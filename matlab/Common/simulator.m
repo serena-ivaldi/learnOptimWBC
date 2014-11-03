@@ -6,7 +6,7 @@ clc
 
 
 mdl_puma560
-%p560.fast = 1;
+p560.fast = 1;
 
 p560.accel(qz, zeros(1,6), zeros(1,6))
 
