@@ -24,4 +24,7 @@ toc
 
 % This can be shown in animation also
 clf
-p560.plot(q)
+p560.plot3d(q,'path','/home/vale/Documents/MatlabToolbox/rvctools/contrib/arte/robots/UNIMATE/puma560')
+
+
+
