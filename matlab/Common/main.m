@@ -5,15 +5,16 @@ clc
 
 
 target_link = [6];
-type = 'cartesian_pos';
+type = 'cartesian_x';
 control_type = 'tracking';
 traj = 'circular';
 parameters = [1 1 1 1 1]; 
+dim_of_task{1}={[1;1;1]};
 %% test substructure
 [p560] = MdlPuma560(target_link);
 
 %% test references
-reference = References(p560,type,control_type,traj,parameters);
+reference = References(p560,type,control_type,traj,parameters,dim_of_task);
 reference.BuildTrajs()
 
 
