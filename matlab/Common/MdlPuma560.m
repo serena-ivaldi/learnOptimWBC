@@ -68,7 +68,7 @@
 
 
 
-function [p560Sub , P560Model] = MdlPuma560(target_link)
+function [p560Sub] = MdlPuma560(target_link)
    clear L
    deg = pi/180;
    % joint angle limits from 

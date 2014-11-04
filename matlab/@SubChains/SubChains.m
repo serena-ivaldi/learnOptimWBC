@@ -1,12 +1,10 @@
-% SubChains contiene naturalmente tutto il robot (non perturbato) e contenuto negli altri
-% campi per cui subchain se non chiamo sub_chains si comporta come tutto il
-% robot
+% SubChains naturally contains the robot without perturbation
 classdef  SubChains < SerialLink
 
 
     properties
        % dim taget_links = ntask
-       target_link; % vector that define wich kind of link i want to control with the e-e effector too
+       target_link; % vector that define wich kind of link i want to control with the e-e effector too (row vector)
        sub_chains; % vector of sub kinematic chain of the robot respect of target link
     end
     
@@ -36,6 +34,11 @@ classdef  SubChains < SerialLink
           end
            
        end
+       
+       function n=GetNumTasks(obj)
+          n=size(obj.target_link,2);
+       end 
+       
       
     end
     
