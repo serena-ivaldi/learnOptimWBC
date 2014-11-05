@@ -4,13 +4,13 @@ function tau = ComputeTorqueSum(obj,index,M,M_inv,F,t,q,qd)
    [J,Jd,x,xd,rpy,rpyd] = obj.subchains.DirKin(index,q,qd,obj.ground_truth);
    [b,A] = TrajCostraint(obj,index,t,J,Jd,x,xd,rpy,rpyd);
    
-   N = evalin('caller',obj.metric{index});
+  % N = evalin('caller',obj.metric{index});
 
    % eventually if the computation is to slow or i have problem i can use
    % "\"
-   N_pow_half = N^(-1/2);
-   AM_inv  = A*M_inv;
-   AM_invN = AM_inv*N_pow_half;
+   %N_pow_half = N^(-1/2);
+   %AM_inv  = A*M_inv;
+   %AM_invN = AM_inv*N_pow_half;
 
 %DEBUG     
 %    Minvers=M_inv   
@@ -20,6 +20,11 @@ function tau = ComputeTorqueSum(obj,index,M,M_inv,F,t,q,qd)
 %    matA=A
 %---
    
-   tau = N_pow_half*pinv(AM_invN)*(b-AM_inv*F');
+   %tau = N_pow_half*pinv(AM_invN)*(b + AM_inv*F');
+    
+    %A'
+    tau0=A*M_inv*A';
+    tau1 =A'/tau0;
+    tau = tau1*(b+A*M_inv*F');
 
 end

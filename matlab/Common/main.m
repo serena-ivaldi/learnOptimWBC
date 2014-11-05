@@ -81,7 +81,7 @@ J_dot = p560.sub_chains(1).jacob_dot(qr(1:p560.GetNumSubLinks(1)),0.5*ones(p560.
 
 metric = {'M_inv'};           
 ground_truth = false; 
-kp = 3;
+kp = 6;
 K_p = kp*eye(3);  
 kd = 1;
 K_d = kd*eye(3);                
@@ -93,12 +93,12 @@ controller = Controllers.UF(p560,reference,metric,ground_truth,K_p,K_d,combine_r
 
 
 tic
-options= odeset('MaxStep',0.1);
-[t q qd] = controller.subchains.nofriction().fdyn(Time,controller,qz,zeros(1,controller.subchains.GetNumSubLinks(1)),options);
+%options= odeset('MaxStep',0.1);
+[t ,q ,qd] = controller.subchains.nofriction().fdyn(Time,controller,qz,zeros(1,controller.subchains.GetNumSubLinks(1)));%,options);
 toc
 
 
-controller.subchains.plot3d(qz,'path','/home/modugno/Documents/toolbox/rvctools/contrib/arte/robots/UNIMATE/puma560')
+controller.subchains.plot3d(q,'path','/home/vale/Documents/MatlabToolbox/rvctools/contrib/arte/robots/UNIMATE/puma560')
 
 
 
