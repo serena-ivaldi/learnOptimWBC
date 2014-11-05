@@ -2,13 +2,16 @@ classdef  References < handle
     
    properties
       subchain;     % handle to subchain (subchain contiene il numero dei task)
-      type;         % cartesian_x cartesian_rpy, joint vector 
+      type;         % cartesian_x,cartesian_rpy, joint vector 
       control_type; % tracking,regulation vector
       traj;         % circular, point-point_quintic, point-point_trapezoidal vector
       parameters;   % vector of parameters that define the properties of every trajectories (both functional and sampled)
-      mask;         % vector of vector(3) that contains a mask that specify what i want to control for the specific task. for example x and z (control a subset of variable) mask = (1;0:1)
-      type_of_traj; % sampled function; (set internally)
+      mask;         % vector of vector(3) (col vec) that contains a mask that specify what i want to control for the specific task. for example x and z (control a subset of variable) mask = (1;0:1)
+      type_of_traj; % sampled func; (set internally)
       trajectories; % cell array with the sampling of the trajectory with position velocity and desired acceleration  
+                    % in case of sampled trajectory i build up a struct with four fields "sample_x" "sample_xd" "sample_xdd" (row matrix) contains the value of the  trajectory 
+                    %and "time" (row vector) that contains the sampling time
+                    
    end
        
     
@@ -51,27 +54,50 @@ classdef  References < handle
           
           for i = 1:obj.GetNumTasks
             obj.SetTraj(i)
-            obj.SetTypeOfTraj(i)%#TODO
+            obj.SetTypeOfTraj(i)
           end
           
       end
       
       
       function [p,pd,pdd]=GetTraj(obj,index,t)
-        [p,pd,pdd]=feval(obj.trajectories{index},t,obj.parameters);       
+         
+         if(strcmp(obj.type_of_traj(index,:),'func')) 
+            
+            [p,pd,pdd]=feval(obj.trajectories{index},t,obj.parameters);    
+         
+         elseif(strcmp(obj.type_of_traj(index,:),'sampled'))
+            
+            % index to the current value
+            [~,ind] = min(abs(obj.trajectories{index}.time-t));
+            %DEBUG
+            cur_time = f(ind); % Finds first one only! 
+            disp(cur_time);
+            %--
+            p  = obj.trajectories{index}.sample_x(:,ind);
+            pd = obj.trajectories{index}.sample_xd(:,ind);
+            pdd= obj.trajectories{index}.sample_x(:,ind);
+         
+         end
+         
       end
       
       
       %#TODO function that set the flag 
-      function SetTypeOfTraj(index)
+      function SetTypeOfTraj(obj,index)
+         
+         if(isa(obj.trajectories{index},'function_handle'))
+         
+            obj.type_of_traj = 'func';  
+         
+         elseif(isa(obj.trajectories{index},'numeric') )
+         
+            obj.type_of_traj = 'sampled';
+         
+         end   
       end
-      %#TODO function that resolve the sample to match the current value of
-      % trajectory respect of time 
-      function [k kd kdd]=GetValueTraj(obj,t)
-      end
-      
-      
      
+      
       
       
    end

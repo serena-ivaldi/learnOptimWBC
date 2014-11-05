@@ -39,6 +39,14 @@ classdef  SubChains < SerialLink
           n=size(obj.target_link,2);
        end 
        
+       function n=GetNumLinks(obj)
+          n=size(obj.links,2);
+       end 
+       
+       function n=GetNumSubLinks(obj,index)
+          n=size(obj.sub_chains(index).links,2);
+       end 
+       
       
     end
     
