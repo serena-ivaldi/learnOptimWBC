@@ -70,9 +70,9 @@ function [t, q, qd] = fdyn(robot, t1, object, q0, qd0, varargin)
     end
 
     % concatenate q and qd into the initial state vector
-    q0 = [q0(:); qd0(:)];
-        
-    [t,y] = ode45(@fdyn2, [0 t1], q0, [], robot, object, varargin{:});
+    q0 = [q0(:); qd0(:)];   
+    
+    [t,y] = ode15s(@fdyn2, [0 t1], q0, [], robot, object,varargin{:});
     q = y(:,1:n);
     qd = y(:,n+1:2*n);
 
@@ -103,10 +103,15 @@ function xd = fdyn2(t, x, robot, object, varargin)
     % evaluate the torque function if one is given
     if isa(object, 'function_handle')
         tau = object(robot, t, q, qd, varargin{:});
-    elseif isa(object, 'object')
+     elseif isobject(object)
         tau = object.Policy(t,q,qd);
     else   
         tau = zeros(1,n);
+    end
+    
+    %control if tau is not a row vector 
+    if(~isrow(tau))
+        tau = tau';    
     end
     
     qdd = robot.accel(x(1:n,1)', x(n+1:2*n,1)', tau);

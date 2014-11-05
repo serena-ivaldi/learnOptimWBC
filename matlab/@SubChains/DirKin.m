@@ -26,7 +26,7 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,index,q,qd,ground_truth)
         % compute generalized cartesian velocities from the pertubed
         % subchain
         J = obj.sub_chains(index).jacob0(q(1:obj.GetNumSubLinks(index)));
-        v=J*qd;
+        v=J*qd';
         xd = v(1:3);rpyd=v(4:6);
         % compute J_dot from the the pertubed subchain
         J_dot = obj.sub_chains(index).jacob_dot(q(1:obj.GetNumSubLinks(index)),qd(1:obj.GetNumSubLinks(index)));   

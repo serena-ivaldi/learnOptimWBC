@@ -136,16 +136,17 @@ function [p560Sub] = MdlPuma560(target_link,P)
        'Tc', [3.96e-3, -10.5e-3], ...
        'qlim', [-266 266]*deg );
 
-   %DEBUG 
-   %assignin('base', 'L',L);
-   %-- 
-   
-   %DEBUG
-   %p560Subtest = SubChains(target_link,L(1:3),'name', 'Puma 560', ...
-   %    'manufacturer', 'Unimation', 'ikine', 'puma', 'comment', 'viscous friction; params of 8/95');
-   %-- 
+ 
+  
+
     
-   p560Sub = SubChains.BuildSC(target_link,L,P,'name', 'Puma 560', ...
+   %build the dynamical model of the robot
+   p560Model = SerialLink(L, 'name', 'Puma 560', ...
+    'manufacturer', 'Unimation', 'ikine', 'puma', 'comment', 'viscous friction; params of 8/95');
+   p560Model.model3d = 'UNIMATE/puma560';
+   
+   %build the subchain struct
+   p560Sub = SubChains.BuildSC(target_link,L,P,p560Model,'name', 'Puma 560', ...
        'manufacturer', 'Unimation', 'ikine', 'puma', 'comment', 'viscous friction; params of 8/95');
    p560Sub.model3d = 'UNIMATE/puma560';
    

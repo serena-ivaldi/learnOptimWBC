@@ -6,10 +6,10 @@ clc
 
 target_link = [6];
 perturbation = 0;
-type = 'cartesian_x';
-control_type = 'tracking';
-traj = 'circular';
-parameters = [1 1 1 1 1]; 
+type = {'cartesian_x'};
+control_type = {'tracking'};
+traj = {'circular'};
+parameters = [0.2 0.4 0.4 0.3 1 -pi/4]; 
 dim_of_task{1}={[1;1;1]};
 %% test substructure
 [p560] = MdlPuma560(target_link,perturbation);
@@ -19,7 +19,7 @@ reference = References(p560,type,control_type,traj,parameters,dim_of_task);
 reference.BuildTrajs()
 
 
-T = 10;
+Time = 10;
 step = 0.1;
 
 
@@ -31,7 +31,7 @@ pdd=[];
 tic
 for index=1:reference.GetNumTasks()
     
-    for t=0:step:T
+    for t=0:step:Time
         
       [p_cur,pd_cur,pdd_cur]=reference.GetTraj(index,t);
       
@@ -43,7 +43,7 @@ toc
 % plot function
 for index=1:reference.GetNumTasks()
     
-    for t=0:step:T
+    for t=0:step:Time
         
       [p_cur,pd_cur,pdd_cur]=reference.GetTraj(index,t);
       p = [p;p_cur];
@@ -58,7 +58,11 @@ for index=1:reference.GetNumTasks()
     pdd=[];
       
 end
-plot3(Results{1}(:,1),Results{1}(:,2),Results{1}(:,3));
+%plot starting point
+plot3(Results{1}(1,1),Results{1}(1,2),Results{1}(1,3),'-.r*','MarkerSize',10);
+hold on
+%plot other points
+plot3(Results{1}(2:end,1),Results{1}(2:end,2),Results{1}(2:end,3));
 
 
 %% test controller 
@@ -73,17 +77,28 @@ J = p560.sub_chains(1).jacob0(qr(1:p560.GetNumSubLinks(1))','trans');
 % right portion
 J_dot = p560.sub_chains(1).jacob_dot(qr(1:p560.GetNumSubLinks(1)),0.5*ones(p560.GetNumSubLinks(1)));
 
-metric = 'M_inv';           
+
+
+metric = {'M_inv'};           
 ground_truth = false; 
 kp = 3;
 K_p = kp*eye(3);  
 kd = 1;
 K_d = kd*eye(3);                
-combine_rule = 'sum'; 
+combine_rule = {'sum'}; 
+
+controller = Controllers.UF(p560,reference,metric,ground_truth,K_p,K_d,combine_rule);
 
 
 
 
+tic
+options= odeset('MaxStep',0.1);
+[t q qd] = controller.subchains.nofriction().fdyn(Time,controller,qz,zeros(1,controller.subchains.GetNumSubLinks(1)),options);
+toc
+
+
+controller.subchains.plot3d(qz,'path','/home/modugno/Documents/toolbox/rvctools/contrib/arte/robots/UNIMATE/puma560')
 
 
 

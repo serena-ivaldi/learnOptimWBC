@@ -1,5 +1,13 @@
 
+general
+instead of using RNE maybe is better to precompute the dynamics term using the symbolic routines inside the toolboox
+
+
+Subchains
+implement a way to manage the case of blocked joints for visualization and simulation of subchain task
+
 UF
+implement mask fuctionalities
 add other trajectories
 sampling trajectories 
 tracking orientation task
@@ -17,5 +25,12 @@ add alpha to UF
 build class instance for learning (cmaes)
 
 implement GHC
+
+
+
+
+update Subchains (better managment of jacobian)
+
+
 
 

@@ -2,7 +2,7 @@ classdef (Abstract) AbstractController < handle
     
    properties(Abstract)
       subchains;
-      reference;
+      references;
    end
        
     

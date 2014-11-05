@@ -83,7 +83,7 @@ classdef  References < handle
       end
       
       
-      %#TODO function that set the flag 
+      %function that set the flag on the kind of trajectories
       function SetTypeOfTraj(obj,index)
          
          if(isa(obj.trajectories{index},'function_handle'))

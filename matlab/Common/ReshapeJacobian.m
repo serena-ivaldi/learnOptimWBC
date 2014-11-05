@@ -11,9 +11,9 @@ function [J,J_dot] = ReshapeJacobian(num_of_link,J_old,J_dot_old,mask,trans_or_r
    
    if(strcmp(trans_or_rot,'trans'))
       J_dot = J_dot_old(1:3,1);   
-      J = J(1:3,:);
+      J = J_old(1:3,:);
    elseif(strcmp(trans_or_rot,'rot'))   
       J_dot = J_dot_old(4:6,1);
-      J = J(4:6,:);
+      J = J_old(4:6,:);
    end
 end

@@ -4,10 +4,10 @@ classdef  SubChains < SerialLink
 
 
     properties
-       % dim taget_links = ntask
-       target_link; % vector that define wich kind of link i want to control with the e-e effector too (row vector)
-       sub_chains; % vector of sub kinematic chain of the robot respect of target link (in general pertubed)
-       sub_chainGT % vector of subchain non perturbed
+       dyn_model;    % full dynamical model of the robot
+       target_link;  % vector that define wich kind of link i want to control with the e-e effector too (row vector)
+       sub_chains;   % vector of sub kinematic chain of the robot respect of target link (in general pertubed)
+       sub_chainsGT; % vector of subchain non perturbed
     end
     
     
@@ -15,12 +15,13 @@ classdef  SubChains < SerialLink
  
       % to copy the whole robot we can use the copy constructor of SerialLink 
       % r1 = SerialLink(r0)   
-      function obj = SubChains(target_link,L,varargin)        
+      function obj = SubChains(target_link,L,model,varargin)        
          
          %DEBUG
          %celldisp(varargin);
          %--
          obj = obj@SerialLink(L,varargin{:});
+         obj.dyn_model = model;
          obj.target_link = target_link;
       end
       
