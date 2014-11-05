@@ -3,7 +3,6 @@ classdef (Abstract) AbstractController < handle
    properties(Abstract)
       subchains;
       reference;
-      policy;
    end
        
     

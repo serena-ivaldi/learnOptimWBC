@@ -104,7 +104,7 @@ function xd = fdyn2(t, x, robot, object, varargin)
     if isa(object, 'function_handle')
         tau = object(robot, t, q, qd, varargin{:});
     elseif isa(object, 'object')
-        tau = object.Policy(obj,M_inv,F,t,q,qd,p,pd,rpy,rpyd);
+        tau = object.Policy(t,q,qd);
     else   
         tau = zeros(1,n);
     end

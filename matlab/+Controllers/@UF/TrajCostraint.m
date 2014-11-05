@@ -1,4 +1,4 @@
-function [b,J] = TrajCostraint(obj,index,t,q,qd,x,xd,rpy,rpyd)
+function [b,J] = TrajCostraint(obj,index,t,J_old,Jd_old,x,xd,rpy,rpyd)
 
  if(strcmp(obj.reference.type(index),'joint'))
     
@@ -8,7 +8,7 @@ function [b,J] = TrajCostraint(obj,index,t,q,qd,x,xd,rpy,rpyd)
         
             if(strcmp(obj.reference.control_type(index),'regulation'))
                
-                [J,J_dot] = ReshapeJacobian(obj.GetNumLinks(),obj.subchains.sub_chains(index).jacob0(q(1:obj.GetNumSubLinks(index)),'trans'),obj.subchains.sub_chains(index).jacob_dot(q,qd),obj.references.mask(index));
+                [J,J_dot] = ReshapeJacobian(obj.GetNumLinks(),J_old,Jd_old,obj.references.mask(index),'trans');
                 [x_des] = obj.reference.GetTraj(index,t);
                 b = PD(x,x_des,obj.Kp(:,:,index),xd,zeros(1,3),obj.Kd(:,:,index),zeros(1,3));
                 
@@ -19,7 +19,7 @@ function [b,J] = TrajCostraint(obj,index,t,q,qd,x,xd,rpy,rpyd)
                 
             elseif(strcmp(obj.reference.control_type(index),'tracking'))
                 
-                [J,J_dot] = ReshapeJacobian(obj.GetNumLinks(),obj.subchains.sub_chains(index).jacob0(q(1:obj.GetNumSubLinks(index)),'trans'),obj.subchains.sub_chains(index).jacob_dot(q,qd),obj.references.mask(index));
+                [J,J_dot] = ReshapeJacobian(obj.GetNumLinks(),J_old,Jd_old,obj.references.mask(index),'trans');
                 [x_des,xd_des,xdd_des] = obj.reference.GetTraj(index,t);
                 b = PD(x,x_des,obj.Kp(:,:,index),xd,xd_des,obj.Kd(:,:,index),xdd_des);  
                 

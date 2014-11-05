@@ -68,7 +68,7 @@
 
 
 
-function [p560Sub] = MdlPuma560(target_link)
+function [p560Sub] = MdlPuma560(target_link,P)
    clear L
    deg = pi/180;
    % joint angle limits from 
@@ -145,7 +145,7 @@ function [p560Sub] = MdlPuma560(target_link)
    %    'manufacturer', 'Unimation', 'ikine', 'puma', 'comment', 'viscous friction; params of 8/95');
    %-- 
     
-   p560Sub = SubChains.BuildSC(target_link,L,0.1,'name', 'Puma 560', ...
+   p560Sub = SubChains.BuildSC(target_link,L,P,'name', 'Puma 560', ...
        'manufacturer', 'Unimation', 'ikine', 'puma', 'comment', 'viscous friction; params of 8/95');
    p560Sub.model3d = 'UNIMATE/puma560';
    

@@ -1,11 +1,13 @@
 % SubChains naturally contains the robot without perturbation
+% SubChains became really usefull when i have DIFERRENT kinematic chains
 classdef  SubChains < SerialLink
 
 
     properties
        % dim taget_links = ntask
        target_link; % vector that define wich kind of link i want to control with the e-e effector too (row vector)
-       sub_chains; % vector of sub kinematic chain of the robot respect of target link
+       sub_chains; % vector of sub kinematic chain of the robot respect of target link (in general pertubed)
+       sub_chainGT % vector of subchain non perturbed
     end
     
     
@@ -23,10 +25,12 @@ classdef  SubChains < SerialLink
       end
       
       
-      
+       % with this function i obtain a pertuberb copy of my SubChain
        function newobj = Perturb(obj,P)
           
-          newobj = obj.perturb(P);
+          %the object contained in  SubChains is the model so i don't have
+          %to perturb it
+          %newobj = obj.perturb(P);
           %if target link is empty i define only the 
           n_task = obj.sub_chains.lenght();
           for i=1:n_task
@@ -61,10 +65,14 @@ classdef  SubChains < SerialLink
              sub_chain = L(1:target_link(i));
              app_subchains = SubChains(target_link,sub_chain,varargin{:});
               vec_sub_chain(i)= app_subchains.perturb(P);
+              % actually i copy the subchain through the perturb function
+              % but with P = 0 and i will use it as a ground truth
+              vec_sub_chainGT(i) = app_subchains.perturb(0);
           end
           
           
-          obj.sub_chains = vec_sub_chain;
+          obj.sub_chains   = vec_sub_chain;
+          obj.sub_chainsGT = vec_sub_chainGT;
           
        end
              

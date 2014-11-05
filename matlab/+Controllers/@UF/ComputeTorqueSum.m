@@ -1,8 +1,12 @@
-function tau = ComputeTorqueSmu(obj,index,M_inv,F,t,q,qd,x,xd,rpy,rpyd)
-      
-   [b,A] = TrajCostraint(obj,index,t,q,qd,x,xd,rpy,rpyd);
+function tau = ComputeTorqueSum(obj,index,M,M_inv,F,t,q,qd)
+    
+
+   [J,Jd,x,xd,rpy,rpyd] = obj.subchains.DirKin(index,q,qd,obj.ground_truth);
+   [b,A] = TrajCostraint(obj,index,t,J,Jd,x,xd,rpy,rpyd);
    
-   N_pow_half = obj.N(:,:,index)^(1/2);
+   N = evalin('caller',obj.metric(index));
+   
+   N_pow_half = N^(1/2);
    AM  = A*M_inv;
    AMN = AM*N_pow_half;
    

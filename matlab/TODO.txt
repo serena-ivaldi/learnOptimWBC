@@ -1,1 +1,21 @@
-implement the control for the data
+
+UF
+add other trajectories
+sampling trajectories 
+tracking orientation task
+joint task (maybe)
+regulation for orientation and positon task
+force task
+projection chaining of the task
+
+
+
+build class alpha function
+
+add alpha to UF
+
+build class instance for learning (cmaes)
+
+implement GHC
+
+
