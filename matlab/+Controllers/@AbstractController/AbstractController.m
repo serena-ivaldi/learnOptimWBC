@@ -3,6 +3,7 @@ classdef (Abstract) AbstractController < handle
    properties(Abstract)
       subchains;
       references;
+      torques;
    end
        
     

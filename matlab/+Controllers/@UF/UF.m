@@ -8,7 +8,8 @@ classdef  UF < Controllers.AbstractController
       ground_truth      % if true for computing the position and velocity of the end effector i will use the non perturbed model 
       Kp               % vector of matrix of proportional gain
       Kd               % vector of matrix of derivative gain
-      combine_rule      % projector or sum 
+      combine_rule     % projector or sum 
+      torques          %  resulting torque (vector of matrix)
    end
 
 
@@ -23,16 +24,23 @@ classdef  UF < Controllers.AbstractController
          obj.Kp = Kp;
          obj.Kd = Kd;
          obj.combine_rule = combine_rule;
+         obj.torques = cell(obj.references.GetNumTasks());
+         for i = 1:obj.references.GetNumTasks()
+            obj.torques{i} = zeros(obj.subchains.n,1);  %tau(n_of_total_joint on the chain x 1 x n_of_task)
+         end
+         
          
       end    
 
 %       function SetAlpha(obj,alpha)
 %          obj.alpha = alpha;
 %       end
+      function SaveTau(obj,index,tau)
+         obj.torques{index} = [obj.torques{index}(:,:),tau];   
+      end
 
 
-
-      function  tau  = Policy(obj,t,q,qd)
+      function  final_tau  = Policy(obj,t,q,qd)
          
         if(strcmp(obj.combine_rule,'sum')) 
            
@@ -49,16 +57,18 @@ classdef  UF < Controllers.AbstractController
            %   torques resulting from unit acceleration of each joint with
            %   no gravity.
            M = rne(obj.subchains.dyn_model, ones(n,1)*q, zeros(n,n), eye(n), [0;0;0]);
-           M_inv = inv(M);
            % compute gravity and coriolis torque
            %    torques resulting from zero acceleration at given velocity &
            %    with gravity acting.
            F = rne(obj.subchains.dyn_model, q, qd, zeros(1,n)); 
            
-           tau = zeros(n,1);
+           final_tau = zeros(n,1);
            for index =1:obj.references.GetNumTasks()
                %#TODO inserire gli alpha
-               tau = tau + ComputeTorqueSum(obj,index,M,M_inv,F,t,q,qd);  
+               tau = ComputeTorqueSum(obj,index,M,F,t,q,qd);
+               obj.SaveTau(index,tau);
+               final_tau =final_tau + tau;  
+               
            end
          
         elseif(strcmp(obj.combine_rule,'projector'))

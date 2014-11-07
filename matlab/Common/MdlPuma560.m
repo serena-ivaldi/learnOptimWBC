@@ -154,7 +154,7 @@ function [p560Sub] = MdlPuma560(target_link,P)
    %
    % some useful poses
    %
-   assignin('base', 'qz', [0 0 0 0 0 0]);% zero angles, L shaped pose
+   assignin('base', 'qz', [pi/2 0 0 0 0 0]);% zero angles, L shaped pose
    assignin('base', 'qr', [0 pi/2 -pi/2 0 0 0]);% ready pose, arm up
    assignin('base', 'qs', [0 0 -pi/2 0 0 0]);
    assignin('base', 'qn', [0 pi/4 pi 0 pi/4  0]);

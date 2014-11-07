@@ -1,4 +1,4 @@
-function tau = ComputeTorqueSum(obj,index,M,M_inv,F,t,q,qd)
+function tau = ComputeTorqueSum(obj,index,M,F,t,q,qd)
     
 
    [J,Jd,x,xd,rpy,rpyd] = obj.subchains.DirKin(index,q,qd,obj.ground_truth);
@@ -9,8 +9,8 @@ function tau = ComputeTorqueSum(obj,index,M,M_inv,F,t,q,qd)
    % eventually if the computation is to slow or i have problem i can use
    % "\"
    %N_pow_half = N^(-1/2);
-   %AM_inv  = A*M_inv;
-   %AM_invN = AM_inv*N_pow_half;
+%   AM_inv  = A*M_inv;
+%   AM_invN = AM_inv*N_pow_half;
 
 %DEBUG     
 %    Minvers=M_inv   
@@ -20,11 +20,13 @@ function tau = ComputeTorqueSum(obj,index,M,M_inv,F,t,q,qd)
 %    matA=A
 %---
    
+    
    %tau = N_pow_half*pinv(AM_invN)*(b + AM_inv*F');
     
-    %A'
-    tau0=A*M_inv*A';
+    
+    tau0_1 = A/M;
+    tau0 = tau0_1*A';
     tau1 =A'/tau0;
-    tau = tau1*(b+A*M_inv*F');
+    tau = tau1*(b+tau0_1*F');
 
 end
