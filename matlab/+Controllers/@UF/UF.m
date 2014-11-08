@@ -1,21 +1,22 @@
 classdef  UF < Controllers.AbstractController
     
    properties
-      subchains;        % object that contains the subchain of the robot and the J dot for each subchain;    
-      references;       % object that contains the reference trajectory for each tasks; 
-      %alpha;           % vector of weight function
-      metric;           % vector of matlab command     for example M_inv^2, M_inv,eye(lenght(q)) 
-      ground_truth      % if true for computing the position and velocity of the end effector i will use the non perturbed model 
+      subchains;       % object that contains the subchain of the robot and the J dot for each subchain;    
+      references;      % object that contains the reference trajectory for each tasks; 
+      %alpha;          % vector of weight function
+      metric;          % vector of matlab command     for example M_inv^2, M_inv,eye(lenght(q)) 
+      ground_truth     % if true for computing the position and velocity of the end effector i will use the non perturbed model 
       Kp               % vector of matrix of proportional gain
       Kd               % vector of matrix of derivative gain
       combine_rule     % projector or sum 
       torques          %  resulting torque (vector of matrix)
+      display_opt      % display settings display_opt.step display_opt.trajtrack
    end
 
 
    methods
       
-       function obj = UF(sub_chains,references,metric,ground_truth,Kp,Kd,combine_rule)
+       function obj = UF(sub_chains,references,metric,ground_truth,Kp,Kd,combine_rule,varargin)
          
          obj.subchains = sub_chains;
          obj.references = references;
@@ -28,7 +29,17 @@ classdef  UF < Controllers.AbstractController
          for i = 1:obj.references.GetNumTasks()
             obj.torques{i} = zeros(obj.subchains.n,1);  %tau(n_of_total_joint on the chain x 1 x n_of_task)
          end
-         
+         % default settings for smoothing and trajectory tracking display (desidered position) 
+         obj.display_opt.fixed_step = false;
+         obj.display_opt.step = 0.00000001;
+         obj.display_opt.trajtrack = false;
+         % settings for smoothing and trajectory tracking display (reference position)
+         if (nargin > 7)
+            disp('sono qui');
+            disp_opt = varargin{1};
+            obj.display_opt.step =disp_opt.step;
+            obj.display_opt.trajtrack = disp_opt.trajtrack;   
+         end
          
       end    
 

@@ -94,15 +94,17 @@ J_dot = p560.sub_chains(1).jacob_dot(qz(1:p560.GetNumSubLinks(1)),0.5*ones(p560.
 
 
 
-metric = {'M_inv'};           
+metric = {'M^(1/2)'};  % N^(1/2) = (M^(-1))^(1/2) = M^(1/2);        
 ground_truth = false; 
 kp = 100;
 K_p = kp*eye(3);  
 kd = 2*sqrt(kp);
 K_d = kd*eye(3);                
 combine_rule = {'sum'}; 
+display_opt.step = 0.001;
+display_opt.trajtrack = true;
 
-controller = Controllers.UF(p560,reference,metric,ground_truth,K_p,K_d,combine_rule);
+controller = Controllers.UF(p560,reference,metric,ground_truth,K_p,K_d,combine_rule,display_opt);
 
 
 tic
@@ -111,7 +113,7 @@ tic
 toc
 
 
-controller.subchains.plot3d(q,'path','/home/vale/Documents/MatlabToolbox/rvctools/contrib/arte/robots/UNIMATE/puma560')
+controller.plot3d(q,'path','/home/vale/Documents/MatlabToolbox/rvctools/contrib/arte/robots/UNIMATE/puma560')
 
 
 
