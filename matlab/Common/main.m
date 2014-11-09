@@ -67,10 +67,10 @@ for index=1:reference.GetNumTasks()
       
 end
 %plot starting point
-plot3(Results{1}(1,1),Results{1}(1,2),Results{1}(1,3),'-.r*','MarkerSize',10);
+%plot3(Results{1}(1,1),Results{1}(1,2),Results{1}(1,3),'-.r*','MarkerSize',10);
 hold on
 %plot other points
-plot3(Results{1}(2:end,1),Results{1}(2:end,2),Results{1}(2:end,3));
+plot3(Results{1}(1:end,1),Results{1}(1:end,2),Results{1}(1:end,3));
 phi      = parameters(5);
 theta    = parameters(6);
 %plot vector u (green)
@@ -113,8 +113,8 @@ tic
 toc
 
 
-controller.plot3d(q,'path','/home/vale/Documents/MatlabToolbox/rvctools/contrib/arte/robots/UNIMATE/puma560')
-
+%controller.plot3d(q,t,'path','/home/vale/Documents/MatlabToolbox/rvctools/contrib/arte/robots/UNIMATE/puma560')
+controller.plot(q,t);
 
 
 %% test instance

@@ -84,9 +84,9 @@
 % http://www.petercorke.com
 
 
-function plot3d(controller, q, time,varargin)
+function plot3d(controller,q,time,varargin)
     
-    opt = plot_options(controller.subchains, varargin);
+    opt = plot_options(controller, varargin);
     
     %-- load the shape if need be
     

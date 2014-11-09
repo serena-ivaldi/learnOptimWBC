@@ -32,28 +32,36 @@
 
 function animate(controller,qq,time)
 
-    if nargin < 3
+    if nargin < 4
         handles = findobj('Tag', controller.subchains.name);
     end
     
     links = controller.subchains.links;
     N = controller.subchains.n;
     
+    disp(N)
+    
+    
     % get handle of any existing graphical robots of same name
     %  one may have just been created above
     handles = findobj('Tag', controller.subchains.name);
     
-    % index k for dowsampling visualization  
+    % index k for downsampling visualization  
     k = 1;
-    
+    % inizializes plot handles
+    pos = zeros(3,controller.references.GetNumTasks());
+    for ii = 1:controller.references.GetNumTasks()
+       pos(:,ii) = controller.references.GetTraj(ii,time(1));
+       des_traj_pos(ii) = plot3(pos(1,ii),pos(2,ii),pos(3,ii),'-.r*','MarkerSize',10,'XDataSource','pos(1,ii)','YDataSource','pos(2,ii)','ZDataSource','pos(3,ii)');
+    end
     % MAIN DISPLAY/ANIMATION LOOP
     while true
         % animate over all instances of this robot in different axes
         
-        for i=2:size(time,2)  
+        for i=2:size(time,1)  
             %check if time fixed_step is active and the the time step is sufficiently large 
             if(time(i)-time(k)>controller.display_opt.step)
-               q = qq(i);
+               q = qq(i,:);
                for handle=handles'
    %                 h = get(handle, 'UserData');
    %                 h.q = q';
@@ -95,7 +103,7 @@ function animate(controller,qq,time)
                            if h.link(L) ~= 0
                                set(h.link(L), 'Matrix', T);
                            end
-
+                           
                            T = T * links(L).A(q(L));
                            vert = [vert; transl(T)'];
                        end
@@ -142,10 +150,11 @@ function animate(controller,qq,time)
                    end
 
                    % show the trajectory 
-                   if(display_opt.trajtrack)
+                   if(controller.display_opt.trajtrack)
                       for ii = 1:controller.references.GetNumTasks()
-                         p = controller.references.GetTraj(ii,t);
-                         plot3(p(1),p(2),p(3),'-.r*','MarkerSize',10);
+                         pos(:,ii) = controller.references.GetTraj(ii,time(i));
+                         refreshdata(des_traj_pos(ii),'caller')
+                         drawnow
                       end
                    end
 
