@@ -49,34 +49,34 @@ end
 toc
 
 % plot function
-for index=1:reference.GetNumTasks()
-    
-    for t=0:step:Time
-        
-      [p_cur,pd_cur,pdd_cur]=reference.GetTraj(index,t);
-      p = [p;p_cur];
-      pd = [pd;pd_cur];
-      pdd = [pdd;pdd_cur];
-      
-    end 
-    
-    Results{index} = [p pd pdd];
-    p=[];
-    pd=[];
-    pdd=[];
-      
-end
-%plot starting point
-%plot3(Results{1}(1,1),Results{1}(1,2),Results{1}(1,3),'-.r*','MarkerSize',10);
-hold on
-%plot other points
-plot3(Results{1}(1:end,1),Results{1}(1:end,2),Results{1}(1:end,3));
-phi      = parameters(5);
-theta    = parameters(6);
-%plot vector u (green)
-quiver3(parameters(1),parameters(2),parameters(3),-sin(theta),cos(theta),0,'g');
-%plot vector nxv (yellow)
-quiver3(parameters(1),parameters(2),parameters(3),cos(theta)*cos(phi),cos(theta)*sin(phi),-sin(theta),'y');
+% for index=1:reference.GetNumTasks()
+%     
+%     for t=0:step:Time
+%         
+%       [p_cur,pd_cur,pdd_cur]=reference.GetTraj(index,t);
+%       p = [p;p_cur];
+%       pd = [pd;pd_cur];
+%       pdd = [pdd;pdd_cur];
+%       
+%     end 
+%     
+%     Results{index} = [p pd pdd];
+%     p=[];
+%     pd=[];
+%     pdd=[];
+%       
+% end
+% %plot starting point
+% %plot3(Results{1}(1,1),Results{1}(1,2),Results{1}(1,3),'-.r*','MarkerSize',10);
+% hold on
+% %plot other points
+% plot3(Results{1}(1:end,1),Results{1}(1:end,2),Results{1}(1:end,3));
+% phi      = parameters(5);
+% theta    = parameters(6);
+% %plot vector u (green)
+% quiver3(parameters(1),parameters(2),parameters(3),-sin(theta),cos(theta),0,'g');
+% %plot vector nxv (yellow)
+% quiver3(parameters(1),parameters(2),parameters(3),cos(theta)*cos(phi),cos(theta)*sin(phi),-sin(theta),'y');
 
 
 
@@ -113,8 +113,8 @@ tic
 toc
 
 
-%controller.plot3d(q,t,'path','/home/vale/Documents/MatlabToolbox/rvctools/contrib/arte/robots/UNIMATE/puma560')
-controller.plot(q,t);
+controller.plot3d(q,t,'path','/home/vale/Documents/MatlabToolbox/rvctools/contrib/arte/robots/UNIMATE/puma560')
+%controller.plot(q,t);
 
 
 %% test instance

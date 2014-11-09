@@ -202,7 +202,7 @@ function plot(controller,q,time,varargin)
     %  - passed arguments
     %  - the robot object itself
     %  - the file plotopt.m
-    opt = plot_options(controller.subchains, varargin);
+    opt = plot_options(controller, varargin);
     
 
     % logic to handle where the plot is drawn, are old figures updated or
@@ -219,7 +219,7 @@ function plot(controller,q,time,varargin)
             
             if ishold
                 % hold is on, add the robot, don't change the floor
-                handle = create_robot(controller.subchains, opt);
+                handle = create_robot(controller, opt);
                 
                 
                 % tag one of the graphical handles with the robot name and hang
@@ -233,7 +233,7 @@ function plot(controller,q,time,varargin)
                 if opt.tiles
                     create_tiled_floor(opt);
                 end
-                handle = create_robot(controller.subchains, opt);
+                handle = create_robot(controller, opt);
                 set(gca, 'Tag', 'RTB.plot');
             end
             
@@ -244,7 +244,7 @@ function plot(controller,q,time,varargin)
         if opt.tiles
             create_tiled_floor(opt);
         end
-        handle = create_robot(controller.subchains, opt);
+        handle = create_robot(controller, opt);
         set(gca, 'Tag', 'RTB.plot');
         set(gcf, 'Units', 'Normalized');
         pf = get(gcf, 'Position');
@@ -305,11 +305,11 @@ end
 %
 % The top-level group has user data which is the handle structure.
 
-function h = create_robot(robot, opt)
+function h = create_robot(controller, opt)
     
     disp('creating new robot');
     
-    links = robot.links;
+    links = controller.subchains.links;
     s = opt.scale;
     
     % create an axis
@@ -320,11 +320,11 @@ function h = create_robot(robot, opt)
         hold
     end
     
-    N = robot.n;
+    N = controller.subchains.n;
     
     % create the base
     if opt.base
-        bt = transl(robot.base);
+        bt = transl(controller.subchains.base);
         bt = [bt'; bt'];
         bt(1,3) = opt.floorlevel;
         line(bt(:,1), bt(:,2), bt(:,3), 'LineWidth', opt.basewidth, 'Color', opt.basecolor);
@@ -332,14 +332,14 @@ function h = create_robot(robot, opt)
     
     % add the robot's name
     if opt.name
-        b = transl(robot.base);
+        b = transl(controller.subchains.base);
         bz = 0;
         if opt.base
             bz = 0.5*opt.floorlevel;
         end
-        text(b(1), b(2)-s, bz, [' ' robot.name], 'FontAngle', 'italic', 'FontWeight', 'bold')
+        text(b(1), b(2)-s, bz, [' ' controller.subchains.name], 'FontAngle', 'italic', 'FontWeight', 'bold')
     end
-    group = hggroup('Tag', robot.name);
+    group = hggroup('Tag', controller.subchains.name);
     h.group = group;
     
     % create the graphical joint and link elements
@@ -368,7 +368,7 @@ function h = create_robot(robot, opt)
         
         % create elements to represent translation between joint frames, ie. the link itself.
         % This is drawn to resemble orthogonal plumbing.
-        if robot.mdh
+        if controller.subchains.mdh
             % modified DH convention
             if L < N
                 A = links(L+1).A(0);
@@ -418,13 +418,13 @@ function h = create_robot(robot, opt)
     % display the tool transform if it exists
     h.link(N+1) = hgtransform('Tag', sprintf('link%d', N+1), 'Parent', group);
     tool = eye(4,4);
-    if ~robot.mdh
+    if ~controller.subchains.mdh
         if (links(end).d ~= 0) || (links(end).a ~= 0)
             tool = transl(links(end).a, 0, links(end).d);
         end
     end
-    if ~isempty(robot.tool)
-        tool = tool * robot.tool;
+    if ~isempty(controller.subchains.tool)
+        tool = tool * controller.subchains.tool;
     end
     t = transl(tool);
     if t(1) ~= 0
@@ -456,7 +456,7 @@ function h = create_robot(robot, opt)
     
     if opt.trail
         h.trail = plot(0, 0, opt.trail);
-        robot.trail = [];
+        controller.subchains.trail = [];
     end
     
     % deal with some display options
@@ -474,7 +474,7 @@ function h = create_robot(robot, opt)
         hold off
     end
     h.floorlevel = opt.floorlevel;
-    h.robot = robot;
+    h.controller.subchains = controller.subchains;
     h.opt = opt;
     
     % attach the handle structure to the top graphical element
@@ -590,7 +590,7 @@ end
     % process a cell array of options and return a struct
     % define all possible options and their default values
     
-function opt = plot_options(robot, optin)
+function opt = plot_options(controller, optin)
     
     % timing/looping
     opt.delay = 0.1;
@@ -656,9 +656,9 @@ function opt = plot_options(robot, optin)
     %   2. robot.plotopt
     %   3. command line arguments
     if exist('plotbotopt', 'file') == 2
-        options = [plotbotopt robot.plotopt optin];
+        options = [plotbotopt controller.subchains.plotopt optin];
     else
-        options = [robot.plotopt optin];
+        options = [controller.subchains.plotopt optin];
     end
     
     % parse the options
@@ -676,15 +676,15 @@ function opt = plot_options(robot, optin)
         %
         % simple heuristic to figure the maximum reach of the robot
         %
-        L = robot.links;
+        L = controller.subchains.links;
         if any(L.isprismatic)
             error('Prismatic joint(s) present: requires the ''workspace'' option');
         end
         reach = 0;
-        for i=1:robot.n
+        for i=1:controller.subchains.n
             reach = reach + abs(L(i).a) + abs(L(i).d);
         end
-        reach = reach + sum(abs(transl(robot.tool)));
+        reach = reach + sum(abs(transl(controller.subchains.tool)));
         reach = reach/opt.zoom;
         
         % if we have a floor, quantize the reach to a tile size

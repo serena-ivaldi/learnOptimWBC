@@ -46,6 +46,27 @@ function animate(controller,qq,time)
     %  one may have just been created above
     handles = findobj('Tag', controller.subchains.name);
     
+    %print trajectory 
+    pp=[];
+    for index=1:controller.references.GetNumTasks()
+    
+       for iii=1:size(time,1)
+         [p_cur]=controller.references.GetTraj(index,time(iii));
+         pp = [pp;p_cur];
+
+       end 
+
+    Results{index} = pp;
+    pp=[];
+      
+    end
+    
+    
+    hold on;
+    for index=1:controller.references.GetNumTasks()
+      plot3(Results{index}(1:end,1),Results{index}(1:end,2),Results{index}(1:end,3));
+    end
+    
     % index k for downsampling visualization  
     k = 1;
     % inizializes plot handles
