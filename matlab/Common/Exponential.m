@@ -1,6 +1,9 @@
-function [s]=Exponential()
 
+
+function [s]=Exponential(tf,time_parameters)
+
+   a = time_parameters(1); 
    t = sym('t');
-   s(t) = t^2;
+   s(t) = (a*t^2)/(a*tf^2);
    
 end

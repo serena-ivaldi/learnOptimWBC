@@ -1,69 +1,66 @@
-%  x_centre = parameters(1);
-%  y_centre = parameters(2);
-%  z_centre = parameters(3);
-%  rad      = parameters(4);
-%  phi      = parameters(5);
-%  theta    = parameters(6);
-%  w        = parameters(7);
-%  w0       = parameters(8);
+% rad_val      = geom_parameters(1);
+% phi_val      = geom_parameters(2);
+% theta_val    = geom_parameters(3);
+% wzero_val    = geom_parameters(4);
+% x_centre_val = geom_parameters(5);
+% y_centre_val = geom_parameters(6);
+% z_centre_val = geom_parameters(7);
 
 
-function [p,pd,pdd,time] = Circular(t,type,parameters)
+
+function [p,pd,pdd,time] = Circular(s,time_struct,geom_parameters,type)
     
-    x_centre = parameters(1);
-    y_centre = parameters(2);
-    z_centre = parameters(3);
-    rad      = parameters(4);
-    phi      = parameters(5);
-    theta    = parameters(6);
-    w        = parameters(7);
-    w0       = parameters(8);
+   t = sym('t');
+   rad      = sym('rad');
+   phi      = sym('phi');
+   theta    = sym('theta');
+   wzero    = sym('wzero');
+   x_centre = sym('x_centre'); 
+   y_centre = sym('y_centre');
+   z_centre = sym('z_centre');
 
-%     compute points on circumference
-%     x = rad*cos(w*t + start_angle) + x_centre;
-%     y = rad*sin(w*t + start_angle) + y_centre;
-%     z = height;
-%     
-%     xd = -rad*w*sin(w*t + start_angle);
-%     yd = rad*w*cos(w*t + start_angle);
-%     zd = 0;
-%     
-%     xdd = -rad*w^2*cos(w*t + start_angle);
-%     ydd = -rad*w^2*sin(w*t + start_angle);
-%     zdd = 0;
-
-
-%   add extra row if z-coordinate is specified, but circle is always in xy plane
-%     p = [x y z];
-%     pd = [xd yd zd];
-%     pdd = [xdd ydd zdd];
-
-
-if(strcmp(type,'func'))
+   %structure of the trajectory
    u = [-sin(theta);cos(theta);0];
    nxu =[cos(theta)*cos(phi);cos(theta)*sin(phi);-sin(theta)];
    centre =[x_centre;y_centre;z_centre];
+   %parametric expression of the trajectory
+   p   = rad*cos(2*pi*s + wzero)*u + rad*sin(2*pi*s + wzero)*nxu  + centre;
+   pd  = diff(p,t);
+   pdd = diff(pd,t);
+   %assing numeric value to the parameter of the trajectory
+   rad_val      = geom_parameters(1);
+   phi_val      = geom_parameters(2);
+   theta_val    = geom_parameters(3);
+   wzero_val    = geom_parameters(4);
+   x_centre_val = geom_parameters(5);
+   y_centre_val = geom_parameters(6);
+   z_centre_val = geom_parameters(7);
+   
+   p = subs(p,{rad,phi,theta,wzero,x_centre,y_centre,z_centre},{rad_val,phi_val,theta_val,wzero_val,x_centre_val,y_centre_val,z_centre_val});
+   pd = subs(pd,{rad,phi,theta,wzero},{rad_val,phi_val,theta_val,wzero_val});
+   pdd = subs(pdd,{rad,phi,theta,wzero},{rad_val,phi_val,theta_val,wzero_val});
+   % transform the exrepssion in matlab function of t 
+   p = matlabFunction(p);
+   pd = matlabFunction(pd);
+   pdd = matlabFunction(pdd);
 
-   p= rad*cos(w*t + w0)*u + rad*sin(w*t + w0)*nxu  + centre;
-   pd = -w*rad*sin(w*t + w0)*u + w*rad*cos(w*t + w0)*nxu;
-   pdd = -w^2*rad*cos(w*t + w0)*u-w^2*rad*sin(w*t + w0)*nxu;
-
-   p = p';
-   pd = pd';
-   pdd = pdd'; 
-elseif(strcmp(type,'func'))
-    u = [-sin(theta);cos(theta);0];
-   nxu =[cos(theta)*cos(phi);cos(theta)*sin(phi);-sin(theta)];
-   centre =[x_centre;y_centre;z_centre];
-
-   p= rad*cos(w*t + w0)*u + rad*sin(w*t + w0)*nxu  + centre;
-   pd = -w*rad*sin(w*t + w0)*u + w*rad*cos(w*t + w0)*nxu;
-   pdd = -w^2*rad*cos(w*t + w0)*u-w^2*rad*sin(w*t + w0)*nxu;
-
-   p = p';
-   pd = pd';
-   pdd = pdd'; 
-end
+   time = 0;
+   
+   if(strcmp(type,'sampled'))
+      
+      
+      time=time_struct.ti:time_struct.step:time_struct.tf;
+      %normtime = NormalizeTime(time,time_struct.ti,time_struct.tf);
+ 
+      p = p(time);
+      pd = pd(time);
+      pdd = pdd(time);
+    
+      
+   end
+   
+   
+   
     
    
  

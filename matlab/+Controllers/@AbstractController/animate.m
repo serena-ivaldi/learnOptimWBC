@@ -52,7 +52,7 @@ function animate(controller,qq,time)
     
        for iii=1:size(time,1)
          [p_cur]=controller.references.GetTraj(index,time(iii));
-         pp = [pp;p_cur];
+         pp = [pp,p_cur];
 
        end 
 
@@ -64,7 +64,7 @@ function animate(controller,qq,time)
     
     hold on;
     for index=1:controller.references.GetNumTasks()
-      plot3(Results{index}(1:end,1),Results{index}(1:end,2),Results{index}(1:end,3));
+      plot3(Results{index}(1,1:end),Results{index}(2,1:end),Results{index}(3,1:end));
     end
     
     % index k for downsampling visualization  
