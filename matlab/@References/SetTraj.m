@@ -24,7 +24,7 @@ function SetTraj(obj,iter)
           elseif(strcmp(obj.traj,'point-point_trapezoidal'))
        
           else
-            error('is not possible to use circular with  cartesian_pos for regulation');
+            error('is not possible to use circular with cartesian_pos for regulation');
           end      
       end 
 

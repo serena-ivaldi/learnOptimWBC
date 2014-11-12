@@ -7,7 +7,7 @@ classdef  References < handle
       traj;         % circular, point-point_quintic, point-point_trapezoidal vector
       parameters;   % vector of parameters that define the properties of every trajectories (both functional and sampled)
       mask;         % vector of vector(3) (col vec) that contains a mask that specify what i want to control for the specific task. for example x and z (control a subset of variable) mask = (1;0:1)
-      type_of_traj; % sampled func; (set internally)
+      type_of_traj; % sampled func
       trajectories; % cell array with the sampling of the trajectory with position velocity and desired acceleration  
                     % in case of sampled trajectory i build up a struct with four fields "sample_x" "sample_xd" "sample_xdd" (row matrix) contains the value of the  trajectory 
                     %and "time" (row vector) that contains the sampling time
@@ -17,7 +17,7 @@ classdef  References < handle
     
    methods
       %#TODO add control of the input
-      function obj = References(subchain,type,control_type,traj,parameters,mask,varargin) % i can specify through varargin the time duration of the sampled trajectories 
+      function obj = References(subchain,type,control_type,traj,parameters,mask,type_of_traj,varargin) % i can specify through varargin the time duration of the sampled trajectories 
          
          if (isobject(subchain))
             obj.subchain = subchain;
@@ -37,6 +37,10 @@ classdef  References < handle
          obj.parameters = parameters;
          obj.mask = mask;
          
+         if(getnameidx({ 'sampled', 'func'} , type_of_traj) ~= 0)
+            obj.type_of_traj = type_of_traj;
+         end
+         
          %#TODO
          %here i have to specify all the optional properties
          %opt.n = 50;
@@ -54,7 +58,7 @@ classdef  References < handle
           
           for i = 1:obj.GetNumTasks
             obj.SetTraj(i)
-            obj.SetTypeOfTraj(i)
+            %obj.SetTypeOfTraj(i)
           end
           
       end
@@ -64,7 +68,7 @@ classdef  References < handle
          
          if(strcmp(obj.type_of_traj(index,:),'func')) 
             
-            [p,pd,pdd]=feval(obj.trajectories{index},t,obj.parameters);    
+            [p,pd,pdd]=feval(obj.trajectories{index},t,obj.type_of_traj,obj.parameters);    
          
          elseif(strcmp(obj.type_of_traj(index,:),'sampled'))
             
@@ -76,7 +80,7 @@ classdef  References < handle
             %--
             p  = obj.trajectories{index}.sample_x(:,ind);
             pd = obj.trajectories{index}.sample_xd(:,ind);
-            pdd= obj.trajectories{index}.sample_x(:,ind);
+            pdd= obj.trajectories{index}.sample_xdd(:,ind);
          
          end
          
