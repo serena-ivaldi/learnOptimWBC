@@ -71,29 +71,35 @@ classdef  References < handle
       
       function [p,pd,pdd]=GetTraj(obj,index,t)
          
-         if(strcmp(obj.type_of_traj(index,:),'func')) 
-            
-            %normtime = NormalizeTime(t,obj.time_struct.ti,obj.time_struct.tf); 
-             
-            p=feval(obj.trajectories{index}.p,t);
-            pd=feval(obj.trajectories{index}.pd,t);
-            pdd=feval(obj.trajectories{index}.pdd,t);
-                
-         
-         elseif(strcmp(obj.type_of_traj(index,:),'sampled'))
-            
-            % index to the current value
-            [~,ind] = min(abs(obj.trajectories{index}.time-t));
-            %DEBUG
-            %cur_time = f(ind); % Finds first one only! 
-            %disp(cur_time);
-            %--
-            p  = obj.trajectories{index}.p(:,ind);
-            pd = obj.trajectories{index}.pd(:,ind);
-            pdd= obj.trajectories{index}.pdd(:,ind);
-         
+         if(strcmp(obj.control_type(index,:),'regulation'))
+             p  = obj.trajectories{index}.p;
+             pd = obj.trajectories{index}.pd;
+             pdd= obj.trajectories{index}.pdd; 
+
+         elseif(strcmp(obj.control_type(index,:),'tracking'))
+             if(strcmp(obj.type_of_traj(index,:),'func')) 
+
+                %normtime = NormalizeTime(t,obj.time_struct.ti,obj.time_struct.tf); 
+
+                p=feval(obj.trajectories{index}.p,t);
+                pd=feval(obj.trajectories{index}.pd,t);
+                pdd=feval(obj.trajectories{index}.pdd,t);
+
+
+             elseif(strcmp(obj.type_of_traj(index,:),'sampled'))
+
+                % index to the current value
+                [~,ind] = min(abs(obj.trajectories{index}.time-t));
+                %DEBUG
+                %cur_time = f(ind); % Finds first one only! 
+                %disp(cur_time);
+                %--
+                p  = obj.trajectories{index}.p(:,ind);
+                pd = obj.trajectories{index}.pd(:,ind);
+                pdd= obj.trajectories{index}.pdd(:,ind);
+
+             end
          end
-         
       end      
       
    end

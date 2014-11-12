@@ -7,19 +7,15 @@ clc
 target_link = [6];
 perturbation = 0;
 type = {'cartesian_x'};
-control_type = {'tracking'};
+control_type = {'regulation'};
 type_of_traj = {'func'};
-traj = {'circular'};
+traj = {'rectilinear'};
 time_law = {'exponential'};
-% rad_val      = geom_parameters(1);
-% phi_val      = geom_parameters(2);
-% theta_val    = geom_parameters(3);
-% wzero_val    = geom_parameters(4);
-% x_centre_val = geom_parameters(5);
-% y_centre_val = geom_parameters(6);
-% z_centre_val = geom_parameters(7);
-geom_parameters = [0.2 0 -pi/2 -pi/4 0 -0.5 0.3];   
-time_parameters = [0.5]; 
+%geom_parameters = [0.2 0 -pi/2 -pi/4 0 -0.5 0.3]; % Circular trajectory
+%geom_parameters = [-0.2 0.3 0.2 0.2 0.3 0.2];% Rectilinear trajectory
+%geom_parameters = [0.2 0.3 0.2];
+geom_parameters =  [-0.2 0.3 0.2];
+time_parameters = [0.5]; % the way that im using time_parameters now is not usefull (i control the velocity of the trajectory trough tf = final time)
 time_struct.ti = 0;
 time_struct.tf = 20;
 time_struct.step = 0.1;
@@ -53,9 +49,11 @@ toc
 
 s = Linear(time_struct.tf,time_parameters);
 type_of_traj = 'sampled';
-test_parameters = [0.2 0 -pi/2 2*pi -pi/4 0 -0.5 0.3];   
-[p,pd,pdd,time] = Circular(s,time_struct,geom_parameters,type_of_traj);
-[p_test,pd_test,pdd_test] = CircularTest(time_struct,'sampled',test_parameters);
+test_parameters = [0.2 0 -pi/2 2*pi -pi/4 0 -0.5 0.3]; 
+if(strcmp(traj,'circular')) 
+    [p,pd,pdd,time] = Circular(s,time_struct,geom_parameters,type_of_traj);
+    [p_test,pd_test,pdd_test] = CircularTest(time_struct,'sampled',test_parameters);
+end
 
 %% plot trajectories
 
@@ -104,7 +102,8 @@ J_dot = p560.sub_chains(1).jacob_dot(qz(1:p560.GetNumSubLinks(1)),0.5*ones(p560.
 
 metric = {'M^(1/2)'};  % N^(1/2) = (M^(-1))^(1/2) = M^(1/2);        
 ground_truth = false; 
-kp = 1500; %linear and exponential
+%kp = 1500; %linear and exponential tracking
+kp = 1497;
 K_p = kp*eye(3);  
 kd = 2*sqrt(kp);
 K_d = kd*eye(3);                
@@ -112,6 +111,8 @@ combine_rule = {'sum'};
 display_opt.step = 0.001;
 display_opt.trajtrack = true;
 
+% for using package function we have to call the name of the package before
+% the constructor
 controller = Controllers.UF(p560,reference,metric,ground_truth,K_p,K_d,combine_rule,display_opt);
 
 

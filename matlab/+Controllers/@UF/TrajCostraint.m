@@ -9,8 +9,8 @@ function [b,J] = TrajCostraint(obj,index,t,J_old,Jd_old,x,xd,rpy,rpyd)
         if(strcmp(obj.references.control_type(index),'regulation'))
 
             [J,J_dot] = ReshapeJacobian(obj.subchains.GetNumLinks(),J_old,Jd_old,obj.references.mask(index),'trans');
-            [x_des] = obj.references.GetTraj(index,t);
-            b = PD(x,x_des,obj.Kp(:,:,index),xd,zeros(1,3),obj.Kd(:,:,index),zeros(1,3));
+            [x_des,xd_des,xdd_des] = obj.references.GetTraj(index,t);
+            b = PD(x,x_des,obj.Kp(:,:,index),xd,xd_des,obj.Kd(:,:,index),xdd_des);
 
             % J_dot is just multiplied by qd
             b = b - J_dot;

@@ -39,7 +39,7 @@ function [p,pd,pdd,time] = Circular(s,time_struct,geom_parameters,type)
    p = subs(p,{rad,phi,theta,wzero,x_centre,y_centre,z_centre},{rad_val,phi_val,theta_val,wzero_val,x_centre_val,y_centre_val,z_centre_val});
    pd = subs(pd,{rad,phi,theta,wzero},{rad_val,phi_val,theta_val,wzero_val});
    pdd = subs(pdd,{rad,phi,theta,wzero},{rad_val,phi_val,theta_val,wzero_val});
-   % transform the exrepssion in matlab function of t 
+   % transform the expression in matlab function of t 
    p = matlabFunction(p);
    pd = matlabFunction(pd);
    pdd = matlabFunction(pdd);
