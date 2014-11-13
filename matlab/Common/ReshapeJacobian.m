@@ -6,7 +6,7 @@ function [J,J_dot] = ReshapeJacobian(num_of_link,J_old,J_dot_old,mask,trans_or_r
    % here complete the jacobian for taking into account the dynamical
    % effect of the whole robot
    if(size(J_old,2)<num_of_link)
-   J = [ J_old , zeros(size(J_old,1),num_of_link - size(J_old,2))];  
+        J_old = [ J_old , zeros(size(J_old,1),num_of_link - size(J_old,2))];  
    end
    
    if(strcmp(trans_or_rot,'trans'))

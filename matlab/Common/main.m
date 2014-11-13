@@ -5,7 +5,7 @@ clc
 
 % we have to specify every value of the cell vector for consistency with
 % the cycle inside the function 
-target_link = [6 6];
+target_link = [6 3];
 % i consider only one perturbation for the whole robot chain
 perturbation = 0;
 type = {'cartesian_x','cartesian_rpy'};
@@ -13,8 +13,16 @@ control_type = {'tracking','regulation'};
 type_of_traj = {'func','func'};
 traj = {'circular','none'};
 time_law = {'linear','none'};
+
+% type = {'cartesian_rpy'};
+% control_type = {'regulation'};
+% type_of_traj = {'func'};
+% traj = {'none'};
+% time_law = {'none'};
+
+
 geom_parameters{1} = [0.2 0 -pi/2 -pi/4 0 -0.5 0.3]; % Circular trajectory
-geom_parameters{2} = [0 0 pi/2]; % orientation regulation
+geom_parameters{2} = [0 0 -pi/2]; % orientation regulation
 %geom_parameters = [-0.2 0.3 0.2 0.2 0.3 0.2];% Rectilinear trajectory
 %geom_parameters =  [-0.2 0.3 0.2]; % position regulation
 
@@ -108,7 +116,7 @@ metric = {'M^(1/2)';'M^(1/2)'};  % N^(1/2) = (M^(-1))^(1/2) = M^(1/2);
 ground_truth = false; 
 %kp = 1500; %linear and exponential tracking
 %kp = 1497  % regulation 
-kp = [1500, 1497]; % row vector
+kp = [1497, 1500]; % row vector
 K_p = zeros(3,3,size(kp,2));
 K_d = zeros(3,3,size(kp,2));
 for par = 1:size(kp,2)
@@ -126,8 +134,8 @@ controller = Controllers.UF(p560,reference,metric,ground_truth,K_p,K_d,combine_r
 
 
 tic
-%options= odeset('MaxStep',0.1);
-[t, q, qd] = controller.subchains.nofriction().fdyn(time_struct.tf,controller,qz(1,1:controller.subchains.GetNumSubLinks(1)),zeros(1,controller.subchains.GetNumSubLinks(1)));%,options);
+options= odeset('MaxStep',0.001);
+[t, q, qd] = controller.subchains.nofriction().fdyn(time_struct.tf,controller,qz,zeros(1,controller.subchains.n),options);
 toc
 
 
