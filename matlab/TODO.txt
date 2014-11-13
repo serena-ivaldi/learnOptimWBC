@@ -8,19 +8,19 @@ implement a way to manage the case of blocked joints for visualization and simul
 
 UF
 implement mask fuctionalities
-add other trajectories
-sampling trajectories 
-tracking orientation task
-joint task (maybe)
-regulation for orientation and positon task
-force task
+add other trajectories                        v
+sampling trajectories                         v
+tracking orientation task                     v
+joint task (maybe)                                  
+regulation for orientation and positon task   v
+force task 
 projection chaining of the task
 
 
 
 build class alpha function
 
-add alpha to UF
+add alpha to UF                                         
 
 build class instance for learning (cmaes)
 
