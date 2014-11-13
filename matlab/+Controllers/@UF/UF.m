@@ -64,18 +64,18 @@ classdef  UF < Controllers.AbstractController
            % the dynamic computation between controller and simulator has
            % to be different
            
-           % compute current manipulator inertia
+           %   compute current manipulator inertia
            %   torques resulting from unit acceleration of each joint with
            %   no gravity.
            M = rne(obj.subchains.dyn_model, ones(n,1)*q, zeros(n,n), eye(n), [0;0;0]);
-           % compute gravity and coriolis torque
+           %    compute gravity and coriolis torque
            %    torques resulting from zero acceleration at given velocity &
            %    with gravity acting.
            F = rne(obj.subchains.dyn_model, q, qd, zeros(1,n)); 
            
            final_tau = zeros(n,1);
            for index =1:obj.references.GetNumTasks()
-               %#TODO inserire gli alpha
+               %#TODO add alpha function
                tau = ComputeTorqueSum(obj,index,M,F,t,q,qd);
                obj.SaveTau(index,tau);
                final_tau =final_tau + tau;  
@@ -85,7 +85,7 @@ classdef  UF < Controllers.AbstractController
         elseif(strcmp(obj.combine_rule,'projector'))
         %#TODO   
         end   
-       % managed combine_rule
+       % add combine_rule
       end    
    end
     

@@ -49,13 +49,13 @@ function animate(controller,qq,time)
     %print trajectory 
     pp=[];
     for index=1:controller.references.GetNumTasks()
-    
-       for iii=1:size(time,1)
-         [p_cur]=controller.references.GetTraj(index,time(iii));
-         pp = [pp,p_cur];
-
-       end 
-
+        % in case my trajectory is a rpy trajectory i dont want to plot it
+        if(~strcmp(controller.references.type{index},'cartesian_rpy'))    
+           for iii=1:size(time,1)
+             [p_cur]=controller.references.GetTraj(index,time(iii));
+             pp = [pp,p_cur];
+           end 
+        end
     Results{index} = pp;
     pp=[];
       
@@ -64,7 +64,10 @@ function animate(controller,qq,time)
     
     hold on;
     for index=1:controller.references.GetNumTasks()
-      plot3(Results{index}(1,1:end),Results{index}(2,1:end),Results{index}(3,1:end));
+      % in case my trajectory is a rpy trajectory i dont want to plot it  
+      if(~strcmp(controller.references.type{index},'cartesian_rpy'))  
+        plot3(Results{index}(1,1:end),Results{index}(2,1:end),Results{index}(3,1:end));
+      end
     end
     
     % index k for downsampling visualization  
@@ -72,8 +75,11 @@ function animate(controller,qq,time)
     % inizializes plot handles
     pos = zeros(3,controller.references.GetNumTasks());
     for ii = 1:controller.references.GetNumTasks()
-       pos(:,ii) = controller.references.GetTraj(ii,time(1));
-       des_traj_pos(ii) = plot3(pos(1,ii),pos(2,ii),pos(3,ii),'-.r*','MarkerSize',10,'XDataSource','pos(1,ii)','YDataSource','pos(2,ii)','ZDataSource','pos(3,ii)');
+        % in case my trajectory is a rpy trajectory i dont want to plot it
+        if(~strcmp(controller.references.type{ii},'cartesian_rpy'))    
+           pos(:,ii) = controller.references.GetTraj(ii,time(1));
+           des_traj_pos(ii) = plot3(pos(1,ii),pos(2,ii),pos(3,ii),'-.r*','MarkerSize',10,'XDataSource','pos(1,ii)','YDataSource','pos(2,ii)','ZDataSource','pos(3,ii)');
+        end   
     end
     % MAIN DISPLAY/ANIMATION LOOP
     while true
@@ -173,9 +179,12 @@ function animate(controller,qq,time)
                    % show the trajectory 
                    if(controller.display_opt.trajtrack)
                       for ii = 1:controller.references.GetNumTasks()
-                         pos(:,ii) = controller.references.GetTraj(ii,time(i));
-                         refreshdata(des_traj_pos(ii),'caller')
-                         drawnow
+                         % in case my trajectory is a rpy trajectory i dont want to plot it 
+                         if(~strcmp(controller.references.type{ii},'cartesian_rpy')) 
+                             pos(:,ii) = controller.references.GetTraj(ii,time(i));
+                             refreshdata(des_traj_pos(ii),'caller')
+                             drawnow
+                         end
                       end
                    end
 

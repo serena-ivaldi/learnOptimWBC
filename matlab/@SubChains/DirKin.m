@@ -8,6 +8,7 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,index,q,qd,ground_truth)
         T = obj.sub_chainsGT(index).fkine(q);
         x = T(1:3,4);
         rpy = tr2rpy(T);
+        rpy = rpy';
         % compute generalized cartesian velocities from the GT subchain
         J_GT=obj.sub_chainsGT(index).jacob0(q(1:obj.GetNumSubLinks(index)));
         v=J_GT*qd;
@@ -23,6 +24,7 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,index,q,qd,ground_truth)
         T = obj.sub_chains(index).fkine(q);
         x = T(1:3,4);
         rpy = tr2rpy(T);
+        rpy = rpy';
         % compute generalized cartesian velocities from the pertubed
         % subchain
         J = obj.sub_chains(index).jacob0(q(1:obj.GetNumSubLinks(index)));

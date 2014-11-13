@@ -29,8 +29,28 @@ function [b,J] = TrajCostraint(obj,index,t,J_old,Jd_old,x,xd,rpy,rpyd)
             return;
         end
 
-    elseif(strcmp(obj.references.type(index),'cartesian_rpy'))    
+    elseif(strcmp(obj.references.type(index),'cartesian_rpy'))  
+        
+        if(strcmp(obj.references.control_type(index),'regulation'))
+            
+            [J,J_dot] = ReshapeJacobian(obj.subchains.GetNumLinks(),J_old,Jd_old,obj.references.mask(index),'rot');
+            [rpy_des,rpyd_des,rpydd_des] = obj.references.GetTraj(index,t);
+            b = PD(rpy,rpy_des,obj.Kp(:,:,index),rpyd,rpyd_des,obj.Kd(:,:,index),rpydd_des);  
 
+            % J_dot is just multiplied by qd
+            b = b - J_dot; 
+            
+        elseif(strcmp(obj.references.control_type(index),'tracking'))
+            
+            [J,J_dot] = ReshapeJacobian(obj.subchains.GetNumLinks(),J_old,Jd_old,obj.references.mask(index),'rot');
+            [rpy_des,rpyd_des,rpydd_des] = obj.references.GetTraj(index,t);
+            b = PD(rpy,rpy_des,obj.Kp(:,:,index),rpyd,rpyd_des,obj.Kd(:,:,index),rpydd_des);  
+
+            % J_dot is just multiplied by qd
+            b = b - J_dot;    
+            
+        end
+        
     end    
          
  end

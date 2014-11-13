@@ -3,24 +3,28 @@ close all
 clc
 
 
-
-target_link = [6];
+% we have to specify every value of the cell vector for consistency with
+% the cycle inside the function 
+target_link = [6 6];
+% i consider only one perturbation for the whole robot chain
 perturbation = 0;
-type = {'cartesian_x'};
-control_type = {'regulation'};
-type_of_traj = {'func'};
-traj = {'rectilinear'};
-time_law = {'exponential'};
-%geom_parameters = [0.2 0 -pi/2 -pi/4 0 -0.5 0.3]; % Circular trajectory
+type = {'cartesian_x','cartesian_rpy'};
+control_type = {'tracking','regulation'};
+type_of_traj = {'func','func'};
+traj = {'circular','none'};
+time_law = {'linear','none'};
+geom_parameters{1} = [0.2 0 -pi/2 -pi/4 0 -0.5 0.3]; % Circular trajectory
+geom_parameters{2} = [0 0 pi/2]; % orientation regulation
 %geom_parameters = [-0.2 0.3 0.2 0.2 0.3 0.2];% Rectilinear trajectory
-%geom_parameters = [0.2 0.3 0.2];
-geom_parameters =  [-0.2 0.3 0.2];
-time_parameters = [0.5]; % the way that im using time_parameters now is not usefull (i control the velocity of the trajectory trough tf = final time)
+%geom_parameters =  [-0.2 0.3 0.2]; % position regulation
+
+time_parameters = [0.5]; % the way that im using time_parameters now is not usefull (i control the velocity of the trajectory through tf = final time)
 time_struct.ti = 0;
 time_struct.tf = 20;
 time_struct.step = 0.1;
 
 dim_of_task{1}={[1;1;1]};
+dim_of_task{2}={[1;1;1]};
 %% test substructure
 [p560] = MdlPuma560(target_link,perturbation);
 
@@ -100,13 +104,18 @@ J_dot = p560.sub_chains(1).jacob_dot(qz(1:p560.GetNumSubLinks(1)),0.5*ones(p560.
 
 
 
-metric = {'M^(1/2)'};  % N^(1/2) = (M^(-1))^(1/2) = M^(1/2);        
+metric = {'M^(1/2)';'M^(1/2)'};  % N^(1/2) = (M^(-1))^(1/2) = M^(1/2);        
 ground_truth = false; 
 %kp = 1500; %linear and exponential tracking
-kp = 1497;
-K_p = kp*eye(3);  
-kd = 2*sqrt(kp);
-K_d = kd*eye(3);                
+%kp = 1497  % regulation 
+kp = [1500, 1497]; % row vector
+K_p = zeros(3,3,size(kp,2));
+K_d = zeros(3,3,size(kp,2));
+for par = 1:size(kp,2)
+    K_p(:,:,par) = kp(par)*eye(3);  
+    kd = 2*sqrt(kp(par));
+    K_d(:,:,par) = kd*eye(3); 
+end
 combine_rule = {'sum'}; 
 display_opt.step = 0.001;
 display_opt.trajtrack = true;
@@ -122,8 +131,8 @@ tic
 toc
 
 
-controller.plot3d(q,t,'path','/home/modugno/Documents/toolbox/arte/arte3.2.3/robots/UNIMATE/puma560')
-%controller.plot(q,t);
+%controller.plot3d(q,t,'path','/home/modugno/Documents/toolbox/arte/arte3.2.3/robots/UNIMATE/puma560')
+controller.plot(q,t);
 
 
 %% test instance

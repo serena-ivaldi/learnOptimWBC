@@ -33,11 +33,11 @@ classdef  References < handle
          if(getnameidx({'tracking' 'regulation'} , control_type) ~= 0)
             obj.control_type = control_type;
          end
-         if(getnameidx({ 'circular','rectilinear', 'point-point_quintic' , 'point-point_trapezoidal'} , traj) ~= 0)
+         if(getnameidx({ 'circular','rectilinear', 'point-point_quintic' , 'point-point_trapezoidal' 'none'} , traj) ~= 0)
             obj.traj = traj;
          end
          
-         if(getnameidx({'exponential','linear','constant','trapezoidal'} , time_law) ~= 0)
+         if(getnameidx({'exponential','linear','constant','trapezoidal' 'none'} , time_law) ~= 0)
             obj.time_law = time_law;
          end
          
@@ -63,7 +63,6 @@ classdef  References < handle
           
           for i = 1:obj.GetNumTasks
             obj.SetTraj(i)
-            %obj.SetTypeOfTraj(i)
           end
           
       end
@@ -71,13 +70,14 @@ classdef  References < handle
       
       function [p,pd,pdd]=GetTraj(obj,index,t)
          
-         if(strcmp(obj.control_type(index,:),'regulation'))
+         if(strcmp(obj.control_type{index},'regulation'))
              p  = obj.trajectories{index}.p;
              pd = obj.trajectories{index}.pd;
              pdd= obj.trajectories{index}.pdd; 
 
-         elseif(strcmp(obj.control_type(index,:),'tracking'))
-             if(strcmp(obj.type_of_traj(index,:),'func')) 
+         elseif(strcmp(obj.control_type{index},'tracking'))
+             
+             if(strcmp(obj.type_of_traj{index},'func')) 
 
                 %normtime = NormalizeTime(t,obj.time_struct.ti,obj.time_struct.tf); 
 
@@ -86,7 +86,7 @@ classdef  References < handle
                 pdd=feval(obj.trajectories{index}.pdd,t);
 
 
-             elseif(strcmp(obj.type_of_traj(index,:),'sampled'))
+             elseif(strcmp(obj.type_of_traj{index},'sampled'))
 
                 % index to the current value
                 [~,ind] = min(abs(obj.trajectories{index}.time-t));
