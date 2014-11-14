@@ -1,9 +1,9 @@
 classdef  UF < Controllers.AbstractController
     
    properties
-      subchains;       % object that contains the subchain of the robot and the J dot for each subchain;    
+      subchains;       % object that contains the subchain of the robot and the J dot for each subchain;   (maybe i can leave it) 
       references;      % object that contains the reference trajectory for each tasks; 
-      %alpha;          % vector of weight function
+      alpha;           % cell array of weight function
       metric;          % vector of matlab command     for example M_inv^2, M_inv,eye(lenght(q)) 
       ground_truth     % if true for computing the position and velocity of the end effector i will use the non perturbed model 
       Kp               % vector of matrix of proportional gain
@@ -49,7 +49,15 @@ classdef  UF < Controllers.AbstractController
       function SaveTau(obj,index,tau)
          obj.torques{index} = [obj.torques{index}(:,:),tau];   
       end
-
+      
+      function SetParameter(obj,parameters)
+          index = 1;
+          for i=1:size(obj.alpha,2) 
+              n_param = obj.alpha{i}.GetParamNum();
+              obj.alpha{i}.ComputeNumValue(parameters(index:index+n_param - 1))
+              index = index+n_param;
+          end
+      end
 
       function  final_tau  = Policy(obj,t,q,qd)
          
@@ -78,7 +86,7 @@ classdef  UF < Controllers.AbstractController
                %#TODO add alpha function
                tau = ComputeTorqueSum(obj,index,M,F,t,q,qd);
                obj.SaveTau(index,tau);
-               final_tau =final_tau + tau;  
+               final_tau = final_tau + obj.alpha{index}.GetValue(t)*tau;  
                
            end
          
@@ -86,7 +94,17 @@ classdef  UF < Controllers.AbstractController
         %#TODO   
         end   
        % add combine_rule
-      end    
+      end  
+      
+      function n_param=GetTotalParamNum(obj)
+         
+          n_param = 0;
+          for i=1:size(obj.alpha,2) 
+              n_param = nparam + obj.alpha{i}.GetParamNum();
+          end
+      end
+      
+      
    end
     
 end

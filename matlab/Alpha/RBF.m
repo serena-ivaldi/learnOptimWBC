@@ -1,6 +1,6 @@
 % gaussian radial basis function
 
-classdef  RBF < handle
+classdef  RBF < AbstractAlpha
     
     
     
@@ -50,12 +50,14 @@ classdef  RBF < handle
         
         % return the value of the alpha function at time t
         % using normalized value
+        
+        %interface function
         function result = GetValue(obj,t)
             [~,ind] = min(abs(obj.sample.time-t));
             result = obj.sample.normvalues(ind);
         end
         
-        
+        %interface function 
         function ComputeNumValue(obj,theta)
             
             time = obj.time_struct.ti:obj.time_struct.step:obj.time_struct.tf;
@@ -71,9 +73,13 @@ classdef  RBF < handle
             
             obj.sample.normvalues=(obj.sample.values - min(obj.sample.values))/(maximum -minimum);
             
-            
-           
         end
+        
+        %interface function
+        function n=GetParamNum(obj)
+            n=obj.n_of_basis;
+        end
+             
         
         function PlotBasisFunction(obj)
             
