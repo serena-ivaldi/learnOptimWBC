@@ -135,12 +135,30 @@ controller = Controllers.UF(p560,reference,metric,ground_truth,K_p,K_d,combine_r
 
 tic
 options= odeset('MaxStep',0.001);
-[t, q, qd] = controller.subchains.nofriction().fdyn(time_struct.tf,controller,qz,zeros(1,controller.subchains.n),options);
+%[t, q, qd] = controller.subchains.nofriction().fdyn(time_struct.tf,controller,qz,zeros(1,controller.subchains.n),options);
 toc
 
 
 %controller.plot3d(q,t,'path','/home/modugno/Documents/toolbox/arte/arte3.2.3/robots/UNIMATE/puma560')
-controller.plot(q,t);
+%controller.plot(q,t);
 
 
 %% test instance
+
+% test alpha function
+number_of_basis = 4;
+redundancy = 3;
+alpha = RBF(time_struct,number_of_basis,redundancy);
+% parameters have to be a column vector !!!!
+alpha.ComputeNumValue(ones(number_of_basis,1));
+plot(alpha.sample.time,alpha.sample.normvalues);
+%alpha.PlotBasisFunction();
+
+
+
+
+
+
+
+
+
