@@ -16,10 +16,11 @@ classdef  UF < Controllers.AbstractController
 
    methods
       
-       function obj = UF(sub_chains,references,metric,ground_truth,Kp,Kd,combine_rule,varargin)
+       function obj = UF(sub_chains,references,alpha,metric,ground_truth,Kp,Kd,combine_rule,varargin)
          
          obj.subchains = sub_chains;
          obj.references = references;
+         obj.alpha = alpha;
          obj.metric = metric;
          obj.ground_truth = ground_truth;
          obj.Kp = Kp;
@@ -43,16 +44,15 @@ classdef  UF < Controllers.AbstractController
          
       end    
 
-%       function SetAlpha(obj,alpha)
-%          obj.alpha = alpha;
-%       end
       function SaveTau(obj,index,tau)
          obj.torques{index} = [obj.torques{index}(:,:),tau];   
       end
       
+      % in this function i update the value of the alpha function giving
+      % new set of parameters
       function SetParameter(obj,parameters)
           index = 1;
-          for i=1:size(obj.alpha,2) 
+          for i=1:obj.references.GetNumTasks() 
               n_param = obj.alpha{i}.GetParamNum();
               obj.alpha{i}.ComputeNumValue(parameters(index:index+n_param - 1))
               index = index+n_param;
@@ -83,7 +83,6 @@ classdef  UF < Controllers.AbstractController
            
            final_tau = zeros(n,1);
            for index =1:obj.references.GetNumTasks()
-               %#TODO add alpha function
                tau = ComputeTorqueSum(obj,index,M,F,t,q,qd);
                obj.SaveTau(index,tau);
                final_tau = final_tau + obj.alpha{index}.GetValue(t)*tau;  

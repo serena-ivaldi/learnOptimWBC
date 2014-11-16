@@ -1,7 +1,8 @@
 classdef (Abstract) AbstractAlpha < handle
     
    properties(Abstract)
-      sample      % value for a specific set of theta and sampling time (sample.time sample.values sample.normvalues)
+      time_struct            % struct with time_struct.ti time_struct.tf time_struct.step
+      sample                 % value for a specific set of theta and sampling time (sample.time sample.values sample.normvalues)
    end
        
     
@@ -14,4 +15,10 @@ classdef (Abstract) AbstractAlpha < handle
       GetParamNum(obj);
    end
     
+   methods(Abstract, Static)
+      % static method used for build a cell array of alpha function
+      result = BuildCellArray
+   end
+   
+   
 end

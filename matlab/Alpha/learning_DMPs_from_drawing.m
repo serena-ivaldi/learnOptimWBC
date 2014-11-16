@@ -151,8 +151,9 @@ hold all;
 plot(Sy);
 
 %% Compute the forcing function given the desired trajectory
-fx = Ax - alpha*beta*(ones(length(Sx),1)*sxd - Sx) + alpha*Vx;
-fy = Ay - alpha*beta*(ones(length(Sy),1)*syd - Sy) + alpha*Vy;
+ fx = Ax - alpha*beta*(ones(length(Sx),1)*sxd - Sx) + alpha*Vx;
+ fy = Ay - alpha*beta*(ones(length(Sy),1)*syd - Sy) + alpha*Vy;
+
 
 figure(10);
 hold all;
@@ -178,16 +179,24 @@ sx0 = x(1);
 sy0 = y(1);
 
 % initial velocity
-vx0 = dx(1);
-vy0 = dy(1);
+% vx0 = dx(1);
+% vy0 = dy(1);
+
+vx0 = 0;
+vy0 = 0;
+
 
 % desired position
 sxd = x(end);
 syd = y(end);
 
 % desired velocity
-vxd = dx(end);
-vyd = dy(end);
+% vxd = dx(end);
+% vyd = dy(end);
+
+ vxd = 0;
+ vyd = 0;
+
 
 % parameters of the PD controller
 alpha = 10;
@@ -207,7 +216,7 @@ Sy = zeros(T,1); % positions
 Vy = zeros(T,1); % velocities
 Ay = zeros(T,1); % accelerations
 
-% simulation
+% simulation 
 for i = 1:T
    
    Sx(i) = sxt;
@@ -221,7 +230,8 @@ for i = 1:T
    
    Ax(i) = ax;
    Ay(i) = ay;
-    
+   
+   
    %new position
    sxt = sxt + vxt*0.2 + ax*0.2^2/2;
    syt = syt + vyt*0.2 + ay*0.2^2/2;
@@ -229,6 +239,7 @@ for i = 1:T
    %new velocity
    vxt = vxt + ax*0.2;
    vyt = vyt + ay*0.2;
+  
     
 end
 

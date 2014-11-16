@@ -1,7 +1,6 @@
-% gaussian radial basis function
-
-classdef  RBF < AbstractAlpha
+classdef  DMP < AbstractAlpha
     
+% gaussian radial basis function
     
     
     properties
@@ -9,14 +8,19 @@ classdef  RBF < AbstractAlpha
         n_of_basis             % number of functions that compose our RBF
         redundancy             % parameter that control the level of overlapping of the function
         basis_functions        % cell array of basis function
-        func                   % handle to rbf(theta,t) 
+        kp                     % parameter of pd (position)
+        kd                     % parameter of pd (velocity)
+        Pd                     % final desired position 
+        Vd                     % final desired velocity 
+        alpha_z                % smoothing factor of non linear force
+        func                   % handle to dmp(theta,t) 
         sample                 % value for a specific set of theta and sampling time (sample.time sample.values sample.normvalues)
     end
 
 
     
     methods
-        function obj = RBF(time_struct,n_of_basis,redundancy)
+        function obj = DMP(time_struct,n_of_basis,redundancy,kp,kd,Pd,Vd,alpha_z)
             obj.time_struct = time_struct;
             obj.n_of_basis = n_of_basis;
             obj.redundancy = redundancy;
@@ -24,10 +28,17 @@ classdef  RBF < AbstractAlpha
             
         end
 
-        function BuildRBF(obj)
-            t = sym('t');
+        function BuildDMP(obj)
+            t  = sym('t');
+            pd = sym('pd');
+            pt = sym('pt');
+            vd = sym('vd');
+            vt = sym('vt');
+            
             theta = sym('theta',[obj.n_of_basis,1]);
             T = obj.time_struct.tf;
+            
+            z = exp(-obj.alpha_z*t);
             
             % this value of sigma produces a 15% of overlapping between two 
             % consecutive gaussian with redundancy = 3;
@@ -36,15 +47,14 @@ classdef  RBF < AbstractAlpha
             
             for i=0:(obj.n_of_basis-1)
                 
-                phi(i+1) = exp(-(t-(i*T)/(obj.n_of_basis-1))^2/cof);
-                obj.basis_functions{i+1} = matlabFunction(phi(i+1));
+                psi(i+1) = (exp(-(t-(i*T)/(obj.n_of_basis-1))^2/cof))*z;
+                obj.basis_functions{i+1} = matlabFunction(psi(i+1));
             end
 
-            
-            rbf = phi*theta;
-            rbf = matlabFunction(rbf,'vars', {t,theta});
-            obj.func = rbf;
-            
+            f = psi*theta;
+            dmp = obj.kd*obj.kp*(pd-pt) + obj.kd*(vd-vt) + f;
+            obj.func = matlabFunction(dmp,'vars', {t,pd,pt,vd,vt,theta});
+                        
         end
         
         
@@ -57,21 +67,34 @@ classdef  RBF < AbstractAlpha
             result = obj.sample.normvalues(ind);
         end
         
-        %interface function 
-        function ComputeNumValue(obj,theta)
+        
+        %interface function (TO FIX) 
+        function ComputeNumValue(obj,p_init,v_init,theta)
             
             time = obj.time_struct.ti:obj.time_struct.step:obj.time_struct.tf;
             i=1;
+            pt = p_init;
+            vt = v_init;
             for t = time
-                obj.sample.values(i) = feval(obj.func,t,theta); 
+                
+                at = feval(obj.func,t,obj.pd,obj.pt,vd,vt,theta); 
+                
+                %new position
+                pt = pt + vt*0.2 + at*0.2^2/2;
+                %new velocity
+                vt = vt + at*0.2;
+                
+                obj.sample.values(i) = pt;
                 i=i+1;
+                
             end
             obj.sample.time = time;
+            
             % normalize result between zero and one
             minimum = min(obj.sample.values);
             maximum = max(obj.sample.values);
             
-            obj.sample.normvalues=(obj.sample.values - min(obj.sample.values))/(maximum -minimum);
+            obj.sample.normvalues=(obj.sample.values - min(obj.sample.values))/(maximum - minimum);
             
         end
         
@@ -99,20 +122,39 @@ classdef  RBF < AbstractAlpha
             end
             
         end
+        
+        % this function modifies the value of "sample" in timestruct 
+        function [p_init,v_init,theta] = TrainByDraw(obj,number_of_pivot,step)
+           
+           [p ,pd ,pdd] = RecordTrajectory(number_of_pivot,step)
+           
+           
+           
+        end
+        
+        
+        
     end
     
     methods (Static)
         
-        function RBFs = BuildCellArray(n_of_task,time_struct,n_of_basis,redundancy)
+        function DMPs = BuildCellArray(n_of_task,time_struct,n_of_basis,redundancy,kp,kd,Pd,Vd,alpha_z,train,number_of_pivot,step)
             
             for i=1:n_of_task
-                RBFs{i} = RBF(time_struct,n_of_basis,redundancy);
+                DMPs{i} = DMP(time_struct,n_of_basis,redundancy,kp,kd,Pd,Vd,alpha_z);
+                if(train)
+                     [p_init,v_init,theta] = DMPs{i}.TrainByDraw(number_of_pivot,step);
+                     DMPs{i}.ComputeNumValue(obj,p_init,v_init,theta);  
+                end
             end
             
         end
     end
     
+   
+
+
+
+
+   
 end
-
-
-

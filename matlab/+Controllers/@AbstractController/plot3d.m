@@ -97,13 +97,13 @@ function plot3d(controller,q,time,varargin)
         
         if isempty(opt.path)
             % first find the path to the models
-            pth = which('arte.m');
+            pth = which('findmodel.m');
             if ~pth
                 error('RTB:plot3d:nomodel', 'no 3D model found, install the RTB contrib zip file');
             end
             
             % find the path to this specific model
-            pth = fullfile(fileparts(pth), 'robots', controller.subchains.model3d)
+            pth = fullfile(fileparts(pth),controller.subchains.model3d)
         else
             pth = opt.path;
         end

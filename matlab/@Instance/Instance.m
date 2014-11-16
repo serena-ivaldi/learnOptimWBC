@@ -39,7 +39,7 @@ classdef  Instance
           %CMA-ES settings
           settings.nIterations = niter;     
           settings.explorationRate = explorationRate; %[0, 1]
-          settings.fnForwardModel = @(a_, flg_)EvaluateCMAES(a_,flg_, obj);
+          settings.fnForwardModel = @(a_, flg_)EvaluateCMAES(a_,flg_, obj); %TO FIX
           settings.plotState = 1;         %{0,1} plot offsprings yes no
 
           %search optimal parameters

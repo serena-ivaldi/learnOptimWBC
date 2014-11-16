@@ -28,7 +28,7 @@ geom_parameters{2} = [0 0 -pi/2]; % orientation regulation
 
 time_parameters = [0.5]; % the way that im using time_parameters now is not usefull (i control the velocity of the trajectory through tf = final time)
 time_struct.ti = 0;
-time_struct.tf = 20;
+time_struct.tf = 10;
 time_struct.step = 0.1;
 
 dim_of_task{1}={[1;1;1]};
@@ -98,6 +98,11 @@ end
 % plot3(p_test(1,1:end),p_test(2,1:end),p_test(3,1:end),'r');
 % p560.plot3d(qz,'path','/home/modugno/Documents/toolbox/arte/arte3.2.3/robots/UNIMATE/puma560');
 %p560.plot(qz);
+%% alpha function
+parameters = zeros(1,10);
+values=[1,1];
+alphas = ConstantAlpha.BuildCellArray(values,time_struct);
+
 %% test controller 
 
 % test on J J_dot and fkine
@@ -125,21 +130,22 @@ for par = 1:size(kp,2)
     K_d(:,:,par) = kd*eye(3); 
 end
 combine_rule = {'sum'}; 
-display_opt.step = 0.001;
+display_opt.step = 0.01;
 display_opt.trajtrack = true;
 
 % for using package function we have to call the name of the package before
 % the constructor
-controller = Controllers.UF(p560,reference,metric,ground_truth,K_p,K_d,combine_rule,display_opt);
+controller = Controllers.UF(p560,reference,alphas,metric,ground_truth,K_p,K_d,combine_rule,display_opt);
 
 
 tic
+controller.SetParameter(parameters);
 options= odeset('MaxStep',0.001);
 %[t, q, qd] = controller.subchains.nofriction().fdyn(time_struct.tf,controller,qz,zeros(1,controller.subchains.n),options);
 toc
 
 
-%controller.plot3d(q,t,'path','/home/modugno/Documents/toolbox/arte/arte3.2.3/robots/UNIMATE/puma560')
+%controller.plot3d(q,t);
 %controller.plot(q,t);
 
 
@@ -151,10 +157,11 @@ redundancy = 3;
 alpha = RBF(time_struct,number_of_basis,redundancy);
 % parameters have to be a column vector !!!!
 alpha.ComputeNumValue(ones(number_of_basis,1));
-plot(alpha.sample.time,alpha.sample.normvalues);
+%plot(alpha.sample.time,alpha.sample.normvalues);
 %alpha.PlotBasisFunction();
 
 
+[zp ,zpd ,zpdd] = RecordTrajectory(5,0.01);
 
 
 
