@@ -103,10 +103,11 @@ classdef  RBF < AbstractAlpha
     
     methods (Static)
         
-        function RBFs = BuildCellArray(n_of_task,time_struct,n_of_basis,redundancy)
+        function RBFs = BuildCellArray(n_of_task,time_struct,n_of_basis,redundancy,theta)
             
             for i=1:n_of_task
                 RBFs{i} = RBF(time_struct,n_of_basis,redundancy);
+                RBFs{i}.ComputeNumValue(theta);
             end
             
         end

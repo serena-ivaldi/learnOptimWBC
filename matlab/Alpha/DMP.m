@@ -10,8 +10,6 @@ classdef  DMP < AbstractAlpha
         basis_functions        % cell array of basis function
         kp                     % parameter of pd (position)
         kd                     % parameter of pd (velocity)
-        Pd                     % final desired position 
-        Vd                     % final desired velocity 
         alpha_z                % smoothing factor of non linear force
         func                   % handle to dmp(theta,t) 
         sample                 % value for a specific set of theta and sampling time (sample.time sample.values sample.normvalues)
@@ -20,11 +18,15 @@ classdef  DMP < AbstractAlpha
 
     
     methods
-        function obj = DMP(time_struct,n_of_basis,redundancy,kp,kd,Pd,Vd,alpha_z)
+        function obj = DMP(time_struct,n_of_basis,redundancy,kp,kd,alpha_z)
             obj.time_struct = time_struct;
             obj.n_of_basis = n_of_basis;
             obj.redundancy = redundancy;
-            obj.BuildRBF();
+            obj.kp = kp;
+            obj.kd = kd;
+            obj.alpha_z = alpha_z;
+            obj.BuildDMP();
+            
             
         end
 
@@ -69,7 +71,7 @@ classdef  DMP < AbstractAlpha
         
         
         %interface function (TO FIX) 
-        function ComputeNumValue(obj,p_init,v_init,theta)
+        function ComputeNumValue(obj,p_init,v_init,pd,vd,theta)
             
             time = obj.time_struct.ti:obj.time_struct.step:obj.time_struct.tf;
             i=1;
@@ -77,12 +79,12 @@ classdef  DMP < AbstractAlpha
             vt = v_init;
             for t = time
                 
-                at = feval(obj.func,t,obj.pd,obj.pt,vd,vt,theta); 
+                at = feval(obj.func,t,pd,pt,vd,vt,theta); 
                 
                 %new position
-                pt = pt + vt*0.2 + at*0.2^2/2;
+                pt = pt + vt*obj.time_struct.step + at*obj.time_struct.step^2/2;
                 %new velocity
-                vt = vt + at*0.2;
+                vt = vt + at*obj.time_struct.step;
                 
                 obj.sample.values(i) = pt;
                 i=i+1;
@@ -124,12 +126,32 @@ classdef  DMP < AbstractAlpha
         end
         
         % this function modifies the value of "sample" in timestruct 
-        function [p_init,v_init,theta] = TrainByDraw(obj,number_of_pivot,step)
+        function [p_init,v_init,p_end,v_end,theta] = TrainByDraw(obj,number_of_pivot,step)
            
-           [p ,pd ,pdd] = RecordTrajectory(number_of_pivot,step)
+           [p ,pd ,pdd, time] = RecordTrajectory(number_of_pivot,step,obj.time_struct.tf);
+           % Compute the forcing function given the desired trajectory
+           f = pdd' - obj.kp*obj.kd*(ones(length(p),1)*p(end) - p') - obj.kd*(ones(length(p),1)*pd(end) - pd');
            
+           PHI = zeros(size(time,2),obj.n_of_basis);
            
+           for j=1:obj.n_of_basis
+              index = 1;
+              for t=time
+                 PHI(index,j) = obj.basis_functions{j}(t);
+                 index = index + 1;
+              end
+           end
            
+           theta = (PHI'*PHI)\PHI'*f;
+           p_init = p(1);
+           v_init = pd(1);
+           p_end  = p(end);
+           v_end  = pd(end);
+           
+           % update step in time_struct
+%            T = obj.time_struct.tf;
+%            new_step = T/size(time,2);
+%            obj.time_struct.step = new_step;
         end
         
         
@@ -138,13 +160,15 @@ classdef  DMP < AbstractAlpha
     
     methods (Static)
         
-        function DMPs = BuildCellArray(n_of_task,time_struct,n_of_basis,redundancy,kp,kd,Pd,Vd,alpha_z,train,number_of_pivot,step)
+        function DMPs = BuildCellArray(n_of_task,time_struct,n_of_basis,redundancy,kp,kd,Po,Vo,Pd,Vd,alpha_z,train,number_of_pivot,step)
             
             for i=1:n_of_task
-                DMPs{i} = DMP(time_struct,n_of_basis,redundancy,kp,kd,Pd,Vd,alpha_z);
+                DMPs{i} = DMP(time_struct,n_of_basis,redundancy,kp,kd,alpha_z);
                 if(train)
-                     [p_init,v_init,theta] = DMPs{i}.TrainByDraw(number_of_pivot,step);
-                     DMPs{i}.ComputeNumValue(obj,p_init,v_init,theta);  
+                     [p_init,v_init,p_end,v_end,theta] = DMPs{i}.TrainByDraw(number_of_pivot,step);
+                     DMPs{i}.ComputeNumValue(obj,p_init,v_init,p_end,v_end,theta); 
+                else
+                     DMPs{i}.ComputeNumValue(obj,Po,Vo,Pd,Vd,theta); 
                 end
             end
             

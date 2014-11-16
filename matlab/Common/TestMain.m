@@ -155,16 +155,29 @@ toc
 number_of_basis = 4;
 redundancy = 3;
 alpha = RBF(time_struct,number_of_basis,redundancy);
-% parameters have to be a column vector !!!!
+% the parameters have to be a column vector !!!!
 alpha.ComputeNumValue(ones(number_of_basis,1));
 %plot(alpha.sample.time,alpha.sample.normvalues);
 %alpha.PlotBasisFunction();
 
 
-[zp ,zpd ,zpdd] = RecordTrajectory(5,0.01);
+%[zp ,zpd ,zpdd , scaled_time] = RecordTrajectory(5,0.01);
 
-
-
+number_of_basis = 10;
+redundancy = 3;
+kp = 10;
+kd = 2*sqrt(kp);
+alpha_z = 0.1;
+number_of_pivot = 5;
+step = 0.01;
+alpha1 = DMP(time_struct,number_of_basis,redundancy,kp,kd,alpha_z);
+[p_init,v_init,p_end,v_end,theta] = alpha1.TrainByDraw(number_of_pivot,step);
+alpha1.ComputeNumValue(p_init,v_init,p_end,v_end,theta);
+% plot results
+figure
+plot(alpha1.sample.time,alpha1.sample.normvalues);
+figure
+alpha1.PlotBasisFunction();
 
 
 

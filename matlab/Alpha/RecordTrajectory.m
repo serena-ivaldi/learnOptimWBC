@@ -1,8 +1,8 @@
-function [p ,pd ,pdd] = RecordTrajectory(number_of_pivot,step)
+function [p ,pd ,pdd, sample] = RecordTrajectory(number_of_pivot,step,tf)
 
    
    figure(1);
-   axis([0  1  0  1])
+   axis([0  tf  0  1])
    for i=1:number_of_pivot
       h(i) = impoint();
       pos = wait(h(i));
@@ -14,13 +14,14 @@ function [p ,pd ,pdd] = RecordTrajectory(number_of_pivot,step)
       sam(i) = pos(2);
    end
    
-   sample=0:step:1;
+   sample=0:step:tf;
 
    % interpolate the points to obtain a continuos curve
    p = interp1(val,sam,sample,'spline'); 
    % saturation to keep value between zero and one
    p(p>=1) = 1;
    p(p<=0) = 0;
+   
    % plot positions
    figure;
    plot(sample,p,'.');
@@ -36,9 +37,8 @@ function [p ,pd ,pdd] = RecordTrajectory(number_of_pivot,step)
    % cut down parts where we
    % don't have acceleration
    pd = pd(2:end);
-
    p  = p(3:end);
-
+   sample = sample(3:end);
 
    % % plot x coordinates, velocities and accelerations with respect to x
    % figure;
