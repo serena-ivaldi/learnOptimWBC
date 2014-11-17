@@ -141,11 +141,11 @@ controller = Controllers.UF(p560,reference,alphas,metric,ground_truth,K_p,K_d,co
 tic
 controller.SetParameter(parameters);
 options= odeset('MaxStep',0.001);
-[t, q, qd] = controller.subchains.nofriction().fdyn(time_struct.tf,controller,qz,zeros(1,controller.subchains.n),options);
+%[t, q, qd] = controller.subchains.nofriction().fdyn(time_struct.tf,controller,qz,zeros(1,controller.subchains.n),options);
 toc
 
 
-controller.plot3d(q,t);
+%controller.plot3d(q,t);
 %controller.plot(q,t);
 
 
@@ -178,6 +178,10 @@ figure
 plot(alpha1.sample.time,alpha1.sample.normvalues);
 figure
 alpha1.PlotBasisFunction();
+
+
+
+
 
 
 

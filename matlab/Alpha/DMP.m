@@ -66,11 +66,11 @@ classdef  DMP < AbstractAlpha
         %interface function
         function result = GetValue(obj,t)
             [~,ind] = min(abs(obj.sample.time-t));
-            result = obj.sample.normvalues(ind);
+            result = obj.sample.values(ind);
         end
         
         
-        %interface function (TO FIX) 
+        %interface function 
         function ComputeNumValue(obj,p_init,v_init,pd,vd,theta)
             
             time = obj.time_struct.ti:obj.time_struct.step:obj.time_struct.tf;
@@ -90,13 +90,12 @@ classdef  DMP < AbstractAlpha
                 i=i+1;
                 
             end
+            
+            % saturation to keep value between zero and one
+            obj.sample.values(obj.sample.values>=1) = 1;
+            obj.sample.values(obj.sample.values<=0) = 0;
+            
             obj.sample.time = time;
-            
-            % normalize result between zero and one
-            minimum = min(obj.sample.values);
-            maximum = max(obj.sample.values);
-            
-            obj.sample.normvalues=(obj.sample.values - min(obj.sample.values))/(maximum - minimum);
             
         end
         
@@ -148,10 +147,7 @@ classdef  DMP < AbstractAlpha
            p_end  = p(end);
            v_end  = pd(end);
            
-           % update step in time_struct
-%            T = obj.time_struct.tf;
-%            new_step = T/size(time,2);
-%            obj.time_struct.step = new_step;
+
         end
         
         
