@@ -1,4 +1,4 @@
-%VREP_arm V-REP mirror of robot arm object
+%VAREP_arm V-REP mirror of robot arm object
 %
 % Mirror objects are MATLAB objects that reflect objects in the V-REP
 % environment.  Methods allow the V-REP state to be examined or changed.
@@ -9,7 +9,7 @@
 % Methods throw exception if an error occurs.
 %
 % Example::
-%          vrep = VREP();
+%          varep = VAREP();
 %          arm = vrep.arm('IRB140');
 %          q = arm.getq();
 %          arm.setq(zeros(1,6));
@@ -60,7 +60,7 @@
 %
 % http://www.petercorke.com
 
-classdef VREP_arm < VREP_obj
+classdef VAREP_arm < VAREP_obj
     
     properties(GetAccess=public, SetAccess=protected)
         q
@@ -72,7 +72,7 @@ classdef VREP_arm < VREP_obj
     
     methods
         
-        function arm = VREP_arm(vrep, name, varargin)
+        function arm = VAREP_arm(vrep, name, varargin)
             %VREP_arm.VREP_arm Create a robot arm mirror object
             %
             % R = VREP_arm(NAME, OPTIONS) is a mirror object that corresponds to the
@@ -92,7 +92,7 @@ classdef VREP_arm < VREP_obj
             if h == 0
                 error('no such object as %s in the scene', name);
             end
-            arm = arm@VREP_obj(vrep, name);
+            arm = arm@VAREP_obj(vrep, name);
             
             opt.fmt = '%s_joint%d';
             opt = tb_optparse(opt, varargin);

@@ -61,7 +61,7 @@
 %
 % http://www.petercorke.com
 
-classdef VREP_camera < VREP_obj
+classdef VAREP_camera < VAREP_obj
     
     properties
     end
@@ -82,7 +82,7 @@ classdef VREP_camera < VREP_obj
             % - Default parameters are set in the V-REP environment
             %
             % See also VREP_obj.
-            obj = obj@VREP_obj(vrep, name);
+            obj = obj@VAREP_obj(vrep, name);
         end
         
         function im = setclipping(obj, near, far)

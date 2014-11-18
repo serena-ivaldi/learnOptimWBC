@@ -1,6 +1,6 @@
-%VREP V-REP simulator communications object
+%VAREP V-REP simulator communications object
 %
-% A VREP object holds all information related to the state of a connection.
+% A VAREP object holds all information related to the state of a connection.
 % References are passed to other objects which mirror the V-REP environment
 % in MATLAB.
 %
@@ -74,7 +74,7 @@
 %
 % http://www.petercorke.com
 
-classdef VREP < handle
+classdef VAREP < handle
         
     properties(GetAccess=public, SetAccess=protected)
         vrep    % the remApi object
@@ -88,7 +88,7 @@ classdef VREP < handle
     
     methods
     
-        function obj = VREP(path, varargin)
+        function obj = VAREP(path, varargin)
             %VREP.VREP VREP object constructor
             %
             % v = VREP(OPTIONS) create a connection to the V-REP simulator.

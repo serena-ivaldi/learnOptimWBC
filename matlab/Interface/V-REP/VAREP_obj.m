@@ -54,19 +54,19 @@
 %
 % http://www.petercorke.com
 
-classdef VREP_obj < VREP_mirror
+classdef VAREP_obj < VAREP_mirror
     
     properties
     end
     
     methods
         
-        function obj = VREP_obj(vrep, name)
+        function obj = VAREP_obj(vrep, name)
             %VREP_obj.VREP_obj VREP_obj mirror object constructor
             %
             % v = VREP_base(NAME) creates a V-REP mirror object for a
             % simple V-REP object type.
-            obj = obj@VREP_mirror(vrep, name);
+            obj = obj@VAREP_mirror(vrep, name);
         end
         
         function p = getpos(obj, relto)

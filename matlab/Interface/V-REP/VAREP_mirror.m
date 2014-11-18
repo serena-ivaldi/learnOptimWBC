@@ -34,7 +34,7 @@
 %
 % http://www.petercorke.com
 
-classdef (Abstract=true) VREP_mirror < handle
+classdef (Abstract=true) VAREP_mirror < handle
     
     properties(GetAccess=public, SetAccess=protected)
         vrep
@@ -45,7 +45,7 @@ classdef (Abstract=true) VREP_mirror < handle
             
         methods
             
-            function obj = VREP_mirror(vrep, name)
+            function obj = VAREP_mirror(vrep, name)
             %VREP_mirror.VREP_mirror VREP_mirror object constructor
             %
             % v = VREP_mirror(NAME) creates a V-REP mirror object.

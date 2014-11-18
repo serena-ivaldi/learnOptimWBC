@@ -17,7 +17,7 @@
 % along with RTB.  If not, see <http://www.gnu.org/licenses/>.
 %
 % http://www.petercorke.com
-classdef VREP_mobile < handle
+classdef VAREP_mobile < handle
     
     properties
         vrep
@@ -27,7 +27,7 @@ classdef VREP_mobile < handle
     
     methods
         
-        function mob = VREP_mobile(vrep, name)
+        function mob = VAREP_mobile(vrep, name)
             
             mob.vrep = vrep;
             
