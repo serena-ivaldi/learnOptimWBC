@@ -50,14 +50,18 @@
 %
 % http://www.petercorke.com
 
-function [t, q, qd] = fdyn(robot, t1, object, q0, qd0, varargin)
+function [t, q, qd] = fdyn(robot, time_struct, object, q0, qd0,fixed_step,varargin)
 
     % check the Matlab version, since ode45 syntax has changed
     if verLessThan('matlab', '7')  
         error('fdyn now requires Matlab version >= 7');
     end
 
+    time = time_struct.ti:time_struct.step:time_struct.tf;
+    
     n = robot.n;
+    
+    %TO FIX
     if nargin == 2
         torqfun = 0;
         q0 = zeros(1,n);
@@ -71,8 +75,11 @@ function [t, q, qd] = fdyn(robot, t1, object, q0, qd0, varargin)
 
     % concatenate q and qd into the initial state vector
     q0 = [q0(:); qd0(:)];   
-    
-    [t,y] = ode15s(@fdyn2, [0 t1], q0, [], robot, object,varargin{:});
+    if(fixed_step)
+        y= ode4(@fdyn2,time,q0,robot,object,varargin{:});
+    else
+        [t,y] = ode15s(@fdyn2, [0 time_struct.tf], q0, [], robot, object,varargin{:});
+    end      
     q = y(:,1:n);
     qd = y(:,n+1:2*n);
 

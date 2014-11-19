@@ -5,7 +5,7 @@ clc
 
 % we have to specify every value of the cell vector for consistency with
 % the cycle inside the function 
-target_link = [7 7 4];
+target_link = [7 7];
 % i consider only one perturbation for the whole robot chain
 perturbation = 0;
 type = {'cartesian_x','cartesian_rpy','cartesian_rpy'};
@@ -21,7 +21,7 @@ time_law = {'linear','none','none'};
 % time_law = {'none'};
 
 
-geom_parameters{1} = [0.2 0 -pi/2 -pi/4 0 -0.5 0.3]; % Circular trajectory
+geom_parameters{1} = [0.2 0 -pi/2 -pi/4 0 -0.6 0.5]; % Circular trajectory
 geom_parameters{2} = [0 0 -pi/2]; % orientation regulation
 geom_parameters{3} = [0 0 -pi/2]; % orientation regulation
 %geom_parameters = [-0.2 0.3 0.2 0.2 0.3 0.2];% Rectilinear trajectory
@@ -30,7 +30,7 @@ geom_parameters{3} = [0 0 -pi/2]; % orientation regulation
 time_parameters = [0.5]; % the way that im using time_parameters now is not usefull (i control the velocity of the trajectory through tf = final time)
 time_struct.ti = 0;
 time_struct.tf = 10;
-time_struct.step = 0.1;
+time_struct.step = 0.001;
 
 dim_of_task{1}={[1;1;1]};
 dim_of_task{2}={[1;1;1]};
@@ -46,17 +46,17 @@ reference.BuildTrajs();
 
 
 % perfomance measure 
-tic
-for index=1:reference.GetNumTasks()
-    
-    for t=time_struct.ti:time_struct.step:time_struct.tf
-        
-      [p_cur,pd_cur,pdd_cur]=reference.GetTraj(index,t);
-      
-    end 
-      
-end
-toc
+% tic
+% for index=1:reference.GetNumTasks()
+%     
+%     for t=time_struct.ti:time_struct.step:time_struct.tf
+%         
+%       [p_cur,pd_cur,pdd_cur]=reference.GetTraj(index,t);
+%       
+%     end 
+%       
+% end
+% toc
 
 
 %% test sampled reference 
@@ -69,19 +69,19 @@ toc
 %     [p_test,pd_test,pdd_test] = CircularTest(time_struct,'sampled',test_parameters);
 % end
 
-%% plot trajectories
+%% plot Trajectories and Robot
 
-% if(strcmp(type_of_traj,'func')) 
+% if(strcmp(type_of_traj{1},'func')) 
 %   
 %     p_tot=[];
 %     pd_tot=[];
 %     pdd_tot=[];
 %     for t=time_struct.ti:time_struct.step:time_struct.tf
 %         
-%         normtime = NormalizeTime(t,time_struct.ti,time_struct.tf); 
-%         p_cur=feval(p,normtime);
-%         pd_cur=feval(pd,normtime);
-%         pdd_cur=feval(pdd,normtime);
+%         
+%         p_cur=feval(reference.trajectories{1}.p,t);
+%         pd_cur=feval(reference.trajectories{1}.pd,t);
+%         pdd_cur=feval(reference.trajectories{1}.pdd,t);
 % 
 %         p_tot = [p_tot,p_cur];
 %         pd_tot = [pd_tot,pd_cur];
@@ -89,20 +89,19 @@ toc
 %         
 %     end
 %     
-% elseif(strcmp(type_of_traj,'sampled'))
-%     p_tot = p;
-%     pd_tot = pd;
-%     pdd_tot = pdd;
+% elseif(strcmp(type_of_traj{1},'sampled'))
+%     p_tot = reference.trajectories{1}.p;
+%     pd_tot = reference.trajectories{1}.pd;
+%     pdd_tot = reference.trajectories{1}.pdd;
 % end
 % 
+% 
+% hold on;axis equal;
+% LBR4p.plot(qz);
 % plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
-% hold on;
-% plot3(p_test(1,1:end),p_test(2,1:end),p_test(3,1:end),'r');
-% LBR4p.plot3d(qz,'path','/home/modugno/Documents/toolbox/arte/arte3.2.3/robots/UNIMATE/puma560');
-%LBR4p.plot(qz);
 %% alpha function
 parameters = zeros(1,10);
-values=[1,0.3,1];
+values=[1,1,1];
 alphas = ConstantAlpha.BuildCellArray(values,time_struct);
 
 %% test controller 
@@ -123,7 +122,7 @@ metric = {'M';'M^(1/2)';'M^(1/2)'};  % N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);
 ground_truth = false; 
 %kp = 1500; %linear and exponential tracking
 %kp = 1497  % regulation 
-kp = [500, 4997, 4997]; % row vector
+kp = [700, 700, 4997]; % row vector
 K_p = zeros(3,3,size(kp,2));
 K_d = zeros(3,3,size(kp,2));
 for par = 1:size(kp,2)
@@ -141,19 +140,21 @@ controller = Controllers.UF(LBR4p,reference,alphas,metric,ground_truth,K_p,K_d,c
 
 
 tic
-controller.SetParameter(parameters);
-%options= odeset('MaxStep',0.001);
-[t, q, qd] = controller.subchains.nofriction().fdyn(time_struct.tf,controller,qz,zeros(1,controller.subchains.n));%,options);
+fixed_step = false;
+time_sym_struct = time_struct;
+time_sym_struct.step = 0.001;
+options= odeset('MaxStep',0.001);
+%[t, q, qd] = controller.subchains.nofriction().fdyn(time_sym_struct,controller,qz,zeros(1,controller.subchains.n),fixed_step);%,options);
 toc
 
-controller.plot(q,t);
+%controller.plot(q,t);
 
 
-%% test instance
+%% test Alpha
 
 % % test alpha function
-% number_of_basis = 4;
-% redundancy = 3;
+number_of_basis = 4;
+redundancy = 1;
 % alpha = RBF(time_struct,number_of_basis,redundancy);
 % % the parameters have to be a column vector !!!!
 % alpha.ComputeNumValue(ones(number_of_basis,1));
@@ -179,7 +180,13 @@ controller.plot(q,t);
 % figure
 % alpha1.PlotBasisFunction();
 
-
+theta = ones(number_of_basis,reference.GetNumTasks());
+alpha_cell = RBF.BuildCellArray(reference.GetNumTasks(),time_struct,number_of_basis,redundancy,theta);
+for i=1:reference.GetNumTasks()
+figure   
+plot(alpha_cell{i}.sample.time,alpha_cell{i}.sample.normvalues);   
+    
+end
 
 
 

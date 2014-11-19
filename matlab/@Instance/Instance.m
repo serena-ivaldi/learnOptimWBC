@@ -1,49 +1,61 @@
 classdef  Instance
     
    properties
-      controller  % structure that contains every information about the specific instance of the problem
-      simulator   % rbt v-rep
-      result      % vector that contains all the informations that is needed for the fitness function
+      controller      % structure that contains every information about the specific instance of the problem
+      simulator       % rbt v-rep
+      qinit           % initial position 
+      qdinit          % initial velocity
+      time_sym_struct %time struct for simulation with fixed step
+      fixed_step      % if is true i use ode4 (runge-kutta)
+      options         % options for variable step 
+      fitness         % fitness function handle
    end
        
     
    methods
        
-       function obj = Instance(controller,simulator_type)
+       function obj = Instance(controller,simulator_type,qinit,qdinit,time_sym_struct,fixed_step,options,fitness)
            obj.controller = controller;
-           if(getnameidx({'rbt','v-rep'} , type) ~= 0 )
+           if(getnameidx({'rbt','v-rep'} , simulator_type{1}) ~= 0 )
              obj.simulator = simulator_type;
            end
+           obj.qinit = qinit;
+           obj.qdinit= qdinit;
+           obj.time_sym_struct = time_sym_struct;
+           obj.fixed_step = fixed_step;
+           obj.options = options;
+           obj.fitness = fitness;
        end
        
-       
+       % this function has to give back something that let me compute the
+       % fitness function for that sample
        function run(obj,parameters)
            
-            obj.controller.SetParameter(parameters);
+            obj.controller.UpdateParameters(parameters);
             
             if(strcmp(obj.simulator,'rbt'))
-                tic
-                options= odeset('MaxStep',0.001);   
-                obj.controller.subchains.nofriction().fdyn(time_struct.tf,obj.controller,qinit,qdinit,options);
+                tic 
+                obj.controller.subchains.nofriction().fdyn(obj.time_sym_struct,obj.controller,obj.qinit,obj.qdinit,obj.fixed_step,obj.options);
                 toc 
             end
        end
        
-       function [mean_performances bestAction]=CMAES(obj,min_action,max_action,niter,explorationRate)
+       function [mean_performances bestAction]=CMAES(obj,start_action,min_action,max_action,niter,explorationRate)
           %Parameter space
           NumParam = obj.controller.GetTotalParamNum();
-          settings.action = zeros(1,NumParam);
+          % start_value for action
+          settings.action = start_action;
           settings.minAction = ones(1,NumParam).*min_action;
           settings.maxAction = ones(1,NumParam).*max_action;
 
           %CMA-ES settings
           settings.nIterations = niter;     
           settings.explorationRate = explorationRate; %[0, 1]
-          settings.fnForwardModel = @(a_, flg_)EvaluateCMAES(a_,flg_, obj); %TO FIX
+          settings.fnForwardModel = @(a_,obj_)EvaluateCMAES(a_,obj); 
           settings.plotState = 1;         %{0,1} plot offsprings yes no
 
           %search optimal parameters
-          [mean_performances bestAction] = learnCMAES(settings);
+          [mean_performances bestAction] = obj.LearnCMAES(settings);
 
           figure;
           plot(mean_performances);      

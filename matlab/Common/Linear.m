@@ -5,6 +5,4 @@ t = sym('t');
 
 s = (a*t)/(a*tf);
 
-
-
 end

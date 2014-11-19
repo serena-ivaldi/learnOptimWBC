@@ -12,7 +12,7 @@ classdef  References < handle
       mask;            % vector of vector(3) (col vec) that contains a mask that specify what i want to control for the specific task. for example x and z (control a subset of variable) mask = (1;0:1)
       type_of_traj;    % sampled func
       trajectories;    % cell array with the sampling of the trajectory with position velocity and desired acceleration  
-                       % in case of sampled trajectory i build up a struct with four fields "sample_x" "sample_xd" "sample_xdd" (row matrix) contains the value of the  trajectory 
+                       % in case of sampled trajectory i build up a struct with four fields "p" "pd" "pdd" (row matrix) contains the value of the  trajectory 
                        %and "time" (row vector) that contains the sampling time
                     
    end

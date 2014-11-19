@@ -4,8 +4,13 @@ clc
 
 %GENERAL PARAMETERS
 time_struct.ti = 0;
-time_struct.tf = 20;
+time_struct.tf = 10;
 time_struct.step = 0.1;
+
+% for fixed step simulation only
+time_sym_struct = time_struct;
+time_sym_struct.step = 0.01; 
+fixed_step = false;
 
 %SUBCHAIN PARAMETERS 
 % we have to specify every value of the cell vector for consistency with
@@ -45,8 +50,19 @@ combine_rule = {'sum'};
 display_opt.step = 0.001;
 display_opt.trajtrack = true;
 
+
+
+
 %% Robot
 [p560] = MdlPuma560(target_link,perturbation);
+
+
+% INSTANCE PARAMETERS
+qinit = qz;
+qdinit = zeros(size(qz));
+fitness= @(t)t;
+options= [];
+simulator_type = {'rbt'};
 
 %% Reference
 % if type_of_task = sampled i have to specify the Time to reach the
@@ -56,15 +72,14 @@ reference.BuildTrajs();
 
 
 
-%% to fix
 %% Alpha
 % test alpha function
 number_of_basis = 4;
-redundancy = 3;
-alpha = RBF(time_struct,number_of_basis,redundancy);
-% parameters have to be a column vector !!!!
-alpha.ComputeNumValue(ones(number_of_basis,1));
-plot(alpha.sample.time,alpha.sample.normvalues);
+redundancy = 1;
+theta = ones(number_of_basis,reference.GetNumTasks());
+alphas = RBF.BuildCellArray(reference.GetNumTasks(),time_struct,number_of_basis,redundancy,theta);
+
+
 %alpha.PlotBasisFunction();
 
 
@@ -72,13 +87,18 @@ plot(alpha.sample.time,alpha.sample.normvalues);
 
 % for using package function we have to call the name of the package before
 % the constructor
-controller = Controllers.UF(p560,reference,metric,ground_truth,K_p,K_d,combine_rule,display_opt);
+controller = Controllers.UF(p560,reference,alphas,metric,ground_truth,K_p,K_d,combine_rule,display_opt);
 
 %% Instance
+% starting value of parameters
+start_action = ones(1,reference.GetNumTasks()*number_of_basis);
+min_action   = 3;
+max_action   = 3;
+explorationRate =0.1;%[0, 1]
+niter = 10;
 
-
-
-
+inst = Instance(controller,simulator_type,qinit,qdinit,time_sym_struct,fixed_step,options,fitness);
+inst.CMAES(start_action,min_action,max_action,niter,explorationRate)
 
 
 

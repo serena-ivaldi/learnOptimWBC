@@ -50,7 +50,6 @@ function [p,pd,pdd,time] = Rectilinear(s,time_struct,geom_parameters,type)
       
       
       time=time_struct.ti:time_struct.step:time_struct.tf;
-      %normtime = NormalizeTime(time,time_struct.ti,time_struct.tf);
  
       p = p(time);
       pd = pd(time);

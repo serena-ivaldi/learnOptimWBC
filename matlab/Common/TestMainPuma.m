@@ -141,7 +141,10 @@ controller = Controllers.UF(p560,reference,alphas,metric,ground_truth,K_p,K_d,co
 tic
 controller.SetParameter(parameters);
 options= odeset('MaxStep',0.001);
-%[t, q, qd] = controller.subchains.nofriction().fdyn(time_struct.tf,controller,qz,zeros(1,controller.subchains.n),options);
+fixed_step = false;
+time_sym_struct = time_struct;
+time_sym_struct.step = 0.001;
+%[t, q, qd] = controller.subchains.nofriction().fdyn(time_sym_struct,controller,qz,zeros(1,controller.subchains.n),fixed_step,options);
 toc
 
 

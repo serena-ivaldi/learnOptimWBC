@@ -1,13 +1,21 @@
 function tau = ComputeTorqueSum(obj,index,M,F,t,q,qd)
-    
+   
 
    [J,Jd,x,xd,rpy,rpyd] = obj.subchains.DirKin(index,q,qd,obj.ground_truth);
    [b,A] = TrajCostraint(obj,index,t,J,Jd,x,xd,rpy,rpyd);
    
    N = evalin('caller',obj.metric{index});
-
+   
+   
+   
    AM_inv  = A/M;
-   AM_invN = AM_inv*N;      
+   AM_invN = AM_inv*N;
+   
+   %DEBUG
+%   t
+%   zz = svd(AM_invN); 
+   %---
+   
    tau = N*pinv(AM_invN)*(b + AM_inv*F');
     
 %     % kathib 87 controller 

@@ -478,6 +478,7 @@ function h = create_robot(controller, opt)
     h.opt = opt;
     
     % attach the handle structure to the top graphical element
+    disp('sono qui')
     set(group, 'UserData', h);
 end
 

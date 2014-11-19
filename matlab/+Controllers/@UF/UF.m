@@ -50,11 +50,12 @@ classdef  UF < Controllers.AbstractController
       
       % in this function i update the value of the alpha function giving
       % new set of parameters
-      function SetParameter(obj,parameters)
+      function UpdateParameters(obj,parameters)
           index = 1;
           for i=1:obj.references.GetNumTasks() 
               n_param = obj.alpha{i}.GetParamNum();
-              obj.alpha{i}.ComputeNumValue(parameters(index:index+n_param - 1))
+              app_param = parameters(index:index+n_param - 1);
+              obj.alpha{i}.ComputeNumValue(app_param')
               index = index+n_param;
           end
       end
@@ -99,7 +100,7 @@ classdef  UF < Controllers.AbstractController
          
           n_param = 0;
           for i=1:size(obj.alpha,2) 
-              n_param = nparam + obj.alpha{i}.GetParamNum();
+              n_param = n_param + obj.alpha{i}.GetParamNum();
           end
       end
       

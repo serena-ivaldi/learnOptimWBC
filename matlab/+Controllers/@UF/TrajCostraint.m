@@ -1,3 +1,7 @@
+% in this function i compute a part of control action giving the desidered
+% position and velocity and comparing them with the actual position and
+% velocity plus i extract from the jacobian the task jacobian and J_dot task  
+
 function [b,J] = TrajCostraint(obj,index,t,J_old,Jd_old,x,xd,rpy,rpyd)
 
  if(strcmp(obj.references.type(index),'joint'))

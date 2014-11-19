@@ -2,7 +2,7 @@
 %%***************************************************
 %% Task dependent evaluation function
 %%***************************************************
-function [performance succeeded] = EvaluateCMAES(action, isMean,obj)
+function [performance succeeded] = EvaluateCMAES(action,obj)
 %%
 %% action is a row vector where each element denotes the amplitude of one
 %% Gaussian Kernel
@@ -13,7 +13,7 @@ succeeded = 1;
 
 obj.run(action)
 
-%fitness function (TO FIX)
-performance = exp(-20*sum((tFn - aFn).^2)/length(x));%-sum((tFn - aFn).^2)/100; 
+%fitness function i have to change the structure of the feval
+performance = feval(obj.fitness,1);
 
 end

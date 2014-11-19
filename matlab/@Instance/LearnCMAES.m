@@ -1,4 +1,4 @@
-function [mean_performances bestAction policies costs succeeded] = learnCMAES(settings)
+function [mean_performances bestAction policies costs succeeded] = LearnCMAES(obj,settings)
 
 nIterations = settings.nIterations;
 explorationRate = settings.explorationRate;

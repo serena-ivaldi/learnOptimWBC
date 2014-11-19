@@ -1,4 +1,5 @@
-%#TODO set control of input plus error sginaling
+%#TODO set control of input plus error signaling
+% I control the normalization of time inside the time law (linear circular and trapezoid)
 
 function SetTraj(obj,iter)
 

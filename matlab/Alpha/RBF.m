@@ -1,4 +1,6 @@
 % gaussian radial basis function
+% parameters have to be  column vectors because of the way the alpha function
+% is built before (from sym to function)
 
 classdef  RBF < AbstractAlpha
     
@@ -107,7 +109,7 @@ classdef  RBF < AbstractAlpha
             
             for i=1:n_of_task
                 RBFs{i} = RBF(time_struct,n_of_basis,redundancy);
-                RBFs{i}.ComputeNumValue(theta);
+                RBFs{i}.ComputeNumValue(theta(:,i));
             end
             
         end
