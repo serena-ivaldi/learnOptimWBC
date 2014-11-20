@@ -52,36 +52,44 @@
 
 function [t, q, qd] = fdyn(robot, time_struct, object, q0, qd0,fixed_step,varargin)
 
-    % check the Matlab version, since ode45 syntax has changed
-    if verLessThan('matlab', '7')  
-        error('fdyn now requires Matlab version >= 7');
-    end
+%     try
+        % check the Matlab version, since ode45 syntax has changed
+        if verLessThan('matlab', '7')  
+            error('fdyn now requires Matlab version >= 7');
+        end
 
-    time = time_struct.ti:time_struct.step:time_struct.tf;
-    
-    n = robot.n;
-    
-    %TO FIX
-    if nargin == 2
-        torqfun = 0;
-        q0 = zeros(1,n);
-        qd0 = zeros(1,n);
-    elseif nargin == 3
-        q0 = zeros(1,n);
-        qd0 = zeros(1,n);
-    elseif nargin == 4
-        qd0 = zeros(1,n);
-    end
+        time = time_struct.ti:time_struct.step:time_struct.tf;
 
-    % concatenate q and qd into the initial state vector
-    q0 = [q0(:); qd0(:)];   
-    if(fixed_step)
-        y= ode4(@fdyn2,time,q0,robot,object,varargin{:});
-    else
-        [t,y] = ode15s(@fdyn2, [0 time_struct.tf], q0, [], robot, object,varargin{:});
-    end      
-    q = y(:,1:n);
-    qd = y(:,n+1:2*n);
+        n = robot.n;
+
+        %TO FIX
+        if nargin == 2
+            torqfun = 0;
+            q0 = zeros(1,n);
+            qd0 = zeros(1,n);
+        elseif nargin == 3
+            q0 = zeros(1,n);
+            qd0 = zeros(1,n);
+        elseif nargin == 4
+            qd0 = zeros(1,n);
+        end
+    
+        % concatenate q and qd into the initial state vector
+        q0 = [q0(:); qd0(:)];   
+        if(fixed_step)
+            y= ode4(@fdyn2,time,q0,robot,object,varargin{:});
+            t = time';
+        else
+            [t,y] = ode15s(@fdyn2, [0 time_struct.tf], q0, [], robot, object,varargin{:});
+        end      
+        q = y(:,1:n);
+        qd = y(:,n+1:2*n);
+%     catch err
+%         q = y(:,1:n);
+%         qd = y(:,n+1:2*n);
+%         
+%         rethrow(error);
+%     end    
 
 end
 

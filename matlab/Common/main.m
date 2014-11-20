@@ -2,6 +2,10 @@ clear all
 close all
 clc
 
+% this 2 line are necessatry if i want to catch warning message from ode
+warning on verbose
+warning('error', 'MATLAB:ode15s:IntegrationTolNotMet');
+
 %GENERAL PARAMETERS
 time_struct.ti = 0;
 time_struct.tf = 10;

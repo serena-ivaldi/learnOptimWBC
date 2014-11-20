@@ -9,7 +9,7 @@ function [p ,pd ,pdd, sample] = RecordTrajectory(number_of_pivot,step,tf)
    end
    % get the position (x,y coordinates) of each point of the curve
    for i=1:number_of_pivot
-      pos = getPosition(h(i))
+      pos = getPosition(h(i));
       val(i) = pos(1);
       sam(i) = pos(2);
    end
@@ -60,7 +60,9 @@ function [p ,pd ,pdd, sample] = RecordTrajectory(number_of_pivot,step,tf)
    % plot(ddy, 'r');
    % 
    % legend('y', 'dy', 'ddy');
-
+   
+   k = waitforbuttonpress(); 
+   close all
 
 
 

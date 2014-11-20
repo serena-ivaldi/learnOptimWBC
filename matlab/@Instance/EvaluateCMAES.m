@@ -11,8 +11,11 @@ function [performance succeeded] = EvaluateCMAES(action,obj)
 %% target function
 succeeded = 1;
 
-obj.run(action)
-
+try
+    obj.run(action)
+catch err
+    perfomance = 0;
+end
 %fitness function i have to change the structure of the feval
 performance = feval(obj.fitness,1);
 

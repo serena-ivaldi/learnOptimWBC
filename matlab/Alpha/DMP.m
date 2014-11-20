@@ -162,9 +162,9 @@ classdef  DMP < AbstractAlpha
                 DMPs{i} = DMP(time_struct,n_of_basis,redundancy,kp,kd,alpha_z);
                 if(train)
                      [p_init,v_init,p_end,v_end,theta] = DMPs{i}.TrainByDraw(number_of_pivot,step);
-                     DMPs{i}.ComputeNumValue(obj,p_init,v_init,p_end,v_end,theta); 
+                     DMPs{i}.ComputeNumValue(p_init,v_init,p_end,v_end,theta); 
                 else
-                     DMPs{i}.ComputeNumValue(obj,Po,Vo,Pd,Vd,theta); 
+                     DMPs{i}.ComputeNumValue(Po,Vo,Pd,Vd,theta); 
                 end
             end
             

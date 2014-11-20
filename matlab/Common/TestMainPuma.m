@@ -5,7 +5,7 @@ clc
 
 % we have to specify every value of the cell vector for consistency with
 % the cycle inside the function 
-target_link = [6 3];
+target_link = [6];
 % i consider only one perturbation for the whole robot chain
 perturbation = 0;
 type = {'cartesian_x','cartesian_rpy'};
@@ -96,11 +96,25 @@ end
 % plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
 % hold on;
 % plot3(p_test(1,1:end),p_test(2,1:end),p_test(3,1:end),'r');
-% p560.plot3d(qz,'path','/home/modugno/Documents/toolbox/arte/arte3.2.3/robots/UNIMATE/puma560');
+% p560.plot3d(qz);
 %p560.plot(qz);
 %% alpha function
-parameters = zeros(1,10);
-values=[1,1];
+
+number_of_basis = 10;
+redundancy = 3;
+kp = 10;
+kd = 2*sqrt(kp);
+Po = 0;
+Vo = 0;
+Pd = 0; 
+Vd = 0;
+alpha_z = 0.1;
+train = true;
+number_of_pivot = 5;
+step = 0.01;
+theta = 1*ones(number_of_basis,reference.GetNumTasks());
+values = 1*ones(reference.GetNumTasks());
+%alphas = DMP.BuildCellArray(reference.GetNumTasks(),time_struct,number_of_basis,redundancy,kp,kd,Po,Vo,Pd,Vd,alpha_z,train,number_of_pivot,step);
 alphas = ConstantAlpha.BuildCellArray(values,time_struct);
 
 %% test controller 
@@ -133,54 +147,60 @@ combine_rule = {'sum'};
 display_opt.step = 0.01;
 display_opt.trajtrack = true;
 
-% for using package function we have to call the name of the package before
+% for using package functions we have to call the name of the package before
 % the constructor
 controller = Controllers.UF(p560,reference,alphas,metric,ground_truth,K_p,K_d,combine_rule,display_opt);
 
-
+value =1;
+try
 tic
-controller.SetParameter(parameters);
 options= odeset('MaxStep',0.001);
 fixed_step = false;
 time_sym_struct = time_struct;
 time_sym_struct.step = 0.001;
-%[t, q, qd] = controller.subchains.nofriction().fdyn(time_sym_struct,controller,qz,zeros(1,controller.subchains.n),fixed_step,options);
+[t, q, qd] = controller.subchains.nofriction().fdyn(time_sym_struct,controller,qz,zeros(1,controller.subchains.n),fixed_step,options);
 toc
+catch error
+    
+    disp(error);
+    value = 0;
+    
+end
 
 
-%controller.plot3d(q,t);
+controller.plot3d(q,t);
 %controller.plot(q,t);
 
 
 %% test instance
 
 % test alpha function
-number_of_basis = 4;
-redundancy = 3;
-alpha = RBF(time_struct,number_of_basis,redundancy);
-% the parameters have to be a column vector !!!!
-alpha.ComputeNumValue(ones(number_of_basis,1));
-%plot(alpha.sample.time,alpha.sample.normvalues);
-%alpha.PlotBasisFunction();
-
-
-%[zp ,zpd ,zpdd , scaled_time] = RecordTrajectory(5,0.01);
-
-number_of_basis = 10;
-redundancy = 3;
-kp = 10;
-kd = 2*sqrt(kp);
-alpha_z = 0.1;
-number_of_pivot = 5;
-step = 0.01;
-alpha1 = DMP(time_struct,number_of_basis,redundancy,kp,kd,alpha_z);
-[p_init,v_init,p_end,v_end,theta] = alpha1.TrainByDraw(number_of_pivot,step);
-alpha1.ComputeNumValue(p_init,v_init,p_end,v_end,theta);
-% plot results
-figure
-plot(alpha1.sample.time,alpha1.sample.normvalues);
-figure
-alpha1.PlotBasisFunction();
+% number_of_basis = 4;
+% redundancy = 3;
+% alpha = RBF(time_struct,number_of_basis,redundancy);
+% % the parameters have to be a column vector !!!!
+% alpha.ComputeNumValue(ones(number_of_basis,1));
+% %plot(alpha.sample.time,alpha.sample.normvalues);
+% %alpha.PlotBasisFunction();
+% 
+% 
+% %[zp ,zpd ,zpdd , scaled_time] = RecordTrajectory(5,0.01);
+% 
+% number_of_basis = 10;
+% redundancy = 3;
+% kp = 10;
+% kd = 2*sqrt(kp);
+% alpha_z = 0.1;
+% number_of_pivot = 5;
+% step = 0.01;
+% alpha1 = DMP(time_struct,number_of_basis,redundancy,kp,kd,alpha_z);
+% [p_init,v_init,p_end,v_end,theta] = alpha1.TrainByDraw(number_of_pivot,step);
+% alpha1.ComputeNumValue(p_init,v_init,p_end,v_end,theta);
+% % plot results
+% figure
+% plot(alpha1.sample.time,alpha1.sample.normvalues);
+% figure
+% alpha1.PlotBasisFunction();
 
 
 

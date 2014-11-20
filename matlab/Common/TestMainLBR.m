@@ -2,6 +2,10 @@ clear all
 close all
 clc
 
+warning on verbose
+warning('error', 'MATLAB:ode15s:IntegrationTolNotMet');
+warning('error','MATLAB:illConditionedMatrix');
+
 
 % we have to specify every value of the cell vector for consistency with
 % the cycle inside the function 
@@ -137,17 +141,21 @@ display_opt.trajtrack = true;
 % for using package function we have to call the name of the package before
 % the constructor
 controller = Controllers.UF(LBR4p,reference,alphas,metric,ground_truth,K_p,K_d,combine_rule,display_opt);
-
-
-tic
-fixed_step = false;
-time_sym_struct = time_struct;
-time_sym_struct.step = 0.001;
-options= odeset('MaxStep',0.001);
-%[t, q, qd] = controller.subchains.nofriction().fdyn(time_sym_struct,controller,qz,zeros(1,controller.subchains.n),fixed_step);%,options);
-toc
-
-%controller.plot(q,t);
+value = 1;
+try
+    tic
+    fixed_step = true;
+    time_sym_struct = time_struct;
+    time_sym_struct.step = 0.001;
+    options= odeset('MaxStep',0.001);
+    [t, q, qd] = controller.subchains.nofriction().fdyn(time_sym_struct,controller,qz,zeros(1,controller.subchains.n),fixed_step);%,options);
+    toc
+catch err
+    % test try catch
+    disp(err)
+    value = 0;
+end
+controller.plot(q,t);
 
 
 %% test Alpha
