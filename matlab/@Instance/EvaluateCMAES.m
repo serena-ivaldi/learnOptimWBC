@@ -2,21 +2,32 @@
 %%***************************************************
 %% Task dependent evaluation function
 %%***************************************************
-function [performance succeeded] = EvaluateCMAES(action,obj)
+function [performance succeeded] = EvaluateCMAES(obj,action,ismean)
 %%
 %% action is a row vector where each element denotes the amplitude of one
 %% Gaussian Kernel
 %%
 %% performance denotes the mean squared error to the one dimensional
 %% target function
-succeeded = 1;
+
 
 try
     obj.run(action)
+    
+    succeeded = 1;
+    
+    % insert fitness function 
+    performance = rand();
+    
+    % cancel all the information relative to the current iteration (control action)
+    obj.controller.CleanTau();
+    
 catch err
-    perfomance = 0;
+    
+    succeeded = 0;
+    performance = 0;
+    
 end
-%fitness function i have to change the structure of the feval
-performance = feval(obj.fitness,1);
+
 
 end

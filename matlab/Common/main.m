@@ -5,6 +5,7 @@ clc
 % this 2 line are necessatry if i want to catch warning message from ode
 warning on verbose
 warning('error', 'MATLAB:ode15s:IntegrationTolNotMet');
+warning('error', 'MATLAB:illConditionedMatrix')
 
 %GENERAL PARAMETERS
 time_struct.ti = 0;
@@ -96,7 +97,7 @@ controller = Controllers.UF(p560,reference,alphas,metric,ground_truth,K_p,K_d,co
 %% Instance
 % starting value of parameters
 start_action = ones(1,reference.GetNumTasks()*number_of_basis);
-min_action   = 3;
+min_action   = -3;
 max_action   = 3;
 explorationRate =0.1;%[0, 1]
 niter = 10;

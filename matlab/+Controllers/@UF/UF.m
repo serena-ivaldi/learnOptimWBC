@@ -48,6 +48,12 @@ classdef  UF < Controllers.AbstractController
          obj.torques{index} = [obj.torques{index}(:,:),tau];   
       end
       
+      function CleanTau(obj)
+          for i = 1 :obj.references.GetNumTasks()
+            obj.torques{i} = [];
+          end
+      end
+      
       % in this function i update the value of the alpha function giving
       % new set of parameters
       function UpdateParameters(obj,parameters)

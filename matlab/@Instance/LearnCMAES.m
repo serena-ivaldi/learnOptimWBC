@@ -69,10 +69,10 @@ else
     end
 end
 
-fnForwardModel = @(actionLearn_, isMean_) TransAction(actionLearn_, isMean_, settings);
+fnForwardModel = @(obj_,actionLearn_, isMean_) TransAction(obj_,actionLearn_, isMean_, settings);
 
 
-[mean_performances(1) succeeded(1)] = fnForwardModel(mean(1, :), 1);
+[mean_performances(1) succeeded(1)] = fnForwardModel(obj,mean(1, :), 1);
 policies(policyId,:) = mean(1, :);
 costs(policyId) = -mean_performances(1);
 policyId = policyId + 1;
@@ -81,6 +81,7 @@ fprintf('Mean %d: %e %d\n', 1 , mean_performances(1), succeeded(1));
 for k = 1:(nIterations - 1)
     %create offsprings
     for l = 1:lambda 
+
         offsprings(l, :) = mean(k,:) + sigma(k) * mvnrnd(zeros(1, n), C{k});
         
         offsprings(l, offsprings(l,:) > maxAction) = maxAction(offsprings(l,:) > maxAction);
@@ -89,7 +90,7 @@ for k = 1:(nIterations - 1)
     
     %evaluate offsprings
     if settings.allowEvalMultiple > 0
-        performances = fnForwardModel(offsprings, 0);
+        performances = fnForwardModel(obj,offsprings, 0);
 %         keyboard %check correctness of ids
         ids = policyId:policyId+lambda-1;
         policies(ids,:) = offsprings;
@@ -98,7 +99,7 @@ for k = 1:(nIterations - 1)
     else
         %par
         for l = 1:lambda 
-            [performances(l) succeeded(policyId)] = fnForwardModel(offsprings(l, :), 0);
+            [performances(l) succeeded(policyId)] = fnForwardModel(obj,offsprings(l, :), 0);
             if settings.plotState
                 fprintf('Offspring %d : %e %d\n', l, performances(l), succeeded(policyId));
             end
@@ -117,7 +118,7 @@ for k = 1:(nIterations - 1)
         mean(k + 1, :) = mean(k + 1, :) + w(l) * offsprings(index, :);
     end
 
-    [mean_performances(k + 1) succeeded(policyId)] = fnForwardModel(mean(k + 1, :), 1);
+    [mean_performances(k + 1) succeeded(policyId)] = fnForwardModel(obj,mean(k + 1, :), 1);
     policies(policyId,:) = mean(k + 1, :);
     costs(policyId) = -mean_performances(k + 1);
     policyId = policyId + 1;
@@ -129,6 +130,8 @@ for k = 1:(nIterations - 1)
 
     fprintf('Mean %d: %e %d\n', k + 1, mean_performances(k + 1), succeeded(policyId-1));
 
+    p_c(k, :)
+    sigma(k)
     
     p_c(k + 1,:) = (1 - cc) * p_c(k, :) + sqrt(cc * (2-cc) * ueff) *(mean(k + 1, :) - mean(k,:)) / sigma(k);
     C{k + 1} = (1 - ccov) * C{k} + ccov * (1 / ueff * p_c(k + 1,:)' * p_c(k + 1,:));
@@ -156,7 +159,7 @@ bestAction.performance = -costs(id);
 
 end
 
-function [performance succeeded] = TransAction(actionLearn, isMean, settings)
+function [performance succeeded] = TransAction(obj_,actionLearn, isMean, settings)
 
 if isfield(settings, 'activeIndices')
     if size(actionLearn,1) < 2
@@ -169,6 +172,6 @@ if isfield(settings, 'activeIndices')
 else
     actionFull = actionLearn;
 end
-    [performance succeeded] = settings.fnForwardModel(actionFull, isMean);
+    [performance succeeded] = settings.fnForwardModel(obj_, actionFull, isMean);
 
 end
