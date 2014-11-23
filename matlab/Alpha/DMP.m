@@ -156,16 +156,18 @@ classdef  DMP < AbstractAlpha
     
     methods (Static)
         
-        function DMPs = BuildCellArray(n_of_task,time_struct,n_of_basis,redundancy,kp,kd,Po,Vo,Pd,Vd,alpha_z,train,number_of_pivot,step)
+        function DMPs = BuildCellArray(n_subchain,n_task,time_struct,n_of_basis,redundancy,kp,kd,Po,Vo,Pd,Vd,alpha_z,train,number_of_pivot,step)
             
-            for i=1:n_of_task
-                DMPs{i} = DMP(time_struct,n_of_basis,redundancy,kp,kd,alpha_z);
-                if(train)
-                     [p_init,v_init,p_end,v_end,theta] = DMPs{i}.TrainByDraw(number_of_pivot,step);
-                     DMPs{i}.ComputeNumValue(p_init,v_init,p_end,v_end,theta); 
-                else
-                     DMPs{i}.ComputeNumValue(Po,Vo,Pd,Vd,theta); 
-                end
+            for i=1:n_subchain
+               for j=1:n_task
+                   DMPs{i,j} = DMP(time_struct,n_of_basis,redundancy,kp,kd,alpha_z);
+                   if(train)
+                        [p_init,v_init,p_end,v_end,theta] = DMPs{i}.TrainByDraw(number_of_pivot,step);
+                        DMPs{i,j}.ComputeNumValue(p_init,v_init,p_end,v_end,theta); 
+                   else
+                        DMPs{i,j}.ComputeNumValue(Po,Vo,Pd,Vd,theta); 
+                   end
+               end
             end
             
         end

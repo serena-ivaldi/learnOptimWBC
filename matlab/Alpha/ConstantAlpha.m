@@ -35,10 +35,11 @@ classdef ConstantAlpha < AbstractAlpha
    end
    
    methods (Static)
-      function alphas = BuildCellArray(values,time_struct)
+      function alphas = BuildCellArray(n_subchain,n_task,values,time_struct)
          
-         for i=1:size(values,2)
-            alphas{i} = ConstantAlpha(values(i),time_struct);
+         for i=1:n_subchain
+             for j =1:n_task
+            alphas{i,j} = ConstantAlpha(values(i,j),time_struct);
          end
          
       end

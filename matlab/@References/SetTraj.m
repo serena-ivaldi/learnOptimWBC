@@ -1,101 +1,101 @@
 %#TODO set control of input plus error signaling
 % I control the normalization of time inside the time law (linear circular and trapezoid)
 
-function SetTraj(obj,iter)
+function SetTraj(obj,ind_subchain,ind_task)
 
   if(strcmp(obj.type,'joint'))
   % write joint block
 
-  elseif(strcmp(obj.type{iter},'cartesian_x'))
+  elseif(strcmp(obj.type{ind_subchain,ind_task},'cartesian_x'))
   
-      if(strcmp(obj.control_type{iter},'tracking'))
+      if(strcmp(obj.control_type{ind_subchain,ind_task},'tracking'))
        
-          if(strcmp(obj.traj{iter},'rectilinear'))
+          if(strcmp(obj.traj{ind_subchain,ind_task},'rectilinear'))
               s = 0;
-              if(strcmp(obj.time_law{iter},'exponential'))
-                  s=Exponential(obj.time_struct.tf,obj.time_parameters);
-              elseif(strcmp(obj.time_law{iter},'linear'))
-                  s=Linear(obj.time_struct.tf,obj.time_parameters);
-              elseif(strcmp(obj.time_law{iter},'trapezoidal'))
+              if(strcmp(obj.time_law{ind_subchain,ind_task},'exponential'))
+                  s=Exponential(obj.time_struct.tf);
+              elseif(strcmp(obj.time_law{ind_subchain,ind_task},'linear'))
+                  s=Linear(obj.time_struct.tf);
+              elseif(strcmp(obj.time_law{ind_subchain,ind_task},'trapezoidal'))
                   %s=Trapezoidal(obj.time_parameters);
               end
               
-              [p pd pdd t] = Rectilinear(s,obj.time_struct,obj.geom_parameters{iter},obj.type);
-              obj.trajectories{iter}.p = p;
-              obj.trajectories{iter}.pd = pd;
-              obj.trajectories{iter}.pdd = pdd;
-              obj.trajectories{iter}.time = t;
+              [p,pd,pdd,t] = Rectilinear(s,obj.time_struct,obj.geom_parameters{ind_subchain,ind_task},obj.type);
+              obj.trajectories{ind_subchain,ind_task}.p = p;
+              obj.trajectories{ind_subchain,ind_task}.pd = pd;
+              obj.trajectories{ind_subchain,ind_task}.pdd = pdd;
+              obj.trajectories{ind_subchain,ind_task}.time = t;
               
               
-          elseif(strcmp(obj.traj{iter},'circular')) 
+          elseif(strcmp(obj.traj{ind_subchain,ind_task},'circular')) 
               s = 0;
-              if(strcmp(obj.time_law{iter},'exponential'))
-                  s=Exponential(obj.time_struct.tf,obj.time_parameters);
-              elseif(strcmp(obj.time_law{iter},'linear'))
-                  s=Linear(obj.time_struct.tf,obj.time_parameters);
-              elseif(strcmp(obj.time_law{iter},'trapezoidal'))
+              if(strcmp(obj.time_law{ind_subchain,ind_task},'exponential'))
+                  s=Exponential(obj.time_struct.tf);
+              elseif(strcmp(obj.time_law{ind_subchain,ind_task},'linear'))
+                  s=Linear(obj.time_struct.tf);
+              elseif(strcmp(obj.time_law{ind_subchain,ind_task},'trapezoidal'))
                   %s=Trapezoidal(obj.time_parameters);
               end
             
-              [p pd pdd t] = Circular(s,obj.time_struct,obj.geom_parameters{iter},obj.type);
-              obj.trajectories{iter}.p = p;
-              obj.trajectories{iter}.pd = pd;
-              obj.trajectories{iter}.pdd = pdd;
-              obj.trajectories{iter}.time = t;
+              [p,pd,pdd,t] = Circular(s,obj.time_struct,obj.geom_parameters{ind_subchain,ind_task},obj.type);
+              obj.trajectories{ind_subchain,ind_task}.p = p;
+              obj.trajectories{ind_subchain,ind_task}.pd = pd;
+              obj.trajectories{ind_subchain,ind_task}.pdd = pdd;
+              obj.trajectories{ind_subchain,ind_task}.time = t;
           end 
           
-      elseif(strcmp(obj.control_type{iter},'regulation'))
-         [p pd pdd t]=Fixedpoint(obj.geom_parameters{iter});
-         obj.trajectories{iter}.p = p;
-         obj.trajectories{iter}.pd = pd;
-         obj.trajectories{iter}.pdd = pdd;
-         obj.trajectories{iter}.time = t;    
+      elseif(strcmp(obj.control_type{ind_subchain,ind_task},'regulation'))
+         [p,pd,pdd,t]=Fixedpoint(obj.geom_parameters{ind_subchain,ind_task});
+         obj.trajectories{ind_subchain,ind_task}.p = p;
+         obj.trajectories{ind_subchain,ind_task}.pd = pd;
+         obj.trajectories{ind_subchain,ind_task}.pdd = pdd;
+         obj.trajectories{ind_subchain,ind_task}.time = t;    
       end 
 
-  elseif(strcmp(obj.type{iter},'cartesian_rpy'))  
+  elseif(strcmp(obj.type{ind_subchain,ind_task},'cartesian_rpy'))  
       
-      if(strcmp(obj.control_type{iter},'tracking'))
+      if(strcmp(obj.control_type{ind_subchain,ind_task},'tracking'))
        
-          if(strcmp(obj.traj{iter},'rectilinear'))
+          if(strcmp(obj.traj{ind_subchain,ind_task},'rectilinear'))
               s = 0;
-              if(strcmp(obj.time_law{iter},'exponential'))
-                  s=Exponential(obj.time_struct.tf,obj.time_parameters);
-              elseif(strcmp(obj.time_law{iter},'linear'))
-                  s=Linear(obj.time_struct.tf,obj.time_parameters);
-              elseif(strcmp(obj.time_law{iter},'trapezoidal'))
+              if(strcmp(obj.time_law{ind_subchain,ind_task},'exponential'))
+                  s=Exponential(obj.time_struct.tf);
+              elseif(strcmp(obj.time_law{ind_subchain,ind_task},'linear'))
+                  s=Linear(obj.time_struct.tf);
+              elseif(strcmp(obj.time_law{ind_subchain,ind_task},'trapezoidal'))
                   %s=Trapezoidal(obj.time_parameters);
               end
               
-              [p pd pdd t] = Rectilinear(s,obj.time_struct,obj.geom_parameters{iter},obj.type);
-              obj.trajectories{iter}.p = p;
-              obj.trajectories{iter}.pd = pd;
-              obj.trajectories{iter}.pdd = pdd;
-              obj.trajectories{iter}.time = t;
+              [p,pd,pdd,t] = Rectilinear(s,obj.time_struct,obj.geom_parameters{ind_subchain,ind_task},obj.type);
+              obj.trajectories{ind_subchain,ind_task}.p = p;
+              obj.trajectories{ind_subchain,ind_task}.pd = pd;
+              obj.trajectories{ind_subchain,ind_task}.pdd = pdd;
+              obj.trajectories{ind_subchain,ind_task}.time = t;
               
               
-          elseif(strcmp(obj.traj{iter},'circular')) 
+          elseif(strcmp(obj.traj{ind_subchain,ind_task},'circular')) 
               s = 0;
-              if(strcmp(obj.time_law{iter},'exponential'))
-                  s=Exponential(obj.time_struct.tf,obj.time_parameters);
-              elseif(strcmp(obj.time_law{iter},'linear'))
-                  s=Linear(obj.time_struct.tf,obj.time_parameters);
-              elseif(strcmp(obj.time_law{iter},'trapezoidal'))
+              if(strcmp(obj.time_law{ind_subchain,ind_task},'exponential'))
+                  s=Exponential(obj.time_struct.tf);
+              elseif(strcmp(obj.time_law{ind_subchain,ind_task},'linear'))
+                  s=Linear(obj.time_struct.tf);
+              elseif(strcmp(obj.time_law{ind_subchain,ind_task},'trapezoidal'))
                   %s=Trapezoidal(obj.time_parameters);
               end
             
-              [p pd pdd t] = Circular(s,obj.time_struct,obj.geom_parameters{iter},obj.type);
-              obj.trajectories{iter}.p = p;
-              obj.trajectories{iter}.pd = pd;
-              obj.trajectories{iter}.pdd = pdd;
-              obj.trajectories{iter}.time = t;
+              [p,pd,pdd,t] = Circular(s,obj.time_struct,obj.geom_parameters{ind_subchain,ind_task},obj.type);
+              obj.trajectories{ind_subchain,ind_task}.p = p;
+              obj.trajectories{ind_subchain,ind_task}.pd = pd;
+              obj.trajectories{ind_subchain,ind_task}.pdd = pdd;
+              obj.trajectories{ind_subchain,ind_task}.time = t;
           end 
           
-      elseif(strcmp(obj.control_type{iter},'regulation'))
-         [p pd pdd t]=Fixedpoint(obj.geom_parameters{iter});
-         obj.trajectories{iter}.p = p;
-         obj.trajectories{iter}.pd = pd;
-         obj.trajectories{iter}.pdd = pdd;
-         obj.trajectories{iter}.time = t;    
+      elseif(strcmp(obj.control_type{ind_subchain,ind_task},'regulation'))
+         [p,pd,pdd,t]=Fixedpoint(obj.geom_parameters{ind_subchain,ind_task});
+         obj.trajectories{ind_subchain,ind_task}.p = p;
+         obj.trajectories{ind_subchain,ind_task}.pd = pd;
+         obj.trajectories{ind_subchain,ind_task}.pdd = pdd;
+         obj.trajectories{ind_subchain,ind_task}.time = t;    
       end
   
   end

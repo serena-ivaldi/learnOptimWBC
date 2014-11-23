@@ -1,4 +1,5 @@
 for updating robotics toolbox subsitute the file in the toolbox with the ones that are inside this folder
 
 
-fdyn.m  ---> /path to rcvtoolbox/rvctools/robot/@SerialLink
+fdyn.m          ----> /path to rcvtoolbox/rvctools/robot/@SerialLink
+CodeGenerator.m ----> /path to rcvtoolbox/rvctools/robot/@CodeGenerator

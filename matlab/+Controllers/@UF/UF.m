@@ -26,9 +26,9 @@ classdef  UF < Controllers.AbstractController
          obj.Kp = Kp;
          obj.Kd = Kd;
          obj.combine_rule = combine_rule;
-         obj.torques = cell(obj.references.GetNumTasks());
-         for i = 1:obj.references.GetNumTasks()
-            obj.torques{i} = zeros(obj.subchains.n,1);  %tau(n_of_total_joint on the chain x 1 x n_of_task)
+         obj.torques = cell(obj.subchains.GetNumChains());
+         for i = 1:obj.subchains.GetNumChains()
+            obj.torques{i} = zeros(GetNumLinks(obj.subchains.GetNumLinks(i),1,obj.subchainsGetNumTasks(i)));  %tau(n_of_total_joint on the chain x 1 x n_of_task)
          end
          % default settings for smoothing and trajectory tracking display (desidered position) 
          obj.display_opt.fixed_step = false;
@@ -44,12 +44,12 @@ classdef  UF < Controllers.AbstractController
          
       end    
 
-      function SaveTau(obj,index,tau)
-         obj.torques{index} = [obj.torques{index}(:,:),tau];   
+      function SaveTau(obj,ind_subchain,ind_task,tau)
+         obj.torques{ind_subchain} = [obj.torques{index}(:,:,ind_task),tau];   
       end
       
       function CleanTau(obj)
-          for i = 1 :obj.references.GetNumTasks()
+          for i = 1 :obj.subchains.GetNumTasks()
             obj.torques{i} = [];
           end
       end
@@ -57,56 +57,57 @@ classdef  UF < Controllers.AbstractController
       % in this function i update the value of the alpha function giving
       % new set of parameters
       function UpdateParameters(obj,parameters)
-          index = 1;
-          for i=1:obj.references.GetNumTasks() 
-              n_param = obj.alpha{i}.GetParamNum();
-              app_param = parameters(index:index+n_param - 1);
-              obj.alpha{i}.ComputeNumValue(app_param')
-              index = index+n_param;
-          end
+          
+         for i=1:obj.subchains.GetNumChains() 
+             index = 1;
+             for j=1:obj.subchains.GetNumTasks()  
+                 n_param = obj.alpha{i,j}.GetParamNum();
+                 app_param = parameters(index:index+n_param - 1);
+                 obj.alpha{i,j}.ComputeNumValue(app_param')
+                 index = index+n_param;
+             end
+         end
       end
 
       function  final_tau  = Policy(obj,t,q,qd)
          
-        if(strcmp(obj.combine_rule,'sum')) 
-           
-           %#TODO instead of using RNE maybe is better to precompute the dynamics term using the symbolic routines inside the toolboox
-           %symbolic and then trasform them as function  
-           
-           % number of links of the complete kinematic chain
-           n = obj.subchains.n;
-           
-           % the dynamic computation between controller and simulator has
-           % to be different
-           
-           %   compute current manipulator inertia
-           %   torques resulting from unit acceleration of each joint with
-           %   no gravity.
-           M = rne(obj.subchains.dyn_model, ones(n,1)*q, zeros(n,n), eye(n), [0;0;0]);
-           %    compute gravity and coriolis torque
-           %    torques resulting from zero acceleration at given velocity &
-           %    with gravity acting.
-           F = rne(obj.subchains.dyn_model, q, qd, zeros(1,n)); 
-           
-           final_tau = zeros(n,1);
-           for index =1:obj.references.GetNumTasks()
-               tau = ComputeTorqueSum(obj,index,M,F,t,q,qd);
-               obj.SaveTau(index,tau);
-               final_tau = final_tau + obj.alpha{index}.GetValue(t)*tau;  
-               
-           end
-         
-        elseif(strcmp(obj.combine_rule,'projector'))
-        %#TODO   
-        end   
-       % add combine_rule
-      end  
+           if(strcmp(obj.combine_rule,'sum')) 
+
+               for i = 1:obj.subchains.GetNumChains()
+
+                 % number of links of the complete kinematic chain
+                 n = obj.subchains.GetNumLinks(i);
+
+                 % the dynamic computation between controller and simulator has
+                 % to be different
+
+                 M = obj.subchains.sub_chains{i}.inertia(q);
+                 F = obj.subchains.sub_chains{i}.coriolis(q,qd)*qd' + obj.subchains.sub_chains{i}.gravload(q);
+
+
+                 final_tau = zeros(n,1);
+                 for j =1:obj.subchains.GetNumTasks(i)
+                     tau = obj.ComputeTorqueSum(i,j,M,F,t,q,qd);
+                     % here i have to put a subset of functions t that i want to
+                     % use to catch data for computing fitness func
+                     obj.SaveTau(i,j,tau);
+                     final_tau = final_tau + obj.alpha{i,j}.GetValue(t)*tau;  
+                 end
+                 
+               end
+              
+           elseif(strcmp(obj.combine_rule,'projector'))
+           %#TODO % add combine_rule  
+           end   
+      end
+       
       
-      function n_param=GetTotalParamNum(obj)
+      
+      function n_param=GetTotalParamNum(obj,ind_subchain)
          
           n_param = 0;
-          for i=1:size(obj.alpha,2) 
-              n_param = n_param + obj.alpha{i}.GetParamNum();
+          for j=1:obj.subchains.GetNumTasks(obj,ind_subchain) 
+              n_param = n_param + obj.alpha{ind_subchain,j}.GetParamNum();
           end
       end
       

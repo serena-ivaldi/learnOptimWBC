@@ -1,10 +1,10 @@
-function tau = ComputeTorqueSum(obj,index,M,F,t,q,qd)
+function tau = ComputeTorqueSum(obj,ind_subchain,ind_task,M,F,t,q,qd)
    
     try
-       [J,Jd,x,xd,rpy,rpyd] = obj.subchains.DirKin(index,q,qd,obj.ground_truth);
+       [J,Jd,x,xd,rpy,rpyd] = obj.subchains.DirKin(q,qd,ind_subchain,ind_task);
        [b,A] = TrajCostraint(obj,index,t,J,Jd,x,xd,rpy,rpyd);
 
-       N = evalin('caller',obj.metric{index});
+       N = evalin('caller',obj.metric{ind_subchain,ind_task});
 
 
 

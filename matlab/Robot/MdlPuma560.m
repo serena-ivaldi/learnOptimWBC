@@ -1,6 +1,6 @@
 %MDL_PUMA560 Create model of Puma 560 manipulator
 %
-%      mdl_puma560
+%    
 %
 % Script creates the workspace variable p560 which describes the 
 % kinematic and dynamic characteristics of a Unimation Puma 560 manipulator
@@ -68,7 +68,7 @@
 
 
 
-function [p560Sub] = MdlPuma560(target_link,P)
+function [p560] = MdlPuma560()
    clear L
    deg = pi/180;
    % joint angle limits from 
@@ -141,15 +141,9 @@ function [p560Sub] = MdlPuma560(target_link,P)
 
     
    %build the dynamical model of the robot
-   p560Model = SerialLink(L, 'name', 'Puma 560', ...
+   p560 = SerialLink(L, 'name', 'Puma 560', ...
     'manufacturer', 'Unimation', 'ikine', 'puma', 'comment', 'viscous friction; params of 8/95');
-   p560Model.model3d = 'UNIMATE/puma560';
-   
-   %build the subchain struct
-   p560Sub = SubChains.BuildSC(target_link,L,P,p560Model,'name', 'Puma 560', ...
-       'manufacturer', 'Unimation', 'ikine', 'puma', 'comment', 'viscous friction; params of 8/95');
-   p560Sub.model3d = 'UNIMATE/puma560';
-   
+   p560.model3d = 'UNIMATE/puma560';
    
    %
    % some useful poses

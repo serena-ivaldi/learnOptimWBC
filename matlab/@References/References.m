@@ -1,13 +1,13 @@
 classdef  References < handle
     
    properties
-      subchain;        % handle to subchain (subchain contiene il numero dei task)
+      target_link      %  vector that define wich kind of link i want to control with the e-e effector too (row vector) one for every kinematic chain
       type;            % cartesian_x,cartesian_rpy, joint vector 
       control_type;    % tracking,regulation vector
       traj;            % circular, rectilinear, point-point_quintic, point-point_trapezoidal vector
       geom_parameters; % vector of parameters that define the properties of every trajectories (both functional and sampled)
       time_law;        % exponential,linear,constant,trapezoidal
-      time_parameters; % vector of the time parameters of the specified time law
+      %time_parameters; % vector of the time parameters of the specified time law
       time_struct      % struct with time_struct.ti time_struct.tf time_struct.step
       mask;            % vector of vector(3) (col vec) that contains a mask that specify what i want to control for the specific task. for example x and z (control a subset of variable) mask = (1;0:1)
       type_of_traj;    % sampled func
@@ -20,13 +20,10 @@ classdef  References < handle
     
    methods
       %#TODO add control of the input
-      function obj = References(subchain,type,control_type,traj,geom_parameters,time_law,time_parameters,time_struct,mask,type_of_traj,varargin) % i can specify through varargin the time duration of the sampled trajectories 
-         
-         if (isobject(subchain))
-            obj.subchain = subchain;
-         else
-            error('first argument must be a subchain object')   
-         end
+      function obj = References(target_link,type,control_type,traj,geom_parameters,time_law,time_struct,mask,type_of_traj,varargin) % i can specify through varargin the time duration of the sampled trajectories 
+          
+         obj.target_link = target_link;
+       
          if(getnameidx({'joint' 'cartesian_x' 'cartesian_rpy'} , type) ~= 0 )
             obj.type = type;
          end
@@ -42,7 +39,6 @@ classdef  References < handle
          end
          
          obj.geom_parameters = geom_parameters;
-         obj.time_parameters = time_parameters;
          obj.time_struct = time_struct;
          obj.mask = mask;
          
@@ -53,50 +49,49 @@ classdef  References < handle
             
       end  
       
-         
-      function n=GetNumTasks(obj)
-          n=size(obj.subchain.target_link,2);
-      end  
+     
 
       
       function BuildTrajs(obj)
-          
-          for i = 1:obj.GetNumTasks
-            obj.SetTraj(i)
+         
+          for i = 1:size(obj.target_link,1)
+             for j = 1:size(obj.target_link{i},2)
+               obj.SetTraj(i,j)
+             end
           end
           
       end
       
       
-      function [p,pd,pdd]=GetTraj(obj,index,t)
+      function [p,pd,pdd]=GetTraj(obj,ind_subchain,ind_task,t)
          
-         if(strcmp(obj.control_type{index},'regulation'))
-             p  = obj.trajectories{index}.p;
-             pd = obj.trajectories{index}.pd;
-             pdd= obj.trajectories{index}.pdd; 
+         if(strcmp(obj.control_type{ind_subchain,ind_task},'regulation'))
+             p  = obj.trajectories{ind_subchain,ind_task}.p;
+             pd = obj.trajectories{ind_subchain,ind_task}.pd;
+             pdd= obj.trajectories{ind_subchain,ind_task}.pdd; 
 
-         elseif(strcmp(obj.control_type{index},'tracking'))
+         elseif(strcmp(obj.control_type{ind_subchain,ind_task},'tracking'))
              
-             if(strcmp(obj.type_of_traj{index},'func')) 
+             if(strcmp(obj.type_of_traj{ind_subchain,ind_task},'func')) 
 
                 %normtime = NormalizeTime(t,obj.time_struct.ti,obj.time_struct.tf); 
 
-                p=feval(obj.trajectories{index}.p,t);
-                pd=feval(obj.trajectories{index}.pd,t);
-                pdd=feval(obj.trajectories{index}.pdd,t);
+                p=feval(obj.trajectories{ind_subchain,ind_task}.p,t);
+                pd=feval(obj.trajectories{ind_subchain,ind_task}.pd,t);
+                pdd=feval(obj.trajectories{ind_subchain,ind_task}.pdd,t);
 
 
-             elseif(strcmp(obj.type_of_traj{index},'sampled'))
+             elseif(strcmp(obj.type_of_traj{ind_subchain,ind_task},'sampled'))
 
                 % index to the current value
-                [~,ind] = min(abs(obj.trajectories{index}.time-t));
+                [~,ind] = min(abs(obj.trajectories{ind_subchain,ind_task}.time-t));
                 %DEBUG
                 %cur_time = f(ind); % Finds first one only! 
                 %disp(cur_time);
                 %--
-                p  = obj.trajectories{index}.p(:,ind);
-                pd = obj.trajectories{index}.pd(:,ind);
-                pdd= obj.trajectories{index}.pdd(:,ind);
+                p  = obj.trajectories{ind_subchain,ind_task}.p(:,ind);
+                pd = obj.trajectories{ind_subchain,ind_task}.pd(:,ind);
+                pdd= obj.trajectories{ind_subchain,ind_task}.pdd(:,ind);
 
              end
          end

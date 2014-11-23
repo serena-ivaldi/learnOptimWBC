@@ -5,44 +5,25 @@
 % external sensors like a set of cameras
 
 
-function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,index,q,qd,ground_truth)
+function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
 
-
-
-    if(ground_truth)
-       
-        % compute pose (position + rool pitch yaw) from the GT subchain
-        T = obj.sub_chainsGT(index).fkine(q(1:obj.GetNumSubLinks(index)));
-        x = T(1:3,4);
-        rpy = tr2rpy(T);
-        rpy = rpy';
-        % compute generalized cartesian velocities from the GT subchain
-        J_GT=obj.sub_chainsGT(index).jacob0(q(1:obj.GetNumSubLinks(index)));
-        v=J_GT*qd(1:obj.GetNumSubLinks(index));
-        xd = v(1:3);rpyd=v(4:6);
-        % compute jacobian and J_dot from the pertubed subchain
-        J = obj.sub_chains(index).jacob0(q(1:obj.GetNumSubLinks(index)));
-        J_dot = obj.sub_chains(index).jacob_dot(q(1:obj.GetNumSubLinks(index)),qd(1:obj.GetNumSubLinks(index)));
-    
-    else
+        q_cur = zeros(1,obj.sub_chains{ind_subchain}.n);
+        qd_cur= zeros(1,obj.sub_chains{ind_subchain}.n);
         
-        % compute pose (position + rool pitch yaw) from the pertubed
+        q_cur(1:obj.GetNumSubLinks(ind_subchain,ind_task)) = q(1:obj.GetNumSubLinks(ind_subchain,ind_task));
+         qd_cur(1:obj.GetNumSubLinks(ind_subchain,ind_task)) = qd(1:obj.GetNumSubLinks(ind_subchain,ind_task));
+        % compute pose (position + rool pitch yaw) from the current
         % subchain
-        T = obj.sub_chains(index).fkine(q(1:obj.GetNumSubLinks(index)));
+        T = obj.sub_chains(ind_subchain).fkine(q_cur);
         x = T(1:3,4);
         rpy = tr2rpy(T);
         rpy = rpy';
-        % compute generalized cartesian velocities from the pertubed
+        % compute generalized cartesian velocities from the current
         % subchain
-        J = obj.sub_chains(index).jacob0(q(1:obj.GetNumSubLinks(index)));
-        v=J*qd(1:obj.GetNumSubLinks(index))';
+        J = obj.sub_chains{ind_subchain}.jacob0(q_cur);
+        v=J*qd_cur';
         xd = v(1:3);rpyd=v(4:6);
-        % compute J_dot from the the pertubed subchain
-        J_dot = obj.sub_chains(index).jacob_dot(q(1:obj.GetNumSubLinks(index)),qd(1:obj.GetNumSubLinks(index)));   
-    end    
-
-
-
-
-
+        % compute J_dot from the the current subchain
+        J_dot = obj.sub_chains(index).jacob_dot(q_cur,qd_cur);   
+  
 end

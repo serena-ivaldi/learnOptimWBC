@@ -1,6 +1,6 @@
-function s=Linear(tf,time_parameters)
+function s=Linear(tf)
 
-a = time_parameters(1); 
+a = 1; 
 t = sym('t');
 
 s = (a*t)/(a*tf);
