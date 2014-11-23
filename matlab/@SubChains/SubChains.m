@@ -25,7 +25,10 @@ classdef  SubChains < handle
             rob_name(rob_name==' ')=[];
             
             if find(strcat(rob_name,'_done.m'))
-               obj.sub_chains{i} = CodeGenerator(sub_chains{i});
+               app_rob = eval(strcat(rob_name,'()'));
+               app_rob.name = obj.sub_chains{i}.name;
+               app_rob.model3d = obj.sub_chains{i}.name;
+               obj.sub_chains{i} = app_rob;
                obj.symbolic_flag(i) = 1;
             else   
                obj.sub_chains{i} = sub_chains{i};
@@ -35,19 +38,21 @@ classdef  SubChains < handle
             
          end
       end
-      
+      % number of subchains
       function n=GetNumChains(obj)
-         n=size(obj.target_link,2);
+         n=size(obj.target_link,1);
       end
        
+       % number of task in the subchain
        function n=GetNumTasks(obj,ind_subchain)
           n=size(obj.target_link{ind_subchain},2);
        end 
        
+       % number of degrees of freedom of the current subchain
        function n=GetNumLinks(obj,ind_subchain)
           n=obj.sub_chains{ind_subchain}.n;
        end 
-       
+       % number of the link that is used as e-e
        function n=GetNumSubLinks(obj,ind_subchain,ind_task)
           n=obj.target_link{ind_subchain}(ind_task);
        end 

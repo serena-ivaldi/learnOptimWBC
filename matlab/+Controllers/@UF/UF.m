@@ -102,12 +102,14 @@ classdef  UF < Controllers.AbstractController
       end
        
       
-      
+      % TO FIX i have to see in instance 
       function n_param=GetTotalParamNum(obj,ind_subchain)
          
           n_param = 0;
-          for j=1:obj.subchains.GetNumTasks(obj,ind_subchain) 
-              n_param = n_param + obj.alpha{ind_subchain,j}.GetParamNum();
+          for i=1:obj.subchains.GetNumChains()
+             for j=1:obj.subchains.GetNumTasks(i) 
+                 n_param = n_param + obj.alpha{i,j}.GetParamNum();
+             end
           end
       end
       

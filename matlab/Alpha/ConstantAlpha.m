@@ -39,7 +39,8 @@ classdef ConstantAlpha < AbstractAlpha
          
          for i=1:n_subchain
              for j =1:n_task
-            alphas{i,j} = ConstantAlpha(values(i,j),time_struct);
+               alphas{i,j} = ConstantAlpha(values{i}(j),time_struct);
+             end
          end
          
       end

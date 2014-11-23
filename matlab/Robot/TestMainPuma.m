@@ -73,34 +73,34 @@ end
 
 %% plot trajectories (only the first one of the first chain)
 
-if(strcmp(type_of_traj{1,1},'func')) 
-  
-    p_tot=[];
-    pd_tot=[];
-    pdd_tot=[];
-    for t=time_struct.ti:time_struct.step:time_struct.tf
-        
-        
-        p_cur=feval(reference.trajectories{1,1}.p,t);
-        pd_cur=feval(reference.trajectories{1,1}.pd,t);
-        pdd_cur=feval(reference.trajectories{1,1}.pdd,t);
-
-        p_tot = [p_tot,p_cur];
-        pd_tot = [pd_tot,pd_cur];
-        pdd_tot = [pdd_tot,pdd_cur];
-        
-    end
-    
-elseif(strcmp(type_of_traj{1,1},'sampled'))
-    p_tot = reference.trajectories{1,1}.p;
-    pd_tot = reference.trajectories{1,1}.pd;
-    pdd_tot = reference.trajectories{1,1}.pdd;
-end
-
-
-hold on;axis equal;
-p560.plot(qz);
-plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
+% if(strcmp(type_of_traj{1,1},'func')) 
+%   
+%     p_tot=[];
+%     pd_tot=[];
+%     pdd_tot=[];
+%     for t=time_struct.ti:time_struct.step:time_struct.tf
+%         
+%         
+%         p_cur=feval(reference.trajectories{1,1}.p,t);
+%         pd_cur=feval(reference.trajectories{1,1}.pd,t);
+%         pdd_cur=feval(reference.trajectories{1,1}.pdd,t);
+% 
+%         p_tot = [p_tot,p_cur];
+%         pd_tot = [pd_tot,pd_cur];
+%         pdd_tot = [pdd_tot,pdd_cur];
+%         
+%     end
+%     
+% elseif(strcmp(type_of_traj{1,1},'sampled'))
+%     p_tot = reference.trajectories{1,1}.p;
+%     pd_tot = reference.trajectories{1,1}.pd;
+%     pdd_tot = reference.trajectories{1,1}.pdd;
+% end
+% 
+% 
+% hold on;axis equal;
+% p560.plot(qz);
+% plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
 %% alpha function
 
 number_of_basis = 10;
@@ -115,25 +115,27 @@ alpha_z = 0.1;
 train = true;
 number_of_pivot = 5;
 step = 0.01;
-theta = 1*ones(number_of_basis,reference.GetNumTasks());
-values = 1*ones(reference.GetNumTasks());
+theta1 = 1*ones(number_of_basis,chains.GetNumTasks(1));
+thetas{1} = theta1;
+value1 = 1*ones(chains.GetNumTasks(1));
+values{1} = value1;
 %alphas = DMP.BuildCellArray(reference.GetNumTasks(),time_struct,number_of_basis,redundancy,kp,kd,Po,Vo,Pd,Vd,alpha_z,train,number_of_pivot,step);
-alphas = ConstantAlpha.BuildCellArray(values,time_struct);
+alphas = ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,time_struct);
 
 % %% test controller 
-% 
-% % test on J J_dot and fkine
-% p560.GetNumSubLinks(1)
-% qz(1:p560.GetNumSubLinks(1))
-% %structure of jacobian
-% fkin = p560.sub_chains(1).fkine(qr(1:p560.GetNumSubLinks(1)));
-% J = p560.sub_chains(1).jacob0(qr(1:p560.GetNumSubLinks(1))','trans');
-% % J_dot is multiplied by qd inside the function so i have only to get the
-% % right portion
-% J_dot = p560.sub_chains(1).jacob_dot(qz(1:p560.GetNumSubLinks(1)),0.5*ones(p560.GetNumSubLinks(1),1));
-% 
-% 
-% 
+
+% test on J J_dot and fkine
+chains.GetNumSubLinks(1,1)
+qz_cur = qz(1:chains.GetNumSubLinks(1,1));
+%structure of jacobian
+fkin = chains.sub_chains{1}.fkine(qz_cur);
+J = chains.sub_chains{1}.jacob0(qz_cur);
+% J_dot is multiplied by qd inside the function so i have only to get the
+% right portion
+J_dot = chains.sub_chains{1}.jacob_dot(qz_cur,0.5*ones(chains.GetNumSubLinks(1,1),1));
+
+
+
 % metric = {'M^(1/2)';'M^(1/2)'};  % N^(1/2) = (M^(-1))^(1/2) = M^(1/2);        
 % ground_truth = false; 
 % %kp = 1500; %linear and exponential tracking
