@@ -10,7 +10,7 @@ classdef  UF < Controllers.AbstractController
       Kp               % vector of matrix of proportional gain
       Kd               % vector of matrix of derivative gain
       combine_rule     % projector or sum 
-      torques          %  resulting torque (vector of matrix)
+      torques          %  resulting torque (cell array of matrix)
       display_opt      % display settings display_opt.step display_opt.trajtrack
    end
 
@@ -69,20 +69,6 @@ classdef  UF < Controllers.AbstractController
           bot = obj.subchains.GetCurRobotVis(obj.current_chain);
       end
       
-      % in this function i update the value of the alpha function giving
-      % new set of parameters
-      function UpdateParameters(obj,parameters)
-          
-         for i=1:obj.subchains.GetNumChains() 
-             index = 1;
-             for j=1:obj.subchains.GetNumTasks()  
-                 n_param = obj.alpha{i,j}.GetParamNum();
-                 app_param = parameters(index:index+n_param - 1);
-                 obj.alpha{i,j}.ComputeNumValue(app_param')
-                 index = index+n_param;
-             end
-         end
-      end
       
       function  final_tau  = Policy(obj,t,q,qd)
          
@@ -100,20 +86,38 @@ classdef  UF < Controllers.AbstractController
 
 
              final_tau = zeros(cur_bot.n,1);
-             for j =1:obj.subchains.GetNumTasks(i)
-                 tau = obj.ComputeTorqueSum(i,j,M,F,t,q,qd);
+             parfor j =1:obj.subchains.GetNumTasks(i)
+                 tau(:,j) = obj.ComputeTorqueSum(i,j,M,F,t,q,qd);
                  % here i have to put a subset of functions t that i want to
                  % use to catch data for computing fitness func
-                 final_tau = final_tau + obj.alpha{i,j}.GetValue(t)*tau;  
-                 obj.SaveTau(i,final_tau);
-             end
+                 %final_tau = final_tau + obj.alpha{i,j}.GetValue(t)*tau;  
                  
+             end
+             final_tau = sum(tau,2);
+             obj.SaveTau(i,final_tau)    
               
            elseif(strcmp(obj.combine_rule,'projector'))
            %#TODO % add combine_rule  
            end   
       end
-       
+      
+      % TO FIX
+      % in this function i update the value of the alpha function giving
+      % new set of parameters
+      function UpdateParameters(obj,parameters)
+          
+         for i=1:obj.subchains.GetNumChains() 
+             index = 1;
+             for j=1:obj.subchains.GetNumTasks()  
+                 n_param = obj.alpha{i,j}.GetParamNum();
+                 app_param = parameters(index:index+n_param - 1);
+                 obj.alpha{i,j}.ComputeNumValue(app_param')
+                 index = index+n_param;
+             end
+         end
+      end
+      
+      
       
       % TO FIX i have to see in instance 
       function n_param=GetTotalParamNum(obj,ind_subchain)

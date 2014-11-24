@@ -1,4 +1,4 @@
-function Y = ode3(odefun,tspan,y0,varargin)
+function Y = Ode3(odefun,tspan,y0,varargin)
 %ODE3  Solve differential equations with a non-adaptive method of order 3.
 %   Y = ODE3(ODEFUN,TSPAN,Y0) with TSPAN = [T1, T2, T3, ... TN] integrates 
 %   the system of differential equations y' = f(t,y) by stepping from T0 to 

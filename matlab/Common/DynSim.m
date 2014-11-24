@@ -50,7 +50,7 @@
 %
 % http://www.petercorke.com
 
-function [t, q, qd] = DynSim(time_struct,controller,q0,qd0,fixed_step,varargin)
+function [t, q, qd] = DynSim(time_struct,controller,qi,qdi,fixed_step,varargin)
 
     % check the Matlab version, since ode45 syntax has changed
     if verLessThan('matlab', '7')  
@@ -78,15 +78,19 @@ function [t, q, qd] = DynSim(time_struct,controller,q0,qd0,fixed_step,varargin)
     for index_chain=1:controller.subchains.GetNumChains
         
         % concatenate q and qd into the initial state vector
-        q0 = [q0{index_chain}; qd0{index_chain}];
+        yi = [qi{index_chain};qdi{index_chain}]
+        % set the index for the current chain in use
         controller.SetCurRobotIndex(index_chain);
         n = controller.GetActiveBot.n;
         try
             if(fixed_step)
-                y = ode4(@fdyn2,time,q0,controller,varargin{:}); 
+                disp('fixed_step') 
+                
+                y = Ode1(@fdyn2,time,yi,controller); 
             else
-                [T,y] = ode15s(@fdyn2,time,q0,[],controller,varargin{:});     
-            end      
+                disp('NOT fixed_step')
+                [T,y] = ode15s(@fdyn2,time,yi,[],controller,varargin{:});     
+            end  
             q{index_chain} = y(:,1:n);
             qd{index_chain} = y(:,n+1:2*n);
         catch err
@@ -94,12 +98,12 @@ function [t, q, qd] = DynSim(time_struct,controller,q0,qd0,fixed_step,varargin)
             qd{{index_chain}} = y(:,n+1:2*n); 
             %because of i have failed i need to cut the time till the last
             %position computed
-            t = time(1,1:size(q,1));
+            t = time(1,1:size(q{index_chain},1));
             rethrow(err);
         end
     end
     % i have to use the same sample time for every chain 
-    t = time(1,1:size(q,1));
+    t = time;
 end
 
 

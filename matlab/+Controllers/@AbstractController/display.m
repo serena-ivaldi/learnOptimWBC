@@ -6,7 +6,7 @@ function display(obj,q,time,stl)
 % index k for downsampling visualization  
 k = 1;
 for j=1:size(time,2)
-    %check if time fixed_step is active and the the time step is sufficiently large 
+    %check if time fixed_step is active and the time step is sufficiently large 
     if(time(j)-time(k)>obj.display_opt.step)
         for i = 1:obj.subchains.GetNumChains();
             obj.SetCurRobotIndex(i);

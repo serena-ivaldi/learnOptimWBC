@@ -5,7 +5,7 @@ clc
 
 % we have to specify every value of the cell vector for consistency with
 % the cycle inside the function 
-subchain1 = [6 3];
+subchain1 = [6];
 target_link{1} = subchain1;
 % reference parameters
 type = {'cartesian_x','cartesian_rpy'};
@@ -22,7 +22,7 @@ time_law = {'linear','none'};
 
 %parameters first chains
 geom_parameters{1,1} = [0.2 0 -pi/2 -pi/4 0 -0.5 0.3]; % Circular trajectory 
-geom_parameters{1,2} = [0 0 -pi/2]; % orientation regulation
+geom_parameters{1,2} = [0 0 pi/2]; % orientation regulation
 
 %geom_parameters = [-0.2 0.3 0.2 0.2 0.3 0.2];% Rectilinear trajectory
 %geom_parameters =  [-0.2 0.3 0.2]; % position regulation
@@ -64,12 +64,12 @@ toc
 
 %% test sampled reference 
 
-s = Linear(time_struct.tf);
-test_parameters = [0.2 0 -pi/2 2*pi -pi/4 0 -0.5 0.3]; 
-if(strcmp(traj,'circular')) 
-    [p,pd,pdd,time] = Circular(s,time_struct,geom_parameters,type_of_traj);
-    [p_test,pd_test,pdd_test] = CircularTest(time_struct,'sampled',test_parameters);
-end
+% s = Linear(time_struct.tf);
+% test_parameters = [0.2 0 -pi/2 2*pi -pi/4 0 -0.5 0.3]; 
+% if(strcmp(traj,'circular')) 
+%     [p,pd,pdd,time] = Circular(s,time_struct,geom_parameters,type_of_traj);
+%     [p_test,pd_test,pdd_test] = CircularTest(time_struct,'sampled',test_parameters);
+% end
 
 %% plot trajectories (only the first one of the first chain)
 
@@ -124,15 +124,15 @@ alphas = ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1
 
 % %% test controller 
 
-% test on J J_dot and fkine
-chains.GetNumSubLinks(1,1)
-qz_cur = qz(1:chains.GetNumSubLinks(1,1));
-%structure of jacobian
-fkin = chains.sub_chains{1}.fkine(qz_cur);
-J = chains.sub_chains{1}.jacob0(qz_cur);
-% J_dot is multiplied by qd inside the function so i have only to get the
-% right portion
-J_dot = chains.sub_chains{1}.jacob_dot(qz_cur,0.5*ones(1,chains.GetNumSubLinks(1,1)));
+% % test on J J_dot and fkine
+% chains.GetNumSubLinks(1,1)
+% qz_cur = qz(1:chains.GetNumSubLinks(1,1));
+% %structure of jacobian
+% fkin = chains.sub_chains{1}.fkine(qz_cur);
+% J = chains.sub_chains{1}.jacob0(qz_cur);
+% % J_dot is multiplied by qd inside the function so i have only to get the
+% % right portion
+% J_dot = chains.sub_chains{1}.jacob_dot(qz_cur,0.5*ones(1,chains.GetNumSubLinks(1,1)));
 
 % one shot only for generate jacob_dot
 % JacDotGen(chains.sub_chains{1},'/home/vale/Documents');
@@ -161,28 +161,21 @@ display_opt.trajtrack = true;
 controller = Controllers.UF(chains,reference,alphas,metric,Kp,Kd,combine_rule,display_opt);
 
 % generate starting conditions for every chains
-q0{1} = qz;
-qd0{1} = zeros(1,controller.subchains.sub_chains{1}.n);
+qi{1} = qz;
+qdi{1} = zeros(1,controller.subchains.sub_chains{1}.n);
 
-% value = 1;
-% try
-    tic
-    options= odeset('MaxStep',0.001);
-    fixed_step = false;
-    time_sym_struct = time_struct;
-    time_sym_struct.step = 0.001;
-    [t, q, qd] = DynSim(time_sym_struct,controller,q0,qd0,fixed_step,options);
-    toc
-% catch error
-%     
-%     disp(error);
-%     value = 0;
-%     
-% end
 
+tic
+%options= odeset('MaxStep',0.001);
+fixed_step = false;
+time_sym_struct = time_struct;
+time_sym_struct.step = 0.001;
+[t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);
+toc
 
 controller.display(q,t,false)
-%controller.plot(q,t);
+
+
 % 
 % 
 % %% test instance

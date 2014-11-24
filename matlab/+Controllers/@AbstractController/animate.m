@@ -72,7 +72,7 @@ function animate(controller,qq,time)
       end
     end
     
-   
+    % i have to create different handle for each task for each chain
     % inizializes plot handles
     pos = zeros(3,controller.subchains.GetNumTasks(index_chain));
     for ii = 1:controller.subchains.GetNumTasks(index_chain)
