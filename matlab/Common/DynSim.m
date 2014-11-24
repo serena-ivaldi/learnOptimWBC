@@ -121,7 +121,7 @@ end
 %
 % The result is XDD = [QD QDD].
 function xd = fdyn2(t, x, controller, varargin)
-    disp('fdyn2');
+
     n = controller.GetActiveBot().n;
     
     q = x(1:n)';

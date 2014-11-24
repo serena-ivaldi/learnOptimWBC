@@ -1,3 +1,4 @@
+function Y = ode4(odefun,tspan,y0,varargin)
 %ODE4  Solve differential equations with a non-adaptive method of order 4.
 %   Y = ODE4(ODEFUN,TSPAN,Y0) with TSPAN = [T1, T2, T3, ... TN] integrates 
 %   the system of differential equations y' = f(t,y) by stepping from T0 to 
@@ -20,37 +21,28 @@
 %     and plots the first component of the solution.   
 %
 
-function Y = Ode4(odefun,tspan,y0,varargin)
-
-
 if ~isnumeric(tspan)
-    disp('TSPAN should be a vector of integration steps.')
   error('TSPAN should be a vector of integration steps.');
 end
 
 if ~isnumeric(y0)
-    disp('Y0 should be a vector of initial conditions.')
   error('Y0 should be a vector of initial conditions.');
 end
 
 h = diff(tspan);
 if any(sign(h(1))*h <= 0)
-    disp('Entries of TSPAN are not in order.')
   error('Entries of TSPAN are not in order.') 
 end  
 
-
 try
   f0 = feval(odefun,tspan(1),y0,varargin{:});
-catch error
-    disp('Unable to evaluate the ODEFUN at t0,y0. ')
-  msg = 'Unable to evaluate the ODEFUN at t0,y0. ';
+catch
+  msg = ['Unable to evaluate the ODEFUN at t0,y0. ',lasterr];
   error(msg);  
 end  
 
 y0 = y0(:);   % Make a column vector.
 if ~isequal(size(y0),size(f0))
-    disp('Inconsistent sizes of Y0 and f(t0,y0).')
   error('Inconsistent sizes of Y0 and f(t0,y0).');
 end  
 
@@ -58,9 +50,9 @@ neq = length(y0);
 N = length(tspan);
 Y = zeros(neq,N);
 F = zeros(neq,4);
- 
+
 Y(:,1) = y0;
-for i = 2:N  
+for i = 2:N
   ti = tspan(i-1);
   hi = h(i-1);
   yi = Y(:,i-1);
