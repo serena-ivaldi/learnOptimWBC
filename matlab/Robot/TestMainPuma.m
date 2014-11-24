@@ -167,7 +167,7 @@ qdi{1} = zeros(1,controller.subchains.sub_chains{1}.n);
 
 tic
 %options= odeset('MaxStep',0.001);
-fixed_step = false;
+fixed_step = true;
 time_sym_struct = time_struct;
 time_sym_struct.step = 0.001;
 [t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);

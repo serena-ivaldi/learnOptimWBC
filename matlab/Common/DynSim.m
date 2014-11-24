@@ -78,15 +78,14 @@ function [t, q, qd] = DynSim(time_struct,controller,qi,qdi,fixed_step,varargin)
     for index_chain=1:controller.subchains.GetNumChains
         
         % concatenate q and qd into the initial state vector
-        yi = [qi{index_chain};qdi{index_chain}]
+        yi = [qi{index_chain}(:);qdi{index_chain}(:)];
         % set the index for the current chain in use
         controller.SetCurRobotIndex(index_chain);
         n = controller.GetActiveBot.n;
         try
             if(fixed_step)
                 disp('fixed_step') 
-                
-                y = Ode1(@fdyn2,time,yi,controller); 
+                y = Ode4(@fdyn2,time,yi,controller,varargin{:}); 
             else
                 disp('NOT fixed_step')
                 [T,y] = ode15s(@fdyn2,time,yi,[],controller,varargin{:});     
@@ -122,7 +121,7 @@ end
 %
 % The result is XDD = [QD QDD].
 function xd = fdyn2(t, x, controller, varargin)
-
+    disp('fdyn2');
     n = controller.GetActiveBot().n;
     
     q = x(1:n)';

@@ -85,9 +85,9 @@ classdef  UF < Controllers.AbstractController
              F = cur_bot.coriolis(q,qd)*qd' + cur_bot.gravload(q)';
 
 
-             final_tau = zeros(cur_bot.n,1);
-             parfor j =1:obj.subchains.GetNumTasks(i)
-                 tau(:,j) = obj.ComputeTorqueSum(i,j,M,F,t,q,qd);
+             %final_tau = zeros(cur_bot.n,1)
+             for j =1:obj.subchains.GetNumTasks(i)
+                 tau(:,j) = obj.alpha{i,j}.GetValue(t)*obj.ComputeTorqueSum(i,j,M,F,t,q,qd);
                  % here i have to put a subset of functions t that i want to
                  % use to catch data for computing fitness func
                  %final_tau = final_tau + obj.alpha{i,j}.GetValue(t)*tau;  
