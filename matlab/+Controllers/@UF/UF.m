@@ -5,7 +5,7 @@ classdef  UF < Controllers.AbstractController
       references;      % object that contains the reference trajectory for each tasks; 
       alpha;           % cell array of weight function
       metric;          % vector of matlab command     for example M_inv^2, M_inv,eye(lenght(q)) 
-      ground_truth     % if true for computing the position and velocity of the end effector i will use the non perturbed model 
+      %ground_truth     % if true for computing the position and velocity of the end effector i will use the non perturbed model 
       Kp               % vector of matrix of proportional gain
       Kd               % vector of matrix of derivative gain
       combine_rule     % projector or sum 
@@ -16,19 +16,18 @@ classdef  UF < Controllers.AbstractController
 
    methods
       
-       function obj = UF(sub_chains,references,alpha,metric,ground_truth,Kp,Kd,combine_rule,varargin)
+       function obj = UF(sub_chains,references,alpha,metric,Kp,Kd,combine_rule,varargin)
          
          obj.subchains = sub_chains;
          obj.references = references;
          obj.alpha = alpha;
          obj.metric = metric;
-         obj.ground_truth = ground_truth;
          obj.Kp = Kp;
          obj.Kd = Kd;
          obj.combine_rule = combine_rule;
          obj.torques = cell(obj.subchains.GetNumChains());
          for i = 1:obj.subchains.GetNumChains()
-            obj.torques{i} = zeros(GetNumLinks(obj.subchains.GetNumLinks(i),1,obj.subchainsGetNumTasks(i)));  %tau(n_of_total_joint on the chain x 1 x n_of_task)
+            obj.torques{i} = zeros(obj.subchains.GetNumLinks(i),1,obj.subchains.GetNumTasks(i));  %tau(n_of_total_joint on the chain x 1 x n_of_task)
          end
          % default settings for smoothing and trajectory tracking display (desidered position) 
          obj.display_opt.fixed_step = false;

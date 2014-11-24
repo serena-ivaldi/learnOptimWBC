@@ -132,31 +132,35 @@ fkin = chains.sub_chains{1}.fkine(qz_cur);
 J = chains.sub_chains{1}.jacob0(qz_cur);
 % J_dot is multiplied by qd inside the function so i have only to get the
 % right portion
-J_dot = chains.sub_chains{1}.jacob_dot(qz_cur,0.5*ones(chains.GetNumSubLinks(1,1),1));
+J_dot = chains.sub_chains{1}.jacob_dot(qz_cur,0.5*ones(1,chains.GetNumSubLinks(1,1)));
 
+% one shot only for generate jacob_dot
+% JacDotGen(chains.sub_chains{1},'/home/vale/Documents');
 
+metric = {'M^(1/2)';'M^(1/2)'};  % N^(1/2) = (M^(-1))^(1/2) = M^(1/2);         
+%kp = 1500; %linear and exponential tracking
+%kp = 1497  % regulation 
+kp = [1497, 1500]; % row vector one for each chain
+for i= 1:chains.GetNumChains();
+   K_p = zeros(3,3,size(kp,2));
+   K_d = zeros(3,3,size(kp,2));
+   for par = 1:size(kp,2)
+       K_p(:,:,par) = kp(i,par)*eye(3);  
+       kd = 2*sqrt(kp(i,par));
+       K_d(:,:,par) = kd*eye(3); 
+   end
+   Kp{i} = K_p;
+   Kd{i} = K_d;
+end
+combine_rule = {'sum'};
+display_opt.step = 0.01;
+display_opt.trajtrack = true;
 
-% metric = {'M^(1/2)';'M^(1/2)'};  % N^(1/2) = (M^(-1))^(1/2) = M^(1/2);        
-% ground_truth = false; 
-% %kp = 1500; %linear and exponential tracking
-% %kp = 1497  % regulation 
-% kp = [1497, 1500]; % row vector
-% K_p = zeros(3,3,size(kp,2));
-% K_d = zeros(3,3,size(kp,2));
-% for par = 1:size(kp,2)
-%     K_p(:,:,par) = kp(par)*eye(3);  
-%     kd = 2*sqrt(kp(par));
-%     K_d(:,:,par) = kd*eye(3); 
-% end
-% combine_rule = {'sum'}; 
-% display_opt.step = 0.01;
-% display_opt.trajtrack = true;
-% 
-% % for using package functions we have to call the name of the package before
-% % the constructor
-% controller = Controllers.UF(p560,reference,alphas,metric,ground_truth,K_p,K_d,combine_rule,display_opt);
-% 
-% value =1;
+% for using package functions we have to call the name of the package before
+% the constructor
+controller = Controllers.UF(chains,reference,alphas,metric,Kp,Kd,combine_rule,display_opt);
+
+% value = 1;
 % try
 % tic
 % options= odeset('MaxStep',0.001);
@@ -174,7 +178,7 @@ J_dot = chains.sub_chains{1}.jacob_dot(qz_cur,0.5*ones(chains.GetNumSubLinks(1,1
 % 
 % 
 % controller.plot3d(q,t);
-% %controller.plot(q,t);
+%controller.plot(q,t);
 % 
 % 
 % %% test instance

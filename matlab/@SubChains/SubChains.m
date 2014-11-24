@@ -12,9 +12,7 @@ classdef  SubChains < handle
     
     
     methods
- 
-      % to copy the whole robot we can use the copy constructor of SerialLink 
-      % r1 = SerialLink(r0)   
+  
       function obj = SubChains(target_link,sub_chains)        
          
          obj.target_link = target_link;
@@ -26,8 +24,8 @@ classdef  SubChains < handle
             
             if find(strcat(rob_name,'_done.m'))
                app_rob = eval(strcat(rob_name,'()'));
-               app_rob.name = obj.sub_chains{i}.name;
-               app_rob.model3d = obj.sub_chains{i}.name;
+               app_rob.name = sub_chains{i}.name;
+               app_rob.model3d = sub_chains{i}.model3d;
                obj.sub_chains{i} = app_rob;
                obj.symbolic_flag(i) = 1;
             else   
@@ -38,6 +36,7 @@ classdef  SubChains < handle
             
          end
       end
+      
       % number of subchains
       function n=GetNumChains(obj)
          n=size(obj.target_link,1);
@@ -50,7 +49,7 @@ classdef  SubChains < handle
        
        % number of degrees of freedom of the current subchain
        function n=GetNumLinks(obj,ind_subchain)
-          n=obj.sub_chains{ind_subchain}.n;
+          n=obj.sub_chains{ind_subchain,1}.n;
        end 
        % number of the link that is used as e-e
        function n=GetNumSubLinks(obj,ind_subchain,ind_task)
