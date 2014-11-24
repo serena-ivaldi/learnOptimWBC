@@ -32,8 +32,8 @@
 
 function animate(controller,qq,time)
 
-    cur_bot = controller.GetActiveBot();
-    
+    cur_bot = controller.GetActiveBotVis();
+    index_chain = controller.GetCurRobotIndex;
     if nargin < 4
         handles = findobj('Tag', cur_bot.name);
     end
@@ -50,11 +50,11 @@ function animate(controller,qq,time)
     
     %print trajectory 
     pp=[];
-    for index=1:controller.references.GetNumTasks()
+    for index=1:controller.subchains.GetNumTasks(index_chain)
         % in case my trajectory is a rpy trajectory i dont want to plot it
-        if(~strcmp(controller.references.type{index},'cartesian_rpy'))    
+        if(~strcmp(controller.references.type{index_chain,index},'cartesian_rpy'))    
            for iii=1:size(time,1)
-             [p_cur]=controller.references.GetTraj(index,time(iii));
+             [p_cur]=controller.references.GetTraj(index_chain,index,time(iii));
              pp = [pp,p_cur];
            end 
         end
@@ -65,21 +65,20 @@ function animate(controller,qq,time)
     
     
     hold on;
-    for index=1:controller.references.GetNumTasks()
+    for index=1:controller.subchains.GetNumTasks(index_chain)
       % in case my trajectory is a rpy trajectory i dont want to plot it  
-      if(~strcmp(controller.references.type{index},'cartesian_rpy'))  
+      if(~strcmp(controller.references.type{index_chain,index},'cartesian_rpy'))  
         plot3(Results{index}(1,1:end),Results{index}(2,1:end),Results{index}(3,1:end));
       end
     end
     
-    % index k for downsampling visualization  
-    k = 1;
+   
     % inizializes plot handles
-    pos = zeros(3,controller.references.GetNumTasks());
-    for ii = 1:controller.references.GetNumTasks()
+    pos = zeros(3,controller.subchains.GetNumTasks(index_chain));
+    for ii = 1:controller.subchains.GetNumTasks(index_chain)
         % in case my trajectory is a rpy trajectory i dont want to plot it
         if(~strcmp(controller.references.type{ii},'cartesian_rpy'))    
-           pos(:,ii) = controller.references.GetTraj(ii,time(1));
+           pos(:,ii) = controller.references.GetTraj(index_chain,ii,time(1));
            des_traj_pos(ii) = plot3(pos(1,ii),pos(2,ii),pos(3,ii),'-.r*','MarkerSize',10,'XDataSource','pos(1,ii)','YDataSource','pos(2,ii)','ZDataSource','pos(3,ii)');
         end   
     end
@@ -87,15 +86,12 @@ function animate(controller,qq,time)
     while true
         % animate over all instances of this robot in different axes
         
-        for i=2:size(time,1)  
-            %check if time fixed_step is active and the the time step is sufficiently large 
-            if(time(i)-time(k)>controller.display_opt.step)
+        for i=1:size(time,2)   
                q = qq(i,:);
                for handle=handles'
    %                 h = get(handle, 'UserData');
    %                 h.q = q';
    %                 set(handle, 'UserData', h);
-
                      group = findobj('Tag', cur_bot.name);
                      h = get(group, 'UserData');
 
@@ -180,10 +176,10 @@ function animate(controller,qq,time)
 
                    % show the trajectory 
                    if(controller.display_opt.trajtrack)
-                      for ii = 1:controller.references.GetNumTasks()
+                      for ii = 1:controller.subchains.GetNumTasks(index_chain)
                          % in case my trajectory is a rpy trajectory i dont want to plot it 
-                         if(~strcmp(controller.references.type{ii},'cartesian_rpy')) 
-                             pos(:,ii) = controller.references.GetTraj(ii,time(i));
+                         if(~strcmp(controller.references.type{index_chain,ii},'cartesian_rpy')) 
+                             pos(:,ii) = controller.references.GetTraj(index_chain,ii,time(i));
                              refreshdata(des_traj_pos(ii),'caller')
                              drawnow
                          end
@@ -203,8 +199,7 @@ function animate(controller,qq,time)
                        drawnow
                    end
                end
-               k = i;
-            end
+            
         end
         
         if ~h.cur_bot.loop

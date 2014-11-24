@@ -5,7 +5,8 @@ classdef  SubChains < handle
 
     properties
        target_link;    %  cell array of vector that define wich kind of link i want to control with the e-e effector too (row vector) one for every kinematic chain
-       sub_chains;     %  cell array of kinematic model symbolic and not 
+       sub_chains;     %  cell array of kinematic model symbolic and not
+       sub_chains_vis; %  cell array of robot for visualization purpose
        symbolic_flag;  %  is true if i have a symbolic counterpart fo the kinematic chains
        
     end
@@ -27,9 +28,11 @@ classdef  SubChains < handle
                app_rob.name = sub_chains{i}.name;
                app_rob.model3d = sub_chains{i}.model3d;
                obj.sub_chains{i} = app_rob;
+               obj.sub_chains_vis{i} = sub_chains{i};
                obj.symbolic_flag(i) = 1;
             else   
                obj.sub_chains{i} = sub_chains{i};
+               obj.sub_chains_vis{i} = sub_chains{i};
                obj.symbolic_flag(i) = 0;
             end
             
@@ -40,6 +43,11 @@ classdef  SubChains < handle
       % get active subchain
       function rob = GetCurRobot(obj,current_chain)
           rob = obj.sub_chains{current_chain};
+      end
+      
+       % get active subchain
+      function rob = GetCurRobotVis(obj,current_chain)
+          rob = obj.sub_chains_vis{current_chain};
       end
       
       % number of subchains

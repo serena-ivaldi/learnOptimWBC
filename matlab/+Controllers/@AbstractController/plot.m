@@ -193,7 +193,7 @@
 function plot(controller,q,time,varargin)
     
 
-    cur_bot = controller.GetActiveBot();
+    cur_bot = controller.GetActiveBotVis();
 
     % check the joint angle data matches the robot
     n = cur_bot.n;
@@ -308,7 +308,7 @@ end
 %
 % The top-level group has user data which is the handle structure.
 
-function h = create_robot(controller, opt)
+function h = create_robot(cur_bot, opt)
     
     disp('creating new robot');
     
@@ -594,7 +594,7 @@ end
     % process a cell array of options and return a struct
     % define all possible options and their default values
     
-function opt = plot_options(controller, optin)
+function opt = plot_options(cur_bot, optin)
     
     % timing/looping
     opt.delay = 0.1;

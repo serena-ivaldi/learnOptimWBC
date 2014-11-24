@@ -164,15 +164,15 @@ controller = Controllers.UF(chains,reference,alphas,metric,Kp,Kd,combine_rule,di
 q0{1} = qz;
 qd0{1} = zeros(1,controller.subchains.sub_chains{1}.n);
 
-%value = 1;
-%try
-tic
-options= odeset('MaxStep',0.001);
-fixed_step = false;
-time_sym_struct = time_struct;
-time_sym_struct.step = 0.001;
-[t, q, qd] = DynSim(time_sym_struct,controller,q0,qd0,fixed_step,options);
-toc
+% value = 1;
+% try
+    tic
+    options= odeset('MaxStep',0.001);
+    fixed_step = false;
+    time_sym_struct = time_struct;
+    time_sym_struct.step = 0.001;
+    [t, q, qd] = DynSim(time_sym_struct,controller,q0,qd0,fixed_step,options);
+    toc
 % catch error
 %     
 %     disp(error);
@@ -181,7 +181,7 @@ toc
 % end
 
 
-controller.plot3d(q,t);
+controller.display(q,t,false)
 %controller.plot(q,t);
 % 
 % 

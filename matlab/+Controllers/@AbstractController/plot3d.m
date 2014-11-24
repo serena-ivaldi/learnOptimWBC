@@ -87,7 +87,7 @@
 function plot3d(controller,q,time,varargin)
     
 
-    cur_bot = controller.GetActiveBot();
+    cur_bot = controller.GetActiveBotVis();
     
     opt = plot_options(cur_bot, varargin);
     
@@ -106,7 +106,7 @@ function plot3d(controller,q,time,varargin)
             end
             
             % find the path to this specific model
-            pth = fullfile(fileparts(pth),cur_bot.model3d)
+            pth = fullfile(fileparts(pth),cur_bot.model3d);
         else
             pth = opt.path;
         end
@@ -141,6 +141,7 @@ function plot3d(controller,q,time,varargin)
     ish = ishold();
     if ~ishold
         % if hold is off, set the axis dimensions
+        opt.ws
         axis(opt.ws);
         set(gca, 'ZLimMode', 'manual');
         axis(opt.ws);
@@ -196,7 +197,7 @@ function plot3d(controller,q,time,varargin)
     
 
     %--- create the robot
-    %  one patch per shape, use hgtransform to animate them later
+    %  one patch per shape, use hgtransform to animate them late
     group = hggroup('Tag', cur_bot.name);
     ncolors = numrows(C);
     
@@ -313,8 +314,12 @@ function opt = plot_options(cur_bot, optin)
             reach = opt.tilesize * ceil(reach/opt.tilesize);
         end
         
+        %convert symbolic to double
+        %reach = double(reach);
+        
         % now create a 3D volume based on this reach
         opt.ws = [-reach reach -reach reach -reach reach];
+        
         
         % if a floorlevel has been given, ammend the 3D volume
         if ~isempty(opt.floorlevel)

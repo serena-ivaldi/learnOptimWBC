@@ -65,6 +65,10 @@ classdef  UF < Controllers.AbstractController
           bot = obj.subchains.GetCurRobot(obj.current_chain);
       end
       
+      function bot = GetActiveBotVis(obj)
+          bot = obj.subchains.GetCurRobotVis(obj.current_chain);
+      end
+      
       % in this function i update the value of the alpha function giving
       % new set of parameters
       function UpdateParameters(obj,parameters)
