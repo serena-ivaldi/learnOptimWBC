@@ -32,19 +32,21 @@
 
 function animate(controller,qq,time)
 
+    cur_bot = controller.GetActiveBot();
+    
     if nargin < 4
-        handles = findobj('Tag', controller.subchains.name);
+        handles = findobj('Tag', cur_bot.name);
     end
     
-    links = controller.subchains.links;
-    N = controller.subchains.n;
+    links = cur_bot.links;
+    N = cur_bot.n;
     
     disp(N)
     
     
     % get handle of any existing graphical robots of same name
     %  one may have just been created above
-    handles = findobj('Tag', controller.subchains.name);
+    handles = findobj('Tag', cur_bot.name);
     
     %print trajectory 
     pp=[];
@@ -94,17 +96,17 @@ function animate(controller,qq,time)
    %                 h.q = q';
    %                 set(handle, 'UserData', h);
 
-                     group = findobj('Tag', controller.subchains.name);
+                     group = findobj('Tag', cur_bot.name);
                      h = get(group, 'UserData');
 
                    % now draw it for a pose q
-                   if controller.subchains.mdh
+                   if cur_bot.mdh
                        % modified DH case
-                       T = controller.subchains.base;
+                       T = cur_bot.base;
                        vert = transl(T)';
 
                        for L=1:N
-                           if controller.subchains.links(L).isprismatic()
+                           if cur_bot.links(L).isprismatic()
                                set(h.pjoint(L), 'Matrix', trotz(q(L))*diag([1 1 -q(L) 1]));
                            end
                            T = T * links(L).A(q(L));
@@ -112,19 +114,19 @@ function animate(controller,qq,time)
                            vert = [vert; transl(T)'];
                        end
                        % update the transform for link N+1 (the tool)
-                       T = T * controller.subchains.tool;
+                       T = T * cur_bot.tool;
                        if length(h.link) > N
                            set(h.link(N+1), 'Matrix', T);
                        end
                        vert = [vert; transl(T)'];
                    else
                        % standard DH case
-                       T = controller.subchains.base;
+                       T = cur_bot.base;
                        vert = transl(T)';
 
                        for L=1:N
                            % for all N+1 links
-                           if controller.subchains.links(L).isprismatic()
+                           if cur_bot.links(L).isprismatic()
                                set(h.pjoint(L), 'Matrix', T*trotz(q(L))*diag([1 1 q(L) 1]));
                            end
                            if h.link(L) ~= 0
@@ -138,7 +140,7 @@ function animate(controller,qq,time)
                        if length(h.link) > N
                            set(h.link(N+1), 'Matrix', T);
                        end
-                       T = T*controller.subchains.tool;
+                       T = T*cur_bot.tool;
                        vert = [vert; transl(T)'];
                    end
 
@@ -163,9 +165,9 @@ function animate(controller,qq,time)
 
                    % update the tool tip trail
                    if isfield(h, 'trail')
-                       T = controller.subchains.fkine(q);
-                       controller.subchains.trail = [controller.subchains.trail; transl(T)'];
-                       set(h.trail, 'Xdata', controller.subchains.trail(:,1), 'Ydata', controller.subchains.trail(:,2), 'Zdata', controller.subchains.trail(:,3));
+                       T = cur_bot.fkine(q);
+                       cur_bot.trail = [cur_bot.trail; transl(T)'];
+                       set(h.trail, 'Xdata', cur_bot.trail(:,1), 'Ydata', cur_bot.trail(:,2), 'Zdata', cur_bot.trail(:,3));
                    end
 
    %                 T = T * robot.tool;
@@ -190,14 +192,14 @@ function animate(controller,qq,time)
 
 
                    % add a frame to the movie
-                   if ~isempty(h.controller.subchains.framenum)
+                   if ~isempty(h.cur_bot.framenum)
                        % write the frame to the movie folder
-                       print( '-dpng', fullfile(h.controller.subchains.moviepath, sprintf('%04d.png', h.controller.subchains.framenum)) );
-                       h.controller.subchains.framenum = h.controller.subchains.framenum+1;
+                       print( '-dpng', fullfile(h.cur_bot.moviepath, sprintf('%04d.png', h.cur_bot.framenum)) );
+                       h.cur_bot.framenum = h.cur_bot.framenum+1;
                    end
 
-                   if h.controller.subchains.delay > 0
-                       pause(h.controller.subchains.delay);
+                   if h.cur_bot.delay > 0
+                       pause(h.cur_bot.delay);
                        drawnow
                    end
                end
@@ -205,7 +207,7 @@ function animate(controller,qq,time)
             end
         end
         
-        if ~h.controller.subchains.loop
+        if ~h.cur_bot.loop
             break;
         end        
     end

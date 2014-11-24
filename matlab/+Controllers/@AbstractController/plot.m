@@ -192,8 +192,11 @@
 % more consistent option names, scale, mag etc.
 function plot(controller,q,time,varargin)
     
+
+    cur_bot = controller.GetActiveBot();
+
     % check the joint angle data matches the robot
-    n = controller.subchains.n;
+    n = cur_bot.n;
     if numcols(q) ~= n
         error('Insufficient columns in q')
     end
@@ -202,7 +205,7 @@ function plot(controller,q,time,varargin)
     %  - passed arguments
     %  - the robot object itself
     %  - the file plotopt.m
-    opt = plot_options(controller, varargin);
+    opt = plot_options(cur_bot, varargin);
     
 
     % logic to handle where the plot is drawn, are old figures updated or
@@ -212,19 +215,19 @@ function plot(controller,q,time,varargin)
     if strcmp(get(gca,'Tag'), 'RTB.plot')
         % this axis is an RTB plot window
         
-        rhandles = findobj('Tag', controller.subchains.name);
+        rhandles = findobj('Tag', cur_bot.name);
         
         if isempty(rhandles)
             % this robot doesnt exist here, create it or add it
             
             if ishold
                 % hold is on, add the robot, don't change the floor
-                handle = create_robot(controller, opt);
+                handle = create_robot(cur_bot, opt);
                 
                 
                 % tag one of the graphical handles with the robot name and hang
                 % the handle structure off it
-                set(handle.joint(1), 'Tag', controller.subchains.name);
+                set(handle.joint(1), 'Tag', cur_bot.name);
                 set(handle.joint(1), 'UserData', handle);
             else
                 % create the robot and floor
@@ -233,7 +236,7 @@ function plot(controller,q,time,varargin)
                 if opt.tiles
                     create_tiled_floor(opt);
                 end
-                handle = create_robot(controller, opt);
+                handle = create_robot(cur_bot, opt);
                 set(gca, 'Tag', 'RTB.plot');
             end
             
@@ -244,7 +247,7 @@ function plot(controller,q,time,varargin)
         if opt.tiles
             create_tiled_floor(opt);
         end
-        handle = create_robot(controller, opt);
+        handle = create_robot(cur_bot, opt);
         set(gca, 'Tag', 'RTB.plot');
         set(gcf, 'Units', 'Normalized');
         pf = get(gcf, 'Position');
@@ -254,13 +257,13 @@ function plot(controller,q,time,varargin)
     % deal with a few options that need to be stashed in the SerialLink object
     % movie mode has not already been flagged
     if opt.movie
-        controller.subchains.framenum = 0;
-        controller.subchains.moviepath = opt.movie;
+        cur_bot.framenum = 0;
+        cur_bot.moviepath = opt.movie;
     else
-        controller.subchains.framenum = [];
+        cur_bot.framenum = [];
     end
-    controller.subchains.delay = opt.delay;
-    controller.subchains.loop = opt.loop;   
+    cur_bot.delay = opt.delay;
+    cur_bot.loop = opt.loop;   
     
     if opt.raise
         % note this is a very time consuming operation
@@ -309,7 +312,7 @@ function h = create_robot(controller, opt)
     
     disp('creating new robot');
     
-    links = controller.subchains.links;
+    links = cur_bot.links;
     s = opt.scale;
     
     % create an axis
@@ -320,11 +323,11 @@ function h = create_robot(controller, opt)
         hold
     end
     
-    N = controller.subchains.n;
+    N = cur_bot.n;
     
     % create the base
     if opt.base
-        bt = transl(controller.subchains.base);
+        bt = transl(cur_bot.base);
         bt = [bt'; bt'];
         bt(1,3) = opt.floorlevel;
         line(bt(:,1), bt(:,2), bt(:,3), 'LineWidth', opt.basewidth, 'Color', opt.basecolor);
@@ -332,14 +335,14 @@ function h = create_robot(controller, opt)
     
     % add the robot's name
     if opt.name
-        b = transl(controller.subchains.base);
+        b = transl(cur_bot.base);
         bz = 0;
         if opt.base
             bz = 0.5*opt.floorlevel;
         end
-        text(b(1), b(2)-s, bz, [' ' controller.subchains.name], 'FontAngle', 'italic', 'FontWeight', 'bold')
+        text(b(1), b(2)-s, bz, [' ' cur_bot.name], 'FontAngle', 'italic', 'FontWeight', 'bold')
     end
-    group = hggroup('Tag', controller.subchains.name);
+    group = hggroup('Tag', cur_bot.name);
     h.group = group;
     
     % create the graphical joint and link elements
@@ -368,7 +371,7 @@ function h = create_robot(controller, opt)
         
         % create elements to represent translation between joint frames, ie. the link itself.
         % This is drawn to resemble orthogonal plumbing.
-        if controller.subchains.mdh
+        if cur_bot.mdh
             % modified DH convention
             if L < N
                 A = links(L+1).A(0);
@@ -418,13 +421,13 @@ function h = create_robot(controller, opt)
     % display the tool transform if it exists
     h.link(N+1) = hgtransform('Tag', sprintf('link%d', N+1), 'Parent', group);
     tool = eye(4,4);
-    if ~controller.subchains.mdh
+    if ~cur_bot.mdh
         if (links(end).d ~= 0) || (links(end).a ~= 0)
             tool = transl(links(end).a, 0, links(end).d);
         end
     end
-    if ~isempty(controller.subchains.tool)
-        tool = tool * controller.subchains.tool;
+    if ~isempty(cur_bot.tool)
+        tool = tool * cur_bot.tool;
     end
     t = transl(tool);
     if t(1) ~= 0
@@ -456,7 +459,7 @@ function h = create_robot(controller, opt)
     
     if opt.trail
         h.trail = plot(0, 0, opt.trail);
-        controller.subchains.trail = [];
+        cur_bot.trail = [];
     end
     
     % deal with some display options
@@ -474,7 +477,7 @@ function h = create_robot(controller, opt)
         hold off
     end
     h.floorlevel = opt.floorlevel;
-    h.controller.subchains = controller.subchains;
+    h.cur_bot = cur_bot;
     h.opt = opt;
     
     % attach the handle structure to the top graphical element
@@ -657,9 +660,9 @@ function opt = plot_options(controller, optin)
     %   2. robot.plotopt
     %   3. command line arguments
     if exist('plotbotopt', 'file') == 2
-        options = [plotbotopt controller.subchains.plotopt optin];
+        options = [plotbotopt cur_bot.plotopt optin];
     else
-        options = [controller.subchains.plotopt optin];
+        options = [cur_bot.plotopt optin];
     end
     
     % parse the options
@@ -677,15 +680,15 @@ function opt = plot_options(controller, optin)
         %
         % simple heuristic to figure the maximum reach of the robot
         %
-        L = controller.subchains.links;
+        L = cur_bot.links;
         if any(L.isprismatic)
             error('Prismatic joint(s) present: requires the ''workspace'' option');
         end
         reach = 0;
-        for i=1:controller.subchains.n
+        for i=1:cur_bot.n
             reach = reach + abs(L(i).a) + abs(L(i).d);
         end
-        reach = reach + sum(abs(transl(controller.subchains.tool)));
+        reach = reach + sum(abs(transl(cur_bot.tool)));
         reach = reach/opt.zoom;
         
         % if we have a floor, quantize the reach to a tile size

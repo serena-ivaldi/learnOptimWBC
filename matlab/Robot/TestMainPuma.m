@@ -137,7 +137,7 @@ J_dot = chains.sub_chains{1}.jacob_dot(qz_cur,0.5*ones(1,chains.GetNumSubLinks(1
 % one shot only for generate jacob_dot
 % JacDotGen(chains.sub_chains{1},'/home/vale/Documents');
 
-metric = {'M^(1/2)';'M^(1/2)'};  % N^(1/2) = (M^(-1))^(1/2) = M^(1/2);         
+metric = {'M^(1/2)','M^(1/2)'};  % N^(1/2) = (M^(-1))^(1/2) = M^(1/2);         
 %kp = 1500; %linear and exponential tracking
 %kp = 1497  % regulation 
 kp = [1497, 1500]; % row vector one for each chain
@@ -160,24 +160,28 @@ display_opt.trajtrack = true;
 % the constructor
 controller = Controllers.UF(chains,reference,alphas,metric,Kp,Kd,combine_rule,display_opt);
 
-value = 1;
-try
+% generate starting conditions for every chains
+q0{1} = qz;
+qd0{1} = zeros(1,controller.subchains.sub_chains{1}.n);
+
+%value = 1;
+%try
 tic
 options= odeset('MaxStep',0.001);
 fixed_step = false;
 time_sym_struct = time_struct;
 time_sym_struct.step = 0.001;
-[t, q, qd] = controller.subchains.nofriction().fdyn(time_sym_struct,controller,qz,zeros(1,controller.subchains.n),fixed_step,options);
+[t, q, qd] = DynSim(time_sym_struct,controller,q0,qd0,fixed_step,options);
 toc
-catch error
-    
-    disp(error);
-    value = 0;
-    
-end
+% catch error
+%     
+%     disp(error);
+%     value = 0;
+%     
+% end
 
 
-% controller.plot3d(q,t);
+controller.plot3d(q,t);
 %controller.plot(q,t);
 % 
 % 

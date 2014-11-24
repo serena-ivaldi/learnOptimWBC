@@ -37,6 +37,11 @@ classdef  SubChains < handle
          end
       end
       
+      % get active subchain
+      function rob = GetCurRobot(obj,current_chain)
+          rob = obj.sub_chains{current_chain};
+      end
+      
       % number of subchains
       function n=GetNumChains(obj)
          n=size(obj.target_link,1);

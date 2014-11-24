@@ -9,21 +9,22 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
 
         q_cur = zeros(1,obj.sub_chains{ind_subchain}.n);
         qd_cur= zeros(1,obj.sub_chains{ind_subchain}.n);
-        
         q_cur(1:obj.GetNumSubLinks(ind_subchain,ind_task)) = q(1:obj.GetNumSubLinks(ind_subchain,ind_task));
-         qd_cur(1:obj.GetNumSubLinks(ind_subchain,ind_task)) = qd(1:obj.GetNumSubLinks(ind_subchain,ind_task));
+        qd_cur(1:obj.GetNumSubLinks(ind_subchain,ind_task)) = qd(1:obj.GetNumSubLinks(ind_subchain,ind_task));
+        
+        cur_bot = obj.GetCurRobot(ind_subchain);
         % compute pose (position + rool pitch yaw) from the current
         % subchain
-        T = obj.sub_chains(ind_subchain).fkine(q_cur);
+        T = cur_bot.fkine(q_cur);
         x = T(1:3,4);
         rpy = tr2rpy(T);
         rpy = rpy';
         % compute generalized cartesian velocities from the current
         % subchain
-        J = obj.sub_chains{ind_subchain}.jacob0(q_cur);
+        J = cur_bot.jacob0(q_cur);
         v=J*qd_cur';
         xd = v(1:3);rpyd=v(4:6);
         % compute J_dot from the the current subchain
-        J_dot = obj.sub_chains(index).jacob_dot(q_cur,qd_cur);   
+        J_dot = cur_bot.jacob_dot(q_cur,qd_cur);   
   
 end

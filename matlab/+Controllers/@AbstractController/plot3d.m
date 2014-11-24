@@ -86,13 +86,16 @@
 
 function plot3d(controller,q,time,varargin)
     
-    opt = plot_options(controller, varargin);
+
+    cur_bot = controller.GetActiveBot();
+    
+    opt = plot_options(cur_bot, varargin);
     
     %-- load the shape if need be
     
-    nshapes = controller.subchains.n+1;
+    nshapes = cur_bot.n+1;
     
-    if isempty(controller.subchains.faces)
+    if isempty(cur_bot.faces)
         % no 3d model defined, let's try to load one
         
         if isempty(opt.path)
@@ -103,18 +106,18 @@ function plot3d(controller,q,time,varargin)
             end
             
             % find the path to this specific model
-            pth = fullfile(fileparts(pth),controller.subchains.model3d)
+            pth = fullfile(fileparts(pth),cur_bot.model3d)
         else
             pth = opt.path;
         end
         
         % now load the STL files
-        controller.subchains.points = cell(1, controller.subchains.n+1);
-        controller.subchains.faces = cell(1, controller.subchains.n+1);
+        cur_bot.points = cell(1, cur_bot.n+1);
+        cur_bot.faces = cell(1, cur_bot.n+1);
         for i=1:nshapes
             [F,P] = rndread( fullfile(pth, sprintf('link%d.stl', i-1)) );
-            controller.subchains.points{i} = P;
-            controller.subchains.faces{i} = F;
+            cur_bot.points{i} = P;
+            cur_bot.faces{i} = F;
         end
     end
     
@@ -124,7 +127,7 @@ function plot3d(controller,q,time,varargin)
         if ~isempty(opt.floorlevel)
             opt.ws(5) = opt.floorlevel;
         elseif opt.base
-            mn = min( controller.subchains.points{1} );
+            mn = min( cur_bot.points{1} );
             opt.ws(5) = mn(3);
         end
     end
@@ -194,28 +197,28 @@ function plot3d(controller,q,time,varargin)
 
     %--- create the robot
     %  one patch per shape, use hgtransform to animate them later
-    group = hggroup('Tag', controller.subchains.name);
+    group = hggroup('Tag', cur_bot.name);
     ncolors = numrows(C);
     
     h = [];
-    for link=0:controller.subchains.n    
+    for link=0:cur_bot.n    
         if link == 0
             if ~opt.base
                 continue;
             end
             
-            patch('Faces', controller.subchains.faces{link+1}, 'Vertices', controller.subchains.points{link+1}, ...
+            patch('Faces', cur_bot.faces{link+1}, 'Vertices', cur_bot.points{link+1}, ...
                 'FaceColor', C(mod(link,ncolors)+1,:), 'EdgeAlpha', 0, 'FaceAlpha', opt.alpha);
         else
             h.link(link) = hgtransform('Tag', sprintf('link%d', link), 'Parent', group);
 
-            patch('Faces', controller.subchains.faces{link+1}, 'Vertices', controller.subchains.points{link+1}, ...
+            patch('Faces', cur_bot.faces{link+1}, 'Vertices', cur_bot.points{link+1}, ...
                 'FaceColor', C(mod(link,ncolors)+1,:), 'EdgeAlpha', 0, 'FaceAlpha', opt.alpha, ...
             'Parent', h.link(link));
         end
     end
     h.wrist = [];  % HACK, should be trplot
-    h.controller.subchains = controller.subchains;
+    h.cur_bot = cur_bot;
     h.link = [0 h.link];
     set(group, 'UserData', h);
     
@@ -226,7 +229,7 @@ function plot3d(controller,q,time,varargin)
     end
 end
 
-function opt = plot_options(controller, optin)
+function opt = plot_options(cur_bot, optin)
     opt.color = [];
     opt.path = [];  % override path
     opt.alpha = 1;
@@ -276,9 +279,9 @@ function opt = plot_options(controller, optin)
     %   2. robot.plotopt
     %   3. command line arguments
     if exist('plotbotopt3d', 'file') == 2
-        options = [plotbotopt3d controller.subchains.plotopt3d optin];
+        options = [plotbotopt3d cur_bot.plotopt3d optin];
     else
-        options = [controller.subchains.plotopt3d optin];
+        options = [cur_bot.plotopt3d optin];
     end
     
     % parse the options
@@ -296,12 +299,12 @@ function opt = plot_options(controller, optin)
         %
         % simple heuristic to figure the maximum reach of the robot
         %
-        L = controller.subchains.links;
+        L = cur_bot.links;
         if any(L.isprismatic)
             error('Prismatic joint(s) present: requires the ''workspace'' option');
         end
         reach = 0;
-        for i=1:controller.subchains.n
+        for i=1:cur_bot.n
             reach = reach + abs(L(i).a) + abs(L(i).d);
         end
         
@@ -337,10 +340,10 @@ function opt = plot_options(controller, optin)
     % deal with a few options that need to be stashed in the SerialLink object
     % movie mode has not already been flagged
     if opt.movie
-        controller.subchains.framenum = 0;
-        controller.subchains.moviepath = opt.movie;
+        cur_bot.framenum = 0;
+        cur_bot.moviepath = opt.movie;
     else
-        controller.subchains.framenum = [];
+        cur_bot.framenum = [];
     end 
     
     if ~isempty(opt.movie)
@@ -348,8 +351,8 @@ function opt = plot_options(controller, optin)
         framenum = 1;
     end
     
-    controller.subchains.delay = opt.delay;
-    controller.subchains.loop = opt.loop;   
+    cur_bot.delay = opt.delay;
+    cur_bot.loop = opt.loop;   
 end
 
 % Extracted from cad2matdemo

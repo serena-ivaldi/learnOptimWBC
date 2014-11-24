@@ -5,6 +5,7 @@ classdef  UF < Controllers.AbstractController
       references;      % object that contains the reference trajectory for each tasks; 
       alpha;           % cell array of weight function
       metric;          % vector of matlab command     for example M_inv^2, M_inv,eye(lenght(q)) 
+      current_chain    % index that define the current robot that i want to move
       %ground_truth     % if true for computing the position and velocity of the end effector i will use the non perturbed model 
       Kp               % vector of matrix of proportional gain
       Kd               % vector of matrix of derivative gain
@@ -27,7 +28,7 @@ classdef  UF < Controllers.AbstractController
          obj.combine_rule = combine_rule;
          obj.torques = cell(obj.subchains.GetNumChains());
          for i = 1:obj.subchains.GetNumChains()
-            obj.torques{i} = zeros(obj.subchains.GetNumLinks(i),1,obj.subchains.GetNumTasks(i));  %tau(n_of_total_joint on the chain x 1 x n_of_task)
+            obj.torques{i} = zeros(obj.subchains.GetNumLinks(i),1);  %tau(n_of_total_joint on the chain x 1)
          end
          % default settings for smoothing and trajectory tracking display (desidered position) 
          obj.display_opt.fixed_step = false;
@@ -35,7 +36,6 @@ classdef  UF < Controllers.AbstractController
          obj.display_opt.trajtrack = false;
          % settings for smoothing and trajectory tracking display (reference position)
          if (nargin > 7)
-            disp('sono qui');
             disp_opt = varargin{1};
             obj.display_opt.step =disp_opt.step;
             obj.display_opt.trajtrack = disp_opt.trajtrack;   
@@ -43,14 +43,26 @@ classdef  UF < Controllers.AbstractController
          
       end    
 
-      function SaveTau(obj,ind_subchain,ind_task,tau)
-         obj.torques{ind_subchain} = [obj.torques{index}(:,:,ind_task),tau];   
+      function SaveTau(obj,ind_subchain,tau)
+         obj.torques{ind_subchain} = [obj.torques{ind_subchain}(:,:),tau];   
       end
       
       function CleanTau(obj)
-          for i = 1 :obj.subchains.GetNumTasks()
+          for i = 1 :obj.subchains.GetNumChains()
             obj.torques{i} = [];
           end
+      end
+      
+      function SetCurRobotIndex(obj,index_chain)
+          obj.current_chain = index_chain;
+      end
+      
+      function i = GetCurRobotIndex(obj)
+          i = obj.current_chain;
+      end
+      
+      function bot = GetActiveBot(obj)
+          bot = obj.subchains.GetCurRobot(obj.current_chain);
       end
       
       % in this function i update the value of the alpha function giving
@@ -67,33 +79,31 @@ classdef  UF < Controllers.AbstractController
              end
          end
       end
-
+      
       function  final_tau  = Policy(obj,t,q,qd)
          
            if(strcmp(obj.combine_rule,'sum')) 
 
-               for i = 1:obj.subchains.GetNumChains()
+             % active robot 
+             cur_bot = obj.GetActiveBot;
+             % current chain index
+             i = obj.GetCurRobotIndex;
+             % the dynamic computation between controller and simulator has
+             % to be different
 
-                 % number of links of the complete kinematic chain
-                 n = obj.subchains.GetNumLinks(i);
-
-                 % the dynamic computation between controller and simulator has
-                 % to be different
-
-                 M = obj.subchains.sub_chains{i}.inertia(q);
-                 F = obj.subchains.sub_chains{i}.coriolis(q,qd)*qd' + obj.subchains.sub_chains{i}.gravload(q);
+             M = cur_bot.inertia(q);
+             F = cur_bot.coriolis(q,qd)*qd' + cur_bot.gravload(q)';
 
 
-                 final_tau = zeros(n,1);
-                 for j =1:obj.subchains.GetNumTasks(i)
-                     tau = obj.ComputeTorqueSum(i,j,M,F,t,q,qd);
-                     % here i have to put a subset of functions t that i want to
-                     % use to catch data for computing fitness func
-                     obj.SaveTau(i,j,tau);
-                     final_tau = final_tau + obj.alpha{i,j}.GetValue(t)*tau;  
-                 end
+             final_tau = zeros(cur_bot.n,1);
+             for j =1:obj.subchains.GetNumTasks(i)
+                 tau = obj.ComputeTorqueSum(i,j,M,F,t,q,qd);
+                 % here i have to put a subset of functions t that i want to
+                 % use to catch data for computing fitness func
+                 final_tau = final_tau + obj.alpha{i,j}.GetValue(t)*tau;  
+                 obj.SaveTau(i,final_tau);
+             end
                  
-               end
               
            elseif(strcmp(obj.combine_rule,'projector'))
            %#TODO % add combine_rule  
