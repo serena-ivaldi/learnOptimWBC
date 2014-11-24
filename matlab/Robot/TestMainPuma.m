@@ -160,23 +160,23 @@ display_opt.trajtrack = true;
 % the constructor
 controller = Controllers.UF(chains,reference,alphas,metric,Kp,Kd,combine_rule,display_opt);
 
-% value = 1;
-% try
-% tic
-% options= odeset('MaxStep',0.001);
-% fixed_step = false;
-% time_sym_struct = time_struct;
-% time_sym_struct.step = 0.001;
-% [t, q, qd] = controller.subchains.nofriction().fdyn(time_sym_struct,controller,qz,zeros(1,controller.subchains.n),fixed_step,options);
-% toc
-% catch error
-%     
-%     disp(error);
-%     value = 0;
-%     
-% end
-% 
-% 
+value = 1;
+try
+tic
+options= odeset('MaxStep',0.001);
+fixed_step = false;
+time_sym_struct = time_struct;
+time_sym_struct.step = 0.001;
+[t, q, qd] = controller.subchains.nofriction().fdyn(time_sym_struct,controller,qz,zeros(1,controller.subchains.n),fixed_step,options);
+toc
+catch error
+    
+    disp(error);
+    value = 0;
+    
+end
+
+
 % controller.plot3d(q,t);
 %controller.plot(q,t);
 % 
