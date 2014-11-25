@@ -5,7 +5,7 @@ clc
 
 % we have to specify every value of the cell vector for consistency with
 % the cycle inside the function 
-subchain1 = [6];
+subchain1 = [6 6];
 target_link{1} = subchain1;
 % reference parameters
 type = {'cartesian_x','cartesian_rpy'};
@@ -22,7 +22,7 @@ time_law = {'linear','none'};
 
 %parameters first chains
 geom_parameters{1,1} = [0.2 0 -pi/2 -pi/4 0 -0.5 0.3]; % Circular trajectory 
-geom_parameters{1,2} = [0 0 pi/2]; % orientation regulation
+geom_parameters{1,2} = [0 0 0]; % orientation regulation
 
 %geom_parameters = [-0.2 0.3 0.2 0.2 0.3 0.2];% Rectilinear trajectory
 %geom_parameters =  [-0.2 0.3 0.2]; % position regulation
@@ -99,7 +99,7 @@ toc
 % 
 % 
 % hold on;axis equal;
-% p560.plot(qz);
+% %p560.plot(qz);
 % plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
 %% alpha function
 
@@ -138,9 +138,8 @@ alphas = ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1
 % JacDotGen(chains.sub_chains{1},'/home/vale/Documents');
 
 metric = {'M^(1/2)','M^(1/2)'};  % N^(1/2) = (M^(-1))^(1/2) = M^(1/2);         
-%kp = 1500; %linear and exponential tracking
-%kp = 1497  % regulation 
-kp = [1497, 1500]; % row vector one for each chain
+ 
+kp = [90, 100]; % row vector one for each chain
 for i= 1:chains.GetNumChains();
    K_p = zeros(3,3,size(kp,2));
    K_d = zeros(3,3,size(kp,2));
@@ -153,7 +152,7 @@ for i= 1:chains.GetNumChains();
    Kd{i} = K_d;
 end
 combine_rule = {'sum'};
-display_opt.step = 0.01;
+display_opt.step = 0.1;
 display_opt.trajtrack = true;
 
 % for using package functions we have to call the name of the package before
@@ -173,8 +172,8 @@ time_sym_struct.step = 0.001;
 [t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);
 toc
 
-controller.display(q,t,false)
-
+%controller.display(q,t,false)
+p560.plot(q{1});
 
 % 
 % 

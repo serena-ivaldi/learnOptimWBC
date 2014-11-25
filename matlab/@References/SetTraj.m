@@ -20,7 +20,7 @@ function SetTraj(obj,ind_subchain,ind_task)
                   %s=Trapezoidal(obj.time_parameters);
               end
               
-              [p,pd,pdd,t] = Rectilinear(s,obj.time_struct,obj.geom_parameters{ind_subchain,ind_task},obj.type);
+              [p,pd,pdd,t] = Rectilinear(s,obj.time_struct,obj.geom_parameters{ind_subchain,ind_task},obj.type_of_traj{ind_subchain,ind_task});
               obj.trajectories{ind_subchain,ind_task}.p = p;
               obj.trajectories{ind_subchain,ind_task}.pd = pd;
               obj.trajectories{ind_subchain,ind_task}.pdd = pdd;
@@ -37,7 +37,7 @@ function SetTraj(obj,ind_subchain,ind_task)
                   %s=Trapezoidal(obj.time_parameters);
               end
             
-              [p,pd,pdd,t] = Circular(s,obj.time_struct,obj.geom_parameters{ind_subchain,ind_task},obj.type);
+              [p,pd,pdd,t] = Circular(s,obj.time_struct,obj.geom_parameters{ind_subchain,ind_task},obj.type_of_traj{ind_subchain,ind_task});
               obj.trajectories{ind_subchain,ind_task}.p = p;
               obj.trajectories{ind_subchain,ind_task}.pd = pd;
               obj.trajectories{ind_subchain,ind_task}.pdd = pdd;
@@ -66,7 +66,7 @@ function SetTraj(obj,ind_subchain,ind_task)
                   %s=Trapezoidal(obj.time_parameters);
               end
               
-              [p,pd,pdd,t] = Rectilinear(s,obj.time_struct,obj.geom_parameters{ind_subchain,ind_task},obj.type);
+              [p,pd,pdd,t] = Rectilinear(s,obj.time_struct,obj.geom_parameters{ind_subchain,ind_task},obj.type_of_traj{ind_subchain,ind_task});
               obj.trajectories{ind_subchain,ind_task}.p = p;
               obj.trajectories{ind_subchain,ind_task}.pd = pd;
               obj.trajectories{ind_subchain,ind_task}.pdd = pdd;
@@ -83,7 +83,7 @@ function SetTraj(obj,ind_subchain,ind_task)
                   %s=Trapezoidal(obj.time_parameters);
               end
             
-              [p,pd,pdd,t] = Circular(s,obj.time_struct,obj.geom_parameters{ind_subchain,ind_task},obj.type);
+              [p,pd,pdd,t] = Circular(s,obj.time_struct,obj.geom_parameters{ind_subchain,ind_task},obj.type_of_traj{ind_subchain,ind_task});
               obj.trajectories{ind_subchain,ind_task}.p = p;
               obj.trajectories{ind_subchain,ind_task}.pd = pd;
               obj.trajectories{ind_subchain,ind_task}.pdd = pdd;

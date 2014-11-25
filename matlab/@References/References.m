@@ -74,12 +74,9 @@ classdef  References < handle
              
              if(strcmp(obj.type_of_traj{ind_subchain,ind_task},'func')) 
 
-                %normtime = NormalizeTime(t,obj.time_struct.ti,obj.time_struct.tf); 
-
                 p=feval(obj.trajectories{ind_subchain,ind_task}.p,t);
                 pd=feval(obj.trajectories{ind_subchain,ind_task}.pd,t);
                 pdd=feval(obj.trajectories{ind_subchain,ind_task}.pdd,t);
-
 
              elseif(strcmp(obj.type_of_traj{ind_subchain,ind_task},'sampled'))
 

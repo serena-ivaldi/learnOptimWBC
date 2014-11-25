@@ -9,7 +9,7 @@
 
 
 function [p,pd,pdd,time] = Circular(s,time_struct,geom_parameters,type)
-    
+ 
    t = sym('t');
    rad      = sym('rad');
    phi      = sym('phi');

@@ -85,7 +85,7 @@ function [t, q, qd] = DynSim(time_struct,controller,qi,qdi,fixed_step,varargin)
         try
             if(fixed_step)
                 disp('fixed_step') 
-                y = Ode4(@fdyn2,time,yi,controller,varargin{:}); 
+                y = Ode1(@fdyn2,time,yi,controller,varargin{:}); 
             else
                 disp('NOT fixed_step')
                 [T,y] = ode15s(@fdyn2,time,yi,[],controller,varargin{:});     
