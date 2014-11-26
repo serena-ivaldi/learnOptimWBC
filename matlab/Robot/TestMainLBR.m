@@ -102,7 +102,6 @@ hold on;axis equal;
 % LBR4p.plot(qz);
 plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
 %% alpha function
-parameters = zeros(1,10);
 value1 = 1*ones(chains.GetNumTasks(1));
 values{1} = value1;
 alphas = ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,time_struct);

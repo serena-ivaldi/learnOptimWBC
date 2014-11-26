@@ -166,46 +166,74 @@ qdi{1} = zeros(1,controller.subchains.sub_chains{1}.n);
 
 tic
 %options= odeset('MaxStep',0.001);
-fixed_step = false;
-time_sym_struct = time_struct;
-time_sym_struct.step = 0.01;
-[t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);
-toc
+% fixed_step = false;
+% time_sym_struct = time_struct;
+% time_sym_struct.step = 0.01;
+% [t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);
+% toc
+% 
+% %controller.display(q,t,false)
+% p560.plot(q{1});
 
-%controller.display(q,t,false)
-p560.plot(q{1});
 
+
+%% test instance
+
+%test alpha function
+% number_of_basis = 4;
+% redundancy = 3;
+% range = [0 , 20];
+% precomp_sample = false;
+% numeric_theta = 2*ones(number_of_basis,1);
+% alpha = RBF(time_struct,number_of_basis,redundancy,range,precomp_sample,numeric_theta);
+% % the parameters have to be a column vector !!!!
+% if(~precomp_sample)
+%     time = time_struct.ti:time_struct.step:time_struct.tf;
+%     i=1;
+%     
+%     tic
+%     for t = time
+%         vec_values(i) = feval(alpha.func,t,numeric_theta); 
+%         i=i+1;
+%     end
+%     toc
+%     figure
+%     plot(time,vec_values);
+% else
+%     figure
+%     plot(alpha.sample.time,alpha.sample.values);
+% end
 % 
+% figure
+% alpha.PlotBasisFunction();
 % 
-% %% test instance
-% 
-% % test alpha function
-% % number_of_basis = 4;
-% % redundancy = 3;
-% % alpha = RBF(time_struct,number_of_basis,redundancy);
-% % % the parameters have to be a column vector !!!!
-% % alpha.ComputeNumValue(ones(number_of_basis,1));
-% % %plot(alpha.sample.time,alpha.sample.normvalues);
-% % %alpha.PlotBasisFunction();
-% % 
-% % 
-% % %[zp ,zpd ,zpdd , scaled_time] = RecordTrajectory(5,0.01);
-% % 
-% % number_of_basis = 10;
-% % redundancy = 3;
-% % kp = 10;
-% % kd = 2*sqrt(kp);
-% % alpha_z = 0.1;
-% % number_of_pivot = 5;
-% % step = 0.01;
-% % alpha1 = DMP(time_struct,number_of_basis,redundancy,kp,kd,alpha_z);
-% % [p_init,v_init,p_end,v_end,theta] = alpha1.TrainByDraw(number_of_pivot,step);
-% % alpha1.ComputeNumValue(p_init,v_init,p_end,v_end,theta);
-% % % plot results
-% % figure
-% % plot(alpha1.sample.time,alpha1.sample.normvalues);
-% % figure
-% % alpha1.PlotBasisFunction();
+% spani = 0:0.001:range(1,2);
+% i = 1;
+% sigvalue = zeros(1,size(spani,2));
+% for x=spani
+%     t = 0;
+%     numeric_theta = x*ones(number_of_basis,1);
+%     sigvalue(i) = feval(alpha.func,t,numeric_theta);
+%     i= i + 1;
+% end
+% figure
+% plot(spani,sigvalue)
+
+% number_of_basis = 10;
+% redundancy = 3;
+% kp = 10;
+% kd = 2*sqrt(kp);
+% alpha_z = 0.1;
+% number_of_pivot = 5;
+% step = 0.01;
+% alpha1 = DMP(time_struct,number_of_basis,redundancy,kp,kd,alpha_z);
+% [p_init,v_init,p_end,v_end,theta] = alpha1.TrainByDraw(number_of_pivot,step);
+% alpha1.ComputeNumValue(p_init,v_init,p_end,v_end,theta);
+% % plot results
+% figure
+% plot(alpha1.sample.time,alpha1.sample.normvalues);
+% figure
+% alpha1.PlotBasisFunction();
 
 
 
