@@ -7,7 +7,7 @@ clc
 
 % we have to specify every value of the cell vector for consistency with
 % the cycle inside the function 
-subchain1 = [7];
+subchain1 = [7 4];
 target_link{1} = subchain1;
 % i consider only one perturbation for the whole robot chain
 type = {'cartesian_x','cartesian_rpy','cartesian_rpy'};
@@ -161,7 +161,7 @@ toc
 
 
 
-LBR4p.plot(q{1});
+%LBR4p.plot(q{1});
 
 
 %% test Alpha

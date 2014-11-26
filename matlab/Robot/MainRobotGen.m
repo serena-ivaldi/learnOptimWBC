@@ -5,7 +5,7 @@ clc
 %% Instantiate a |CodeGenerator| class object
 
 % change the function to change the robot for generating mex matrix
-%rob = MdlLBR4p();
+rob = MdlTestRotoTrasl();
 cGen = CodeGenerator(rob,'mex','genmfun','genmex');
 % with this function i build all the symbolic rapresentation of the robot
 cGen.geneverything();
@@ -19,5 +19,5 @@ fid = fopen( strcat(cGen.basepath,'/',rob_name,'_done.m'), 'wt' );
 
 % create a mfile for J_dot;
 rob = eval(strcat(rob_name,'()'));
-JacDotGen(rob,CGen.basepath);
+JacDotGen(rob,cGen.robjpath);
 

@@ -4,11 +4,11 @@
 function [J,J_dot] = ReshapeJacobian(J_old,J_dot_old,tot_link,sub_link,mask,trans_or_rot)
 
   % i have to insert the mask to select only a subset of the task jacobian
-
+   
    if(sub_link<tot_link)
         diff =tot_link - sub_link;
-        mask = zeros(6,diff);
-        J_old(:,diff+1:end) = mask;
+        mask_mat = zeros(6,diff);
+        J_old(:,sub_link+1:end) = mask_mat;
    end
    
    if(strcmp(trans_or_rot,'trans'))
