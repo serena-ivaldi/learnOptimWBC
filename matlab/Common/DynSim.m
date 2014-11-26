@@ -79,10 +79,11 @@ function [t, q, qd] = DynSim(time_struct,controller,qi,qdi,fixed_step,varargin)
         
         % concatenate q and qd into the initial state vector
         yi = [qi{index_chain}(:);qdi{index_chain}(:)];
+        
         % set the index for the current chain in use
         controller.SetCurRobotIndex(index_chain);
         n = controller.GetActiveBot.n;
-        try
+%         try
             if(fixed_step)
                 disp('fixed_step') 
                 y = Ode1(@fdyn2,time,yi,controller,varargin{:}); 
@@ -92,14 +93,15 @@ function [t, q, qd] = DynSim(time_struct,controller,qi,qdi,fixed_step,varargin)
             end  
             q{index_chain} = y(:,1:n);
             qd{index_chain} = y(:,n+1:2*n);
-        catch err
-            q{index_chain} = y(:,1:n);
-            qd{{index_chain}} = y(:,n+1:2*n); 
-            %because of i have failed i need to cut the time till the last
-            %position computed
-            t = time(1,1:size(q{index_chain},1));
-            rethrow(err);
-        end
+%         catch err
+%             
+%             q{index_chain} = y(:,1:n);
+%             qd{{index_chain}} = y(:,n+1:2*n); 
+%             %because of i have failed i need to cut the time till the last
+%             %position computed
+%             t = time(1,1:size(q{index_chain},1));
+%             rethrow(err);
+%         end
     end
     % i have to use the same sample time for every chain 
     t = time;

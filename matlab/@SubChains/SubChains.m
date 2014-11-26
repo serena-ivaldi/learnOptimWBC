@@ -45,7 +45,7 @@ classdef  SubChains < handle
           rob = obj.sub_chains{current_chain};
       end
       
-       % get active subchain
+       % get active subchain for visualization
       function rob = GetCurRobotVis(obj,current_chain)
           rob = obj.sub_chains_vis{current_chain};
       end
@@ -60,7 +60,7 @@ classdef  SubChains < handle
           n=size(obj.target_link{ind_subchain},2);
        end 
        
-       % number of degrees of freedom of the current subchain
+       % number of total degrees of freedom of the current subchain
        function n=GetNumLinks(obj,ind_subchain)
           n=obj.sub_chains{ind_subchain,1}.n;
        end 

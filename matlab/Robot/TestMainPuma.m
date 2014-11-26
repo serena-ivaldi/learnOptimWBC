@@ -5,7 +5,7 @@ clc
 
 % we have to specify every value of the cell vector for consistency with
 % the cycle inside the function 
-subchain1 = [6 6];
+subchain1 = [6 3];
 target_link{1} = subchain1;
 % reference parameters
 type = {'cartesian_x','cartesian_rpy'};
@@ -22,7 +22,7 @@ time_law = {'linear','none'};
 
 %parameters first chains
 geom_parameters{1,1} = [0.2 0 -pi/2 -pi/4 0 -0.5 0.3]; % Circular trajectory 
-geom_parameters{1,2} = [0 0 0]; % orientation regulation
+geom_parameters{1,2} = [0 0 -pi/2]; % orientation regulation
 
 %geom_parameters = [-0.2 0.3 0.2 0.2 0.3 0.2];% Rectilinear trajectory
 %geom_parameters =  [-0.2 0.3 0.2]; % position regulation
@@ -73,34 +73,34 @@ toc
 
 %% plot trajectories (only the first one of the first chain)
 
-% if(strcmp(type_of_traj{1,1},'func')) 
-%   
-%     p_tot=[];
-%     pd_tot=[];
-%     pdd_tot=[];
-%     for t=time_struct.ti:time_struct.step:time_struct.tf
-%         
-%         
-%         p_cur=feval(reference.trajectories{1,1}.p,t);
-%         pd_cur=feval(reference.trajectories{1,1}.pd,t);
-%         pdd_cur=feval(reference.trajectories{1,1}.pdd,t);
-% 
-%         p_tot = [p_tot,p_cur];
-%         pd_tot = [pd_tot,pd_cur];
-%         pdd_tot = [pdd_tot,pdd_cur];
-%         
-%     end
-%     
-% elseif(strcmp(type_of_traj{1,1},'sampled'))
-%     p_tot = reference.trajectories{1,1}.p;
-%     pd_tot = reference.trajectories{1,1}.pd;
-%     pdd_tot = reference.trajectories{1,1}.pdd;
-% end
-% 
-% 
+if(strcmp(type_of_traj{1,1},'func')) 
+  
+    p_tot=[];
+    pd_tot=[];
+    pdd_tot=[];
+    for t=time_struct.ti:time_struct.step:time_struct.tf
+        
+        
+        p_cur=feval(reference.trajectories{1,1}.p,t);
+        pd_cur=feval(reference.trajectories{1,1}.pd,t);
+        pdd_cur=feval(reference.trajectories{1,1}.pdd,t);
+
+        p_tot = [p_tot,p_cur];
+        pd_tot = [pd_tot,pd_cur];
+        pdd_tot = [pdd_tot,pdd_cur];
+        
+    end
+    
+elseif(strcmp(type_of_traj{1,1},'sampled'))
+    p_tot = reference.trajectories{1,1}.p;
+    pd_tot = reference.trajectories{1,1}.pd;
+    pdd_tot = reference.trajectories{1,1}.pdd;
+end
+
+
 % hold on;axis equal;
 % %p560.plot(qz);
-% plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
+plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
 %% alpha function
 
 number_of_basis = 10;
@@ -166,9 +166,9 @@ qdi{1} = zeros(1,controller.subchains.sub_chains{1}.n);
 
 tic
 %options= odeset('MaxStep',0.001);
-fixed_step = true;
+fixed_step = false;
 time_sym_struct = time_struct;
-time_sym_struct.step = 0.001;
+time_sym_struct.step = 0.01;
 [t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);
 toc
 

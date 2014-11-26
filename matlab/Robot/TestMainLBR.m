@@ -23,7 +23,7 @@ time_law = {'linear','none','none'};
 % time_law = {'none'};
 
 
-geom_parameters{1,1} = [0.2 0 -pi/2 -pi/4 0 -0.6 0.8]; % Circular trajectory
+geom_parameters{1,1} = [0.2 0 -pi/2 -pi/4 0 -0.7 0.6]; % Circular trajectory
 geom_parameters{1,2} = [0 0 -pi/2]; % orientation regulation
 geom_parameters{1,3} = [0 0 -pi/2]; % orientation regulation
 %geom_parameters = [-0.2 0.3 0.2 0.2 0.3 0.2];% Rectilinear trajectory
@@ -73,34 +73,34 @@ toc
 
 %% plot Trajectories and Robot
 
-% if(strcmp(type_of_traj{1,1},'func')) 
-%   
-%     p_tot=[];
-%     pd_tot=[];
-%     pdd_tot=[];
-%     for t=time_struct.ti:time_struct.step:time_struct.tf
-%         
-%         
-%         p_cur=feval(reference.trajectories{1}.p,t);
-%         pd_cur=feval(reference.trajectories{1}.pd,t);
-%         pdd_cur=feval(reference.trajectories{1}.pdd,t);
-% 
-%         p_tot = [p_tot,p_cur];
-%         pd_tot = [pd_tot,pd_cur];
-%         pdd_tot = [pdd_tot,pdd_cur];
-%         
-%     end
-%     
-% elseif(strcmp(type_of_traj{1,1},'sampled'))
-%     p_tot = reference.trajectories{1}.p;
-%     pd_tot = reference.trajectories{1}.pd;
-%     pdd_tot = reference.trajectories{1}.pdd;
-% end
-% 
-% 
-% hold on;axis equal;
+if(strcmp(type_of_traj{1,1},'func')) 
+  
+    p_tot=[];
+    pd_tot=[];
+    pdd_tot=[];
+    for t=time_struct.ti:time_struct.step:time_struct.tf
+        
+        
+        p_cur=feval(reference.trajectories{1}.p,t);
+        pd_cur=feval(reference.trajectories{1}.pd,t);
+        pdd_cur=feval(reference.trajectories{1}.pdd,t);
+
+        p_tot = [p_tot,p_cur];
+        pd_tot = [pd_tot,pd_cur];
+        pdd_tot = [pdd_tot,pdd_cur];
+        
+    end
+    
+elseif(strcmp(type_of_traj{1,1},'sampled'))
+    p_tot = reference.trajectories{1}.p;
+    pd_tot = reference.trajectories{1}.pd;
+    pdd_tot = reference.trajectories{1}.pdd;
+end
+
+
+hold on;axis equal;
 % LBR4p.plot(qz);
-% plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
+plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
 %% alpha function
 parameters = zeros(1,10);
 value1 = 1*ones(chains.GetNumTasks(1));
@@ -151,17 +151,17 @@ qi{1} = qz;
 qdi{1} = zeros(1,controller.subchains.sub_chains{1}.n);
 
 
-% tic
-% %options= odeset('MaxStep',0.001);
-% fixed_step = false;
-% time_sym_struct = time_struct;
-% time_sym_struct.step = 0.001;
-% [t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);
-% toc
+tic
+%options= odeset('MaxStep',0.001);
+fixed_step = false;
+time_sym_struct = time_struct;
+time_sym_struct.step = 0.01;
+[t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);
+toc
 
 
 
-% LBR4p.plot(q{1});
+LBR4p.plot(q{1});
 
 
 %% test Alpha
