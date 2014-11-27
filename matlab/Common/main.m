@@ -19,7 +19,7 @@ time_sym_struct.step = 0.01;
 fixed_step = false;
 
 %SUBCHAIN PARAMETERS 
-subchain1 = [7];
+subchain1 = [7 4];
 target_link{1} = subchain1;
 
 
@@ -81,7 +81,7 @@ values{1} = value1;
 % INSTANCE PARAMETERS
 qi{1} = qz;
 qdi{1} = zeros(1,chains.GetNumLinks(1));
-fitness= @(t)t;
+fitness= @fitness1;
 options= [];
 simulator_type = {'rbt'};
 
@@ -104,7 +104,7 @@ controller = Controllers.UF(chains,reference,alphas,metric,Kp,Kd,combine_rule,di
 
 %% Instance
 % starting value of parameters
-start_action = 3*ones(1,controller.GetTotalParamNum());
+start_action = 6*ones(1,controller.GetTotalParamNum());
 explorationRate =0.1;%[0, 1]
 niter = 10;
 inst = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,fitness,options);

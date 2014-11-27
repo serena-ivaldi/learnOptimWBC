@@ -99,8 +99,10 @@ end
 
 
 hold on;axis equal;
-% LBR4p.plot(qz);
+LBR4p.plot(qz);
 plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
+repulsive_point = [-0.15 -0.4000 0.3100];
+scatter3(repulsive_point(1,1),repulsive_point(1,2),repulsive_point(1,3));
 %% alpha function
 
 %rbf
@@ -161,15 +163,14 @@ qdi{1} = zeros(1,controller.subchains.sub_chains{1}.n);
 
 tic
 %options= odeset('MaxStep',0.001);
-fixed_step = false;
-time_sym_struct = time_struct;
-time_sym_struct.step = 0.01;
-[t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);
-toc
+% fixed_step = false;
+% time_sym_struct = time_struct;
+% time_sym_struct.step = 0.01;
+% [t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);
+% toc
 
 
-
-LBR4p.plot(q{1});
+%LBR4p.plot(q{1});
 
 
 %% test Alpha

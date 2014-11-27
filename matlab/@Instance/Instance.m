@@ -36,13 +36,13 @@ classdef  Instance
        
        % this function has to give back something that let me compute the
        % fitness function for that sample
-       function run(obj,parameters)
+       function [t, q, qd]=run(obj,parameters)
         disp('im in run')   
             obj.controller.UpdateParameters(parameters)
             
             if(strcmp(obj.simulator,'rbt'))
                 tic 
-                DynSim(obj.time_sym_struct,obj.controller,obj.qinit,obj.qdinit,obj.fixed_step);
+                [t, q, qd]=DynSim(obj.time_sym_struct,obj.controller,obj.qinit,obj.qdinit,obj.fixed_step);
                 toc 
             end
        end
