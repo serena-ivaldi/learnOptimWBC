@@ -102,9 +102,18 @@ hold on;axis equal;
 % LBR4p.plot(qz);
 plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
 %% alpha function
+
+%rbf
+number_of_basis = 4;
+redundancy = 3;
+range = [0 , 12];
+precomp_sample = false;
+numeric_theta = 6*ones(number_of_basis,1);
+%constant alpha
 value1 = 1*ones(chains.GetNumTasks(1));
 values{1} = value1;
-alphas = ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,time_struct);
+alphas = RBF.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),time_struct,number_of_basis,redundancy,range,precomp_sample,numeric_theta);       
+%alphas = ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,time_struct);
 %% test controller 
 
 % test on J J_dot and fkine
@@ -160,7 +169,7 @@ toc
 
 
 
-%LBR4p.plot(q{1});
+LBR4p.plot(q{1});
 
 
 %% test Alpha

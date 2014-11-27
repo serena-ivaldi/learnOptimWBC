@@ -8,19 +8,26 @@ warning('error', 'MATLAB:ode15s:IntegrationTolNotMet');
 warning('error', 'MATLAB:illConditionedMatrix')
 
 %GENERAL PARAMETERS
+% for other strucutures
 time_struct.ti = 0;
 time_struct.tf = 10;
 time_struct.step = 0.1;
 
-% for fixed step simulation only
+% for simulation 
 time_sym_struct = time_struct;
 time_sym_struct.step = 0.01; 
 fixed_step = false;
 
 %SUBCHAIN PARAMETERS 
-subchain1 = [7 4];
+subchain1 = [7];
 target_link{1} = subchain1;
 
+
+%% Robot
+[LBR4p] = MdlLBR4p();
+robots{1} = LBR4p;
+chains = SubChains(target_link,robots);
+%%
 
 % REFERENCE PARAMETERS
 % i consider only one perturbation for the whole robot chain
@@ -39,10 +46,10 @@ dim_of_task{1,1}={[1;1;1]};dim_of_task{1,2}={[1;1;1]};dim_of_task{1,3}={[1;1;1]}
 metric = {'M','M^(1/2)','M^(1/2)'};  % N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
 
 kp = [700, 700, 4997]; % row vector one for each chain
-for i= 1:chains.GetNumChains();
+for i= 1:chains.GetNumChains()
    K_p = zeros(3,3,size(kp,2));
    K_d = zeros(3,3,size(kp,2));
-   for par = 1:size(kp,2)
+   for par = 1:chains.GetNumTasks(i)
        K_p(:,:,par) = kp(i,par)*eye(3);  
        kd = 2*sqrt(kp(i,par));
        K_d(:,:,par) = kd*eye(3); 
@@ -61,10 +68,9 @@ display_opt.trajtrack = true;
 %rbf
 number_of_basis = 4;
 redundancy = 3;
-range = [0 , 20];
+range = [0 , 12];
 precomp_sample = false;
 numeric_theta = 2*ones(number_of_basis,1);
-theta = ones(number_of_basis,reference.GetNumTasks());
 %constant alpha
 value1 = 1*ones(chains.GetNumTasks(1));
 values{1} = value1;
@@ -72,15 +78,9 @@ values{1} = value1;
 
 
 
-%% Robot
-[LBR4p] = MdlLBR4p();
-robots{1} = LBR4p;
-chains = SubChains(target_link,robots);
-
-
 % INSTANCE PARAMETERS
-qinit = qz;
-qdinit = zeros(size(qz));
+qi{1} = qz;
+qdi{1} = zeros(1,chains.GetNumLinks(1));
 fitness= @(t)t;
 options= [];
 simulator_type = {'rbt'};
@@ -91,17 +91,10 @@ simulator_type = {'rbt'};
 reference = References(target_link,type,control_type,traj,geom_parameters,time_law,time_struct,dim_of_task,type_of_traj);
 reference.BuildTrajs();
 
-
-
 %% Alpha
 
-
-alphas = ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,time_struct);
-%alphas = RBF.BuildCellArray(reference.GetNumTasks(),time_struct,number_of_basis,redundancy,theta);
-
-
-%alpha.PlotBasisFunction();
-
+%alphas = ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,time_struct);
+alphas = RBF.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),time_struct,number_of_basis,redundancy,range,precomp_sample,numeric_theta);        
 
 %% Controller 
 
@@ -111,12 +104,10 @@ controller = Controllers.UF(chains,reference,alphas,metric,Kp,Kd,combine_rule,di
 
 %% Instance
 % starting value of parameters
-start_action = ones(1,reference.GetNumTasks()*number_of_basis);
+start_action = 3*ones(1,controller.GetTotalParamNum());
 explorationRate =0.1;%[0, 1]
 niter = 10;
-qi{1} = qz;
-qdi{1} = zeros(1,controller.subchains.sub_chains{1}.n);
-inst = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,options,fitness);
+inst = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,fitness,options);
 inst.CMAES(start_action,niter,explorationRate)
 
 

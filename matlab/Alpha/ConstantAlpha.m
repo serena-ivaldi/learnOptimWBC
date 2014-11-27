@@ -3,6 +3,8 @@ classdef ConstantAlpha < AbstractAlpha
    properties
       time_struct
       sample      % value for a specific set of theta and sampling time (sample.time sample.values sample.normvalues)
+      range       % necessary because i call it inside instance cmaes
+      param    
    end
    
    
@@ -17,6 +19,8 @@ classdef ConstantAlpha < AbstractAlpha
           end
           
           obj.time_struct = time_struct;
+          % only to be compiant with the whole structure
+          obj.range = [0 1];
           
       end
       
@@ -30,7 +34,7 @@ classdef ConstantAlpha < AbstractAlpha
       end
       % function that give the number of parameters necessary for the alpha function
       function r = GetParamNum(obj)
-         r = 0;
+         r = 1;
       end   
    end
    

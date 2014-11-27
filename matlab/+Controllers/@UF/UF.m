@@ -101,14 +101,14 @@ classdef  UF < Controllers.AbstractController
            end   
       end
       
-      % TO FIX
+      %% all the function from this point DO NOT SUPPORT multichain structure
       % in this function i update the value of the alpha function giving
       % new set of parameters
       function UpdateParameters(obj,parameters)
-          
+       disp('im in update parameters')   
          for i=1:obj.subchains.GetNumChains() 
              index = 1;
-             for j=1:obj.subchains.GetNumTasks()  
+             for j=1:obj.subchains.GetNumTasks(i)  
                  n_param = obj.alpha{i,j}.GetParamNum();
                  app_param = parameters(index:index+n_param - 1);
                  obj.alpha{i,j}.ComputeNumValue(app_param')
@@ -120,8 +120,8 @@ classdef  UF < Controllers.AbstractController
       
       
       % TO FIX i have to see in instance 
-      function n_param=GetTotalParamNum(obj,ind_subchain)
-         
+      function n_param=GetTotalParamNum(obj)
+          
           n_param = 0;
           for i=1:obj.subchains.GetNumChains()
              for j=1:obj.subchains.GetNumTasks(i) 

@@ -80,6 +80,7 @@ policyId = policyId + 1;
 fprintf('Mean %d: %e %d\n', 1 , mean_performances(1), succeeded(1));
 for k = 1:(nIterations - 1)
     %create offsprings
+    disp('create offsprings')
     for l = 1:lambda 
 
         offsprings(l, :) = mean(k,:) + sigma(k) * mvnrnd(zeros(1, n), C{k});
@@ -89,6 +90,7 @@ for k = 1:(nIterations - 1)
     end
     
     %evaluate offsprings
+    disp('evaluate offsprings')
     if settings.allowEvalMultiple > 0
         performances = fnForwardModel(obj,offsprings, 0);
 %         keyboard %check correctness of ids
@@ -130,8 +132,6 @@ for k = 1:(nIterations - 1)
 
     fprintf('Mean %d: %e %d\n', k + 1, mean_performances(k + 1), succeeded(policyId-1));
 
-    p_c(k, :)
-    sigma(k)
     
     p_c(k + 1,:) = (1 - cc) * p_c(k, :) + sqrt(cc * (2-cc) * ueff) *(mean(k + 1, :) - mean(k,:)) / sigma(k);
     C{k + 1} = (1 - ccov) * C{k} + ccov * (1 / ueff * p_c(k + 1,:)' * p_c(k + 1,:));

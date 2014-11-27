@@ -12,6 +12,7 @@ classdef  RBF < AbstractAlpha
         redundancy             % parameter that control the level of overlapping of the function
         basis_functions        % cell array of basis function
         func                   % handle to rbf(theta,t) 
+        param                  % current parameters set of the alpha function
         sample                 % value for a specific set of theta and sampling time (sample.time sample.values sample.normvalues)
         range                  % interval of values admitable for the weight of the basis function defined as [min max] with range i control the shape of the sigmoid exp(rbf - max(range)/2)/(1-exp(rbf - max(range)/2))
         precomp_sample         % if true i precompute the value of the rbf 
@@ -26,6 +27,7 @@ classdef  RBF < AbstractAlpha
             obj.redundancy     = redundancy;
             obj.range          = range;
             obj.precomp_sample = precomp_sample;
+            obj.param          = numeric_theta;
             obj.BuildRBF(numeric_theta);
             
         end
@@ -68,23 +70,34 @@ classdef  RBF < AbstractAlpha
         end
         
         
-        % return the value of the alpha function at time t
-        % using normalized value
+        % return the value of the alpha function at time 
         
         %interface function
-        function result = GetValue(obj,t,theta)
+        function result = GetValue(obj,t)
             if(obj.precomp_sample)
                 [~,ind] = min(abs(obj.sample.time-t));
                 result = obj.sample.values(ind);
             else
-               result = feval(obj.func,t,theta); 
+               result = feval(obj.func,t,obj.param); 
             end
             
         end
         
-        %interface function 
+        %in this function i update the param for every function
+        % or precompute the value of rbf only if precomp_sample=true
         function ComputeNumValue(obj,theta)
             
+            if(obj.precomp_sample)
+                time = obj.time_struct.ti:obj.time_struct.step:obj.time_struct.tf;
+                i=1;
+                for t = time
+                    obj.sample.values(i) = feval(obj.func,t,numeric_theta); 
+                    i=i+1;
+                end
+                obj.sample.time = time;
+            else
+               obj.param = theta; 
+            end    
         
         end
         
@@ -121,7 +134,6 @@ classdef  RBF < AbstractAlpha
             for i=1:n_subchain
                for j=1:n_task
                 RBFs{i,j} = RBF(time_struct,n_of_basis,redundancy,range,precomp_sample,theta);
-                %RBFs{i,j}.ComputeNumValue(theta(:,i));
                end
             end
             

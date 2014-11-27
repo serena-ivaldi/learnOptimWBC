@@ -1,4 +1,4 @@
-% SubChains naturally contains the robot without perturbation
+
 % SubChains became really usefull when i have DIFERRENT kinematic chains
 classdef  SubChains < handle
 
