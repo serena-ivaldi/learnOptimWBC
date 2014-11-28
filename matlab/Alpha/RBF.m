@@ -131,13 +131,25 @@ classdef  RBF < AbstractAlpha
         
         function RBFs = BuildCellArray(n_subchain,n_task,time_struct,n_of_basis,redundancy,range,precomp_sample,theta)
             
-            for i=1:n_subchain
-               for j=1:n_task
-                RBFs{i,j} = RBF(time_struct,n_of_basis,redundancy,range,precomp_sample,theta);
-               end
-            end
+            if size(theta,2) > n_of_basis;
+                index = 1;
+                for i=1:n_subchain
+                   for j=1:n_task
+                        cur_theta = theta(index:index+n_of_basis - 1); 
+                        RBFs{i,j} = RBF(time_struct,n_of_basis,redundancy,range,precomp_sample,cur_theta);
+                        index = index+n_param;
+                   end
+                end 
+            else
+                for i=1:n_subchain
+                   for j=1:n_task
+                        RBFs{i,j} = RBF(time_struct,n_of_basis,redundancy,range,precomp_sample,theta);
+                   end
+                end    
+            end    
             
         end
+        
     end
     
 end
