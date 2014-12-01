@@ -7,7 +7,7 @@ clc
 
 % we have to specify every value of the cell vector for consistency with
 % the cycle inside the function 
-subchain1 = [7 4];
+subchain1 = [7 3];
 target_link{1} = subchain1;
 % i consider only one perturbation for the whole robot chain
 type = {'cartesian_x','cartesian_rpy','cartesian_rpy'};
@@ -24,7 +24,7 @@ time_law = {'linear','none','none'};
 
 
 geom_parameters{1,1} = [0.2 0 -pi/2 -pi/4 0 -0.7 0.6]; % Circular trajectory
-geom_parameters{1,2} = [0 0 -pi/2]; % orientation regulation
+geom_parameters{1,2} = [0 0  pi/2]; % orientation regulation
 geom_parameters{1,3} = [0 0 -pi/2]; % orientation regulation
 %geom_parameters = [-0.2 0.3 0.2 0.2 0.3 0.2];% Rectilinear trajectory
 %geom_parameters =  [-0.2 0.3 0.2]; % position regulation
