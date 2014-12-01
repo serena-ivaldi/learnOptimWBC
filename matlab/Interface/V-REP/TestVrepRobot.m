@@ -5,7 +5,7 @@ clc
 
 target_link=[7];
 P = 0;
-[LBR4p] = MDL_LBR4p(target_link,P);
+[LBR4p] = MdlLBR4p();
 LBR4p.teach();
 
 

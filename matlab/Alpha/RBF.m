@@ -78,7 +78,13 @@ classdef  RBF < AbstractAlpha
                 [~,ind] = min(abs(obj.sample.time-t));
                 result = obj.sample.values(ind);
             else
-               result = feval(obj.func,t,obj.param); 
+               %control if tau is not a row vector 
+               if(isrow(obj.param))
+                  result = feval(obj.func,t,obj.param');
+               else
+                  result = feval(obj.func,t,obj.param); 
+               end
+               
             end
             
         end
@@ -135,9 +141,9 @@ classdef  RBF < AbstractAlpha
                 index = 1;
                 for i=1:n_subchain
                    for j=1:n_task
-                        cur_theta = theta(index:index+n_of_basis - 1); 
+                        cur_theta = theta(index:index+n_of_basis - 1) 
                         RBFs{i,j} = RBF(time_struct,n_of_basis,redundancy,range,precomp_sample,cur_theta);
-                        index = index+n_param;
+                        index = index+n_of_basis;
                    end
                 end 
             else

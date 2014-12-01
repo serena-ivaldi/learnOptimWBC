@@ -106,7 +106,7 @@ controller = Controllers.UF(chains,reference,alphas,metric,Kp,Kd,combine_rule,di
 % starting value of parameters
 start_action = 6*ones(1,controller.GetTotalParamNum());
 explorationRate =0.1;%[0, 1]
-niter = 10;
+niter = 50;
 inst = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,fitness,options);
 [mean_performances bestAction policies costs succeeded] = inst.CMAES(start_action,niter,explorationRate);
 

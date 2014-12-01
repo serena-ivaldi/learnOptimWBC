@@ -98,8 +98,8 @@ elseif(strcmp(type_of_traj{1,1},'sampled'))
 end
 
 
-hold on;axis equal;
-LBR4p.plot(qz);
+ hold on;axis equal;
+% LBR4p.plot(qz);
 plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
 repulsive_point = [-0.15 -0.4000 0.3100];
 scatter3(repulsive_point(1,1),repulsive_point(1,2),repulsive_point(1,3));
@@ -110,7 +110,7 @@ number_of_basis = 4;
 redundancy = 3;
 range = [0 , 12];
 precomp_sample = false;
-numeric_theta = 6*ones(number_of_basis,1);
+numeric_theta = [11.8371653634879 12 11.1281657661040 12	0 0 0 0];
 %constant alpha
 value1 = 1*ones(chains.GetNumTasks(1));
 values{1} = value1;
@@ -163,14 +163,14 @@ qdi{1} = zeros(1,controller.subchains.sub_chains{1}.n);
 
 tic
 %options= odeset('MaxStep',0.001);
-% fixed_step = false;
-% time_sym_struct = time_struct;
-% time_sym_struct.step = 0.01;
-% [t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);
-% toc
+fixed_step = false;
+time_sym_struct = time_struct;
+time_sym_struct.step = 0.01;
+[t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);
+toc
 
 
-%LBR4p.plot(q{1});
+LBR4p.plot(q{1});
 
 
 %% test Alpha

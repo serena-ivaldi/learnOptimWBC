@@ -4,6 +4,7 @@
 %function itself
 function fit = fitness1(obj,t,q)
 
+alpha = 0.999;
 downsaple = 10;
 tot_sample = size(t,2)/downsaple;
 repuls_pos = [-0.15; -0.4000; 0.3100;];
@@ -28,5 +29,5 @@ for i=1:downsaple:size(t,2)
 end
 
 
-fit = traj_err - repuls
+fit = -(alpha)*traj_err - (1-alpha)*repuls;
 end
