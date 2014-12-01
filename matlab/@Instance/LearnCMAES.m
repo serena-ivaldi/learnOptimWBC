@@ -79,6 +79,10 @@ policyId = policyId + 1;
 
 fprintf('Mean %d: %e %d\n', 1 , mean_performances(1), succeeded(1));
 for k = 1:(nIterations - 1)
+    
+    if settings.plotState
+        fprintf('iteration %d\n',k);
+    end
     %create offsprings
     disp('create offsprings')
     for l = 1:lambda 
