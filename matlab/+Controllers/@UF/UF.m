@@ -6,10 +6,12 @@ classdef  UF < Controllers.AbstractController
       alpha;           % cell array of weight function
       metric;          % vector of matlab command     for example M_inv^2, M_inv,eye(lenght(q)) 
       current_chain    % index that define the current robot that i want to move
-      %ground_truth     % if true for computing the position and velocity of the end effector i will use the non perturbed model 
+      %ground_truth    % if true for computing the position and velocity of the end effector i will use the non perturbed model 
       Kp               % vector of matrix of proportional gain
       Kd               % vector of matrix of derivative gain
       combine_rule     % projector or sum 
+      max_time         % maximum time simulation allowed
+      current_time     % current time to force stop for long iteration
       torques          %  resulting torque (cell array of matrix)
       display_opt      % display settings display_opt.step display_opt.trajtrack
    end
@@ -17,7 +19,7 @@ classdef  UF < Controllers.AbstractController
 
    methods
       
-       function obj = UF(sub_chains,references,alpha,metric,Kp,Kd,combine_rule,varargin)
+       function obj = UF(sub_chains,references,alpha,metric,Kp,Kd,combine_rule,max_time,varargin)
          
          obj.subchains = sub_chains;
          obj.references = references;
@@ -30,6 +32,8 @@ classdef  UF < Controllers.AbstractController
          for i = 1:obj.subchains.GetNumChains()
             obj.torques{i} = zeros(obj.subchains.GetNumLinks(i),1);  %tau(n_of_total_joint on the chain x 1)
          end
+         obj.max_time = max_time;
+         obj.current_time = [];
          % default settings for smoothing and trajectory tracking display (desidered position) 
          obj.display_opt.fixed_step = false;
          obj.display_opt.step = 0.00000001;

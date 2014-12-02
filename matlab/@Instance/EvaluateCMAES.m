@@ -18,10 +18,10 @@ try
     
     succeeded = 1;
     
-    tic
+    %tic
     % insert fitness function 
     performance = feval(obj.fitness,obj,t,q)
-    toc
+    %toc
     
     % cancel all the information relative to the current iteration (control action)
     obj.controller.CleanTau();

@@ -58,6 +58,7 @@ for i= 1:chains.GetNumChains()
    Kd{i} = K_d;
 end
 
+max_time = 50;
 combine_rule = {'sum'}; 
 display_opt.step = 0.01;
 display_opt.trajtrack = true;
@@ -100,7 +101,7 @@ alphas = RBF.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),time_str
 
 % for using package function we have to call the name of the package before
 % the constructor
-controller = Controllers.UF(chains,reference,alphas,metric,Kp,Kd,combine_rule,display_opt);
+controller = Controllers.UF(chains,reference,alphas,metric,Kp,Kd,combine_rule,max_time,display_opt);
 
 %% Instance
 % starting value of parameters

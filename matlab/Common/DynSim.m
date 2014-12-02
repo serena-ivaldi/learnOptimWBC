@@ -126,6 +126,11 @@ end
 % The result is XDD = [QD QDD].
 function xd = fdyn2(t, x, controller, varargin)
 
+    
+    if isempty(controller.current_time)
+      controller.current_time = tic;
+    end
+
     n = controller.GetActiveBot().n;
     
     q = x(1:n)';
@@ -145,4 +150,10 @@ function xd = fdyn2(t, x, controller, varargin)
     
     qdd = controller.GetActiveBot().accel(x(1:n,1)', x(n+1:2*n,1)', tau);
     xd = [x(n+1:2*n,1); qdd];
+    
+    if toc(controller.current_time) > controller.max_time
+      controller.current_time = []; 
+    	error('Stopped. Taking too long.')
+    end
+    
 end

@@ -41,9 +41,9 @@ classdef  Instance
             obj.controller.UpdateParameters(parameters)
             
             if(strcmp(obj.simulator,'rbt'))
-                tic 
+                %tic 
                 [t, q, qd]=DynSim(obj.time_sym_struct,obj.controller,obj.qinit,obj.qdinit,obj.fixed_step);
-                toc 
+                %toc 
             end
        end
        

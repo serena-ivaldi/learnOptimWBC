@@ -110,7 +110,7 @@ number_of_basis = 4;
 redundancy = 3;
 range = [0 , 12];
 precomp_sample = false;
-numeric_theta = [11.8371653634879 12 11.1281657661040 12	0 0 0 0];
+numeric_theta = [9.62341673802502 11.7423992927720 9.56676179109458 8.10186513902229 3.15153714137716 1.32608347854060 0.501041490811476 0.957889382288567];
 %constant alpha
 value1 = 1*ones(chains.GetNumTasks(1));
 values{1} = value1;
@@ -146,14 +146,14 @@ for i= 1:chains.GetNumChains();
    Kp{i} = K_p;
    Kd{i} = K_d;
 end
-
+max_time = 50;
 combine_rule = {'sum'}; 
 display_opt.step = 0.01;
 display_opt.trajtrack = true;
 
 % for using package function we have to call the name of the package before
 % the constructor
-controller = Controllers.UF(chains,reference,alphas,metric,Kp,Kd,combine_rule,display_opt);
+controller = Controllers.UF(chains,reference,alphas,metric,Kp,Kd,combine_rule,max_time,display_opt);
 
 
 % generate starting conditions for every chains
