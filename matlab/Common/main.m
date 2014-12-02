@@ -29,16 +29,12 @@ robots{1} = LBR4p;
 chains = SubChains(target_link,robots);
 %%
 
-% REFERENCE PARAMETERS
-% i consider only one perturbation for the whole robot chain
-type = {'cartesian_x','cartesian_rpy','cartesian_rpy'};
-control_type = {'tracking','regulation','regulation'};
-type_of_traj = {'func','func','func'};
-traj = {'circular','none','none'};
-time_law = {'linear','none','none'};
-geom_parameters{1,1} = [0.2 0 -pi/2 -pi/4 0 -0.7 0.6]; % Circular trajectory
-geom_parameters{1,2} = [0 0  pi/2]; % orientation regulation
-geom_parameters{1,3} = [0 0 -pi/2]; % orientation regulation
+% REFERENCE PARAMETERs
+type = {'cartesian_x','cartesian_x'};
+control_type = {'regulation','regulation'};
+type_of_traj = {'func','func'};
+traj = {'none','none'};
+time_law = {'none'};
 
 dim_of_task{1,1}={[1;1;1]};dim_of_task{1,2}={[1;1;1]};dim_of_task{1,3}={[1;1;1]};
 
@@ -82,7 +78,7 @@ values{1} = value1;
 % INSTANCE PARAMETERS
 qi{1} = qz;
 qdi{1} = zeros(1,chains.GetNumLinks(1));
-fitness= @fitness1;
+fitness= @fitness2;
 options= [];
 simulator_type = {'rbt'};
 

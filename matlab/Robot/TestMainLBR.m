@@ -9,12 +9,19 @@ clc
 % the cycle inside the function 
 subchain1 = [7 3];
 target_link{1} = subchain1;
+
+type = {'cartesian_x','cartesian_x'};
+control_type = {'regulation','regulation'};
+type_of_traj = {'func','func'};
+traj = {'none','none'};
+time_law = {'none'};
+
 % i consider only one perturbation for the whole robot chain
-type = {'cartesian_x','cartesian_rpy','cartesian_rpy'};
-control_type = {'tracking','regulation','regulation'};
-type_of_traj = {'func','func','func'};
-traj = {'circular','none','none'};
-time_law = {'linear','none','none'};
+% type = {'cartesian_x','cartesian_rpy','cartesian_rpy'};
+% control_type = {'tracking','regulation','regulation'};
+% type_of_traj = {'func','func','func'};
+% traj = {'circular','none','none'};
+% time_law = {'linear','none','none'};
 
 % type = {'cartesian_rpy'};
 % control_type = {'regulation'};
@@ -23,11 +30,15 @@ time_law = {'linear','none','none'};
 % time_law = {'none'};
 
 
-geom_parameters{1,1} = [0.2 0 -pi/2 -pi/4 0 -0.7 0.6]; % Circular trajectory
-geom_parameters{1,2} = [0 0  pi/2]; % orientation regulation
-geom_parameters{1,3} = [0 0 -pi/2]; % orientation regulation
+% geom_parameters{1,1} = [0.2 0 -pi/2 -pi/4 0 -0.7 0.6]; % Circular trajectory
+% geom_parameters{1,2} = [0 0  pi/2]; % orientation regulation
+% geom_parameters{1,3} = [0 0 -pi/2]; % orientation regulation
 %geom_parameters = [-0.2 0.3 0.2 0.2 0.3 0.2];% Rectilinear trajectory
 %geom_parameters =  [-0.2 0.3 0.2]; % position regulation
+
+
+geom_parameters{1,1} = [0, -0.7,0.5100]; %position regulation
+geom_parameters{1,2} = [-0.2 -0.4000 0.3100];  %position regulation
 
 time_struct.ti = 0;
 time_struct.tf = 10;
@@ -72,37 +83,49 @@ toc
 % end
 
 %% plot Trajectories and Robot
+hold on;axis equal;
+% experimental setting 1
+% if(strcmp(type_of_traj{1,1},'func'))  
+%     p_tot=[];
+%     pd_tot=[];
+%     pdd_tot=[];
+%     for t=time_struct.ti:time_struct.step:time_struct.tf
+%         
+%         
+%         p_cur=feval(reference.trajectories{1}.p,t);
+%         pd_cur=feval(reference.trajectories{1}.pd,t);
+%         pdd_cur=feval(reference.trajectories{1}.pdd,t);
+% 
+%         p_tot = [p_tot,p_cur];
+%         pd_tot = [pd_tot,pd_cur];
+%         pdd_tot = [pdd_tot,pdd_cur];
+%         
+%     end
+%     
+% elseif(strcmp(type_of_traj{1,1},'sampled'))
+%     p_tot = reference.trajectories{1}.p;
+%     pd_tot = reference.trajectories{1}.pd;
+%     pdd_tot = reference.trajectories{1}.pdd;
+% end
+% 
+% 
 
-if(strcmp(type_of_traj{1,1},'func')) 
-  
-    p_tot=[];
-    pd_tot=[];
-    pdd_tot=[];
-    for t=time_struct.ti:time_struct.step:time_struct.tf
-        
-        
-        p_cur=feval(reference.trajectories{1}.p,t);
-        pd_cur=feval(reference.trajectories{1}.pd,t);
-        pdd_cur=feval(reference.trajectories{1}.pdd,t);
+% plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
+% repulsive_point = [-0.15 -0.4000 0.3100];
+% scatter3(repulsive_point(1,1),repulsive_point(1,2),repulsive_point(1,3));
 
-        p_tot = [p_tot,p_cur];
-        pd_tot = [pd_tot,pd_cur];
-        pdd_tot = [pdd_tot,pdd_cur];
-        
-    end
-    
-elseif(strcmp(type_of_traj{1,1},'sampled'))
-    p_tot = reference.trajectories{1}.p;
-    pd_tot = reference.trajectories{1}.pd;
-    pdd_tot = reference.trajectories{1}.pdd;
+
+%experimental setting 2
+[X Y Z]=meshgrid(-0.05:0.1:0.3,-0.4,0.31:0.1:0.7);
+%Y = -0.4*ones(1,size(X,1));
+for i=1:size(X,2) 
+    scatter3(X(:,:,i),Y(:,:,i),Z(:,:,i))
 end
-
-
- hold on;axis equal;
-% LBR4p.plot(qz);
-plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
-repulsive_point = [-0.15 -0.4000 0.3100];
-scatter3(repulsive_point(1,1),repulsive_point(1,2),repulsive_point(1,3));
+elbow_point = [-0.2 -0.4000 0.3100];
+e_e_point = [0, -0.7,0.5100];
+scatter3(elbow_point(1,1),elbow_point(1,2),elbow_point(1,3));
+scatter3(e_e_point(1,1),e_e_point(1,2),e_e_point(1,3));
+%LBR4p.teach();
 %% alpha function
 
 %rbf
@@ -110,7 +133,7 @@ number_of_basis = 4;
 redundancy = 3;
 range = [0 , 12];
 precomp_sample = false;
-numeric_theta = [9.62341673802502 11.7423992927720 9.56676179109458 8.10186513902229 3.15153714137716 1.32608347854060 0.501041490811476 0.957889382288567];
+numeric_theta = [12 12 12 12 12 12 12 12];
 %constant alpha
 value1 = 1*ones(chains.GetNumTasks(1));
 values{1} = value1;
@@ -162,7 +185,7 @@ qdi{1} = zeros(1,controller.subchains.sub_chains{1}.n);
 
 
 tic
-%options= odeset('MaxStep',0.001);
+options= odeset('MaxStep',0.001);
 fixed_step = false;
 time_sym_struct = time_struct;
 time_sym_struct.step = 0.01;
