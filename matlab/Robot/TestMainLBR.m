@@ -6,7 +6,9 @@ clc
 
 
 % we have to specify every value of the cell vector for consistency with
-% the cycle inside the function 
+% the cycle inside the function
+
+%experiment 2
 subchain1 = [7 3];
 target_link{1} = subchain1;
 
@@ -16,6 +18,11 @@ type_of_traj = {'func','func'};
 traj = {'none','none'};
 time_law = {'none'};
 
+geom_parameters{1,1} = [0, -0.7,0.5100]; %position regulation
+geom_parameters{1,2} = [-0.2 -0.4000 0.3100];  %position regulation
+
+%experiment  1
+% subchain1 = [7 3];
 % i consider only one perturbation for the whole robot chain
 % type = {'cartesian_x','cartesian_rpy','cartesian_rpy'};
 % control_type = {'tracking','regulation','regulation'};
@@ -36,9 +43,6 @@ time_law = {'none'};
 %geom_parameters = [-0.2 0.3 0.2 0.2 0.3 0.2];% Rectilinear trajectory
 %geom_parameters =  [-0.2 0.3 0.2]; % position regulation
 
-
-geom_parameters{1,1} = [0, -0.7,0.5100]; %position regulation
-geom_parameters{1,2} = [-0.2 -0.4000 0.3100];  %position regulation
 
 time_struct.ti = 0;
 time_struct.tf = 10;
