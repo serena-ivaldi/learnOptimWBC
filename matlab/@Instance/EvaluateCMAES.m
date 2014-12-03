@@ -27,7 +27,8 @@ try
     obj.controller.CleanTau();
     
 catch err
-     disp('i am in evaluate CMAES error side')
+    disp('i am in evaluate CMAES error side')
+    obj.controller.CleanTau(); 
     succeeded = 0;
     performance = -10000000;
     

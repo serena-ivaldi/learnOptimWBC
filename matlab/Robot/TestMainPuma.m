@@ -157,20 +157,20 @@ display_opt.trajtrack = true;
 
 % for using package functions we have to call the name of the package before
 % the constructor
-controller = Controllers.UF(chains,reference,alphas,metric,Kp,Kd,combine_rule,display_opt);
+%controller = Controllers.UF(chains,reference,alphas,metric,Kp,Kd,combine_rule,display_opt);
 
 % generate starting conditions for every chains
-qi{1} = qz;
-qdi{1} = zeros(1,controller.subchains.sub_chains{1}.n);
+% qi{1} = qz;
+% qdi{1} = zeros(1,controller.subchains.sub_chains{1}.n);
 
 
-tic
-%options= odeset('MaxStep',0.001);
-fixed_step = false;
-time_sym_struct = time_struct;
-time_sym_struct.step = 0.01;
-[t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);
-toc
+% tic
+% %options= odeset('MaxStep',0.001);
+% fixed_step = false;
+% time_sym_struct = time_struct;
+% time_sym_struct.step = 0.01;
+% [t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);
+% toc
 
 
 %p560.plot(q{1});
@@ -180,44 +180,47 @@ toc
 %% test alpha
 
 %test alpha function
-% number_of_basis = 4;
-% redundancy = 3;
-% range = [0 , 12];
-% precomp_sample = false;
-% numeric_theta = 6*ones(number_of_basis,1);
-% alpha = RBF(time_struct,number_of_basis,redundancy,range,precomp_sample,numeric_theta);
-% the parameters have to be a column vector !!!!
-% if(~precomp_sample)
-%     time = time_struct.ti:time_struct.step:time_struct.tf;
-%     i=1;
-%     
-%     tic
-%     for t = time
-%         vec_values(i) = feval(alpha.func,t,numeric_theta); 
-%         i=i+1;
-%     end
-%     toc
-%     figure
-%     plot(time,vec_values);
-% else
-%     figure
-%     plot(alpha.sample.time,alpha.sample.values);
-% end
-% 
-% figure
-% alpha.PlotBasisFunction();
-% 
-% spani = 0:0.001:range(1,2);
-% i = 1;
-% sigvalue = zeros(1,size(spani,2));
-% for x=spani
-%     t = 0;
-%     numeric_theta = x*ones(number_of_basis,1);
-%     sigvalue(i) = feval(alpha.func,t,numeric_theta);
-%     i= i + 1;
-% end
-% figure
-% plot(spani,sigvalue)
+number_of_basis = 4;
+redundancy = 3;
+range = [0 , 12];
+precomp_sample = false;
+numeric_theta = [3.32035773603460 2.61073652085014 2.86538443220860 2.12296472350555];
+alpha = RBF(time_struct,number_of_basis,redundancy,range,precomp_sample,numeric_theta);
+%the parameters have to be a column vector !!!!
+if(~precomp_sample)
+    time = time_struct.ti:time_struct.step:time_struct.tf;
+    i=1;
+    
+    tic
+    for t = time
+        vec_values(i) = feval(alpha.func,t,numeric_theta'); 
+        i=i+1;
+    end
+    toc
+    
+    figure
+    plot(time,vec_values);
+    xlabel('t','FontSize',16);
+    ylabel('\alpha','FontSize',16);
+else
+    figure
+    plot(alpha.sample.time,alpha.sample.values);
+end
+
+figure
+alpha.PlotBasisFunction();
+
+spani = 0:0.001:range(1,2);
+i = 1;
+sigvalue = zeros(1,size(spani,2));
+for x=spani
+    t = 0;
+    numeric_theta = x*ones(number_of_basis,1);
+    sigvalue(i) = feval(alpha.func,t,numeric_theta);
+    i= i + 1;
+end
+figure
+plot(spani,sigvalue)
 
 % number_of_basis = 10;
 % redundancy = 3;

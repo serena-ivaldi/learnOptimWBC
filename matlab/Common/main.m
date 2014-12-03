@@ -15,7 +15,7 @@ time_struct.step = 0.1;
 
 % for simulation 
 time_sym_struct = time_struct;
-time_sym_struct.step = 0.01; 
+time_sym_struct.step = 0.001; 
 fixed_step = false;
 
 %SUBCHAIN PARAMETERS 
@@ -34,7 +34,10 @@ type = {'cartesian_x','cartesian_x'};
 control_type = {'regulation','regulation'};
 type_of_traj = {'func','func'};
 traj = {'none','none'};
-time_law = {'none'};
+time_law = {'none','none'};
+
+geom_parameters{1,1} = [0, -0.7,0.5100]; %position regulation
+geom_parameters{1,2} = [-0.2 -0.4000 0.3100];  %position regulation
 
 dim_of_task{1,1}={[1;1;1]};dim_of_task{1,2}={[1;1;1]};dim_of_task{1,3}={[1;1;1]};
 
@@ -63,7 +66,7 @@ display_opt.trajtrack = true;
 %ALPHA PARAMETERS
 
 %rbf
-number_of_basis = 4;
+number_of_basis = 10;
 redundancy = 3;
 range = [0 , 12];
 precomp_sample = false;
@@ -103,7 +106,7 @@ controller = Controllers.UF(chains,reference,alphas,metric,Kp,Kd,combine_rule,ma
 % starting value of parameters
 start_action = 6*ones(1,controller.GetTotalParamNum());
 explorationRate =0.1;%[0, 1]
-niter = 50;
+niter = 100;
 inst = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,fitness,options);
 [mean_performances bestAction policies costs succeeded] = inst.CMAES(start_action,niter,explorationRate);
 

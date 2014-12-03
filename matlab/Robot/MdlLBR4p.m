@@ -134,7 +134,8 @@ function [LBR4p] = MdlLBR4p()
    %
    % some useful poses
    %
-   assignin('base', 'qz', [-pi/2 pi/2 0 -pi/2 0 pi/2 0]);% ready pose, arm up
+   %assignin('base', 'qz', [-pi/2 pi/2 0 -pi/2 0 pi/2 0]);% ready pose, arm up
+   assignin('base', 'qz', [0 pi/2 0 -pi/2 0 pi/2 0]);% only for test 3
    assignin('base', 'qr', [0 0 0 0 0 0 0]); % zero angles, arm is stretched out
   
    
