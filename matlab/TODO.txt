@@ -14,7 +14,7 @@ tracking orientation task                     v
 joint task (maybe)                                  
 regulation for orientation and positon task   v
 force task 
-projection chaining of the task
+projection chaining of the task       
 
 
 
