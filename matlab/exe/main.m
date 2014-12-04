@@ -8,8 +8,6 @@ warning('error', 'MATLAB:ode15s:IntegrationTolNotMet');
 warning('error', 'MATLAB:illConditionedMatrix')
 
 
-
-
 %ALPHA PARAMETERS
 
 %rbf
@@ -26,7 +24,6 @@ values{1} = value1;
 % INSTANCE PARAMETERS
 qi{1} = qz;
 qdi{1} = zeros(1,chains.GetNumLinks(1));
-fitness= @fitness2;
 options= [];
 simulator_type = {'rbt'};
 
@@ -35,6 +32,7 @@ simulator_type = {'rbt'};
 % starting value of parameters
 explorationRate =0.1;%[0, 1]
 niter = 100;
+
 
 %% Reference
 % if type_of_task = sampled i have to specify the Time to reach the

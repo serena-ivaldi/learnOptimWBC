@@ -56,6 +56,9 @@ combine_rule = {'sum'};
 display_opt.step = 0.01;
 display_opt.trajtrack = true;
 
+% INSTANCE PARAMETERS
+fitness= @fitness2;
 
+%bot_scenario_brief_description.mat
 
 save 
