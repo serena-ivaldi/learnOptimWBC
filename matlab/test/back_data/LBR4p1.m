@@ -18,7 +18,6 @@ chains = SubChains(target_link,robots);
 %%
 
 % REFERENCE PARAMETERS
-subchain1 = [7 4];
 type = {'cartesian_x','cartesian_rpy'};
 control_type = {'tracking','regulation'};
 type_of_traj = {'func','func'};
@@ -26,9 +25,11 @@ traj = {'circular','none'};
 time_law = {'linear','none'};
 
 geom_parameters{1,1} = [0.2 0 -pi/2 -pi/4 0 -0.7 0.6]; % Circular trajectory
-geom_parameters{1,2} = [0 0    pi/2]; % orientation regulation
+geom_parameters{1,2} = [0 0   -pi/2]; % orientation regulation
 %CONTROLLER PARAMETERS
 metric = {'M','M^(1/2)'};  % N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
+
+dim_of_task{1,1}={[1;1;1]};dim_of_task{1,2}={[1;1;1]};
 
 kp = [700, 700]; % row vector one for each chain
 for i= 1:chains.GetNumChains()

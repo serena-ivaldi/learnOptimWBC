@@ -15,7 +15,7 @@ time_sym_struct.step = 0.001;
 fixed_step = false;
 
 % TASK PARAMETERS
-path=LoadParameters('2_LBR4p_scene2_position_tasks');
+path=LoadParameters('LBR4p1__scene1_wrist_ee_track_pose');
 load(path);
 
 %ALPHA PARAMETERS

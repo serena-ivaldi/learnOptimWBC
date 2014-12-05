@@ -7,6 +7,8 @@ warning on verbose
 warning('error', 'MATLAB:ode15s:IntegrationTolNotMet');
 warning('error', 'MATLAB:illConditionedMatrix')
 
+%%%;;
+
 %GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
@@ -15,11 +17,12 @@ time_struct.step = 0.1;
 
 % for simulation 
 time_sym_struct = time_struct;
-time_sym_struct.step = 0.001; 
+time_sym_struct.step = 0.01; 
 fixed_step = false;
 
 % TASK PARAMETERS
-path=LoadParameters('2_LBR4p_scene2_position_tasks');
+name_dat = 'LBR4p1__scene1_wrist_ee_track_pose';
+path=LoadParameters(name_dat);
 load(path);
 
 %ALPHA PARAMETERS
@@ -48,6 +51,8 @@ simulator_type = {'rbt'};
 explorationRate =0.1;%[0, 1]
 niter = 10;
 
+%%%EOF
+
 %% Reference
 % if type_of_task = sampled i have to specify the Time to reach the
 % end of the trajectories that is equal to the simulation time
@@ -59,19 +64,24 @@ alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),ti
 %alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,time_struct);
 
 %% Controller 
-
-% for using package function we have to call the name of the package before
-% the constructor
 controller = Controllers.UF(chains,reference,alphas,metric,Kp,Kd,combine_rule,max_time);
 
 %% Instance
+
+%%%;;
 start_action = 6*ones(1,controller.GetTotalParamNum());
+%%%EOF
+
 inst = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,fitness,options);
 [mean_performances bestAction policies costs succeeded] = inst.CMAES(start_action,niter,explorationRate);
 
-
-
-
-
+scriptname = mfilename;
+% i have to change this number everytime i perform the same test with
+% different optimization parameter
+experiment_number = '1';
+name_folder = strcat(experiment_number,'__',name_dat);
+complete_path=PlotCmaesResult(time_struct,controller,bestAction,scriptname,name_folder);
+complete_path_to_file = strcat(complete_path,'/data.mat');
+save(complete_path_to_file) 
 
 

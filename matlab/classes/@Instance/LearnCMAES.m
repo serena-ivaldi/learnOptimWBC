@@ -130,6 +130,7 @@ for k = 1:(nIterations - 1)
     policyId = policyId + 1;
     
     bestAction.hist(k).performance = mean_performances(k + 1);
+    bestAction.hist(k).listperformance = performances;
     bestAction.hist(k).parameters = mean(k + 1, :);
     bestAction.hist(k).variance =  var(offsprings);
     

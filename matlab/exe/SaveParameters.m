@@ -22,7 +22,6 @@ chains = SubChains(target_link,robots);
 %%
 
 % REFERENCE PARAMETERS
-subchain1 = [7 4];
 type = {'cartesian_x','cartesian_rpy'};
 control_type = {'tracking','regulation'};
 type_of_traj = {'func','func'};
@@ -30,9 +29,11 @@ traj = {'circular','none'};
 time_law = {'linear','none'};
 
 geom_parameters{1,1} = [0.2 0 -pi/2 -pi/4 0 -0.7 0.6]; % Circular trajectory
-geom_parameters{1,2} = [0 0    pi/2]; % orientation regulation
+geom_parameters{1,2} = [0 0   -pi/2]; % orientation regulation
 %CONTROLLER PARAMETERS
 metric = {'M','M^(1/2)'};  % N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
+
+dim_of_task{1,1}={[1;1;1]};dim_of_task{1,2}={[1;1;1]};
 
 kp = [700, 700]; % row vector one for each chain
 for i= 1:chains.GetNumChains()
@@ -61,7 +62,7 @@ fitness= @fitness1;
 id = 'LBR4p1';
 name_backup = strcat(id,'.m');
 %namebot_scene#_briefdescription.mat
-name_file = 'LBR4p_scene1_wrist_ee_track_pose';
+name_file = '_scene1_wrist_ee_track_pose';
 name_file = strcat(id,'_',name_file,'.mat');
 
 %% DO NOT CHANGE THIS PART!
@@ -75,6 +76,6 @@ rawTextFromStorage = fileread(which(mfilename));
 rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF'],'match','once');
 fileID = fopen(strcat(path,'/back_data/',name_backup),'w');
 fprintf(fileID,'%s',rawTextFromStorage);
-
+fclose(fileID);
 disp('FINISH!')
 
