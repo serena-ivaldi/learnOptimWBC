@@ -1,16 +1,10 @@
-% EXPERIMENTAL SETTINGS GENERATOR
+%%%;;
+%% comment
+%this file describe two position regulation tasks on lwr one on the e-e one on the elbow
+% and this data setting work with scenario 2 (wall scenario)
+%
+%%
 
-
-%GENERAL PARAMETERS
-% for other strucutures
-time_struct.ti = 0;
-time_struct.tf = 10;
-time_struct.step = 0.1;
-
-% for simulation 
-time_sym_struct = time_struct;
-time_sym_struct.step = 0.001; 
-fixed_step = false;
 
 %SUBCHAIN PARAMETERS 
 subchain1 = [7 3];
@@ -23,7 +17,7 @@ robots{1} = LBR4p;
 chains = SubChains(target_link,robots);
 %%
 
-% REFERENCE PARAMETERs
+% REFERENCE PARAMETERS
 type = {'cartesian_x','cartesian_x'};
 control_type = {'regulation','regulation'};
 type_of_traj = {'func','func'};
@@ -33,12 +27,12 @@ time_law = {'none','none'};
 geom_parameters{1,1} = [0, -0.7,0.5100]; %position regulation
 geom_parameters{1,2} = [-0.2 -0.4000 0.3100];  %position regulation
 
-dim_of_task{1,1}={[1;1;1]};dim_of_task{1,2}={[1;1;1]};dim_of_task{1,3}={[1;1;1]};
+dim_of_task{1,1}={[1;1;1]};dim_of_task{1,2}={[1;1;1]};
 
 %CONTROLLER PARAMETERS
-metric = {'M','M^(1/2)','M^(1/2)'};  % N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
+metric = {'M','M^(1/2)'};  % N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
 
-kp = [700, 700, 4997]; % row vector one for each chain
+kp = [700, 700]; % row vector one for each chain
 for i= 1:chains.GetNumChains()
    K_p = zeros(3,3,size(kp,2));
    K_d = zeros(3,3,size(kp,2));
@@ -51,14 +45,8 @@ for i= 1:chains.GetNumChains()
    Kd{i} = K_d;
 end
 
-max_time = 50;
-combine_rule = {'sum'}; 
-display_opt.step = 0.01;
-display_opt.trajtrack = true;
 
 % INSTANCE PARAMETERS
 fitness= @fitness2;
 
-%bot_scenario_brief_description.mat
-
-save 
+%%%EOF

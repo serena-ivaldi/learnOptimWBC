@@ -2,7 +2,7 @@
 % parameters have to be  column vectors because of the way the alpha function
 % is built before (from sym to function)
 
-classdef  RBF < AbstractAlpha
+classdef  RBF < Alpha.AbstractAlpha
     
     
     
@@ -142,14 +142,14 @@ classdef  RBF < AbstractAlpha
                 for i=1:n_subchain
                    for j=1:n_task
                         cur_theta = theta(index:index+n_of_basis - 1); 
-                        RBFs{i,j} = RBF(time_struct,n_of_basis,redundancy,range,precomp_sample,cur_theta);
+                        RBFs{i,j} = Alpha.RBF(time_struct,n_of_basis,redundancy,range,precomp_sample,cur_theta);
                         index = index+n_of_basis;
                    end
                 end 
             else
                 for i=1:n_subchain
                    for j=1:n_task
-                        RBFs{i,j} = RBF(time_struct,n_of_basis,redundancy,range,precomp_sample,theta);
+                        RBFs{i,j} = Alpha.RBF(time_struct,n_of_basis,redundancy,range,precomp_sample,theta);
                    end
                 end    
             end    

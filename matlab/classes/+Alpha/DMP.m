@@ -1,4 +1,4 @@
-classdef  DMP < AbstractAlpha
+classdef  DMP < Alpha.AbstractAlpha
     
 % gaussian radial basis function
     
@@ -160,7 +160,7 @@ classdef  DMP < AbstractAlpha
             
             for i=1:n_subchain
                for j=1:n_task
-                   DMPs{i,j} = DMP(time_struct,n_of_basis,redundancy,kp,kd,alpha_z);
+                   DMPs{i,j} = Alpha.DMP(time_struct,n_of_basis,redundancy,kp,kd,alpha_z);
                    if(train)
                         [p_init,v_init,p_end,v_end,theta] = DMPs{i}.TrainByDraw(number_of_pivot,step);
                         DMPs{i,j}.ComputeNumValue(p_init,v_init,p_end,v_end,theta); 

@@ -39,11 +39,11 @@ classdef  UF < Controllers.AbstractController
          obj.display_opt.step = 0.00000001;
          obj.display_opt.trajtrack = false;
          % settings for smoothing and trajectory tracking display (reference position)
-         if (nargin > 7)
-            disp_opt = varargin{1};
-            obj.display_opt.step =disp_opt.step;
-            obj.display_opt.trajtrack = disp_opt.trajtrack;   
-         end
+%          if (nargin > 7)
+%             disp_opt = varargin{1};
+%             obj.display_opt.step =disp_opt.step;
+%             obj.display_opt.trajtrack = disp_opt.trajtrack;   
+%          end
          
       end    
 
