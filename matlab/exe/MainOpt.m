@@ -53,6 +53,10 @@ niter = 50;
 
 %%%EOF
 
+%% Load Obstacles
+text = LoadScenario('lbr_scenario3');
+eval(text);
+close all;
 %% Reference
 % if type_of_task = sampled i have to specify the Time to reach the
 % end of the trajectories that is equal to the simulation time

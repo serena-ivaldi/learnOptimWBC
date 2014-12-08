@@ -12,3 +12,6 @@ repulsive_point = [-0.125538272258140 -0.5 0.455692460313405];
 attractive_point = [-0.2 -0.5 0.55];
 scatter3(repulsive_point(1,1),repulsive_point(1,2),repulsive_point(1,3), 130);
 scatter3(attractive_point(1,1),attractive_point(1,2),attractive_point(1,3), 130);
+% global obstacle
+ob1 = Obstacle(repulsive_point,'repellers',[])
+global G_OB = [ob1]
