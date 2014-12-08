@@ -31,7 +31,7 @@ geom_parameters{1,3} = [-0.05 -0.5 0.35]; % orientation regulation
 
 %CONTROLLER PARAMETERS
 metric = {'M','M^(1/2)','M^(1/2)'};  % N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
-dim_of_task{1,1}={[1;1;1]};dim_of_task{1,2}={[1;1;1]};
+dim_of_task{1,1}={[1;1;1]};dim_of_task{1,2}={[1;1;1]};dim_of_task{1,3}={[1;1;1]};
 
 kp = [700, 700, 700]; % row vector one for each chain
 for i= 1:chains.GetNumChains()
