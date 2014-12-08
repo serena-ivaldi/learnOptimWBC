@@ -11,11 +11,12 @@ time_struct.step = 0.1;
 % for simulation 
 % options= odeset('MaxStep',0.001);
 time_sym_struct = time_struct;
-time_sym_struct.step = 0.001; 
+time_sym_struct.step = 0.01; 
 fixed_step = false;
 
 % TASK PARAMETERS
-path=LoadParameters('LBR4p1__scene1_wrist_ee_track_pose');
+name_dat='lbr4p1__scene3_ee_tracking_circ_obstacle_on_traj';
+path=LoadParameters(name_dat);
 load(path);
 
 %ALPHA PARAMETERS
@@ -24,7 +25,7 @@ number_of_basis = 10;
 redundancy = 3;
 range = [0 , 12];
 precomp_sample = false;
-numeric_theta = 2*ones(number_of_basis,1);
+numeric_theta = [8.482084 9.956197 9.872670 2.204167 2.594941 2.931874 4.891161 10.797650 6.943595 9.898512 3.365269 5.274187 5.884780 5.837289 1.804642 2.824112 1.884467 10.742163 10.639953 7.777113];
 %constant alpha
 value1 = 1*ones(chains.GetNumTasks(1));
 values{1} = value1;
@@ -44,7 +45,8 @@ reference = References(target_link,type,control_type,traj,geom_parameters,time_l
 reference.BuildTrajs();
 
 %% plot scenario
-LoadScenario('lbr_scenario2');
+text = LoadScenario('lbr_scenario3');
+eval(text);
 
 %% alpha function
 alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),time_struct,number_of_basis,redundancy,range,precomp_sample,numeric_theta);       
@@ -57,7 +59,7 @@ tic
 [t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);
 toc
 %% Display
-LBR4p.plot(q{1});
+bot1.plot(q{1});
 
 
 

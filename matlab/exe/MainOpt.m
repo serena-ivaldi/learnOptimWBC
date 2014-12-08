@@ -21,7 +21,7 @@ time_sym_struct.step = 0.01;
 fixed_step = false;
 
 % TASK PARAMETERS
-name_dat = 'LBR4p1__scene1_wrist_ee_track_pose';
+name_dat = 'lbr4p1__scene3_ee_tracking_circ_obstacle_on_traj';
 path=LoadParameters(name_dat);
 load(path);
 
@@ -49,7 +49,7 @@ simulator_type = {'rbt'};
 % CMAES PARAMETER
 % starting value of parameters
 explorationRate =0.1;%[0, 1]
-niter = 10;
+niter = 50;
 
 %%%EOF
 
@@ -73,7 +73,7 @@ start_action = 6*ones(1,controller.GetTotalParamNum());
 %%%EOF
 
 inst = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,fitness,options);
-[mean_performances bestAction policies costs succeeded] = inst.CMAES(start_action,niter,explorationRate);
+[mean_performances ,bestAction ,policies ,costs ,succeeded] = inst.CMAES(start_action,niter,explorationRate);
 
 scriptname = mfilename;
 % i have to change this number everytime i perform the same test with
