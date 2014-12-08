@@ -5,26 +5,27 @@ clc
 
 % we have to specify every value of the cell vector for consistency with
 % the cycle inside the function 
-subchain1 = [7 7];
+subchain1 = [7 7 7];
 target_link{1} = subchain1;
 % reference parameters
-type = {'cartesian_x','cartesian_x'};
-control_type = {'tracking','regulation'};
-type_of_traj = {'func','func'};
-traj = {'circular','none'};
-time_law = {'linear','none'};
+type = {'cartesian_x','cartesian_x','cartesian_x'};
+control_type = {'tracking','regulation','regulation'};
+type_of_traj = {'func','func','func'};
+traj = {'circular','none','none'};
+time_law = {'linear','none','none'};
 
 %parameters first chains
 geom_parameters{1,1} = [0.2 0 -pi/2 -pi/4 0 -0.5 0.3]; % Circular trajectory 
 geom_parameters{1,2} = [-0.2 -0.5 0.55]; % orientation regulation
+geom_parameters{1,3} = [-0.2 -0.5 0.55]; % orientation regulation
 
 time_struct.ti = 0;
 time_struct.tf = 10;
 time_struct.step = 0.1;
 
-dim_of_task{1,1}={[1;1;1]}; dim_of_task{1,2}={[1;1;1]};
+dim_of_task{1,1}={[1;1;1]}; dim_of_task{1,2}={[1;1;1]}; dim_of_task{1,3}={[1;1;1]};
 
-%% test substructure
+%% robot
 bot = MdlLBR4p();
 
 %% reference
@@ -65,11 +66,13 @@ end
 
 plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
 repulsive_point = [-0.125538272258140 -0.5 0.455692460313405];
-attractive_point = [-0.2 -0.5 0.55];
+attractive_point1 = [-0.2 -0.5 0.55];
+attractive_point2 = [-0.05 -0.5 0.35];
 scatter3(repulsive_point(1,1),repulsive_point(1,2),repulsive_point(1,3), 130);
-scatter3(attractive_point(1,1),attractive_point(1,2),attractive_point(1,3), 130);
-
-bot.teach;
+scatter3(attractive_point1(1,1),attractive_point1(1,2),attractive_point1(1,3), 130);
+scatter3(attractive_point2(1,1),attractive_point2(1,2),attractive_point2(1,3), 130);
+bot.plot(qz);
+%bot.teach();
 
 
 
