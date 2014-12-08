@@ -42,6 +42,7 @@ classdef Obstacle < handle
           elseif(L==2)
               dist_matrix = (cp(1,1) - obj.description.X).^2 + (cp(1,2) - obj.description.Y).^2 + (cp(1,3) - obj.description.Z).^2;
               dist = min(dist_matrix(:)); 
+              dist = sqrt(dist);
           end
 
         end

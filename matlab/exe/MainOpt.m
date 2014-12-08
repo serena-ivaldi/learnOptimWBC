@@ -21,7 +21,7 @@ time_sym_struct.step = 0.01;
 fixed_step = false;
 
 % TASK PARAMETERS
-name_dat = 'lbr4p1__scene3_ee_tracking_circ_obstacle_on_traj';
+name_dat = 'LBR4p5__scene3_ee_tracking_circ_obstacle_on_traj_2_task_fit4';
 path=LoadParameters(name_dat);
 load(path);
 
@@ -53,9 +53,10 @@ niter = 50;
 
 %%%EOF
 
-%% Load Obstacles
+%% Load Obstacles 
 text = LoadScenario('lbr_scenario3');
 eval(text);
+
 close all;
 %% Reference
 % if type_of_task = sampled i have to specify the Time to reach the
