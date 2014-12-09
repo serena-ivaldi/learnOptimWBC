@@ -27,7 +27,7 @@ load(path);
 
 %ALPHA PARAMETERS
 %rbf
-number_of_basis = 10;
+number_of_basis = 4;
 redundancy = 3;
 range = [0 , 12];
 precomp_sample = false;
@@ -53,16 +53,19 @@ niter = 50;
 
 %%%EOF
 
-%% Load Obstacles 
-text = LoadScenario('lbr_scenario3');
-eval(text);
 
-close all;
 %% Reference
 % if type_of_task = sampled i have to specify the Time to reach the
 % end of the trajectories that is equal to the simulation time
 reference = References(target_link,type,control_type,traj,geom_parameters,time_law,time_struct,dim_of_task,type_of_traj);
 reference.BuildTrajs();
+
+
+%% Load Obstacles 
+text = LoadScenario('lbr_scenario3');
+eval(text);
+
+close all;
 
 %% Alpha
 alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),time_struct,number_of_basis,redundancy,range,precomp_sample,numeric_theta);   
@@ -83,7 +86,7 @@ inst = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,fitn
 scriptname = mfilename;
 % i have to change this number everytime i perform the same test with
 % different optimization parameter
-experiment_number = '1';
+experiment_number = '2';
 name_folder = strcat(experiment_number,'__',name_dat);
 complete_path=PlotCmaesResult(time_struct,controller,bestAction,scriptname,name_folder);
 complete_path_to_file = strcat(complete_path,'/data.mat');

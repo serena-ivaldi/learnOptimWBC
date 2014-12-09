@@ -1,12 +1,12 @@
 % this fitness work with scenario 3 e 4
 function fit = fitness4(obj,t,q)
-
+global G_OB;
 downsaple = 10;
 traj_err= 0;
 repuls  = 0;
 L = 1;
 penalty = 10;
-sigma = 2; 
+sigma = 0.2; 
 contr = obj.controller;
 
 for i=1:downsaple:size(t,2)
@@ -17,9 +17,9 @@ for i=1:downsaple:size(t,2)
     ee = T(1:3,4);
     attr_pos = contr.references.GetTraj(1,1,t(i)); 
     traj_err = traj_err + norm((ee - attr_pos),L);
-    % compute the repulsive component (average) 1/r^2
-    dist = G_OB(1).Dist(ee,L);
-    repuls= repuls + penalty*exp((dist)/(2*sigma^(2)));
+    % compute the repulsive component 
+    dist = G_OB(1).Dist(ee',L);
+    repuls= repuls + penalty*exp(-(dist)/(2*sigma^(2)));
 
 end
 

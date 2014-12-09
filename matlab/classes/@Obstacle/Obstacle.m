@@ -4,7 +4,7 @@ classdef Obstacle < handle
     
     properties
       description % one point for repeller matrix for wall 
-      type        % 'wall'  with collision detection or 'repulsor' 
+      type        % 'wall'  with collision detection or 'repeller' 
       tol         %  threshold for collision detection 
     end
        
@@ -14,8 +14,7 @@ classdef Obstacle < handle
       function obj = Obstacle(description,type,tol) % i can specify through varargin the time duration of the sampled trajectories 
           
          obj.description = description;
-       
-         if(getnameidx({'wall' 'repulsor'} , type) ~= 0 )
+         if(getnameidx({'wall' 'repeller'} , type) ~= 0 )
             obj.type = type;
          end
          
@@ -26,7 +25,7 @@ classdef Obstacle < handle
       
       function dist = Dist(obj,cp,L)
       
-          if(strcmp(obj.type,'repellers'))
+          if(strcmp(obj.type,'repeller'))
              dist = norm((cp - obj.description),L);
           elseif(strcmp(obj.type,'wall'))
              dist = obj.MinDist(cp,L);

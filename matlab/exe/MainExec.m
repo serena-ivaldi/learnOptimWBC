@@ -21,11 +21,11 @@ load(path);
 
 %ALPHA PARAMETERS
 %rbf
-number_of_basis = 10;
+number_of_basis = 4;
 redundancy = 3;
 range = [0 , 12];
 precomp_sample = false;
-numeric_theta = [8.482084 9.956197 9.872670 2.204167 2.594941 2.931874 4.891161 10.797650 6.943595 9.898512 3.365269 5.274187 5.884780 5.837289 1.804642 2.824112 1.884467 10.742163 10.639953 7.777113];
+numeric_theta = [9.784897 2.476396 3.748385 8.713565 0.973121 0.057289 1.596817 1.374827];
 %constant alpha
 value1 = 1*ones(chains.GetNumTasks(1));
 values{1} = value1;
@@ -45,7 +45,7 @@ reference = References(target_link,type,control_type,traj,geom_parameters,time_l
 reference.BuildTrajs();
 
 %% plot scenario
-text = LoadScenario('lbr_scenario4');
+text = LoadScenario('lbr_scenario3');
 eval(text);
 
 %% alpha function
