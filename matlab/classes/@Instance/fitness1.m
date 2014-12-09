@@ -4,7 +4,7 @@
 %function itself
 % work with scenario 1
 function fit = fitness1(obj,t,q)
-
+global G_OB;
 alpha = 0.999;
 downsaple = 10;
 tot_sample = size(t,2)/downsaple;

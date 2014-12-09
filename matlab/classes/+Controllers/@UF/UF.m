@@ -4,6 +4,7 @@ classdef  UF < Controllers.AbstractController
       subchains;       % object that contains the subchain of the robot and the J dot for each subchain;   (maybe i can leave it) 
       references;      % object that contains the reference trajectory for each tasks; 
       alpha;           % cell array of weight function
+      repellers        % object of repellers
       metric;          % vector of matlab command     for example M_inv^2, M_inv,eye(lenght(q)) 
       current_chain    % index that define the current robot that i want to move
       %ground_truth    % if true for computing the position and velocity of the end effector i will use the non perturbed model 
@@ -19,11 +20,12 @@ classdef  UF < Controllers.AbstractController
 
    methods
       
-       function obj = UF(sub_chains,references,alpha,metric,Kp,Kd,combine_rule,max_time,varargin)
+       function obj = UF(sub_chains,references,alpha,repellers,metric,Kp,Kd,combine_rule,max_time,varargin)
          
          obj.subchains = sub_chains;
          obj.references = references;
          obj.alpha = alpha;
+         obj.repellers = repellers;
          obj.metric = metric;
          obj.Kp = Kp;
          obj.Kd = Kd;
@@ -76,19 +78,20 @@ classdef  UF < Controllers.AbstractController
       
       function  final_tau  = Policy(obj,t,q,qd)
          
-           if(strcmp(obj.combine_rule,'sum')) 
+           
+          % active robot 
+          cur_bot = obj.GetActiveBot;
+          % current chain index
+          i = obj.GetCurRobotIndex;
+          % the dynamic computation between controller and simulator has
+          % to be different
 
-             % active robot 
-             cur_bot = obj.GetActiveBot;
-             % current chain index
-             i = obj.GetCurRobotIndex;
-             % the dynamic computation between controller and simulator has
-             % to be different
+          M = cur_bot.inertia(q);
+          F = cur_bot.coriolis(q,qd)*qd' + cur_bot.gravload(q)';
 
-             M = cur_bot.inertia(q);
-             F = cur_bot.coriolis(q,qd)*qd' + cur_bot.gravload(q)';
-
-
+          
+          
+          if(strcmp(obj.combine_rule,'sum')) 
              %final_tau = zeros(cur_bot.n,1)
              for j =1:obj.subchains.GetNumTasks(i)
                  tau(:,j) = obj.alpha{i,j}.GetValue(t)*obj.ComputeTorqueSum(i,j,M,F,t,q,qd);
@@ -97,11 +100,23 @@ classdef  UF < Controllers.AbstractController
                  %final_tau = final_tau + obj.alpha{i,j}.GetValue(t)*tau;  
                  
              end
-             final_tau = sum(tau,2);
-             obj.SaveTau(i,final_tau)    
+           final_tau = sum(tau,2);
+           obj.SaveTau(i,final_tau)    
               
            elseif(strcmp(obj.combine_rule,'projector'))
-           %#TODO % add combine_rule  
+           all_jac = cell(1,obj.subchains.GetNumTasks(i));
+           all_dir_kin = zeros(3,obj.subchains.GetNumTasks(i));
+               for j =1:obj.subchains.GetNumTasks(i)
+                     [tor J dir_kin] =obj.ComputeTorqueSum(i,j,M,F,t,q,qd);
+                     tau(:,j) = obj.alpha{i,j}.GetValue(t)*tor
+                     % here i have to put a subset of functions t that i want to
+                     % use to catch data for computing fitness func
+                     %final_tau = final_tau + obj.alpha{i,j}.GetValue(t)*tau;  
+
+               end
+          final_tau = sum(tau,2);
+          obj.SaveTau(i,final_tau)     
+           
            end   
       end
       

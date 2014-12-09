@@ -1,6 +1,6 @@
 % this fitness work with scenario 3 e 4
 function fit = fitness3(obj,t,q)
-
+global G_OB;
 alpha = 0.99;
 downsaple = 10;
 tot_sample = size(t,2)/downsaple;

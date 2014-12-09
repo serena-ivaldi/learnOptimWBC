@@ -4,7 +4,7 @@
 %function itself
 % work with scenario 2
 function fit = fitness2(obj,t,q)
-
+global G_OB;
 traj_err= 0;
 repuls  = 0;
 alpha = 0.5;

@@ -59,7 +59,25 @@ tic
 [t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);
 toc
 %% Display
-bot1.plot(q{1});
+fps = 200;
+video = true;
+
+if(~video)
+   bot1.plot(q{1},'fps',fps);
+else
+   %at the end of the video simulation after chosing a good camera pos and
+   %zoom
+   % to see camera position call "campos" on the shell 
+   % to see zoom call "get(gca,'CameraViewAngle')"
+   allpath = which('FindData.m');
+   path = fileparts(allpath);
+   path = strcat(path,'/video');
+   camera_position = [-7.5371   -1.1569   21.1612];
+   zoom =  2.4702;
+   set(gca,'CameraViewAngle',zoom);
+   campos(camera_position)
+   bot1.plot(q{1},'movie',path);
+end
 
 
 
