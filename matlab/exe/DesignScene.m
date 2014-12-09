@@ -78,7 +78,7 @@ if(save_now)
     path=fileparts(allpath);
     rawTextFromStorage = fileread(which(mfilename));
     rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF'],'match','once');
-    fileID = fopen(strcat(path,'/scenario/',name_scenario,'.txt'),'w');
+    fileID = fopen(strcat(path,'/scenarios/',name_scenario,'.txt'),'w');
     fprintf(fileID,'%s',rawTextFromStorage);
     fclose(fileID);
     disp('DONE!')
