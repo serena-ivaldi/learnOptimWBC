@@ -15,7 +15,7 @@ time_sym_struct.step = 0.01;
 fixed_step = false;
 
 % TASK PARAMETERS
-name_dat='lbr4p1__scene3_ee_tracking_circ_obstacle_on_traj';
+name_dat='LBR4p3__scene3_ee_tracking_circ_obstacle_on_traj';
 path=LoadParameters(name_dat);
 load(path);
 
@@ -45,7 +45,7 @@ reference = References(target_link,type,control_type,traj,geom_parameters,time_l
 reference.BuildTrajs();
 
 %% plot scenario
-text = LoadScenario('lbr_scenario3');
+text = LoadScenario('lbr_scenario4');
 eval(text);
 
 %% alpha function
