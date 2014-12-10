@@ -300,6 +300,7 @@ classdef CodeGenerator
         function [] = geneverything(CGen)
             [t,allT] = CGen.genfkine;
             [J0,Jn] = CGen.genjacobian;
+            [Jdot] = CGen.genJdot;
             [G] = CGen.gengravload;
             [I] = CGen.geninertia;
             [C] = CGen.gencoriolis;

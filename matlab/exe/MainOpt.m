@@ -17,7 +17,7 @@ time_struct.step = 0.1;
 
 % for simulation 
 time_sym_struct = time_struct;
-time_sym_struct.step = 0.01; 
+time_sym_struct.step = 0.001; 
 fixed_step = false;
 
 % TASK PARAMETERS
@@ -27,7 +27,7 @@ load(path);
 
 %ALPHA PARAMETERS
 %rbf
-number_of_basis = 4;
+number_of_basis = 10;
 redundancy = 3;
 range = [0 , 12];
 precomp_sample = false;
@@ -49,7 +49,7 @@ simulator_type = {'rbt'};
 % CMAES PARAMETER
 % starting value of parameters
 explorationRate =0.1;%[0, 1]
-niter = 50;
+niter = 80;
 
 %%%EOF
 
@@ -72,7 +72,7 @@ alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),ti
 %alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,time_struct);
 
 %% Controller 
-controller = Controllers.UF(chains,reference,alphas,metric,Kp,Kd,combine_rule,max_time);
+controller = Controllers.UF(chains,reference,alphas,[],metric,Kp,Kd,combine_rule,max_time);
 
 %% Instance
 
@@ -86,10 +86,10 @@ inst = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,fitn
 scriptname = mfilename;
 % i have to change this number everytime i perform the same test with
 % different optimization parameter
-experiment_number = '2';
+experiment_number = '1';
 name_folder = strcat(experiment_number,'__',name_dat);
 complete_path=PlotCmaesResult(time_struct,controller,bestAction,scriptname,name_folder);
-complete_path_to_file = strcat(complete_path,'/data.mat');
+complete_path_to_file= strcat(complete_path,'/data.mat');
 save(complete_path_to_file) 
 
 

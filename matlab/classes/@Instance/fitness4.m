@@ -6,7 +6,7 @@ traj_err= 0;
 repuls  = 0;
 L = 1;
 penalty = 10;
-sigma = 0.2; 
+sigma = 0.1; 
 contr = obj.controller;
 
 for i=1:downsaple:size(t,2)

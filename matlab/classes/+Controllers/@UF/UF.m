@@ -100,23 +100,22 @@ classdef  UF < Controllers.AbstractController
                  %final_tau = final_tau + obj.alpha{i,j}.GetValue(t)*tau;  
                  
              end
-           final_tau = sum(tau,2);
-           obj.SaveTau(i,final_tau)    
+              final_tau = sum(tau,2);
+              obj.SaveTau(i,final_tau)    
               
            elseif(strcmp(obj.combine_rule,'projector'))
-           all_jac = cell(1,obj.subchains.GetNumTasks(i));
-           all_dir_kin = zeros(3,obj.subchains.GetNumTasks(i));
-               for j =1:obj.subchains.GetNumTasks(i)
-                     [tor J dir_kin] =obj.ComputeTorqueSum(i,j,M,F,t,q,qd);
-                     tau(:,j) = obj.alpha{i,j}.GetValue(t)*tor
-                     % here i have to put a subset of functions t that i want to
-                     % use to catch data for computing fitness func
-                     %final_tau = final_tau + obj.alpha{i,j}.GetValue(t)*tau;  
+              all_jac = cell(1,obj.subchains.GetNumTasks(i));
+              all_dir_kin = zeros(3,obj.subchains.GetNumTasks(i));
+                  for j =1:obj.subchains.GetNumTasks(i)
+                        [tor J dir_kin] =obj.ComputeTorqueSum(i,j,M,F,t,q,qd);
+                        tau(:,j) = obj.alpha{i,j}.GetValue(t)*tor
+                        % here i have to put a subset of functions t that i want to
+                        % use to catch data for computing fitness func
+                        %final_tau = final_tau + obj.alpha{i,j}.GetValue(t)*tau;  
 
-               end
-          final_tau = sum(tau,2);
-          obj.SaveTau(i,final_tau)     
-           
+                  end
+              final_tau = sum(tau,2);
+              obj.SaveTau(i,final_tau)     
            end   
       end
       
