@@ -15,11 +15,11 @@ contr = obj.controller;
 for i=1:downsaple:size(t,2)
     q_cur = q{1}(i,:);
     % compute the trajectory error (mean square average)
-    kinematic=strcat('contr.subchains.sub_chains{1}.T0_',num2str(contr.subchains.GetNumSubLinks(1,1)),'(q_cur)');
-    T = eval(kinematic);
+    kinematic=CStrCatStr({'contr.subchains.sub_chains{1}.T0_'},num2str(contr.subchains.GetNumSubLinks(1,1)),{'(q_cur)'});
+    T = eval(kinematic{1});
     ee = T(1:3,4);
-    kinematic=strcat('contr.subchains.sub_chains{1}.T0_',num2str(contr.subchains.GetNumSubLinks(1,2)),'(q_cur)');
-    T = eval(kinematic);
+    kinematic=CStrCatStr({'contr.subchains.sub_chains{1}.T0_'},num2str(contr.subchains.GetNumSubLinks(1,2)),{'(q_cur)'});
+    T = eval(kinematic{1});
     elbow = T(1:3,4);
     
     traj_err = traj_err + norm((ee' - contr.references.GetTraj(1,1,t(i))))/tot_sample + norm((elbow' - contr.references.GetTraj(1,2,t(i))))/tot_sample;

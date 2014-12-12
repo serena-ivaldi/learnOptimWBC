@@ -4,7 +4,7 @@ classdef  UF < Controllers.AbstractController
       subchains;       % object that contains the subchain of the robot and the J dot for each subchain;   (maybe i can leave it) 
       references;      % object that contains the reference trajectory for each tasks; 
       alpha;           % cell array of weight function
-      repellers        % object of repellers
+      repellers;       % object of repellers
       metric;          % vector of matlab command     for example M_inv^2, M_inv,eye(lenght(q)) 
       current_chain    % index that define the current robot that i want to move
       %ground_truth    % if true for computing the position and velocity of the end effector i will use the non perturbed model 
@@ -88,40 +88,39 @@ classdef  UF < Controllers.AbstractController
 
           M = cur_bot.inertia(q);
           F = cur_bot.coriolis(q,qd)*qd' + cur_bot.gravload(q)';
-
-          
-          
+      
           if(strcmp(obj.combine_rule,'sum')) 
-             %final_tau = zeros(cur_bot.n,1)
-             for j =1:obj.subchains.GetNumTasks(i)
-                 tau(:,j) = obj.alpha{i,j}.GetValue(t)*obj.ComputeTorqueSum(i,j,M,F,t,q,qd);
-                 % here i have to put a subset of functions t that i want to
-                 % use to catch data for computing fitness func
-                 %final_tau = final_tau + obj.alpha{i,j}.GetValue(t)*tau;  
-                 
+             
+             for j = 1:obj.subchains.GetNumTasks(i)
+                 tau = obj.ComputeTorqueSum(i,j,M,F,t,q,qd);
+                 app_tau(:,j) = obj.alpha{i,j}.GetValue(t)*tau;       
              end
-              final_tau = sum(tau,2);
-              obj.SaveTau(i,final_tau)    
-              
-           elseif(strcmp(obj.combine_rule,'projector'))
-              all_jac = cell(1,obj.subchains.GetNumTasks(i));
-              all_dir_kin = zeros(3,obj.subchains.GetNumTasks(i));
-                  for j =1:obj.subchains.GetNumTasks(i)
-                        [tor J dir_kin] =obj.ComputeTorqueSum(i,j,M,F,t,q,qd);
-                        tau(:,j) = obj.alpha{i,j}.GetValue(t)*tor
-                        % here i have to put a subset of functions t that i want to
-                        % use to catch data for computing fitness func
-                        %final_tau = final_tau + obj.alpha{i,j}.GetValue(t)*tau;  
-
-                  end
-              final_tau = sum(tau,2);
-              obj.SaveTau(i,final_tau)     
+             
+             final_tau = sum(app_tau,2);
+                 
+             
+             if(strcmp(obj.combine_rule,'projector'))
+             % compute the projector in the null space of repulsor 
+                 for j = 1:obj.subchains.GetNumTasks(i)
+                   obj.repellers.SetJacob(obj.subchain,q,qd,i,j)  
+                 end
+                 N = obj.repellers.ComputeProjector(i,obj.subchains.GetNumTasks(i),obj.alpha,t);
+                 
+                 final_tau = N*final_tau;
+             end
+             obj.SaveTau(i,final_tau) 
+             
+           elseif(strcmp(obj.combine_rule,'bo'))          
            end   
       end
       
       %% all the function from this point DO NOT SUPPORT multichain structure
       % in this function i update the value of the alpha function giving
       % new set of parameters
+      
+      % the implicit rule with repellers is that before i update the rbf
+      % functions for the task and after that i update the alpha function
+      % for repellers
       function UpdateParameters(obj,parameters)
        disp('im in update parameters')   
          for i=1:obj.subchains.GetNumChains() 

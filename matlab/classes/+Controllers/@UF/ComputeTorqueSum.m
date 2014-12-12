@@ -1,4 +1,4 @@
-function tau = ComputeTorqueSum(obj,ind_subchain,ind_task,M,F,t,q,qd)
+function [tau,J,x,xd,rpy,rpyd] = ComputeTorqueSum(obj,ind_subchain,ind_task,M,F,t,q,qd)
    
     try
        [J,Jd,x,xd,rpy,rpyd] = obj.subchains.DirKin(q,qd,ind_subchain,ind_task);

@@ -9,7 +9,7 @@ classdef  Repellers < handle
       obstacle_ref     % vector of index that specify for each repellers which is the obstacle  G_OB (global vector of Obstacle) associated to the current repeller  
       chain_dof        % vector of total dimension for each kinematic chain
       task_dimension   % vector that define the cumulative dimension for each repulsive task. i use this as a vector of pointer to build the jacobian
-      repellers_fun;   % cell array of func of repellers of type (i,j) where j is the task of the i-th kinematic chain
+      repellers_fun;   % cell array of function of repellers of type (i,j) where j is the task of the i-th kinematic chain
       Jac_rep          % cell array of the final jacobian is the final jacobian of the repellers
                     
    end
@@ -39,7 +39,7 @@ classdef  Repellers < handle
              obj.Jac_rep{i} = zeros(dim,chain_dof(i));
              dim = 0;
          end
-         % in this cycle i build the vector of function handle to compute
+         % in this cycle i build the vector of function handles to compute
          %  repellers jacobian
          for i=1:size(mask,1)
              for j=1:size(mask,2)
@@ -50,26 +50,49 @@ classdef  Repellers < handle
          
          
       end       
-         
-      function SetJacob(obj,direct_kin,J,chain,task)
-           if(task==1)
-               obj.Jac_rep{chain}(1:obj.task_dimension(chain,task) , :) = feval(obj.repellers_fun(chain,task),obj,direct_kin,J,chain,task);
+      
+      function N=ComputeProjector(obj,cur_chain,number_of_tasks_for_cur_chain,alpha,t) 
+          
+          alpha_vec=zeros(size(alpha,1)-number_of_tasks_for_cur_chain,1);
+          index = 1;
+          for i = number_of_tasks_for_cur_chain+1:size(alpha,1)
+            alpha_vec(index) = alpha{cur_chain,i}.GetValue(t);
+            index = index + 1;
+          end
+          alpha_diag = diag(alpha_vec);
+          I = eye(size(alpha_diag,2));
+          [~,~,V] = svd(obj.Jac_rep);
+          N = (I - V*alpha_diag*V');
+          
+      end
+      
+      
+      % ALL THE FUNCTION BELOW WORK ONLY WITH cartesian_x REPELLERS
+      function SetJacob(obj,subchain,q,qd,chain,task)
+           
+          [J,~,x]=subchain.DirKin(q,qd,chain,task);
+
+          if(task==1)
+               obj.Jac_rep{chain}(1:obj.task_dimension(chain,task) , :) = feval(obj.repellers_fun(chain,task),obj,x,J,chain,task);
            else
-               obj.Jac_rep{chain}(obj.task_dimension(chain,task - 1) + 1:obj.task_dimension(chain,task) , :) = feval(obj.repellers_fun(chain,task),obj,direct_kin,J,chain,task); 
+               obj.Jac_rep{chain}(obj.task_dimension(chain,task - 1) + 1:obj.task_dimension(chain,task) , :) = feval(obj.repellers_fun(chain,task),obj,x,J,chain,task); 
            end
       end
       
       function J_rep = DirectionCartesian(obj,direct_kin,J_old,chain,task)
-      global G_OB;    
+        global G_OB;    
           if(strcmp(type{chain,task},'cartesian_x'))
             J = ReshapeJacobian(J_old,[],obj.chain_dof(chain),obj.target_link(chain,task),obj.mask{chain,task},'trans');
           elseif(strcmp(type{chain,task},'cartesian_rpy'))
-            J = ReshapeJacobian(J_old,[],obj.chain_dof(chain),obj.target_link(chain,task),obj.mask{chain,task},'rot');    
+            %J = ReshapeJacobian(J_old,[],obj.chain_dof(chain),obj.target_link(chain,task),obj.mask{chain,task},'rot');    
           end
           v = 2*(direct_kin - G_OB{obj.obstacle_ref(chain,task)}).^(2); 
           J_rep = diag(v)*J;
           
       end
    end
+   
+   
+   
     
 end

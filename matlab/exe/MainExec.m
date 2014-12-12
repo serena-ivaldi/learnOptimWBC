@@ -12,7 +12,7 @@ time_struct.step = 0.1;
 % options= odeset('MaxStep',0.001);
 time_sym_struct = time_struct;
 time_sym_struct.step = 0.001; 
-fixed_step = false;
+fixed_step = true;
 
 % TASK PARAMETERS
 name_dat='LBR4p5__scene3_ee_tracking_circ_obstacle_on_traj_2_task_fit4';
@@ -63,7 +63,7 @@ fps = 200;
 video = false;
 
 if(~video)
-   bot1.plot(q{1},'fps',fps);
+   %bot1.plot(q{1},'fps',fps);
 else
    %at the end of the video simulation after chosing a good camera pos and
    %zoom
