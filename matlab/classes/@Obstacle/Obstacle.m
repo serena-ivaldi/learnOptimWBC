@@ -21,7 +21,14 @@ classdef Obstacle < handle
          obj.tol = tol;        
       end 
       
-      
+      function point=GetDescription(obj)
+          if(strcmp(obj.type,'repeller'))
+             point = obj.description';
+            % add wall case with norm
+%           elseif(strcmp(obj.type,'wall'))
+%              point = obj.MinDist(cp,L);
+          end
+      end    
       
       function dist = Dist(obj,cp,L)
       
@@ -34,7 +41,8 @@ classdef Obstacle < handle
       end
       
         function dist = MinDist(obj,cp,L)
-      
+        
+            
           if(L==1)
               dist_matrix = abs((cp(1,1) - obj.description.X)) + abs((cp(1,2) - obj.description.Y)) + abs((cp(1,3) - obj.description.Z));
               dist = min(dist_matrix(:)); 

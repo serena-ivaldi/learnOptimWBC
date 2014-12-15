@@ -83,9 +83,10 @@ classdef  UF < Controllers.AbstractController
           cur_bot = obj.GetActiveBot;
           % current chain index
           i = obj.GetCurRobotIndex;
+          DOF = cur_bot.n;
+         
           % the dynamic computation between controller and simulator has
           % to be different
-
           M = cur_bot.inertia(q);
           F = cur_bot.coriolis(q,qd)*qd' + cur_bot.gravload(q)';
       
@@ -97,20 +98,25 @@ classdef  UF < Controllers.AbstractController
              end
              
              final_tau = sum(app_tau,2);
-                 
-             
-             if(strcmp(obj.combine_rule,'projector'))
-             % compute the projector in the null space of repulsor 
-                 for j = 1:obj.subchains.GetNumTasks(i)
-                   obj.repellers.SetJacob(obj.subchain,q,qd,i,j)  
-                 end
-                 N = obj.repellers.ComputeProjector(i,obj.subchains.GetNumTasks(i),obj.alpha,t);
-                 
-                 final_tau = N*final_tau;
-             end
              obj.SaveTau(i,final_tau) 
              
-           elseif(strcmp(obj.combine_rule,'bo'))          
+           elseif(strcmp(obj.combine_rule,'projector'))   
+               
+             for j = 1:obj.subchains.GetNumTasks(i)
+                 tau = obj.ComputeTorqueSum(i,j,M,F,t,q,qd);
+                 app_tau(:,j) = obj.alpha{i,j}.GetValue(t)*tau;       
+             end
+             
+             final_tau = sum(app_tau,2);
+             % compute the projector in the null space of repulsor 
+             for j = 1:obj.subchains.GetNumTasks(i)
+               obj.repellers.SetJacob(obj.subchains,q,qd,i,j)  
+             end
+             N = obj.repellers.ComputeProjector(i,DOF,obj.subchains.GetNumTasks(i),obj.alpha,t);
+             final_tau = N*final_tau;
+            
+             obj.SaveTau(i,final_tau) 
+               
            end   
       end
       

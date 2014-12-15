@@ -130,8 +130,29 @@ classdef  RBF < Alpha.AbstractAlpha
                 plot(results(j,:))
             end
             
+        end  
+        
+        
+        function Plot(obj)
+            
+            time = obj.time_struct.ti:obj.time_struct.step:obj.time_struct.tf;
+            
+           
+                i=1;
+                for t = time
+                    results(i) = obj.GetValue(t); 
+                    i=i+1;
+                end
+            
+            plot(time,results)
+               
         end
+        
+        
     end
+    
+    
+    
     
     methods (Static)
         
