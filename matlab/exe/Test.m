@@ -1,4 +1,4 @@
-clear all
+clear variables
 close all
 clc
 
@@ -23,9 +23,9 @@ load(path);
 %rbf
 number_of_basis = 4;
 redundancy = 3;
-range = [0 , 12];
+range = [0 , 20];
 precomp_sample = false;
-numeric_theta = [12 12 12 12  4 4 4 4 4 4 4 4 4 4 4 4];
+numeric_theta = [20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20];
 %constant alpha
 value1 = 1*ones(chains.GetNumTasks(1));
 values{1} = value1;
@@ -38,7 +38,7 @@ max_time = 50;
 combine_rule = {'projector'}; 
 
 % INTEGRATION START CONDITIONS
-qi{1} = qz;
+qi{1} = [-pi/2 pi/2 0 -pi/2 0 pi/2 0];
 qdi{1} = zeros(1,chains.GetNumLinks(1));
 
 %% Reference

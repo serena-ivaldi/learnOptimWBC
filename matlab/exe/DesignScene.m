@@ -6,7 +6,7 @@ clc
 % bot_scenario# where # is incremental
 name_scenario = 'lbr_scenario6';
 % with this variable i decide when i want to save the designed scenario
-save_now = true;
+save_now = false;
 
 plot_subchain1 = [7];
 plot_target_link{1} = plot_subchain1;
@@ -72,8 +72,8 @@ ob1 = Obstacle(rapresentation,'wall',0.002);
 G_OB = [ob1];
 %%%EOF
 
-plot_bot.plot(qz);
-%plot_bot.teach();
+%plot_bot.plot(qz);
+plot_bot.teach();
 
 %% DO NOT CHANGE THIS PART!
 

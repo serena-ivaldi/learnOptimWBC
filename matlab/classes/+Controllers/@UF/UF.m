@@ -109,8 +109,8 @@ classdef  UF < Controllers.AbstractController
              
              final_tau = sum(app_tau,2);
              % compute the projector in the null space of repulsor 
-             for j = 1:obj.subchains.GetNumTasks(i)
-               obj.repellers.SetJacob(obj.subchains,q,qd,i,j)  
+             for j = 1:obj.repellers.GetNumTasks(i)
+               obj.repellers.SetJacob(cur_bot,q,qd,i,j)  
              end
              N = obj.repellers.ComputeProjector(i,DOF,obj.subchains.GetNumTasks(i),obj.alpha,t);
              final_tau = N*final_tau;

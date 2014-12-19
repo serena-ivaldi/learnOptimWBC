@@ -1,7 +1,3 @@
-clear all
-close all
-clc
-
 %%%;;
 
 %% comment
@@ -84,9 +80,4 @@ save(strcat(path,'/datamat/',name_file));
 
 % backup data 
 rawTextFromStorage = fileread(which(mfilename));
-rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF'],'match','once');
-fileID = fopen(strcat(path,'/back_data/',name_backup),'w');
-fprintf(fileID,'%s',rawTextFromStorage);
-fclose(fileID);
-disp('FINISH!')
-
+rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF

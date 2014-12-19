@@ -1,18 +1,11 @@
 %%%;;
 
+% repulsive point elbow attractive point e-e
+
 global G_OB;
 
 hold on;axis equal;
 
-p_tot=[];
-for t=plot_time_struct.ti:plot_time_struct.step:plot_time_struct.tf
- 
-	p_cur=plot_reference.GetTraj(1,1,t);
-	p_tot = [p_tot,p_cur];
-
-end
-    
-plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
 repulsive_point = [0.4 0 0.3];
 attractive_point1 = [0.8 0 0];
 

@@ -1,3 +1,8 @@
+
+% obstacle on circular trajectory 
+% setting 1 : circular trajectory obstacle on the trajectory and attractive point outisde the trajecoty (2 task)
+% setting 2 : circular trajectory obstacle on the traj repellers on obstacle tracking task (1 task 1 repellers)
+
 global G_OB;
 hold on;axis equal;
 p_tot=[];

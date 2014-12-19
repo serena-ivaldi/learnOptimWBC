@@ -1,4 +1,5 @@
 %%%;;
+
 %% comment
 %this file describe a regulation task for the e-e 
 %trajectory and one reppeler task to avoid the obstacle on the elbow
@@ -28,7 +29,8 @@ geom_parameters{1,1} = [-0.2 -0.5 0.55]; % Circular trajectory
 
 % REPELLER PARAMETERS
 % sceario dependant
-rep_target_link = [3];
+rep_subchain = [3];
+rep_target_link{1} = rep_subchain;
 rep_type = {'cartesian_x'};
 rep_mask {1,1}=[1,1,1];
 rep_type_of_J_rep = {'DirectionCartesian'};
@@ -56,5 +58,4 @@ end
 
 % INSTANCE PARAMETERS
 fitness= @fitness5;
-
 %%%EOF

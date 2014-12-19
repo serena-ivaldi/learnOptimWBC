@@ -1,4 +1,4 @@
-% this fitness work with scenario 3 e 4
+% this fitness work with scenario 2 3 e 4
 function fit = fitness4(obj,t,q)
 global G_OB;
 downsaple = 10;

@@ -1,9 +1,12 @@
 %%%;;
+
 %% comment
-%this file describe a tracking task for the e-e on a circular
-%trajectory and one reppeler task to avoid the obstacle 
+%this file describe a trajecotry task for the e-e on a circle and 1
+%repellers on the trajecotry
+%
 %
 %%
+
 
 
 %SUBCHAIN PARAMETERS 
@@ -27,8 +30,9 @@ time_law = {'linear'};
 geom_parameters{1,1} = [0.2 0 -pi/2 -pi/4 0 -0.5 0.3]; % Circular trajectory 
 
 % REPELLER PARAMETERS
-% sceario dependant
-rep_target_link = [7];
+% scenario dependant
+rep_subchain = [7];
+rep_target_link{1} = rep_subchain;
 rep_type = {'cartesian_x'};
 rep_mask {1,1}=[1,1,1];
 rep_type_of_J_rep = {'DirectionCartesian'};
@@ -37,10 +41,10 @@ for ii=1:chains.GetNumChains()
 end
 
 %CONTROLLER PARAMETERS
-metric = {'M','M^(1/2)'};  % N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
-dim_of_task{1,1}={[1;1;1]};dim_of_task{1,2}={[1;1;1]};dim_of_task{1,3}={[1;1;1]};
+metric = {'M'};  % N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
+dim_of_task{1,1}=[1;1;1];
 
-kp = [700, 700]; % row vector one for each chain
+kp = [1700]; % row vector one for each chain
 for i= 1:chains.GetNumChains()
    K_p = zeros(3,3,size(kp,2));
    K_d = zeros(3,3,size(kp,2));

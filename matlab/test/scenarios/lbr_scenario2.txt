@@ -1,3 +1,5 @@
+% wall and two attractive points
+
 global G_OB;
 
 hold on;axis equal;
