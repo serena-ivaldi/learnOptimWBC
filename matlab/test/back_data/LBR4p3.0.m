@@ -1,5 +1,9 @@
 %%%;;
 
+
+
+
+
 %% comment
 %this file describe a trajecotry task for the e-e on a circle and 1
 %repellers on the trajecotry
@@ -7,12 +11,9 @@
 %
 %%
 
-
-
 %SUBCHAIN PARAMETERS 
 subchain1 = [7];
 target_link{1} = subchain1;
-
 
 %% Robot
 [bot1] = MdlLBR4p();
@@ -60,5 +61,9 @@ end
 
 % INSTANCE PARAMETERS
 fitness= @fitness4;
+
+
+
+
 
 %%%EOF

@@ -61,23 +61,4 @@ end
 % INSTANCE PARAMETERS
 fitness= @fitness4;
 
-%% Name of the file (backup and .mat)
-% id specify wich is the backup data that I have to look at. 
-% i have to set the name of the robot plus a number equal to the number of experiment for that scenario 
-% like bot#.# (where n.i means that the file is reffered to the n-scenario and is the i-th data setting)
-% multiple data setting for the same scenario 
-id = 'LBR4p3.1';
-name_backup = strcat(id,'.m');
-%namebot_scene#_briefdescription.mat
-name_file = '_scene3_tracking_circle_task_and_regulation_task_to_avoid_obstacle_on_traj';
-name_file = strcat(id,'_',name_file,'.mat');
 
-%% DO NOT CHANGE THIS PART!
-% build the correct path for .mat
-allpath=which('FindData.m');
-path=fileparts(allpath);
-save(strcat(path,'/datamat/',name_file));
-
-% backup data 
-rawTextFromStorage = fileread(which(mfilename));
-rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF

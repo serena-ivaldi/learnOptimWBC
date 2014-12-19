@@ -8,7 +8,7 @@
 function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,cur_bot,q,qd,ind_subchain,ind_task)
 
         q_cur = zeros(1,cur_bot.n);
-        qd_cur= zeros(1,obj.cur_bot.n);
+        qd_cur= zeros(1,cur_bot.n);
         q_cur(1:obj.target_link{ind_subchain,ind_task}) = q(1:obj.target_link{ind_subchain,ind_task});
         qd_cur(1:obj.target_link{ind_subchain,ind_task}) = qd(1:obj.target_link{ind_subchain,ind_task});
         

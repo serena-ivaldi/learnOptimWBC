@@ -4,20 +4,20 @@ clc
 
 %%%;;
 
+
+
+
+
 %% comment
-%this file describe a trajecotry task for the e-e on a circle and a
-%positioning task to avoid the obstacle
-%
+%this file describe a trajecotry task for the e-e on a circle and 1
+%repellers on the trajecotry
 %
 %
 %%
 
-
-
 %SUBCHAIN PARAMETERS 
-subchain1 = [7 7];
+subchain1 = [7];
 target_link{1} = subchain1;
-
 
 %% Robot
 [bot1] = MdlLBR4p();
@@ -26,19 +26,19 @@ chains = SubChains(target_link,robots);
 %%
 
 % REFERENCE PARAMETERS
-type = {'cartesian_x','cartesian_x'};
-control_type = {'tracking','regulation'};
-type_of_traj = {'func','none'};
-traj = {'circular','none'};
-time_law = {'linear','none'};
+type = {'cartesian_x'};
+control_type = {'tracking'};
+type_of_traj = {'func'};
+traj = {'circular'};
+time_law = {'linear'};
 %parameters first chains
 geom_parameters{1,1} = [0.2 0 -pi/2 -pi/4 0 -0.5 0.3]; % Circular trajectory 
-geom_parameters{1,2} = [-0.2 -0.5 0.55]; %attractive_point
-% REPELLER PARAMETERS EMPTY
+
+% REPELLER PARAMETERS
 % scenario dependant
-rep_subchain = [];
+rep_subchain = [7];
 rep_target_link{1} = rep_subchain;
-rep_type = {' '};
+rep_type = {'cartesian_x'};
 rep_mask {1,1}=[1,1,1];
 rep_type_of_J_rep = {'DirectionCartesian'};
 for ii=1:chains.GetNumChains()
@@ -46,9 +46,10 @@ for ii=1:chains.GetNumChains()
 end
 
 %CONTROLLER PARAMETERS
-metric = {'M','M^(1/2)'};  % N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
-dim_of_task{1,1}=[1;1;1];dim_of_task{1,2}=[1;1;1];
-kp = [700,700]; % row vector one for each chain
+metric = {'M'};  % N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
+dim_of_task{1,1}=[1;1;1];
+
+kp = [1700]; % row vector one for each chain
 for i= 1:chains.GetNumChains()
    K_p = zeros(3,3,size(kp,2));
    K_d = zeros(3,3,size(kp,2));
@@ -65,15 +66,21 @@ end
 % INSTANCE PARAMETERS
 fitness= @fitness4;
 
+
+
+
+
+%%%EOF
+
 %% Name of the file (backup and .mat)
 % id specify wich is the backup data that I have to look at. 
 % i have to set the name of the robot plus a number equal to the number of experiment for that scenario 
 % like bot#.# (where n.i means that the file is reffered to the n-scenario and is the i-th data setting)
 % multiple data setting for the same scenario 
-id = 'LBR4p3.1';
+id = 'LBR4p3.0';
 name_backup = strcat(id,'.m');
 %namebot_scene#_briefdescription.mat
-name_file = '_scene3_tracking_circle_task_and_regulation_task_to_avoid_obstacle_on_traj';
+name_file = '_scene3_ee_tracking_circ_obstacle_on_traj_1repellers_fit4';
 name_file = strcat(id,'_',name_file,'.mat');
 
 %% DO NOT CHANGE THIS PART!

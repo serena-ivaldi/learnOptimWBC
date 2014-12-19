@@ -113,7 +113,7 @@ classdef  UF < Controllers.AbstractController
                obj.repellers.SetJacob(cur_bot,q,qd,i,j)  
              end
              N = obj.repellers.ComputeProjector(i,DOF,obj.subchains.GetNumTasks(i),obj.alpha,t);
-             final_tau = N*final_tau;
+             final_tau = ((M*N)/M)*final_tau;
             
              obj.SaveTau(i,final_tau) 
                

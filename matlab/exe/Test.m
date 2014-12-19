@@ -15,7 +15,7 @@ time_sym_struct.step = 0.001;
 fixed_step = false;
 
 % TASK PARAMETERS
-name_dat='LBR4p6__scene3_ee_tracking_circ_obstacle_on_traj_1repellers_fit4';
+name_dat='LBR4p3.0__scene3_ee_tracking_circ_obstacle_on_traj_1repellers_fit4';
 path=LoadParameters(name_dat);
 load(path);
 
@@ -23,9 +23,9 @@ load(path);
 %rbf
 number_of_basis = 4;
 redundancy = 3;
-range = [0 , 20];
+range = [0 , 12];
 precomp_sample = false;
-numeric_theta = [20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20];
+numeric_theta = [12 12 12 12 10 10 10 10 10 10 10 10 10 10 10 10];
 %constant alpha
 value1 = 1*ones(chains.GetNumTasks(1));
 values{1} = value1;

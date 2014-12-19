@@ -97,7 +97,7 @@ classdef  Repellers < handle
       function J_rep = DirectionCartesian(obj,direct_kin,J_old,chain,task)
         global G_OB;    
           if(strcmp(obj.type{chain,task},'cartesian_x')) 
-            J = ReshapeJacobian(J_old,[],obj.chain_dof(chain),obj.target_link(chain,task),obj.mask{chain,task},'trans');
+            J = ReshapeJacobian(J_old,[],obj.chain_dof(chain),obj.target_link{chain,task},obj.mask{chain,task},'trans');
           elseif(strcmp(obj.type{chain,task},'cartesian_rpy'))
             %J = ReshapeJacobian(J_old,[],obj.chain_dof(chain),obj.target_link(chain,task),obj.mask{chain,task},'rot');    
           end
