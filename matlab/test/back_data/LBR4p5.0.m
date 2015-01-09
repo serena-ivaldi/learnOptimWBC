@@ -25,7 +25,7 @@ type_of_traj = {'func'};
 traj = {'none'};
 time_law = {'none'};
 %parameters first chains
-geom_parameters{1,1} = [-0.2 -0.5 0.55]; % Circular trajectory 
+geom_parameters{1,1} = [-0.2 -0.5 0.55]; 
 
 % REPELLER PARAMETERS
 % sceario dependant

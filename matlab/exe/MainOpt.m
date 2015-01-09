@@ -7,55 +7,7 @@ warning on verbose
 warning('error', 'MATLAB:ode15s:IntegrationTolNotMet');
 warning('error', 'MATLAB:illConditionedMatrix')
 
-%%%;;
-
-%GENERAL PARAMETERS
-% for other strucutures
-time_struct.ti = 0;
-time_struct.tf = 10;
-time_struct.step = 0.1;
-
-% for simulation 
-time_sym_struct = time_struct;
-time_sym_struct.step = 0.001; 
-fixed_step = false;
-
-% TASK PARAMETERS
-name_dat = 'LBR4p5__scene3_ee_tracking_circ_obstacle_on_traj_2_task_fit4';
-path=LoadParameters(name_dat);
-load(path);
-
-%ALPHA PARAMETERS
-%rbf
-number_of_basis = 10;
-redundancy = 3;
-range = [0 , 12];
-precomp_sample = false;
-numeric_theta = 2*ones(number_of_basis,1);
-%constant alpha
-value1 = 1*ones(chains.GetNumTasks(1));
-values{1} = value1;
-
-% REPELLERS PARAMETERS
-rep_obstacle_ref = [1];
-
-%CONTROLLER PARAMETERS
-max_time = 50;
-combine_rule = {'sum'}; 
-
-% INSTANCE PARAMETERS
-qi{1} = qz;
-qdi{1} = zeros(1,chains.GetNumLinks(1));
-options= [];
-simulator_type = {'rbt'};
-
-% CMAES PARAMETER
-% starting value of parameters
-explorationRate =0.1;%[0, 1]
-niter = 80;
-
-%%%EOF
-
+RuntimeVariable
 
 %% Reference
 % if type_of_task = sampled i have to specify the Time to reach the
@@ -65,7 +17,7 @@ reference.BuildTrajs();
 
 
 %% Load Obstacles 
-text = LoadScenario('lbr_scenario3');
+text = LoadScenario(name_scenario);
 eval(text);
 
 close all;
@@ -80,9 +32,7 @@ alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1) + 
 controller = Controllers.UF(chains,reference,alphas,repellers,metric,Kp,Kd,combine_rule,max_time);
 %% Instance
 
-%%%;;
-start_action = 6*ones(1,controller.GetTotalParamNum());
-%%%EOF
+start_action = init_parameters*ones(1,controller.GetTotalParamNum());
 
 inst = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,fitness,options);
 [mean_performances ,bestAction ,policies ,costs ,succeeded] = inst.CMAES(start_action,niter,explorationRate);
