@@ -47,7 +47,7 @@ start_action = init_parameters*ones(1,controller.GetTotalParamNum());
 inst = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,fitness,options);
 [mean_performances ,bestAction ,policies ,costs ,succeeded] = inst.CMAES(start_action,niter,explorationRate);
 
-scriptname = mfilename;
+scriptname = 'RuntimeVariable';
 % i have to change this number everytime i perform the same test with
 % different runtime parameters
 experiment_number = '1';

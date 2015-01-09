@@ -129,9 +129,9 @@ classdef  UF < Controllers.AbstractController
       % for repellers
       function UpdateParameters(obj,parameters)
        disp('im in update parameters')   
-         for i=1:obj.subchains.GetNumChains() 
+         for i=1:size(obj.alpha,1) 
              index = 1;
-             for j=1:obj.subchains.GetNumTasks(i)  
+             for j=1:size(obj.alpha,2)  
                  n_param = obj.alpha{i,j}.GetParamNum();
                  app_param = parameters(index:index+n_param - 1);
                  obj.alpha{i,j}.ComputeNumValue(app_param')

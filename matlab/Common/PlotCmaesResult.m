@@ -6,11 +6,10 @@ path=fileparts(allpath);
 complete_path = strcat(path,'/results/',name_folder);
 mkdir(complete_path)
 
-% copy parameter inside the new folder
+% copy runtime parameter inside the new folder
 rawTextFromStorage = fileread(which(scriptname));
 rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF'],'match');
 fileID = fopen(strcat(complete_path,'/','optimization_parameters.txt'),'w');
-
 
 % write parameters
 fprintf(fileID,'%s',rawTextFromStorage{1});
@@ -23,8 +22,6 @@ fclose(fileID);
 % copy best action inside the new folder
 fileID = fopen(strcat(complete_path,'/','best_action.txt'),'wt');
 fprintf(fileID,'%f ',bestAction.parameters);
-
-
 
 time = time_struct.ti:time_struct.step:time_struct.tf;
 vec_values = zeros(size(time));
@@ -63,7 +60,6 @@ end
 evolutions = size(bestAction.hist,2);
 
 
-
 % remove failed mean and failed variance
 % -10000000 is the penalty that is applied when i have a failure 
 index = 1;
@@ -80,7 +76,6 @@ for i =1:evolutions
     end
     
 end
-
 
 handle = figure;
 hold on;
