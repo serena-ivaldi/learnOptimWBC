@@ -82,15 +82,17 @@ classdef  Repellers < handle
       end
       
       
-      % ALL THE FUNCTION BELOW WORK ONLY WITH cartesian_x REPELLERS
+      % ALL THE FUNCTION BELOW WORK ONLY WITH cartesian_x REPELLERS 
+      % in this function im building the extended jcobian of the repellers
+      % I have to build the chain of jacobian repellers too
       function SetJacob(obj,cur_rob,q,qd,chain,task)
            
           [J,~,x]=obj.DirKin(cur_rob,q,qd,chain,task);
 
           if(task==1)
                obj.Jac_rep{chain}(1:obj.task_dimension(chain,task) , :) = feval(obj.repellers_fun{chain,task},obj,x,J,chain,task);
-           else
-               obj.Jac_rep{chain}(obj.task_dimension(chain,task - 1) + 1:obj.task_dimension(chain,task) , :) = feval(obj.repellers_fun{chain,task},obj,x,J,chain,task); 
+          else
+               obj.Jac_rep{chain}( (obj.task_dimension(chain,task - 1) + 1) : obj.task_dimension(chain,task) , :) = feval(obj.repellers_fun{chain,task},obj,x,J,chain,task); 
            end
       end
       

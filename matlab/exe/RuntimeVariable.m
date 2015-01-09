@@ -39,7 +39,7 @@ values{1} = value1;
 
 %CONTROLLER PARAMETERS
 max_time = 50;
-combine_rule = {'sum'}; 
+combine_rule = {'projector'}; % sum or projector
 
 % INSTANCE PARAMETERS and STARTING CONDITIONS FOR INTEGRATION (only qi and qdi)
 qi{1} = qz;

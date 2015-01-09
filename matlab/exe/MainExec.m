@@ -17,7 +17,15 @@ eval(text);
 %% repellers
 repellers = Repellers(chain_dof,rep_target_link,rep_type,rep_mask,rep_type_of_J_rep,rep_obstacle_ref); 
 %% alpha function
-alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1) + repellers.GetTotalDimRep(1),time_struct,number_of_basis,redundancy,range,precomp_sample,numeric_theta);       
+
+% TODO generalize to multichain and generalize respect of different controller
+if(strcmp(combine_rule,'sum'))
+    number_of_action = chains.GetNumTasks(1);
+elseif(strcmp(combine_rule,'projector'))
+    number_of_action = chains.GetNumTasks(1) + repellers.GetTotalDimRep(1);
+end
+
+alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,range,precomp_sample,numeric_theta);       
 %alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,time_struct);
 
 %% Controller
@@ -36,7 +44,7 @@ else
    %at the end of the video simulation after chosing a good camera pos and
    %zoom
    % to see camera position call "campos" on the shell 
-   % to see zoom call "get(gca,'CameraViewAngle')"
+   % to see zoom call "get(gca,'CameraViewAngle')" on the shell
    allpath = which('FindData.m');
    path = fileparts(allpath);
    path = strcat(path,'/video');

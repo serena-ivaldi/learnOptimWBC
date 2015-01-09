@@ -124,8 +124,8 @@ classdef  UF < Controllers.AbstractController
       % in this function i update the value of the alpha function giving
       % new set of parameters
       
-      % the implicit rule with repellers is that before i update the rbf
-      % functions for the task and after that i update the alpha function
+      % the implicit rule with repellers is that first i update the rbf
+      % functions for the task and after i update the alpha function
       % for repellers
       function UpdateParameters(obj,parameters)
        disp('im in update parameters')   
@@ -140,14 +140,12 @@ classdef  UF < Controllers.AbstractController
          end
       end
       
-      
-      
-      % TO FIX i have to see in instance 
+       
       function n_param=GetTotalParamNum(obj)
           
           n_param = 0;
-          for i=1:obj.subchains.GetNumChains()
-             for j=1:obj.subchains.GetNumTasks(i) 
+          for i=1:1:size(obj.alpha,1) 
+             for j=1:size(obj.alpha,2) 
                  n_param = n_param + obj.alpha{i,j}.GetParamNum();
              end
           end

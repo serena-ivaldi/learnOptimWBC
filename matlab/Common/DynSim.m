@@ -82,7 +82,9 @@ function [t, q, qd] = DynSim(time_struct,controller,qi,qdi,fixed_step,varargin)
           % preallocate q and qd for handle failure situations
 %         q = zeros(size(qi{index_chain}(:)));
 %         qd = zeros(size(qdi{index_chain}(:)));
+        
         % set the index for the current chain in use
+        % TODO add managment of multiple chain in fdyn2
         controller.SetCurRobotIndex(index_chain);
         n = controller.GetActiveBot.n;
 %         try
