@@ -1,5 +1,6 @@
 %%%;;
 
+
 %% comment
 %this file describe a regulation task for the e-e 
 %trajectory and one reppeler task to avoid the obstacle on the elbow
@@ -25,7 +26,7 @@ type_of_traj = {'func'};
 traj = {'none'};
 time_law = {'none'};
 %parameters first chains
-geom_parameters{1,1} = [-0.2 -0.5 0.55]; 
+geom_parameters{1,1} = [0.6 0 0]; 
 
 % REPELLER PARAMETERS
 % sceario dependant
@@ -58,4 +59,6 @@ end
 
 % INSTANCE PARAMETERS
 fitness= @fitness5;
+
+
 %%%EOF

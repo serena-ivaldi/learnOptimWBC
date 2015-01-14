@@ -18,9 +18,7 @@ plot_traj = {'none'};
 plot_time_law = {'none'};
 
 %parameters first chains
-plot_geom_parameters{1,1} = [0.643 0 -0.174]; % orientation regulation
-
-
+plot_geom_parameters{1,1} = [0.643 0 -0.174];
 plot_time_struct.ti = 0;
 plot_time_struct.tf = 10;
 plot_time_struct.step = 0.1;

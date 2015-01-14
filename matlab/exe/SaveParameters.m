@@ -5,19 +5,17 @@ clc
 %%%;;
 
 
-
-
-
 %% comment
-%this file describe a trajecotry task for the e-e on a circle and 1
-%repellers on the trajecotry
-%
+%this file describe a regulation task for the e-e 
+%trajectory and one reppeler task to avoid the obstacle on the elbow
 %
 %%
+
 
 %SUBCHAIN PARAMETERS 
 subchain1 = [7];
 target_link{1} = subchain1;
+
 
 %% Robot
 [bot1] = MdlLBR4p();
@@ -27,16 +25,16 @@ chains = SubChains(target_link,robots);
 
 % REFERENCE PARAMETERS
 type = {'cartesian_x'};
-control_type = {'tracking'};
+control_type = {'regulation'};
 type_of_traj = {'func'};
-traj = {'circular'};
-time_law = {'linear'};
+traj = {'none'};
+time_law = {'none'};
 %parameters first chains
-geom_parameters{1,1} = [0.2 0 -pi/2 -pi/4 0 -0.5 0.3]; % Circular trajectory 
+geom_parameters{1,1} = [0.6 0 0]; 
 
 % REPELLER PARAMETERS
-% scenario dependant
-rep_subchain = [7];
+% sceario dependant
+rep_subchain = [3];
 rep_target_link{1} = rep_subchain;
 rep_type = {'cartesian_x'};
 rep_mask {1,1}=[1,1,1];
@@ -46,10 +44,13 @@ for ii=1:chains.GetNumChains()
 end
 
 %CONTROLLER PARAMETERS
-metric = {'M'};  % N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
-dim_of_task{1,1}=[1;1;1];
+% the metric change between regularized and not regularized because in the
+% regularized case i have to do N^(-1) 
+% not regularized case i have N^(-1/2)
+metric = {'M'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
+dim_of_task{1,1}={[1;1;1]};
 
-kp = [1700]; % row vector one for each chain
+kp = [700]; % row vector one for each chain
 for i= 1:chains.GetNumChains()
    K_p = zeros(3,3,size(kp,2));
    K_d = zeros(3,3,size(kp,2));
@@ -64,10 +65,7 @@ end
 
 
 % INSTANCE PARAMETERS
-fitness= @fitness4;
-
-
-
+fitness= @fitness5;
 
 
 %%%EOF
@@ -77,10 +75,10 @@ fitness= @fitness4;
 % i have to set the name of the robot plus a number equal to the number of experiment for that scenario 
 % like bot#.# (where n.i means that the file is reffered to the n-scenario and is the i-th data setting)
 % multiple data setting for the same scenario 
-id = 'LBR4p3.0';
+id = 'LBR4p5.1';
 name_backup = strcat(id,'.m');
 %namebot_scene#_briefdescription.mat
-name_file = '_scene3_ee_tracking_circ_obstacle_on_traj_1repellers_fit4';
+name_file = '_scene5_test_controller';
 name_file = strcat(id,'_',name_file,'.mat');
 
 %% DO NOT CHANGE THIS PART!

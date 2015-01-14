@@ -11,6 +11,8 @@ classdef  UF < Controllers.AbstractController
       Kp               % vector of matrix of proportional gain
       Kd               % vector of matrix of derivative gain
       combine_rule     % projector or sum 
+      regularizer      % this term transform the UF in a regularized UF if it is different from zero. it is a cell array of vector each vector has as many entry as the number of task for the current chain vector
+      torque_func      % in this vector i put the handle to the function that i want to use: ComputeRegularizedTorqueSum(...) ComputeTorqueSum(...)
       max_time         % maximum time simulation allowed
       current_time     % current time to force stop for long iteration
       torques          %  resulting torque (cell array of matrix)
@@ -20,16 +22,30 @@ classdef  UF < Controllers.AbstractController
 
    methods
       
-       function obj = UF(sub_chains,references,alpha,repellers,metric,Kp,Kd,combine_rule,max_time,varargin)
+       function obj = UF(sub_chains,references,alpha,repellers,metric,Kp,Kd,combine_rule,regularization,max_time,varargin)
          
+        
          obj.subchains = sub_chains;
          obj.references = references;
          obj.alpha = alpha;
          obj.repellers = repellers;
          obj.metric = metric;
          obj.Kp = Kp;
-         obj.Kd = Kd;
+         obj.Kd = Kd;  
          obj.combine_rule = combine_rule;
+         % in this way i can use a generic long vector inside
+         % RuntimeVariable than here i take what i need
+         for i = 1:obj.subchains.GetNumChains()
+             for j=1:obj.subchains.GetNumLinks(i)
+                 app_vector(j) = regularization{i}(1,j);
+                 if( app_vector(j) == 0)
+                    torque_func{i,j} = @obj.ComputeRegularizedTorqueSum; 
+                 else
+                    torque_func{i,j} = @obj.ComputeTorqueSum;
+                 end
+             end
+             obj.regularizer{i}=app_vector;
+         end
          obj.torques = cell(obj.subchains.GetNumChains());
          for i = 1:obj.subchains.GetNumChains()
             obj.torques{i} = zeros(obj.subchains.GetNumLinks(i),1);  %tau(n_of_total_joint on the chain x 1)
@@ -89,11 +105,19 @@ classdef  UF < Controllers.AbstractController
           % to be different
           M = cur_bot.inertia(q);
           F = cur_bot.coriolis(q,qd)*qd' + cur_bot.gravload(q)';
-      
+          % adding the stabilization part in joint space if i have only one
+          % controller
+          if(obj.subchains.GetNumTasks(i) == 1)
+              u1 = F;
+          else
+              u1 = 0;
+          end
+         
           if(strcmp(obj.combine_rule,'sum')) 
              
              for j = 1:obj.subchains.GetNumTasks(i)
-                 tau = obj.ComputeTorqueSum(i,j,M,F,t,q,qd);
+                 cur_func = obj.torque_func{i,j};
+                 tau = cur_func(i,j,M,F,t,q,qd,u1);
                  app_tau(:,j) = obj.alpha{i,j}.GetValue(t)*tau;       
              end
              
@@ -103,7 +127,8 @@ classdef  UF < Controllers.AbstractController
            elseif(strcmp(obj.combine_rule,'projector'))   
                
              for j = 1:obj.subchains.GetNumTasks(i)
-                 tau = obj.ComputeTorqueSum(i,j,M,F,t,q,qd);
+                 cur_func = obj.torque_func{i,j};
+                 tau = cur_func(i,j,M,F,t,q,qd,u1);
                  app_tau(:,j) = obj.alpha{i,j}.GetValue(t)*tau;       
              end
              

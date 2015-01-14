@@ -29,7 +29,7 @@ alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_st
 %alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,time_struct);
 
 %% Controller
-controller = Controllers.UF(chains,reference,alphas,repellers,metric,Kp,Kd,combine_rule,max_time);
+controller = Controllers.UF(chains,reference,alphas,repellers,metric,Kp,Kd,combine_rule,regularizer,max_time);
 %% Simulation
 tic
 [t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);
@@ -39,7 +39,7 @@ fps = 200;
 video = false;
 
 if(~video)
-   %bot1.plot(q{1},'fps',fps);
+   bot1.plot(q{1},'fps',fps);
 else
    %at the end of the video simulation after chosing a good camera pos and
    %zoom

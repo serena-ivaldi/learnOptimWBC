@@ -5,7 +5,7 @@ downsaple = 10;
 traj_err= 0;
 repuls  = 0;
 L = 1;
-penalty = 10;
+penalty = 20; %10
 sigma = 0.1; 
 contr = obj.controller;
 
@@ -25,6 +25,9 @@ for i=1:downsaple:size(t,2)
     repuls= repuls + penalty*exp(-(dist)/(2*sigma^(2)));
 
 end
-
+%%DEBUG
+fprintf('traj error is %f\n', traj_err)
+fprintf('repuls term is %f\n', repuls)
+%---
 fit = -traj_err - repuls;
 end
