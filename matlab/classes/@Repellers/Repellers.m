@@ -37,13 +37,17 @@ classdef  Repellers < handle
          % structure of  single_alpha in RuntimeVariable. the only things that
          %  is necesessary is that the single_alpha is sufficiently long.
          for i=1:size(mask,1)
-             for j=1:size(mask,2) 
+             for j=1:size(mask{i},2) 
                 obj.single_alpha{i}(1,j) = single_alpha{i}(1,j);
              end
          end
          
          obj.type_of_rep_strct = type_of_rep_strct;
-         
+         % in this cycle i compute the number of alpha for each kinematic
+         % chain for the repellers
+         for i=1:size(mask,1)
+            obj.n_alpha_x_chain(i)=obj.ComputeNumberOfWeightFuncRep(i);    
+         end
          for i=1:size(mask,1)
              switch obj.type_of_rep_strct{i}
                  case 'extended' 
@@ -56,15 +60,10 @@ classdef  Repellers < handle
                          end
                      obj.Jac_rep{i} = zeros(dim,chain_dof(i));
                  case 'stacked'
-
+                     obj.Jac_rep{i} = cell(1,obj.GetNumberOfWeightFuncRep(i));
                  otherwise 
                 error('Unexpected structure for repulsor');
              end  
-         end
-         % in this cycle i compute the number of alpha for each kinematic
-         % chain for the repellers
-         for i=1:size(mask,1)
-            obj.n_alpha_x_chain(i)=obj.ComputeNumberOfWeightFuncRep(i);    
          end
          % in this cycle i build the vector of function handles to compute
          %  repellers jacobian
@@ -117,28 +116,49 @@ classdef  Repellers < handle
                 
                 alpha_vec=zeros(n_of_alpha_repellers,1);
                 index_alpha_vec = 1;
-                index_map = 1;
-                for j = task_per_cur_chain+1:task_per_cur_chain+n_of_alpha_repellers
-                    
-                    if (obj.single_alpha{cur_chain}(j))
+                for index_map = 1:n_of_alpha_repellers;
+                    if (obj.single_alpha{cur_chain}(index_map))
                         % i have to use a different index that maps the
                         % current number of alpha to the original repellers
                         for k=1:nnz(obj.mask{cur_chain,obj.map_from_alpha_to_rep{cur_chain}(index_map)})
-                            alpha_vec(index_alpha_vec)=alpha{cur_chain,j}.GetValue(t);
-                            index = index + 1; 
+                            alpha_vec(index_alpha_vec)=alpha{cur_chain,task_per_cur_chain+index_map}.GetValue(t);
+                            index_alpha_vec = index_alpha_vec + 1; 
                         end
                     else
-                    alpha_vec(index_alpha_vec) = alpha{cur_chain,j}.GetValue(t);
-                    index_alpha_vec = index_alpha_vec + 1;    
+                        alpha_vec(index_alpha_vec) = alpha{cur_chain,task_per_cur_chain+index_map}.GetValue(t);
+                        index_alpha_vec = index_alpha_vec + 1;    
                     end
-                index_map =index_map + 1;
                 end
                 alpha_diag = diag(alpha_vec);
                 I = eye(cur_chain_dim);
                 [~,~,V] = svd(obj.Jac_rep{cur_chain},'econ');
                 N = (I-V*alpha_diag*V');
-            case 'stacked'  
-          
+            case 'stacked' 
+  
+                for index_map = 1:n_of_alpha_repellers
+                   alpha_vec = zeros(1,nnz(obj.mask{cur_chain}{index_map},2));    
+                   if (obj.single_alpha{cur_chain}(index_map))
+                        % i have to use a different index that maps the
+                        % current number of alpha to the original repellers
+                        for k=1:nnz(obj.mask{cur_chain,obj.map_from_alpha_to_rep{cur_chain}(index_map)})
+                            alpha_vec(k)=alpha{cur_chain,task_per_cur_chain+index_map}.GetValue(t);
+                            
+                        end
+                   else 
+                        for k=1:nnz(obj.mask{cur_chain,obj.map_from_alpha_to_rep{cur_chain}(index_map)})
+                            alpha_vec(k) = alpha{cur_chain,task_per_cur_chain+index_map}.GetValue(t);   
+                        end
+                   end
+                   alpha_diag = diag(alpha_vec);
+                   I = eye(cur_chain_dim);
+                   [~,~,V] = svd(obj.Jac_rep{cur_chain,index_map},'econ');
+                   N_app = (I-V*alpha_diag*V');
+                   % TODO 
+                   % add the possibility of decide the order of the
+                   % repellers
+                   %---
+                   N = N*N_app;
+                end
             otherwise
                 error('Unexpected structure for repulsor');
         end
@@ -161,8 +181,8 @@ classdef  Repellers < handle
                  else
                       obj.Jac_rep{chain}( (obj.task_dimension(chain,task - 1) + 1) : obj.task_dimension(chain,task) , :) = feval(obj.repellers_fun{chain,task},obj,x,J,chain,task); 
                  end
-             case 'stacked'  
-
+             case 'stacked' 
+                 obj.Jac_rep{chain}{task} = feval(obj.repellers_fun{chain,task},obj,x,J,chain,task);
              otherwise
                  error('Unexpected structure for repulsor');
          end 
