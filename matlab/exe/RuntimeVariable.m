@@ -23,6 +23,11 @@ name_scenario = 'lbr_scenario5';
 
 % REPELLERS PARAMETERS
 rep_obstacle_ref = [1];
+single_alpha_chain1 = [1 0];
+single_alpha_chain2 = [1];
+single_alpha{1} = single_alpha_chain1;
+single_alpha{2} = single_alpha_chain2;
+type_of_rep_strct={'extended' , 'stacked'};
 
 %ALPHA PARAMETERS
 %rbf

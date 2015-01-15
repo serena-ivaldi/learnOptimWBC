@@ -2,15 +2,19 @@
 classdef  Repellers < handle
     
    properties
-      chain_dof        % number of degrees of freeedom for each kinematic chain 
-      target_link;     % vector that define wich kind of link interact with the repellers,one for every kinematic chain
-      type;            % cartesian_x,cartesian_rpy, joint vector  
-      mask;            % vector of vector(3) (col vec) that contains a mask that specify what i want to control for the specific task. for example x and z (control a subset of variable) mask = (1;0:1)
-      J_rep_func       % this specify wich kind of function i want to use to compute the repellers jacobian
-      obstacle_ref     % vector of index that specify for each repellers which is the obstacle  G_OB (global vector of Obstacle) associated to the current repeller  
-      task_dimension   % vector that define the cumulative dimension for each repulsive task. i use this as a vector of pointer to build the jacobian
-      repellers_fun;   % cell array of function of repellers of type (i,j) where j is the task of the i-th kinematic chain
-      Jac_rep          % cell array of the final jacobian is the final jacobian of the repellers
+      chain_dof            % number of degrees of freeedom for each kinematic chain 
+      target_link;         % vector that define wich kind of link interact with the repellers,one for every kinematic chain
+      type;                % cartesian_x,cartesian_rpy, joint vector  
+      mask;                % vector of vector(3) (col vec) that contains a mask that specify what i want to control for the specific task. for example x and z (control a subset of variable) mask = (1;0:1)
+      J_rep_func           % this specify wich kind of function i want to use to compute the repellers jacobian
+      obstacle_ref         % vector of index that specify for each repellers which is the obstacle  G_OB (global vector of Obstacle) associated to the current repeller  
+      task_dimension       % vector that define the cumulative dimension for each repulsive task. i use this as a vector of pointer to build the jacobian. If single_alpha = 1 use only one alpha for the whole controller
+      single_alpha         % is a vector of vector of flag 0 and 1 that define for each repellers if i want one alpha for each dimension of my repellers or only one alpha
+      type_of_rep_strct    % with this parameter i can specify wich kind of repellers structure i want to use : 'extended' or 'stacked' (column vector of string)  
+      n_alpha_x_chain      % column vector that on the basis of the single_alpha contain the number of "different" alpha for repellers per kinematic chain 
+      map_from_alpha_to_rep% this vector has the dimension of the number of alpha but say to me at wich repellors the alpha are reffered so is basically a vector of pointers, one for each chain 
+      repellers_fun;       % cell array of function of repellers of type (i,j) where j is the task of the i-th kinematic chain
+      Jac_rep              % cell array of the final jacobian is the final jacobian of the repellers
                     
    end
        
@@ -18,7 +22,7 @@ classdef  Repellers < handle
    methods
       %type_of_J_rep specify the kind of repellers that i want to use
       %chain_dof is a vector with the dimension 
-      function obj = Repellers(chain_dof,target_link,type,mask,type_of_J_rep,obstacle_ref) 
+      function obj = Repellers(chain_dof,target_link,type,mask,type_of_J_rep,obstacle_ref,single_alpha,type_of_rep_strct) 
           
          obj.target_link = target_link;
        
@@ -28,16 +32,39 @@ classdef  Repellers < handle
          obj.mask = mask;
          obj.obstacle_ref = obstacle_ref;
          obj.chain_dof = chain_dof;
-         % in this cycle i pre allocate the jacobian for each chain and 
-         % i compute from mask the dimension of each task
-         dim = 0;
+         % in this cycle i copy the value that i have in RuntimeVariable
+         % inside the object in such a way that i dont care about the
+         % structure of  single_alpha in RuntimeVariable. the only things that
+         %  is necesessary is that the single_alpha is sufficiently long.
          for i=1:size(mask,1)
-             for j=1:size(mask,2)   
-                 dim = dim + nnz(mask{i,j});   
-                 obj.task_dimension(i,j) = dim;
+             for j=1:size(mask,2) 
+                obj.single_alpha{i}(1,j) = single_alpha{i}(1,j);
              end
-             obj.Jac_rep{i} = zeros(dim,chain_dof(i));
-             dim = 0;
+         end
+         
+         obj.type_of_rep_strct = type_of_rep_strct;
+         
+         for i=1:size(mask,1)
+             switch obj.type_of_rep_strct{i}
+                 case 'extended' 
+                     % in this cycle i pre allocate the jacobian for each chain and 
+                     % i compute from mask the dimension of each task
+                     dim = 0;
+                         for j=1:size(mask{i},2)
+                             dim = dim + nnz(mask{i,j});  
+                             obj.task_dimension(i,j) = dim;
+                         end
+                     obj.Jac_rep{i} = zeros(dim,chain_dof(i));
+                 case 'stacked'
+
+                 otherwise 
+                error('Unexpected structure for repulsor');
+             end  
+         end
+         % in this cycle i compute the number of alpha for each kinematic
+         % chain for the repellers
+         for i=1:size(mask,1)
+            obj.n_alpha_x_chain(i)=obj.ComputeNumberOfWeightFuncRep(i);    
          end
          % in this cycle i build the vector of function handles to compute
          %  repellers jacobian
@@ -50,13 +77,29 @@ classdef  Repellers < handle
          
          
       end    
-      
-      
-      
-      function n=GetTotalDimRep(obj,cur_chain)
-          n=obj.task_dimension(cur_chain,end);
+       
+      function n=ComputeNumberOfWeightFuncRep(obj,cur_chain)
+          
+           n = 0;
+           index = 1;
+           for j=1:size(obj.mask{cur_chain},2) 
+               if (obj.single_alpha{cur_chain}(j)) 
+                    n = n + 1;
+                    obj.map_from_alpha_to_rep{cur_chain}(index) = j;
+                    index = index + 1;
+               else
+                    n = n + nnz(obj.mask{cur_chain,j});
+                    for k = 1 : nnz(obj.mask{cur_chain,j})
+                        obj.map_from_alpha_to_rep{cur_chain}(index) = j;
+                        index = index + 1;
+                    end
+               end
+           end         
       end
       
+      function n=GetNumberOfWeightFuncRep(obj,cur_chain)
+          n=obj.n_alpha_x_chain(cur_chain);
+      end
       
       
       function n=GetNumTasks(obj,cur_chain)
@@ -64,20 +107,41 @@ classdef  Repellers < handle
       end
       
       
-      function N=ComputeProjector(obj,cur_chain,cur_chain_dim,number_of_tasks_for_cur_chain,alpha,t) 
+      function N=ComputeProjector(obj,cur_chain,cur_chain_dim,alpha,t)       
+        
+        n_of_alpha_repellers=obj.GetNumberOfWeightFuncRep(obj,cur_chain);  
           
-          n_of_alpha_repellers=size(alpha(cur_chain,:),2);
-          alpha_vec=zeros( n_of_alpha_repellers - number_of_tasks_for_cur_chain,1);
-          index = 1;
-          for i = number_of_tasks_for_cur_chain+1:n_of_alpha_repellers
- 
-            alpha_vec(index) = alpha{cur_chain,i}.GetValue(t);
-            index = index + 1;
-          end
-          alpha_diag = diag(alpha_vec);
-          I = eye(cur_chain_dim);
-          [~,~,V] = svd(obj.Jac_rep{cur_chain},'econ');
-          N = (I-V*alpha_diag*V');
+        switch obj.type_of_rep_strct{cur_chain}
+
+            case 'extended' 
+                
+                alpha_vec=zeros(n_of_alpha_repellers,1);
+                index_alpha_vec = 1;
+                index_map = 1;
+                for j = task_per_cur_chain+1:task_per_cur_chain+n_of_alpha_repellers
+                    
+                    if (obj.single_alpha{cur_chain}(j))
+                        % i have to use a different index that maps the
+                        % current number of alpha to the original repellers
+                        for k=1:nnz(obj.mask{cur_chain,obj.map_from_alpha_to_rep{cur_chain}(index_map)})
+                            alpha_vec(index_alpha_vec)=alpha{cur_chain,j}.GetValue(t);
+                            index = index + 1; 
+                        end
+                    else
+                    alpha_vec(index_alpha_vec) = alpha{cur_chain,j}.GetValue(t);
+                    index_alpha_vec = index_alpha_vec + 1;    
+                    end
+                index_map =index_map + 1;
+                end
+                alpha_diag = diag(alpha_vec);
+                I = eye(cur_chain_dim);
+                [~,~,V] = svd(obj.Jac_rep{cur_chain},'econ');
+                N = (I-V*alpha_diag*V');
+            case 'stacked'  
+          
+            otherwise
+                error('Unexpected structure for repulsor');
+        end
             
       end
       
@@ -87,14 +151,23 @@ classdef  Repellers < handle
       % I have to build the chain of jacobian repellers too
       function SetJacob(obj,cur_rob,q,qd,chain,task)
            
-          [J,~,x]=obj.DirKin(cur_rob,q,qd,chain,task);
+         switch obj.type_of_rep_strct{chain}
 
-          if(task==1)
-               obj.Jac_rep{chain}(1:obj.task_dimension(chain,task) , :) = feval(obj.repellers_fun{chain,task},obj,x,J,chain,task);
-          else
-               obj.Jac_rep{chain}( (obj.task_dimension(chain,task - 1) + 1) : obj.task_dimension(chain,task) , :) = feval(obj.repellers_fun{chain,task},obj,x,J,chain,task); 
-           end
+             % in this case i obtain a huge jacobian by stacking the single jacobian one over another     
+             case 'extended'
+                 [J,~,x]=obj.DirKin(cur_rob,q,qd,chain,task);
+                 if(task==1)
+                      obj.Jac_rep{chain}(1:obj.task_dimension(chain,task) , :) = feval(obj.repellers_fun{chain,task},obj,x,J,chain,task);
+                 else
+                      obj.Jac_rep{chain}( (obj.task_dimension(chain,task - 1) + 1) : obj.task_dimension(chain,task) , :) = feval(obj.repellers_fun{chain,task},obj,x,J,chain,task); 
+                 end
+             case 'stacked'  
+
+             otherwise
+                 error('Unexpected structure for repulsor');
+         end 
       end
+      
       
       function J_rep = DirectionCartesian(obj,direct_kin,J_old,chain,task)
         global G_OB;    
