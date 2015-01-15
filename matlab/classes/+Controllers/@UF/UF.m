@@ -36,12 +36,12 @@ classdef  UF < Controllers.AbstractController
          % in this way i can use a generic long vector inside
          % RuntimeVariable than here i take what i need
          for i = 1:obj.subchains.GetNumChains()
-             for j=1:obj.subchains.GetNumLinks(i)
+             for j=1:obj.subchains.GetNumTasks(i)
                  app_vector(j) = regularization{i}(1,j);
                  if( app_vector(j) == 0)
-                    torque_func{i,j} = @obj.ComputeRegularizedTorqueSum; 
+                    obj.torque_func{i,j} = @(ind_subchain,ind_task,M,F,t,q,qd,u1)obj.ComputeTorqueSum(ind_subchain,ind_task,M,F,t,q,qd,u1);
                  else
-                    torque_func{i,j} = @obj.ComputeTorqueSum;
+                    obj.torque_func{i,j} = @(ind_subchain,ind_task,M,F,t,q,qd,u1)obj.ComputeRegularizedTorqueSum(ind_subchain,ind_task,M,F,t,q,qd,u1);
                  end
              end
              obj.regularizer{i}=app_vector;
@@ -93,8 +93,6 @@ classdef  UF < Controllers.AbstractController
       
       
       function  final_tau  = Policy(obj,t,q,qd)
-         
-           
           % active robot 
           cur_bot = obj.GetActiveBot;
           % current chain index
@@ -116,8 +114,9 @@ classdef  UF < Controllers.AbstractController
           if(strcmp(obj.combine_rule,'sum')) 
              
              for j = 1:obj.subchains.GetNumTasks(i)
-                 cur_func = obj.torque_func{i,j};
-                 tau = cur_func(i,j,M,F,t,q,qd,u1);
+%                  cur_func = obj.torque_func{i,j};
+%                  tau = cur_func(i,j,M,F,t,q,qd,u1);
+                 tau=obj.torque_func{i,j}(i,j,M,F,t,q,qd,u1);
                  app_tau(:,j) = obj.alpha{i,j}.GetValue(t)*tau;       
              end
              
@@ -127,8 +126,9 @@ classdef  UF < Controllers.AbstractController
            elseif(strcmp(obj.combine_rule,'projector'))   
                
              for j = 1:obj.subchains.GetNumTasks(i)
-                 cur_func = obj.torque_func{i,j};
-                 tau = cur_func(i,j,M,F,t,q,qd,u1);
+%                  cur_func = obj.torque_func{i,j};
+%                  tau = cur_func(obj,i,j,M,F,t,q,qd,u1);
+                 tau=obj.torque_func{i,j}(i,j,M,F,t,q,qd,u1);
                  app_tau(:,j) = obj.alpha{i,j}.GetValue(t)*tau;       
              end
              

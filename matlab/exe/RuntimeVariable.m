@@ -40,11 +40,11 @@ values{1} = value1;
 
 
 %CONTROLLER PARAMETERS
-max_time = 50;
+max_time = 100; %50
 combine_rule = {'projector'}; % sum or projector
 % with this term i introduce a damped least square structure inside my
 % controller if regularizer is 0 i remove the regularizer action 
-regularizer_chain_1 = [1 1];
+regularizer_chain_1 = [0 1]; %0.1
 regularized_chain_2 = [1];
 regularizer{1} = regularizer_chain_1;
 regularizer{2} = regularized_chain_2;
