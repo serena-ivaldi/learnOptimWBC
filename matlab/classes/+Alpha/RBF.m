@@ -156,25 +156,40 @@ classdef  RBF < Alpha.AbstractAlpha
     
     methods (Static)
         
-        function RBFs = BuildCellArray(n_subchain,n_task,time_struct,n_of_basis,redundancy,range,precomp_sample,theta)
+        function RBFs = BuildCellArray(n_subchain,n_task,time_struct,n_of_basis,redundancy,range,precomp_sample,theta,optim)
             
-            if size(theta,2) > n_of_basis;
-                index = 1;
-                for i=1:n_subchain
-                   for j=1:n_task
-                        cur_theta = theta(index:index+n_of_basis - 1); 
-                        RBFs{i,j} = Alpha.RBF(time_struct,n_of_basis,redundancy,range,precomp_sample,cur_theta);
-                        index = index+n_of_basis;
-                   end
+            % if i not optimizing i want to read  value from theta 
+            if(~optim)   
+                % this branch is active if i give the correct number of
+                % parameter
+                if (size(theta,2) > n_of_basis)
+                    index = 1;
+                    for i=1:n_subchain
+                       for j=1:n_task
+                            cur_theta = theta(index:index+n_of_basis - 1); 
+                            RBFs{i,j} = Alpha.RBF(time_struct,n_of_basis,redundancy,range,precomp_sample,cur_theta);
+                            index = index+n_of_basis;
+                       end
+                    end 
+                else
+                    % this branch is active if theta is fitted for only one
+                    % rbf
+                    for i=1:n_subchain
+                       for j=1:n_task
+                            RBFs{i,j} = Alpha.RBF(time_struct,n_of_basis,redundancy,range,precomp_sample,theta);
+                       end
+                    end    
                 end 
-            else
+                
+            else    
                 for i=1:n_subchain
-                   for j=1:n_task
-                        RBFs{i,j} = Alpha.RBF(time_struct,n_of_basis,redundancy,range,precomp_sample,theta);
-                   end
-                end    
-            end    
-            
+                       for j=1:n_task
+                            app_theta = ones(1,n_of_basis);
+                            RBFs{i,j} = Alpha.RBF(time_struct,n_of_basis,redundancy,range,precomp_sample,app_theta);
+                       end
+                end        
+            end 
+         
         end
         
     end

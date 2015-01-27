@@ -9,12 +9,12 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,cur_bot,q,qd,ind_subchain,ind_task)
 
         q_cur = zeros(1,cur_bot.n);
         qd_cur= zeros(1,cur_bot.n);
-        q_cur(1:obj.target_link{ind_subchain,ind_task}) = q(1:obj.target_link{ind_subchain,ind_task});
-        qd_cur(1:obj.target_link{ind_subchain,ind_task}) = qd(1:obj.target_link{ind_subchain,ind_task});
+        q_cur(1:obj.target_link{ind_subchain}(1,ind_task)) = q(1:obj.target_link{ind_subchain}(1,ind_task));
+        qd_cur(1:obj.target_link{ind_subchain}(1,ind_task)) = qd(1:obj.target_link{ind_subchain}(1,ind_task));
         
         % compute pose (position + rool pitch yaw) from the current
         % subchain
-        kinematic=CStrCatStr({'cur_bot.T0_'},num2str(obj.target_link{ind_subchain,ind_task}),{'(q_cur)'});
+        kinematic=CStrCatStr({'cur_bot.T0_'},num2str(obj.target_link{ind_subchain}(1,ind_task)),{'(q_cur)'});
         T = eval(kinematic{1});
         %T=cur_bot.T0_6(q_cur)
         %T = cur_bot.fkine(q_cur);

@@ -1,13 +1,14 @@
-% this fitness work with scenario 5, 6
+% this fitness work with scenario 5, 6, 7
 function fit = fitness5(obj,t,q)
 global G_OB;
 downsaple = 10;
-traj_err= 0;
-repuls  = 0;
 L = 1;
 penalty = 20; %10
 sigma = 0.1; 
 contr = obj.controller;
+
+traj_err= 0;
+repuls  = 0;
 
 for i=1:downsaple:size(t,2)
     q_cur = q{1}(i,:);
@@ -20,9 +21,11 @@ for i=1:downsaple:size(t,2)
     elbow = T(1:3,4);
     attr_pos = contr.references.GetTraj(1,1,t(i)); 
     traj_err = traj_err + norm((ee - attr_pos),L);
-    % compute the repulsive component 
-    dist = G_OB(1).Dist(elbow',L);
-    repuls= repuls + penalty*exp(-(dist)/(2*sigma^(2)));
+    % compute the repulsive component for all the obstacle
+    for jj=1:size(G_OB,2)
+        dist = G_OB(jj).Dist(elbow',L);
+        repuls= repuls + penalty*exp(-(dist)/(2*sigma^(2)));
+    end
 
 end
 %%DEBUG

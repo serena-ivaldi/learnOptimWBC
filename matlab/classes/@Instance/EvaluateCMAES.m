@@ -11,7 +11,7 @@ function [performance succeeded] = EvaluateCMAES(obj,action,ismean)
 %% target function
 
 
-try
+% try
     disp('i am in evaluate CMAES')
     action
     [t, q, qd]=obj.run(action);
@@ -26,13 +26,13 @@ try
     % cancel all the information relative to the current iteration (control action)
     obj.controller.CleanTau();
     
-catch err
-    disp('i am in evaluate CMAES error side')
-    obj.controller.CleanTau(); 
-    succeeded = 0;
-    performance = -10000000;
-    
-end
+% catch err
+%     disp('i am in evaluate CMAES error side')
+%     obj.controller.CleanTau(); 
+%     succeeded = 0;
+%     performance = -10000000;
+%     
+% end
 
 
 end

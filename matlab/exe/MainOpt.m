@@ -35,14 +35,14 @@ elseif(strcmp(combine_rule,'projector'))
 end
 %---
 
-alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,range,precomp_sample,numeric_theta);       
+alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,range,precomp_sample,numeric_theta,true);       
 %alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,time_struct);
 
 %% Controller
 controller = Controllers.UF(chains,reference,alphas,repellers,metric,Kp,Kd,combine_rule,regularizer,max_time);
 
 %% Instance
-
+controller.GetTotalParamNum()
 start_action = init_parameters*ones(1,controller.GetTotalParamNum());
 
 inst = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,fitness,options);
@@ -51,7 +51,7 @@ inst = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,fitn
 scriptname = 'RuntimeVariable';
 % i have to change this number everytime i perform the same test with
 % different runtime parameters
-experiment_number = '2';
+experiment_number = '1';
 name_folder = strcat(experiment_number,'__',name_dat);
 complete_path=PlotCmaesResult(time_struct,controller,bestAction,scriptname,name_folder);
 complete_path_to_file= strcat(complete_path,'/data.mat');

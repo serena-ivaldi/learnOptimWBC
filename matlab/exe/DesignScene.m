@@ -4,9 +4,9 @@ clc
 
 % in this variable we have to specify the name of the scenario:
 % bot_scenario# where # is incremental
-name_scenario = 'lbr_scenario6';
+name_scenario = 'lbr_scenario8';
 % with this variable i decide when i want to save the designed scenario
-save_now = false;
+save_now = true;
 
 plot_subchain1 = [7];
 plot_target_link{1} = plot_subchain1;
@@ -43,32 +43,23 @@ global G_OB;
 
 hold on;axis equal;
 
-p_tot=[];
-for t=plot_time_struct.ti:plot_time_struct.step:plot_time_struct.tf
- 
-	p_cur=plot_reference.GetTraj(1,1,t);
-	p_tot = [p_tot,p_cur];
 
-end
-    
-plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
-attractive_point1 = [0.8 0 0];
+repulsive_point1 = [0.35 0 0.3];
+repulsive_point2 = [0.35  0 0.1];
+attractive_point1 = [0.6 0 0];
 
-[X Y Z]=meshgrid(0.39 , -0.3:0.01:0.3 , -0.1:0.01:0.15);
-
-for i=1:size(X,3) 
-    scatter3(X(:,:,i),Y(:,:,i),Z(:,:,i))
-end
-
+scatter3(repulsive_point1(1,1),repulsive_point1(1,2),repulsive_point1(1,3), 130)
+scatter3(repulsive_point2(1,1),repulsive_point2(1,2),repulsive_point2(1,3), 130);
 scatter3(attractive_point1(1,1),attractive_point1(1,2),attractive_point1(1,3), 130);
 
-% global obstacle
-rapresentation.X = X;
-rapresentation.Y = Y;
-rapresentation.Z = Z;
-ob1 = Obstacle(rapresentation,'wall',0.002);
-G_OB = [ob1];
+ob1 = Obstacle(repulsive_point1,'repeller',[]);
+ob2 = Obstacle(repulsive_point2,'repeller',[]);
+G_OB = [ob1 ob2];
+
+
+
 %%%EOF
+
 
 %plot_bot.plot(qz);
 plot_bot.teach();

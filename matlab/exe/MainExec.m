@@ -18,7 +18,7 @@ eval(text);
 repellers = Repellers(chain_dof,rep_target_link,rep_type,rep_mask,rep_type_of_J_rep,rep_obstacle_ref,single_alpha,type_of_rep_strct); 
 %% alpha function
 
-% TODO generalize to multichain and generalize respect of different controller
+% TODO generalize to multichain 
 if(strcmp(combine_rule,'sum'))
     number_of_action = chains.GetNumTasks(1);
 elseif(strcmp(combine_rule,'projector'))
@@ -26,7 +26,7 @@ elseif(strcmp(combine_rule,'projector'))
 end
 %%--- 
 
-alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,range,precomp_sample,numeric_theta);       
+alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,range,precomp_sample,numeric_theta,false);       
 %alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,time_struct);
 
 %% Controller

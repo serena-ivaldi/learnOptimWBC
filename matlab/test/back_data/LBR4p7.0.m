@@ -30,11 +30,11 @@ geom_parameters{1,1} = [0.6 0 0];
 
 % REPELLER PARAMETERS
 % sceario dependant
-rep_subchain = [3];
+rep_subchain = [3 3];
 rep_target_link{1} = rep_subchain;
-rep_type = {'cartesian_x'};
-rep_mask {1,1}=[1,1,1];
-rep_type_of_J_rep = {'DirectionCartesian'};
+rep_type = {'cartesian_x' 'cartesian_x'};
+rep_mask {1,1}=[1,1,1]; rep_mask {1,2}=[1,1,1];
+rep_type_of_J_rep = {'DirectionCartesian' 'DirectionCartesian'};
 for ii=1:chains.GetNumChains()
     chain_dof(ii) = chains.GetNumLinks(ii);
 end

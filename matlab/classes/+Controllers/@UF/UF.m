@@ -104,9 +104,11 @@ classdef  UF < Controllers.AbstractController
           M = cur_bot.inertia(q);
           F = cur_bot.coriolis(q,qd)*qd' + cur_bot.gravload(q)';
           % adding the stabilization part in joint space if i have only one
-          % controller
+          % controller 
           if(obj.subchains.GetNumTasks(i) == 1)
-              u1 = F;
+              kp = 300;
+              kd = 2*sqrt(kp);
+              u1 = -kd*qd' - kp*q';
           else
               u1 = 0;
           end
@@ -133,10 +135,10 @@ classdef  UF < Controllers.AbstractController
              end
              
              final_tau = sum(app_tau,2);
-             % compute the projector in the null space of repulsor 
+             % compute the projector in the null space of repulsor (number of repulsor) 
              for j = 1:obj.repellers.GetNumTasks(i)
                obj.repellers.SetJacob(cur_bot,q,qd,i,j)  
-             end
+             end                                
              N = obj.repellers.ComputeProjector(i,DOF,obj.subchains.GetNumTasks(i),obj.alpha,t);
              final_tau = ((M*N)/M)*final_tau;
             

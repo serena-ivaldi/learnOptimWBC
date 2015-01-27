@@ -33,12 +33,12 @@ time_law = {'none'};
 geom_parameters{1,1} = [0.6 0 0]; 
 
 % REPELLER PARAMETERS
-% sceario dependant
-rep_subchain = [3];
+% scenario dependant
+rep_subchain = [3 3];
 rep_target_link{1} = rep_subchain;
-rep_type = {'cartesian_x'};
-rep_mask {1,1}=[1,1,1];
-rep_type_of_J_rep = {'DirectionCartesian'};
+rep_type = {'cartesian_x' 'cartesian_x'};
+rep_mask {1,1}=[1,1,1]; rep_mask {1,2}=[1,1,1];
+rep_type_of_J_rep = {'DirectionCartesian' 'DirectionCartesian'};
 for ii=1:chains.GetNumChains()
     chain_dof(ii) = chains.GetNumLinks(ii);
 end
@@ -65,7 +65,7 @@ end
 
 
 % INSTANCE PARAMETERS
-fitness= @fitness5;
+fitness= @fitness6;
 
 
 %%%EOF
@@ -75,10 +75,10 @@ fitness= @fitness5;
 % i have to set the name of the robot plus a number equal to the number of experiment for that scenario 
 % like bot#.# (where n.i means that the file is reffered to the n-scenario and is the i-th data setting)
 % multiple data setting for the same scenario 
-id = 'LBR4p5.1';
+id = 'LBR4p7.0';
 name_backup = strcat(id,'.m');
 %namebot_scene#_briefdescription.mat
-name_file = '_scene5_test_controller';
+name_file = '_scene7_double_reppelers_fit_6';
 name_file = strcat(id,'_',name_file,'.mat');
 
 %% DO NOT CHANGE THIS PART!
@@ -90,8 +90,20 @@ save(strcat(path,'/datamat/',name_file));
 % backup data 
 rawTextFromStorage = fileread(which(mfilename));
 rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF'],'match','once');
-fileID = fopen(strcat(path,'/back_data/',name_backup),'w');
-fprintf(fileID,'%s',rawTextFromStorage);
-fclose(fileID);
+existence = exist(strcat(path,'/back_data/',name_backup),'file');
+if(~existence)
+    fileID = fopen(strcat(path,'/back_data/',name_backup),'w');
+    fprintf(fileID,'%s',rawTextFromStorage);
+    fclose(fileID);
+else
+    adv = strcat('The file: /',name_backup,' allready exist');
+    b=questdlg(adv, 'Overwrite?','Yes','No','No');
+    switch b
+        case 'Yes'
+            fileID = fopen(strcat(path,'/back_data/',name_backup),'w');
+            fprintf(fileID,'%s',rawTextFromStorage);
+            fclose(fileID);
+    end
+end
 disp('FINISH!')
 
