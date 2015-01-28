@@ -51,7 +51,7 @@ inst = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,fitn
 scriptname = 'RuntimeVariable';
 % i have to change this number everytime i perform the same test with
 % different runtime parameters
-experiment_number = '1';
+experiment_number = '2';
 name_folder = strcat(experiment_number,'__',name_dat);
 complete_path=PlotCmaesResult(time_struct,controller,bestAction,scriptname,name_folder);
 complete_path_to_file= strcat(complete_path,'/data.mat');

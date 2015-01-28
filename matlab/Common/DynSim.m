@@ -87,7 +87,7 @@ function [t, q, qd] = DynSim(time_struct,controller,qi,qdi,fixed_step,varargin)
         % TODO add managment of multiple chain in fdyn2
         controller.SetCurRobotIndex(index_chain);
         n = controller.GetActiveBot.n;
-%         try
+%          try
             if(fixed_step)
                 disp('fixed_step') 
                 y = Ode1(@fdyn2,time,yi,controller,varargin{:}); 

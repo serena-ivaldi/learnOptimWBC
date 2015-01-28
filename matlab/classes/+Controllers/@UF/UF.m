@@ -109,6 +109,8 @@ classdef  UF < Controllers.AbstractController
               kp = 300;
               kd = 2*sqrt(kp);
               u1 = -kd*qd' - kp*q';
+              % i want to control only the last joint and 
+              u1(1:end - 1,1) = zeros(size(u1,1)-1,1); 
           else
               u1 = 0;
           end

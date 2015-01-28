@@ -24,12 +24,12 @@ name_scenario = 'lbr_scenario8';
 
 % REPELLERS PARAMETERS
 % GENERALIZE TO MULTICHAIN !!!
-rep_obstacle_ref = [1 2];
-single_alpha_chain1 = [1 1];
+rep_obstacle_ref = [1 2]; % if i change the order of ref obstacle i change the order of repellor in the stacked case
+single_alpha_chain1 = [0 1];
 single_alpha_chain2 = [1];
 single_alpha{1} = single_alpha_chain1;
 single_alpha{2} = single_alpha_chain2;
-type_of_rep_strct={'extended_combine' , 'stacked', 'extended_indipendent'};
+type_of_rep_strct={'stacked' , 'extended_combine' , 'extended_decoupled'};
 
 %ALPHA PARAMETERS
 %rbf
@@ -39,7 +39,7 @@ range = [0 , 12];
 precomp_sample = false;
 % value of theta that we have to change when we want to execute the result
 % from the optimization step
-numeric_theta = [8.780098 8.765290 8.461586 11.204990 11.173776 8.551731 8.427082 9.581020 9.647632 7.245557 2.586975 9.250070 6.977037 7.210969 6.895398 6.914006 0.522321 8.655853 5.843199 6.691017 3.625846 5.457990 0.992693 4.097152 5.452603 2.960787 6.540737 4.252656 4.416881 10.533105 5.418901 1.855286 3.491727 1.727777 2.360968 1.729813 2.491500 1.261090 2.224534 6.177421 ];  
+numeric_theta = [5.586974 12.000000 10.343330 11.936231 10.997103 12.000000 10.042855 11.247323 10.538352 9.181423 7.009495 0.000000 0.965310 0.160456 2.072685 2.753228 1.270566 2.130679 0.000000 4.426763 1.725728 2.665351 1.002842 2.293220 0.548551 2.927859 0.675315 1.330734 0.072510 3.967580 ];  
 %numeric_theta =[12 12 12 12 12 12 12 12 12 12 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0];
 %constant alpha
 value1 = 1*ones(chains.GetNumTasks(1));

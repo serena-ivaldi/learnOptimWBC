@@ -11,7 +11,7 @@ function [performance succeeded] = EvaluateCMAES(obj,action,ismean)
 %% target function
 
 
-% try
+%  try
     disp('i am in evaluate CMAES')
     action
     [t, q, qd]=obj.run(action);
