@@ -1,6 +1,6 @@
 % here i compute the matrix for the objective function
 
-function [H,f,J_list]=ObjectiveFunction(obj,DOF,ind_subchain,q,qd)
+function [H,f,J_list]=ObjectiveFunction(obj,DOF,ind_subchain,t,q,qd)
   
 % preallocate matrix 
   % plus 1 because i have to consider also the torque in the vector that we

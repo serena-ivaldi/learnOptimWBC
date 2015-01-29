@@ -4,10 +4,12 @@ classdef  GHC < Controllers.AbstractController
       subchains;       % object that contains the subchain of the robot and the J dot for each subchain;   (maybe i can leave it) 
       references;      % object that contains the reference trajectory for each tasks; 
       alpha;           % cell array of weight function
+      constraints      % cell of constraint objects 
       current_chain    % index that define the current robot that i want to move
       Kp               % vector of matrix of proportional gain
       Kd               % vector of matrix of derivative gain
       regularizer      % value of the regularization term for each chain (column vector) 
+      epsilon          % parameter used in the computation of the orthogonal basis for 
       max_time         % maximum time simulation allowed
       current_time     % current time to force stop for long iteration
       torques          %  resulting torque (cell array of matrix)
@@ -17,7 +19,7 @@ classdef  GHC < Controllers.AbstractController
 
    methods
       
-       function obj = GHC(sub_chains,references,alpha,Kp,Kd,regularization,max_time,varargin)
+       function obj = GHC(sub_chains,references,alpha,Kp,Kd,regularization,epsilon,max_time,varargin)
          
         
          obj.subchains = sub_chains;
@@ -26,7 +28,7 @@ classdef  GHC < Controllers.AbstractController
          obj.Kp = Kp;
          obj.Kd = Kd;  
          obj.regularizer = regularization;
-         
+         obj.epsilon = epsilon;
          
          obj.torques = cell(obj.subchains.GetNumChains());
          for i = 1:obj.subchains.GetNumChains()
@@ -81,9 +83,18 @@ classdef  GHC < Controllers.AbstractController
           M = cur_bot.inertia(q);
           F = cur_bot.coriolis(q,qd)*qd' + cur_bot.gravload(q)';
           
-          [H,f,J_list]=obj.ObjectiveFunction(DOF,i,q,qd)
           
+          % compute the objective function
+          [H,f,J_list]=obj.ObjectiveFunction(DOF,i,t,q,qd);
           
+          % compute the projector
+          [projector_list]=obj.ComputeGeneralizedProjector(i,J_list,t);
+          
+          % compute matrix for equality constraints
+          [Aeq,beq] = obj.EqualityConstraints(M,F,DOF,projector_list);
+          
+           % compute matrix for disequality constraints
+          [A,b] = obj.DisequalityConstraints(DOF,J_list,projector_list);
           
           % TO GO
           x=quadprog(H,f,A,b,Aeq,beq);
