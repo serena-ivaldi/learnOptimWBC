@@ -10,6 +10,7 @@ classdef  GHC < Controllers.AbstractController
       Kd               % vector of matrix of derivative gain
       regularizer      % value of the regularization term for each chain (column vector) 
       epsilon          % parameter used in the computation of the orthogonal basis for 
+      delta_t          % sampling rate used during simulation
       max_time         % maximum time simulation allowed
       current_time     % current time to force stop for long iteration
       torques          %  resulting torque (cell array of matrix)
@@ -19,7 +20,7 @@ classdef  GHC < Controllers.AbstractController
 
    methods
       
-       function obj = GHC(sub_chains,references,alpha,Kp,Kd,regularization,epsilon,max_time,varargin)
+       function obj = GHC(sub_chains,references,alpha,Kp,Kd,regularization,epsilon,delta_t,max_time,varargin)
          
         
          obj.subchains = sub_chains;
@@ -29,7 +30,7 @@ classdef  GHC < Controllers.AbstractController
          obj.Kd = Kd;  
          obj.regularizer = regularization;
          obj.epsilon = epsilon;
-         
+         obj.delta_t = delta_t;
          obj.torques = cell(obj.subchains.GetNumChains());
          for i = 1:obj.subchains.GetNumChains()
             obj.torques{i} = zeros(obj.subchains.GetNumLinks(i),1);  %tau(n_of_total_joint on the chain x 1)
@@ -93,14 +94,14 @@ classdef  GHC < Controllers.AbstractController
           % compute matrix for equality constraints
           [Aeq,beq] = obj.EqualityConstraints(M,F,DOF,projector_list);
           
-           % compute matrix for disequality constraints
-          [A,b] = obj.DisequalityConstraints(DOF,J_list,projector_list);
+           % compute matrix for disequality constraints   
+          [A,b] = obj.DisequalityConstraints(DOF,obj.delta_t,J_list,projector_list,qd);
           
-          % TO GO
+          % result
           x=quadprog(H,f,A,b,Aeq,beq);
           final_tau = x(1:DOF); 
-         
           
+          obj.SaveTau(i,final_tau) 
       end
       
 

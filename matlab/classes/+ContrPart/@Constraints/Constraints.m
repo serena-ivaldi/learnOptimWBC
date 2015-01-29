@@ -1,7 +1,7 @@
 classdef  Constraints < handle
     
    properties
-     constraints_list     % in this vector  define the set of constraints per each kinematic chain
+     constraints_list     % in this vector  define the set of constraints per each kinematic chain (torquelimit,vellimit,obsavoid)
      constraints_data     % row vector of column vector of data per each constraint
      constraints_handle   % cell vector of function for computing function
      number_of_constraint % number of constraints
@@ -10,10 +10,26 @@ classdef  Constraints < handle
 
    methods
       
-       function obj = Constraints(sub_chains,references,alpha,Kp,Kd,regularization,epsilon,max_time,varargin)
-         
-        
-
+       function obj = Constraints(constraints_list,constraints_data,varargin)
+       
+           obj.constraints_list = constraints_list;
+           obj.constraints_data = constraints_data;
+           obj.number_of_constraint = size(constraints_list,2);
+           for i=1:obj.number_of_constraint
+               
+               switch constraints_list(i)
+                   case 'torquelimit' 
+                        constraints_handle{1,i}=@TorqueLimit;
+                   case 'vellimit'
+                        constraints_handle{1,i}=@VelocityLimit; 
+                   case 'obsavoid'
+                        constraints_handle{1,i}=@ObstacleAvoidance;    
+                   otherwise 
+                   error('Unexpected structure for repulsor');
+             end  
+               
+               
+           end
          
        end    
 
@@ -97,7 +113,8 @@ classdef  Constraints < handle
 end
 
 function val=MaxAllowVel(obj_dist)
-
+          %TODO pass tresh from outside
+          tresh = 0.02;
           val = 1/(-tresh+obj_dist);
 
 end
