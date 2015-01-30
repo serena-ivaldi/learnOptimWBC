@@ -2,52 +2,118 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
    
    properties
       time_struct
-      sample      % value for a specific set of theta and sampling time (sample.time sample.values sample.normvalues)
-      range       % necessary because i call it inside instance cmaes
-      param    
+      sample              % value for a specific set of theta and sampling time (sample.time sample.values sample.normvalues)
+      range               % necessary because i call it inside instance cmaes
+      matrix_value        % this field is rapresented by a matrix T(n x n x k) where n is the number of tasks and k is the number change in task priority
+      transition_matrix   % matrix obtained by subtracting matrix inside matrix value  
+      ti                  % starting point for each transition number of transition = (k-1) row vector
+      transition_interval % lenght in time of the transition interval
+      current_phase       % is an index that say which transition time we have to check to start a new transition 
+      transition_flag     % when is 1 im in transition so i have to use the transition function i exit from transition when the value that we obtain are close to 0 or 1;
+      current_value       % is the vector of all the value that we have for the current time t
    end
    
    
    
    methods
       
-      function obj = ChainedAlpha(value,time_struct)
-          if(value>=0 && value<= 1)
-            obj.sample = value;
-          else
-             error('alpha has to be between 0 and 1')  
-          end
+      function obj = ChainedAlpha(matrix_value,ti,transition_interval,time_struct)
+         
           
           obj.time_struct = time_struct;
-          % only to be compiant with the whole structure
+          obj.matrix_value= matrix_value(:,:,1);
+          % i add inf to vector of time to avoid that after the last
+          % transition i came back inside the transition block
+          obj.ti = [ti,inf];
+          obj.transition_interval = transition_interval;
+          
+          % compute transition matrix 
+          for i = 2 : size(matrix_value,3)
+             obj.transition_matrix(:,:,i-1) = matrix_value(:,:,i) - matrix_value(:,:,i-1);
+          end
+          
+          obj.current_phase = 1;
+          obj.transition_flag = 0;
+          % only to be compliant with the whole structure
           obj.range = [0 1];
           
       end
       
-      %function that give the value of the alpha function given the current time 
-      function val = GetValue(obj,t)
-         val = obj.sample;
+      %function that give the value of the alpha function with the current time 
+      function  ComputeValue(obj,t)
+         %first of all i have to check if we are in transition or not
+         if(t>= obj.ti(obj.current_phase) && ~obj.transition_flag)
+            obj.transition_flag = 1;
+         end
+            
+         % not in transition
+         if(obj.transition_flag)
+            % transform the matrix_val in a vector by stacking the row
+            % transposed   
+            obj.current_value = obj.matrix_val; 
+            
+         % in transition   
+         else
+            % compute the transition value
+             transval=obj.TransFunc(t);
+             
+             % -1 is the placeholder for the alpha that is increasing
+             [row,col] =ind2sub(size(obj.transition_matrix(:,:,obj.current_phase)), -1);
+             
+             % check if transval is bigger or equal than one 
+             if(1 - transval >=  1)
+                transval = 1;
+                obj.transition_flag = 0;
+                obj.current_phase = obj.current_phase + 1;
+                % update matrix_val
+                obj.matrix_val =  obj.matrix_val - obj.transition_matrix(:,:,obj.current_phase - 1);
+             end
+             
+             % in this block i assign the value of matrix_val in an app
+             % matrix and than i update the value with the 
+             app_matrix_val = obj.matrix_val;
+             app_matrix_val(row,col) = transval;
+             app_matrix_val(col,row) = 1 - transval;
+             % transform the matrix_val in a vector by stacking the row
+             % transposed
+             obj.current_value = app_matrix_val(:);
+             
+            
+         end
+         
+         
       end   
+      
+      
+      function result = GetValue(index)
+         result = obj.current_value(index); 
+      end
+      
+      %this function for t = ti is equal to 1 
+      function val=TransFunc(obj,t)
+         val = 0.5 - cos( ( t-obj.ti(obj.current_phase) / obj.transition_interval ) *pi );
+      end
+      
+      
       %function that compute the value of the alpha function given parameters
       function ComputeNumValue(obj,theta)
           
       end
       % function that give the number of parameters necessary for the alpha function
+      % here i dont have parameters
       function r = GetParamNum(obj)
-         r = 1;
+         r = 0;
       end   
    end
    
    methods (Static)
-      function alphas = BuildCellArray(n_subchain,n_task,values,time_struct)
+      function alphas = BuildCellArray(n_subchain,matrix_value,ti,transition_interval,time_struct)
          
-         for i=1:n_subchain
-             for j =1:n_task
-               alphas{i,j} = Alpha.ConstantAlpha(values{i}(j),time_struct);
-             end
-         end
-         
+               for i=1:n_subchain
+               alphas{i} = Alpha.ChainedAlpha(matrix_value,ti,transition_interval,time_struct); 
+               end
       end
+      
    end
    
    
