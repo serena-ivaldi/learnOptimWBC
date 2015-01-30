@@ -29,7 +29,7 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
           
           % compute transition matrix 
           for i = 2 : size(matrix_value,3)
-             obj.transition_matrix(:,:,i-1) = matrix_value(:,:,i) - matrix_value(:,:,i-1);
+             obj.transition_matrix(:,:,i-1) = matrix_value(:,:,i-1) - matrix_value(:,:,i);
           end
           
           obj.current_phase = 1;
@@ -42,15 +42,15 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
       %function that give the value of the alpha function with the current time 
       function  ComputeValue(obj,t)
          %first of all i have to check if we are in transition or not
-         if(t>= obj.ti(obj.current_phase) && ~obj.transition_flag)
+         if(t >= obj.ti(obj.current_phase) && ~obj.transition_flag)
             obj.transition_flag = 1;
          end
             
          % not in transition
-         if(obj.transition_flag)
+         if(~obj.transition_flag)
             % transform the matrix_val in a vector by stacking the row
             % transposed   
-            obj.current_value = obj.matrix_val; 
+            obj.current_value = reshape(obj.matrix_value',1,[])'; 
             
          % in transition   
          else
@@ -58,25 +58,26 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
              transval=obj.TransFunc(t);
              
              % -1 is the placeholder for the alpha that is increasing
-             [row,col] =ind2sub(size(obj.transition_matrix(:,:,obj.current_phase)), -1);
+             ind = find(obj.transition_matrix(:,:,obj.current_phase) == -1);
+             [row,col] = ind2sub(size(obj.transition_matrix(:,:,obj.current_phase)), ind);
              
              % check if transval is bigger or equal than one 
-             if(1 - transval >=  1)
+             if(transval >=  1)
                 transval = 1;
                 obj.transition_flag = 0;
                 obj.current_phase = obj.current_phase + 1;
                 % update matrix_val
-                obj.matrix_val =  obj.matrix_val - obj.transition_matrix(:,:,obj.current_phase - 1);
+                obj.matrix_value =  obj.matrix_value - obj.transition_matrix(:,:,obj.current_phase - 1);
              end
              
              % in this block i assign the value of matrix_val in an app
              % matrix and than i update the value with the 
-             app_matrix_val = obj.matrix_val;
+             app_matrix_val = obj.matrix_value;
              app_matrix_val(row,col) = transval;
              app_matrix_val(col,row) = 1 - transval;
              % transform the matrix_val in a vector by stacking the row
              % transposed
-             obj.current_value = app_matrix_val(:);
+             obj.current_value = reshape(app_matrix_val',1,[])'; 
              
             
          end
@@ -91,7 +92,7 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
       
       %this function for t = ti is equal to 1 
       function val=TransFunc(obj,t)
-         val = 0.5 - cos( ( t-obj.ti(obj.current_phase) / obj.transition_interval ) *pi );
+         val = 0.5 - 0.5*cos( ( t-obj.ti(obj.current_phase) / obj.transition_interval ) *pi );
       end
       
       
