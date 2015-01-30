@@ -7,8 +7,7 @@ warning on verbose
 warning('error', 'MATLAB:ode15s:IntegrationTolNotMet');
 warning('error', 'MATLAB:illConditionedMatrix')
 
-RuntimeVariable
-
+ARuntimeParameters
 %% Reference
 % if type_of_task = sampled i have to specify the Time to reach the
 % end of the trajectories that is equal to the simulation time

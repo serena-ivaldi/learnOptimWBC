@@ -6,14 +6,16 @@ clc
 
 
 %% comment
-%this file describe a regulation task for the e-e 
-%trajectory and one reppeler task to avoid the obstacle on the elbow
+%this file describe a regulation task for the e-e another regulation task
+%for elbow and a rest pose for all the joints
 %
+%
+%% TYPE OF CONTROLLER 
+CONTROLLERTYPE ='GHC';   % GHC or UF
 %%
 
-
 %SUBCHAIN PARAMETERS 
-subchain1 = [7];
+subchain1 = [7 3 7];
 target_link{1} = subchain1;
 
 
@@ -24,50 +26,25 @@ chains = SubChains(target_link,robots);
 %%
 
 % REFERENCE PARAMETERS
-type = {'cartesian_x'};
-control_type = {'regulation'};
-type_of_traj = {'func'};
-traj = {'none'};
-time_law = {'none'};
+type = {'cartesian_x','cartesian_x','joint'};
+control_type = {'regulation','regulation','regulation'};
+type_of_traj = {'func','func','func'};
+traj = {'none','none','none'};
+time_law = {'none','none','none'};
 %parameters first chains
-geom_parameters{1,1} = [0.6 0 0]; 
-
-% REPELLER PARAMETERS
-% scenario dependant
-rep_subchain = [3 3];
-rep_target_link{1} = rep_subchain;
-rep_type = {'cartesian_x' 'cartesian_x'};
-rep_mask {1,1}=[1,1,1]; rep_mask {1,2}=[1,1,1];
-rep_type_of_J_rep = {'DirectionCartesian' 'DirectionCartesian'};
-for ii=1:chains.GetNumChains()
-    chain_dof(ii) = chains.GetNumLinks(ii);
+geom_parameters{1,1} = [0.813 0.006 0.6]; 
+geom_parameters{1,2} = [0.4 -0.2 0.02];
+geom_parameters{1,3} = [0 pi/2 0 -pi/2 0 pi/2 0];
+dim_of_task{1,1}={[1;1;1]};dim_of_task{1,2}={[1;1;1]};dim_of_task{1,3}={ones(bot1.n,1)};
+%% parameter dependant on the type of controller 
+switch CONTROLLERTYPE
+    case 'UF'
+        UF_StaticParameters
+    case 'GHC'
+        GHC_StaticParameters
+    otherwise
+        warning('Unexpected control method')
 end
-
-%CONTROLLER PARAMETERS
-% the metric change between regularized and not regularized because in the
-% regularized case i have to do N^(-1) 
-% not regularized case i have N^(-1/2)
-metric = {'M'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
-dim_of_task{1,1}={[1;1;1]};
-
-kp = [700]; % row vector one for each chain
-for i= 1:chains.GetNumChains()
-   K_p = zeros(3,3,size(kp,2));
-   K_d = zeros(3,3,size(kp,2));
-   for par = 1:chains.GetNumTasks(i)
-       K_p(:,:,par) = kp(i,par)*eye(3);  
-       kd = 2*sqrt(kp(i,par));
-       K_d(:,:,par) = kd*eye(3); 
-   end
-   Kp{i} = K_p;
-   Kd{i} = K_d;
-end
-
-
-% INSTANCE PARAMETERS
-fitness= @fitness6;
-
-
 %%%EOF
 
 %% Name of the file (backup and .mat)
@@ -75,10 +52,10 @@ fitness= @fitness6;
 % i have to set the name of the robot plus a number equal to the number of experiment for that scenario 
 % like bot#.# (where n.i means that the file is reffered to the n-scenario and is the i-th data setting)
 % multiple data setting for the same scenario 
-id = 'LBR4p7.0';
+id = 'LBR4p8.0';
 name_backup = strcat(id,'.m');
 %namebot_scene#_briefdescription.mat
-name_file = '_scene7_double_reppelers_fit_6';
+name_file = '_scene9_GHC_test_wall_and_two_attractive_point';
 name_file = strcat(id,'_',name_file,'.mat');
 
 %% DO NOT CHANGE THIS PART!

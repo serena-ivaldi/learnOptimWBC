@@ -20,12 +20,13 @@ classdef  GHC < Controllers.AbstractController
 
    methods
       
-       function obj = GHC(sub_chains,references,alpha,Kp,Kd,regularization,epsilon,delta_t,max_time,varargin)
+       function obj = GHC(sub_chains,references,alpha,constraints,Kp,Kd,regularization,epsilon,delta_t,max_time,varargin)
          
         
          obj.subchains = sub_chains;
          obj.references = references;
          obj.alpha = alpha;
+         obj.constraints = constraints;
          obj.Kp = Kp;
          obj.Kd = Kd;  
          obj.regularizer = regularization;
@@ -86,7 +87,7 @@ classdef  GHC < Controllers.AbstractController
           
           
           % compute the objective function
-          [H,f,J_list]=obj.ObjectiveFunction(DOF,i,t,q,qd);
+          [H,f,J_list,cp]=obj.ObjectiveFunction(DOF,i,t,q,qd);
           
           % compute the projector
           [projector_list]=obj.ComputeGeneralizedProjector(i,J_list,t);
@@ -94,8 +95,8 @@ classdef  GHC < Controllers.AbstractController
           % compute matrix for equality constraints
           [Aeq,beq] = obj.EqualityConstraints(M,F,DOF,projector_list);
           
-           % compute matrix for disequality constraints   
-          [A,b] = obj.DisequalityConstraints(DOF,obj.delta_t,J_list,projector_list,qd);
+           % compute matrix for disequality constraints 
+          [A,b] = obj.DisequalityConstraints(DOF,obj.delta_t,J_list,projector_list,qd,cp);
           
           % result
           x=quadprog(H,f,A,b,Aeq,beq);

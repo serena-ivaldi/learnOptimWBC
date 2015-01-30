@@ -2,7 +2,7 @@ clear variables
 close all
 clc
 
-RuntimeVariable
+ARuntimeParameters
 
 %% Reference
 % if type_of_task = sampled i have to specify the Time to reach the

@@ -1,27 +1,3 @@
-
-%%%;;
-
-%GENERAL PARAMETERS
-% for other strucutures
-time_struct.ti = 0;
-time_struct.tf = 10;
-time_struct.step = 0.1;
-
-% for simulation 
-time_sym_struct = time_struct;
-time_sym_struct.step = 0.001; 
-% define the type of integration of the sytem of differential equation
-fixed_step = false;
-
-% TASK PARAMETERS
-name_dat = 'LBR4p7.0__scene7_double_reppelers_fit_6';
-%name_dat = 'LBR4p5.0__scene5_repellers_on_elbow__atrtactive_point_on_ee_fit5';
-path=LoadParameters(name_dat);
-load(path);
-
-%SCENARIO
-name_scenario = 'lbr_scenario8';
-
 % REPELLERS PARAMETERS
 % GENERALIZE TO MULTICHAIN !!!
 rep_obstacle_ref = [1 2]; % if i change the order of ref obstacle i change the order of repellor in the stacked case
@@ -56,16 +32,9 @@ regularized_chain_2 = [1];
 regularizer{1} = regularizer_chain_1;
 regularizer{2} = regularized_chain_2;
 
-% INSTANCE PARAMETERS and STARTING CONDITIONS FOR INTEGRATION (only qi and qdi)
-qi{1} = qz;
-qdi{1} = zeros(1,chains.GetNumLinks(1));
-options= [];
-simulator_type = {'rbt'};
 
 % CMAES PARAMETER
 % starting value of parameters
 init_parameters = 6;
 explorationRate =0.1;%[0, 1]
 niter = 80;
-
-%%%EOF

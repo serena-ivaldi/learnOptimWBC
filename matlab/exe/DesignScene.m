@@ -4,7 +4,7 @@ clc
 
 % in this variable we have to specify the name of the scenario:
 % bot_scenario# where # is incremental
-name_scenario = 'lbr_scenario8';
+name_scenario = 'lbr_scenario9';
 % with this variable i decide when i want to save the designed scenario
 save_now = true;
 
@@ -43,18 +43,24 @@ global G_OB;
 
 hold on;axis equal;
 
+step = 0.01;
+[X Y Z]=meshgrid(0.6, -0.1 : step : 0.3, 0.4: step : 0.9);
+%Y = -0.4*ones(1,size(X,1));
+for i=1:size(X,3) 
+    scatter3(X(:,:,i),Y(:,:,i),Z(:,:,i))
+end
 
-repulsive_point1 = [0.35 0 0.3];
-repulsive_point2 = [0.35  0 0.1];
-attractive_point1 = [0.6 0 0];
-
-scatter3(repulsive_point1(1,1),repulsive_point1(1,2),repulsive_point1(1,3), 130)
-scatter3(repulsive_point2(1,1),repulsive_point2(1,2),repulsive_point2(1,3), 130);
+attractive_point1 = [0.813 0.006 0.6]; % for end effector
+attractive_point2 = [0.4 -0.2 0.02];
 scatter3(attractive_point1(1,1),attractive_point1(1,2),attractive_point1(1,3), 130);
+scatter3(attractive_point2(1,1),attractive_point2(1,2),attractive_point2(1,3), 130);
 
-ob1 = Obstacle(repulsive_point1,'repeller',[]);
-ob2 = Obstacle(repulsive_point2,'repeller',[]);
-G_OB = [ob1 ob2];
+
+rapresentation.X = X;
+rapresentation.Y = Y;
+rapresentation.Z = Z;
+ob1 = Obstacle(rapresentation,'wall',0.002);
+G_OB = [ob1];
 
 
 

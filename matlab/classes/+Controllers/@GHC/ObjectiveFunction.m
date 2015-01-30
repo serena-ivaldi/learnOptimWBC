@@ -1,6 +1,6 @@
 % here i compute the matrix for the objective function
 
-function [H,f,J_list]=ObjectiveFunction(obj,DOF,ind_subchain,t,q,qd)
+function [H,f,J_list,cp]=ObjectiveFunction(obj,DOF,ind_subchain,t,q,qd)
   
 % preallocate matrix 
   % plus 1 because i have to consider also the torque in the vector that we
@@ -14,11 +14,12 @@ function [H,f,J_list]=ObjectiveFunction(obj,DOF,ind_subchain,t,q,qd)
   
   % insert in H and f the term related to torque (in f we have zero so i dont have to add anything)
   H(1:DOF,:) = [O I_rel];
-  
+  cp = zeros(1,obj.subchains.GetNumTasks(ind_subchain));
   ind = DOF+1;
   for j = 1 : obj.subchains.GetNumTasks(ind_subchain)
       
       [J_old,Jd_old,x,xd,rpy,rpyd] = obj.subchains.DirKin(q,qd,ind_subchain,j);
+      cp(1,j) = x;
       [b,J,J_dot] = obj.ControlLaw(ind_subchain,j,t,J_old,Jd_old,x,xd,rpy,rpyd,q,qd);
       C = J_dot'-b;
       Cs=(C' + C)/2;

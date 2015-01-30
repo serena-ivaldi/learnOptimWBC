@@ -55,6 +55,30 @@ classdef Obstacle < handle
         end
       
       
+        function n = Normal(obj,cp) 
+          if(strcmp(obj.type,'repeller'))
+             n = (cp - obj.description)/norm((cp - obj.description));
+          elseif(strcmp(obj.type,'wall'))
+             n = obj.MinDistNorm(cp);
+          end
+            
+        function n = MinDistNorm(obj,cp)
+        
+              dist_matrix = (cp(1,1) - obj.description.X).^2 + (cp(1,2) - obj.description.Y).^2 + (cp(1,3) - obj.description.Z).^2;
+              [dist i] = min(dist_matrix(:)); 
+              dist = sqrt(dist);
+              point = [obj.description.X(i); obj.description.Y(i); obj.description.Z(i)];
+              n = (cp - point)/dist;
+              
+              
+          end
+
+        end
+          
+          
+            
+        end
+        
       
    end   
     
