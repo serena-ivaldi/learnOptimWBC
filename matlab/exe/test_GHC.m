@@ -28,6 +28,11 @@ cdata5 = [0;2];
 constraints_data = [cdata1, cdata2, cdata3, cdata4, cdata5];
 constraints = ContrPart.Constraints(constraints_list,constraints_data);
 
+%% test of constraints and obstacle
+
+cp=[0,0.8,0.6];
+distanza = G_OB(1).Normal(cp)
+norm(distanza) 
 %% chained alpha 
 matrix1 = [0 1 0;0 0 0;1 1 0];  % 2>1>3
 matrix2 = [0 0 0;1 0 0;1 1 0];  % 1>2>3
@@ -44,6 +49,8 @@ alphas = Alpha.ChainedAlpha.BuildCellArray(chains.GetNumChains(),matrix_value,ti
 
 time = time_sym_struct.ti:time_struct.step:time_sym_struct.tf;
 
+
+%% test of alpha
 allvalue=[];
 for t = time
     
@@ -60,24 +67,24 @@ end
 
 %% GHC
 % % row vector one for each chain
-% kp = [30 30 30]; 
-% kd = [20 20 20];
-% for i= 1:chains.GetNumChains()
-%    K_p = zeros(3,3,size(kp,2));
-%    K_d = zeros(3,3,size(kp,2));
-%    for par = 1:chains.GetNumTasks(i)
-%        K_p(:,:,par) = kp(i,par)*eye(3);  
-%        K_d(:,:,par) = kd(i,par)*eye(3); 
-%    end
-%    Kp{i} = K_p;
-%    Kd{i} = K_d;
-% end
-% epsilon = 0.002;
-% regularization = 0.01;
-% max_time = 100;
-% delta_t = time_sym_struct.tf*time_struct.step;
-% controller = Controllers.GHC(chains,references,alphas,constraints,Kp,Kd,regularization,epsilon,delta_t,max_time);
-% 
+kp = [30 30 30]; 
+kd = [20 20 20];
+for i= 1:chains.GetNumChains()
+   K_p = zeros(3,3,size(kp,2));
+   K_d = zeros(3,3,size(kp,2));
+   for par = 1:chains.GetNumTasks(i)
+       K_p(:,:,par) = kp(i,par)*eye(3);  
+       K_d(:,:,par) = kd(i,par)*eye(3); 
+   end
+   Kp{i} = K_p;
+   Kd{i} = K_d;
+end
+epsilon = 0.002;
+regularization = 0.01;
+max_time = 100;
+delta_t = time_sym_struct.tf*time_struct.step;
+controller = Controllers.GHC(chains,reference,alphas,constraints,Kp,Kd,regularization,epsilon,delta_t,max_time);
+
 % %% Simulation
 % tic
 % [t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);

@@ -19,14 +19,14 @@ classdef  Constraints < handle
                
                switch constraints_list{i}
                    case 'torquelimit' 
-                        constraints_handle{1,i}=@TorqueLimit;
+                        obj.constraints_handle{1,i}=@TorqueLimit;
                    case 'vellimit'
-                        constraints_handle{1,i}=@VelocityLimit; 
+                        obj.constraints_handle{1,i}=@VelocityLimit; 
                    case 'obsavoid'
-                        constraints_handle{1,i}=@ObstacleAvoidance;    
+                        obj.constraints_handle{1,i}=@ObstacleAvoidance;    
                    otherwise 
                    error('Unexpected structure for repulsor');
-             end  
+               end  
                
                
            end
@@ -101,10 +101,10 @@ classdef  Constraints < handle
 
            index = DOF + 1;
            for i=1:n_of_task
-                g(:,index:index + DOF) = G_OB(param(1,1)).normal(cp(param(2,1)))'*J_list{param(2,1)}*Projector_list{i};   
+                g(:,index:index + DOF) = G_OB(param(1,1)).Normal(cp(param(2,1)))'*J_list{param(2,1)}*Projector_list{i};   
                 index = index + DOF;
            end
-           hi = (MaxAllowVel(G_OB(param(1,1)).dist) - G_OB(param(1,1)).normal(cp(param(2,1)))'*J_list{param(2,1)}*qd')/delta_t;
+           hi = (MaxAllowVel(G_OB(param(1,1)).dist) - G_OB(param(1,1)).Normal(cp(param(2,1)))'*J_list{param(2,1)}*qd')/delta_t;
        end  
       
       

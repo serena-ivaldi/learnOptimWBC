@@ -105,6 +105,10 @@ classdef  GHC < Controllers.AbstractController
           obj.SaveTau(i,final_tau) 
       end
       
+      %empty only for fullfil the requiriments of the interface 
+      function GetTotalParamNum(obj)
+
+      end
 
       
       
