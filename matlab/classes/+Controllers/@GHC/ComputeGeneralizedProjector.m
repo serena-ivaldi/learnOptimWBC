@@ -24,18 +24,26 @@ function projector_list = ComputeGeneralizedProjector(obj,ind_subchain,J_list,t)
         % build alpha_s and Js
         for k = 1:n_task
             J_app = J_list{i(k)};
+            %DEBUG
+            nsv = rank(J_app);
+            %---
             %size_vector(k) = size(J_app,1);
             Js = [Js;J_app];
             % build diagonal of the matrix a_s in form of vector.
-            alpha_vec_s_diag = [alpha_vec_s_diag; alpha_vec_s(k)*ones(size(J_app,1))];
+            alpha_vec_s_diag = [alpha_vec_s_diag; alpha_vec_s(k)*ones(size(J_app,1),1)];
         end
+        
+        %DEBUG
+        nsv = rank(Js);
+        %---
+        
         % compute the origin 
         [B,origin,r]=GetOrthBasis(Js,obj.epsilon);
         
         % take the element in alpha_vec_s_diag that appear after the
         % orthonormalization
-        for k =1:r
-            alpha_vec_s_diag_origin() = alpha_vec_s_diag(origin(k));
+        for k = 1:r
+            alpha_vec_s_diag_origin(k) = alpha_vec_s_diag(origin(k));
         end
         % compute projector 
         projector_list{j} = I - B'*diag(alpha_vec_s_diag_origin)*B; 
@@ -60,7 +68,7 @@ function [B,origin,r]=GetOrthBasis(Js,epsilon)
         
         B(i,:) = Js(k,:);
         
-        for j=1:i
+        for j=1:i-1
             B(i,:) = B(i,:) - ( B(i,:)*B(j,:)' ) * B(j,:);
         end
         
@@ -70,12 +78,13 @@ function [B,origin,r]=GetOrthBasis(Js,epsilon)
             i = i + 1;    
         end
         
-        if i >= nbcol
+        if i > nbcol
             break      
         end
         
     end
 
-    r=i;
+    r=i-1;
+    B=B(1:r,:);
 
 end

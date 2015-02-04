@@ -1,4 +1,4 @@
-function [A,b] = DisequalityConstraints(obj,DOF,delta_t,J_list,projector_list,qd,cp)
+function [A,b] = DisequalityConstraints(obj,DOF,n_of_task,delta_t,J_list,projector_list,qd,cp)
     A=[];
     b=[];
     for i = 1:obj.constraints.number_of_constraint

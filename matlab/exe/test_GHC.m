@@ -30,9 +30,9 @@ constraints = ContrPart.Constraints(constraints_list,constraints_data);
 
 %% test of constraints and obstacle
 
-cp=[0,0.8,0.6];
-distanza = G_OB(1).Normal(cp)
-norm(distanza) 
+% cp=[0,0.8,0.6];
+% distanza = G_OB(1).Normal(cp)
+% norm(distanza) 
 %% chained alpha 
 matrix1 = [0 1 0;0 0 0;1 1 0];  % 2>1>3
 matrix2 = [0 0 0;1 0 0;1 1 0];  % 1>2>3
@@ -51,13 +51,13 @@ time = time_sym_struct.ti:time_struct.step:time_sym_struct.tf;
 
 
 %% test of alpha
-allvalue=[];
-for t = time
-    
-    alphas{1}.ComputeValue(t)
-    allvalue = [allvalue ; alphas{1}.current_value'];
-       
-end
+%  allvalue=[];
+% for t = time
+%     
+%     alphas{1}.ComputeValue(t)
+%     allvalue = [allvalue ; alphas{1}.current_value'];
+%     alphas{1}.GetValue(1);   
+% end
 
 % for i = 1:size(allvalue,2)
 %     figure
@@ -69,44 +69,49 @@ end
 % % row vector one for each chain
 kp = [30 30 30]; 
 kd = [20 20 20];
+
+%UPDATE UF USING THIS ELEMENTS
 for i= 1:chains.GetNumChains()
-   K_p = zeros(3,3,size(kp,2));
-   K_d = zeros(3,3,size(kp,2));
+  
    for par = 1:chains.GetNumTasks(i)
-       K_p(:,:,par) = kp(i,par)*eye(3);  
-       K_d(:,:,par) = kd(i,par)*eye(3); 
+       K_p = kp(i,par)*eye(reference.GetDimTask(i,par));  
+       K_d = kd(i,par)*eye(reference.GetDimTask(i,par)); 
+       Kp{i,par} = K_p;
+       Kd{i,par} = K_d;
+       
    end
-   Kp{i} = K_p;
-   Kd{i} = K_d;
+   
 end
+%---
+
 epsilon = 0.002;
 regularization = 0.01;
-max_time = 100;
+max_time = 200;
 delta_t = time_sym_struct.tf*time_struct.step;
 controller = Controllers.GHC(chains,reference,alphas,constraints,Kp,Kd,regularization,epsilon,delta_t,max_time);
 
-% %% Simulation
-% tic
-% [t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);
-% toc
-% %% Display
-% fps = 200;
-% video = false;
-% 
-% if(~video)
-%    bot1.plot(q{1},'fps',fps);
-% else
-%    %at the end of the video simulation after chosing a good camera pos and
-%    %zoom
-%    % to see camera position call "campos" on the shell 
-%    % to see zoom call "get(gca,'CameraViewAngle')" on the shell
-%    allpath = which('FindData.m');
-%    path = fileparts(allpath);
-%    path = strcat(path,'/video');
-%    camera_position = [-7.5371   -1.1569   21.1612];
-%    zoom =  2.4702;
-%    set(gca,'CameraViewAngle',zoom);
-%    campos(camera_position)
-%    bot1.plot(q{1},'movie',path);
-% end
+%% Simulation
+tic
+[t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);
+toc
+%% Display
+fps = 200;
+video = false;
+
+if(~video)
+   bot1.plot(q{1},'fps',fps);
+else
+   %at the end of the video simulation after chosing a good camera pos and
+   %zoom
+   % to see camera position call "campos" on the shell 
+   % to see zoom call "get(gca,'CameraViewAngle')" on the shell
+   allpath = which('FindData.m');
+   path = fileparts(allpath);
+   path = strcat(path,'/video');
+   camera_position = [-7.5371   -1.1569   21.1612];
+   zoom =  2.4702;
+   set(gca,'CameraViewAngle',zoom);
+   campos(camera_position)
+   bot1.plot(q{1},'movie',path);
+end
 

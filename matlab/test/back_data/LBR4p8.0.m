@@ -31,7 +31,7 @@ time_law = {'none','none','none'};
 geom_parameters{1,1} = [0.813 0.006 0.6]; 
 geom_parameters{1,2} = [0.4 -0.2 0.02];
 geom_parameters{1,3} = [0 pi/2 0 -pi/2 0 pi/2 0];
-dim_of_task{1,1}={[1;1;1]};dim_of_task{1,2}={[1;1;1]};dim_of_task{1,3}={ones(bot1.n,1)};
+dim_of_task{1,1}=[1;1;1] ;dim_of_task{1,2}= [1;1;1] ;dim_of_task{1,3}=ones(bot1.n,1);
 %% parameter dependant on the type of controller 
 switch CONTROLLERTYPE
     case 'UF'

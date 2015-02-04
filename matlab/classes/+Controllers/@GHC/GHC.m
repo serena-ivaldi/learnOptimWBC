@@ -79,7 +79,7 @@ classdef  GHC < Controllers.AbstractController
           % current chain index
           i = obj.GetCurRobotIndex;
           DOF = cur_bot.n;
-          
+          n_of_task = obj.subchains.GetNumTasks(i);
           % the dynamic computation between controller and simulator has
           % to be different
           M = cur_bot.inertia(q);
@@ -87,6 +87,7 @@ classdef  GHC < Controllers.AbstractController
           
           
           % compute the objective function
+          % cp = control points are disposed per columns
           [H,f,J_list,cp]=obj.ObjectiveFunction(DOF,i,t,q,qd);
           
           % compute the projector
@@ -96,7 +97,7 @@ classdef  GHC < Controllers.AbstractController
           [Aeq,beq] = obj.EqualityConstraints(M,F,DOF,projector_list);
           
            % compute matrix for disequality constraints 
-          [A,b] = obj.DisequalityConstraints(DOF,obj.delta_t,J_list,projector_list,qd,cp);
+          [A,b] = obj.DisequalityConstraints(DOF,n_of_task,obj.delta_t,J_list,projector_list,qd,cp);
           
           % result
           x=quadprog(H,f,A,b,Aeq,beq);

@@ -86,7 +86,7 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
       end   
       
       
-      function result = GetValue(index)
+      function result = GetValue(obj,index)
          result = obj.current_value(index); 
       end
       

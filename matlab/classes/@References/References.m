@@ -9,7 +9,7 @@ classdef  References < handle
       time_law;        % exponential,linear,constant,trapezoidal
       %time_parameters; % vector of the time parameters of the specified time law
       time_struct      % struct with time_struct.ti time_struct.tf time_struct.step
-      mask;            % vector of vector(3) (col vec) that contains a mask that specify what i want to control for the specific task. for example x and z (control a subset of variable) mask = (1;0:1)
+      mask;            % vector of vector(3 or DOF) (col vec) that contains a mask that specify what i want to control for the specific task. for example x and z (control a subset of variable) mask = (1;0:1)
       type_of_traj;    % sampled func
       trajectories;    % cell array with the sampling of the trajectory with position velocity and desired acceleration  
                        % in case of sampled trajectory i build up a struct with four fields "p" "pd" "pdd" (row matrix) contains the value of the  trajectory 
@@ -62,6 +62,9 @@ classdef  References < handle
           
       end
       
+      function n = GetDimTask(obj,ind_subchain,ind_task)
+          n = nnz(obj.mask{ind_subchain,ind_task});
+      end
       
       function [p,pd,pdd]=GetTraj(obj,ind_subchain,ind_task,t)
          

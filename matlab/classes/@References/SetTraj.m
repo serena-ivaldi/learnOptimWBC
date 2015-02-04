@@ -3,9 +3,16 @@
 
 function SetTraj(obj,ind_subchain,ind_task)
 
-  if(strcmp(obj.type,'joint'))
-  % write joint block
-
+  if(strcmp(obj.type{ind_subchain,ind_task},'joint'))
+      if(strcmp(obj.control_type{ind_subchain,ind_task},'tracking'))
+        %write regulation block 
+      elseif(strcmp(obj.control_type{ind_subchain,ind_task},'regulation'))
+         [p,pd,pdd,t]=Fixedpoint(obj.geom_parameters{ind_subchain,ind_task});
+         obj.trajectories{ind_subchain,ind_task}.p = p;
+         obj.trajectories{ind_subchain,ind_task}.pd = pd;
+         obj.trajectories{ind_subchain,ind_task}.pdd = pdd;
+         obj.trajectories{ind_subchain,ind_task}.time = t;    
+      end 
   elseif(strcmp(obj.type{ind_subchain,ind_task},'cartesian_x'))
   
       if(strcmp(obj.control_type{ind_subchain,ind_task},'tracking'))

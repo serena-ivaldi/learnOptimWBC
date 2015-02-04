@@ -38,7 +38,7 @@ classdef  Constraints < handle
        
        function [g hi]=GetConstrValue(obj,constr_index,DOF,delta_t,n_of_task,J_list,Projector_list,qd,cp)
            
-           [g hi] = obj.constraints_handle{constr_index}(obj,obj.constraints_data(constr_index),DOF,delta_t,n_of_task,J_list,Projector_list,qd,cp);
+           [g hi] = obj.constraints_handle{constr_index}(obj,obj.constraints_data(:,constr_index),DOF,delta_t,n_of_task,J_list,Projector_list,qd,cp);
      
        end
 
@@ -73,19 +73,19 @@ classdef  Constraints < handle
 
            if(param(1,1))
 
-                index = DOF + 1;
+                index = DOF;
                 for i=1:n_of_task
-                    g(:,index:index + DOF) = Projector_list{i};   
+                    g(:,index + 1:index + DOF) = Projector_list{i};   
                     index = index + DOF;
                 end
-                hi = (param(2,1)*ones(dof,1)-qd')*delta_t;
+                hi = (param(2,1)*ones(DOF,1)-qd')*delta_t;
            else
-               index = DOF + 1;
+               index = DOF;
                for i=1:n_of_task
-                    g(:,index:index + DOF) = -Projector_list{i};   
+                    g(:,index + 1:index + DOF) = -Projector_list{i};   
                     index = index + DOF;      
                 end
-                hi = (param(2,1)*ones(dof,1)-qd')*delta_t;
+                hi = (param(2,1)*ones(DOF,1)-qd')*delta_t;
            end
        
            
@@ -96,15 +96,15 @@ classdef  Constraints < handle
            % 2 parameters 
            %param(1,1) = obstacle in the world 
            %param(2,1) = task involved in the obstacle avoidance 
-           current_task_dimension = size(J_list{param(2,1)},1);
-           g = zeros(current_task_dimension,DOF*(n_of_task+1)); 
-
-           index = DOF + 1;
+           g = zeros(1,DOF*(n_of_task+1)); 
+           hortho_distance_per_J=G_OB(param(1,1)).Normal(cp(:,param(2,1))')'*J_list{param(2,1)};
+           index = DOF;
+           
            for i=1:n_of_task
-                g(:,index:index + DOF) = G_OB(param(1,1)).Normal(cp(param(2,1)))'*J_list{param(2,1)}*Projector_list{i};   
+                g(:,index + 1:index + DOF) = hortho_distance_per_J*Projector_list{i};   
                 index = index + DOF;
            end
-           hi = (MaxAllowVel(G_OB(param(1,1)).dist) - G_OB(param(1,1)).Normal(cp(param(2,1)))'*J_list{param(2,1)}*qd')/delta_t;
+           hi = (MaxAllowVel(G_OB(param(1,1)).Dist(cp(:,param(2,1))',2)) - hortho_distance_per_J*qd')/delta_t;
        end  
       
       
