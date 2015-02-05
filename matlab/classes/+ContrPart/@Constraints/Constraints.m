@@ -49,7 +49,7 @@ classdef  Constraints < handle
        function [g hi]=TorqueLimit(obj,param,DOF,delta_t,n_of_task,J_list,Projector_list,qd,cp)
        % 2 parameters 
        %param(1,1) = 1 or 0. if 1 upper bound if 0 lower bound
-       %param(2,1) = value of the bound
+       %param(2,1) = absolute value of the bound 
        g = zeros(DOF,DOF*(n_of_task+1));
        hi= ones(DOF,1);
        I = eye(DOF);
@@ -58,7 +58,7 @@ classdef  Constraints < handle
             hi = param(2,1)*hi;
        else
             g(:,1:DOF) = -I; 
-            hi = -param(2,1)*hi;
+            hi = param(2,1)*hi;
        end
            
            
@@ -67,7 +67,7 @@ classdef  Constraints < handle
        function [g hi]=VelocityLimit(obj,param,DOF,delta_t,n_of_task,J_list,Projector_list,qd,cp)
            % 2 parameters 
            %param(1,1) = 1 or 0. if 1 upper bound if 0 lower bound
-           %param(2,1) = value of the bound  
+           %param(2,1) =absolute value of the bound  
            g = zeros(DOF,DOF*(n_of_task+1));
 
 

@@ -51,7 +51,7 @@ for i=1:size(X,3)
 end
 
 attractive_point1 = [0.813 0.006 0.6]; % for end effector
-attractive_point2 = [0.4 -0.2 0.02];
+attractive_point2 = [0.15 0.10 0.7];
 scatter3(attractive_point1(1,1),attractive_point1(1,2),attractive_point1(1,3), 130);
 scatter3(attractive_point2(1,1),attractive_point2(1,2),attractive_point2(1,3), 130);
 
@@ -77,11 +77,27 @@ if(save_now)
     allpath=which('FindData.m');
     path=fileparts(allpath);
     rawTextFromStorage = fileread(which(mfilename));
-    rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF'],'match','once');
-    fileID = fopen(strcat(path,'/scenarios/',name_scenario,'.txt'),'w');
-    fprintf(fileID,'%s',rawTextFromStorage);
-    fclose(fileID);
-    disp('DONE!')
+    rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF'],'match','once');    
+    existence = exist(strcat(path,'/scenarios/',name_scenario,'.txt'),'file');
+    if(~existence)
+        fileID = fopen(sstrcat(path,'/scenarios/',name_scenario,'.txt'),'w');
+        fprintf(fileID,'%s',rawTextFromStorage);
+        fclose(fileID);
+
+        disp('DONE!')
+    else
+        adv = strcat('The file: /',name_scenario,' allready exist');
+        b=questdlg(adv, 'Overwrite?','Yes','No','No');
+        switch b
+            case 'Yes'
+                fileID = fopen(strcat(path,'/scenarios/',name_scenario,'.txt'),'w');
+                fprintf(fileID,'%s',rawTextFromStorage);
+                fclose(fileID);
+                disp('DONE!')
+        end
+    end
+    
+    
 end
 
 

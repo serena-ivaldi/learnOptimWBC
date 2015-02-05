@@ -100,8 +100,10 @@ classdef  GHC < Controllers.AbstractController
           [A,b] = obj.DisequalityConstraints(DOF,n_of_task,obj.delta_t,J_list,projector_list,qd,cp);
           
           % result
-          x=quadprog(H,f,A,b,Aeq,beq);
-          final_tau = x(1:DOF); 
+          options = optimset('Algorithm','interior-point-convex');
+          x=quadprog(H,f,A,b,Aeq,beq,[],[],[],options);
+          
+          final_tau = x(1:DOF,1); 
           
           obj.SaveTau(i,final_tau) 
       end

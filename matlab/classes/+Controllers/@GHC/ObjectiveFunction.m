@@ -25,7 +25,7 @@ function [H,f,J_list,cp]=ObjectiveFunction(obj,DOF,ind_subchain,t,q,qd)
       [b,J,J_dot] = obj.ControlLaw(ind_subchain,j,t,J_old,Jd_old,x,xd,rpy,rpyd,q,qd);
       % J_dot is just multiplied by qd in obj.ControlLaw
       C = J_dot' - b';
-      f(1,ind + 1:ind + DOF) = C*J;
+      f(1,ind + 1:ind + DOF) = 2*C*J;
       app_mat_row(:,ind + 1:ind + DOF) = J'*J+I_rel;
       H(ind + 1: ind + DOF,:) = app_mat_row;
       app_mat_row = zeros(DOF,DOF*(obj.subchains.GetNumTasks(ind_subchain)+1));

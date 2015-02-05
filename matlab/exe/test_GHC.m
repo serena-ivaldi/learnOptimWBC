@@ -21,10 +21,10 @@ eval(text);
 
 constraints_list={'obsavoid','vellimit','vellimit','torquelimit','torquelimit'};
 cdata1 = [1;1];
-cdata2 = [1;1];
-cdata3 = [0;1];
-cdata4 = [1;2];
-cdata5 = [0;2];
+cdata2 = [1;100];
+cdata3 = [0;100];
+cdata4 = [1;2000];
+cdata5 = [0;2000];
 constraints_data = [cdata1, cdata2, cdata3, cdata4, cdata5];
 constraints = ContrPart.Constraints(constraints_list,constraints_data);
 
@@ -67,8 +67,8 @@ time = time_sym_struct.ti:time_struct.step:time_sym_struct.tf;
 
 %% GHC
 % % row vector one for each chain
-kp = [30 30 30]; 
-kd = [20 20 20];
+kp = [700 700 700]; 
+kd = [2*sqrt(700) 2*sqrt(700) 2*sqrt(700)];
 
 %UPDATE UF USING THIS ELEMENTS
 for i= 1:chains.GetNumChains()
