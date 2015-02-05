@@ -9,5 +9,4 @@ function [A,b] = DisequalityConstraints(obj,DOF,n_of_task,delta_t,J_list,project
 
     end
 
-
 end

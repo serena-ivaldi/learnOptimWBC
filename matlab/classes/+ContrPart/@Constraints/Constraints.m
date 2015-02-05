@@ -104,6 +104,9 @@ classdef  Constraints < handle
                 g(:,index + 1:index + DOF) = hortho_distance_per_J*Projector_list{i};   
                 index = index + DOF;
            end
+           %DEBUG
+           MaxAllowVel(G_OB(param(1,1)).Dist(cp(:,param(2,1))',2))
+           %---
            hi = (MaxAllowVel(G_OB(param(1,1)).Dist(cp(:,param(2,1))',2)) - hortho_distance_per_J*qd')/delta_t;
        end  
       
@@ -114,9 +117,14 @@ end
 
 function val=MaxAllowVel(obj_dist)
           %TODO pass tresh from outside
+          Max_vel = 1;
           tresh = 0.02;
-          val = 1/(-tresh+obj_dist);
-
+           val=-tresh+obj_dist;
+          if(norm(val,1)<0.001)
+              val = Max_vel;     
+          end
+          val = Max_vel+val;
+           
 end
 
 

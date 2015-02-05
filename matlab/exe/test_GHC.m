@@ -23,8 +23,8 @@ constraints_list={'obsavoid','vellimit','vellimit','torquelimit','torquelimit'};
 cdata1 = [1;1];
 cdata2 = [1;100];
 cdata3 = [0;100];
-cdata4 = [1;2000];
-cdata5 = [0;2000];
+cdata4 = [1;500];
+cdata5 = [0;500];
 constraints_data = [cdata1, cdata2, cdata3, cdata4, cdata5];
 constraints = ContrPart.Constraints(constraints_list,constraints_data);
 
@@ -36,8 +36,8 @@ constraints = ContrPart.Constraints(constraints_list,constraints_data);
 %% chained alpha 
 matrix1 = [0 1 0;0 0 0;1 1 0];  % 2>1>3
 matrix2 = [0 0 0;1 0 0;1 1 0];  % 1>2>3
-matrix3 = [0 0 0;0 0 0;0 1 0];  % 1>3>2
-matrix4 = [0 1 1;0 0 0;1 1 0];  % 3>1>2
+matrix3 = [0 0 0;1 0 1;1 0 0];  % 1>3>2
+matrix4 = [0 0 1;1 0 1;0 0 0];  % 3>1>2
 matrix_value(:,:,1) = matrix1;
 matrix_value(:,:,2) = matrix2;
 matrix_value(:,:,3) = matrix3;
@@ -86,7 +86,7 @@ end
 
 epsilon = 0.002;
 regularization = 0.01;
-max_time = 200;
+max_time = 2000;
 delta_t = time_sym_struct.tf*time_struct.step;
 controller = Controllers.GHC(chains,reference,alphas,constraints,Kp,Kd,regularization,epsilon,delta_t,max_time);
 

@@ -34,22 +34,23 @@ function projector_list = ComputeGeneralizedProjector(obj,ind_subchain,J_list,t)
         end
         
         %DEBUG
-        nsv = rank(Js);
+%         nsv = rank(Js);
         %---
         
         % compute the origin 
         [B,origin,r]=GetOrthBasis(Js,obj.epsilon);
         %DEBUG
-        B'*B
+%         B'*B
+        %---
         % take the element in alpha_vec_s_diag that appear after the
         % orthonormalization
         for k = 1:r
             alpha_vec_s_diag_origin(k) = alpha_vec_s_diag(origin(k));
         end
         %DEBUG
-        origin
-        test_mat=diag(alpha_vec_s_diag_origin)
-        
+%         origin
+%         test_mat=diag(alpha_vec_s_diag_origin)
+        %---
         % compute projector 
         projector_list{j} = I - B'*diag(alpha_vec_s_diag_origin)*B; 
         alpha_vec_s_diag = [];
