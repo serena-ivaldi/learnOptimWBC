@@ -14,12 +14,12 @@ function [b,J] = TrajCostraint(obj,ind_subchain,ind_task,t,J_old,Jd_old,x,xd,rpy
             % in this part of the code i dont need to use reshape jacobian
             % because i will use for use the complete jacobian for control in joint
             % space
-            J=J_old;
+            J=eye(obj.GetActiveBot.n);
             [x_des,xd_des,xdd_des] = obj.references.GetTraj(ind_subchain,ind_task,t);
             b = PD(q,x_des,obj.Kp{ind_subchain}(:,:,ind_task),qd,xd_des,obj.Kd{ind_subchain}(:,:,ind_task),xdd_des);
 
-            % J_dot is just multiplied by qd
-            b = b - Jd_old;
+            % J_dot is not used anymore because im imposing a trajecotry in
+            % the joint
 
             return;
 

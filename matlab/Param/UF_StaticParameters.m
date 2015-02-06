@@ -1,3 +1,4 @@
+disp('UF_STATICPARAM')
 % REPELLER PARAMETERS
 % scenario dependant
 rep_subchain = [3 3];
@@ -19,17 +20,18 @@ metric = {'M'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);
 
 
 kp = [700]; % row vector one for each chain
+kd = [2*sqrt(kp)];
+
 for i= 1:chains.GetNumChains()
-   K_p = zeros(3,3,size(kp,2));
-   K_d = zeros(3,3,size(kp,2));
    for par = 1:chains.GetNumTasks(i)
-       K_p(:,:,par) = kp(i,par)*eye(3);  
-       kd = 2*sqrt(kp(i,par));
-       K_d(:,:,par) = kd*eye(3); 
+       K_p = kp(i,par)*eye(size(dim_of_task{i,par},1));  
+       K_d = kd(i,par)*eye(size(dim_of_task{i,par},1)); 
+       Kp{i,par} = K_p;
+       Kd{i,par} = K_d;
    end
-   Kp{i} = K_p;
-   Kd{i} = K_d;
+   
 end
+
 
 
 % INSTANCE PARAMETERS

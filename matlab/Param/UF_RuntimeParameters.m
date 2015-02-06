@@ -1,3 +1,4 @@
+disp('UF_RUNTIMEPARAM')
 % REPELLERS PARAMETERS
 % GENERALIZE TO MULTICHAIN !!!
 rep_obstacle_ref = [1 2]; % if i change the order of ref obstacle i change the order of repellor in the stacked case
@@ -35,6 +36,6 @@ regularizer{2} = regularized_chain_2;
 
 % CMAES PARAMETER
 % starting value of parameters
-init_parameters = 6;
+%init_parameters = 6;
 explorationRate =0.1;%[0, 1]
 niter = 80;
