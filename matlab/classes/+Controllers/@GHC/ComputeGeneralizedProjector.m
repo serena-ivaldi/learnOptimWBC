@@ -8,14 +8,15 @@ function projector_list = ComputeGeneralizedProjector(obj,ind_subchain,J_list,t)
     Js = [];
     alpha_vec_s_diag = [];
     
-    % precompute the value of alpha for the current time 
-    obj.alpha{ind_subchain}.ComputeValue(t)
+    %DEBUG
+    t
+    %--- 
     index_alpha = 1;
     for j = 1 : n_task
         
         % read and store the current value of alpha functions for each task 
         for k = 1:n_task
-            app_alpha(k) = obj.alpha{ind_subchain}.GetValue(index_alpha);
+            app_alpha(k) = obj.alpha{ind_subchain}.GetValue(t,index_alpha);
             index_alpha = index_alpha + 1;
         end
         % sort vector 
@@ -25,7 +26,7 @@ function projector_list = ComputeGeneralizedProjector(obj,ind_subchain,J_list,t)
         for k = 1:n_task
             J_app = J_list{i(k)};
             %DEBUG
-            nsv = rank(J_app);
+            %nsv = rank(J_app);
             %---
             %size_vector(k) = size(J_app,1);
             Js = [Js;J_app];
@@ -40,7 +41,7 @@ function projector_list = ComputeGeneralizedProjector(obj,ind_subchain,J_list,t)
         % compute the origin 
         [B,origin,r]=GetOrthBasis(Js,obj.epsilon);
         %DEBUG
-%         B'*B
+%          B'*B
         %---
         % take the element in alpha_vec_s_diag that appear after the
         % orthonormalization

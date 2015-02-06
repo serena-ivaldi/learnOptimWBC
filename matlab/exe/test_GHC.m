@@ -19,13 +19,13 @@ eval(text);
 
 %% constraints
 
-constraints_list={'obsavoid','vellimit','vellimit','torquelimit','torquelimit'};
-cdata1 = [1;1];
-cdata2 = [1;100];
-cdata3 = [0;100];
-cdata4 = [1;500];
-cdata5 = [0;500];
-constraints_data = [cdata1, cdata2, cdata3, cdata4, cdata5];
+constraints_list={'vellimit','vellimit','torquelimit','torquelimit'};
+%cdata1 = [1;1];
+cdata1 = [1;1000];
+cdata2 = [0;1000];
+cdata3 = [1;2000];
+cdata4 = [0;2000];
+constraints_data = [cdata1, cdata2, cdata3, cdata4];%, cdata5];
 constraints = ContrPart.Constraints(constraints_list,constraints_data);
 
 %% test of constraints and obstacle
@@ -43,32 +43,62 @@ matrix_value(:,:,2) = matrix2;
 matrix_value(:,:,3) = matrix3;
 matrix_value(:,:,4) = matrix4;
 ti =[2 6 8];
+
+
+% matrix1 = [0 1 0;0 0 0;1 1 0];  % 2>1>3
+% matrix2 = [0 0 0;1 0 0;1 1 0];  % 1>2>3
+% matrix3 = [0 1 0;0 0 0;1 1 0];  % 2>1>3
+% matrix_value(:,:,1) = matrix1;
+% matrix_value(:,:,2) = matrix2;
+% matrix_value(:,:,3) = matrix3;
+% ti =[5 8];
+% with trnasition interval 1.5 i have a strange behaviour
 transition_interval = 0.5;
 
 alphas = Alpha.ChainedAlpha.BuildCellArray(chains.GetNumChains(),matrix_value,ti,transition_interval,time_struct);
 
-time = time_sym_struct.ti:time_struct.step:time_sym_struct.tf;
+
 
 
 %% test of alpha
-%  allvalue=[];
-% for t = time
-%     
-%     alphas{1}.ComputeValue(t)
-%     allvalue = [allvalue ; alphas{1}.current_value'];
-%     alphas{1}.GetValue(1);   
-% end
-
-% for i = 1:size(allvalue,2)
+% time = time_sym_struct.ti:time_struct.step:time_sym_struct.tf;
+% % allvalue=[];
+% % for t = time
+% %     
+% %     alphas{1}.ComputeValue(t)
+% %     allvalue = [allvalue ; alphas{1}.current_value'];
+% %     alphas{1}.GetValue(1);   
+% % end
+% 
+% 
+% 
+% % for i = 1:size(allvalue,2)
 %     figure
-%     plot(allvalue(:,i))
+%     plot(alphas{1}.all_value(:,2))
+% % end
+% 
+% time_sym = time_sym_struct.ti:time_sym_struct.step:time_sym_struct.tf;
+% 
+% tic
+% i = 1;
+% for t = time_sym
+%     for j=1:size(alphas{1}.all_value,2)
+%         app(i,j) = alphas{1}.GetValue(t,j);
+%     end
+%     i = i+1;
 % end
+% toc
+% figure
+% plot(app)
+
+
+
 
 
 %% GHC
 % % row vector one for each chain
-kp = [700 700 700]; 
-kd = [2*sqrt(700) 2*sqrt(700) 2*sqrt(700)];
+kp = [1000 1000 1000]; 
+kd = [2*sqrt(kp) 2*sqrt(kp) 2*sqrt(kp)];
 
 %UPDATE UF USING THIS ELEMENTS
 for i= 1:chains.GetNumChains()

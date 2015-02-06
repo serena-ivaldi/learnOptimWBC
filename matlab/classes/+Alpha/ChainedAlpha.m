@@ -10,7 +10,9 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
       transition_interval % lenght in time of the transition interval
       current_phase       % is an index that say which transition time we have to check to start a new transition 
       transition_flag     % when is 1 im in transition so i have to use the transition function i exit from transition when the value that we obtain are close to 0 or 1;
-      current_value       % is the vector of all the value that we have for the current time t
+      all_value           % array of value used to train spline and for debug
+      all_func            % is the vector of all the value that we have for all time
+      
    end
    
    
@@ -36,11 +38,22 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
           obj.transition_flag = 0;
           % only to be compliant with the whole structure
           obj.range = [0 1];
+          % repcompute all the value of the alpha and i fit this data with
+          % splines
+          time = time_struct.ti:time_struct.step:time_struct.tf;
+          obj.all_value = [];
+          for t = time
+            obj.all_value = [obj.all_value ; ComputeValue(obj,t)'];  
+          end
+          
+          for i = 1:size(obj.all_value,2)
+              obj.all_func{i} = fit(time',obj.all_value(:,i),'smoothingspline');
+          end
           
       end
       
       %function that give the value of the alpha function with the current time 
-      function  ComputeValue(obj,t)
+      function  current_value=ComputeValue(obj,t)
          %first of all i have to check if we are in transition or not
          if(t >= obj.ti(obj.current_phase) && ~obj.transition_flag)
             obj.transition_flag = 1;
@@ -50,7 +63,7 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
          if(~obj.transition_flag)
             % transform the matrix_val in a vector by stacking the row
             % transposed   
-            obj.current_value = reshape(obj.matrix_value',1,[])'; 
+            current_value = reshape(obj.matrix_value',1,[])'; 
             
          % in transition   
          else
@@ -77,7 +90,7 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
              app_matrix_val(col,row) = 1 - transval;
              % transform the matrix_val in a vector by stacking the row
              % transposed
-             obj.current_value = reshape(app_matrix_val',1,[])'; 
+             current_value = reshape(app_matrix_val',1,[])'; 
              
             
          end
@@ -86,8 +99,8 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
       end   
       
       
-      function result = GetValue(obj,index)
-         result = obj.current_value(index); 
+      function result = GetValue(obj,t,index)
+         result = feval(obj.all_func{index},t);
       end
       
       %this function for t = ti is equal to 1 
