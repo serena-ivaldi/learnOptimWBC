@@ -9,15 +9,16 @@ warning('error', 'MATLAB:illConditionedMatrix')
 
 
 % Parametets 
-init_parameters = 6;
-number_of_iteration = 1;
-random = false;
+n_of_experiment = 2;        % number that we use to distinguish between the same static parameters settings but with different runtime parameters
+init_parameters = 6;        %initial value for the optimization  
+number_of_iteration = 1;    % number of  optimzation (for robustness assesement)
+random = false;             % if true i randomize init_parameters for each iteration
 
 
 
 
 for iter=1:number_of_iteration
-    [tau, init_parameters, mean_performances, bestAction, policies, costs, succeeded]=OptimizationUF(init_parameters,iter,random);
+    [tau, init_parameters, mean_performances, bestAction, policies, costs, succeeded]=OptimizationUF(n_of_experiment,iter,init_parameters,random);
 end
 
 

@@ -1,4 +1,4 @@
-function [tau,init_parameters,mean_performances, bestAction, policies, costs, succeeded]=OptimizationUF(iter,init_parameters,random)
+function [tau,init_parameters,mean_performances, bestAction, policies, costs, succeeded]=OptimizationUF(n_of_experiment,iter,init_parameters,random)
 
     AllRuntimeParameters
     %% TODO
@@ -49,7 +49,7 @@ function [tau,init_parameters,mean_performances, bestAction, policies, costs, su
         scriptname = 'RuntimeVariable';
         % i have to change this number everytime i perform the same test with
         % different runtime parameters
-        experiment_number = iter;
+        experiment_number = strcat(num2str(iter),'_of_',num2str(n_of_experiment));
         name_folder = strcat(experiment_number,'__',name_dat);
         complete_path=PlotCmaesResult(time_struct,controller,bestAction,scriptname,name_folder);
         complete_path_to_file= strcat(complete_path,'/data.mat');
