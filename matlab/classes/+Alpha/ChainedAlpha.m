@@ -105,7 +105,7 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
       
       %this function for t = ti is equal to 1 
       function val=TransFunc(obj,t)
-         val = 0.5 - 0.5*cos( ( t-obj.ti(obj.current_phase) / obj.transition_interval ) *pi );
+         val = 0.5 - 0.5*cos( ( ( t-obj.ti(obj.current_phase) ) / obj.transition_interval ) *pi );
       end
       
       

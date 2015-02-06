@@ -53,7 +53,7 @@ ti =[2 6 8];
 % matrix_value(:,:,3) = matrix3;
 % ti =[5 8];
 % with trnasition interval 1.5 i have a strange behaviour
-transition_interval = 0.5;
+transition_interval = 1.5;
 
 alphas = Alpha.ChainedAlpha.BuildCellArray(chains.GetNumChains(),matrix_value,ti,transition_interval,time_struct);
 
@@ -61,35 +61,22 @@ alphas = Alpha.ChainedAlpha.BuildCellArray(chains.GetNumChains(),matrix_value,ti
 
 
 %% test of alpha
-% time = time_sym_struct.ti:time_struct.step:time_sym_struct.tf;
-% % allvalue=[];
-% % for t = time
-% %     
-% %     alphas{1}.ComputeValue(t)
-% %     allvalue = [allvalue ; alphas{1}.current_value'];
-% %     alphas{1}.GetValue(1);   
-% % end
-% 
-% 
-% 
-% % for i = 1:size(allvalue,2)
-%     figure
-%     plot(alphas{1}.all_value(:,2))
-% % end
-% 
-% time_sym = time_sym_struct.ti:time_sym_struct.step:time_sym_struct.tf;
-% 
-% tic
-% i = 1;
-% for t = time_sym
-%     for j=1:size(alphas{1}.all_value,2)
-%         app(i,j) = alphas{1}.GetValue(t,j);
-%     end
-%     i = i+1;
-% end
-% toc
-% figure
-% plot(app)
+
+time_sym = time_sym_struct.ti:time_sym_struct.step:time_sym_struct.tf;
+
+tic
+i = 1;
+for t = time_sym
+    for j=1:size(alphas{1}.all_value,2)
+        app(i,j) = alphas{1}.GetValue(t,j);
+    end
+    i = i+1;
+end
+toc
+for j=1:size(app,2)
+figure
+plot(app(:,j))
+end
 
 
 
