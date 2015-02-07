@@ -1,5 +1,7 @@
 disp('GHC_STATICPARAM')
 
+%%%;;
+
 %% chained alpha 
 matrix1 = [0 1 0;0 0 0;1 1 0];  % 2>1>3
 matrix2 = [0 0 0;1 0 0;1 1 0];  % 1>2>3
@@ -30,3 +32,11 @@ for i= 1:chains.GetNumChains()
 end
 %---
 
+
+%%%EOF
+
+
+%% DO NOT MODIFY THIS PART 
+
+rawTextFromStoragePart = fileread(which(mfilename));
+rawTextFromStoragePart = regexp(rawTextFromStoragePart,['%%%;;' '(.*?)%%%EOF'],'match','once');

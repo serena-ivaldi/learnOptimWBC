@@ -105,14 +105,15 @@ classdef  UF < Controllers.AbstractController
           F = cur_bot.coriolis(q,qd)*qd' + cur_bot.gravload(q)';
           % adding the stabilization part in joint space if i have only one
           % controller 
+          
           if(obj.subchains.GetNumTasks(i) == 1)
-              kp = 300;
+              kp = 700;
               kd = 2*sqrt(kp);
-              u1 = -kd*qd' - kp*q';
-              % i want to control only the last joint and 
-              u1(1:end - 1,1) = zeros(size(u1,1)-1,1); 
+              qd_des =zeros(size(q,2),1);
+              q_des  = [0;pi/2; 0; -pi/2; 0; pi/2; 0];
+              u1 = ( kd*(qd_des - qd') + kp*(q_des - q')) ;
           else
-              u1 = 0;
+              u1 = zeros(size(q,2),1);
           end
          
           if(strcmp(obj.combine_rule,'sum')) 

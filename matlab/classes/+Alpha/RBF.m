@@ -161,26 +161,38 @@ classdef  RBF < Alpha.AbstractAlpha
             % if i not optimizing i want to read  value from theta 
             if(~optim)   
                 % this branch is active if i give the correct number of
-                % parameter
+                % parameter    
                 if (size(theta,2) > n_of_basis)
-                    index = 1;
-                    for i=1:n_subchain
-                       for j=1:n_task
-                            cur_theta = theta(index:index+n_of_basis - 1); 
-                            RBFs{i,j} = Alpha.RBF(time_struct,n_of_basis,redundancy,range,precomp_sample,cur_theta);
-                            index = index+n_of_basis;
-                       end
-                    end 
+                    if(size(theta,2) < n_of_basis*n_task)
+                        fprintf('dimension of current theta = %d \n',size(theta,2));
+                        fprintf('number of basis for each rbf = %d  \n',n_of_basis);
+                        fprintf('number of sub-policies = %d  \n',n_task);
+                        error('the dimension of the theta vector does not match with the number of parameters that we need for this run')
+                    else
+                        index = 1;
+                        for i=1:n_subchain
+                           for j=1:n_task
+                                cur_theta = theta(index:index+n_of_basis - 1); 
+                                RBFs{i,j} = Alpha.RBF(time_struct,n_of_basis,redundancy,range,precomp_sample,cur_theta);
+                                index = index+n_of_basis;
+                           end
+                        end 
+                    end
+                % this branch is active if theta is fitted for only one
+                % rbf    
                 else
-                    % this branch is active if theta is fitted for only one
-                    % rbf
-                    for i=1:n_subchain
-                       for j=1:n_task
-                            RBFs{i,j} = Alpha.RBF(time_struct,n_of_basis,redundancy,range,precomp_sample,theta);
-                       end
-                    end    
-                end 
-                
+                    if(size(theta,2)~= n_of_basis)
+                        fprintf('dimension of current theta =%d \n',size(theta,2));
+                        fprintf('number of basis for each rbf =%d  \n',n_of_basis);
+                        error('the dimension of the theta vector does not match with the number of parameters that we need for this run')
+                    else
+                        for i=1:n_subchain
+                           for j=1:n_task
+                                RBFs{i,j} = Alpha.RBF(time_struct,n_of_basis,redundancy,range,precomp_sample,theta);
+                           end
+                        end 
+                    end
+                end  
             else    
                 for i=1:n_subchain
                        for j=1:n_task

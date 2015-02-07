@@ -1,11 +1,14 @@
 disp('UF_STATICPARAM')
+
+%%%;;
+
 % REPELLER PARAMETERS
 % scenario dependant
-rep_subchain = [3 3];
+rep_subchain = [3];
 rep_target_link{1} = rep_subchain;
-rep_type = {'cartesian_x' 'cartesian_x'};
-rep_mask {1,1}=[1,1,1]; rep_mask {1,2}=[1,1,1];
-rep_type_of_J_rep = {'DirectionCartesian' 'DirectionCartesian'};
+rep_type = {'cartesian_x'};
+rep_mask {1,1}=[1,1,1]; 
+rep_type_of_J_rep = {'DirectionCartesian'};
 for ii=1:chains.GetNumChains()
     chain_dof(ii) = chains.GetNumLinks(ii);
 end
@@ -35,4 +38,12 @@ end
 
 
 % INSTANCE PARAMETERS
-fitness= @fitness6;
+fitness = @fitness6;
+
+%%%EOF
+
+
+%% DO NOT MODIFY THIS PART 
+
+rawTextFromStoragePart = fileread(which(mfilename));
+rawTextFromStoragePart = regexp(rawTextFromStoragePart,['%%%;;' '(.*?)%%%EOF'],'match','once');

@@ -14,13 +14,13 @@ time_sym_struct.step = 0.001;
 fixed_step = false;
 
 %% TASK PARAMETERS
-name_dat = 'LBR4p8.0__scene9_GHC_test_wall_and_two_attractive_point';
+name_dat = 'LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5';
 %name_dat = 'LBR4p5.0__scene5_repellers_on_elbow__atrtactive_point_on_ee_fit5';
 path=LoadParameters(name_dat);
 load(path);
 
 %% SCENARIO
-name_scenario = 'lbr_scenario9';
+name_scenario = 'lbr_scenario5';
 
 %% STARTING CONDITION FOR SIMULATION
 % TODO generalize for multichain
