@@ -7,7 +7,7 @@ AllRuntimeParameters
 %% Reference
 % if type_of_task = sampled i have to specify the Time to reach the
 % end of the trajectories that is equal to the simulation time
-reference = References(target_link,type,control_type,traj,geom_parameters,time_law,time_struct,dim_of_task,type_of_traj);
+reference = References(target_link,traj_type,control_type,traj,geom_parameters,time_law,time_struct,dim_of_task,type_of_traj);
 reference.BuildTrajs();
 
 %% plot scenario
@@ -36,7 +36,7 @@ switch CONTROLLERTYPE
         end
         %%--- 
 
-        alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,range,precomp_sample,numeric_theta,false);       
+        alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,value_range,precomp_sample,numeric_theta,false);       
         %alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,time_struct);  
     case 'GHC'
         alphas = Alpha.ChainedAlpha.BuildCellArray(chains.GetNumChains(),matrix_value,ti,transition_interval,time_struct);

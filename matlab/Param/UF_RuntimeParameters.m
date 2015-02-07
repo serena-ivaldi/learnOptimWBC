@@ -15,7 +15,7 @@ type_of_rep_strct={'extended_decoupled' 'extended_combine','stacked' };
 %rbf
 number_of_basis = 10;
 redundancy = 3;
-range = [0 , 12];
+value_range = [0 , 12];
 precomp_sample = false;
 % value of theta that we have to change when we want to execute the result
 % from the optimization step

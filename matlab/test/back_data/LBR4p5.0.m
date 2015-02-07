@@ -22,7 +22,7 @@ chains = SubChains(target_link,robots);
 %%
 
 % REFERENCE PARAMETERS
-type = {'cartesian_x'};
+traj_type = {'cartesian_x'};
 control_type = {'regulation'};
 type_of_traj = {'func'};
 traj = {'none'};
