@@ -211,7 +211,7 @@ classdef  Repellers < handle
                 end
                 JJt=Jext*Jext';
                 I_damp = obj.J_damp*eye(size(JJt,1));
-                N = I - (Jext'/(I_damp + JJt))*Jext';
+                N = I - Jext'*( Jext'/(I_damp + JJt) )';
             otherwise
                 error('Unexpected structure for repulsor');
         end
