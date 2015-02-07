@@ -8,8 +8,9 @@ classdef  Repellers < handle
       mask;                % vector of vector(3) (col vec) that contains a mask that specify what i want to control for the specific task. for example x and z (control a subset of variable) mask = (1;0:1)
       J_rep_func           % this specify wich kind of function i want to use to compute the repellers jacobian
       obstacle_ref         % vector of index that specify for each repellers which is the obstacle  G_OB (global vector of Obstacle) associated to the current repeller  
-      task_dimension       % vector that define the cumulative dimension for each repulsive task. i use this as a vector of pointer to build the jacobian. If single_alpha = 1 use only one alpha for the whole controller
-      single_alpha         % is a vector of vector of flag 0 and 1 that define for each repellers if i want one alpha for each dimension of my repellers or only one alpha
+      task_dimension       % vector that define the cumulative dimension for each repulsive task. i use this as a vector of pointer to build the jacobian. 
+      single_alpha         % is a vector of vector of flag 0 and 1 that define for each repellers if i want one alpha for each dimension of my repellers or only one alpham.If single_alpha = 1 use only one alpha for the whole controller
+      J_damp               % is the value used to perform adamped least square inversion of my extended jacobian in the 'extended_decoupled' case
       type_of_rep_strct    % with this parameter i can specify wich kind of repellers structure i want to use : 'extended_combine' or 'stacked' (column vector of string)  one for each kinematic chain
       n_alpha_x_chain      % column vector that on the basis of the single_alpha contain the number of "different" alpha for repellers per kinematic chain 
       map_from_alpha_to_rep% this vector has the dimension of the number of alpha but say to me at wich repellors the alpha are reffered so is basically a vector of pointers, one for each chain 
@@ -22,7 +23,7 @@ classdef  Repellers < handle
    methods
       %type_of_J_rep specify the kind of repellers that i want to use
       %chain_dof is a vector with the dimension 
-      function obj = Repellers(chain_dof,target_link,type,mask,type_of_J_rep,obstacle_ref,single_alpha,type_of_rep_strct) 
+      function obj = Repellers(chain_dof,target_link,type,mask,type_of_J_rep,obstacle_ref,single_alpha,J_damp,type_of_rep_strct) 
           
          obj.target_link = target_link;
          
@@ -33,6 +34,7 @@ classdef  Repellers < handle
          obj.mask = mask;
          obj.obstacle_ref = obstacle_ref;
          obj.chain_dof = chain_dof;
+         obj.J_damp = J_damp;
          % in this cycle i copy the value that i have in RuntimeVariable
          % inside the object in such a way that i dont care about the
          % structure of  single_alpha in RuntimeVariable. the only things that
@@ -44,11 +46,7 @@ classdef  Repellers < handle
          end
          
          obj.type_of_rep_strct = type_of_rep_strct;
-         % in this cycle i compute the number of alpha for each kinematic
-         % chain for the repellers
-         for i=1:size(mask,1)
-            obj.n_alpha_x_chain(i)=obj.ComputeNumberOfWeightFuncRep(i);    
-         end
+         
          % when i move on the row i cheching for diffrent kinematic chain
          for i=1:size(mask,1)
              switch obj.type_of_rep_strct{i}
@@ -67,12 +65,31 @@ classdef  Repellers < handle
                      % im looking for all the repulsor that correspond to
                      % the number of mask on a row 
                      for j=1:size(mask(i,:),2)
-                     obj.Jac_rep{i,j} = zeros(nnz(obj.mask{i,j}),chain_dof(i));
+                            obj.Jac_rep{i,j} = zeros(nnz(obj.mask{i,j}),chain_dof(i));
+                     end
+                 case 'extended_decoupled'
+                      for j=1:size(mask(i,:),2)
+                            obj.Jac_rep{i,j} = zeros(nnz(obj.mask{i,j}),chain_dof(i));
+                      end
+                      % because of in this branch i have only one alpha for
+                      % each repellor i change the value of single_alpha to
+                      % assure that this condition is met
+                      for ii=1:size(mask,1)
+                         for jj=1:size(mask(ii,:),2) 
+                            obj.single_alpha{ii}(1,jj) = 1;
+                         end
                      end
                  otherwise 
                 error('Unexpected structure for repulsor');
              end  
          end
+         
+         % in this cycle i compute the number of alpha for each kinematic
+         % chain for the repellers
+         for i=1:size(mask,1)
+            obj.n_alpha_x_chain(i)=obj.ComputeNumberOfWeightFuncRep(i);    
+         end
+         
          % in this cycle i build the vector of function handles to compute
          %  repellers jacobian
          for i=1:size(mask,1)
@@ -182,6 +199,19 @@ classdef  Repellers < handle
                    N = N*N_app;
                    index_map = index_map + 1;
                 end
+            % in this branch i have only one activation policy for each repellors     
+            case 'extended_decoupled'
+                N = eye(cur_chain_dim);
+                I = N;
+                Jext = [];
+                index_map = 1;
+                while index_map <= n_of_alpha_repellers
+                   Jext =  [Jext;alpha{cur_chain,task_per_cur_chain+index_map}.GetValue(t)*obj.Jac_rep{cur_chain,index_map}];
+                   index_map = index_map + 1;
+                end
+                JJt=Jext*Jext';
+                I_damp = obj.J_damp*eye(size(JJt,1));
+                N = I - (Jext'/(I_damp + JJt))*Jext';
             otherwise
                 error('Unexpected structure for repulsor');
         end
@@ -207,6 +237,10 @@ classdef  Repellers < handle
                  end
              case 'stacked' 
                  obj.Jac_rep{chain,task} = feval(obj.repellers_fun{chain,task},obj,x,J,chain,task);
+                 
+             case 'extended_decoupled'
+                  obj.Jac_rep{chain,task} = feval(obj.repellers_fun{chain,task},obj,x,J,chain,task); 
+                 
              otherwise
                  error('Unexpected structure for repulsor');
          end 

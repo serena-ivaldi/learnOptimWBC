@@ -24,7 +24,8 @@ name_scenario = 'lbr_scenario5';
 
 %% STARTING CONDITION FOR SIMULATION
 % TODO generalize for multichain
-qi{1} = qz;
+%qi{1} = qz;
+qi{i} = zeros(1,chains.GetNumLinks(1));
 qdi{1} = zeros(1,chains.GetNumLinks(1));
 options= [];
 simulator_type = {'rbt'};

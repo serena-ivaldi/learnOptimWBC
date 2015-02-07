@@ -2,13 +2,14 @@ disp('UF_RUNTIMEPARAM')
 % REPELLERS PARAMETERS
 % GENERALIZE TO MULTICHAIN !!!
 rep_obstacle_ref = [1 2]; % if i change the order of ref obstacle i change the order of repellor in the stacked case
+J_damp = 0.01;
 % with this part i choose if for each repellers i want to use 3 or one
 % activation policy if 1 only one if 0 we have three activation policy
 single_alpha_chain1 = [1 1];
 single_alpha_chain2 = [1];
 single_alpha{1} = single_alpha_chain1;
 single_alpha{2} = single_alpha_chain2;
-type_of_rep_strct={'extended_combine','stacked' , 'extended_decoupled'};
+type_of_rep_strct={'extended_decoupled' 'extended_combine','stacked' };
 
 %ALPHA PARAMETERS
 %rbf
@@ -27,10 +28,10 @@ values{1} = value1;
 
 %CONTROLLER PARAMETERS
 max_time = 100; %50
-combine_rule = {'sum'}; % sum or projector
+combine_rule = {'projector'}; % sum or projector
 % with this term i introduce a damped least square structure inside my
 % controller if regularizer is 0 i remove the regularizer action 
-regularizer_chain_1 = [0 0]; 
+regularizer_chain_1 = [0.01 0]; 
 regularized_chain_2 = [1];
 regularizer{1} = regularizer_chain_1;
 regularizer{2} = regularized_chain_2;
