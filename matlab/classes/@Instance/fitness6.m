@@ -2,11 +2,13 @@
 % added controllo sulla torque
 function fit = fitness6(obj,t,q)
     global G_OB;
+    
+    %%%;;
     downsaple = 10;
-
     L = 1;
-    penalty = 20; %10
+    penalty = 5000; %10
     sigma = 0.1; 
+    %%%EOF
     contr = obj.controller;
     traj_err= 0;
     repuls  = 0;

@@ -21,14 +21,40 @@ classdef Obstacle < handle
                obj.tol = tol;        
             end 
       
-            function point=GetDescription(obj)
+            function point=GetDescription(obj,cp)
                 if(strcmp(obj.type,'repeller'))
                    point = obj.description';
                   % add wall case with norm
-      %           elseif(strcmp(obj.type,'wall'))
-      %              point = obj.MinDist(cp,L);
+                elseif(strcmp(obj.type,'wall'))
+                   point = obj.PointMinDist(cp,2);
                 end
             end    
+            
+            
+            function pwall=PointMinDist(obj,cp,L)
+                 pwall = zeros(3,1);
+               
+                if(L==1)
+                  dist_matrix = abs((cp(1,1) - obj.description.X)) + abs((cp(1,2) - obj.description.Y)) + abs((cp(1,3) - obj.description.Z));
+                  [dist ind] = min(dist_matrix(:)); 
+                  pwall(1,1) = obj.description.X(ind);
+                  pwall(2,1) = obj.description.Y(ind);
+                  pwall(3,1) = obj.description.Z(ind);
+              elseif(L==2)
+                  dist_matrix = (cp(1,1) - obj.description.X).^2 + (cp(1,2) - obj.description.Y).^2 + (cp(1,3) - obj.description.Z).^2;
+                  [dist ind]= min(dist_matrix(:)); 
+                  pwall(1,1) = obj.description.X(ind);
+                  pwall(2,1) = obj.description.Y(ind);
+                  pwall(3,1) = obj.description.Z(ind);
+                  
+              end
+               
+               
+               
+            end
+            
+            
+            
 
             function dist = Dist(obj,cp,L)
 

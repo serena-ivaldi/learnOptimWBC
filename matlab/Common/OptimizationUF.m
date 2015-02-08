@@ -1,4 +1,4 @@
-function [tau,init_parameters,mean_performances, bestAction, policies, costs, succeeded]=OptimizationUF(n_of_experiment,iter,init_parameters,random)
+function [tau,mean_performances, bestAction, policies, costs, succeeded]=OptimizationUF(n_of_experiment,iter,init_parameters,random)
 
     AllRuntimeParameters
     %% TODO

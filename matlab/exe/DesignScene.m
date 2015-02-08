@@ -4,9 +4,9 @@ clc
 
 % in this variable we have to specify the name of the scenario:
 % bot_scenario# where # is incremental
-name_scenario = 'lbr_scenario5';
+name_scenario = 'lbr_scenario5.2';
 % with this variable i decide when i want to save the designed scenario
-save_now = true;
+save_now = false;
 
 plot_subchain1 = [7];
 plot_target_link{1} = plot_subchain1;
@@ -43,14 +43,21 @@ global G_OB;
 
 hold on;axis equal;
 
-repulsive_point = [0.35  0 0.3];
 attractive_point1 = [0.6 0 0.15];
 
-scatter3(repulsive_point(1,1),repulsive_point(1,2),repulsive_point(1,3), 130);
+[X, Y ,Z]=meshgrid( 0.15:0.01:0.40 , -0.35:0.01:0.35 , 0.25);
+
+% global obstacle
+rapresentation.X = X;
+rapresentation.Y = Y;
+rapresentation.Z = Z;
+
+scatter3(X(:),Y(:),Z(:))
+
 scatter3(attractive_point1(1,1),attractive_point1(1,2),attractive_point1(1,3), 130);
 
 % global obstacle
-ob1 = Obstacle(repulsive_point,'repeller',[]);
+ob1 = Obstacle(rapresentation,'wall',[]);
 G_OB = [ob1];
 
 
@@ -71,7 +78,7 @@ if(save_now)
     rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF'],'match','once');    
     existence = exist(strcat(path,'/scenarios/',name_scenario,'.txt'),'file');
     if(~existence)
-        fileID = fopen(sstrcat(path,'/scenarios/',name_scenario,'.txt'),'w');
+        fileID = fopen(strcat(path,'/scenarios/',name_scenario,'.txt'),'w');
         fprintf(fileID,'%s',rawTextFromStorage);
         fclose(fileID);
 

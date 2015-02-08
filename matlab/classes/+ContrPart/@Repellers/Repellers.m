@@ -254,7 +254,7 @@ classdef  Repellers < handle
           elseif(strcmp(obj.type{chain,task},'cartesian_rpy'))
             %J = ReshapeJacobian(J_old,[],obj.chain_dof(chain),obj.target_link(chain,task),obj.mask{chain,task},'rot');    
           end
-          v = 2*(direct_kin - G_OB(obj.obstacle_ref(chain,task)).GetDescription()).^(2);
+          v = 2*( direct_kin - G_OB(obj.obstacle_ref(chain,task)).GetDescription(direct_kin') ).^(2);
           J_rep = diag(v)*J;
           
       end

@@ -37,9 +37,6 @@ end
 
 
 
-% INSTANCE PARAMETERS
-fitness = @fitness6;
-
 %%%EOF
 
 

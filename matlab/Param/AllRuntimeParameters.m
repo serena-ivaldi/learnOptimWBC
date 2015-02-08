@@ -20,7 +20,7 @@ path=LoadParameters(name_dat);
 load(path);
 
 %% SCENARIO
-name_scenario = 'lbr_scenario5';
+name_scenario = 'lbr_scenario5.1';
 
 %% STARTING CONDITION FOR SIMULATION
 % TODO generalize for multichain
@@ -42,12 +42,6 @@ switch CONTROLLERTYPE
     otherwise
         warning('Unexpected control method')
 end
-
-
-
-
-
-
 
 
 %% DO NOT CHANGE THIS PART!
