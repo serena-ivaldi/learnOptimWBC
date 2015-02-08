@@ -1,4 +1,7 @@
 disp('UF_RUNTIMEPARAM')
+
+%%%;;
+
 % REPELLERS PARAMETERS
 % GENERALIZE TO MULTICHAIN !!!
 rep_obstacle_ref = [1 2]; % if i change the order of ref obstacle i change the order of repellor in the stacked case
@@ -19,7 +22,7 @@ value_range = [0 , 12];
 precomp_sample = false;
 % value of theta that we have to change when we want to execute the result
 % from the optimization step
-%numeric_theta = [5.586974 12.000000 10.343330 11.936231 10.997103 12.000000 10.042855 11.247323 10.538352 9.181423 7.009495 0.000000 0.965310 0.160456 2.072685 2.753228 1.270566 2.130679 0.000000 4.426763 1.725728 2.665351 1.002842 2.293220 0.548551 2.927859 0.675315 1.330734 0.072510 3.967580 ];  
+numeric_theta = [3.493783 6.211959 7.883578 11.988846 7.900086 9.468388 6.525209 11.867391 7.355206 8.158990 0.000000 0.054878 11.131856 8.063698 1.871041 9.107188 3.646651 8.656589 11.419753 4.346246 ];  
 numeric_theta =[12 12 12 12 12 12 12 12 12 12 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0];
 %constant alpha
 value1 = 1*ones(chains.GetNumTasks(1));
@@ -42,3 +45,11 @@ regularizer{2} = regularized_chain_2;
 %init_parameters = 6;
 explorationRate =0.1;%[0, 1]
 niter = 80;
+
+
+%%%EOF
+
+%% DO NOT MODIFY THIS PART 
+
+rawTextFromStoragePart = fileread(which(mfilename));
+rawTextFromStoragePart = regexp(rawTextFromStoragePart,['%%%;;' '(.*?)%%%EOF'],'match','once');

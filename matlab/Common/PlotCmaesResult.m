@@ -1,4 +1,4 @@
-function complete_path=PlotCmaesResult(time_struct,controller,bestAction,scriptname,name_folder)
+function complete_path=PlotCmaesResult(time_struct,controller,bestAction,rawTextFromStorage,name_folder)
 
 % create folder 
 allpath=which('FindData.m');
@@ -7,16 +7,18 @@ complete_path = strcat(path,'/results/',name_folder);
 mkdir(complete_path)
 
 % copy runtime parameter inside the new folder
-rawTextFromStorage = fileread(which(scriptname));
-rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF'],'match');
+% rawTextFromStorage = fileread(which(scriptname));
+% rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF'],'match');
+
+
 fileID = fopen(strcat(complete_path,'/','optimization_parameters.txt'),'w');
 
 % write parameters
-fprintf(fileID,'%s',rawTextFromStorage{1});
-for z = 2:size(rawTextFromStorage,2)
-    fseek(fileID, 0, 'eof');
-    fwrite(fileID, rawTextFromStorage{z});
-end
+fprintf(fileID,'%s',rawTextFromStorage);
+% for z = 2:size(rawTextFromStorage,2)
+%     fseek(fileID, 0, 'eof');
+%     fwrite(fileID, rawTextFromStorage{z});
+% end
 fclose(fileID);
 
 % copy best action inside the new folder
@@ -27,7 +29,7 @@ time = time_struct.ti:time_struct.step:time_struct.tf;
 vec_values = zeros(size(time));
 handle_vec = [];
 
-% build numeric theta 
+% build numeric theta for best action 
 controller.UpdateParameters(bestAction.parameters)
 
 % plot alpha 

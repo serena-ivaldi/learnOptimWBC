@@ -7,7 +7,7 @@ AllRuntimeParameters
 %% Reference
 % if type_of_task = sampled i have to specify the Time to reach the
 % end of the trajectories that is equal to the simulation time
-reference = References(target_link,traj_type,control_type,traj,geom_parameters,time_law,time_struct,dim_of_task,type_of_traj);
+reference = References(target_link,traj_type,control_type,geometric_path,geom_parameters,time_law,time_struct,dim_of_task,type_of_traj);
 reference.BuildTrajs();
 
 %% plot scenario

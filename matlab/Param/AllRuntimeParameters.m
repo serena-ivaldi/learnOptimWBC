@@ -31,6 +31,9 @@ options= [];
 simulator_type = {'rbt'};
 
 %% Parameters Dependant on the type of controller
+
+%%%EOF
+
 switch CONTROLLERTYPE
     case 'UF'
         UF_RuntimeParameters
@@ -40,4 +43,20 @@ switch CONTROLLERTYPE
         warning('Unexpected control method')
 end
 
-%%%EOF
+
+
+
+
+
+
+
+%% DO NOT CHANGE THIS PART!
+
+
+% backup data 
+rawTextFromStorage = fileread(which(mfilename));
+rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF'],'match','once');
+
+% join the general static parameter with the particular static one
+rawTextFromStorage = strcat(rawTextFromStorage,rawTextFromStoragePart);
+

@@ -29,7 +29,7 @@ chains = SubChains(target_link,robots);
 traj_type = {'cartesian_x'};
 control_type = {'regulation'};
 type_of_traj = {'func'};
-traj = {'none'};
+geometric_path = {'none'};
 time_law = {'none'};
 %parameters first chains
 geom_parameters{1,1} = [0.6 0 0.15]; 

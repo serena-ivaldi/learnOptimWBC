@@ -10,7 +10,7 @@ function [tau,init_parameters,mean_performances, bestAction, policies, costs, su
         %% Reference
         % if type_of_task = sampled i have to specify the Time to reach the
         % end of the trajectories that is equal to the simulation time
-        reference = References(target_link,traj_type,control_type,traj,geom_parameters,time_law,time_struct,dim_of_task,type_of_traj);
+        reference = References(target_link,traj_type,control_type,geometric_path,geom_parameters,time_law,time_struct,dim_of_task,type_of_traj);
         reference.BuildTrajs();
 
 
@@ -46,13 +46,13 @@ function [tau,init_parameters,mean_performances, bestAction, policies, costs, su
         inst = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,fitness,options);
         [mean_performances ,bestAction ,policies ,costs ,succeeded] = inst.CMAES(start_action,niter,explorationRate);
 
-        scriptname = 'RuntimeVariable';
+        %scriptname = 'AllRuntimeParameters';
         % i have to change this number everytime i perform the same test with
         % different runtime parameters
         experiment_number = strcat(num2str(iter),'_of_',num2str(n_of_experiment));
-        name_folder = strcat(experiment_number,'__',name_dat);
-        complete_path=PlotCmaesResult(time_struct,controller,bestAction,scriptname,name_folder);
-        complete_path_to_file= strcat(complete_path,'/data.mat');
+        name_folder = strcat(experiment_number,'_',name_dat);
+        complete_path=PlotCmaesResult(time_struct,controller,bestAction,rawTextFromStorage,name_folder);
+        complete_path_to_file = strcat(complete_path,'/data.mat');
         save(complete_path_to_file) 
 
         tau = controller.torques;
