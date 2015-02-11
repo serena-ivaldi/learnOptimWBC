@@ -14,9 +14,9 @@ classdef Obstacle < handle
             function obj = Obstacle(description,type,tol) % i can specify through varargin the time duration of the sampled trajectories 
 
                obj.description = description;
-               if(getnameidx({'wall' 'repeller'} , type) ~= 0 )
+               %if(getnameidx({'wall' 'repeller'} , type) ~= 0 )
                   obj.type = type;
-               end
+               %end
 
                obj.tol = tol;        
             end 

@@ -14,7 +14,8 @@ time_sym_struct.step = 0.001;
 fixed_step = false;
 
 %% TASK PARAMETERS
-name_dat = 'LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5';
+name_dat = 'sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE';
+%name_dat = 'LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5';
 %name_dat = 'LBR4p5.0__scene5_repellers_on_elbow__atrtactive_point_on_ee_fit5';
 path=LoadParameters(name_dat);
 load(path);
@@ -25,7 +26,7 @@ name_scenario = 'lbr_scenario5.1';
 %% STARTING CONDITION FOR SIMULATION
 % TODO generalize for multichain
 %qi{1} = qz;
-qi{i} = zeros(1,chains.GetNumLinks(1));
+qi{1} = zeros(1,chains.GetNumLinks(1));
 qdi{1} = zeros(1,chains.GetNumLinks(1));
 options= [];
 simulator_type = {'rbt'};
