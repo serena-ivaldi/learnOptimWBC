@@ -1,9 +1,9 @@
-function [tau,mean_performances, bestAction, policies, costs, succeeded]=OptimizationUF(n_of_experiment,iter,init_parameters,random)
-
+% number_of_iteration is usefull only for PlotGraphPaper.m main
+function [tau,mean_performances, bestAction, policies, costs, succeeded]=OptimizationUF(number_of_iteration,n_of_experiment,iter,init_parameters,random)
+  
+    
     AllRuntimeParameters
-    %% TODO
-    %% randomization init parameters
-    %% assigned a specific value as starting point
+   
     
     switch CONTROLLERTYPE
     case 'UF'
@@ -41,10 +41,17 @@ function [tau,mean_performances, bestAction, policies, costs, succeeded]=Optimiz
 
         %% Instance
         controller.GetTotalParamNum()
+        
+         %% TODO
+         %% randomization init parameters
+         %% assigned a specific value as starting point
         start_action = init_parameters*ones(1,controller.GetTotalParamNum());
 
         inst = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,fitness,options);
+        
+        tic
         [mean_performances ,bestAction ,policies ,costs ,succeeded] = inst.CMAES(start_action,niter,explorationRate);
+        exec_time = toc
 
         %scriptname = 'AllRuntimeParameters';
         % i have to change this number everytime i perform the same test with

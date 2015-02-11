@@ -67,6 +67,10 @@ fps = 200;
 video = false;
 
 if(~video)
+   zoom =  5.0698;
+   set(gca,'CameraViewAngle',zoom);
+   camera_position = [14.3762    9.7004   15.0093];
+   campos(camera_position)
    bot1.plot(q{1},'fps',fps);
 else
    %at the end of the video simulation after chosing a good camera pos and

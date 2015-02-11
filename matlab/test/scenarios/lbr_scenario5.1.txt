@@ -1,0 +1,26 @@
+%%%;;
+
+global G_OB;
+
+hold on;axis equal;
+
+attractive_point1 = [0.6 0 0.15];
+
+[X, Y ,Z]=meshgrid( 0.15:0.01:0.40 , -0.2:0.01:0.2 , 0.25);
+
+% global obstacle
+rapresentation.X = X;
+rapresentation.Y = Y;
+rapresentation.Z = Z;
+
+scatter3(X(:),Y(:),Z(:))
+
+scatter3(attractive_point1(1,1),attractive_point1(1,2),attractive_point1(1,3), 130);
+
+% global obstacle
+ob1 = Obstacle(rapresentation,'wall',[]);
+G_OB = [ob1];
+
+
+
+%%%EOF

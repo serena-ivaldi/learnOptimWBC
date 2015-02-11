@@ -53,8 +53,8 @@ end
 % save alpha plot 
 for ii = 1:size(controller.alpha,1)
     for jj = 1:size(controller.alpha,2)
-    saveas(handle_vec(ii,jj),strcat(complete_path,'/','\alpha',num2str(ii),num2str(jj)),'jpg');
-   end
+      saveas(handle_vec(ii,jj),strcat(complete_path,'/','\alpha',num2str(ii),num2str(jj)),'jpg');
+    end
 end
 
 

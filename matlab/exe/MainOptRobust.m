@@ -20,7 +20,7 @@ p = ProgressBar(number_of_iteration);
 
 
 parfor iter=1:number_of_iteration
-    [tau, mean_performances, bestAction, policies, costs, succeeded]=OptimizationUF(n_of_experiment,iter,init_parameters,random);
+    [tau, mean_performances, bestAction, policies, costs, succeeded]=OptimizationUF(number_of_iteration,n_of_experiment,iter,init_parameters,random);
      p.progress;
 end
 
