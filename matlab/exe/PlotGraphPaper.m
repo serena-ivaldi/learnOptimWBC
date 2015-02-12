@@ -192,7 +192,7 @@ function PlotAlpha(all_alpha,controller,time_struct)
               for kk = 1:size(alphas_time(k,:),2)
 
                  if(~isnan(alphas_time{k,kk}))
-                 cur_alpha_time(:,kk) = alphas_time{k,kk}(:,ii*jj); 
+                     cur_alpha_time(:,kk) = alphas_time{k,kk}(:,ii*jj); 
                  end
 
               end
