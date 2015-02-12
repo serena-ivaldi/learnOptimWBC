@@ -43,6 +43,7 @@ switch CONTROLLERTYPE
           case 'chained'  
             alphas = Alpha.ChainedAlpha.BuildCellArray(chains.GetNumChains(),matrix_value,ti,transition_interval,time_struct);
           case 'RBF'
+            number_of_action = chains.GetNumTasks(obj,ind_subchain)*chains.GetNumTasks(obj,ind_subchain);
             alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,value_range,precomp_sample,numeric_theta,false);
           otherwise
             warning('Uexpected alpha functions')
