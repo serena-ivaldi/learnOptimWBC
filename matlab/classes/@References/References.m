@@ -24,27 +24,28 @@ classdef  References < handle
           
          obj.target_link = target_link;
        
-         if(getnameidx({'joint' 'cartesian_x' 'cartesian_rpy'} , type) ~= 0 )
+         %warning: getnameidx is in the financial toolbox
+         %if(getnameidx({'joint' 'cartesian_x' 'cartesian_rpy'} , type) ~= 0 )
             obj.type = type;
-         end
-         if(getnameidx({'tracking' 'regulation'} , control_type) ~= 0)
+         %end
+         %if(getnameidx({'tracking' 'regulation'} , control_type) ~= 0)
             obj.control_type = control_type;
-         end
-         if(getnameidx({ 'circular','rectilinear', 'point-point_quintic' , 'point-point_trapezoidal' 'none'} , traj) ~= 0)
+         %end
+         %if(getnameidx({ 'circular','rectilinear', 'point-point_quintic' , 'point-point_trapezoidal' 'none'} , traj) ~= 0)
             obj.traj = traj;
-         end
+         %end
          
-         if(getnameidx({'exponential','linear','constant','trapezoidal' 'none'} , time_law) ~= 0)
+         %if(getnameidx({'exponential','linear','constant','trapezoidal' 'none'} , time_law) ~= 0)
             obj.time_law = time_law;
-         end
+         %end
          
          obj.geom_parameters = geom_parameters;
          obj.time_struct = time_struct;
          obj.mask = mask;
          
-         if(getnameidx({ 'sampled', 'func'} , type_of_traj) ~= 0)
+         %if(getnameidx({ 'sampled', 'func'} , type_of_traj) ~= 0)
             obj.type_of_traj = type_of_traj;
-         end
+         %end
          
             
       end  

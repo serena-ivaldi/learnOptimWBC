@@ -28,9 +28,9 @@ classdef  Repellers < handle
          obj.target_link = target_link;
          
        
-         if(getnameidx({'joint' 'cartesian_x' 'cartesian_rpy'} , type) ~= 0 )
+         %if(getnameidx({'joint' 'cartesian_x' 'cartesian_rpy'} , type) ~= 0 )
             obj.type = type;
-         end
+         %end
          obj.mask = mask;
          obj.obstacle_ref = obstacle_ref;
          obj.chain_dof = chain_dof;

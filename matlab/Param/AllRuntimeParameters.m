@@ -14,7 +14,8 @@ time_sym_struct.step = 0.001;
 fixed_step = false;
 
 %% TASK PARAMETERS
-name_dat = 'LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5';
+name_dat = 'sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE';
+%name_dat = 'LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5';
 %name_dat = 'LBR4p5.0__scene5_repellers_on_elbow__atrtactive_point_on_ee_fit5';
 path=LoadParameters(name_dat);
 load(path);

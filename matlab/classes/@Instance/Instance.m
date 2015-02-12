@@ -22,9 +22,9 @@ classdef  Instance
        
        function obj = Instance(controller,simulator_type,qinit,qdinit,time_sym_struct,fixed_step,fitness,options)
            obj.controller = controller;
-           if(getnameidx({'rbt','v-rep'} , simulator_type{1}) ~= 0 )
+           %if(getnameidx({'rbt','v-rep'} , simulator_type{1}) ~= 0 )
              obj.simulator = simulator_type;
-           end
+           %end
            obj.qinit = qinit;
            obj.qdinit= qdinit;
            obj.time_sym_struct = time_sym_struct;
