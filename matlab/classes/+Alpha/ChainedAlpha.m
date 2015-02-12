@@ -11,7 +11,7 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
       current_phase       % is an index that say which transition time we have to check to start a new transition 
       transition_flag     % when is 1 im in transition so i have to use the transition function i exit from transition when the value that we obtain are close to 0 or 1;
       all_value           % array of value used to train spline and for debug
-      all_func            % is the vector of all the value that we have for all time
+      alpha_func          % is the vector of all the value that we have for all time
       
    end
    
@@ -121,7 +121,40 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
    end
    
    methods (Static)
+      
+      function  all_func = BuildAlpha(matrix_value,ti,transition_interval,time_struct)
+          matrix_value= matrix_value(:,:,1);
+          % i add inf to vector of time to avoid that after the last
+          % transition i came back inside the transition block
+          obj.ti = [ti,inf];
+          obj.transition_interval = transition_interval;
+          
+          % compute transition matrix 
+          for i = 2 : size(matrix_value,3)
+             obj.transition_matrix(:,:,i-1) = matrix_value(:,:,i-1) - matrix_value(:,:,i);
+          end
+          
+          obj.current_phase = 1;
+          obj.transition_flag = 0;
+          % only to be compliant with the whole structure
+          obj.range = [0 1];
+          % repcompute all the value of the alpha and i fit this data with
+          % splines
+          time = time_struct.ti:time_struct.step:time_struct.tf;
+          obj.all_value = [];
+          for t = time
+            obj.all_value = [obj.all_value ; ComputeValue(obj,t)'];  
+          end
+          
+          for i = 1:size(obj.all_value,2)
+              all_func{i} = fit(time',obj.all_value(:,i),'smoothingspline');
+          end   
+      end
+      
+      
       function alphas = BuildCellArray(n_subchain,matrix_value,ti,transition_interval,time_struct)
+         
+               all_func = BuildAlpha(matrix_value,ti,transition_interval,time_struct)
          
                for i=1:n_subchain
                alphas{i} = Alpha.ChainedAlpha(matrix_value,ti,transition_interval,time_struct); 
