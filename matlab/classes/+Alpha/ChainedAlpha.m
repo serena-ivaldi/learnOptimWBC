@@ -19,37 +19,15 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
    
    methods
       
-      function obj = ChainedAlpha(matrix_value,ti,transition_interval,time_struct)
+      function obj = ChainedAlpha(alpha_func,ti,transition_interval,time_struct)
          
-          
           obj.time_struct = time_struct;
-          obj.matrix_value= matrix_value(:,:,1);
           % i add inf to vector of time to avoid that after the last
           % transition i came back inside the transition block
           obj.ti = [ti,inf];
           obj.transition_interval = transition_interval;
-          
-          % compute transition matrix 
-          for i = 2 : size(matrix_value,3)
-             obj.transition_matrix(:,:,i-1) = matrix_value(:,:,i-1) - matrix_value(:,:,i);
-          end
-          
-          obj.current_phase = 1;
-          obj.transition_flag = 0;
-          % only to be compliant with the whole structure
-          obj.range = [0 1];
-          % repcompute all the value of the alpha and i fit this data with
-          % splines
-          time = time_struct.ti:time_struct.step:time_struct.tf;
-          obj.all_value = [];
-          for t = time
-            obj.all_value = [obj.all_value ; ComputeValue(obj,t)'];  
-          end
-          
-          for i = 1:size(obj.all_value,2)
-              obj.all_func{i} = fit(time',obj.all_value(:,i),'smoothingspline');
-          end
-          
+          obj.alpha_func = alpha_func;
+           
       end
       
       %function that give the value of the alpha function with the current time 
@@ -99,8 +77,8 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
       end   
       
       
-      function result = GetValue(obj,t,index)
-         result = feval(obj.all_func{index},t);
+      function result = GetValue(obj,t)
+         result = feval(obj.alpha_func,t);
       end
       
       %this function for t = ti is equal to 1 
@@ -123,6 +101,7 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
    methods (Static)
       
       function  all_func = BuildAlpha(matrix_value,ti,transition_interval,time_struct)
+          % ONLY FOR SINGLE CHAINS!!
           matrix_value= matrix_value(:,:,1);
           % i add inf to vector of time to avoid that after the last
           % transition i came back inside the transition block
@@ -154,10 +133,13 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
       
       function alphas = BuildCellArray(n_subchain,matrix_value,ti,transition_interval,time_struct)
          
-               all_func = BuildAlpha(matrix_value,ti,transition_interval,time_struct)
+               all_func = BuildAlpha(matrix_value,ti,transition_interval,time_struct);
          
+               % WORK ONLY FOR SINGLE CHAIN
                for i=1:n_subchain
-               alphas{i} = Alpha.ChainedAlpha(matrix_value,ti,transition_interval,time_struct); 
+                  for j=1:size(all_func,1)
+                     alphas{i,j} = Alpha.ChainedAlpha(all_func,ti,transition_interval,time_struct); 
+                  end
                end
       end
       

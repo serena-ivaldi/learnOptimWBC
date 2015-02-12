@@ -16,7 +16,7 @@ function projector_list = ComputeGeneralizedProjector(obj,ind_subchain,J_list,t)
         
         % read and store the current value of alpha functions for each task 
         for k = 1:n_task
-            app_alpha(k) = obj.alpha{ind_subchain}.GetValue(t,index_alpha);
+            app_alpha(k) = obj.alpha{ind_subchain,index_alpha}.GetValue(t);
             index_alpha = index_alpha + 1;
         end
         % sort vector 

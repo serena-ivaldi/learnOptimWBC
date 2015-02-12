@@ -10,10 +10,10 @@ function PlotGraphPaper
    
    % if i give more than one result folder i will merge the result all
    % togheter
-   list_of_folder = {'_of_5_LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5'};
+   list_of_folder = {'_of_5_LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5','_of_4_LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5'};
    % name of the method that will be displayed in the legenda of graph
-   name_of_methods = {'UF'};
-   color_list={'b','b','g'};
+   name_of_methods = {'UF','UF'};
+   color_list={'b','r','g'};
    alpha_flag =true;
    variance_flag = false;
    
@@ -76,10 +76,7 @@ function [n_of_iter, control ,t_struct] = GetAdditionalData(cur_mat_path)
 
    load(cur_mat_path);
    
-   %n_of_iter = number_of_iteration;
-   %DEBUG
-   n_of_iter = 3;
-   %---
+   n_of_iter = number_of_iteration;
    t_struct = time_struct;
    control = controller;
 end
@@ -110,28 +107,40 @@ end
 % define more folder i merge the result in one graph
 function PlotFitness(all_fitness,variance_flag,name_of_methods,color_list)
 hold on;
-fit_mean = zeros(size(all_fitness{1},1),1);
-fit_var  = zeros(size(all_fitness{1},1),1);
-generation = 1:size(all_fitness{1},1);
 
-   for i = 1:size(all_fitness,1)
+   for i = 1:size(all_fitness,2)
+      fit_mean = zeros(size(all_fitness{i},1),1);
+      fit_var  = zeros(size(all_fitness{i},1),1);
+      
 
       for j = 1 : size(all_fitness{i},1)
          % i remove from the computation the failure value 
          current_generation = all_fitness{i}(j,:);
+         % remove all the failure 
          current_generation( current_generation==-10000000) = [];
+         
          fit_mean(j) = mean(current_generation,2);
          fit_var (j) = std(current_generation);
       end
       
       if(variance_flag)
-         shadedErrorBar(generation,fit_mean,fit_var,{'r-o','Color',color_list{i},'markerfacecolor',color_list{i}});
-         xlabel('generation','FontSize',16);
+         % remove all the not a number. it can happens if in one generation
+         % i have a failure in each experiment and in that case mean give
+         % back a NaN
+         fit_mean(isnan(fit_mean)) = [];
+         generation = 1:size(fit_mean,1);
+         shadedErrorBar(generation',fit_mean,fit_var,{'r-o','Color',color_list{i},'markerfacecolor',color_list{i}});
+         xlabel('generations','FontSize',16);
          ylabel('fitness','FontSize',16);
          legend(name_of_methods)
       else
-         plot(generation,fit_mean,'r-o','Color',color_list{i},'markerfacecolor',color_list{i})
-         xlabel('generation','FontSize',16);
+         % remove all the not a number. it can happens if in one generation
+         % i have a failure in each experiment and in that case mean give
+         % back a NaN
+         fit_mean(isnan(fit_mean)) = [];
+         generation = 1:size(fit_mean,1);
+         plot(generation',fit_mean,'r-o','Color',color_list{i},'markerfacecolor',color_list{i})
+         xlabel('generations','FontSize',16);
          ylabel('fitness','FontSize',16);
          legend(name_of_methods)
       end
@@ -143,7 +152,7 @@ end
 % plot mean and std deviation for each alpha having a bunch of experiment
 function PlotAlpha(all_alpha,controller,time_struct)
 
-   for k = 1:size(all_alpha,1)
+   for k = 1:size(all_alpha,2)
       
       time = time_struct{k}.ti:time_struct{k}.step:time_struct{k}.tf;
       cur_alpha_mean_time = zeros(size(time,1),1);
@@ -179,9 +188,12 @@ function PlotAlpha(all_alpha,controller,time_struct)
           for jj = 1:size(controller{k}.alpha,2)
 
               cur_alpha_time = [];
-              for kk = 1:size(alphas_time{k},2)
+              
+              for kk = 1:size(alphas_time(k,:),2)
 
+                 if(~isnan(alphas_time{k,kk}))
                  cur_alpha_time(:,kk) = alphas_time{k,kk}(:,ii*jj); 
+                 end
 
               end
 
