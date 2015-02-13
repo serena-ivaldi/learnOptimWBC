@@ -97,7 +97,10 @@ classdef  Constraints < handle
            %param(1,1) = obstacle in the world 
            %param(2,1) = task involved in the obstacle avoidance 
            g = zeros(1,DOF*(n_of_task+1)); 
-           normal_dist = G_OB(param(1,1)).Normal(cp(:,param(2,1))')';
+           % the minus in the nexet line assures that the normal vector
+           % point from the end_effector to the surface and not vice versa
+           % as a normal vector of a surface
+           normal_dist = -G_OB(param(1,1)).Normal(cp(:,param(2,1))')';
            cur_distance = G_OB(param(1,1)).Dist(cp(:,param(2,1))',2)
            
            hortho_distance_per_J=normal_dist*J_list{param(2,1)};
@@ -108,9 +111,9 @@ classdef  Constraints < handle
                 index = index + DOF;
            end
            %DEBUG
-           MaxAllowVel2(G_OB(param(1,1)).Dist(cp(:,param(2,1))',2),delta_t)
+           %MaxAllowVel2(G_OB(param(1,1)).Dist(cp(:,param(2,1))',2),delta_t)
            %---
-           hi = (MaxAllowVel2(cur_distance,delta_t) - hortho_distance_per_J*qd')/delta_t
+           hi = (MaxAllowVel2(cur_distance,delta_t) - hortho_distance_per_J*qd')/delta_t;
        end  
       
      
@@ -133,7 +136,7 @@ end
 
 function val=MaxAllowVel(dist,delta_t)
           
-   val = (exp((dist-0.1)/delta_t))*0.5 - (exp((-dist-0.1)/delta_t))*0.4999999999999999999999999999999;      
+   val = (exp((dist-0.1)/delta_t))*0.5 - (exp((-dist-0.1)/delta_t))*0.49;      
 end
 
 function val=MaxAllowVel1(dist,delta_t)
@@ -143,8 +146,8 @@ end
 
 function val=MaxAllowVel2(dist,delta_t)
           
-       if dist<0.1
-          val = -10;
+       if dist<0.09
+          val = -1;
        else
           val = 10000;
        end

@@ -8,9 +8,7 @@ function projector_list = ComputeGeneralizedProjector(obj,ind_subchain,J_list,t)
     Js = [];
     alpha_vec_s_diag = [];
     
-    %DEBUG
-    %t
-    %--- 
+    
     index_alpha = 1;
     for j = 1 : n_task
         

@@ -10,11 +10,11 @@ function PlotGraphPaper
    
    % if i give more than one result folder i will merge the result all
    % togheter
-   list_of_folder = {'_of_5_LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5','_of_4_LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5'};
+   list_of_folder = {'_of_6_sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE'};
    % name of the method that will be displayed in the legenda of graph
    name_of_methods = {'UF','UF'};
    color_list={'b','r','g'};
-   alpha_flag =true;
+   alpha_flag =false;
    variance_flag = false;
    
    % for now i have to use a driver because when i compute value in the
