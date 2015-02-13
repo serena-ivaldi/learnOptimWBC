@@ -16,7 +16,7 @@ type_of_rep_strct={'extended_decoupled' 'extended_combine','stacked' };
 
 %ALPHA PARAMETERS
 %rbf
-number_of_basis = 10;
+number_of_basis = 5; %10;
 redundancy = 3;
 value_range = [0 , 12];
 precomp_sample = false;
@@ -53,7 +53,7 @@ regularizer{2} = regularized_chain_2;
 % CMAES PARAMETER
 % starting value of parameters
 %init_parameters = 6;
-explorationRate =0.1;%[0, 1]
+explorationRate = 0.1; %0.5; %0.1;%[0, 1]
 niter = 80;  %number of generations
 fitness = @fitness6;
 

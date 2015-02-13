@@ -2,6 +2,8 @@ clear variables
 close all
 clc
 
+tic
+
 % this 2 line are necessatry if i want to catch warning message from ode
 warning on verbose
 warning('error', 'MATLAB:ode15s:IntegrationTolNotMet');
@@ -16,7 +18,7 @@ warning('error', 'MATLAB:illConditionedMatrix')
 
 % SERE
 % Parameters 
-n_of_experiment = 6;        % number that we use to distinguish between the same static parameters settings but with different runtime parameters
+n_of_experiment = 8; %7; %6;        % number that we use to distinguish between the same static parameters settings but with different runtime parameters
 init_parameters = 6;        %initial value for the optimization  (the scale is 0-12, so 6=0.5)
 number_of_iteration = 50;    % number of  optimzation (for robustness assesement)
 random = false;             % if true i randomize init_parameters for each iteration
@@ -35,6 +37,6 @@ end
 p.stop;
 
 
-
+toc
 
 
