@@ -75,7 +75,7 @@ classdef  GHC < Controllers.AbstractController
       
       function  final_tau  = Policy(obj,t,q,qd)
           %DEBUG
-          t
+          %t
           %--- 
          
           % active robot 
@@ -104,7 +104,7 @@ classdef  GHC < Controllers.AbstractController
           [A,b] = obj.DisequalityConstraints(DOF,n_of_task,obj.delta_t,J_list,projector_list,qd,cp);
           
           % result
-          options = optimset('Algorithm','interior-point-convex');
+          options = optimset('Display','off','Algorithm','interior-point-convex'); % if i remove display off i see if the optimization problem is solved for each step
           x=quadprog(H,f,A,b,Aeq,beq,[],[],[],options);
           
           final_tau = x(1:DOF,1); 
@@ -112,10 +112,37 @@ classdef  GHC < Controllers.AbstractController
           obj.SaveTau(i,final_tau) 
       end
       
-      %empty only for fullfil the requiriments of the interface 
-      function GetTotalParamNum(obj)
-
+       %% all the function from this point DO NOT SUPPORT multichain structure (this part work only with RBF)
+      % in this function i update the value of the alpha function giving
+      % new set of parameters
+      
+      % the implicit rule with repellers is that first i update the rbf
+      % functions for the task and after i update the alpha function
+      % for repellers 
+      function UpdateParameters(obj,parameters)
+       disp('im in update parameters')   
+         for i=1:size(obj.alpha,1) 
+             index = 1;
+             for j=1:size(obj.alpha,2)  
+                 n_param = obj.alpha{i,j}.GetParamNum();
+                 app_param = parameters(index:index+n_param - 1);
+                 obj.alpha{i,j}.ComputeNumValue(app_param')
+                 index = index+n_param;
+             end
+         end
       end
+      
+       
+      function n_param=GetTotalParamNum(obj)
+          
+          n_param = 0;
+          for i=1:1:size(obj.alpha,1) 
+             for j=1:size(obj.alpha,2) 
+                 n_param = n_param + obj.alpha{i,j}.GetParamNum();
+             end
+          end
+      end
+      
 
       
       

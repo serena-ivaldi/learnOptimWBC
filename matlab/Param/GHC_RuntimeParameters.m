@@ -3,18 +3,18 @@ disp('GHC_RUNTIMEPARAM')
 %%%;;
 
 %% Constraints
-constraints_list={'obsavoid','vellimit','vellimit','torquelimit','torquelimit'};
-cdata1 = [1;1];
-cdata2 = [1;1000];
-cdata3 = [0;1000];
-cdata4 = [1;2000];
-cdata5 = [0;2000];
-constraints_data = [cdata1, cdata2, cdata3, cdata4, cdata5];
+constraints_list={'vellimit','vellimit','torquelimit','torquelimit'};
+%cdata1 = [1;1];
+cdata1 = [1;1000];
+cdata2 = [0;1000];
+cdata3 = [1;2000];
+cdata4 = [0;2000];
+constraints_data = [cdata1, cdata2, cdata3, cdata4]%, cdata5];
 
 
 %% flag to choose type of alpha 
 % RBF or chained
-choose_alpha = 'chained';
+choose_alpha = 'RBF';
 
 %% ChainedAlpha
 transition_interval = 1.5;
