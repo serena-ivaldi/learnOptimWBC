@@ -16,7 +16,7 @@ type_of_rep_strct={'extended_decoupled' 'extended_combine','stacked' };
 
 %ALPHA PARAMETERS
 %rbf
-number_of_basis = 5; %10;
+number_of_basis = 10;
 redundancy = 3;
 value_range = [0 , 12];
 precomp_sample = false;
@@ -24,7 +24,7 @@ precomp_sample = false;
 % from the optimization step
 
 %from 10 generation of CMAES: collision with end-eff and table
-numeric_theta = [1.351681 10.784147 9.724284 6.550806 7.740233 5.928500 8.123806 7.776163 6.548935 5.474038 7.455956 4.011111 6.704292 1.089315 3.712038 6.041540 5.098971 5.054418 6.312087 6.223340 ];
+numeric_theta = [1.351681 10.784147 9.724284 6.550806 7.740233 5.928500 8.123806 7.776163 6.548935 5.474038 7.455956 4.011111 6.704292 1.089315 3.712038 6.041540 5.098971 5.054418 6.312087 6.223340 ] 
 
 % this is a good one (obtained by 80 generations of CMAES)
 %numeric_theta = [2.885347 7.054374 6.510485 4.220996 3.779241 7.292772 6.753379 4.039816 3.503077 7.105706 7.242047 5.176997 6.656641 7.282674 6.310105 2.320801 6.164860 5.949270 5.958774 3.349248]; 
@@ -53,7 +53,7 @@ regularizer{2} = regularized_chain_2;
 % CMAES PARAMETER
 % starting value of parameters
 %init_parameters = 6;
-explorationRate = 0.1; %0.5; %0.1;%[0, 1]
+explorationRate = 0.5; %0.1;%[0, 1]
 niter = 80;  %number of generations
 fitness = @fitness6;
 
