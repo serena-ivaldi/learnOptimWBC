@@ -150,7 +150,7 @@ classdef  UF < Controllers.AbstractController
            end   
       end
       
-      %% all the function from this point DO NOT SUPPORT multichain structure
+      %% all the function from this point DO NOT SUPPORT multichain structure (this part work only with RBF)
       % in this function i update the value of the alpha function giving
       % new set of parameters
       
