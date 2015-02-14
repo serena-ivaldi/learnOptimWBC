@@ -14,7 +14,8 @@ time_sym_struct.step = 0.001;
 fixed_step = false;
 
 %% TASK PARAMETERS
-name_dat = 'LBR4p8.0__scene9_GHC_test_wall_and_two_attractive_point';
+name_dat = 'sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE';
+%name_dat = 'LBR4p8.0__scene9_GHC_test_wall_and_two_attractive_point';
 path=LoadParameters(name_dat);
 load(path);
 
