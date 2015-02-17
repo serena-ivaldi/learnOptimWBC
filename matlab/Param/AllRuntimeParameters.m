@@ -20,7 +20,7 @@ path=LoadParameters(name_dat);
 load(path);
 
 %% SCENARIO
-name_scenario = 'lbr_scenario9';
+name_scenario = 'lbr_scenario5.1'; %'lbr_scenario9';
 
 %% STARTING CONDITION FOR SIMULATION
 % TODO generalize for multichain
