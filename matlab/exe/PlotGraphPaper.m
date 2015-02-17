@@ -10,12 +10,12 @@ function PlotGraphPaper
    
    % if i give more than one result folder i will merge the result all
    % togheter
-   list_of_folder = {'_of_8_sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE'};
+   list_of_folder = {'_of_12_sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE'};
    % name of the method that will be displayed in the legenda of graph
    name_of_methods = {'UF','UF'};
    color_list={'b','r','g'};
-   alpha_flag =false;
-   variance_flag = false;
+   alpha_flag =true;
+   variance_flag = true;
    
    % for now i have to use a driver because when i compute value in the
    % last version i did not put the number of experiments in data.mat
@@ -209,6 +209,7 @@ function PlotAlpha(all_alpha,controller,time_struct)
               shadedErrorBar(time,cur_alpha_mean_time,cur_alpha_var_time,{'r-o','Color','r','markerfacecolor','r'});
               xlabel('t','FontSize',16);
               ylabel(strcat('\alpha_{',num2str(ii),num2str(jj),'}'),'FontSize',16);
+              ylim([0 1])
 
           end
       end
