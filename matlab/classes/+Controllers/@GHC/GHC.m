@@ -75,7 +75,9 @@ classdef  GHC < Controllers.AbstractController
       
       function  final_tau  = Policy(obj,t,q,qd)
           %DEBUG
-          %t
+          t
+%           q
+%           qd
           %--- 
          
           % active robot 
@@ -104,10 +106,18 @@ classdef  GHC < Controllers.AbstractController
           [A,b] = obj.DisequalityConstraints(DOF,n_of_task,obj.delta_t,J_list,projector_list,qd,cp);
           
           % result
-          options = optimset('Display','off','Algorithm','interior-point-convex'); % if i remove display off i see if the optimization problem is solved for each step
+          options = optimset('Display','on','Algorithm','interior-point-convex','TolCon',0.0000000000001); % if i remove display off i see if the optimization problem is solved for each step 
           x=quadprog(H,f,A,b,Aeq,beq,[],[],[],options);
+%           n = size(H,1);
+%           cvx_begin quiet
+%              variable x(n)
+%              minimize ( (1/2)*quad_form(x,H) + f*x)
+%              Aeq*x == beq;
+%              A*x <=  b;
+%           cvx_end
+
           
-          final_tau = x(1:DOF,1); 
+          final_tau = x(1:DOF,1);
           
           obj.SaveTau(i,final_tau) 
       end

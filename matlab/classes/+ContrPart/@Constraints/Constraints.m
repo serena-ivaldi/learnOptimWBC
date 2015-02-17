@@ -100,10 +100,10 @@ classdef  Constraints < handle
            % the minus in the nexet line assures that the normal vector
            % point from the end_effector to the surface and not vice versa
            % as a normal vector of a surface
-           normal_dist = -G_OB(param(1,1)).Normal(cp(:,param(2,1))')';
+           normal_dist = G_OB(param(1,1)).Normal(cp(:,param(2,1))')';
            cur_distance = G_OB(param(1,1)).Dist(cp(:,param(2,1))',2)
            
-           hortho_distance_per_J=normal_dist*J_list{param(2,1)};
+           hortho_distance_per_J= - normal_dist*J_list{param(2,1)};
            index = DOF;
            
            for i=1:n_of_task
@@ -111,9 +111,11 @@ classdef  Constraints < handle
                 index = index + DOF;
            end
            %DEBUG
-           %MaxAllowVel2(G_OB(param(1,1)).Dist(cp(:,param(2,1))',2),delta_t)
+           MaxAllowVel3(cur_distance,delta_t)
+           hortho_distance_per_J*qd'
            %---
-           hi = (MaxAllowVel2(cur_distance,delta_t) - hortho_distance_per_J*qd')/delta_t;
+           
+           hi = ( MaxAllowVel3(cur_distance,delta_t)  - hortho_distance_per_J*qd')/delta_t;
        end  
       
      
@@ -153,5 +155,16 @@ function val=MaxAllowVel2(dist,delta_t)
        end
           
 end
+
+function val=MaxAllowVel3(dist,delta_t)
+          
+       if dist<1
+          val = -1000*log(1.1 - dist);
+       else
+          val = 2000;
+       end
+          
+end
+
 
 
