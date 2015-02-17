@@ -1,5 +1,5 @@
 % number_of_iteration is usefull only for PlotGraphPaper.m main
-function [tau,mean_performances, bestAction, policies, costs, succeeded]=OptimizationUF(number_of_iteration,n_of_experiment,iter,init_parameters,random)
+function [tau,mean_performances, bestAction, policies, costs, succeeded]=OptimizationRoutine(number_of_iteration,n_of_experiment,iter,init_parameters_from_out,random)
   
     
      AllRuntimeParameters
@@ -72,12 +72,14 @@ function [tau,mean_performances, bestAction, policies, costs, succeeded]=Optimiz
      end
 
      %% Instance
-     controller.GetTotalParamNum()
 
-      %% TODO
-      %% randomization init parameters
-      %% assigned a specific value as starting point
-     start_action = init_parameters*ones(1,controller.GetTotalParamNum());
+     % im using init_value from outside
+     start_action = init_parameters_from_out*ones(1,controller.GetTotalParamNum());
+     if(random)
+            
+        start_action = (value_range(1,2)-value_range(1,1)).*rand(1,controller.GetTotalParamNum()) + value_range(1,1)*ones(1,controller.GetTotalParamNum());
+       
+     end
 
      inst = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,fitness,options);
 
