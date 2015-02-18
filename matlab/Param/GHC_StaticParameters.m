@@ -16,7 +16,7 @@ ti =[2 6 8];
 
 %% CONTROLLER PARAMETERS
 % % row vector one for each chain
-kp = [1000 1000 1000]; 
+kp = [600 1200 1200]; 
 kd = [2*sqrt(kp) 2*sqrt(kp) 2*sqrt(kp)];
 
 for i= 1:chains.GetNumChains()
