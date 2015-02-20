@@ -16,6 +16,7 @@ classdef  UF < Controllers.AbstractController
       max_time         % maximum time simulation allowed
       current_time     % current time to force stop for long iteration
       torques          %  resulting torque (cell array of matrix)
+      torques_time     % all the time istant when i aply a torque.
       display_opt      % display settings display_opt.step display_opt.trajtrack
    end
 
@@ -46,9 +47,15 @@ classdef  UF < Controllers.AbstractController
              end
              obj.regularizer{i}=app_vector;
          end
+         
+         % initialize torque and torque time
          obj.torques = cell(obj.subchains.GetNumChains());
          for i = 1:obj.subchains.GetNumChains()
-            obj.torques{i} = zeros(obj.subchains.GetNumLinks(i),1);  %tau(n_of_total_joint on the chain x 1)
+            obj.torques{i} = [];  %tau(n_of_total_joint on the chain x 1)
+         end
+         obj.torques_time = cell(obj.subchains.GetNumChains());
+         for i = 1 :obj.subchains.GetNumChains()
+            obj.torques_time{i} = [];
          end
          obj.max_time = max_time;
          obj.current_time = [];
@@ -63,8 +70,12 @@ classdef  UF < Controllers.AbstractController
 %             obj.display_opt.trajtrack = disp_opt.trajtrack;   
 %          end
          
-      end    
+       end    
 
+      function SaveTime(obj,ind_subchain,time)
+         obj.torques_time{ind_subchain} = [obj.torques_time{ind_subchain}(:,:),time];
+      end
+       
       function SaveTau(obj,ind_subchain,tau)
          obj.torques{ind_subchain} = [obj.torques{ind_subchain}(:,:),tau];   
       end
@@ -73,6 +84,12 @@ classdef  UF < Controllers.AbstractController
           for i = 1 :obj.subchains.GetNumChains()
             obj.torques{i} = [];
           end
+      end
+      
+      function CleanTime(obj)
+         for i = 1 :obj.subchains.GetNumChains()
+            obj.torques_time{i} = [];
+         end
       end
       
       function SetCurRobotIndex(obj,index_chain)
@@ -126,7 +143,8 @@ classdef  UF < Controllers.AbstractController
              end
              
              final_tau = sum(app_tau,2);
-             obj.SaveTau(i,final_tau) 
+             obj.SaveTau(i,final_tau); 
+             obj.SaveTime(i,t);
              
            elseif(strcmp(obj.combine_rule,'projector'))   
                
@@ -146,7 +164,7 @@ classdef  UF < Controllers.AbstractController
              final_tau = ((M*N)/M)*final_tau;
             
              obj.SaveTau(i,final_tau) 
-               
+             obj.SaveTime(i,t);  
            end   
       end
       

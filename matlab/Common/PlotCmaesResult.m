@@ -82,11 +82,9 @@ end
 handle = figure;
 hold on;
 plot(evo,mean);
-
-%   fill([evo;flipud(evo)],[mean+2 * variance;flipud(mean+2 * variance)],...
-%        'r','EdgeColor','r','FaceAlpha',0.1,'EdgeAlpha',0.3);
-plot(evo, mean + 2 * variance, ':');
-plot(evo, mean - 2 * variance, ':');
+%variance plot of cmaes not significant
+% plot(evo, mean + 2 * variance, ':');
+% plot(evo, mean - 2 * variance, ':');
 xlabel('evolutions','FontSize',16);
 ylabel('fitness','FontSize',16);
 

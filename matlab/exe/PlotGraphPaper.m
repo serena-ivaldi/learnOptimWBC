@@ -2,7 +2,7 @@
 % to compare methods and to establish if the activation policies have to many
 % basis functions(overfitting).
 % TODO add time plot!. i have to change data.mat in the optimization loop
-function PlotGraphPaper
+function [all_controller,all_tau]=PlotGraphPaper
    
    close all 
    clear variable 
@@ -14,33 +14,44 @@ function PlotGraphPaper
    % name of the method that will be displayed in the legenda of graph
    name_of_methods = {'UF','UF'};
    color_list={'b','r','g'};
-   alpha_flag =true;
    variance_flag = true;
+   alpha_flag =false;
+   position_joint_torque_flag = true;
+   % with this variable i control for each folder how many sample i
+   % consider for the plot of the position e-e elbow and for the joint
+   %it is necessary to have one increment for each folder 
+   increment = [0.1 0.001];
+   % interpolation step for the tau if we use a small step wi will badly
+   % capture the value of the applied torque
+   interpolation_step = 0.01;
    
-   % for now i have to use a driver because when i compute value in the
-   % last version i did not put the number of experiments in data.mat
+   
    for i=1:size(list_of_folder,2)
       % here i take only the first because i make the hypotesis that the
       % data necessary here for each series of experiment are all similar
       % to the first of each series
       cur_folder_path = BuildMatFilePath(list_of_folder{i},1);
-      [number_of_iteration,controller,time_struct] = GetAdditionalData(cur_folder_path);
+      [number_of_iteration,controller,time_struct,cur_qi,cur_qdi,cur_fixed_step] = GetAdditionalData(cur_folder_path);
       list_number_of_iteration(i) = number_of_iteration;
-      list_controller{i}= controller;
+      controller_first_iteration{i}= controller;
       list_time_struct{i}= time_struct;
+      qi = cur_qi;
+      qdi = cur_qdi;
+      fixed_step(i) = cur_fixed_step;
    end
     
     all_cur_fitness = [];
     all_cur_alpha   = [];
     
    for i=1:size(list_of_folder,2)
-
+ 
       for j=1:list_number_of_iteration(i)
          cur_folder_path = BuildMatFilePath(list_of_folder{i},j);
-         [cur_fitness,cur_alpha,cur_time]=GetFitnessResultAndAlpha(cur_folder_path);
+         [cur_fitness,cur_alpha,cur_time,cur_control] = GetFitnessAlphaTimeControl(cur_folder_path);
          all_cur_fitness = [all_cur_fitness, cur_fitness];
          all_cur_alpha  =  [all_cur_alpha cur_alpha];
          all_exec_cur_time(1,j) = cur_time;
+         all_controller{i,j} = cur_control;
       end
 
       all_fitness{i} = all_cur_fitness;
@@ -48,13 +59,25 @@ function PlotGraphPaper
       all_exec_time{i} = all_exec_cur_time;
       all_cur_fitness = [];
       all_cur_alpha   = [];
+      all_exec_cur_time = [];
+      
    end
 
    PlotFitness(all_fitness,variance_flag,name_of_methods,color_list);
    
    if(alpha_flag)
-      PlotAlpha(all_alpha,list_controller,list_time_struct);
+      PlotAlpha(all_alpha,controller_first_iteration,list_time_struct);
    end
+   
+   
+   if(position_joint_torque_flag)
+      tic
+      [all_q,all_tau,all_ee,all_elbow]=ComputeTorqueAndCartesianJointPos(all_controller,list_time_struct,qi,qdi,fixed_step,increment,interpolation_step);
+      toc
+      PlotJoints(all_q,list_time_struct);
+      PlotTorque(all_tau,list_time_struct,interpolation_step)
+   end
+   
 
 
 end
@@ -72,19 +95,22 @@ end
 % eith this function i collect all the data that are necessary for the
 % subsequent method. the hypothesis is that the firsrt experiment share the
 % same data with the others 
-function [n_of_iter, control ,t_struct] = GetAdditionalData(cur_mat_path)
+function [n_of_iter, control ,t_struct,qinit,qdinit,cur_fixed_step] = GetAdditionalData(cur_mat_path)
 
    load(cur_mat_path);
-   
+    
    n_of_iter = number_of_iteration;
    t_struct = time_struct;
    control = controller;
+   qinit  = qi;
+   qdinit = qdi;
+   cur_fixed_step = fixed_step;
 end
 
 % with this function i collect best fitness value for each generation and 
 % the best alpha combination fo the current experiment
 % and the time execution of the experiment
-function [cur_fitness,cur_alpha,cur_time]=GetFitnessResultAndAlpha(cur_mat_path)
+function [cur_fitness,cur_alpha,cur_time,cur_controller]=GetFitnessAlphaTimeControl(cur_mat_path)
 
    load(cur_mat_path);
    
@@ -95,10 +121,18 @@ function [cur_fitness,cur_alpha,cur_time]=GetFitnessResultAndAlpha(cur_mat_path)
    
    cur_alpha = bestAction.parameters';
    
-   %cur_time = exec_time;
-   %DEBUG
-   cur_time = 0;
-   %---
+   cur_time = exec_time;
+   % i have to clean this variable because in fdyn he expect that it is
+   % empty
+   controller.current_time = [];
+   % i have to provide the controller with this new field that i add after
+   % taking data
+   controller.torques_time = cell(controller.subchains.GetNumChains());
+   for i = 1 :controller.subchains.GetNumChains()
+      controller.torques_time{i} = [];
+   end
+   cur_controller = controller;
+
 end
 
 
@@ -177,8 +211,7 @@ function PlotAlpha(all_alpha,controller,time_struct)
          end
          % in vec values i have all the value for the k-th experiment for
          % every kinematic chain one for each 
-         alphas_time{k,kk} = vec_values;
-         disp('yea')  
+         alphas_time{k,kk} = vec_values;  
       end
    end
    
@@ -222,9 +255,118 @@ function PlotAlpha(all_alpha,controller,time_struct)
 
 end
 
+% i need to compute direcctly the mean for each variable to avoid 
+function [all_q,all_tau,all_ee,all_elbow]=ComputeTorqueAndCartesianJointPos(all_controller,time_sym_struct,qi,qdi,fixed_step,increment,interp_step)
+
+for i=1:size(all_controller,1)
+   % in this way i reduce the number of sample changing the step for the
+   % current time_sym_struct
+   time_sym_struct{i}.step = increment(1,i); 
+   for j = 1:size(all_controller,2)
+         if(isobject(all_controller{i,j}))
+               [t, q, qd] = DynSim(time_sym_struct{i},all_controller{i,j},qi(i,:),qdi(i,:),fixed_step(i));
+               all_q{i,j} = q{1}';
+               % all_tau is a cell{i,j} of cell{i}
+               all_tau{i,j} = InterpTorque(all_controller{i,j},time_sym_struct{i},interp_step);
+               %all_tau{i,j} = all_controller{i,j}.torques{1};
+               [ee,elbow]=ComputePositions(q{1},t,all_controller{i,j});
+               all_ee{i,j} = ee;
+               all_elbow{i,j} = elbow;   
+         end
+   end
+end
+
+
+end
+
+
+function [ee,elbow]=ComputePositions(q,t,controller)
+   ee = [];
+   elbow = [];
+   
+   for i=1:size(t,2)
+      q_cur = q(i,:);
+      % compute the trajectory error (absolute error)
+      kinematic=CStrCatStr({'controller.subchains.sub_chains{1}.T0_'},num2str(controller.subchains.GetNumSubLinks(1,1)),{'(q_cur)'});
+      T = eval(kinematic{1});
+      ee = [ee , T(1:3,4)];
+      kinematic=CStrCatStr({'controller.subchains.sub_chains{1}.T0_'},'3',{'(q_cur)'});
+      T = eval(kinematic{1});
+      elbow = [elbow, T(1:3,4)];
+   end
+end
+
+% i obtain the interpolated torque and in this way i can compute mean and
+% variance
+function torque=InterpTorque(controller,time_struct,interp_step)
+   time = time_struct.ti:interp_step:time_struct.tf;
+   [unique_time,ia,ic] = unique(controller.torques_time{1});
+   torque = [];
+   for i = 1:size(controller.torques{1},1)
+      
+      unique_torque = controller.torques{1}(i,ia);
+      interp_torque = interp1(unique_time,unique_torque,time,'nearest');
+      torque = [torque , interp_torque'];
+   end 
+end
+
+
+function PlotJoints(all_q,list_time_struct)
+   
+   for i = 1:size(all_q,1)
+      time = list_time_struct{i}.ti:list_time_struct{i}.step:list_time_struct{i}.tf;
+      result_avg = zeros(size(all_q{i,1},2),size(all_q{i,1},1));
+      result_std = zeros(size(all_q{i,1},2),size(all_q{i,1},1));
+      for k = 1:size(all_q{i,1},2)
+         cur_sample = [];
+         for j = 1:size(all_q,2)
+            
+            cur_sample = [cur_sample ,all_q{i,j}(:,k)];
+   
+         end
+         result_avg(k,:) = mean(cur_sample,2)';
+         result_std(k,:) = std(cur_sample,0,2)';
+         
+      end
+      
+      %time = 1:size(result_avg,1);
+      
+      % plot each q
+      for h=1:size(result_avg,2)
+         figure
+         shadedErrorBar(time,result_avg(:,h),result_std(:,h),{'r-o','Color','r','markerfacecolor','r'});
+      end
+      
+   end
+end
+% plot the average and the std deviation for each bunch
+function PlotTorque(all_tau,list_time_struct,interp_step)
+
+for i=1:size(all_tau,1)
+   time = list_time_struct{i}.ti:interp_step:list_time_struct{i}.tf;
+   % this is a cycle on the different torque joint
+   for k = 1:size(all_tau{i,1},2)
+   all_cur_value = zeros(size(time,2),size(all_tau,2));   
+      for j = 1:size(all_tau,2)
+         all_cur_value(:,j) = all_tau{i,j}(:,k);
+      end
+      cur_mean = mean(all_cur_value,2);
+      cur_var  = std(all_cur_value,0,2);
+      
+     figure
+      %cur_var = zeros(size(time,2),1);
+      shadedErrorBar(time,cur_mean,cur_var,{'b-o','Color','b','markerfacecolor','b'});
+      
+   end
+end
+
+
+end
+
+function PlotTrajectory()
 
 
 
-
+end
 
 
