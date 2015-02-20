@@ -14,6 +14,7 @@ classdef  GHC < Controllers.AbstractController
       max_time         % maximum time simulation allowed
       current_time     % current time to force stop for long iteration
       torques          %  resulting torque (cell array of matrix)
+      torques_time     % all the time istant when i aply a torque.
       display_opt      % display settings display_opt.step display_opt.trajtrack
    end
 
@@ -44,7 +45,11 @@ classdef  GHC < Controllers.AbstractController
          obj.display_opt.trajtrack = false;
 
          
-      end    
+       end    
+      
+      function SaveTime(obj,ind_subchain,time)
+         obj.torques_time{ind_subchain} = [obj.torques_time{ind_subchain}(:,:),time];
+      end
 
       function SaveTau(obj,ind_subchain,tau)
          obj.torques{ind_subchain} = [obj.torques{ind_subchain}(:,:),tau];   
@@ -54,6 +59,12 @@ classdef  GHC < Controllers.AbstractController
           for i = 1 :obj.subchains.GetNumChains()
             obj.torques{i} = [];
           end
+      end
+      
+      function CleanTime(obj)
+         for i = 1 :obj.subchains.GetNumChains()
+            obj.torques_time{i} = [];
+         end
       end
       
       function SetCurRobotIndex(obj,index_chain)
@@ -75,7 +86,7 @@ classdef  GHC < Controllers.AbstractController
       
       function  final_tau  = Policy(obj,t,q,qd)
           %DEBUG
-          t
+          %t
 %           q
 %           qd
           %--- 
@@ -120,6 +131,7 @@ classdef  GHC < Controllers.AbstractController
           final_tau = x(1:DOF,1);
           
           obj.SaveTau(i,final_tau) 
+          obj.SaveTime(i,t);  
       end
       
        %% all the function from this point DO NOT SUPPORT multichain structure (this part work only with RBF)

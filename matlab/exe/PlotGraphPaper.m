@@ -2,7 +2,7 @@
 % to compare methods and to establish if the activation policies have to many
 % basis functions(overfitting).
 % TODO add time plot!. i have to change data.mat in the optimization loop
-function [all_controller,all_tau]=PlotGraphPaper
+function PlotGraphPaper
    
    close all 
    clear variable 
@@ -10,7 +10,7 @@ function [all_controller,all_tau]=PlotGraphPaper
    
    % if i give more than one result folder i will merge the result all
    % togheter
-   list_of_folder = {'_of_12_sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE'};
+   list_of_folder = {'_of_7_sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE'};
    % name of the method that will be displayed in the legenda of graph
    name_of_methods = {'UF','UF'};
    color_list={'b','r','g'};
@@ -31,13 +31,17 @@ function [all_controller,all_tau]=PlotGraphPaper
       % data necessary here for each series of experiment are all similar
       % to the first of each series
       cur_folder_path = BuildMatFilePath(list_of_folder{i},1);
-      [number_of_iteration,controller,time_struct,cur_qi,cur_qdi,cur_fixed_step] = GetAdditionalData(cur_folder_path);
+      [number_of_iteration,controller,time_struct,cur_qi,cur_qdi,cur_fixed_step,cur_scene,bot] = GetAdditionalData(cur_folder_path);
       list_number_of_iteration(i) = number_of_iteration;
       controller_first_iteration{i}= controller;
       list_time_struct{i}= time_struct;
+      %TODO generalize to multiple experiment
       qi = cur_qi;
       qdi = cur_qdi;
+      %----
       fixed_step(i) = cur_fixed_step;
+      all_scene{i} = cur_scene;
+      all_bot{i} = bot;
    end
     
     all_cur_fitness = [];
@@ -75,7 +79,9 @@ function [all_controller,all_tau]=PlotGraphPaper
       [all_q,all_tau,all_ee,all_elbow]=ComputeTorqueAndCartesianJointPos(all_controller,list_time_struct,qi,qdi,fixed_step,increment,interpolation_step);
       toc
       PlotJoints(all_q,list_time_struct);
-      PlotTorque(all_tau,list_time_struct,interpolation_step)
+      PlotTorque(all_tau,list_time_struct,interpolation_step);
+      PlotTrajectory(all_ee,all_scene,list_time_struct,qi,all_bot);
+      PlotTrajectory(all_elbow,all_scene,list_time_struct,qi,all_bot)
    end
    
 
@@ -95,7 +101,7 @@ end
 % eith this function i collect all the data that are necessary for the
 % subsequent method. the hypothesis is that the firsrt experiment share the
 % same data with the others 
-function [n_of_iter, control ,t_struct,qinit,qdinit,cur_fixed_step] = GetAdditionalData(cur_mat_path)
+function [n_of_iter, control ,t_struct,qinit,qdinit,cur_fixed_step,scene,bot] = GetAdditionalData(cur_mat_path)
 
    load(cur_mat_path);
     
@@ -105,6 +111,8 @@ function [n_of_iter, control ,t_struct,qinit,qdinit,cur_fixed_step] = GetAdditio
    qinit  = qi;
    qdinit = qdi;
    cur_fixed_step = fixed_step;
+   scene = name_scenario;
+   bot = bot1;
 end
 
 % with this function i collect best fitness value for each generation and 
@@ -335,6 +343,8 @@ function PlotJoints(all_q,list_time_struct)
       for h=1:size(result_avg,2)
          figure
          shadedErrorBar(time,result_avg(:,h),result_std(:,h),{'r-o','Color','r','markerfacecolor','r'});
+         xlabel('t','FontSize',16);
+         ylabel(strcat('q_{',num2str(h),'}'),'FontSize',16);
       end
       
    end
@@ -356,6 +366,9 @@ for i=1:size(all_tau,1)
      figure
       %cur_var = zeros(size(time,2),1);
       shadedErrorBar(time,cur_mean,cur_var,{'b-o','Color','b','markerfacecolor','b'});
+      xlabel('t','FontSize',16);
+      ylabel(strcat('\tau_{',num2str(k),'}'),'FontSize',16);
+      
       
    end
 end
@@ -363,7 +376,47 @@ end
 
 end
 
-function PlotTrajectory()
+function PlotTrajectory(all_position,scenes,list_time_struct,qi,bot)
+
+
+
+ for i = 1:size(all_position,1)
+      time = list_time_struct{i}.ti:list_time_struct{i}.step:list_time_struct{i}.tf;
+      result_avg = zeros(size(all_position{i,1},2),size(all_position{i,1},1));
+      result_std = zeros(size(all_position{i,1},2),size(all_position{i,1},1));
+      for k = 1:size(all_position{i,1},2)
+         cur_sample = [];
+         for j = 1:size(all_position,2)
+            
+            cur_sample = [cur_sample ,all_position{i,j}(:,k)];
+   
+         end
+         result_avg(k,:) = mean(cur_sample,2)';
+         result_std(k,:) = std(cur_sample,0,2)';
+         
+      end
+      
+      
+      
+      figure
+      bot{i}.plot(qi{1,1})
+      % plot avg final trajectory
+      text = LoadScenario(scenes{i});
+      eval(text);
+      plot3(result_avg(:,1),result_avg(:,2),result_avg(:,3),'Color','r');
+      
+      label={'x','y','z'};
+      
+      for ii =1:size(result_avg,2)
+          figure
+          shadedErrorBar(time,result_avg(:,ii),result_std(:,ii),{'k-o','Color','k','markerfacecolor','k'});  
+           xlabel('t','FontSize',16);
+           ylabel(label{ii},'FontSize',16);
+      end
+      
+      
+ end
+
 
 
 

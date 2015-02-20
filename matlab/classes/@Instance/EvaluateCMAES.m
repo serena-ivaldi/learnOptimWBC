@@ -25,6 +25,7 @@ function [performance succeeded] = EvaluateCMAES(obj,action,ismean)
     
     % cancel all the information relative to the current iteration (control action)
     obj.controller.CleanTau();
+    obj.controller.CleanTime();
     
 catch err
     disp('i am in evaluate CMAES error side')
