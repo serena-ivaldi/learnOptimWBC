@@ -1,0 +1,13 @@
+CMAES 
+exploration rate= 0.01
+number of generations = 80
+
+UF
+number rbf=10
+redundancy=1
+
+PARAMETERS
+init parameters = 6 (0.5)
+
+number of iterations = 50
+random=false
