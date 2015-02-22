@@ -16,8 +16,8 @@ type_of_rep_strct={'extended_decoupled' 'extended_combine','stacked' };
 
 %ALPHA PARAMETERS
 %rbf
-number_of_basis = 3; %5; %10; %basis functions for the RBF
-redundancy = 1; %3; %overlap of the RBF
+number_of_basis = 10; %3; %5; %10; %basis functions for the RBF
+redundancy = 2; %3; %overlap of the RBF
 value_range = [0 , 12];
 precomp_sample = false;
 % value of theta that we have to change when we want to execute the result
@@ -53,7 +53,7 @@ regularizer{2} = regularized_chain_2;
 % CMAES PARAMETER
 % starting value of parameters
 %init_parameters = 6;
-explorationRate = 0.01; %0.1; %0.5; %0.1;%[0, 1]
+explorationRate = 0.05; %0.01; %0.1; %0.5; %0.1;%[0, 1]
 niter = 80;  %number of generations
 fitness = @fitness6;
 
