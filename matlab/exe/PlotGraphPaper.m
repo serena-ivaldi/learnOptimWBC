@@ -10,13 +10,13 @@ function PlotGraphPaper
    
    % if i give more than one result folder i will merge the result all
    % togheter
-   list_of_folder = {'_of_7_sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE'};
+   list_of_folder = {'_of_106_sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE'};
    % name of the method that will be displayed in the legenda of graph
    name_of_methods = {'UF','UF'};
    color_list={'b','r','g'};
    variance_flag = true;
-   alpha_flag =false;
-   position_joint_torque_flag = true;
+   alpha_flag =true;
+   position_joint_torque_flag = false;
    % with this variable i control for each folder how many sample i
    % consider for the plot of the position e-e elbow and for the joint
    %it is necessary to have one increment for each folder 
@@ -162,7 +162,11 @@ hold on;
          current_generation( current_generation==-10000000) = [];
          
          fit_mean(j) = mean(current_generation,2);
-         fit_var (j) = std(current_generation);
+         if(isempty( fit_mean(j)))
+            fit_var (j) = Nan;
+         else
+            fit_var (j) = std(current_generation);
+         end
       end
       
       if(variance_flag)
@@ -170,6 +174,7 @@ hold on;
          % i have a failure in each experiment and in that case mean give
          % back a NaN
          fit_mean(isnan(fit_mean)) = [];
+         fit_var(isnan(fit_var)) = [];
          generation = 1:size(fit_mean,1);
          shadedErrorBar(generation',fit_mean,fit_var,{'r-o','Color',color_list{i},'markerfacecolor',color_list{i}});
          xlabel('generations','FontSize',16);

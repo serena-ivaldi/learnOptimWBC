@@ -1,6 +1,37 @@
-disp('UF_RUNTIMEPARAM')
-
 %%%;;
+
+%% GENERAL PARAMETERS
+% for other strucutures
+time_struct.ti = 0;
+time_struct.tf = 10;
+time_struct.step = 0.1;
+
+%% for simulation 
+time_sym_struct = time_struct;
+time_sym_struct.step = 0.001; 
+% define the type of integration of the sytem of differential equation
+fixed_step = false;
+
+%% TASK PARAMETERS
+name_dat = 'sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE';
+%name_dat = 'LBR4p8.0_scene9_GHC_test_wall_and_two_attractive_point';
+path=LoadParameters(name_dat);
+load(path);
+
+%% SCENARIO
+name_scenario = 'lbr_scenario5.1'; %'lbr_scenario9';
+
+%% STARTING CONDITION FOR SIMULATION
+% TODO generalize for multichain
+%qi{1} = qz;
+qi{1} = zeros(1,chains.GetNumLinks(1));
+qdi{1} = zeros(1,chains.GetNumLinks(1));
+options= [];
+simulator_type = {'rbt'};
+
+%% Parameters Dependant on the type of controller
+
+%%%EOF%%%;;
 
 % REPELLERS PARAMETERS
 % GENERALIZE TO MULTICHAIN !!!
@@ -16,7 +47,7 @@ type_of_rep_strct={'extended_decoupled' 'extended_combine','stacked' };
 
 %ALPHA PARAMETERS
 %rbf
-number_of_basis = 5; %5; %10; %basis functions for the RBF
+number_of_basis = 10; %5; %10; %basis functions for the RBF
 redundancy = 2; %3; %overlap of the RBF
 value_range = [0 , 12];
 precomp_sample = false;
@@ -55,29 +86,15 @@ regularizer{2} = regularized_chain_2;
 % CMAES PARAMETER
 % starting value of parameters
 %init_parameters = 6;
-explorationRate = 0.11; %0.1; %0.5; %0.1;%[0, 1]
+explorationRate = 0.08; %0.1; %0.5; %0.1;%[0, 1]
 niter = 50;  %number of generations
 fitness = @fitness6;
 
 % FITNESS PARAMETERS
 
-%%%EOF
-
-%% DO NOT MODIFY THIS PART 
-
-
-% i read the parameters from this file
-rawTextFromStoragePart = fileread(which(mfilename));
-rawTextFromStoragePart = regexp(rawTextFromStoragePart,['%%%;;' '(.*?)%%%EOF'],'match','once');
-
-% i read the parameters from fitness function
-name_fitness = func2str(fitness);
-rawTextFromStorageIsntace = fileread(which(name_fitness));
-rawTextFromStorageIsntace = regexp(rawTextFromStorageIsntace,['%%%;;' '(.*?)%%%EOF'],'match','once');
-
-% attach the info on the fitness function to rawTextFromStoragePart
-rawTextFromStoragePart = strcat(rawTextFromStoragePart,rawTextFromStorageIsntace);
-
-
-
-
+%%%EOF%%%;;
+    downsaple = 1;
+    L = 1;
+    penalty = 5000; %10
+    sigma = 0.1; 
+    %%%EOF
