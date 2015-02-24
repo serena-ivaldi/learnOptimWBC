@@ -55,15 +55,9 @@ regularizer{2} = regularized_chain_2;
 % CMAES PARAMETER
 % starting value of parameters
 %init_parameters = 6;
-<<<<<<< HEAD
 explorationRate = 0.08; %0.1; %0.5; %0.1;%[0, 1]
 niter = 50;  %number of generations
 fitness = @fitness7;
-=======
-explorationRate = 0.05; %0.01; %0.1; %0.5; %0.1;%[0, 1]
-niter = 80;  %number of generations
-fitness = @fitness6;
->>>>>>> refs/remotes/origin/master
 
 % FITNESS PARAMETERS
 
