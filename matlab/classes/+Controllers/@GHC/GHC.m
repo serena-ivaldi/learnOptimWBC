@@ -37,6 +37,10 @@ classdef  GHC < Controllers.AbstractController
          for i = 1:obj.subchains.GetNumChains()
             obj.torques{i} = zeros(obj.subchains.GetNumLinks(i),1);  %tau(n_of_total_joint on the chain x 1)
          end
+         obj.torques_time = cell(obj.subchains.GetNumChains());
+         for i = 1 :obj.subchains.GetNumChains()
+            obj.torques_time{i} = [];
+         end
          obj.max_time = max_time;
          obj.current_time = [];
          % default settings for smoothing and trajectory tracking display (desidered position) 
@@ -114,10 +118,10 @@ classdef  GHC < Controllers.AbstractController
           [Aeq,beq] = obj.EqualityConstraints(M,F,DOF,projector_list);
           
            % compute matrix for disequality constraints 
-          [A,b] = obj.DisequalityConstraints(DOF,n_of_task,obj.delta_t,J_list,projector_list,qd,cp);
+          [A,b] = obj.DisequalityConstraints(DOF,n_of_task,obj.delta_t,J_list,projector_list,q,qd,cp);
           
           % result
-          options = optimset('Display','on','Algorithm','interior-point-convex','TolCon',0.0000000000001); % if i remove display off i see if the optimization problem is solved for each step 
+          options = optimset('Display','off','Algorithm','interior-point-convex','TolCon',0.0000000000001); % if i remove display off i see if the optimization problem is solved for each step 
           x=quadprog(H,f,A,b,Aeq,beq,[],[],[],options);
 %           n = size(H,1);
 %           cvx_begin quiet

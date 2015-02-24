@@ -25,7 +25,7 @@ function [tau,mean_performances, bestAction, policies, costs, succeeded]=Optimiz
             repellers = ContrPart.Repellers(chain_dof,rep_target_link,rep_type,rep_mask,rep_type_of_J_rep,rep_obstacle_ref,single_alpha,J_damp,type_of_rep_strct);
          case 'GHC'
             % constraints
-            constraints = ContrPart.Constraints(constraints_list,constraints_data);
+            constraints = ContrPart.Constraints(robots,target_link,constraints_list,constraints_data);
          otherwise
             warning('Unexpected control method');
       end
