@@ -10,7 +10,11 @@ function PlotGraphPaper
    
    % if i give more than one result folder i will merge the result all
    % togheter
+<<<<<<< HEAD
    list_of_folder = {'_of_112_sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE'};
+=======
+   list_of_folder = {'_of_19_sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE'};
+>>>>>>> refs/remotes/origin/master
    % name of the method that will be displayed in the legenda of graph
    name_of_methods = {'UF','UF'};
    color_list={'b','r','g'};
