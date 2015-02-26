@@ -10,7 +10,7 @@ function PlotGraphPaper
    
    % if i give more than one result folder i will merge the result all
    % togheter
-   list_of_folder = {'_of_20_sere/LBR4p9.0_scene5_GHC_table_and_an_one_attractive_point_and_posture_task_SERE'};
+   list_of_folder = {'_of_21_sere/LBR4p9.0_scene5_GHC_table_and_an_one_attractive_point_and_posture_task_SERE'};
    % name of the method that will be displayed in the legenda of graph
    name_of_methods = {'UF','UF'};
    color_list={'b','r','g'};
