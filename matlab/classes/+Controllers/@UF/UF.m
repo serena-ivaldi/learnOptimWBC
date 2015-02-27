@@ -110,6 +110,13 @@ classdef  UF < Controllers.AbstractController
       
       
       function  final_tau  = Policy(obj,t,q,qd)
+          
+          %DEBUG
+          %t
+          %---
+         
+         
+         
           % active robot 
           cur_bot = obj.GetActiveBot;
           % current chain index

@@ -70,19 +70,50 @@ end
 
 %% Simulation
 tic
-[t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);%,options);
+[t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step,'TorqueSat',torque_saturation);
 toc
 %% Display
 fps = 200;
 video = false;
+step_save_fig = 20;
+save_fig = true;
+ee_trajectory = true; 
+elbow_traj    = true;
+%---
 
-if(~video)
+% plot the trajectory of the elbow or e-e or both
+if(ee_trajectory || elbow_traj)
+   
+   [ee,elbow] = ComputePositions(q{1},t,controller);
+   ee = ee';
+   elbow = elbow';
+   izy = 1;
+   handle_vector = [];
+   if(ee_trajectory)
+      name_of_trace {1,izy} = 'end-effector';  
+      handle1 = plot3(ee(:,1)',ee(:,2)',ee(:,3)','Color','r','LineWidth',2);
+      handle_vector=[handle_vector,handle1];
+      izy = izy + 1;
+   end
+   if(elbow_traj)
+      name_of_trace{1,izy} = 'elbow';  
+       handle2 = plot3(elbow(:,1)',elbow(:,2)',elbow(:,3)','Color','g','LineWidth',2);
+       handle_vector=[handle_vector,handle2];
+      izy = izy + 1;
+   end
+   hold on;
+   hL = legend(handle_vector,name_of_trace);
+   set(hL,'FontSize',15);
+end
+
+
+if(~video && ~save_fig)
    zoom =  5.0698;
    set(gca,'CameraViewAngle',zoom);
    camera_position = [14.3762    9.7004   15.0093];
    campos(camera_position)
    bot1.plot(q{1},'fps',fps);
-else
+elseif(video)
    %at the end of the video simulation after chosing a good camera pos and
    %zoom
    % to see camera position call "campos" on the shell 
@@ -95,6 +126,12 @@ else
    set(gca,'CameraViewAngle',zoom);
    campos(camera_position)
    bot1.plot(q{1},'movie',path);
+elseif(save_fig)
+   camera_position = [-7.5371   -1.1569   21.1612];
+   zoom =  2.4702;
+   set(gca,'CameraViewAngle',zoom);
+   campos(camera_position)
+   SaveFigures(bot1,q{1},step_save_fig)
 end
 
 
