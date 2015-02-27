@@ -12,11 +12,8 @@ function PlotGraphPaper
    % togheter
    list_of_folder = {'_of_18_sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE'};
    % name of the method that will be displayed in the legenda of graph
-   name_of_methods = {'UF','UF'};
+   name_of_methods = {'std deviation','mean'};
    color_list={'b','r','g'};
-   variance_flag = true;
-   alpha_flag =true;
-   position_joint_torque_flag = true;
    % with this variable i control for each folder how many sample i
    % consider for the plot of the position e-e elbow and for the joint
    %it is necessary to have one increment for each folder 
@@ -24,67 +21,81 @@ function PlotGraphPaper
    % interpolation step for the tau if we use a small step wi will badly
    % capture the value of the applied torque
    interpolation_step = 0.01;
+   % flag to control what i want to plot
+   variance_flag = true;
+   alpha_flag =true;
+   position_joint_torque_flag = false;
+   
+   % with this list i decide wich data mat im going to plot
+   list_of_data_to_plot = [1,2];
+   style = {'-k','-.r','--b'};
+   experiment1 = false;
    
    
-   for i=1:size(list_of_folder,2)
-      % here i take only the first because i make the hypotesis that the
-      % data necessary here for each series of experiment are all similar
-      % to the first of each series
-      cur_folder_path = BuildMatFilePath(list_of_folder{i},1);
-      [number_of_iteration,controller,time_struct,cur_qi,cur_qdi,cur_fixed_step,cur_scene,bot] = GetAdditionalData(cur_folder_path);
-      list_number_of_iteration(i) = number_of_iteration;
-      controller_first_iteration{i}= controller;
-      list_time_struct{i}= time_struct;
-      %TODO generalize to multiple experiment
-      qi = cur_qi;
-      qdi = cur_qdi;
-      %----
-      fixed_step(i) = cur_fixed_step;
-      all_scene{i} = cur_scene;
-      all_bot{i} = bot;
-   end
-    
-    all_cur_fitness = [];
-    all_cur_alpha   = [];
-    
-   for i=1:size(list_of_folder,2)
- 
-      for j=1:list_number_of_iteration(i)
-         cur_folder_path = BuildMatFilePath(list_of_folder{i},j);
-         [cur_fitness,cur_alpha,cur_time,cur_control] = GetFitnessAlphaTimeControl(cur_folder_path);
-         all_cur_fitness = [all_cur_fitness, cur_fitness];
-         all_cur_alpha  =  [all_cur_alpha cur_alpha];
-         all_exec_cur_time(1,j) = cur_time;
-         all_controller{i,j} = cur_control;
+   if(experiment1)
+      PlotExpOne(list_of_data_to_plot,style);
+   else
+      for i=1:size(list_of_folder,2)
+         % here i take only the first because i make the hypotesis that the
+         % data necessary here for each series of experiment are all similar
+         % to the first of each series
+
+
+         cur_folder_path = BuildMatFilePath(list_of_folder{i},1);
+         [number_of_iteration,controller,time_struct,cur_qi,cur_qdi,cur_fixed_step,cur_scene,bot] = GetAdditionalData(cur_folder_path);
+         list_number_of_iteration(i) = number_of_iteration;
+         controller_first_iteration{i}= controller;
+         list_time_struct{i}= time_struct;
+         %TODO generalize to multiple experiment
+         qi = cur_qi;
+         qdi = cur_qdi;
+         %----
+         fixed_step(i) = cur_fixed_step;
+         all_scene{i} = cur_scene;
+         all_bot{i} = bot;
       end
 
-      all_fitness{i} = all_cur_fitness;
-      all_alpha{i} = all_cur_alpha;
-      all_exec_time{i} = all_exec_cur_time;
-      all_cur_fitness = [];
-      all_cur_alpha   = [];
-      all_exec_cur_time = [];
+       all_cur_fitness = [];
+       all_cur_alpha   = [];
+
+      for i=1:size(list_of_folder,2)
+
+         for j=1:list_number_of_iteration(i)
+            cur_folder_path = BuildMatFilePath(list_of_folder{i},j);
+            [cur_fitness,cur_alpha,cur_time,cur_control] = GetFitnessAlphaTimeControl(cur_folder_path);
+            all_cur_fitness = [all_cur_fitness, cur_fitness];
+            all_cur_alpha  =  [all_cur_alpha cur_alpha];
+            all_exec_cur_time(1,j) = cur_time;
+            all_controller{i,j} = cur_control;
+         end
+
+         all_fitness{i} = all_cur_fitness;
+         all_alpha{i} = all_cur_alpha;
+         all_exec_time{i} = all_exec_cur_time;
+         all_cur_fitness = [];
+         all_cur_alpha   = [];
+         all_exec_cur_time = [];
+
+      end
+
+      PlotFitness(all_fitness,variance_flag,name_of_methods,color_list);
+
+      if(alpha_flag)
+         PlotAlpha(all_alpha,controller_first_iteration,list_time_struct);
+      end
+
+
+      if(position_joint_torque_flag)
+         tic
+         [all_q,all_tau,all_ee,all_elbow]=ComputeTorqueAndCartesianJointPos(all_controller,list_time_struct,qi,qdi,fixed_step,increment,interpolation_step);
+         toc
+         PlotJoints(all_q,list_time_struct);
+         PlotTorque(all_tau,list_time_struct,interpolation_step);
+         PlotTrajectory(all_ee,all_scene,list_time_struct,qi,all_bot);
+         PlotTrajectory(all_elbow,all_scene,list_time_struct,qi,all_bot)
+      end
       
    end
-
-   PlotFitness(all_fitness,variance_flag,name_of_methods,color_list);
-   
-   if(alpha_flag)
-      PlotAlpha(all_alpha,controller_first_iteration,list_time_struct);
-   end
-   
-   
-   if(position_joint_torque_flag)
-      tic
-      [all_q,all_tau,all_ee,all_elbow]=ComputeTorqueAndCartesianJointPos(all_controller,list_time_struct,qi,qdi,fixed_step,increment,interpolation_step);
-      toc
-      PlotJoints(all_q,list_time_struct);
-      PlotTorque(all_tau,list_time_struct,interpolation_step);
-      PlotTrajectory(all_ee,all_scene,list_time_struct,qi,all_bot);
-      PlotTrajectory(all_elbow,all_scene,list_time_struct,qi,all_bot)
-   end
-   
-
 
 end
 
@@ -179,7 +190,8 @@ hold on;
          shadedErrorBar(generation',fit_mean,fit_var,{'r-o','Color',color_list{i},'markerfacecolor',color_list{i}});
          xlabel('generations','FontSize',16);
          ylabel('fitness','FontSize',16);
-         legend(name_of_methods)
+         h_legend = legend(name_of_methods);
+         set(h_legend,'FontSize',15);
       else
          % remove all the not a number. it can happens if in one generation
          % i have a failure in each experiment and in that case mean give
@@ -189,7 +201,8 @@ hold on;
          plot(generation',fit_mean,'r-o','Color',color_list{i},'markerfacecolor',color_list{i})
          xlabel('generations','FontSize',16);
          ylabel('fitness','FontSize',16);
-         legend(name_of_methods)
+         h_legend = legend(name_of_methods);
+         set(h_legend,'FontSize',15);
       end
       
    end
@@ -252,10 +265,13 @@ function PlotAlpha(all_alpha,controller,time_struct)
                   i=i+1;
               end
               figure
+              names_legend = {'std deviation', 'mean'};
               shadedErrorBar(time,cur_alpha_mean_time,cur_alpha_var_time,{'r-o','Color','r','markerfacecolor','r'});
               xlabel('t','FontSize',16);
               ylabel(strcat('\alpha_{',num2str(ii),num2str(jj),'}'),'FontSize',16);
               ylim([0 1])
+              h_legend = legend(names_legend);
+              set(h_legend,'FontSize',15);
 
           end
       end
@@ -271,43 +287,27 @@ end
 % i need to compute direcctly the mean for each variable to avoid 
 function [all_q,all_tau,all_ee,all_elbow]=ComputeTorqueAndCartesianJointPos(all_controller,time_sym_struct,qi,qdi,fixed_step,increment,interp_step)
 
-for i=1:size(all_controller,1)
-   % in this way i reduce the number of sample changing the step for the
-   % current time_sym_struct
-   time_sym_struct{i}.step = increment(1,i); 
-   for j = 1:size(all_controller,2)
-         if(isobject(all_controller{i,j}))
-               [t, q, qd] = DynSim(time_sym_struct{i},all_controller{i,j},qi(i,:),qdi(i,:),fixed_step(i));
-               all_q{i,j} = q{1}';
-               % all_tau is a cell{i,j} of cell{i}
-               all_tau{i,j} = InterpTorque(all_controller{i,j},time_sym_struct{i},interp_step);
-               %all_tau{i,j} = all_controller{i,j}.torques{1};
-               [ee,elbow]=ComputePositions(q{1},t,all_controller{i,j});
-               all_ee{i,j} = ee;
-               all_elbow{i,j} = elbow;   
-         end
+   for i=1:size(all_controller,1)
+      % in this way i reduce the number of sample changing the step for the
+      % current time_sym_struct
+      time_sym_struct{i}.step = increment(1,i); 
+      for j = 1:size(all_controller,2)
+            if(isobject(all_controller{i,j}))
+                  [t, q, qd] = DynSim(time_sym_struct{i},all_controller{i,j},qi(i,:),qdi(i,:),fixed_step(i));
+                  all_q{i,j} = q{1}';
+                  % all_tau is a cell{i,j} of cell{i}
+                  all_tau{i,j} = InterpTorque(all_controller{i,j},time_sym_struct{i},interp_step);
+                  %all_tau{i,j} = all_controller{i,j}.torques{1};
+                  [ee,elbow]=ComputePositions(q{1},t,all_controller{i,j});
+                  all_ee{i,j} = ee;
+                  all_elbow{i,j} = elbow;   
+            end
+      end
    end
-end
 
 
 end
 
-
-function [ee,elbow]=ComputePositions(q,t,controller)
-   ee = [];
-   elbow = [];
-   
-   for i=1:size(t,2)
-      q_cur = q(i,:);
-      % compute the trajectory error (absolute error)
-      kinematic=CStrCatStr({'controller.subchains.sub_chains{1}.T0_'},num2str(controller.subchains.GetNumSubLinks(1,1)),{'(q_cur)'});
-      T = eval(kinematic{1});
-      ee = [ee , T(1:3,4)];
-      kinematic=CStrCatStr({'controller.subchains.sub_chains{1}.T0_'},'3',{'(q_cur)'});
-      T = eval(kinematic{1});
-      elbow = [elbow, T(1:3,4)];
-   end
-end
 
 % i obtain the interpolated torque and in this way i can compute mean and
 % variance
@@ -383,48 +383,109 @@ end
 
 function PlotTrajectory(all_position,scenes,list_time_struct,qi,bot)
 
+    for i = 1:size(all_position,1)
+         time = list_time_struct{i}.ti:list_time_struct{i}.step:list_time_struct{i}.tf;
+         result_avg = zeros(size(all_position{i,1},2),size(all_position{i,1},1));
+         result_std = zeros(size(all_position{i,1},2),size(all_position{i,1},1));
+         for k = 1:size(all_position{i,1},2)
+            cur_sample = [];
+            for j = 1:size(all_position,2)
 
+               cur_sample = [cur_sample ,all_position{i,j}(:,k)];
 
- for i = 1:size(all_position,1)
-      time = list_time_struct{i}.ti:list_time_struct{i}.step:list_time_struct{i}.tf;
-      result_avg = zeros(size(all_position{i,1},2),size(all_position{i,1},1));
-      result_std = zeros(size(all_position{i,1},2),size(all_position{i,1},1));
-      for k = 1:size(all_position{i,1},2)
-         cur_sample = [];
-         for j = 1:size(all_position,2)
-            
-            cur_sample = [cur_sample ,all_position{i,j}(:,k)];
-   
+            end
+            result_avg(k,:) = mean(cur_sample,2)';
+            result_std(k,:) = std(cur_sample,0,2)';
+
          end
-         result_avg(k,:) = mean(cur_sample,2)';
-         result_std(k,:) = std(cur_sample,0,2)';
+         
+         figure
+         bot{i}.plot(qi{1,1})
+         % plot avg final trajectory
+         text = LoadScenario(scenes{i});
+         eval(text);
+         plot3(result_avg(:,1),result_avg(:,2),result_avg(:,3),'Color','r','LineWidth',2);
+
+         label={'x','y','z'};
+
+         for ii =1:size(result_avg,2)
+             figure
+             shadedErrorBar(time,result_avg(:,ii),result_std(:,ii),{'k-o','Color','k','markerfacecolor','k'});  
+              xlabel('t','FontSize',16);
+              ylabel(label{ii},'FontSize',16);
+         end
+    end
+end
+
+function PlotExpOne(list_of_data_to_plot,style)
+      
+
+      % i read all the data that i want to plot
+      for iii = 1:size(list_of_data_to_plot,2)
+      
+         allpath=which('FindData.m');
+         path=fileparts(allpath);
+         result = strcat(path,'/results/','1_Atest1/',num2str(list_of_data_to_plot(iii)),'.mat');
+         load(result);
+         
+         if iii == 1
+            traj{1} = p_tot';
+         end
+         
+         all_controller{iii} = controller;
+         all_q{iii} = q{1};
+      end
+      
+      % compute the cartesian position 
+      for i = 1:size(list_of_data_to_plot,2)
+         traj{i+1} = CompPosition(all_controller{i},all_q{i});   
+      end
+      
+      name_of_methods = {'reference','RUF','UF'}; 
+      linewidth = [2.5,2,2];
+      for j = 1:size(traj,2)
+         subplot(1,2,1);hold on
+         plot(traj{j}(:,1),traj{j}(:,2),style{j},'LineWidth',linewidth(j))
+         xlabel('x','FontSize',16);
+         ylabel('y','FontSize',16);
+         xlim([-0.2 1])
+         hM = legend(name_of_methods);
+         set(hM,'FontSize',15);
+         
+         subplot(1,2,2);hold on
+         plot(traj{j}(:,1),traj{j}(:,3),style{j},'LineWidth',linewidth(j))
+         xlabel('x','FontSize',16);
+         ylabel('z','FontSize',16);
+         hL = legend(name_of_methods);
+         set(hL,'FontSize',15);
          
       end
-      
-      
-      
-      figure
-      bot{i}.plot(qi{1,1})
-      % plot avg final trajectory
-      text = LoadScenario(scenes{i});
-      eval(text);
-      plot3(result_avg(:,1),result_avg(:,2),result_avg(:,3),'Color','r');
-      
-      label={'x','y','z'};
-      
-      for ii =1:size(result_avg,2)
-          figure
-          shadedErrorBar(time,result_avg(:,ii),result_std(:,ii),{'k-o','Color','k','markerfacecolor','k'});  
-           xlabel('t','FontSize',16);
-           ylabel(label{ii},'FontSize',16);
-      end
-      
-      
- end
+%       newPosition = [0.1 0.5 0.1 0.1];
+%       newUnits = 'normalized';
+%       set(hL,'Position', newPosition,'Units', newUnits);
 
+end
+
+
+
+
+
+function pos = CompPosition(controller,q)
+
+        
+        bot = controller.GetActiveBot();
+        pos = [];
+        for i = 1 : size(q,1)
+           % compute pose (position + rool pitch yaw) from the current
+           % subchain
+           T=bot.T0_7(q(i,:));
+           pos =[ pos; T(1:3,4)'];
+        end
 
 
 
 end
+
+
 
 

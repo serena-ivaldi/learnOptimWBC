@@ -16,14 +16,17 @@ type_of_rep_strct={'extended_decoupled' 'extended_combine','stacked' };
 
 %ALPHA PARAMETERS
 %rbf
-number_of_basis = 5; %5; %10; %basis functions for the RBF
+number_of_basis = 10; %5; %10; %basis functions for the RBF
 redundancy = 2; %3; %overlap of the RBF
 value_range = [0 , 12];
 precomp_sample = false;
 % value of theta that we have to change when we want to execute the result
 % from the optimization step
+
+numeric_theta =[1.789168 11.108128 7.249950 10.537336 9.111206 12.000000 9.391411 8.799351 10.570821 2.834663];
+
 % from sere 12
-numeric_theta = [5.819383 4.412794 5.286902 7.786384 7.599614 3.512520 5.989917 9.410994 7.444834 7.472545 4.532512 5.614148 7.970080 4.498142 6.194601 6.925731 4.815911 5.490313 5.294776 6.011380 ]
+%numeric_theta = [5.819383 4.412794 5.286902 7.786384 7.599614 3.512520 5.989917 9.410994 7.444834 7.472545 4.532512 5.614148 7.970080 4.498142 6.194601 6.925731 4.815911 5.490313 5.294776 6.011380 ]
 
 %from 10 generation of CMAES: collision with end-eff and table
 %numeric_theta = [1.351681 10.784147 9.724284 6.550806 7.740233 5.928500 8.123806 7.776163 6.548935 5.474038 7.455956 4.011111 6.704292 1.089315 3.712038 6.041540 5.098971 5.054418 6.312087 6.223340 ];
@@ -35,7 +38,7 @@ numeric_theta = [5.819383 4.412794 5.286902 7.786384 7.599614 3.512520 5.989917 
 %numeric_theta = [3.493783 6.211959 7.883578 11.988846 7.900086 9.468388 6.525209 11.867391 7.355206 8.158990 0.000000 0.054878 11.131856 8.063698 1.871041 9.107188 3.646651 8.656589 11.419753 4.346246 ];  
 
 %this is the task without the constraints of the table 
-%numeric_theta =[12 12 12 12 12 12 12 12 12 12 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0];
+%numeric_theta =[12 12 12 12 12 12 12 12 12 12];
 %constant alpha
 value1 = 1*ones(chains.GetNumTasks(1));
 values{1} = value1;
@@ -43,10 +46,10 @@ values{1} = value1;
 
 %CONTROLLER PARAMETERS
 max_time = 100; %50
-combine_rule = {'projector'}; % sum or projector
+combine_rule = {'sum'}; % sum or projector (with sum reppelers are removed)
 % with this term i introduce a damped least square structure inside my
 % controller if regularizer is 0 i remove the regularizer action 
-regularizer_chain_1 = [0.01 0]; 
+regularizer_chain_1 = [0.001 0]; 
 regularized_chain_2 = [1];
 regularizer{1} = regularizer_chain_1;
 regularizer{2} = regularized_chain_2;
@@ -55,8 +58,8 @@ regularizer{2} = regularized_chain_2;
 % CMAES PARAMETER
 % starting value of parameters
 %init_parameters = 6;
-explorationRate = 0.08; %0.1; %0.5; %0.1;%[0, 1]
-niter = 50;  %number of generations
+explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
+niter = 20;  %number of generations
 fitness = @fitness7;
 
 % FITNESS PARAMETERS

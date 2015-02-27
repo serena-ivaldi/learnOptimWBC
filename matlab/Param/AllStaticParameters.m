@@ -11,11 +11,11 @@ clc
 %
 %
 %% TYPE OF CONTROLLER 
-CONTROLLERTYPE ='GHC';   % GHC or UF
+CONTROLLERTYPE ='UF';   % GHC or UF
 %%
 
 %SUBCHAIN PARAMETERS 
-subchain1 = [7 7];
+subchain1 = [7];
 target_link{1} = subchain1;
 
 
@@ -26,15 +26,14 @@ chains = SubChains(target_link,robots);
 %%
 
 % REFERENCE PARAMETERS
-traj_type = {'cartesian_x','joint'};
-control_type = {'regulation','regulation'};
-type_of_traj = {'func','func'};
-geometric_path = {'none','none'};
-time_law = {'none','none'};
+traj_type = {'cartesian_x'};
+control_type = {'tracking'};
+type_of_traj = {'func'};
+geometric_path = {'lemniscate'};
+time_law = {'linear'};
 %parameters first chains
-geom_parameters{1,1} = [0.6 0 0.15]; 
-geom_parameters{1,2} = [0 pi/2 0 -pi/2 0 pi/2 0];
-dim_of_task{1,1}=[1;1;1];dim_of_task{1,2}=ones(bot1.n,1);
+geom_parameters{1,1} = [1.2 pi/4 -pi/2 0 0 1.178]; 
+dim_of_task{1,1}=[1;1;1];
 
 %% FROM THIS POINT YOU CAN FIND PARAMETERS IN THE STATIC PARAMETERS FILE RELATED TO EACH ALGORITHM 
 
@@ -55,10 +54,10 @@ end
 % i have to set the name of the robot plus a number equal to the number of experiment for that scenario 
 % like bot#.# (where n.i means that the file is reffered to the n-scenario and is the i-th data setting)
 % multiple data setting for the same scenario 
-id = 'LBR4p9.0';
+id = 'LBR4p10.0';
 name_backup = strcat(id,'.m');
 %namebot_scene#_briefdescription.mat
-name_file = 'scene5_GHC_table_and_an_one_attractive_point_and_posture_task';
+name_file = 'scene10_UF_lemniscate';
 name_file = strcat(id,'_',name_file,'.mat');
 
 %% DO NOT CHANGE THIS PART!

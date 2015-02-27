@@ -126,7 +126,34 @@ end
 % if not given zero joint torques are assumed.
 %
 % The result is XDD = [QD QDD].
-function xd = fdyn2(t, x, controller, varargin)
+function xd = fdyn2(t, x, controller,varargin)
+
+
+    %% varargin settings
+    options = struct('torquesat',10000);
+
+    %# read the acceptable names
+    optionNames = fieldnames(options);
+
+    %# count arguments
+    nArgs = length(varargin);
+    if round(nArgs/2)~=nArgs/2
+       error('EXAMPLE needs propertyName/propertyValue pairs')
+    end
+
+    for pair = reshape(varargin,2,[]) %# pair is {propName;propValue}
+       inpName = lower(pair{1}); %# make case insensitive
+
+       if any(strcmp(inpName,optionNames))
+          %# overwrite options. If you want you can test for the right class here
+          %# Also, if you find out that there is an option you keep getting wrong,
+          %# you can use "if strcmp(inpName,'problemOption'),testMore,end"-statements
+          options.(inpName) = pair{2};
+       else
+          error('%s is not a recognized parameter name',inpName)
+       end
+    end
+    %%
 
     
     if isempty(controller.current_time)
@@ -144,6 +171,10 @@ function xd = fdyn2(t, x, controller, varargin)
     else   
         tau = zeros(1,n);
     end
+    
+    %apply saturation on the torque 
+    tau(tau>options.('torquesat')) = options.('torquesat');
+    tau(tau<-options.('torquesat')) = -options.('torquesat');
     
     %control if tau is not a row vector 
     if(~isrow(tau))
