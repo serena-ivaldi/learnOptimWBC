@@ -1,6 +1,37 @@
-disp('GHC_RUNTIMEPARAM')
-
 %%%;;
+
+%% GENERAL PARAMETERS
+% for other strucutures
+time_struct.ti = 0;
+time_struct.tf = 10;
+time_struct.step = 0.1;
+
+%% for simulation 
+time_sym_struct = time_struct;
+time_sym_struct.step = 0.005; 
+% define the type of integration of the sytem of differential equation
+fixed_step = true; %true;
+
+%% TASK PARAMETERS
+%name_dat = 'sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE';
+name_dat = 'sere/LBR4p9.0_scene5_GHC_table_and_an_one_attractive_point_and_posture_task_SERE';
+path=LoadParameters(name_dat);
+load(path);
+
+%% SCENARIO
+name_scenario = 'lbr_scenario5.1'; %'lbr_scenario9';
+
+%% STARTING CONDITION FOR SIMULATION
+% TODO generalize for multichain
+%qi{1} = qz;
+qi{1} = zeros(1,chains.GetNumLinks(1));
+qdi{1} = zeros(1,chains.GetNumLinks(1));
+options= [];
+simulator_type = {'rbt'};
+
+%% Parameters Dependant on the type of controller
+
+%%%EOF%%%;;
 
 %% Constraints
 constraints_list={'vellimit','vellimit','torquelimit','torquelimit','obsavoid'}; %'obsavoid'
@@ -50,19 +81,15 @@ fitness = @fitness7;
 
 %% FITNESS PARAMETERS
 
-%%%EOF
-
-%% DO NOT MODIFY THIS PART 
-
-
-% i read the parameters from this file
-rawTextFromStoragePart = fileread(which(mfilename));
-rawTextFromStoragePart = regexp(rawTextFromStoragePart,['%%%;;' '(.*?)%%%EOF'],'match','once');
-
-% i read the parameters from fitness function
-name_fitness = func2str(fitness);
-rawTextFromStorageIsntace = fileread(which(name_fitness));
-rawTextFromStorageIsntace = regexp(rawTextFromStorageIsntace,['%%%;;' '(.*?)%%%EOF'],'match','once');
-
-% attach the info on the fitness function to rawTextFromStoragePart
-rawTextFromStoragePart = strcat(rawTextFromStoragePart,rawTextFromStorageIsntace);
+%%%EOF%%%;;
+    downsaple = 10;
+    L = 1;
+    penalty = 5000; %10
+    sigma = 0.1; 
+    max_effort = 2000;
+    max_traj_error = 1000;
+    max_penalties  = 20000;
+    weight_effort = 1;
+    weight_traj_err = 1;
+    weight_penal = 5;
+    %%%EOF
