@@ -45,7 +45,7 @@ max_time = 500;
 % starting value of parameters
 %init_parameters = 6;
 explorationRate =0.1;%[0, 1]
-niter = 20;  %number of generations
+niter = 80;  %number of generations
 fitness = @fitness7;
 
 %% FITNESS PARAMETERS
