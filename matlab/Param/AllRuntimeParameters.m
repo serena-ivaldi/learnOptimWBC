@@ -9,14 +9,14 @@ time_struct.step = 0.1;
 
 %% for simulation 
 time_sym_struct = time_struct;
-time_sym_struct.step = 0.001; 
+time_sym_struct.step = 0.005; 
 % define the type of integration of the sytem of differential equation
-fixed_step = false; %true;
+fixed_step = true; %true;
 torque_saturation =10000000000000;
 
 %% TASK PARAMETERS
-name_dat = 'sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE';
-%name_dat = 'sere/LBR4p9.0_scene5_GHC_table_and_an_one_attractive_point_and_posture_task_SERE';
+%name_dat = 'sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE';
+name_dat = 'sere/LBR4p9.0_scene5_GHC_table_and_an_one_attractive_point_and_posture_task_SERE';
 %name_dat = 'LBR4p10.0_scene10_UF_lemniscate';
 path=LoadParameters(name_dat);
 load(path);
