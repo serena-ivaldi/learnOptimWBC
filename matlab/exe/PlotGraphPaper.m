@@ -1,26 +1,30 @@
 % with this file is possible to draw graph about method robustness 
 % to compare methods and to establish if the activation policies have to many
 % basis functions(overfitting).
-% TODO add time plot!. i have to change data.mat in the optimization loop
+% TODO add time plot
 function PlotGraphPaper
    
    close all 
    clear variable 
    clc
    
+   
+   %LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE
+   %LBR4p9.0_scene5_GHC_table_and_an_one_attractive_point_and_posture_task_SERE
    % if i give more than one result folder i will merge the result all
    % togheter
-   list_of_folder = {'_of_21_sere/LBR4p9.0_scene5_GHC_table_and_an_one_attractive_point_and_posture_task_SERE'};
+   list_of_folder = {'_of_22_sere/LBR4p9.0_scene5_GHC_table_and_an_one_attractive_point_and_posture_task_SERE'};
    % name of the method that will be displayed in the legenda of graph
-   name_of_methods = {'RUF + Learning','GHC + Learning'};
-   color_list={'b','r','g'};
+   name_of_methods = {'RUF fixed initial point','RUF random initial point'};
+   color_list={'m','g','c','k','b','r'};
    % interpolation step for the tau if we use a small step wi will badly
    % capture the value of the applied torque
    interpolation_step = 0.01;
    % flag to control what i want to plot
    variance_flag = true; % to select if i want the variance or not on the fitness graph
-   transparent_flag = 1; % make transparent variance in fitness (0 or 1)
-   alpha_flag =false;
+   transparent_flag = 0; % make transparent variance in fitness (0 or 1)
+   alpha_flag =true;
+   tresh_for_count_success_experiment = [-50,-50]; % one for each batch
    position_joint_torque_flag = false;
    
    % with this list i decide wich data mat im going to plot for experiment1
@@ -75,6 +79,9 @@ function PlotGraphPaper
 
       end
 
+      ComputeMeanVarianceTime(all_exec_time);
+      CountSuccessRate(all_fitness,tresh_for_count_success_experiment);
+      
       PlotFitness(all_fitness,variance_flag,name_of_methods,color_list,transparent_flag);
 
       if(alpha_flag)
@@ -83,9 +90,9 @@ function PlotGraphPaper
 
 
       if(position_joint_torque_flag)
-         tic
+         
          [all_q,all_tau,all_ee,all_elbow]=ComputeTorqueAndCartesianJointPos(all_controller,list_time_struct,qi,qdi,fixed_step,interpolation_step);
-         toc
+        
          PlotJoints(all_q,list_time_struct);
          PlotTorque(all_tau,list_time_struct,interpolation_step);
          PlotTrajectory(all_ee,all_scene,list_time_struct,qi,all_bot);
@@ -190,6 +197,7 @@ function PlotFitness(all_fitness,variance_flag,name_of_methods,color_list,transp
          ylabel('fitness','FontSize',16);
          h_legend = legend(handle_legend,name_of_methods);
          set(h_legend,'FontSize',15);
+         set(gca,'Layer','top')
       else
          % remove all the not a number. it can happens if in one generation
          % i have a failure in each experiment and in that case mean give
@@ -201,10 +209,12 @@ function PlotFitness(all_fitness,variance_flag,name_of_methods,color_list,transp
          ylabel('fitness','FontSize',16);
          h_legend = legend(name_of_methods);
          set(h_legend,'FontSize',15);
+         set(gca,'Layer','top')
       end
       
    end
-   
+   YL = get(gca,'ylim');
+   set(gca,'ylim',[YL(1) 0]);
 end
 
 % plot mean and std deviation for each alpha having a bunch of experiment
@@ -265,14 +275,16 @@ function PlotAlpha(all_alpha,controller,time_struct)
                   i=i+1;
               end
               figure
-              names_legend = {'std deviation', 'mean'};
-              shadedErrorBar(time,cur_alpha_mean_time,cur_alpha_var_time,{'r','LineWidth',3});
+            
+              h = shadedErrorBar(time,cur_alpha_mean_time,cur_alpha_var_time,{'r','LineWidth',3});
               xlabel('t','FontSize',16);
-              ylabel(strcat('\alpha_{',num2str(ii),num2str(jj),'}'),'FontSize',16);
+              ylabel(strcat('\alpha_{',num2str(jj),'}'),'FontSize',16);
               ylim([0 1])
-              h_legend = legend(names_legend);
+              names_legend = { 'mean','std deviation'};
+              handle_legend = [h.mainLine,h.patch];
+              h_legend = legend(handle_legend,names_legend);
               set(h_legend,'FontSize',15);
-              
+              set(gca,'Layer','top')
           end
       end
       cur_alpha_mean_time = [];
@@ -346,9 +358,14 @@ function PlotJoints(all_q,list_time_struct)
       % plot each q
       for h=1:size(result_avg,2)
          figure
-         shadedErrorBar(time,result_avg(:,h),result_std(:,h),{'r-o','Color','r','markerfacecolor','r'});
+         hh = shadedErrorBar(time,result_avg(:,h),result_std(:,h),{'Color','r','LineWidth',3});
          xlabel('t','FontSize',16);
          ylabel(strcat('q_{',num2str(h),'}'),'FontSize',16);
+         names_legend = { 'mean','std deviation'};
+         handle_legend = [hh.mainLine,hh.patch];
+         h_legend = legend(handle_legend,names_legend);
+         set(h_legend,'FontSize',15);
+         set(gca,'Layer','top')
       end
       
    end
@@ -369,10 +386,14 @@ for i=1:size(all_tau,1)
       
      figure
       %cur_var = zeros(size(time,2),1);
-      shadedErrorBar(time,cur_mean,cur_var,{'b-o','Color','b','markerfacecolor','b'});
+      h = shadedErrorBar(time,cur_mean,cur_var,{'Color','b','LineWidth',3'});
       xlabel('t','FontSize',16);
       ylabel(strcat('\tau_{',num2str(k),'}'),'FontSize',16);
-      
+      names_legend = { 'mean','std deviation'};
+      handle_legend = [h.mainLine,h.patch];
+      h_legend = legend(handle_legend,names_legend);
+      set(h_legend,'FontSize',15);
+      set(gca,'Layer','top')
       
    end
 end
@@ -409,7 +430,7 @@ function PlotTrajectory(all_position,scenes,list_time_struct,qi,bot)
 
          for ii =1:size(result_avg,2)
              figure
-             shadedErrorBar(time,result_avg(:,ii),result_std(:,ii),{'k-o','Color','k','markerfacecolor','k'});  
+             shadedErrorBar(time,result_avg(:,ii),result_std(:,ii),{'Color','k','LineWidth',3});  
               xlabel('t','FontSize',16);
               ylabel(label{ii},'FontSize',16);
          end
@@ -485,6 +506,40 @@ function pos = CompPosition(controller,q)
 
 end
 
+function ComputeMeanVarianceTime(all_exec_time)
 
+   mean_time_vector = [];
+   std_time_vector = [];
+   for i=1:size(all_exec_time,2)
+      cur_vec_time = all_exec_time{1,i};
+      mean_time_vector = [mean_time_vector;mean(cur_vec_time)];
+      std_time_vector = [std_time_vector;std(cur_vec_time)];
+   end
+   
+   assignin('base','mean_time_vector',mean_time_vector);
+   assignin('base','std_time_vector',std_time_vector);
 
+end
+
+function CountSuccessRate(all_fitness,tresh)
+   
+   total_trial = zeros(size(all_fitness,2),1);
+   success     = zeros(size(all_fitness,2),1);
+   percentage_success = zeros(size(all_fitness,2),1);
+   
+   for i = 1:size(all_fitness,2)
+      
+      total_trial(i,1) = size(all_fitness{1,i},2);
+      for j =1:total_trial(i,1)
+         if(find(all_fitness{1,i}(:,j) >= tresh(1,i),1))
+           success(i,1) = success(i,1) + 1; 
+         end
+      end
+       percentage_success(i,1) = (success(i,1)/total_trial(i,1))*100;  
+   end
+   
+   assignin('base','total_trial_success_rate',total_trial);
+   assignin('base','success_rate',success);
+   assignin('base','percentage_success_rate',percentage_success);
+end
 
