@@ -2,7 +2,7 @@ function [tau,J,x,xd,rpy,rpyd] = ComputeTorqueSum(obj,ind_subchain,ind_task,M,F,
    
     try
        [J,Jd,x,xd,rpy,rpyd] = obj.subchains.DirKin(q,qd,ind_subchain,ind_task);
-       [b,A] = TrajCostraint(obj,ind_subchain,ind_task,t,J,Jd,x,xd,rpy,rpyd,q,qd);
+       [b,A] = TrajCostraint(obj,ind_subchain,ind_task,t,J,Jd,x,xd,rpy,rpyd,q',qd');
 
        % the hypothesis is that N is inverted directly from data ()
        N = evalin('caller',obj.metric{ind_subchain,ind_task});

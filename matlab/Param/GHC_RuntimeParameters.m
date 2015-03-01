@@ -9,13 +9,13 @@ cdata1 = [1;1000];
 cdata2 = [0;1000];
 cdata3 = [1;2000];
 cdata4 = [0;2000];
-cdata5 = [1;3];
+cdata5 = [1;7];
 constraints_data = [cdata1, cdata2, cdata3, cdata4, cdata5];
 
 
 %% flag to choose type of alpha 
-% RBF or chaine
-choose_alpha = 'RBF';
+% RBF or chained
+choose_alpha = 'chained';
 
 %% ChainedAlpha
 transition_interval = 1.5;

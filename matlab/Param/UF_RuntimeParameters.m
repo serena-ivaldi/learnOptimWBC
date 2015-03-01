@@ -16,7 +16,7 @@ type_of_rep_strct={'extended_decoupled' 'extended_combine','stacked' };
 
 %ALPHA PARAMETERS
 %rbf
-number_of_basis = 10; %5; %10; %basis functions for the RBF
+number_of_basis = 5; %5; %10; %basis functions for the RBF
 redundancy = 2; %3; %overlap of the RBF
 value_range = [0 , 12];
 precomp_sample = false;
@@ -46,10 +46,11 @@ values{1} = value1;
 
 %CONTROLLER PARAMETERS
 max_time = 100; %50
-combine_rule = {'sum'}; % sum or projector (with sum reppelers are removed)
+combine_rule = {'projector'}; % sum or projector (with sum reppelers are removed)
 % with this term i introduce a damped least square structure inside my
 % controller if regularizer is 0 i remove the regularizer action 
-regularizer_chain_1 = [0.001 0]; 
+% ONE FOR EACH TASK
+regularizer_chain_1 = [0.001 0.001 0.001]; 
 regularized_chain_2 = [1];
 regularizer{1} = regularizer_chain_1;
 regularizer{2} = regularized_chain_2;
@@ -59,7 +60,7 @@ regularizer{2} = regularized_chain_2;
 % starting value of parameters
 %init_parameters = 6;
 explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-niter = 20;  %number of generations
+niter = 50;  %number of generations
 fitness = @fitness7;
 
 % FITNESS PARAMETERS

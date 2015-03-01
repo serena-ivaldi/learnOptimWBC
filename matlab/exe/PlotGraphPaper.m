@@ -13,7 +13,7 @@ function PlotGraphPaper
    %LBR4p9.0_scene5_GHC_table_and_an_one_attractive_point_and_posture_task_SERE
    % if i give more than one result folder i will merge the result all
    % togheter
-   list_of_folder = {'_of_22_sere/LBR4p9.0_scene5_GHC_table_and_an_one_attractive_point_and_posture_task_SERE'};
+   list_of_folder = {'_of_18_sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE'};
    % name of the method that will be displayed in the legenda of graph
    name_of_methods = {'RUF fixed initial point','RUF random initial point'};
    color_list={'m','g','c','k','b','r'};
@@ -197,7 +197,7 @@ function PlotFitness(all_fitness,variance_flag,name_of_methods,color_list,transp
          ylabel('fitness','FontSize',16);
          h_legend = legend(handle_legend,name_of_methods);
          set(h_legend,'FontSize',15);
-         set(gca,'Layer','top')
+         
       else
          % remove all the not a number. it can happens if in one generation
          % i have a failure in each experiment and in that case mean give
@@ -209,12 +209,15 @@ function PlotFitness(all_fitness,variance_flag,name_of_methods,color_list,transp
          ylabel('fitness','FontSize',16);
          h_legend = legend(name_of_methods);
          set(h_legend,'FontSize',15);
-         set(gca,'Layer','top')
+         
       end
       
    end
    YL = get(gca,'ylim');
    set(gca,'ylim',[YL(1) 0]);
+   % if i want to fix the axis
+   %set(gca,'ylim',[-600 0])
+   set(gca,'Layer','top')
 end
 
 % plot mean and std deviation for each alpha having a bunch of experiment
