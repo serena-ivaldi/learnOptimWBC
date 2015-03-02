@@ -16,7 +16,7 @@ type_of_rep_strct={'extended_decoupled' 'extended_combine','stacked' };
 
 %ALPHA PARAMETERS
 %rbf
-number_of_basis = 10; %5; %10; %basis functions for the RBF
+number_of_basis = 5; %5; %10; %basis functions for the RBF
 redundancy = 2; %3; %overlap of the RBF
 value_range = [0 , 12];
 precomp_sample = false;
@@ -59,7 +59,7 @@ regularizer{2} = regularized_chain_2;
 % starting value of parameters
 %init_parameters = 6;
 explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-niter = 20;  %number of generations
+niter = 80;  %number of generations
 fitness = @fitness7;
 
 % FITNESS PARAMETERS
