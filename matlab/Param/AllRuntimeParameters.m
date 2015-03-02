@@ -15,14 +15,16 @@ fixed_step = false; %true;
 torque_saturation =10000000000000;
 
 %% TASK PARAMETERS
-name_dat = 'sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE';
+%name_dat = 'sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE';
 %name_dat = 'sere/LBR4p9.0_scene5_GHC_table_and_an_one_attractive_point_and_posture_task_SERE';
+%name_dat = 'LBR4p8.0_scene9_GHC_test_wall_and_two_attractive_point';
+name_dat = 'LBR4p11.0_scene9_UF_mulitple_task_stability_Null_space_projectors';
 %name_dat = 'LBR4p10.0_scene10_UF_lemniscate';
 path=LoadParameters(name_dat);
 load(path);
 
 %% SCENARIO
-name_scenario = 'lbr_scenario5.1'; %'lbr_scenario9''lbr_scenario10';
+name_scenario = 'lbr_scenario9'; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
 
 %% STARTING CONDITION FOR SIMULATION
 % TODO generalize for multichain

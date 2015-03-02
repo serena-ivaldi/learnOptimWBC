@@ -9,13 +9,13 @@ cdata1 = [1;1000];
 cdata2 = [0;1000];
 cdata3 = [1;2000];
 cdata4 = [0;2000];
-cdata5 = [1;3];
+cdata5 = [1;7];
 constraints_data = [cdata1, cdata2, cdata3, cdata4, cdata5];
 
 
 %% flag to choose type of alpha 
-% RBF or chaine
-choose_alpha = 'RBF';
+% RBF or chained
+choose_alpha = 'chained';
 
 %% ChainedAlpha
 transition_interval = 1.5;
@@ -31,7 +31,7 @@ precomp_sample = false;
 % from the optimization step
 
 %from 10 generation of CMAES: collision with end-eff and table
-numeric_theta = [0.000000 6.112754 1.548512 4.320045 4.210416 3.384720 1.652093 2.600296 5.280306 2.041988 10.990456 11.266227 7.441896 12.000000 7.157816 0.598944 10.115051 11.252554 3.775318 3.506263  ];
+numeric_theta = [5.545380 6.292794 4.686268 4.954681 2.166321 3.780383 6.104651 6.199604 4.132309 7.537761 8.678486 9.190867 8.804879 7.583105 7.401123 5.246353 3.797951 10.289526 10.088667 9.602943 ];
 %numeric_theta =[12 12 12 12 12 12 12 12 12 12 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0];
 
 

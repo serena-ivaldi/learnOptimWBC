@@ -20,8 +20,8 @@ warning('error', 'MATLAB:illConditionedMatrix')
 % Parameters 
 n_of_experiment = 23;      % number that we use to distinguish between the same static parameters settings but with different runtime parameters
 init_parameters = 6;        %initial value for the optimization  (the scale is 0-12, so 6=0.5)
-number_of_iteration = 20;    % number of  optimzation (for robustness assesement)
-random = true;             % if true i randomize init_parameters for each iteration
+number_of_iteration = 20;   % number of  optimzation (for robustness assesement)
+random = true;              % if true i randomize init_parameters for each iteration
 
 
 p = ProgressBar(number_of_iteration); 
