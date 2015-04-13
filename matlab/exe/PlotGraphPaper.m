@@ -15,26 +15,37 @@ function PlotGraphPaper
    % togheter
    list_of_folder = {'_of_18_sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE'};
    % name of the method that will be displayed in the legenda of graph
-   name_of_methods = {'RUF fixed initial point','RUF random initial point'};
-   color_list={'m','g','c','k','b','r'};
+   name_of_methods = {'RUF + CMA-ES','GHC + CMA-ES'};
+   color_list={'b','r','m','g','c','k'};
    % interpolation step for the tau if we use a small step wi will badly
    % capture the value of the applied torque
    interpolation_step = 0.01;
    % flag to control what i want to plot
    variance_flag = true; % to select if i want the variance or not on the fitness graph
-   transparent_flag = 0; % make transparent variance in fitness (0 or 1)
+   transparent_flag = 1; % make transparent variance in fitness (0 or 1)
    alpha_flag =true;
    tresh_for_count_success_experiment = [-50,-50]; % one for each batch
-   position_joint_torque_flag = false;
+   position_joint_torque_flag = true;
    
    % with this list i decide wich data mat im going to plot for experiment1
    list_of_data_to_plot = [1,2];
    style = {'-k','-.r','--b'};
    experiment1 = false;
    
+   % i plot x and y position of end effector of specific experiments
+   % and i merge all the plot 
+   list_of_folder_xy = {'_of_115_LBR4p11.0_scene9_UF_mulitple_task_stability_Null_space_projectors','_of_116_LBR4p8.0_scene9_GHC_test_wall_and_two_attractive_point'};
+   experiment_index = [18,1];
+   name_of_methods_xy = {'RUF + CMA-ES','GHC'};
+   style_xy = {'-k','-r','--b'};
+   xy_from_data = true;
    
    if(experiment1)
       PlotExpOne(list_of_data_to_plot,style);
+   elseif(xy_from_data)
+      
+      %PlotPositionXYfromDat(list_of_folder_xy,experiment_index,name_of_methods_xy,style_xy,interpolation_step);
+       PlotPositionXYZfromDat(list_of_folder_xy,experiment_index,name_of_methods_xy,style_xy,interpolation_step);
    else
       for i=1:size(list_of_folder,2)
          % here i take only the first because i make the hypotesis that the
@@ -211,13 +222,17 @@ function PlotFitness(all_fitness,variance_flag,name_of_methods,color_list,transp
          set(h_legend,'FontSize',15);
          
       end
-      
+      final_fit_mean{i} = fit_mean;
+      final_fit_var{i}  = fit_var;
    end
    YL = get(gca,'ylim');
    set(gca,'ylim',[YL(1) 0]);
    % if i want to fix the axis
    %set(gca,'ylim',[-600 0])
    set(gca,'Layer','top')
+   
+   assignin('base','final_fit_mean',final_fit_mean);
+   assignin('base','final_fit_var',final_fit_var);
 end
 
 % plot mean and std deviation for each alpha having a bunch of experiment
@@ -320,6 +335,30 @@ function [all_q,all_tau,all_ee,all_elbow]=ComputeTorqueAndCartesianJointPos(all_
    end
 
 
+end
+
+function [q,tau,ee,elbow]=ComputeTorqueAndCartesianJointPosSingleControllerUknownSolution(controller,time_sym_struct,qi,qdi,fixed_step,torque_interp_step)
+
+   if(isobject(controller))
+         [t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);
+         tau = InterpTorque(controller,time_sym_struct,torque_interp_step);
+         [ee,elbow]=ComputePositions(q{1},t,controller);
+   end
+
+end
+
+
+function [q,tau,ee,elbow]=ComputeTorqueAndCartesianJointPosSingleControllerKnownSolution(controller,q,t,time_sym_struct,torque_interp_step)
+
+   
+   if(isobject(controller))
+         
+         % all_tau is a cell{i,j} of cell{i}
+         tau = InterpTorque(controller,time_sym_struct,torque_interp_step);
+         [ee,elbow]=ComputePositions(q,t,controller);
+        
+   end
+   
 end
 
 
@@ -546,3 +585,115 @@ function CountSuccessRate(all_fitness,tresh)
    assignin('base','percentage_success_rate',percentage_success);
 end
 
+
+
+function PlotTorqueFromDat(controller)
+   plot(controller.torques{1, 1}');
+   xlabel('t','FontSize',16);
+   ylabel(strcat('torque'),'FontSize',16);
+   h_legend = legend({'J1','J2','J3','J4','J5','J6','J7'});
+   set(h_legend,'FontSize',15);
+   set(gca,'Layer','top');
+end
+
+
+
+
+function PlotPositionXYfromDat(list_of_folder,experiment_index,name_of_methods,style,interp_step)
+
+   for i = 1:size(list_of_folder,2)
+      folder_path = BuildMatFilePath(list_of_folder{i},experiment_index(i));
+      [cur_ee,cur_elbow] = ComputeXYLink(folder_path,interp_step);
+      all_ee{i} = cur_ee';
+      all_elbow{i} = cur_elbow';
+   end
+   
+   
+   figure
+   hold on;
+   for j = 1:size(list_of_folder,2)
+      plot(all_ee{j}(:,1),all_ee{j}(:,2),style{j},'LineWidth',3)
+      xlabel('x','FontSize',16);
+      ylabel('y','FontSize',16);
+      xlim([-0.2 1])
+   end
+   hM = legend(name_of_methods);
+   set(hM,'FontSize',15);
+   
+   figure
+   hold on;
+   for j = 1:size(list_of_folder,2)
+      plot(all_elbow{j}(:,1),all_elbow{j}(:,2),style{j},'LineWidth',3)
+      xlabel('x','FontSize',16);
+      ylabel('y','FontSize',16);
+      xlim([-0.2 1])
+   end
+   hM = legend(name_of_methods);
+   set(hM,'FontSize',15);
+   
+   
+end
+
+
+
+function PlotPositionXYZfromDat(list_of_folder,experiment_index,name_of_methods,style,interp_step)
+
+   for i = 1:size(list_of_folder,2)
+      folder_path = BuildMatFilePath(list_of_folder{i},experiment_index(i));
+      [cur_ee,cur_elbow,time_sym] = ComputeXYLink(folder_path,interp_step);
+      all_ee{i} = cur_ee';
+      all_elbow{i} = cur_elbow';
+      time_struct{i} = time_sym;
+   end
+   
+   
+   figure
+   hold on;
+   for j = 1:size(list_of_folder,2)
+      time = time_struct{j}.ti:time_struct{j}.step:time_struct{j}.tf;
+      plot(time,all_ee{j}(:,1),style{j},'LineWidth',3)
+      xlabel('t','FontSize',16);
+      ylabel('x','FontSize',16);
+   end
+   hM = legend(name_of_methods);
+   set(hM,'FontSize',15);
+   
+   
+   figure
+   hold on;
+   for j = 1:size(list_of_folder,2)
+      time = time_struct{j}.ti:time_struct{j}.step:time_struct{j}.tf;
+      plot(time,all_ee{j}(:,2),style{j},'LineWidth',3)
+      xlabel('t','FontSize',16);
+      ylabel('y','FontSize',16);
+   end
+   hM = legend(name_of_methods);
+   set(hM,'FontSize',15);
+  
+   figure
+   hold on;
+   for j = 1:size(list_of_folder,2)
+      time = time_struct{j}.ti:time_struct{j}.step:time_struct{j}.tf;
+      plot(time,all_ee{j}(:,3),style{j},'LineWidth',3)
+      xlabel('t','FontSize',16);
+      ylabel('z','FontSize',16);
+      %xlim([-0.2 1])
+   end
+   hM = legend(name_of_methods);
+   set(hM,'FontSize',15);
+   
+   
+end
+
+
+% with GHC from optimization with cmaes doesnt work
+function [ee,elbow,time_sym_struct] = ComputeXYLink(path,torque_interp_step)
+   q = [];
+   load(path);
+   if(~isempty(q))
+      [~,~,ee,elbow]=ComputeTorqueAndCartesianJointPosSingleControllerKnownSolution(controller,q{1},t,time_sym_struct,torque_interp_step);
+   else
+      [~,~,ee,elbow]=ComputeTorqueAndCartesianJointPosSingleControllerUknownSolution(controller,time_sym_struct,qi,qdi,fixed_step,torque_interp_step);
+   end
+   
+end

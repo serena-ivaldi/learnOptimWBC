@@ -11,7 +11,7 @@ time_struct.step = 0.1;
 time_sym_struct = time_struct;
 time_sym_struct.step = 0.001; 
 % define the type of integration of the sytem of differential equation
-fixed_step = false; %true;
+fixed_step = true; %true;
 torque_saturation =10000000000000;
 
 %% TASK PARAMETERS
