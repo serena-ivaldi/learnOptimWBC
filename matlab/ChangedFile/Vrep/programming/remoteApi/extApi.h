@@ -120,6 +120,10 @@ simxInt _receiveSimplePacket_socket(simxInt clientID,simxUChar** packet,simxShor
 
 /* The remote API functions */
 #include "extApiCustom.h"
+/* custom function*/
+//EXTAPI_DLLEXPORT simxInt simxCustomGetTime(simxInt clientID,simxFloat* time,simxInt operationMode); /* related to command ID: simx_customcmd_set_object_name */
+//EXTAPI_DLLEXPORT simxInt simxCustomGetDelta(simxInt clientID,simxFloat* delta,simxInt operationMode);
+
 /* EXTAPI_DLLEXPORT simxFloat mtlb_simxTest(simxFloat* b); */
 EXTAPI_DLLEXPORT simxInt simxGetJointPosition(simxInt clientID,simxInt jointHandle,simxFloat* position,simxInt operationMode);
 EXTAPI_DLLEXPORT simxInt simxSetJointPosition(simxInt clientID,simxInt jointHandle,simxFloat position,simxInt operationMode);

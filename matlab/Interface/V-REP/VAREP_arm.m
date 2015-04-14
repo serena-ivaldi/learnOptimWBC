@@ -142,13 +142,13 @@ classdef VAREP_arm < VAREP_obj
         end
         
         
-        function SetTau(arm, q)
+        function SetTau(arm, tau)
             %VREP_arm.setq  Set joint angles of V-REP robot
             %
             % R.setq(Q) sets the joint angles of the corresponding
             % robot arm in the V-REP simulation to Q (1xN).
             for j=1:arm.n
-                arm.vrep.SetJointTorque(obj,arm.joint(j),tau(j);
+                arm.vrep.SetJointTorque(obj,arm.joint(j),tau(j));
             end
         end
         

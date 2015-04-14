@@ -583,13 +583,16 @@ classdef remApi
         %constructor
         function obj = remApi(libname,hfile)
             obj.libName = libname;
+            
+            hfile2 = strcat(hfile,'Custom','.h');
+            hfile  = strcat(hfile,'.h');
 			fprintf('Running Matlab %s\n',computer('arch'));
 			disp('Note: always make sure you use the corresponding remoteApi library');
 			disp('(i.e. 32bit Matlab will not work with 64bit remoteApi, and vice-versa)');
 			if ~libisloaded(obj.libName)
-				if exist('hfile','var')
+				if (exist('hfile','var') &&  exist('hfile2','var'))
 					obj.hFile = hfile;
-					loadlibrary(obj.libName,obj.hFile);
+					[notfound, warnings]=loadlibrary(obj.libName,obj.hFile,'addheader',hfile2)
 				else
 					loadlibrary(obj.libName,@remoteApiProto);
 				end
@@ -727,14 +730,14 @@ classdef remApi
       
       %% custom function
       function [rtn,value] = simxGetTime(obj,clientID,operationMode)
-			value = libpointer('singlePtr',float(0));
+			value = libpointer('singlePtr',single([0]));
 			operationMode_ = int32(operationMode);
 
 			[rtn,value] = calllib(obj.libName,'simxCustomGetTime',clientID,value,operationMode_);
       end 
       
       function [rtn,value] = simxGetDelta(obj,clientID,operationMode)
-			value = libpointer('singlePtr',float(0));
+			value = libpointer('singlePtr',single([0]));
 			operationMode_ = int32(operationMode);
          
 			[rtn,value] = calllib(obj.libName,'simxCustomGetDelta',clientID,value,operationMode_);
@@ -742,12 +745,11 @@ classdef remApi
       
       
       %%
- 
+      
 		function [rtn paramValues ]= simxGetArrayParameter(obj,clientID,paramIdentifier,operationMode)
 			paramIdentifier_ = int32(paramIdentifier);
 			operationMode_ = int32(operationMode);
 			paramValues = libpointer('singlePtr',single([0 0 0]));
-
 			[rtn paramValues] = calllib(obj.libName,'simxGetArrayParameter',clientID,paramIdentifier_,paramValues ,operationMode_);
 		end 
  

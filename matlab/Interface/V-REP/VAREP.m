@@ -89,7 +89,7 @@ classdef VAREP < handle
     
     methods
     
-        function obj = VAREP(path, varargin)
+        function obj = VAREP(path,varargin)
             %VREP.VREP VREP object constructor
             %
             % v = VREP(OPTIONS) create a connection to the V-REP simulator.
@@ -104,17 +104,17 @@ classdef VAREP < handle
             % 'port',P        Override communications port
             % 'reconnect'     Reconnect on error (default noreconnect)
             
-            opt.version = 313;
+            opt.version = '313_custom';
             opt.timeout = 2000;
             opt.cycle = 5;
             opt.port = [];
             opt.reconnect = false;
             [opt,args] = tb_optparse(opt, varargin);
                         
-            if isempty(args)
+            if isempty(path)
                 path = '~/V-REP';
-            else
-                path = args{1};
+%             else
+%                 path = args{1}
             end
             
             if ~exist(path, 'dir')
@@ -123,12 +123,15 @@ classdef VAREP < handle
             obj.path = path;
             
             switch opt.version
+                case '313_custom'
+                   libpath = { fullfile(path, 'git', 'learnOptimWBC','matlab','Interface','V-REP','matlab_bindings')};
+                    port = 19996;
                 case 313
                     % for 3.1.3
                     libpath = { fullfile(path, 'programming', 'remoteApi')
                         fullfile(path, 'programming', 'remoteApiBindings', 'matlab', 'matlab')
                         fullfile(path, 'programming', 'remoteApiBindings', 'lib', 'lib','64Bit')
-                        };
+                        }
                     port = 19996;
                 case 311
                     % for 3.1.1
@@ -153,7 +156,7 @@ classdef VAREP < handle
             obj.libpath = libpath;
             obj.version = opt.version;
             
-            obj.vrep = remApi('remoteApi','extApi.h');
+            obj.vrep = remApi('remoteApi','extApi');
             
             % IP address and port
             % wait until connected
@@ -653,6 +656,20 @@ classdef VAREP < handle
             else
                 R = eul2tr(eul, args{:});
             end
+        end
+        %---- custom functions
+        function time = GetSimTime(obj)
+           [s,time] = obj.vrep.simxGetTime(obj.client,obj.mode);
+           if s ~= 0
+                   throw( obj.except(s) );
+           end
+        end
+        
+        function delta = GetSimDelta(obj)
+           [s,delta] = obj.vrep.simxGetDelta(obj.client,obj.mode);
+           if s ~= 0
+                   throw( obj.except(s) );
+           end
         end
         
         %---- factory methods to create instances of specific objects that mirror VREP objects

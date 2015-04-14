@@ -1,6 +1,9 @@
 close all
-clear all
+%clear variables
 clc
+if libisloaded('remoteApi')
+   unloadlibrary remoteApi
+end
 
 
 target_link=[7];
@@ -10,9 +13,17 @@ LBR4p.teach();
 
 
 
-v = VAREP();
+v = VAREP('~');
 arm = VAREP_arm(v, 'LBR4p','fmt','%s_joint%d');
 arm.teach();
 
+
+while true
+   
+   v.GetSimTime()
+   v.GetSimDelta()
+   
+   
+end
 
 
