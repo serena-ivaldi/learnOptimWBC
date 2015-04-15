@@ -796,7 +796,7 @@ classdef remApi
 			end
 		end
  
-		function [rtn result]= simxGetDialogResult (obj,clientID,dialogHandle,operationMode)
+		function [rtn result]= simxGetDialogResult(obj,clientID,dialogHandle,operationMode)
 			dialogHandle_  = int32(dialogHandle);
 			result = libpointer('int32Ptr',int32(0));
 			operationMode_ = int32(operationMode);
@@ -835,7 +835,7 @@ classdef remApi
 			[rtn info] = calllib(obj.libName,'simxGetInMessageInfo',clientID,infoType_,info);
 		end 
  
-		function [rtn paramValue]= simxGetIntegerParameter (obj,clientID,paramIdentifier,operationMode)
+		function [rtn paramValue]= simxGetIntegerParameter(obj,clientID,paramIdentifier,operationMode)
 			paramIdentifier_ = int32(paramIdentifier);
 			operationMode_ = int32(operationMode);
 			paramValue = libpointer('int32Ptr',int32(0));
@@ -1612,12 +1612,6 @@ classdef remApi
 			floatArray=typecast(uint8(single(string)),'single');
 		end
 
-
-
-		
-		
-		
-		
 		function rtn = simxSetJointPosition(obj,clientID,handle,position,option)
 			handle_ = int32(handle);
 			position_ = libpointer('singlePtr',single(position));

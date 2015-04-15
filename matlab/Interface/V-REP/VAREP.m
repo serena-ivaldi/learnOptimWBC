@@ -109,6 +109,7 @@ classdef VAREP < handle
             opt.cycle = 5;
             opt.port = [];
             opt.reconnect = false;
+            opt.syncronous = true;
             [opt,args] = tb_optparse(opt, varargin);
                         
             if isempty(path)
@@ -174,6 +175,14 @@ classdef VAREP < handle
             end
             % communication mode (blocking and not buffer)
             obj.mode = obj.vrep.simx_opmode_oneshot_wait;
+            
+            % type of communication sync or async
+            obj.syncronous = opt.syncronous;
+            
+            if(obj.syncronous == true)
+               obj.vrep.simxSynchronous(obj.client,obj.syncronous)
+            end
+            
         end
         
         
@@ -476,22 +485,6 @@ classdef VAREP < handle
         end
         
         
-        function SetJointTorque(obj,h,torque)
-           
-           %  i need to set vel = 1000000 because in that way i saturate
-           % i impose the torque ( trick on ode)
-           vel = 1000000;
-           s = obj.vrep.simxSetJointTargetVelocity(obj.client, h,vel, obj.mode);
-           if s ~= 0
-                throw( obj.except(s) );
-           end
-           
-           so = obj.vrep.simxSetJointForce(obj.client,h,torque,obj.mode);
-           if so ~= 0
-                throw( obj.except(so) );
-           end
-           
-        end
         
         %---- wrapper functions for position of objects
         function setpos(obj, h, t, relto)
@@ -657,7 +650,30 @@ classdef VAREP < handle
                 R = eul2tr(eul, args{:});
             end
         end
-        %---- custom functions
+        %---- custom function 
+        function SetJointTorque(obj,h,torque)
+           
+           %  i need to set vel = 1000000 because in that way i saturate
+           % i impose the torque ( trick on ode)
+           vel = 1000000;
+           s = obj.vrep.simxSetJointTargetVelocity(obj.client, h,vel, obj.mode);
+           if s ~= 0
+                throw( obj.except(s) );
+           end
+           
+           so = obj.vrep.simxSetJointForce(obj.client,h,torque,obj.mode);
+           if so ~= 0
+                throw( obj.except(so) );
+           end
+           
+        end
+        
+        function SendTriggerSync(obj)
+           obj.vrep.simxSynchronousTrigger(obj.client);
+        end
+        
+        
+        %---- custom functions (remote api)
         function time = GetSimTime(obj)
            [s,time] = obj.vrep.simxGetTime(obj.client,obj.mode);
            if s ~= 0

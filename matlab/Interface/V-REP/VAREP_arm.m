@@ -121,6 +121,9 @@ classdef VAREP_arm < VAREP_obj
             %             end
         end
         
+        
+        %%---- rendering method
+        
         function q = getq(arm)
             %VREP_arm.getq  Get joint angles of V-REP robot
             %
@@ -141,16 +144,6 @@ classdef VAREP_arm < VAREP_obj
             end
         end
         
-        
-        function SetTau(arm, tau)
-            %VREP_arm.setq  Set joint angles of V-REP robot
-            %
-            % R.setq(Q) sets the joint angles of the corresponding
-            % robot arm in the V-REP simulation to Q (1xN).
-            for j=1:arm.n
-                arm.vrep.SetJointTorque(obj,arm.joint(j),tau(j));
-            end
-        end
         
         
         function animate(arm, qt, varargin)
@@ -308,6 +301,50 @@ classdef VAREP_arm < VAREP_obj
                     'Callback', @(src,event)teach_callback(j, handles, src));        
             end
         end
+        
+         %---- custom function (dynamic method)
+        function SetTau(arm, tau)
+            %VREP_arm.setq  Set joint angles of V-REP robot
+            %
+            % R.setq(Q) sets the joint angles of the corresponding
+            % robot arm in the V-REP simulation to Q (1xN).
+            for j=1:arm.n
+                arm.vrep.SetJointTorque(obj,arm.joint(j),tau(j));
+            end
+        end
+        
+        function SetTargetQ(arm, q)
+            %VREP_arm.setq  Set joint angles of V-REP robot
+            %
+            % R.setq(Q) sets the joint angles of the corresponding
+            % robot arm in the V-REP simulation to Q (1xN).
+            for j=1:arm.n
+                arm.vrep.setjointtarget( arm.joint(j), q);
+            end
+        end
+        
+        
+        function SetTargetQd(arm, qd)
+            %VREP_arm.setq  Set joint angles of V-REP robot
+            %
+            % R.setq(Q) sets the joint angles of the corresponding
+            % robot arm in the V-REP simulation to Q (1xN).
+            for j=1:arm.n
+                arm.vrep.setjointvel(arm.joint(j), qd);
+            end
+        end
+        
+        
+        function qd = GetQd(arm)
+            qd = zeros(1,arm.n);
+            paramid = 2012;
+            for j=1:arm.n
+                qd(j) = arm.vrep.getobjparam_float(arm.joint(j), paramid);
+            end
+            
+        end
+        
+        
     end
 end
 
