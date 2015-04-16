@@ -650,11 +650,17 @@ classdef VAREP < handle
                 R = eul2tr(eul, args{:});
             end
         end
+        
+        function SendTriggerSync(obj)
+           obj.vrep.simxSynchronousTrigger(obj.client);
+        end
+        
+        
         %---- custom function 
         function SetJointTorque(obj,h,torque)
            
            %  i need to set vel = 1000000 because in that way i saturate
-           % i impose the torque ( trick on ode)
+           % i impose the torque ( trick on ode) only one times
            vel = 1000000;
            s = obj.vrep.simxSetJointTargetVelocity(obj.client, h,vel, obj.mode);
            if s ~= 0
@@ -667,11 +673,6 @@ classdef VAREP < handle
            end
            
         end
-        
-        function SendTriggerSync(obj)
-           obj.vrep.simxSynchronousTrigger(obj.client);
-        end
-        
         
         %---- custom functions (remote api)
         function time = GetSimTime(obj)

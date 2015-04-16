@@ -8,7 +8,7 @@ clc
 % end
 %% 
 op_selection = 'control';
-control = 'fb_tracking_vel_joint';
+control = 'torque control';
 % GENERAL PARAM 
 
 time_struct.ti = 0;
@@ -199,6 +199,82 @@ switch op_selection
              end
             
             v.simstop();
+      case 'torque control' % in the vrep model yuo have to remove the low level control loop (pid or spring-damper)
+         subchain1 = [7];
+         target_link{1} = subchain1;
+         
+         robots{1} = LBR4p;
+         chains = SubChains(target_link,robots);
+         
+         % repellers parameters
+         repellers = [];
+         
+         
+         %CONTROLLER PARAMETERS 1
+         % the metric change between regularized and not regularized because in the
+         % regularized case i have to do N^(-1) 
+         % not regularized case i have N^(-1/2)
+         metric = {'M'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
+
+
+         kp = [700]; % row vector one for each chain
+         kd = [2*sqrt(kp)];
+
+         for i= 1:chains.GetNumChains()
+            for par = 1:chains.GetNumTasks(i)
+                K_p = kp(i,par)*eye(size(dim_of_task{i,par},1));  
+                K_d = kd(i,par)*eye(size(dim_of_task{i,par},1)); 
+                Kp{i,par} = K_p;
+                Kd{i,par} = K_d;
+            end
+
+         end
+        
+         value1 = 1*ones(chains.GetNumTasks(1));
+         values{1} = value1;
+
+
+         %CONTROLLER PARAMETERS 2
+         max_time = 100; %50
+         combine_rule = {'sum'}; % sum or projector (with sum reppelers are removed)
+         % with this term i introduce a damped least square structure inside my
+         % controller if regularizer is 0 i remove the regularizer action 
+         % ONE FOR EACH TASK
+         regularizer_chain_1 = [0.001 0.001 0.001]; 
+         regularized_chain_2 = [1];
+         regularizer{1} = regularizer_chain_1;
+         regularizer{2} = regularized_chain_2;
+         
+         
+         if(strcmp(combine_rule,'sum'))
+            number_of_action = chains.GetNumTasks(1);
+         elseif(strcmp(combine_rule,'projector'))
+            number_of_action = chains.GetNumTasks(1) + repellers.GetNumberOfWeightFuncRep(1);
+         end
+        
+         alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,time_struct); 
+         controller = Controllers.UF(chains,reference,alphas,repellers,metric,Kp,Kd,combine_rule,regularizer,max_time);
+         
+         q = qr ;
+         qd = zeros(1,7);
+         controller.SetCurRobotIndex(1);
+         v.simstart();
+          for i = time_struct.ti:time_struct.step:time_struct.tf
+             
+             t = v.GetSimTime();
+             tau = controller.Policy(t,q,qd);
+             v_arm.SetTau(tau)
+             
+             if(v.syncronous)
+                  v.SendTriggerSync()
+             end
+             
+             q = v_arm.getq(); 
+             qd = v_arm. GetQd();
+             
+          end
+         
+         
             
       end
 
