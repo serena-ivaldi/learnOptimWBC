@@ -319,7 +319,7 @@ classdef VAREP_arm < VAREP_obj
             % R.setq(Q) sets the joint angles of the corresponding
             % robot arm in the V-REP simulation to Q (1xN).
             for j=1:arm.n
-                arm.vrep.setjointtarget( arm.joint(j), q);
+                arm.vrep.setjointtarget( arm.joint(j), q(j));
             end
         end
         
@@ -330,7 +330,7 @@ classdef VAREP_arm < VAREP_obj
             % R.setq(Q) sets the joint angles of the corresponding
             % robot arm in the V-REP simulation to Q (1xN).
             for j=1:arm.n
-                arm.vrep.setjointvel(arm.joint(j), qd);
+                arm.vrep.setjointvel(arm.joint(j), qd(j));
             end
         end
         
