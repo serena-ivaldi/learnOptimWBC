@@ -113,6 +113,8 @@ classdef  UF < Controllers.AbstractController
           
           %DEBUG
           %t
+          q
+          qd
           %---
          
          
@@ -125,17 +127,19 @@ classdef  UF < Controllers.AbstractController
          
           % the dynamic computation between controller and simulator has
           % to be different
-          M = cur_bot.inertia(q);
-          F = cur_bot.coriolis(q,qd)*qd' + cur_bot.gravload(q)';
+          M = cur_bot.inertia(q)
+          F = cur_bot.coriolis(q,qd)*qd' + cur_bot.gravload(q)'
           % adding the stabilization part in joint space if i have only one
           % controller 
           
           if(obj.subchains.GetNumTasks(i) == 1)
-              kp = 700;
-              kd = 2*sqrt(kp);
+              %kp = 700;
+              kp = 200;
+              kd = 120;
+              %kd = 2*sqrt(kp);
               qd_des =zeros(size(q,2),1);
               q_des  = [0;pi/2; 0; -pi/2; 0; pi/2; 0];
-              u1 = ( kd*(qd_des - qd') + kp*(q_des - q')) ;
+              u1 = ( kd*(qd_des - qd') + kp*(q_des - q'))
           else
               u1 = zeros(size(q,2),1);
           end
@@ -149,7 +153,7 @@ classdef  UF < Controllers.AbstractController
                  app_tau(:,j) = obj.alpha{i,j}.GetValue(t)*tau;       
              end
              
-             final_tau = sum(app_tau,2);
+             final_tau = sum(app_tau,2)
              obj.SaveTau(i,final_tau); 
              obj.SaveTime(i,t);
              

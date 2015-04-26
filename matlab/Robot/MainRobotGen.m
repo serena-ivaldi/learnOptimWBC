@@ -5,7 +5,7 @@ clc
 %% Instantiate a |CodeGenerator| class object
 
 % change the function to change the robot for generating mex matrix
-rob = MdlPuma560();
+rob = MdlLBR4pReal();
 cGen = CodeGenerator(rob,'mex','genmfun','genmex');
 %with this function i build all the symbolic rapresentation of the robot
 cGen.geneverything();

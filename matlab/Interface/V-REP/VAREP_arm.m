@@ -64,8 +64,9 @@ classdef VAREP_arm < VAREP_obj
     
     properties(GetAccess=public, SetAccess=protected)
         q
-        joint   % VREP joint object handles
-        n       % number of joints
+        joint            % VREP joint object handles
+        n                % number of joints
+        torque_control;  % true i control te robot in torque;
         
     end
     
@@ -114,6 +115,8 @@ classdef VAREP_arm < VAREP_obj
             end
             
             arm.n = j - 1;
+            
+            arm.torque_control = true;
             
             % set all joints to passive mode
             %             for j=1:arm.n
@@ -303,13 +306,15 @@ classdef VAREP_arm < VAREP_obj
         end
         
          %---- custom function (dynamic method)
-        function SetTau(arm, tau)
-            %VREP_arm.setq  Set joint angles of V-REP robot
-            %
-            % R.setq(Q) sets the joint angles of the corresponding
-            % robot arm in the V-REP simulation to Q (1xN).
+        function SetTau(arm, tau)   
+            velocity = 1500.0;
             for j=1:arm.n
-                arm.vrep.SetJointTorque(arm.joint(j),tau(j));
+                if(tau(j)>=0)
+                  arm.vrep.setjointvel(arm.joint(j), -velocity);
+                else
+                   arm.vrep.setjointvel(arm.joint(j), velocity);
+                end
+                arm.vrep.SetJointTorque(arm.joint(j),abs(tau(j)));
             end
         end
         
@@ -341,7 +346,7 @@ classdef VAREP_arm < VAREP_obj
             for j=1:arm.n
                 qd(j) = arm.vrep.getobjparam_float(arm.joint(j), paramid);
             end
-            
+            qd
         end
         
         

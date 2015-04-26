@@ -8,7 +8,7 @@ clc
 % end
 %% 
 op_selection = 'control';
-control = 'torque control';
+control = 'torque_control';
 % GENERAL PARAM 
 
 time_struct.ti = 0;
@@ -20,7 +20,7 @@ subchain1 = [7];
 target_link{1} = subchain1;
 
 % matlab model
-[LBR4p] = MdlLBR4p();
+[LBR4p] = MdlLBR4pReal();
 
 % vrep model
 v = VAREP('~');%,'nosyncronous');
@@ -30,7 +30,8 @@ v_arm = VAREP_arm(v, 'LBR4p','fmt','%s_joint%d');
 des_pos = v.object('cur_pos');
 
 % set the first joint position 
-v_arm.setq(qr)
+v_arm.setq(qz)
+v_arm.SetTargetQd( zeros(1,7));
 
 % this is usefull to check the geometric correspondance
 %between vrep and matlab
@@ -199,7 +200,7 @@ switch op_selection
              end
             
             v.simstop();
-      case 'torque control' % in the vrep model yuo have to remove the low level control loop (pid or spring-damper)
+      case 'torque_control' % in the vrep model yuo have to remove the low level control loop (pid or spring-damper)
          subchain1 = [7];
          target_link{1} = subchain1;
          
@@ -214,11 +215,11 @@ switch op_selection
          % the metric change between regularized and not regularized because in the
          % regularized case i have to do N^(-1) 
          % not regularized case i have N^(-1/2)
-         metric = {'M'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
+         metric = {'M^2'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
 
 
-         kp = [700]; % row vector one for each chain
-         kd = [2*sqrt(kp)];
+         kp = [0.5]; % row vector one for each chain
+         kd = [0.1]%[2*sqrt(kp)];
 
          for i= 1:chains.GetNumChains()
             for par = 1:chains.GetNumTasks(i)
@@ -235,7 +236,7 @@ switch op_selection
 
 
          %CONTROLLER PARAMETERS 2
-         max_time = 100; %50
+         max_time = 1000000; %50
          combine_rule = {'sum'}; % sum or projector (with sum reppelers are removed)
          % with this term i introduce a damped least square structure inside my
          % controller if regularizer is 0 i remove the regularizer action 
@@ -255,24 +256,66 @@ switch op_selection
          alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,time_struct); 
          controller = Controllers.UF(chains,reference,alphas,repellers,metric,Kp,Kd,combine_rule,regularizer,max_time);
          
-         q = qr ;
+         q = qz ;
          qd = zeros(1,7);
+         all_tau = [];
          controller.SetCurRobotIndex(1);
          v.simstart();
           for i = time_struct.ti:time_struct.step:time_struct.tf
-             
              t = v.GetSimTime();
+             [p,pd,pdd]=reference.GetTraj(1,1,t);
+             % object that show the desired position 
+             des_pos.setpos(p');
+             
              tau = controller.Policy(t,q,qd);
+             %tau = tau*10^(-3);
              v_arm.SetTau(tau)
+             
+             
              
              if(v.syncronous)
                   v.SendTriggerSync()
              end
              
              q = v_arm.getq(); 
-             qd = v_arm. GetQd();
+             qd = v_arm.GetQd();
+             
+             
+             all_tau = [all_tau;tau'];
+             
+             
              
           end
+         v.simstop();
+%          qi{1} = q;
+%          qdi{1} = qd;
+%          fps = 200;
+%          fixed_step =  true;
+%          time_struct.step = 0.001;
+%          [t, q, qd] = DynSim(time_struct,controller,qi,qdi,fixed_step);
+%          LBR4p.plot(q{1},'fps',fps);
+%      
+         
+     case 'test_torque'
+         
+         v.simstart();
+          for i = time_struct.ti:time_struct.step:time_struct.tf
+             
+             
+             
+             v_arm.SetTau(tau);
+           
+             if(v.syncronous)
+                  v.SendTriggerSync()
+             end
+       
+             
+             q = v_arm.getq(); 
+             qd = v_arm.GetQd();
+             
+          end
+         v.simstop();
+         
          
          
             

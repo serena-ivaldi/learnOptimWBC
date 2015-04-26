@@ -1499,7 +1499,7 @@ classdef remApi
 			[rtn ] = calllib(obj.libName,'simxSetUIButtonProperty',clientID,uiHandle_,uiButtonID_,prop_,operationMode_);
 		end
 
-		function [rtn] = simxSetUISlider (obj,clientID,uiHandle,uiButtonID,position,operationMode)
+		function [rtn] = simxSetUISlider(obj,clientID,uiHandle,uiButtonID,position,operationMode)
 			uiHandle_ = int32(uiHandle);
 			operationMode_ = int32(operationMode);
 			uiButtonID_ = int32(uiButtonID);

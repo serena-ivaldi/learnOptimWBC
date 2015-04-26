@@ -77,13 +77,13 @@
 classdef VAREP < handle
         
     properties(GetAccess=public, SetAccess=protected)
-        vrep       % the remApi object
-        client     % the comms handle
-        path       % path to V-REP root
-        mode       % the communications mode TO FIX i have to define different modalities for different function
-        libpath    % list of libraries added to path
-        syncronous % when true i force a synchronous simulation 
-        version    % the version as given by user 304, 311 etc.
+        vrep          % the remApi object
+        client        % the comms handle
+        path          % path to V-REP root
+        mode          % the communications mode TO FIX i have to define different modalities for different function
+        libpath       % list of libraries added to path
+        syncronous    % when true i force a synchronous simulation   
+        version       % the version as given by user 304, 311 etc.
     end
     
     
@@ -658,15 +658,7 @@ classdef VAREP < handle
         
         %---- custom function 
         function SetJointTorque(obj,h,torque)
-           
-           %  i need to set vel = 1000000 because in that way i saturate
-           % i impose the torque ( trick on ode) only one times
-           vel = 1000000;
-           s = obj.vrep.simxSetJointTargetVelocity(obj.client, h,vel, obj.mode);
-           if s ~= 0
-                throw( obj.except(s) );
-           end
-           
+                                     
            so = obj.vrep.simxSetJointForce(obj.client,h,torque,obj.mode);
            if so ~= 0
                 throw( obj.except(so) );
