@@ -8,14 +8,23 @@ classdef ParamIdentification < handle
       
       bot        % symbolic robot
       dh         % matrix of denavit hartberg parameter 'd' 'a' 'alpha'
-      dyn_param  % 
+      dyn_param  % matrix of parameter 'I','r','m','qlimdown','qlimup','Bdown','Bup','Tc','Jm','G'
+      
+      R          % array of Rotation matrix
+      Jv         % array of jacobian matrix (traslational part)
+      Jw         % array of jacobian matrix (rotational part)
+      
+      
+      q_t        % symbolic joint position function of time q(t)
+      qdiff_t    % symbolic joint veolcities function of time qd(t)  
+      qddiff_t   % symbolic joint accelerations function of time qdd(t)
       
       q          % symbolic joints position (column vector)
       qd         % symbolic joints velocities (column vector)
       qdd        % symbolic joints accelerations (column vector)
       dof        % number of degree of freedom
       tensor     % tensor of third order 
-      regressor  % symbolic exrepssion of the regressor matrix
+      regressor  % symbolic expression of the regressor matrix
    end
    
    
@@ -25,10 +34,9 @@ classdef ParamIdentification < handle
          
          
          
-         [q,qd,qdd]=obj.bot.gencoords();
-         obj.q = q;
-         obj.qd = qd;
-         obj.qdd = qdd;
+         [obj.q,obj.qd,obj.qdd]=obj.bot.gencoords();
+      
+         [obj.q_t,obj.qdiff_t,obj.qddiff_t] = GenTimeCoord(obj.bot.n);
          E1 = [1,0,0;0,0,0;0,0,0];
          E2 = [0,1,0;1,0,0;0,0,0];
          E3 = [0,0,1;0,0,0;1,0,0];
@@ -39,11 +47,81 @@ classdef ParamIdentification < handle
          
       end
       
+      
       function ComputeRegressor(obj)
          
+         obj.regressor = [];
+         for i = 1:obj.dof
+            
+            Y = obj.ComputeYi(i);
+            obj.regressor = [obj.regressor Y];
+         end
          
+      end
+      
+      
+      function Y = ComputeYi(obj,i)
          
+         [Xd_zero, Xd_one, Xd_two]=obj.ComputeXdi(obj.R{i},obj.Jv{i},obj.Jw{i});
+         [Wzero, Wone, Wtwo]=obj.ComputeWi(obj.R{i},obj.Jv{i},obj.Jw{i});
+         [Z_zero, Z_one] = obj.ComputeZi(obj.R{i},obj.Jv{i});
+         
+         Y0 = Xd_zero - Wzero + Z_zero;
+         Y1 = Xd_one  - Wone  + Z_one;
+         Y2 = Xd_two  - Wtwo;
+         
+         Y = [Y0, Y1 , Y2];
              
+      end
+      
+      
+      function [Xd_zero, Xd_one, Xd_two]=ComputeXdi(obj,R_i,J_vi,J_wi)
+      
+         sym t;
+         
+         % substituions for computing the derivative of the expression
+         % respect of the time
+         Rt_i = VecSubs(R_i,obj.q,obj.q_t);
+         Jt_vi= VecSubs(J_vi,obj.q,obj.q_t);
+         Jt_wi= VecSubs(J_wi,obj.q,obj.q_t);
+         
+         % compute Xd_0
+         
+         A = (Jt_vi'*Jt_vi)*obj.qdiff_t;
+         Xd_zero = diff(A,t);
+         
+         % substituions
+         Xd_zero = VecSubs(Xd_zero,obj.q_t,obj.q);
+         Xd_zero = VecSubs(Xd_zero,obj.qdiff_t,obj.qd);
+         Xd_zero = VecSubs(Xd_zero,obj.qddiff_t,obj.qdd);
+         
+         % compute Xd_1
+         
+         B = ( Jt_vi'*skew(Jt_wi*obj.qdiff_t) - Jt_wi'*skew(Jt_vi*obj.qdiff_t) )*Rt_i;
+         Xd_one = diff(B,t);
+         
+         % substituions
+         Xd_one = VecSubs(Xd_one,obj.q_t,obj.q);
+         Xd_one = VecSubs(Xd_one,obj.qdiff_t,obj.qd);
+         Xd_one = VecSubs(Xd_one,obj.qddiff_t,obj.qdd);
+         
+         
+         % compute Xd_2
+         
+         C_left = Jt_wi'*Rt_i;
+         C_right = C_left'*obj.qdiff_t;
+         for i=1:6
+            C(:,i) = C_left*obj.tensor{i}*C_right;
+         end
+         
+         
+         Xd_two = diff(C,t);
+         
+          % substituions
+         Xd_two = VecSubs(Xd_two,obj.q_t,obj.q);
+         Xd_two = VecSubs(Xd_two,obj.qdiff_t,obj.qd);
+         Xd_two = VecSubs(Xd_two,obj.qddiff_t,obj.qdd);
+            
       end
       
       % in the lagrange expression derivative of the kinetic energy
@@ -76,13 +154,13 @@ classdef ParamIdentification < handle
          
       end
       
-      function   [Zzero, Zone] = ComputeZi(obj,R_i,J_vi)
+      function   [Z_zero, Z_one] = ComputeZi(obj,R_i,J_vi)
          
          %column vector  
          g = obj.rob.gravity;
          
          %compute Z0
-         Zzero = - J_vi' * g;
+         Z_zero = - J_vi' * g;
          
          % compute Z1
          A = R_i' * g;
@@ -90,17 +168,30 @@ classdef ParamIdentification < handle
          
          Ad=MatrixDerivative(A,obj.q);
          for i =1:obj.dof
-            Zone(i,:) = -Ad{i};
+            Z_one(i,:) = -Ad{i};
          end
          
       end
       
-      
-
-   
    end
 
 end
+
+
+function [q_t,qdiff_t,qddiff_t] = GenTimeCoord(n)
+
+    sym t
+    if nargout > 0
+        for j=1:n
+            q_t(j) = sym( sprintf('q%d(t)', j), 'real' );
+            qdiff_t(j) = diff(q_t(j),t);
+            qddiff_t(j)   = diff(qdiff_t(j),t);
+        end
+    end
+
+end
+
+
 function [Md]=MatrixDerivative(M,x)
 
    number_of_matrix = length(x);
@@ -127,5 +218,16 @@ function [Md]=MatrixDerivative(M,x)
 
 end
 
+
+function new_s=VecSubs(s,old,new)
+
+   len = length(old);
+   new_s = s;
+   
+   for i=1:len
+      new_s = subs(s,old(i),new(i));
+   end
+   
+end
 
 
