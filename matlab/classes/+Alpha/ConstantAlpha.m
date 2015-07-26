@@ -11,7 +11,7 @@ classdef ConstantAlpha < Alpha.AbstractAlpha
    
    methods
       
-      function obj = ConstantAlpha(value,time_struct)
+      function obj = ConstantAlpha(value,value_range,time_struct)
           if(value>=0 && value<= 1)
             obj.sample = value;
           else
@@ -20,7 +20,7 @@ classdef ConstantAlpha < Alpha.AbstractAlpha
           
           obj.time_struct = time_struct;
           % only to be compiant with the whole structure
-          obj.range = [0 1];
+          obj.range = value_range;
           
       end
       
@@ -34,16 +34,16 @@ classdef ConstantAlpha < Alpha.AbstractAlpha
       end
       % function that give the number of parameters necessary for the alpha function
       function r = GetParamNum(obj)
-         r = 1;
+         r = 0;
       end   
    end
    
    methods (Static)
-      function alphas = BuildCellArray(n_subchain,n_task,values,time_struct)
+      function alphas = BuildCellArray(n_subchain,n_task,values,value_range,time_struct)
          
          for i=1:n_subchain
              for j =1:n_task
-               alphas{i,j} = Alpha.ConstantAlpha(values{i}(j),time_struct);
+               alphas{i,j} = Alpha.ConstantAlpha(values{i}(j),value_range,time_struct);
              end
          end
          

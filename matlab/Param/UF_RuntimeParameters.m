@@ -2,6 +2,10 @@ disp('UF_RUNTIMEPARAM')
 
 %%%;;
 
+% REFERENCE PARAMETERS (this parameter only works if one of the specific trajectory has runtime parameters)
+numeric_reference_parameter{1,1} = [0.7 0.6 0.5 0.4 0.3 -0.3 0.0 -0.2 0.0 0.1 0.1 0.5 0.4 0.3 0.2]';
+
+
 % REPELLERS PARAMETERS
 % GENERALIZE TO MULTICHAIN !!!
 rep_obstacle_ref = [1 2]; % if i change the order of ref obstacle i change the order of repellor in the stacked case
@@ -15,7 +19,9 @@ single_alpha{2} = single_alpha_chain2;
 type_of_rep_strct={'extended_decoupled' 'extended_combine','stacked' };
 
 %ALPHA PARAMETERS
-%rbf
+choose_alpha = 'constant';  % RBF , constant
+
+%RBF
 number_of_basis = 5; %5; %10; %basis functions for the RBF
 redundancy = 2; %3; %overlap of the RBF
 value_range = [0 , 12];
@@ -39,14 +45,15 @@ numeric_theta = [0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.94302
 
 %this is the task without the constraints of the table 
 %numeric_theta =[12 12 12 12 12 12 12 12 12 12];
+
 %constant alpha
 value1 = 1*ones(chains.GetNumTasks(1));
 values{1} = value1;
-
+value_range_for_optimization_routine = [-0.5 , 1.5];
 
 %CONTROLLER PARAMETERS
 max_time = 100; %50
-combine_rule = {'projector'}; % sum or projector (with sum reppelers are removed)
+combine_rule = {'sum'}; % sum or projector (with sum reppelers are removed)
 % with this term i introduce a damped least square structure inside my
 % controller if regularizer is 0 i remove the regularizer action 
 % ONE FOR EACH TASK
@@ -60,8 +67,8 @@ regularizer{2} = regularized_chain_2;
 % starting value of parameters
 %init_parameters = 6;
 explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-niter = 50;  %number of generations
-fitness = @fitness7_1;
+niter = 100;  %number of generations
+fitness = @fitness8;
 % FITNESS PARAMETERS
 
 %%%EOF

@@ -1,6 +1,6 @@
 % rad_val      = geom_parameters(1);
 % phi_val      = geom_parameters(2);
-% theta_val    = geom_parameters(3);
+% tau_val      = geom_parameters(3);
 % wzero_val    = geom_parameters(4);
 % x_centre_val = geom_parameters(5);
 % y_centre_val = geom_parameters(6);

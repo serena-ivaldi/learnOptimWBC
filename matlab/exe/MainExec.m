@@ -9,7 +9,7 @@ AllRuntimeParameters
 % end of the trajectories that is equal to the simulation time
 reference = References(target_link,traj_type,control_type,geometric_path,geom_parameters,time_law,time_struct,dim_of_task,type_of_traj);
 reference.BuildTrajs();
-
+reference. cur_param_set = numeric_reference_parameter;
 %% plot scenario
 text = LoadScenario(name_scenario);
 eval(text);
@@ -28,16 +28,21 @@ end
 %% alpha function
 switch CONTROLLERTYPE
     case 'UF'
-        % TODO generalize to multichain 
-        if(strcmp(combine_rule,'sum'))
-            number_of_action = chains.GetNumTasks(1);
-        elseif(strcmp(combine_rule,'projector'))
-            number_of_action = chains.GetNumTasks(1) + repellers.GetNumberOfWeightFuncRep(1);
-        end
-        %%--- 
-
-        alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,value_range,precomp_sample,numeric_theta,false);       
-        %alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,time_struct);  
+       switch choose_alpha
+           case 'RBF'
+               % TODO generalize to multichain and generalize respect of controller
+              if(strcmp(combine_rule,'sum'))
+                  number_of_action = chains.GetNumTasks(1) ;
+              elseif(strcmp(combine_rule,'projector'))
+                  number_of_action = chains.GetNumTasks(1) + repellers.GetNumberOfWeightFuncRep(1);
+              end
+              %---
+              alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,value_range,precomp_sample,numeric_theta,true);       
+           case 'constant'
+              alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,value_range_for_optimization_routine,time_struct);
+           otherwise
+              warning('Uexpected alpha functions')
+       end   
     case 'GHC'
        switch choose_alpha
           case 'chained'  

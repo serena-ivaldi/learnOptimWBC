@@ -2,13 +2,15 @@ close all
 clear variables
 clc
 
+deg = pi/180;
+
 %% only for debug of the remote api library
 % if libisloaded('remoteApi')
 %    unloadlibrary remoteApi
 % end
 %% 
 op_selection = 'control';
-control = 'torque_control';
+control = 'tracking_velocity';
 % GENERAL PARAM 
 
 time_struct.ti = 0;
@@ -16,22 +18,26 @@ time_struct.tf = 10;
 time_struct.step = 0.001;
 
 %SUBCHAIN PARAMETERS 
-subchain1 = [7];
+subchain1 = [6];
 target_link{1} = subchain1;
 
 % matlab model
-[LBR4p] = MdlLBR4pReal();
+[bot] = MdlLBR4p();
 
 % vrep model
 v = VAREP('~');%,'nosyncronous');
-v_arm = VAREP_arm(v, 'LBR4p','fmt','%s_joint%d');
+v_arm = VAREP_arm(v,'LBR4p','fmt','%s_joint%d');
 
 %desired_pose pointer
 des_pos = v.object('cur_pos');
-
+% current pose tip robot
+ee_cur_pos = v.object('toolVis');
 % set the first joint position 
-v_arm.setq(qz)
-v_arm.SetTargetQd( zeros(1,7));
+
+q_start = qz;
+qd_start = zeros(size(q_start));
+v_arm.setq(q_start)
+v_arm.SetTargetQd(qd_start);
 
 % this is usefull to check the geometric correspondance
 %between vrep and matlab
@@ -49,7 +55,7 @@ type_of_traj = {'func'};
 geometric_path = {'circular'};
 time_law = {'linear'};
 %parameters first chains
-geom_parameters{1,1} = [0.2 0 -pi/2 -pi/4 0 0.5 0.3]; % Circular trajectory 
+geom_parameters{1,1} = [0.1, 0, pi/2,pi,-0.4, 0, 0.3]; % Circular trajectory 
 dim_of_task{1,1}={[1;1;1]};
 
 
@@ -64,7 +70,7 @@ switch op_selection
    case 'teach'
       % this is usefull to check the geometric correspondance
       %between vrep and matlab
-      LBR4p.teach();
+      bot.teach();
       v_arm.teach(); 
    case 'check_scene'
    
@@ -87,8 +93,48 @@ switch op_selection
       end
       fclose(fileID);
       hold on;
-      LBR4p.teach(); 
+      bot.teach(); 
       plot3(p_disp(:,1),p_disp(:,2),p_disp(:,3));
+   case 'test_integration_joint_path' 
+      
+      % starting desired position
+      [p,pd,pdd]=reference.GetTraj(1,1,0);    
+      fixed_orientation = eye(3);
+      T = eye(4);
+      T(1:3,1:3) = fixed_orientation;
+      T(1:3,4) = KinovaVrepGlobalCoordinateCorrection(p);
+      q_des = bot.ikunc(T)';
+
+      % starting desired velocity
+      qd_des = qd_start';
+      lambda = 0;
+      all_position =[];
+      all_joint_position=[];
+      for time = time_struct.ti:time_struct.step:time_struct.tf % integration step
+
+        [p,pd,pdd]=reference.GetTraj(1,1,time);
+        all_position = [all_position p];
+         % inversion with jacobian
+         J = bot.jacob0(q_des,'trans');
+         J_damp = J'/(J*J' + eye(3)*lambda);
+         qd_des = J_damp*pd;
+
+         % euler integration of velocity(ode1)
+         q_des = q_des + qd_des*time_struct.step;
+         all_joint_position = [all_joint_position q_des];
+        time
+      end
+
+      disp('start visualization! --------------- ')
+      vis_step = 10;
+      % visualization step
+      for index = 1:vis_step:length(all_joint_position)% integration step       
+         q_dh = all_joint_position(:,index)
+         % joint corrections
+         q_dh = KinovaVrepKinematicCorrection(q_dh) 
+         v_arm.setq(q_dh);
+         des_pos.setpos(all_position(:,index)')
+      end
    case 'control'
       % i use the same integration step of vrep
       if(v.syncronous)
@@ -128,7 +174,7 @@ switch op_selection
            
             % start simulation
             v.simstart();
-            q = qr';
+            q = q_start';
            
             for i = time_struct.ti:time_struct.step:time_struct.tf
       
@@ -138,7 +184,7 @@ switch op_selection
                T(1:3,4) = p;
 
                % inversione cinematica
-               q = LBR4p.ikunc(T);
+               q = bot.ikunc(T);
 
                v_arm.SetTargetQ(q);
                
@@ -152,59 +198,48 @@ switch op_selection
             end
       
       
-         v.simstop();
-         
-         case 'fb_tracking_vel_joint' % in the vrep model yuo have to remove the low level control loop (pid or spring-damper)
+         v.simstop()
+      case 'tracking_velocity'
+         lambda = 0.001;
+         K_p = 10;
+         % initialize
+         T = ee_cur_pos.getpose();
+         p_mes = T(1:3,4);
+         q_mes =  v_arm.getq()';
+         v.simstart();
+         for i = time_struct.ti:time_struct.step:time_struct.tf
             
-             v.simstart();
-             q_meas= qr';
-             qd_cur = zeros(7,1);
-             lambda = 0.1;
-             Kp = 20;
-             Ki = 100;
-             % intial position attached to the trajectory
-             [p,pd,pdd]=reference.GetTraj(1,1,0);
-             fixed_orientation = roty(90);
-             T = eye(4);
-             T(1:3,1:3) = fixed_orientation;
-             T(1:3,4) = p;
-             q_des = LBR4p.ikunc(T)';
-             e_int = 0;
-             for i = time_struct.ti:time_struct.step:time_struct.tf
-                
-                % reference in cartesian
-                t = v.GetSimTime();
-                [p,pd,pdd]=reference.GetTraj(1,1,t);
-                des_pos.setpos(p');
-                
-                % inversion with jacobian
-                J = LBR4p.jacob0(q_des,'trans');
-                J_damp = J'/(J*J' + eye(3)*lambda);
-                qd_des = J_damp*pd;
-                
-                % euler integration of velocity(ode1)
-                q_des = q_des + qd_des*time_struct.step;
-                
-                
-                e_int = e_int + (q_des - q_meas)*time_struct.step;
-                control = Kp*(q_des - q_meas) + Ki*(e_int) + qd_des;
-                
-                v_arm.SetTargetQd(control);
-                
-                if(v.syncronous)
-                  v.SendTriggerSync()
-               end
+             t = v.GetSimTime();
+             [p_des,pd_des,pdd]=reference.GetTraj(1,1,t);
+             des_pos.setpos(p_des'); % for positioning one object to show trajectory
 
-                % update q and qd
-               q_meas = v_arm.getq()';   
-             end
+             % inversion with jacobian
+             J = bot.jacob0(q_mes,'trans');
+             J_damp = J'/(J*J' + eye(3)*lambda);
+             qd_contr = J_damp*(K_p*((p_des)-(p_mes)) + pd_des)
             
-            v.simstop();
+             error = p_des-p_mes
+             
+             v_arm.SetTargetQd(qd_contr);
+            
+             if(v.syncronous)
+               v.SendTriggerSync()
+             end
+             
+             % update p and q
+             T = ee_cur_pos.getpose();
+             p_mes = T(1:3,4);
+             q_mes =  v_arm.getq()';
+               
+         end
+         
+      v.simstop();
+            
       case 'torque_control' % in the vrep model yuo have to remove the low level control loop (pid or spring-damper)
          subchain1 = [7];
          target_link{1} = subchain1;
          
-         robots{1} = LBR4p;
+         robots{1} = bot;
          chains = SubChains(target_link,robots);
          
          % repellers parameters
@@ -256,8 +291,8 @@ switch op_selection
          alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,time_struct); 
          controller = Controllers.UF(chains,reference,alphas,repellers,metric,Kp,Kd,combine_rule,regularizer,max_time);
          
-         q = qz ;
-         qd = zeros(1,7);
+         q = q_start ;
+         qd = qd_start;
          all_tau = [];
          controller.SetCurRobotIndex(1);
          v.simstart();
@@ -293,7 +328,7 @@ switch op_selection
 %          fixed_step =  true;
 %          time_struct.step = 0.001;
 %          [t, q, qd] = DynSim(time_struct,controller,qi,qdi,fixed_step);
-%          LBR4p.plot(q{1},'fps',fps);
+%          bot.plot(q{1},'fps',fps);
 %      
          
      case 'test_torque'
@@ -323,6 +358,58 @@ switch op_selection
 
 end
 
+
+
+%% old fb tracking_vel
+
+%             case 'fb_tracking_vel_joint' % in the vrep model yuo have to remove the low level control loop (pid or spring-damper)
+%             
+%              v.simstart();
+%              q_meas= q_start';
+%              qd_cur = qd_start';
+%              lambda = 0.01;
+%              Kp = 2;
+%              Ki = 0.1;
+%              % intial position attached to the trajectory
+%              [p,pd,pdd]=reference.GetTraj(1,1,0);
+%              fixed_orientation = eye(3);
+%              T = eye(4);
+%              T(1:3,1:3) = fixed_orientation;
+%              T(1:3,4) = KinovaVrepGlobalCoordinateCorrection(p);
+%              q_des = bot.ikunc(T)';
+%              e_int = 0;
+%               all_joint_position=[];
+%              for i = time_struct.ti:time_struct.step:time_struct.tf
+%                 
+%                 % reference in cartesian
+%                 t = v.GetSimTime();
+%                 [p,pd,pdd]=reference.GetTraj(1,1,t);
+%                 des_pos.setpos(p'); % for positioning one object to show trajectory
+%                 
+%                 % inversion with jacobian
+%                 J = bot.jacob0(q_des,'trans');
+%                 J_damp = J'/(J*J' + eye(3)*lambda);
+%                 qd_des = J_damp*pd;
+%                 
+%                 % euler integration of velocity(ode1)
+%                 q_des = q_des + qd_des*time_struct.step;
+%                 all_joint_position = [all_joint_position q_des];
+%                 q_des_jaco_vrep = KinovaVrepKinematicCorrection(q_des);
+%                 position_error = q_des_jaco_vrep - q_meas;
+%                 
+%                 e_int = e_int + (q_des_jaco_vrep - q_meas)*time_struct.step;
+%                 control = Kp*(q_des_jaco_vrep - q_meas) + Ki*(e_int) + qd_des;
+%                 
+%                 v_arm.SetTargetQd(control);
+%                 
+%                 if(v.syncronous)
+%                   v.SendTriggerSync()
+%                 end
+%                 % update q and qd
+%                q_meas = v_arm.getq()';   
+%              end
+%             
+%             v.simstop();
 
 
 

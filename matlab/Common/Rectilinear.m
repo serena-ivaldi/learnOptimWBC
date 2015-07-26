@@ -24,8 +24,6 @@ function [p,pd,pdd,time] = Rectilinear(s,time_struct,geom_parameters,type)
     pd = diff(p,t);
     pdd = s*zeros(3,1);
 
-
-
     xi_val = geom_parameters(1);
     yi_val = geom_parameters(2);
     zi_val = geom_parameters(3);
@@ -38,7 +36,21 @@ function [p,pd,pdd,time] = Rectilinear(s,time_struct,geom_parameters,type)
     p = subs(p,{xi,yi,zi,xf,yf,zf},{xi_val,yi_val,zi_val,xf_val,yf_val,zf_val});
     pd = subs(pd,{xi,yi,zi,xf,yf,zf},{xi_val,yi_val,zi_val,xf_val,yf_val,zf_val});
    
-
+    
+      % check if the some of the function are constant
+      check1=symvar(p);
+      if(isempty(check1))
+         p(4) = t;
+      end
+      check2=symvar(pd);
+      if(isempty(check2))
+         pd(4)= t;
+      end
+      check3=symvar(pdd);
+      if(isempty(check3))
+         pdd(4) = t;
+      end
+    
     % transform the expression in matlab function of t 
     p = matlabFunction(p);
     pd = matlabFunction(pd);
@@ -59,7 +71,4 @@ function [p,pd,pdd,time] = Rectilinear(s,time_struct,geom_parameters,type)
    end
    
     
-
-
-
 end

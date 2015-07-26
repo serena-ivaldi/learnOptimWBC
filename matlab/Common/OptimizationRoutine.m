@@ -1,5 +1,5 @@
 % number_of_iteration is usefull only for PlotGraphPaper.m main
-function [tau,mean_performances, bestAction, policies, costs, succeeded]=OptimizationRoutine(number_of_iteration,n_of_experiment,iter,init_parameters_from_out,random)
+function [tau,mean_performances, bestAction, policies, costs, succeeded]=OptimizationRoutine(number_of_iteration,n_of_experiment,iter,init_parameters_from_out,generation_of_starting_point)
   
     
      AllRuntimeParameters
@@ -34,16 +34,21 @@ function [tau,mean_performances, bestAction, policies, costs, succeeded]=Optimiz
      %% alpha function
      switch CONTROLLERTYPE
          case 'UF'
-           % TODO generalize to multichain and generalize respect of controller
-           if(strcmp(combine_rule,'sum'))
-               number_of_action = chains.GetNumTasks(1);
-           elseif(strcmp(combine_rule,'projector'))
-               number_of_action = chains.GetNumTasks(1) + repellers.GetNumberOfWeightFuncRep(1);
+           switch choose_alpha
+              case 'RBF'
+                  % TODO generalize to multichain and generalize respect of controller
+                 if(strcmp(combine_rule,'sum'))
+                     number_of_action = chains.GetNumTasks(1) ;
+                 elseif(strcmp(combine_rule,'projector'))
+                     number_of_action = chains.GetNumTasks(1) + repellers.GetNumberOfWeightFuncRep(1);
+                 end
+                 %---
+                 alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,value_range,precomp_sample,numeric_theta,true);       
+              case 'constant'
+                 alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,value_range_for_optimization_routine,time_struct);
+              otherwise
+                 warning('Uexpected alpha functions')
            end
-           %---
-
-           alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,value_range,precomp_sample,numeric_theta,true);       
-           %alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,time_struct);
          case 'GHC'
             switch choose_alpha
                 case 'chained'  
@@ -74,11 +79,14 @@ function [tau,mean_performances, bestAction, policies, costs, succeeded]=Optimiz
      %% Instance
 
      % im using init_value from outside
-     start_action = init_parameters_from_out*ones(1,controller.GetTotalParamNum());
-     if(random)
-            
-        start_action = (value_range(1,2)-value_range(1,1)).*rand(1,controller.GetTotalParamNum()) + value_range(1,1)*ones(1,controller.GetTotalParamNum());
-       
+     switch generation_of_starting_point
+        case 'test'
+           start_action = [0.7 0.6 0.5 0.4 0.3 -0.3 0.0 -0.2 0.0 0.1 0.1 0.5 0.4 0.3 0.2];
+        case 'given'
+            start_action = init_parameters_from_out*ones(1,controller.GetTotalParamNum());
+        case 'random'
+           start_action = (value_range(1,2)-value_range(1,1)).*rand(1,controller.GetTotalParamNum()) + value_range(1,1)*ones(1,controller.GetTotalParamNum());
+        
      end
 
      inst = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,fitness,options);

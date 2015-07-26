@@ -308,6 +308,13 @@ classdef CodeGenerator
             [Iqdd] = CGen.genfdyn;
             [tau] = CGen.geninvdyn;
         end
+        
+        function [] = genkinematic(CGen)
+           [t,allT] = CGen.genfkine;
+            [J0,Jn] = CGen.genjacobian;
+            [Jdot] = CGen.genJdot;
+        end
+        
 
         function CGen = set.genmfun(CGen,value)
             CGen.genmfun = value;

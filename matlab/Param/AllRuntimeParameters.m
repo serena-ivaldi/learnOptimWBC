@@ -4,32 +4,33 @@
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
-time_struct.tf = 10;
-time_struct.step = 0.1;
+time_struct.tf = 20;
+time_struct.step = 0.001;
 
 %% for simulation 
 time_sym_struct = time_struct;
 time_sym_struct.step = 0.001; 
 % define the type of integration of the sytem of differential equation
-fixed_step = true; %true;
-torque_saturation =10000000000000;
+fixed_step = false; %true;
+torque_saturation =10000000000000; % high value no saturation
 
 %% TASK PARAMETERS
 %name_dat = 'sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE';
 %name_dat = 'sere/LBR4p9.0_scene5_GHC_table_and_an_one_attractive_point_and_posture_task_SERE';
 %name_dat = 'LBR4p8.0_scene9_GHC_test_wall_and_two_attractive_point';
-name_dat = 'LBR4p11.0_scene9_UF_mulitple_task_stability_Null_space_projectors';
+%name_dat = 'LBR4p11.0_scene9_UF_mulitple_task_stability_Null_space_projectors';
+name_dat = 'LBR4p12.0_scene0_UF_test_elastic_reference';
 %name_dat = 'LBR4p10.0_scene10_UF_lemniscate';
 path=LoadParameters(name_dat);
 load(path);
 
 %% SCENARIO
-name_scenario = 'lbr_scenario9'; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
+name_scenario = 'lbr_scenario11'; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
 
 %% STARTING CONDITION FOR SIMULATION
 % TODO generalize for multichain
-%qi{1} = qz;
-qi{1} = zeros(1,chains.GetNumLinks(1)); %stretched arm
+qi{1} = qz;
+%qi{1} = zeros(1,chains.GetNumLinks(1)); %stretched arm
 qdi{1} = zeros(1,chains.GetNumLinks(1));
 options= [];
 simulator_type = {'rbt'};

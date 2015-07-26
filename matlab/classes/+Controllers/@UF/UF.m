@@ -113,8 +113,8 @@ classdef  UF < Controllers.AbstractController
           
           %DEBUG
           %t
-          q
-          qd
+          %q
+          %qd
           %---
          
          
@@ -127,8 +127,8 @@ classdef  UF < Controllers.AbstractController
          
           % the dynamic computation between controller and simulator has
           % to be different
-          M = cur_bot.inertia(q)
-          F = cur_bot.coriolis(q,qd)*qd' + cur_bot.gravload(q)'
+          M = cur_bot.inertia(q);
+          F = cur_bot.coriolis(q,qd)*qd' + cur_bot.gravload(q)';
           % adding the stabilization part in joint space if i have only one
           % controller 
           
@@ -139,7 +139,7 @@ classdef  UF < Controllers.AbstractController
               %kd = 2*sqrt(kp);
               qd_des =zeros(size(q,2),1);
               q_des  = [0;pi/2; 0; -pi/2; 0; pi/2; 0];
-              u1 = ( kd*(qd_des - qd') + kp*(q_des - q'))
+              u1 = ( kd*(qd_des - qd') + kp*(q_des - q'));
           else
               u1 = zeros(size(q,2),1);
           end
@@ -153,7 +153,7 @@ classdef  UF < Controllers.AbstractController
                  app_tau(:,j) = obj.alpha{i,j}.GetValue(t)*tau;       
              end
              
-             final_tau = sum(app_tau,2)
+             final_tau = sum(app_tau,2);
              obj.SaveTau(i,final_tau); 
              obj.SaveTime(i,t);
              
@@ -185,7 +185,8 @@ classdef  UF < Controllers.AbstractController
       
       % the implicit rule with repellers is that first i update the rbf
       % functions for the task and after i update the alpha function
-      % for repellers
+      % for repellers 
+      % and then i update the parameter that govern the reference
       function UpdateParameters(obj,parameters)
        disp('im in update parameters')   
          for i=1:size(obj.alpha,1) 
@@ -197,6 +198,20 @@ classdef  UF < Controllers.AbstractController
                  index = index+n_param;
              end
          end
+         % update parameters of the references (if there are some)
+         for i=1:size(obj.references.parameter_dim,1) 
+             index = 1;
+             for j=1:size(obj.references.parameter_dim,2)  
+                 n_param = obj.references.parameter_dim{i,j};
+                 app_param = parameters(index:index+n_param - 1);
+                 if(n_param>0)
+                     obj.references.cur_param_set{i,j} = (app_param');
+                     index = index+n_param;
+                 end
+                
+             end
+         end
+         
       end
       
        
@@ -207,6 +222,9 @@ classdef  UF < Controllers.AbstractController
              for j=1:size(obj.alpha,2) 
                  n_param = n_param + obj.alpha{i,j}.GetParamNum();
              end
+          end
+          for i=1:1:size(obj.references.parameter_dim,1) 
+             n_param = n_param + obj.references.GetNumParam(i);
           end
       end
       
