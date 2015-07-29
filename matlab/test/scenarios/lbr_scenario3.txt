@@ -1,22 +1,53 @@
+%%%;;
 
-% obstacle on circular trajectory 
-% setting 1 : circular trajectory obstacle on the trajectory and attractive point outisde the trajecoty (2 task)
-% setting 2 : circular trajectory obstacle on the traj repellers on obstacle tracking task (1 task 1 repellers)
-
-global G_OB;
 hold on;axis equal;
-p_tot=[];
-for t=time_struct.ti:time_struct.step:time_struct.tf
- 
-	p_cur=reference.GetTraj(1,1,t);
-	p_tot = [p_tot,p_cur];
+%% modify from this point
+global G_OB;
+plot_time_struct.ti = 0;
+plot_time_struct.tf = 20;
+plot_time_struct.step = 0.1;
 
+plot_subchain1 = [7];
+plot_target_link{1} = plot_subchain1;
+% reference parameters
+plot_type = {'cartesian_x'};
+plot_control_type = {'tracking'};
+plot_type_of_traj = {'func'};
+plot_traj = {'circular'};
+plot_time_law = {'linear'};
+
+
+%parameters first chains
+plot_geom_parameters{1,1} = [0.3 pi/2 -pi/2 0 0 -0.5 0.5];
+plot_time_struct.ti = 0;
+plot_time_struct.tf = 20;
+plot_time_struct.step = 0.1;
+
+plot_dim_of_task{1,1}={[1;1;1]};
+
+%% reference
+% if type_of_task = sampled i have to specify the Time to reach the
+% end of the trajectories that is equal to the simulation time
+plot_reference = References(plot_target_link,plot_type,plot_control_type,plot_traj,plot_geom_parameters,plot_time_law,plot_time_struct,plot_dim_of_task,plot_type_of_traj);
+plot_reference.BuildTrajs();
+
+p_tot=[];
+for t= plot_time_struct.ti : plot_time_struct.step : plot_time_struct.tf
+	p_cur=plot_reference.GetTraj(1,1,t);
+	p_tot = [p_tot,p_cur];
 end
     
-plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
-repulsive_point = [-0.125538272258140 -0.5 0.455692460313405];
-attractive_point = [-0.2 -0.5 0.55];
-scatter3(repulsive_point(1,1),repulsive_point(1,2),repulsive_point(1,3), 130);
-scatter3(attractive_point(1,1),attractive_point(1,2),attractive_point(1,3), 130);
-ob1 = Obstacle(repulsive_point,'repeller',[]);
-G_OB = [ob1];
+plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end),'g');
+repulsive_point1 =  [-0.037020544895198 -0.5 0.202292964047434];
+repulsive_point2 =  [-0.289597165399004 -0.5 0.578316548652642];
+attractive_point1 = [-0.03 -0.5 0.05];
+attractive_point2 = [-0.4 -0.5 0.7];
+scatter3(repulsive_point1(1,1),repulsive_point1(1,2),repulsive_point1(1,3), 130,'r');
+scatter3(repulsive_point2(1,1),repulsive_point2(1,2),repulsive_point2(1,3), 130,'r');
+scatter3(attractive_point1(1,1),attractive_point1(1,2),attractive_point1(1,3), 130,'b');
+scatter3(attractive_point2(1,1),attractive_point2(1,2),attractive_point2(1,3), 130,'b');
+ob1 = Obstacle(repulsive_point1,'repeller',[]);
+ob2 = Obstacle(repulsive_point2,'repeller',[]);
+G_OB = [ob1 ob2];
+
+%%%EOF

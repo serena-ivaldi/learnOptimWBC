@@ -23,6 +23,7 @@ classdef  SubChains < handle
             rob_name = sub_chains{i}.name;
             rob_name(rob_name==' ')=[];
             
+            % here i use the model of the symbolic robot
             if find(strcat(rob_name,'_done.m'))
                app_rob = eval(strcat(rob_name,'()'));
                app_rob.name = sub_chains{i}.name;

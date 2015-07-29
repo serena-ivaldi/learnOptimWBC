@@ -3,7 +3,7 @@ disp('UF_RUNTIMEPARAM')
 %%%;;
 
 % REFERENCE PARAMETERS (this parameter only works if one of the specific trajectory has runtime parameters)
-numeric_reference_parameter{1,1} = [0.7 0.6 0.5 0.4 0.3 -0.3 0.0 -0.2 0.0 0.1 0.1 0.5 0.4 0.3 0.2]';
+numeric_reference_parameter{1,1} = [0.047180 0.359539 1.045565 0.374223 -0.069047 0.013630 -0.495463 -0.131683 0.668327 -0.184017 1.115775 0.884010 0.120701 0.837400 1.189048]';
 
 
 % REPELLERS PARAMETERS
@@ -19,7 +19,7 @@ single_alpha{2} = single_alpha_chain2;
 type_of_rep_strct={'extended_decoupled' 'extended_combine','stacked' };
 
 %ALPHA PARAMETERS
-choose_alpha = 'constant';  % RBF , constant
+choose_alpha = 'RBF';  % RBF , constant
 
 %RBF
 number_of_basis = 5; %5; %10; %basis functions for the RBF
@@ -28,9 +28,10 @@ value_range = [0 , 12];
 precomp_sample = false;
 % value of theta that we have to change when we want to execute the result
 % from the optimization step
-numeric_theta = [0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
+%numeric_theta = [0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
 %numeric_theta =[0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
-
+%numeric_theta =[2.3218    2.5695    6.8006    4.6558    5.7475    8.7383    3.5058    5.2817    6.9910    6.7590    4.5235    6.3875    7.3247    6.7258 8.5637];
+numeric_theta =[0 0 0 0 0 12 12 12 12 12 0 0 0 0 0];
 % from sere 12
 %numeric_theta = [5.819383 4.412794 5.286902 7.786384 7.599614 3.512520 5.989917 9.410994 7.444834 7.472545 4.532512 5.614148 7.970080 4.498142 6.194601 6.925731 4.815911 5.490313 5.294776 6.011380 ]
 
@@ -49,7 +50,7 @@ numeric_theta = [0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.94302
 %constant alpha
 value1 = 1*ones(chains.GetNumTasks(1));
 values{1} = value1;
-value_range_for_optimization_routine = [-0.5 , 1.5];
+value_range_for_optimization_routine = [-0.5 , 1.5]; % this is a trick that im using to provide bound to the optimization procedure for parametric reference
 
 %CONTROLLER PARAMETERS
 max_time = 100; %50
@@ -67,8 +68,8 @@ regularizer{2} = regularized_chain_2;
 % starting value of parameters
 %init_parameters = 6;
 explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-niter = 100;  %number of generations
-fitness = @fitness8;
+niter = 20;  %number of generations
+fitness = @fitness7_2;
 % FITNESS PARAMETERS
 
 %%%EOF

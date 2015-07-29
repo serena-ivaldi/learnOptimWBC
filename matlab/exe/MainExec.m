@@ -37,7 +37,7 @@ switch CONTROLLERTYPE
                   number_of_action = chains.GetNumTasks(1) + repellers.GetNumberOfWeightFuncRep(1);
               end
               %---
-              alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,value_range,precomp_sample,numeric_theta,true);       
+              alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,value_range,precomp_sample,numeric_theta,false);       
            case 'constant'
               alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,value_range_for_optimization_routine,time_struct);
            otherwise
@@ -81,7 +81,7 @@ toc
 fps = 200;
 video = false;
 step_save_fig = 20;
-save_fig = true;
+save_fig = false;
 ee_trajectory = true; 
 elbow_traj    = true;
 %---
