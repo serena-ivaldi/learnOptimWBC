@@ -1,4 +1,4 @@
-% this fitness work with scenario 5, 6, 7,9 and experiment scenario 3 icra
+% this fitness work with scenario 5, 6, 7,9 and experiment scenario 3,2 icra
 
 function fit = fitness7_1(obj,t,q)
     global G_OB;
@@ -9,11 +9,13 @@ function fit = fitness7_1(obj,t,q)
     penalty = 5000; %10
     sigma = 0.1; 
     max_effort = 2000;
-    max_traj_error = 1000;
+    max_traj_error = 5000;
     max_penalties  = 20000;
     weight_effort = 1;
-    weight_traj_err = 1;
-    weight_penal = 5;
+    weight_traj_err = 4;
+    weight_penal = 2;
+    hitting_condition = 0.05;
+    hitting = false;
     %%%EOF
     contr = obj.controller;
     traj_err= 0;
@@ -30,7 +32,13 @@ function fit = fitness7_1(obj,t,q)
         % compute the repulsive component for all the obstacle
         for jj=1:size(G_OB,2)
             dist = G_OB(jj).Dist(ee',L);
+            if(dist < hitting_condition)
+               hitting = true;
+            end
             repuls= repuls + penalty*exp(-(dist)/(2*sigma^(2)));
+        end
+        if(hitting)
+           break;
         end
     end
     % max effort
@@ -60,4 +68,9 @@ function fit = fitness7_1(obj,t,q)
     fprintf('effort term is %f\n', effort)
     %---
     fit = (-traj_err*(weight_traj_err) - repuls*(weight_penal) - effort*(weight_effort))*( 1000/(weight_traj_err+weight_penal+weight_effort) );
+    
+    if(hitting)
+      fit = -1500;
+      disp('hit the obstacle')
+    end
 end

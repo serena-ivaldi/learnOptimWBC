@@ -4,7 +4,7 @@ clc
 
 % in this variable we have to specify the name of the scenario:
 % bot_scenario# where # is incremental
-name_scenario = 'lbr_scenario3';
+name_scenario = 'lbr_scenario2';
 % with this variable i decide when i want to save the designed scenario
 save_now = true;
 
@@ -19,15 +19,17 @@ hold on;axis equal;
 global G_OB;
 
 hold on;axis equal;
-[X Y Z]=meshgrid(-0.05:0.01:0.3,-0.4,0.31:0.01:0.7);
+[X,Y,Z]=meshgrid(-0.05:0.001:0.3,-0.5,0.45:0.001:1.0);
 %Y = -0.4*ones(1,size(X,1));
 for i=1:size(X,2) 
     scatter3(X(:,:,i),Y(:,:,i),Z(:,:,i))
 end
-elbow_point = [-0.2 -0.4000 0.3100];
-e_e_point = [0, -0.7,0.5100];
+elbow_point = [-0.2 -0.4 0.31];
+e_e_point = [0,-0.7,0.51];
+intermediate_e_e_point = [ -0.3,-0.2,0.7];
 scatter3(elbow_point(1,1),elbow_point(1,2),elbow_point(1,3),130,'b');
 scatter3(e_e_point(1,1),e_e_point(1,2),e_e_point(1,3),130,'b');
+scatter3(intermediate_e_e_point(1,1),intermediate_e_e_point(1,2),intermediate_e_e_point(1,3),130,'b');
 % global obstacle
 rapresentation.X = X;
 rapresentation.Y = Y;

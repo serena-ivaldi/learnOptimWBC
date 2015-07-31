@@ -1,6 +1,5 @@
 for updating robotics toolbox subsitute the file in the toolbox with the ones that are inside this folder
 
 
-fdyn.m          ----> /path to rcvtoolbox/rvctools/robot/@SerialLink (only for master branch)
 CodeGenerator.m ----> /path to rcvtoolbox/rvctools/robot/@CodeGenerator
 gencoriolis.m   ----> /path to rcvtoolbox/rvctools/robot/@CodeGenerator (corrected only the last line, could be a correction by hand)
