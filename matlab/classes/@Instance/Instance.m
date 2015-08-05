@@ -47,7 +47,7 @@ classdef  Instance
             end
        end
        
-       function [mean_performances bestAction policies costs succeeded]=CMAES(obj,start_action,niter,explorationRate)
+       function [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded]=CMAES(obj,start_action,niter,explorationRate)
           %Parameter space
           NumParam = obj.controller.GetTotalParamNum();
           % start_value for action
@@ -62,7 +62,7 @@ classdef  Instance
           settings.plotState = 1;         %{0,1} plot offsprings yes no
 
           %search optimal parameters
-          [mean_performances bestAction policies costs succeeded] = obj.LearnCMAES(settings);
+          [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded] = obj.LearnCMAES(settings);
 
           figure;
           plot(mean_performances);      

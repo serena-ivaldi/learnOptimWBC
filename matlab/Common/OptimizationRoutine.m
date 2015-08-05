@@ -1,5 +1,5 @@
 % number_of_iteration is usefull only for PlotGraphPaper.m main
-function [tau,mean_performances, bestAction, policies, costs, succeeded]=OptimizationRoutine(number_of_iteration,n_of_experiment,iter,init_parameters_from_out,generation_of_starting_point)
+function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded]=OptimizationRoutine(number_of_iteration,n_of_experiment,iter,init_parameters_from_out,generation_of_starting_point)
   
     
      AllRuntimeParameters
@@ -92,8 +92,13 @@ function [tau,mean_performances, bestAction, policies, costs, succeeded]=Optimiz
      inst = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,fitness,options);
 
      tic
-     [mean_performances ,bestAction ,policies ,costs ,succeeded] = inst.CMAES(start_action,niter,explorationRate);
+     [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded] = inst.CMAES(start_action,niter,explorationRate);
      exec_time = toc
+     
+     % analisys of the optimization result for building repertoire
+     %[index, search_params ] = flann_build_index(BestActionPerEachGen.policy, struct('algorithm','kmeans','branching',32,'iterations',3,'checks',120)); 
+     BestActionPerEachGen.start_point = start_action;
+     
 
      %scriptname = 'AllRuntimeParameters';
      % i have to change this number everytime i perform the same test with

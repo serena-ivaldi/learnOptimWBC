@@ -21,7 +21,7 @@ torque_saturation =10000000000000; % high value no saturation
 %name_dat = 'LBR4p11.0_scene9_UF_mulitple_task_stability_Null_space_projectors';
 %name_dat = 'LBR4p10.0_scene10_UF_lemniscate';
 %name_dat = 'LBR4p12.0_scene0_UF_test_elastic_reference';
-name_dat = 'LBR4p2.1_scene2_three_regulation_task_and_wall_obstacle';
+name_dat = 'LBR4p2.0_scene2_two_regulation_task_and_wall_obstacle';
 path=LoadParameters(name_dat);
 load(path);
 

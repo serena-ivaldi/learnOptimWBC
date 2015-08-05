@@ -1,4 +1,4 @@
-function [mean_performances bestAction policies costs succeeded] = LearnCMAES(obj,settings)
+function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succeeded] = LearnCMAES(obj,settings)
 
 nIterations = settings.nIterations;
 explorationRate = settings.explorationRate;
@@ -56,6 +56,8 @@ d_sigma = 1 + 2 * max([0, sqrt((ueff - 1)/(n-1))]) + c_sigma;
 
 mean_performances = zeros(nIterations,1);
 policies = zeros(nIterations*lambda, n);
+BestActionPerEachGenPolicy = zeros(nIterations, n);
+BestActionPerEachGenFitness= zeros(nIterations, 1);
 costs = zeros(1,nIterations*lambda);
 succeeded = zeros(1,nIterations*lambda);
 policyId = 1;
@@ -134,6 +136,9 @@ for k = 1:(nIterations - 1)
     bestAction.hist(k).parameters = mean(k + 1, :);
     bestAction.hist(k).variance =  var(offsprings);
     
+    % im building the data set to cluster in a second phase
+    BestActionPerEachGenPolicy(k,:)= offsprings(sortInd(1),:);
+    BestActionPerEachGenFitness(k,1) = performances(sortInd(1));
 
     fprintf('Mean %d: %e %d\n', k + 1, mean_performances(k + 1), succeeded(policyId-1));
 
@@ -155,6 +160,10 @@ end
 policies = policies(1:policyId-1,:);
 costs = costs(1:policyId-1);
 succeeded = succeeded(1:policyId-1);
+
+
+BestActionPerEachGen.policy = BestActionPerEachGenPolicy;
+BestActionPerEachGen.fitness = BestActionPerEachGenFitness;
 
 %bestAction.parameters = mean(end, :);
 %bestAction.performance = fnForwardModel(bestAction.parameters);
