@@ -3,7 +3,7 @@ function complete_path=PlotCmaesResult(time_struct,controller,bestAction,rawText
 % create folder 
 allpath=which('FindData.m');
 path=fileparts(allpath);
-complete_path = strcat(path,'/results/',name_folder);
+complete_path = strcat(path,'/results/current_experiments/',name_folder);
 mkdir(complete_path)
 
 % copy runtime parameter inside the new folder

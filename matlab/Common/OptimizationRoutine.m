@@ -1,5 +1,5 @@
 % number_of_iteration is usefull only for PlotGraphPaper.m main
-function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded]=OptimizationRoutine(number_of_iteration,n_of_experiment,iter,init_parameters_from_out,generation_of_starting_point)
+function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, name_dat]=OptimizationRoutine(number_of_iteration,n_of_experiment,iter,init_parameters_from_out,generation_of_starting_point)
   
     
      AllRuntimeParameters
@@ -108,7 +108,9 @@ function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, co
      complete_path=PlotCmaesResult(time_struct,controller,bestAction,rawTextFromStorage,name_folder);
      complete_path_to_file = strcat(complete_path,'/data.mat');
      save(complete_path_to_file) 
-
+     % copy name_dat to the base workspace
+     assignin('base', 'new_name_folder', strcat(num2str(n_of_experiment),'_',name_dat));
+     
      tau = controller.torques;
     
 

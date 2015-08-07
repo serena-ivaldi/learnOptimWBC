@@ -1,6 +1,43 @@
-disp('UF_RUNTIMEPARAM')
-
 %%%;;
+
+%% GENERAL PARAMETERS
+% for other strucutures
+time_struct.ti = 0;
+time_struct.tf = 20;
+time_struct.step = 0.001;
+
+%% for simulation 
+time_sym_struct = time_struct;
+time_sym_struct.step = 0.001; 
+% define the type of integration of the sytem of differential equation
+fixed_step = false; %true;
+torque_saturation =10000000000000; % high value no saturation
+
+%% TASK PARAMETERS
+%name_dat = 'sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE';
+%name_dat = 'sere/LBR4p9.0_scene5_GHC_table_and_an_one_attractive_point_and_posture_task_SERE';
+%name_dat = 'LBR4p8.0_scene9_GHC_test_wall_and_two_attractive_point';
+%name_dat = 'LBR4p11.0_scene9_UF_mulitple_task_stability_Null_space_projectors';
+%name_dat = 'LBR4p10.0_scene10_UF_lemniscate';
+%name_dat = 'LBR4p12.0_scene0_UF_test_elastic_reference';
+name_dat = 'LBR4p2.0_scene2_two_regulation_task_and_wall_obstacle';
+path=LoadParameters(name_dat);
+load(path);
+
+%% SCENARIO
+name_scenario = 'lbr_scenario2'; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
+
+%% STARTING CONDITION FOR SIMULATION
+% TODO generalize for multichain
+qi{1} = qz;
+%qi{1} = zeros(1,chains.GetNumLinks(1)); %stretched arm
+qdi{1} = zeros(1,chains.GetNumLinks(1));
+options= [];
+simulator_type = {'rbt'};
+
+%% Parameters Dependant on the type of controller
+
+%%%EOF%%%;;
 
 % REFERENCE PARAMETERS (this parameter only works if one of the specific trajectory has runtime parameters)
 numeric_reference_parameter{1,1} = [0.047180 0.359539 1.045565 0.374223 -0.069047 0.013630 -0.495463 -0.131683 0.668327 -0.184017 1.115775 0.884010 0.120701 0.837400 1.189048]';
@@ -31,8 +68,8 @@ precomp_sample = false;
 %numeric_theta = [0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
 %numeric_theta =[0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
 %numeric_theta =[2.3218    2.5695    6.8006    4.6558    5.7475    8.7383    3.5058    5.2817    6.9910    6.7590    4.5235    6.3875    7.3247    6.7258 8.5637];
-numeric_theta =[9.274626 9.772934 6.193645 8.097974 12.000000 1.882649 2.484198 9.531073 10.315638 3.863503 8.019803 0.052260 1.705022 1.302329 0.953256];
-% from sere 1
+numeric_theta =[0.503768 11.381104 6.811892 11.481018 5.407800 7.341567 8.353971 8.606053 5.926168 9.938215 2.166454 1.191754 0.156401 0.372194 0.917602 1.082514 0.135295 0.264739 0.000000 0.000000];
+% from sere 12
 %numeric_theta = [5.819383 4.412794 5.286902 7.786384 7.599614 3.512520 5.989917 9.410994 7.444834 7.472545 4.532512 5.614148 7.970080 4.498142 6.194601 6.925731 4.815911 5.490313 5.294776 6.011380 ]
 
 %from 10 generation of CMAES: collision with end-eff and table
@@ -68,27 +105,21 @@ regularizer{2} = regularized_chain_2;
 % starting value of parameters
 %init_parameters = 6;
 explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-niter = 3;  %number of generations
+niter = 100;  %number of generations
 fitness = @fitness7_2;
 % FITNESS PARAMETERS
 
-%%%EOF
-
-%% DO NOT MODIFY THIS PART 
-
-
-% i read the parameters from this file
-rawTextFromStoragePart = fileread(which(mfilename));
-rawTextFromStoragePart = regexp(rawTextFromStoragePart,['%%%;;' '(.*?)%%%EOF'],'match','once');
-
-% i read the parameters from fitness function
-name_fitness = func2str(fitness);
-rawTextFromStorageIsntace = fileread(which(name_fitness));
-rawTextFromStorageIsntace = regexp(rawTextFromStorageIsntace,['%%%;;' '(.*?)%%%EOF'],'match','once');
-
-% attach the info on the fitness function to rawTextFromStoragePart
-rawTextFromStoragePart = strcat(rawTextFromStoragePart,rawTextFromStorageIsntace);
-
-
-
-
+%%%EOF%%%;;
+    downsaple = 10;
+    L = 1;
+    penalty = 5000; %10
+    sigma = 0.09; 
+    max_effort = 2000;
+    max_traj_error = 5000;
+    max_penalties  = 20000;
+    weight_effort = 1;
+    weight_traj_err = 4;
+    weight_penal = 2;
+    hitting_condition = 0.05;
+    hitting = false;
+    %%%EOF
