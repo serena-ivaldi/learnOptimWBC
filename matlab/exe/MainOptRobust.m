@@ -10,9 +10,9 @@ warning('error', 'MATLAB:ode15s:IntegrationTolNotMet');
 warning('error', 'MATLAB:illConditionedMatrix')
 
 % Parameters 
-n_of_experiment = 10;      % number that we use to distinguish between the same static parameters settings but with different runtime parameters
-init_parameters = 6;        %initial value for the optimization  (the scale is 0-12, so 6=0.5)
-number_of_iteration = 1;   % number of  optimization (for robustness assesement)
+n_of_experiment = 1;      % number that we use to distinguish between the same static parameters settings but with different runtime parameters
+init_parameters = 6;      % initial value for the optimization  (the scale is 0-12, so 6=0.5)
+number_of_iteration = 1;  % number of  optimization (for robustness assesement)
 generation_of_starting_point = 'random'; % 'test', 'given', 'random'
 
 

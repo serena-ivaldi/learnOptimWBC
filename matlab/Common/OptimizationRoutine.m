@@ -81,7 +81,7 @@ function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, co
      % im using init_value from outside
      switch generation_of_starting_point
         case 'test'
-           start_action = [0.7 0.6 0.5 0.4 0.3 -0.3 0.0 -0.2 0.0 0.1 0.1 0.5 0.4 0.3 0.2];
+           start_action = [9.274626 9.772934  6.193645  8.097974  12.000000 1.882649  2.484198  9.531073 10.31563 3.863503 8.019803 0.052260 1.705022  1.302329 0.953256];
         case 'given'
             start_action = init_parameters_from_out*ones(1,controller.GetTotalParamNum());
         case 'random'

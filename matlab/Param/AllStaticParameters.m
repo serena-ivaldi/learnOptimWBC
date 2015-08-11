@@ -13,7 +13,7 @@ CONTROLLERTYPE ='UF';   % GHC or UF
 %%
 
 %SUBCHAIN PARAMETERS 
-subchain1 = [7 3 7 7];
+subchain1 = [7 3 7];
 target_link{1} = subchain1;
 
 
@@ -24,17 +24,17 @@ chains = SubChains(target_link,robots);
 %%
 
 % REFERENCE PARAMETERS
-traj_type = {'cartesian_x','cartesian_x','cartesian_x','joint'};
-control_type = {'regulation','regulation','regulation','regulation'};
-type_of_traj = {'none','none','none','none'};
-geometric_path = {'none','none','none','none'};
-time_law = {'none','none','none','none'};
+traj_type = {'cartesian_x','cartesian_x','joint'};
+control_type = {'regulation','regulation','regulation'};
+type_of_traj = {'none','none','none'};
+geometric_path = {'none','none','none'};
+time_law = {'none','none','none'};
 %parameters first chains
-geom_parameters{1,1} = [0, -0.7,0.51];
-geom_parameters{1,2} = [-0.2 -0.4 0.31]; 
-geom_parameters{1,3} = [-0.4 -0.5 0.7];
-geom_parameters{1,4} = [0 0 0 0 0 0 0];
-dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= [1;1;1]; dim_of_task{1,4}=ones(bot1.n,1);
+geom_parameters{1,1} = [0.367 -0.647 0.538];
+geom_parameters{1,2} = [0.48 -0.4 0.28]; 
+geom_parameters{1,3} = [0 0 0 0 0 0 0];
+%geom_parameters{1,4} = [0 0 0 0 0 0 0];
+dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
 
 %% FROM THIS POINT YOU CAN FIND PARAMETERS IN THE STATIC PARAMETERS FILE RELATED TO EACH ALGORITHM 
 
@@ -55,10 +55,10 @@ end
 % i have to set the name of the robot plus a number equal to the number of experiment for that scenario 
 % like bot#.# (where n.i means that the file is reffered to the n-scenario and is the i-th data setting)
 % multiple data setting for the same scenario 
-id = 'LBR4p2.1';
+id = 'LBR4p2.2';
 name_backup = strcat(id,'.m');
 %namebot_scene#_briefdescription.mat
-name_file = 'scene2_three_regulation_task_and_wall_obstacle';
+name_file = 'scene2_generalization';
 name_file = strcat(id,'_',name_file,'.mat');
 
 %% DO NOT CHANGE THIS PART!

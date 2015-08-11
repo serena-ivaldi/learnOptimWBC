@@ -4,9 +4,9 @@ clc
 
 % in this variable we have to specify the name of the scenario:
 % bot_scenario# where # is incremental
-name_scenario = 'lbr_scenario2';
+name_scenario = 'lbr_scenario_2_gen';
 % with this variable i decide when i want to save the designed scenario
-save_now = true;
+save_now = false;
 
 
 %% plot scene

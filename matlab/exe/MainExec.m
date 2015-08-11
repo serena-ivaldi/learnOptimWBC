@@ -9,7 +9,7 @@ AllRuntimeParameters
 % end of the trajectories that is equal to the simulation time
 reference = References(target_link,traj_type,control_type,geometric_path,geom_parameters,time_law,time_struct,dim_of_task,type_of_traj);
 reference.BuildTrajs();
-reference. cur_param_set = numeric_reference_parameter;
+reference.cur_param_set = numeric_reference_parameter;
 %% plot scenario
 text = LoadScenario(name_scenario);
 eval(text);
