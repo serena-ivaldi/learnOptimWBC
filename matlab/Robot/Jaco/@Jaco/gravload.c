@@ -1,10 +1,10 @@
-/* LBR4P_GRAVLOAD - This file contains auto generated C-code for a MATLAB MEX function.
-// For details on how to use the complied MEX function see the documentation provided in LBR4p_gravload.m
+/* JACO_GRAVLOAD - This file contains auto generated C-code for a MATLAB MEX function.
+// For details on how to use the complied MEX function see the documentation provided in Jaco_gravload.m
 // The compiled MEX function replaces this .m-function with identical usage but substantial execution speedup.
 //
 // For compilation of this C-code using MATLAB please run:
 //
-// 		'mex /home/vale/git/learnOptimWBC/matlab/Robot/LBR4p/@LBR4p/gravload.c /home/vale/git/learnOptimWBC/matlab/Robot/LBR4p/c/src/LBR4p_gravload.c -I/home/vale/git/learnOptimWBC/matlab/Robot/LBR4p/c/include -v -outdir /home/vale/git/learnOptimWBC/matlab/Robot/LBR4p/@LBR4p'
+// 		'mex /home/vale/git/learnOptimWBC/matlab/Robot/Jaco/@Jaco/gravload.c /home/vale/git/learnOptimWBC/matlab/Robot/Jaco/c/src/Jaco_gravload.c -I/home/vale/git/learnOptimWBC/matlab/Robot/Jaco/c/include -v -outdir /home/vale/git/learnOptimWBC/matlab/Robot/Jaco/@Jaco'
 //
 // Make sure you have a C-compiler installed and your MATLAB MEX environment readily configured.
 // Type 'doc mex' for additional help.
@@ -35,7 +35,7 @@
 // acknowledge the financial support. 
  */
 #include "mex.h"
-#include "LBR4p_gravload.h"
+#include "Jaco_gravload.h"
 
 
 /* The gateway function */
@@ -48,16 +48,16 @@ void mexFunction( int nlhs, mxArray *plhs[],
  
 	/* check for proper number of arguments */
 	if(nrhs!=2) {
-		mexErrMsgIdAndTxt("LBR4p_gravload:nrhs",
+		mexErrMsgIdAndTxt("Jaco_gravload:nrhs",
 		                       "1 inputs required.");
 	}
 	if(nlhs>1) {
-		mexErrMsgIdAndTxt("LBR4p_gravload:nlhs",
+		mexErrMsgIdAndTxt("Jaco_gravload:nlhs",
 		                       "Only single output allowed.");
 	}
  
 	/* allocate memory for the output matrix */
-	plhs[0] = mxCreateDoubleMatrix(1,7, mxREAL);
+	plhs[0] = mxCreateDoubleMatrix(1,6, mxREAL);
 	/* get a pointer to the real data in the output matrix */
 	outMatrix = mxGetPr(plhs[0]);
  
@@ -65,5 +65,5 @@ void mexFunction( int nlhs, mxArray *plhs[],
 	input1 = mxGetPr(prhs[1]);
  
 	/* call the computational routine */
-	LBR4p_gravload(outMatrix, input1);
+	Jaco_gravload(outMatrix, input1);
 }

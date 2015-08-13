@@ -9,7 +9,7 @@ deg = pi/180;
 %    unloadlibrary remoteApi
 % end
 %% 
-op_selection = 'control';
+op_selection = 'teach';
 control = 'tracking_velocity';
 % GENERAL PARAM 
 
@@ -22,16 +22,16 @@ subchain1 = [6];
 target_link{1} = subchain1;
 
 % matlab model
-[bot] = MdlLBR4p();
+[bot] = MdlJaco();
 
 % vrep model
 v = VAREP('~');%,'nosyncronous');
-v_arm = VAREP_arm(v,'LBR4p','fmt','%s_joint%d');
+v_arm = VAREP_arm(v,'Jaco','fmt','%s_joint%d');
 
 %desired_pose pointer
-des_pos = v.object('cur_pos');
+%des_pos = v.object('cur_pos');
 % current pose tip robot
-ee_cur_pos = v.object('toolVis');
+%ee_cur_pos = v.object('toolVis');
 % set the first joint position 
 
 q_start = qz;

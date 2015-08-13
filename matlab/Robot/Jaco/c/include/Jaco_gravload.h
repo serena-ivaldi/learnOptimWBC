@@ -1,5 +1,5 @@
-/*! \file LBR4p_gravload.h
-\brief Computation of the configuration dependent vector of gravitational load forces/torques for LBR4p copy 
+/*! \file Jaco_gravload.h
+\brief Computation of the configuration dependent vector of gravitational load forces/torques for Jaco copy 
     
   
 Given a full set of joint variables this function computes the 
@@ -49,17 +49,17 @@ __Copyright Note__:
   acknowledge the financial support. 
 */
     
-/*!\fn void LBR4p_gravload(double G[][1], const double* input1);
-\param input1: 7-element vector of generalized coordinates.
-\param G: [7x1] output vector of gravitational load forces/torques.
+/*!\fn void Jaco_gravload(double G[][1], const double* input1);
+\param input1: 6-element vector of generalized coordinates.
+\param G: [6x1] output vector of gravitational load forces/torques.
 */
 
 
-#ifndef LBR4P_GRAVLOAD_H
-#define LBR4P_GRAVLOAD_H
+#ifndef JACO_GRAVLOAD_H
+#define JACO_GRAVLOAD_H
 
 #include "math.h"
 
-void LBR4p_gravload(double G[][1], const double* input1);
+void Jaco_gravload(double G[][1], const double* input1);
 
-#endif /*LBR4P_GRAVLOAD_H */
+#endif /*JACO_GRAVLOAD_H */

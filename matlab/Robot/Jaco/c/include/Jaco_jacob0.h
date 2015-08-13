@@ -1,9 +1,9 @@
-/*! \file LBR4p_gravload.h
-\brief Computation of the configuration dependent vector of gravitational load forces/torques for LBR4p copy 
+/*! \file Jaco_jacob0.h
+\brief C code for the Jacobian with respect to the base coordinate frame of the Jaco copy arm. 
     
   
-Given a full set of joint variables this function computes the 
-configuration dependent vector of gravitational load forces/torques. Angles have to be given in radians! 
+Given a full set of joint variables the function 
+computes the robot jacobian with respect to the base frame. Angles have to be given in radians! 
     
 __Example__:<BR> 
      
@@ -49,17 +49,17 @@ __Copyright Note__:
   acknowledge the financial support. 
 */
     
-/*!\fn void LBR4p_gravload(double G[][1], const double* input1);
-\param input1: 7-element vector of generalized coordinates.
-\param G: [7x1] output vector of gravitational load forces/torques.
+/*!\fn void Jaco_jacob0(double J0[][6], const double* input1);
+\param input1:  6-element vector of generalized coordinates.
+\param J0:  [6x6] Jacobian matrix
 */
 
 
-#ifndef LBR4P_GRAVLOAD_H
-#define LBR4P_GRAVLOAD_H
+#ifndef JACOB0_H
+#define JACOB0_H
 
 #include "math.h"
 
-void LBR4p_gravload(double G[][1], const double* input1);
+void Jaco_jacob0(double J0[][6], const double* input1);
 
-#endif /*LBR4P_GRAVLOAD_H */
+#endif /*JACOB0_H */

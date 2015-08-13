@@ -5,8 +5,8 @@ clc
 %% Instantiate a |CodeGenerator| class object
 
 % change the function to change the robot for generating mex matrix
-rob = MdlJacoDH();
-genkinonly = true;
+rob = MdlJaco();
+genkinonly = false;
 cGen = CodeGenerator(rob,'mex','genmfun','genmex');
 if(genkinonly)
    %with this function i build only the kinematic symbolic rapresentation

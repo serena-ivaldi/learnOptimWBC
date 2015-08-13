@@ -13,7 +13,7 @@ CONTROLLERTYPE ='UF';   % GHC or UF
 %%
 
 %SUBCHAIN PARAMETERS 
-subchain1 = [7 3 7];
+subchain1 = [6 3 6];
 target_link{1} = subchain1;
 
 

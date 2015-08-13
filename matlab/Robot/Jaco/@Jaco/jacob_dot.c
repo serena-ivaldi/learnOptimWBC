@@ -1,10 +1,10 @@
-/* LBR4P_GRAVLOAD - This file contains auto generated C-code for a MATLAB MEX function.
-// For details on how to use the complied MEX function see the documentation provided in LBR4p_gravload.m
+/* JACO_JACOB_DOT - This file contains auto generated C-code for a MATLAB MEX function.
+// For details on how to use the complied MEX function see the documentation provided in Jaco_jacob_dot.m
 // The compiled MEX function replaces this .m-function with identical usage but substantial execution speedup.
 //
 // For compilation of this C-code using MATLAB please run:
 //
-// 		'mex /home/vale/git/learnOptimWBC/matlab/Robot/LBR4p/@LBR4p/gravload.c /home/vale/git/learnOptimWBC/matlab/Robot/LBR4p/c/src/LBR4p_gravload.c -I/home/vale/git/learnOptimWBC/matlab/Robot/LBR4p/c/include -v -outdir /home/vale/git/learnOptimWBC/matlab/Robot/LBR4p/@LBR4p'
+// 		'mex /home/vale/git/learnOptimWBC/matlab/Robot/Jaco/@Jaco/jacob_dot.c /home/vale/git/learnOptimWBC/matlab/Robot/Jaco/c/src/Jaco_jacob_dot.c -I/home/vale/git/learnOptimWBC/matlab/Robot/Jaco/c/include -v -outdir /home/vale/git/learnOptimWBC/matlab/Robot/Jaco/@Jaco'
 //
 // Make sure you have a C-compiler installed and your MATLAB MEX environment readily configured.
 // Type 'doc mex' for additional help.
@@ -35,7 +35,7 @@
 // acknowledge the financial support. 
  */
 #include "mex.h"
-#include "LBR4p_gravload.h"
+#include "Jaco_jacob_dot.h"
 
 
 /* The gateway function */
@@ -45,25 +45,27 @@ void mexFunction( int nlhs, mxArray *plhs[],
 	/* variable declarations */
 	double* outMatrix;      /* output matrix */
 	double* input1;
+	double* input2;
  
 	/* check for proper number of arguments */
-	if(nrhs!=2) {
-		mexErrMsgIdAndTxt("LBR4p_gravload:nrhs",
-		                       "1 inputs required.");
+	if(nrhs!=3) {
+		mexErrMsgIdAndTxt("Jaco_jacob_dot:nrhs",
+		                       "2 inputs required.");
 	}
 	if(nlhs>1) {
-		mexErrMsgIdAndTxt("LBR4p_gravload:nlhs",
+		mexErrMsgIdAndTxt("Jaco_jacob_dot:nlhs",
 		                       "Only single output allowed.");
 	}
  
 	/* allocate memory for the output matrix */
-	plhs[0] = mxCreateDoubleMatrix(1,7, mxREAL);
+	plhs[0] = mxCreateDoubleMatrix(6,1, mxREAL);
 	/* get a pointer to the real data in the output matrix */
 	outMatrix = mxGetPr(plhs[0]);
  
 	/* get a pointers to the real data in the input matrices */
 	input1 = mxGetPr(prhs[1]);
+	input2 = mxGetPr(prhs[2]);
  
 	/* call the computational routine */
-	LBR4p_gravload(outMatrix, input1);
+	Jaco_jacob_dot(outMatrix, input1, input2);
 }
