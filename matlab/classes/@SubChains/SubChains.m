@@ -24,13 +24,16 @@ classdef  SubChains < handle
             rob_name(rob_name==' ')=[];
             
             % here i use the model of the symbolic robot
-            if find(strcat(rob_name,'_done.m'))
+            if which(strcat(rob_name,'_done.m'))
                app_rob = eval(strcat(rob_name,'()'));
                app_rob.name = sub_chains{i}.name;
                app_rob.model3d = sub_chains{i}.model3d;
+               app_rob.links = sub_chains{1, 1}.links; % this line is fundamental whe we want to use a symbolic KINEMATIC model with frne (mex rne)
+               app_rob.robot2 = app_rob.nofriction('all');
                obj.sub_chains{i} = app_rob;
                obj.sub_chains_vis{i} = sub_chains{i};
                obj.symbolic_flag(i) = 1;
+               
             else   
                obj.sub_chains{i} = sub_chains{i};
                obj.sub_chains_vis{i} = sub_chains{i};

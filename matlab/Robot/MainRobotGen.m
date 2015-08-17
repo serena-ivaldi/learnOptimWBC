@@ -1,5 +1,5 @@
 close all
-clear all
+clear variables
 clc
 
 %% Instantiate a |CodeGenerator| class object

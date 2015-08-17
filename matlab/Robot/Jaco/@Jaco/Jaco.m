@@ -1,6 +1,7 @@
 classdef Jaco < SerialLink
  
 	properties
+        robot2 % robot without friction
 	end
  
 	methods
@@ -11,10 +12,9 @@ classdef Jaco < SerialLink
 			 
 			tmp = load(fullfile(objdir,'@Jaco','matJaco.mat'));
 			 
-			ro = ro@SerialLink(tmp.sr);
-			 
-			 
-		end
+			ro = ro@SerialLink(tmp.sr);	 
+        end
+        
 	end
 	 
 end

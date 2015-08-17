@@ -138,7 +138,7 @@ classdef  UF < Controllers.AbstractController
               kd = 120;
               %kd = 2*sqrt(kp);
               qd_des =zeros(size(q,2),1);
-              q_des  = [0;pi/2; 0; -pi/2; 0; pi/2; 0];
+              q_des  = [0;pi/2; 0; -pi/2; 0; pi/2; 0]; %  TODO to generalize for different lenght of kinematic chain
               u1 = ( kd*(qd_des - qd') + kp*(q_des - q'));
           else
               u1 = zeros(size(q,2),1);

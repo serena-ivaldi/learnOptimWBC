@@ -4,13 +4,13 @@ clc
 
 % in this variable we have to specify the name of the scenario:
 % bot_scenario# where # is incremental
-name_scenario = 'lbr_scenario_2_gen';
+name_scenario = 'jaco_scenario1';
 % with this variable i decide when i want to save the designed scenario
 save_now = false;
 
 
 %% plot scene
-plot_bot = MdlLBR4p();
+plot_bot = MdlJaco();
 
 %%%;;
 
@@ -24,12 +24,12 @@ hold on;axis equal;
 for i=1:size(X,2) 
     scatter3(X(:,:,i),Y(:,:,i),Z(:,:,i))
 end
-elbow_point = [-0.2 -0.4 0.31];
-e_e_point = [0,-0.7,0.51];
-intermediate_e_e_point = [ -0.3,-0.2,0.7];
+elbow_point = [-0.1 -0.25 0.5];
+e_e_point = [0,-0.63,0.70];
+%intermediate_e_e_point = [ -0.3,-0.2,0.7];
 scatter3(elbow_point(1,1),elbow_point(1,2),elbow_point(1,3),130,'b');
 scatter3(e_e_point(1,1),e_e_point(1,2),e_e_point(1,3),130,'b');
-scatter3(intermediate_e_e_point(1,1),intermediate_e_e_point(1,2),intermediate_e_e_point(1,3),130,'b');
+%scatter3(intermediate_e_e_point(1,1),intermediate_e_e_point(1,2),intermediate_e_e_point(1,3),130,'b');
 % global obstacle
 rapresentation.X = X;
 rapresentation.Y = Y;

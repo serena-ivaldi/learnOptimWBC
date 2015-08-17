@@ -1,7 +1,3 @@
 for updating robotics toolbox subsitute the file in the toolbox with the ones that are inside this folder
 
-
-CodeGenerator.m ----> /path to rcvtoolbox/rvctools/robot/@CodeGenerator
-gencoriolis.m   ----> /path to rcvtoolbox/rvctools/robot/@CodeGenerator (corrected only the last line, could be a correction by hand)
-jacobn.m -----------> /path to rcvtoolbox/rvctools/robot
-rne_dh.m -----------> /path to rcvtoolbox/rvctools/robot
+frne.c -----------> /path to rcvtoolbox/rvctools/robot/mex

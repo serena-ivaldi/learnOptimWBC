@@ -1,4 +1,4 @@
-clear all
+clear variables
 close all
 clc
 
@@ -18,7 +18,7 @@ target_link{1} = subchain1;
 
 
 %% Robot
-[bot1] = MdlLBR4p();
+[bot1] = MdlJaco();
 robots{1} = bot1;
 chains = SubChains(target_link,robots);
 %%
@@ -30,9 +30,9 @@ type_of_traj = {'none','none','none'};
 geometric_path = {'none','none','none'};
 time_law = {'none','none','none'};
 %parameters first chains
-geom_parameters{1,1} = [0.367 -0.647 0.538];
-geom_parameters{1,2} = [0.48 -0.4 0.28]; 
-geom_parameters{1,3} = [0 0 0 0 0 0 0];
+geom_parameters{1,1} = [0,-0.63,0.70];
+geom_parameters{1,2} = [-0.1 -0.25 0.5]; 
+geom_parameters{1,3} = [0 0 0 0 0 0];
 %geom_parameters{1,4} = [0 0 0 0 0 0 0];
 dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
 
@@ -55,10 +55,10 @@ end
 % i have to set the name of the robot plus a number equal to the number of experiment for that scenario 
 % like bot#.# (where n.i means that the file is reffered to the n-scenario and is the i-th data setting)
 % multiple data setting for the same scenario 
-id = 'LBR4p2.2';
+id = 'Jaco1.0';
 name_backup = strcat(id,'.m');
 %namebot_scene#_briefdescription.mat
-name_file = 'scene2_generalization';
+name_file = 'scene1';
 name_file = strcat(id,'_',name_file,'.mat');
 
 %% DO NOT CHANGE THIS PART!

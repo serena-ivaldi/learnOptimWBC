@@ -21,13 +21,13 @@ torque_saturation =10000000000000; % high value no saturation
 %name_dat = 'LBR4p11.0_scene9_UF_mulitple_task_stability_Null_space_projectors';
 %name_dat = 'LBR4p10.0_scene10_UF_lemniscate';
 %name_dat = 'LBR4p12.0_scene0_UF_test_elastic_reference';
-name_dat = 'LBR4p2.0_scene2_two_regulation_task_and_wall_obstacle';
+name_dat = 'Jaco1.0_scene1';
 %name_dat = 'LBR4p2.2_scene2_generalization';
 path=LoadParameters(name_dat);
 load(path);
 
 %% SCENARIO
-name_scenario = 'lbr_scenario2';%'lbr_scenario_2_gen' lbr_scenario2; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
+name_scenario = 'jaco_scenario1';%'lbr_scenario_2_gen' lbr_scenario2; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
 
 %% STARTING CONDITION FOR SIMULATION
 % TODO generalize for multichain
