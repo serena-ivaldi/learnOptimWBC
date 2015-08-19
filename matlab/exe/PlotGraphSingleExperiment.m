@@ -3,18 +3,23 @@ clear variables
 close all
 clc
 
+name = '2_Jaco1.1_scene1';
+starting_point = 1;
+total_number_of_experiments = 20;
 
-total_number_of_experiments = 1;
-name = '1_LBR4p2.1_scene2_three_regulation_task_and_wall_obstacle';
+
 
 allpath=which('FindData.m');
 fold_path=fileparts(allpath);
 
-for iter = 1:total_number_of_experiments
+for iter = starting_point:total_number_of_experiments
    name_folder = strcat(num2str(iter),'_of_',name);
+   disp(name_folder);
    fold_complete_path = strcat(fold_path,'/results/',name,'/',name_folder);
    load(strcat(fold_complete_path,'/data.mat'));
    controller.current_time =[]; % i need to make it empty for restarting simulation
    PlotCmaesResult(fold_complete_path,time_sym_struct,controller,qi,qdi,fixed_step,torque_saturation,name_scenario,time_struct,bestAction,bot1);
-   clear variables;
+   clear time_sym_struct controller qi qdi fixed_step torque_saturation name_scenario time_struct bestAction bot1
 end
+
+disp('GENERATION COMPLETED!');

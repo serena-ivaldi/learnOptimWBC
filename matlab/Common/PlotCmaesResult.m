@@ -5,8 +5,10 @@ RAD = 180/pi;
 interpolation_step = 0.001;
 % build numeric theta for best action 
 controller.UpdateParameters(bestAction.parameters)
+% change the computation time more than i consider the execution a fail (useful whn i recompute the solution on another machine)
+controller.max_time = 1000;
 % recompute the best solution
-[t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step,'TorqueSat',torque_saturation);
+[t_, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step,'TorqueSat',torque_saturation);
 % generate cartesian position and cartesian velocity
 p=[];
 pd=[];
@@ -60,6 +62,8 @@ evolutions = size(bestAction.hist,2);
 % remove failed mean and failed variance
 % -10000000 is the penalty that is applied when i have a failure 
 index = 1;
+evo = 1;
+mean = 0;
 for ww =1:evolutions
     % i discard the evolutions with failure final mean
     if(bestAction.hist(1,ww).performance>-1)
@@ -77,6 +81,7 @@ end
 handle = figure;
 hold on;
 grid on;
+
 plot(evo,mean);
 % variance plot of cmaes not significant
 % plot(evo, mean + 2 * variance, ':');
@@ -93,7 +98,7 @@ text = LoadScenario(name_scenario);
 eval(text);
 grid on;
 % plot trace
-[ee,elbow] = ComputePositions(q{1},t,controller);
+[ee,elbow] = ComputePositions(q{1},t_,controller);
 ee = ee';
 elbow = elbow';
 izy = 1;
@@ -191,7 +196,13 @@ end
 % variance
 function torque=InterpTorque(controller,time_struct,interp_step)
    time = time_struct.ti:interp_step:time_struct.tf;
-   [unique_time,ia,ic] = unique(controller.torques_time{1});
+   if(size(controller.torques_time{1},2) == size(controller.torques{1},2))
+      [unique_time,ia,ic] = unique(controller.torques_time{1});
+   else
+      diff = size(controller.torques_time{1},2) - size(controller.torques{1},2) + 1;
+      controller.torques_time{1} = controller.torques_time{1}(diff:end);
+      [unique_time,ia,ic] = unique(controller.torques_time{1});
+   end
    torque = [];
    for i = 1:size(controller.torques{1},1)
       unique_torque = controller.torques{1}(i,ia);
