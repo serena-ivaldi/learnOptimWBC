@@ -69,7 +69,7 @@ regularizer{2} = regularized_chain_2;
 % starting value of parameters
 %init_parameters = 6;
 explorationRate = 0.5; %0.1; %0.5; %0.1;%[0, 1]
-niter = 100;  %number of generations
+niter = 2;  %number of generations
 fitness = @fitness10;
 % FITNESS PARAMETERS
 

@@ -61,10 +61,10 @@ evolutions = size(bestAction.hist,2);
 index = 1;
 for ww =1:evolutions
     % i discard the evolutions with failure final mean
-    if(bestAction.hist(1,ww).performance>-100000000000000)
+    if(bestAction.hist(1,ww).performance>-1)
         listperformance = bestAction.hist(1,ww).listperformance;
         %remove all the failure from the computation of the variance
-        listperformance = listperformance(listperformance~=-100000000000000);
+        listperformance = listperformance(listperformance~=-1);
         variance(index) = var(listperformance);
         mean(index) = bestAction.hist(1,ww).performance;
         evo(index) = index;
