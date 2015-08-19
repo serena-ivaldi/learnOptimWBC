@@ -1,5 +1,6 @@
 function PlotCmaesResult(complete_path,time_sym_struct,controller,qi,qdi,fixed_step,torque_saturation,name_scenario,time_struct,bestAction,bot1)
-
+% conversion from rad to deg
+RAD = 180/pi;
 % for torque
 interpolation_step = 0.001;
 % build numeric theta for best action 
@@ -41,7 +42,7 @@ for ii = 1:size(controller.alpha,1)
         handle_vec(ii,jj) = figure;
         plot(time,vec_values);
         grid on;
-        xlab = xlabel('s');
+        xlab = xlabel('t [s]');
         set(xlab,'FontSize',dim_lab,'Interpreter','latex');
         ylab = ylabel(strcat('\alpha_{',num2str(ii),num2str(jj),'}'));
         set(ylab,'FontSize',dim_lab);      
@@ -118,19 +119,19 @@ plot(p(:,1:3));
 grid on;
 leg = legend('X','Y','Z');
 set(leg,'FontSize',dim_leg,'Interpreter','latex','Location','best');
-xlab=xlabel('ms'); % x-axis label
+xlab=xlabel('time [ms]'); % x-axis label
 set(xlab,'FontSize',dim_lab,'Interpreter','latex');
-ylab=ylabel('m'); % y-axis label
+ylab=ylabel('cartesian position [m]'); % y-axis label
 set(ylab,'FontSize',dim_lab,'Interpreter','latex');
 saveas(handle,strcat(complete_path,'/','e_e'),'pdf');
 saveas(handle,strcat(complete_path,'/','e_e'));
 %plot q 
 handle = figure;
-plot(q{1});
+plot(q{1}*RAD);
 grid on;
-xlab=xlabel('ms'); % x-axis label
+xlab=xlabel('time [ms]'); % x-axis label
 set(xlab,'FontSize',dim_lab,'Interpreter','latex');
-ylab=ylabel('rad'); % y-axis label
+ylab=ylabel('joints position [deg]'); % y-axis label
 set(ylab,'FontSize',dim_lab,'Interpreter','latex');
 for i = 1:size(q{1},2)
    str_name{i} = strcat('q_{',num2str(i),'}');
@@ -143,9 +144,9 @@ saveas(handle,strcat(complete_path,'/','q'));
 handle = figure;
 plot(tau_)
 grid on;
-xlab=xlabel('ms'); % x-axis label
+xlab=xlabel('time [ms]'); % x-axis label
 set(xlab,'FontSize',dim_lab,'Interpreter','latex');
-ylab=ylabel('N*m'); % y-axis label
+ylab=ylabel('joints torque [N*m]'); % y-axis label
 set(ylab,'FontSize',dim_lab,'Interpreter','latex');
 for i = 1:size(q{1},2)
    str_name1{i} = strcat('U_{',num2str(i),'}');
