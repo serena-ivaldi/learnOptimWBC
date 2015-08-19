@@ -88,7 +88,6 @@ elbow_traj    = true;
 
 % plot the trajectory of the elbow or e-e or both
 if(ee_trajectory || elbow_traj)
-   
    [ee,elbow] = ComputePositions(q{1},t,controller);
    ee = ee';
    elbow = elbow';
@@ -102,8 +101,8 @@ if(ee_trajectory || elbow_traj)
    end
    if(elbow_traj)
       name_of_trace{1,izy} = 'elbow';  
-       handle2 = plot3(elbow(:,1)',elbow(:,2)',elbow(:,3)','Color','g','LineWidth',2);
-       handle_vector=[handle_vector,handle2];
+      handle2 = plot3(elbow(:,1)',elbow(:,2)',elbow(:,3)','Color','g','LineWidth',2);
+      handle_vector=[handle_vector,handle2];
       izy = izy + 1;
    end
    hold on;

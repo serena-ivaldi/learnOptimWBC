@@ -24,8 +24,6 @@ classdef  UF < Controllers.AbstractController
    methods
       
        function obj = UF(sub_chains,references,alpha,repellers,metric,Kp,Kd,combine_rule,regularization,max_time,varargin)
-         
-        
          obj.subchains = sub_chains;
          obj.references = references;
          obj.alpha = alpha;

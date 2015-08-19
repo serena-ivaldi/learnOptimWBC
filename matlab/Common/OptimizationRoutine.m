@@ -105,7 +105,17 @@ function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, co
      % different runtime parameters
      experiment_number = strcat(num2str(iter),'_of_',num2str(n_of_experiment));
      name_folder = strcat(experiment_number,'_',name_dat);
-     complete_path=PlotCmaesResult(time_struct,controller,bestAction,rawTextFromStorage,name_folder);
+     % create folder 
+     allpath=which('FindData.m');
+     path=fileparts(allpath);
+     complete_path = strcat(path,'/results/current_experiments/',name_folder);
+     mkdir(complete_path)
+     % copy runtime parameters in the newly created folder
+     fileID = fopen(strcat(complete_path,'/','optimization_parameters.txt'),'w');
+     fprintf(fileID,'%s',rawTextFromStorage);
+     fclose(fileID);
+     % generate graph and data from the current best solution
+     PlotCmaesResult(complete_path,time_sym_struct,controller,qi,qdi,fixed_step,torque_saturation,name_scenario,time_struct,bestAction,bot1);
      complete_path_to_file = strcat(complete_path,'/data.mat');
      save(complete_path_to_file) 
      % copy name_dat to the base workspace

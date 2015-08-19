@@ -1,6 +1,5 @@
 function WriteFF(p_tot,TaskSpaceDim,namefile)
 
- namefile
    fileID = fopen(namefile,'w');
    % here i write the kind of control that i want to do on the kinova
    fprintf(fileID,'%1.0f \n',TaskSpaceDim);
@@ -15,5 +14,5 @@ function WriteFF(p_tot,TaskSpaceDim,namefile)
    for i = 1:size(p_tot,1)
       fprintf(fileID,w_string,p_tot(i,:));
    end
-
+   fclose(fileID);
 end
