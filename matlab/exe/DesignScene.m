@@ -24,10 +24,10 @@ hold on;axis equal;
 for i=1:size(X,2) 
     scatter3(X(:,:,i),Y(:,:,i),Z(:,:,i))
 end
-elbow_point = [-0.1 -0.25 0.5];
+%elbow_point = [-0.1 -0.25 0.5];
 e_e_point = [0,-0.63,0.70];
 %intermediate_e_e_point = [ -0.3,-0.2,0.7];
-scatter3(elbow_point(1,1),elbow_point(1,2),elbow_point(1,3),130,'b');
+%scatter3(elbow_point(1,1),elbow_point(1,2),elbow_point(1,3),130,'b');
 scatter3(e_e_point(1,1),e_e_point(1,2),e_e_point(1,3),130,'b');
 %scatter3(intermediate_e_e_point(1,1),intermediate_e_e_point(1,2),intermediate_e_e_point(1,3),130,'b');
 % global obstacle
@@ -40,8 +40,8 @@ G_OB = [ob1];
 %%%EOF
 
 
-%plot_bot.plot(qz);
-plot_bot.teach();
+plot_bot.plot(qr);
+%plot_bot.teach();
 
 %% DO NOT CHANGE THIS PART!
 
