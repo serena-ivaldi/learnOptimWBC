@@ -31,8 +31,7 @@ catch err
     disp('i am in evaluate CMAES error side')
     obj.controller.CleanTau(); 
     succeeded = 0;
-    performance = -10000000;
-    
+    performance = -1;
 end
 
 
