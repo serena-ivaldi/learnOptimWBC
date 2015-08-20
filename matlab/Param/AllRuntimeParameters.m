@@ -12,7 +12,7 @@ time_sym_struct = time_struct;
 time_sym_struct.step = 0.001; 
 % define the type of integration of the sytem of differential equation
 fixed_step = false; %true;
-torque_saturation =10000000000000; % high value no saturation
+torque_saturation =20; % high value no saturation
 
 %% TASK PARAMETERS
 %name_dat = 'sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE';
@@ -21,7 +21,7 @@ torque_saturation =10000000000000; % high value no saturation
 %name_dat = 'LBR4p11.0_scene9_UF_mulitple_task_stability_Null_space_projectors';
 %name_dat = 'LBR4p10.0_scene10_UF_lemniscate';
 %name_dat = 'LBR4p12.0_scene0_UF_test_elastic_reference';
-name_dat = 'Jaco1.1_scene1';
+name_dat = 'Jaco1.2_scene1';
 %name_dat = 'LBR4p2.2_scene2_generalization';
 path=LoadParameters(name_dat);
 load(path);

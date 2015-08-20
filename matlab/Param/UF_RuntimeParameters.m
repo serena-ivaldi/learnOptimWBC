@@ -54,7 +54,7 @@ values{1} = value1;
 value_range_for_optimization_routine = [-0.5 , 1.5]; % this is a trick that im using to provide bound to the optimization procedure for parametric reference
 
 %CONTROLLER PARAMETERS
-max_time = 100; %50
+max_time = 200; %50
 combine_rule = {'sum'}; % sum or projector (with sum reppelers are removed)
 % with this term i introduce a damped least square structure inside my
 % controller if regularizer is 0 i remove the regularizer action 
@@ -69,7 +69,7 @@ regularizer{2} = regularized_chain_2;
 % starting value of parameters
 %init_parameters = 6;
 explorationRate = 0.5; %0.1; %0.5; %0.1;%[0, 1]
-niter = 2;  %number of generations
+niter = 100;  %number of generations
 fitness = @fitness10;
 % FITNESS PARAMETERS
 

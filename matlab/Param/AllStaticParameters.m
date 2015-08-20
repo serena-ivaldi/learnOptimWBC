@@ -55,7 +55,7 @@ end
 % i have to set the name of the robot plus a number equal to the number of experiment for that scenario 
 % like bot#.# (where n.i means that the file is reffered to the n-scenario and is the i-th data setting)
 % multiple data setting for the same scenario 
-id = 'Jaco1.1';
+id = 'Jaco1.2';
 name_backup = strcat(id,'.m');
 %namebot_scene#_briefdescription.mat
 name_file = 'scene1';

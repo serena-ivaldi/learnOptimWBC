@@ -22,7 +22,7 @@ end
 metric = {'M','M','M','M'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
 
 
-kp = [700,700,700,700]; % row vector one for each chain
+kp = [50,1,5,700]; % row vector one for each chain
 kd = [2*sqrt(kp),2*sqrt(kp),2*sqrt(kp),2*sqrt(kp)];
 
 for i= 1:chains.GetNumChains()
