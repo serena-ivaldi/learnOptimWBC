@@ -40,8 +40,8 @@ G_OB = [ob1];
 %%%EOF
 
 
-plot_bot.plot(qr);
-%plot_bot.teach();
+%plot_bot.plot(qr);
+plot_bot.teach();
 
 %% DO NOT CHANGE THIS PART!
 

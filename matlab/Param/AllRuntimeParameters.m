@@ -4,7 +4,7 @@
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
-time_struct.tf = 20;
+time_struct.tf = 7;
 time_struct.step = 0.001;
 
 %% for simulation 

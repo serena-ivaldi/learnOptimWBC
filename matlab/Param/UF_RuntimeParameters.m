@@ -2,11 +2,11 @@ disp('UF_RUNTIMEPARAM')
 
 %%%;;
 
-% REFERENCE PARAMETERS (this parameter only works if one of the specific trajectory has runtime parameters)
+%% REFERENCE PARAMETERS (this parameter only works if one of the specific trajectory has runtime parameters)
 numeric_reference_parameter{1,1} = [0.047180 0.359539 1.045565 0.374223 -0.069047 0.013630 -0.495463 -0.131683 0.668327 -0.184017 1.115775 0.884010 0.120701 0.837400 1.189048]';
 
 
-% REPELLERS PARAMETERS
+%% REPELLERS PARAMETERS
 % GENERALIZE TO MULTICHAIN !!!
 rep_obstacle_ref = [1 2]; % if i change the order of ref obstacle i change the order of repellor in the stacked case
 J_damp = 0.01;
@@ -18,8 +18,8 @@ single_alpha{1} = single_alpha_chain1;
 single_alpha{2} = single_alpha_chain2;
 type_of_rep_strct={'extended_decoupled' 'extended_combine','stacked' };
 
-%ALPHA PARAMETERS
-choose_alpha = 'RBF';  % RBF , constant
+%% ALPHA PARAMETERS
+choose_alpha = 'handTuned';  % RBF , constant, handTuned
 
 %RBF
 number_of_basis = 5; %5; %10; %basis functions for the RBF
@@ -53,7 +53,16 @@ value1 = 1*ones(chains.GetNumTasks(1));
 values{1} = value1;
 value_range_for_optimization_routine = [-0.5 , 1.5]; % this is a trick that im using to provide bound to the optimization procedure for parametric reference
 
-%CONTROLLER PARAMETERS
+
+% HandTunedAlpha
+starting_value = [0 0 1] ;
+% inf means no transition but i have to add them because im using matrix
+% so i have to keep the number of element even between each row and between each col
+t1 = [3 3.5 inf;2 2.5 4;3 3.5 inf];
+ti(:,:,1) = t1;
+transition_interval1 = [0.5 0.2 0;0.5 0.5 0.5;0.5 0.5 0];
+transition_interval(:,:,1) = transition_interval1;
+%% CONTROLLER PARAMETERS
 max_time = 200; %50
 combine_rule = {'sum'}; % sum or projector (with sum reppelers are removed)
 % with this term i introduce a damped least square structure inside my
@@ -65,13 +74,13 @@ regularizer{1} = regularizer_chain_1;
 regularizer{2} = regularized_chain_2;
 
 
-% CMAES PARAMETER
+%% CMAES PARAMETER
 % starting value of parameters
 %init_parameters = 6;
 explorationRate = 0.5; %0.1; %0.5; %0.1;%[0, 1]
 niter = 100;  %number of generations
 fitness = @fitness10;
-% FITNESS PARAMETERS
+%% FITNESS PARAMETERS
 
 %%%EOF
 

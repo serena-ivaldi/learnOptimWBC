@@ -1,4 +1,4 @@
-classdef ChainedAlpha < Alpha.AbstractAlpha
+classdef HandTuneAlpha < Alpha.AbstractAlpha
    
    properties
       time_struct
@@ -19,7 +19,7 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
    
    methods
       
-      function obj = ChainedAlpha(alpha_func,time_struct)
+      function obj = HandTuneAlpha(alpha_func,time_struct)
          
           obj.time_struct = time_struct;
           % i add inf to vector of time to avoid that after the last
@@ -70,56 +70,55 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
       
       %this function for t = ti is equal to 1 
       function val=TransFunc(ti,current_phase,transition_interval,t)
-         val = 0.5 - 0.5*cos( ( ( t-ti(current_phase) ) / transition_interval ) *pi );
+         val = 0.5 - 0.5*cos( ( ( t-ti(current_phase) ) / transition_interval(current_phase)) *pi );
       end
       
-      %function that give the value of the alpha function with the current time 
-      function  all_value=ComputeValue(time,ti,transition_matrix,matrix_value,transition_interval)
-         
+      %function that compute the value of the alpha function for all the time interval 
+      function  all_value=ComputeValue(time,starting_value,ti,transition_interval)
+         % i change ti in a way that after the last transition i will not
+         % have any transition anymore
+         ti = [ti inf];
          transition_flag = 0;
          current_phase = 1;
          all_value = [];
+         % this value cqn be either 0 or  1si 
+         steady_value = starting_value;
          for t=time
             %first of all i have to check if we are in transition or not
             if(t >= ti(current_phase) && ~transition_flag)
                transition_flag = 1;
             end
-
-            % not in transition
+            % not in transition   
             if(~transition_flag)
-               % transform the matrix_val in a vector by stacking the row
-               % transposed   
-               current_value = reshape(matrix_value',1,[]); 
-
-            % in transition   
+                current_value = steady_value;
             else
                % compute the transition value
-                transval=Alpha.ChainedAlpha.TransFunc(ti,current_phase,transition_interval,t);
-
-                % -1 is the placeholder for the alpha that is increasing
-                ind = find(transition_matrix(:,:,current_phase) == -1);
-                [row,col] = ind2sub(size(transition_matrix(:,:,current_phase)), ind);
-
+                transval=Alpha.HandTuneAlpha.TransFunc(ti,current_phase,transition_interval,t);
                 % check if transval is bigger or equal than one 
                 if(transval >=  1)
                    transval = 1;
                    transition_flag = 0;
                    current_phase = current_phase + 1;
-                   % update matrix_val
-                   matrix_value =  matrix_value - transition_matrix(:,:,current_phase - 1);
                 end
-
-                % in this block i assign the value of matrix_val in an app
+                
+                 % in this block i assign the value of matrix_val in an app
                 % matrix and than i update the value with the 
-                app_matrix_val = matrix_value;
-                app_matrix_val(row,col) = transval;
-                app_matrix_val(col,row) = 1 - transval;
-                % transform the matrix_val in a vector by stacking the row
-                % transposed
-                current_value = reshape(app_matrix_val',1,[]); 
-
-
+                if(steady_value == 0)
+                   current_value = transval;
+                else
+                   current_value = 1 - transval;
+                end
+                % update steady_value
+               if(transval >=  1)
+                   if(steady_value == 0)
+                       steady_value = 1;
+                   else
+                       steady_value = 0;
+                   end
+               end
+              
             end
+            
             all_value = [all_value ; current_value];
          end
          
@@ -127,41 +126,30 @@ classdef ChainedAlpha < Alpha.AbstractAlpha
       end   
       
       
-      function  all_func = BuildChainAlpha(matrix_value,ti,transition_interval,time_struct)
+      function  all_func = BuildChainAlpha(n_subchain,n_task,starting_value,ti,transition_interval,time_struct)
           % ONLY FOR SINGLE CHAINS!!
-          matrix_value_start= matrix_value(:,:,1);
-          
-          % i add inf to vector of time to avoid that after the last
-          % transition i came back inside the transition block
-          ti = [ti,inf];
-          
-          % compute transition matrix 
-          for i = 2 : size(matrix_value,3)
-             transition_matrix(:,:,i-1) = matrix_value(:,:,i-1) - matrix_value(:,:,i);
-          end
-        
+      
          
           % repcompute all the value of the alpha and i fit this data with
           % splines
           time = time_struct.ti:time_struct.step:time_struct.tf;
-          
-          all_value=Alpha.ChainedAlpha.ComputeValue(time,ti,transition_matrix,matrix_value_start,transition_interval);
-          
-          
-          for i = 1:size(all_value,2)
-              all_func{i} = fit(time',all_value(:,i),'smoothingspline');
+          for i = 1:n_subchain
+              for j = 1:n_task
+                  all_value = Alpha.HandTuneAlpha.ComputeValue(time,starting_value(i,j),ti(j,:,i),transition_interval(j,:,i));
+                  all_func{i,j} = fit(time',all_value,'smoothingspline');
+              end
           end   
       end
       
       
-      function alphas = BuildCellArray(n_subchain,matrix_value,ti,transition_interval,time_struct)
+      function alphas = BuildCellArray(n_subchain,n_task,starting_value,ti,transition_interval,time_struct)
          
-           all_func = Alpha.ChainedAlpha.BuildChainAlpha(matrix_value,ti,transition_interval,time_struct);
+           all_func = Alpha.HandTuneAlpha.BuildChainAlpha(n_subchain,n_task,starting_value,ti,transition_interval,time_struct);
 
            % WORK ONLY FOR SINGLE CHAIN
            for i=1:n_subchain
               for j=1:size(all_func,2)
-                 alphas{i,j} = Alpha.ChainedAlpha(all_func{j},time_struct); 
+                 alphas{i,j} = Alpha.HandTuneAlpha(all_func{i,j},time_struct); 
               end
            end
       end
