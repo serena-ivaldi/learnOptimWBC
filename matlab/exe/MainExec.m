@@ -79,6 +79,21 @@ end
 tic
 [t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step,'TorqueSat',torque_saturation);
 toc
+
+%% Evaluate fitness 
+evaluation = true;
+if (evaluation)
+    fit_evaluation = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,fitness,options);
+    performance = feval(fitness,fit_evaluation,t,q);
+end
+
+%% produce graph and copy parameters
+name_folder = 'hand_made_jaco1.3_a';
+complete_path = PlotSingleExecResult(name_folder,q,qd,t,time_sym_struct,controller,time_struct,name_scenario,bot1);
+% copy runtime parameters in the newly created folder
+fileID = fopen(strcat(complete_path,'/','runtime_parameters.txt'),'w');
+fprintf(fileID,'%s',rawTextFromStorage);
+
 %% Display
 fps = 200;
 video = false;
@@ -90,6 +105,9 @@ elbow_traj    = true;
 
 % plot the trajectory of the elbow or e-e or both
 if(ee_trajectory || elbow_traj)
+   figure; hold on;
+   text = LoadScenario(name_scenario);
+   eval(text);
    [ee,elbow] = ComputePositions(q{1},t,controller);
    ee = ee';
    elbow = elbow';
@@ -134,12 +152,8 @@ elseif(video)
    bot1.plot(q{1},'movie',path);
 elseif(save_fig)
    camera_position = [-7.5371   -1.1569   21.1612];
-   zoom =  2.4702;
+   zoom =  2.4702;it
    set(gca,'CameraViewAngle',zoom);
    campos(camera_position)
    SaveFigures(bot1,q{1},step_save_fig)
 end
-
-
-
-

@@ -10,7 +10,7 @@ function fit = fitness10(obj,t,q)
     max_traj_error = 5000;
     weight_effort = 1;
     weight_traj_err = 1;
-    hitting_condition = 0.05;
+    hitting_condition = 0.1;
     hitting = false;
     max_allowed_tau = 20;
     tau_violation = false;
@@ -31,13 +31,7 @@ function fit = fitness10(obj,t,q)
         if(q_cur(2)*(180/pi)<47 || q_cur(2)*(180/pi)>341)
            joint_violation = true;
         end
-        
-        % tau violation control
-        for kk = 1:size(contr.torques{1}(:,i),1)
-            if(contr.torques{1}(kk,i)>max_allowed_tau || contr.torques{1}(kk,i)<-max_allowed_tau)
-                tau_violation = true;
-            end
-        end
+      
         
         % compute the trajectory error (absolute error)
         kinematic6=CStrCatStr({'contr.subchains.sub_chains{1}.T0_'},num2str(contr.subchains.GetNumSubLinks(1,1)),{'(q_cur)'});
@@ -60,17 +54,31 @@ function fit = fitness10(obj,t,q)
         control_points =[ee, p5, p4, p3];
         % verify the pruning conditions
         for jj=1:size(G_OB,2)
-            for jjj = 1 : size(G_OB,2)
+            for jjj = 1 : size(control_points,2)
                 dist = G_OB(jj).Dist(control_points(:,jjj)',L);
                 if(dist < hitting_condition)
                    hitting = true;
                 end
             end
         end
-        if(hitting || joint_violation || tau_violation)
+        if(hitting || joint_violation)
            break;
         end
     end
+    
+    % tau violation control
+    for ii =1:size(contr.torques{1},2)
+        for kk = 1:size(contr.torques{1},1)
+            if(contr.torques{1}(kk,ii)>max_allowed_tau || contr.torques{1}(kk,ii)<-max_allowed_tau)
+                tau_violation = true;
+            end
+        end
+        if(tau_violation)
+           break;
+        end
+    end
+
+    
     % max effort
     effort = sum((contr.torques{1}(:).*contr.torques{1}(:)),2);
     effort = sum(effort,1);
