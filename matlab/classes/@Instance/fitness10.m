@@ -6,13 +6,16 @@ function fit = fitness10(obj,t,q)
     %%%;;
     downsaple = 10;
     L = 1; 
-    max_effort = 1.6589e+07;
+    max_effort = 1.5000e+06;
     max_traj_error = 5000;
     weight_effort = 1;
     weight_traj_err = 1;
     hitting_condition = 0.05;
     hitting = false;
+    max_allowed_tau = 20;
+    tau_violation = false;
     joint_violation = false; % joint in deg
+    
     %%%EOF
     contr = obj.controller;
     traj_err= 0;
@@ -28,20 +31,43 @@ function fit = fitness10(obj,t,q)
         if(q_cur(2)*(180/pi)<47 || q_cur(2)*(180/pi)>341)
            joint_violation = true;
         end
-        % compute the trajectory error (absolute error)
-        kinematic=CStrCatStr({'contr.subchains.sub_chains{1}.T0_'},num2str(contr.subchains.GetNumSubLinks(1,1)),{'(q_cur)'});
-        T = eval(kinematic{1});
-        ee = T(1:3,4);
-        attr_pos = contr.references.GetTraj(1,1,t(i)); 
-        traj_err = traj_err + norm((ee - attr_pos),L);
-        % verify the pruning conditions
-        for jj=1:size(G_OB,2)
-            dist = G_OB(jj).Dist(ee',L);
-            if(dist < hitting_condition)
-               hitting = true;
+        
+        % tau violation control
+        for kk = 1:size(contr.torques{1}(:,i),1)
+            if(contr.torques{1}(kk,i)>max_allowed_tau || contr.torques{1}(kk,i)<-max_allowed_tau)
+                tau_violation = true;
             end
         end
-        if(hitting || joint_violation)
+        
+        % compute the trajectory error (absolute error)
+        kinematic6=CStrCatStr({'contr.subchains.sub_chains{1}.T0_'},num2str(contr.subchains.GetNumSubLinks(1,1)),{'(q_cur)'});
+        T6 = eval(kinematic6{1});
+        ee = T6(1:3,4);
+        attr_pos = contr.references.GetTraj(1,1,t(i)); 
+        traj_err = traj_err + norm((ee - attr_pos),L);
+        
+        %compute position of the all control points
+        kinematic5='contr.subchains.sub_chains{1}.T0_5(q_cur)';
+        kinematic4='contr.subchains.sub_chains{1}.T0_4(q_cur)';
+        kinematic3='contr.subchains.sub_chains{1}.T0_3(q_cur)';
+        p5 = eval(kinematic5);
+        p5 = p5(1:3,4);
+        p4 = eval(kinematic4);
+        p4 = p4(1:3,4);
+        p3 = eval(kinematic3);
+        p3 = p3(1:3,4);
+        
+        control_points =[ee, p5, p4, p3];
+        % verify the pruning conditions
+        for jj=1:size(G_OB,2)
+            for jjj = 1 : size(G_OB,2)
+                dist = G_OB(jj).Dist(control_points(:,jjj)',L);
+                if(dist < hitting_condition)
+                   hitting = true;
+                end
+            end
+        end
+        if(hitting || joint_violation || tau_violation)
            break;
         end
     end
@@ -75,5 +101,9 @@ function fit = fitness10(obj,t,q)
     if(joint_violation)
       fit = -1;
       disp('joint violation')
+    end
+    if(tau_violation)
+      fit = -1;
+      disp('tau violation')
     end
 end

@@ -28,11 +28,11 @@ function [performance succeeded] = EvaluateCMAES(obj,action,ismean)
     obj.controller.CleanTime();
     
 catch err
-    disp('i am in evaluate CMAES error side')
-    obj.controller.CleanTau(); 
-    succeeded = 0;
-    performance = -1;
-end
+     disp('i am in evaluate CMAES error side')
+     obj.controller.CleanTau(); 
+     succeeded = 0;
+     performance = -1;
+ end
 
 
 end
