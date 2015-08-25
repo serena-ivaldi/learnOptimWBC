@@ -13,7 +13,7 @@ CONTROLLERTYPE ='UF';   % GHC or UF
 %%
 
 %SUBCHAIN PARAMETERS 
-subchain1 = [6 3 6];
+subchain1 = [6 4 6];
 target_link{1} = subchain1;
 
 
@@ -22,7 +22,7 @@ target_link{1} = subchain1;
 robots{1} = bot1;
 chains = SubChains(target_link,robots);
 %%
-
+deg = pi/180;
 % REFERENCE PARAMETERS
 traj_type = {'cartesian_x','cartesian_x','joint'};
 control_type = {'regulation','regulation','regulation'};
@@ -30,9 +30,9 @@ type_of_traj = {'none','none','none'};
 geometric_path = {'none','none','none'};
 time_law = {'none','none','none'};
 %parameters first chains
-geom_parameters{1,1} = [0,-0.63,0.70];
-geom_parameters{1,2} = [-0.1 -0.25 0.5]; 
-geom_parameters{1,3} = qr;
+geom_parameters{1,1} = [0,-0.63,0.70]; 
+geom_parameters{1,2} = [-0.309 -0.469 0.581];
+geom_parameters{1,3} = [120 116 90 0 0 0]* deg;
 %geom_parameters{1,4} = [0 0 0 0 0 0 0];
 dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
 
@@ -55,10 +55,10 @@ end
 % i have to set the name of the robot plus a number equal to the number of experiment for that scenario 
 % like bot#.# (where n.i means that the file is reffered to the n-scenario and is the i-th data setting)
 % multiple data setting for the same scenario 
-id = 'Jaco1.2';
+id = 'Jaco1.3';
 name_backup = strcat(id,'.m');
 %namebot_scene#_briefdescription.mat
-name_file = 'scene1';
+name_file = 'scene1.1';
 name_file = strcat(id,'_',name_file,'.mat');
 
 %% DO NOT CHANGE THIS PART!

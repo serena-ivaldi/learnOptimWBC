@@ -129,24 +129,24 @@ classdef  UF < Controllers.AbstractController
           F = cur_bot.coriolis(q,qd)*qd' + cur_bot.gravload(q)';
           % adding the stabilization part in joint space if i have only one
           % controller 
-          
-          if(obj.subchains.GetNumTasks(i) == 1)
-              %kp = 700;
-              kp = 200;
-              kd = 120;
-              %kd = 2*sqrt(kp);
-              qd_des =zeros(size(q,2),1);
-              q_des  = [0;pi/2; 0; -pi/2; 0; pi/2; 0]; %  TODO to generalize for different lenght of kinematic chain
-              u1 = ( kd*(qd_des - qd') + kp*(q_des - q'));
-          else
-              u1 = zeros(size(q,2),1);
-          end
          
           if(strcmp(obj.combine_rule,'sum')) 
              
              for j = 1:obj.subchains.GetNumTasks(i)
-%                  cur_func = obj.torque_func{i,j};
-%                  tau = cur_func(i,j,M,F,t,q,qd,u1);
+                 % for stability reason when a controller use less dof
+                 % then the free one i have to add a stabilizing action
+                 % trough a null space porjected component
+                 if(obj.subchains.GetNumSubLinks(i,j) < DOF )
+                   deg = pi/180;
+                    %kp = 700;
+                    kp = 5;
+                    kd = 2*sqrt(kp);
+                    qd_des =zeros(size(q,2),1);
+                    q_des  = [122;121; 19; 60; 90; 0]*deg; %  TODO to generalize for different lenght of kinematic chain
+                    u1 = ( kd*(qd_des - qd') + kp*(q_des - q'));
+                 else
+                    u1 = zeros(size(q,2),1);
+                 end
                  tau=obj.torque_func{i,j}(i,j,M,F,t,q,qd,u1);
                  app_tau(:,j) = obj.alpha{i,j}.GetValue(t)*tau;       
              end
@@ -158,8 +158,6 @@ classdef  UF < Controllers.AbstractController
            elseif(strcmp(obj.combine_rule,'projector'))   
                
              for j = 1:obj.subchains.GetNumTasks(i)
-%                  cur_func = obj.torque_func{i,j};
-%                  tau = cur_func(obj,i,j,M,F,t,q,qd,u1);
                  tau=obj.torque_func{i,j}(i,j,M,F,t,q,qd,u1);
                  app_tau(:,j) = obj.alpha{i,j}.GetValue(t)*tau;       
              end

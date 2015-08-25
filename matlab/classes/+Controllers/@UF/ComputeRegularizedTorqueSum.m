@@ -21,8 +21,8 @@ function [tau,J,x,xd,rpy,rpyd] = ComputeRegularizedTorqueSum(obj,ind_subchain,in
        t1 = (AM_inv)'/(reg_factr*I_damp + AM_invN_AM_inv_T);
        %tau = u1 + N*(AM_inv)'*t1*(b + AM_inv*(F + u1));
        %% TEST PROJECTION
-       (I - N*t1*AM_inv)*u1;
-       tau = N*t1*(b + AM_inv*(F)); %+ (I - N*t1*AM_inv)*u1;
+       %(I - N*t1*AM_inv)*u1;
+       tau = N*t1*(b + AM_inv*(F)) + (I - N*t1*AM_inv)*u1;
        
 
     catch error
