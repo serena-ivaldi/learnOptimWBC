@@ -31,7 +31,7 @@ precomp_sample = false;
 %numeric_theta = [0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
 %numeric_theta =[0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
 %numeric_theta =[2.3218    2.5695    6.8006    4.6558    5.7475    8.7383    3.5058    5.2817    6.9910    6.7590    4.5235    6.3875    7.3247    6.7258 8.5637];
-numeric_theta =[3.314339 7.037574 8.010913 8.104115 10.420123 5.815695 10.639344 6.241454 1.656821 4.274706 10.098549 7.152070 0.000000 0.011717 0.000000];
+numeric_theta =[12 12 12 12 12];
 
 % from sere 1
 %numeric_theta = [5.819383 4.412794 5.286902 7.786384 7.599614 3.512520 5.989917 9.410994 7.444834 7.472545 4.532512 5.614148 7.970080 4.498142 6.194601 6.925731 4.815911 5.490313 5.294776 6.011380 ]
@@ -55,12 +55,12 @@ value_range_for_optimization_routine = [-0.5 , 1.5]; % this is a trick that im u
 
 
 % HandTunedAlpha
-starting_value = [0 0 1] ;
+starting_value = [0 1 0] ;
 % inf means no transition but i have to add them because im using matrix
 % so i have to keep the number of element even between each row and between each col
-t1 = [3 3.5 inf;2 2.5 4;3 3.5 inf];
+t1 = [13 inf;15 inf;0.5 3];
 ti(:,:,1) = t1;
-transition_interval1 = [0.5 0.2 0;0.5 0.5 0.5;0.5 0.5 0];
+transition_interval1 = [0.5 0.5;1 0.5;0.5 1];
 transition_interval(:,:,1) = transition_interval1;
 %% CONTROLLER PARAMETERS
 max_time = 200; %50

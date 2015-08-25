@@ -4,7 +4,7 @@
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
-time_struct.tf = 7;
+time_struct.tf = 20;
 time_struct.step = 0.001;
 
 %% for simulation 
@@ -21,13 +21,13 @@ torque_saturation =20; % high value no saturation
 %name_dat = 'LBR4p11.0_scene9_UF_mulitple_task_stability_Null_space_projectors';
 %name_dat = 'LBR4p10.0_scene10_UF_lemniscate';
 %name_dat = 'LBR4p12.0_scene0_UF_test_elastic_reference';
-name_dat = 'Jaco1.2_scene1';
+name_dat = 'Jaco1.3_scene1.1';
 %name_dat = 'LBR4p2.2_scene2_generalization';
 path=LoadParameters(name_dat);
 load(path);
 
 %% SCENARIO
-name_scenario = 'jaco_scenario1';%'lbr_scenario_2_gen' lbr_scenario2; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
+name_scenario = 'jaco_scenario1.1';%'lbr_scenario_2_gen' lbr_scenario2; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
 
 %% STARTING CONDITION FOR SIMULATION
 % TODO generalize for multichain
