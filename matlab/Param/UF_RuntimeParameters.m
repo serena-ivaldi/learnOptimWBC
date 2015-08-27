@@ -19,7 +19,7 @@ single_alpha{2} = single_alpha_chain2;
 type_of_rep_strct={'extended_decoupled' 'extended_combine','stacked' };
 
 %% ALPHA PARAMETERS
-choose_alpha = 'handTuned';  % RBF , constant, handTuned
+choose_alpha = 'RBF';  % RBF , constant, handTuned
 
 %RBF
 number_of_basis = 5; %5; %10; %basis functions for the RBF
