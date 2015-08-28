@@ -11,6 +11,7 @@ classdef  RBF < Alpha.AbstractAlpha
         n_of_basis             % number of functions that compose our RBF
         redundancy             % parameter that control the level of overlapping of the function
         basis_functions        % cell array of basis function
+        sumphi                 % function that represent the sum of basis function (usefull for the learning from demostration part)
         func                   % handle to rbf(theta,t) 
         param                  % current parameters set of the alpha function
         sample                 % value for a specific set of theta and sampling time (sample.time sample.values sample.normvalues)
@@ -48,7 +49,8 @@ classdef  RBF < Alpha.AbstractAlpha
                 obj.basis_functions{i+1} = matlabFunction(phi(i+1));
                 sumphi = sumphi + phi(i+1);
             end
-
+            obj.sumphi = matlabFunction(sumphi);
+            
             c=obj.range(1,2)/2;
             
             rbf = (phi*theta)/sumphi;
@@ -148,6 +150,26 @@ classdef  RBF < Alpha.AbstractAlpha
                
         end
         
+        function theta=LearningFromDemo(obj,x,y)  
+           PHI=zeros(length(x),obj.n_of_basis);
+           app_vectr = zeros(1,obj.n_of_basis);
+           
+           y(y >= 0.9975) = 0.9975;
+           y(y<=0.002473) = 0.002473;
+           % anti - transform sigmoid
+           c=(obj.range(1,2)/2) * ones(length(x),1);
+           y = log(y./(ones(length(x),1)-y)) + c;
+           
+           for i = 1:length(x)
+              for j = 1:obj.n_of_basis
+               app_vectr(1,j) = feval(obj.basis_functions{j},x(i))/feval(obj.sumphi,x(i));
+              end
+              PHI(i,:) = app_vectr;
+           end
+           
+           theta = pinv(PHI)*y;
+           
+        end
         
     end
     
