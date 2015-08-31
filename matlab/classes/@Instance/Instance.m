@@ -52,8 +52,11 @@ classdef  Instance
           NumParam = obj.controller.GetTotalParamNum();
           % start_value for action
           settings.action = start_action;
-          settings.minAction = ones(1,NumParam).*obj.controller.alpha{1}.range(1,1);
-          settings.maxAction = ones(1,NumParam).*obj.controller.alpha{1}.range(1,2);
+%           settings.minAction = ones(1,NumParam).*obj.controller.alpha{1}.range(1,1);
+%           settings.maxAction = ones(1,NumParam).*obj.controller.alpha{1}.range(1,2);
+          settings.minAction = ones(1,NumParam).*(-14);
+          settings.maxAction = ones(1,NumParam).*(14);
+
 
           %CMA-ES settings
           settings.nIterations = niter;     

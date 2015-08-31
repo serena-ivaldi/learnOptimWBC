@@ -51,7 +51,7 @@ for j = 1:number_of_action
     end 
     Y = [Y ,Y_col];
 end
-theta = []
+theta = [];
 for k = 1 : number_of_action
    cur_theta = alphas{k}.LearningFromDemo(X(:,k),Y(:,k)); 
    theta = [theta,cur_theta'];
