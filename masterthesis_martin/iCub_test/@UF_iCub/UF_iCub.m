@@ -110,20 +110,15 @@ classdef  UF_iCub < Controllers.AbstractController
       
       
       function final_tau = Policy(obj, t, chi, icub_params)
-          
-          ndof = icub_params.ndof; % get the current configured DOF of the iCub 
+          % get the current configured DOF of the iCub
+          ndof = icub_params.ndof;
           
           % get the vectors of the current state of the forward dynamics from 
           % the explicit oridnary differenial equation - ODE(1):
-          q_j = chi(8:ndof+7, :);            % joint positions (R^ndof) 
-          dq_j = chi(ndof+14:2*ndof+13, :);  % joint velocities (R^ndof)
-          dx_b = chi(ndof+8:ndof+10, :);     % cartesian velocity of the floating base (R^3) 
-          omega_W = chi(ndof+11:ndof+13, :); % velocity of the orientation of the world (SO(3))
-                    
-          % updating the robot state at every time step t, i.e. the joint positions, joint
-          % velocities, the floating base velocity, etc.
-          %wbm_updateState(q_j, dq_j, [dx_b; omega_W]); % do I need that inside this function?? I gues not here --> outside ...
-          %[q_j, xT_b, dq_j, v_b] = wbm_getState();
+          q_j = chi(8:ndof + 7, :);                 % joint positions (R^ndof) 
+          dq_j = chi(ndof + 14:2*ndof + 13, :);     % joint velocities (R^ndof)
+          dx_b = chi(ndof+8:ndof + 10, :);          % cartesian velocity of the floating base (R^3) 
+          omega_W = chi(ndof + 11:ndof + 13, :);    % velocity of the orientation of the world (SO(3))
           
           % calculate the dynamics for the iCub-Robot:
           %
