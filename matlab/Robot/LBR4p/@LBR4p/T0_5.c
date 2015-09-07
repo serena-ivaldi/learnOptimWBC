@@ -4,14 +4,14 @@
 //
 // For compilation of this C-code using MATLAB please run:
 //
-// 		'mex /home/vale/git/learnOptimWBC/matlab/Robot/LBR4p/@LBR4p/T0_5.c /home/vale/git/learnOptimWBC/matlab/Robot/LBR4p/c/src/LBR4p_T0_5.c -I/home/vale/git/learnOptimWBC/matlab/Robot/LBR4p/c/include -v -outdir /home/vale/git/learnOptimWBC/matlab/Robot/LBR4p/@LBR4p'
+// 		'mex /home/ganymed/MasterThesis/SourceCode/learnOptimWBC/matlab/Robot/LBR4p/@LBR4p/T0_5.c /home/ganymed/MasterThesis/SourceCode/learnOptimWBC/matlab/Robot/LBR4p/c/src/LBR4p_T0_5.c -I/home/ganymed/MasterThesis/SourceCode/learnOptimWBC/matlab/Robot/LBR4p/c/include -v -outdir /home/ganymed/MasterThesis/SourceCode/learnOptimWBC/matlab/Robot/LBR4p/@LBR4p'
 //
 // Make sure you have a C-compiler installed and your MATLAB MEX environment readily configured.
 // Type 'doc mex' for additional help.
 //
 // __Copyright Note__:
-// Copyright (C) 1993-2014, by Peter I. Corke 
-// Copyright (C) 2012-2014, by Joern Malzahn 
+// Copyright (C) 1993-2015, by Peter I. Corke 
+// Copyright (C) 2012-2015, by Joern Malzahn 
 // 
 // This file has been automatically generated with The Robotics Toolbox for Matlab (RTB). 
 // 

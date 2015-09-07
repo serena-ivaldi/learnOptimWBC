@@ -42,8 +42,8 @@ function C = coriolis(rob,q,qd)
 %  See also inertia.
 %    
     
-% Copyright (C) 1993-2014, by Peter I. Corke 
-% Copyright (C) 2012-2014, by Joern Malzahn 
+% Copyright (C) 1993-2015, by Peter I. Corke 
+% Copyright (C) 2012-2015, by Joern Malzahn 
 % 
 % This file has been automatically generated with The Robotics Toolbox for Matlab (RTB). 
 % 

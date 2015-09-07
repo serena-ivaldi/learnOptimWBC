@@ -4,7 +4,7 @@
 //
 // For compilation of this C-code using MATLAB please run:
 //
-// 		'mex /home/vale/git/learnOptimWBC/matlab/Robot/LBR4p/@LBR4p/gravload.c /home/vale/git/learnOptimWBC/matlab/Robot/LBR4p/c/src/LBR4p_gravload.c -I/home/vale/git/learnOptimWBC/matlab/Robot/LBR4p/c/include -v -outdir /home/vale/git/learnOptimWBC/matlab/Robot/LBR4p/@LBR4p'
+// 		'mex /home/ganymed/MasterThesis/SourceCode/learnOptimWBC/matlab/Robot/LBR4p/@LBR4p/gravload.c /home/ganymed/MasterThesis/SourceCode/learnOptimWBC/matlab/Robot/LBR4p/c/src/LBR4p_gravload.c -I/home/ganymed/MasterThesis/SourceCode/learnOptimWBC/matlab/Robot/LBR4p/c/include -v -outdir /home/ganymed/MasterThesis/SourceCode/learnOptimWBC/matlab/Robot/LBR4p/@LBR4p'
 //
 // Make sure you have a C-compiler installed and your MATLAB MEX environment readily configured.
 // Type 'doc mex' for additional help.
