@@ -1,4 +1,4 @@
-classdef iCubRobot < handle
+classdef iCubWBM < handle
     properties(SetAccess = private)
         urdfName@char
         ndof@int16
@@ -9,7 +9,11 @@ classdef iCubRobot < handle
 
     methods
         % Constructor:        
-        function obj = iCubRobot(urdfName, ndof, linkName, R_lw, p_lw)
+        function obj = iCubWBM(iCubParams)
+            initRobot(iCubParams);
+        end
+        
+        function initRobot(iCubParams)
             % Initialization:
             if nargin >= 1
                 if ~exist('urdfName', 'var')
@@ -32,7 +36,7 @@ classdef iCubRobot < handle
             
             % set the the world frame to a given rototranslation from
             % a chosen reference link ...
-            wbm_setWorldLink(obj.linkName, obj.R_lw, obj.p_lw);
+            wbm_setWorldLink(obj.linkName, obj.R_lw, obj.p_lw);            
         end
                 
         function setState(q_j, dq_j, vw_b)

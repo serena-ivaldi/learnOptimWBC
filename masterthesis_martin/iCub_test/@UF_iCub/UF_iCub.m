@@ -128,8 +128,7 @@ classdef  UF_iCub < Controllers.AbstractController
           gF = wbm_generalisedBiasForces(q_j, dq_j, [dx_b; omega_W]);
           
           % adding the stabilization part in joint space if i have only one
-          % controller 
-          
+          % controller
           if(obj.subchains.GetNumTasks(i) == 1)
               %kp = 700;
               kp = 200;

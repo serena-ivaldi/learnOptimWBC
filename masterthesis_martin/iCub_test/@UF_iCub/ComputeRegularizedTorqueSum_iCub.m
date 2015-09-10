@@ -3,14 +3,14 @@ function [tau,J,x,xd,rpy,rpyd] = ComputeRegularizedTorqueSum_iCub(obj, icub_para
    
     ndof = icub_params.ndof;
     try
-       [J,Jd,x,xd,rpy,rpyd] = obj.subchains.DirKin(q_j,dq_j,ind_subchain,ind_task);
+       [~,~,x,xd,rpy,rpyd] = obj.subchains.DirKin(q_j,dq_j,ind_subchain,ind_task);
        
-       % Building up contraints jacobian and djdq
-       Jc = zeros(6*icub_params.numConstraints, 6+ndof);
+       % building up contraints jacobian and djdq
+       Jc = zeros(6*icub_params.numConstraints, 6 + ndof);
        dJcDq = zeros(6*icub_params.numConstraints, 1);
        for i=1:icub_params.numConstraints
-            Jc(6*(i-1)+1:6*i, :) = wbm_jacobian(icub_params.constraintLinkNames{i});
-            dJcDq(6*(i-1)+1:6*i, :) = wbm_djdq(icub_params.constraintLinkNames{i});
+            Jc(6*(i-1) + 1:6*i, :) = wbm_jacobian(icub_params.constraintLinkNames{i});
+            dJcDq(6*(i-1) + 1:6*i, :) = wbm_djdq(icub_params.constraintLinkNames{i});
        end
        
        [b,A] = TrajCostraint(obj,ind_subchain,ind_task,t,Jc,dJcDq,x,xd,rpy,rpyd,q_j',dq_j');
