@@ -23,9 +23,8 @@ classdef  UF_iCub < Controllers.AbstractController
 
    methods
       
-       function obj = UF_iCub(sub_chains,references,alpha,repellers,metric,Kp,Kd,combine_rule,regularization,max_time,varargin)
+       function obj = UF_iCub(icub_params,sub_chains,references,alpha,repellers,metric,Kp,Kd,combine_rule,regularization,max_time,varargin)
          
-        
          obj.subchains = sub_chains;
          obj.references = references;
          obj.alpha = alpha;
@@ -37,12 +36,12 @@ classdef  UF_iCub < Controllers.AbstractController
          % in this way i can use a generic long vector inside
          % RuntimeVariable than here i take what i need
          for i = 1:obj.subchains.GetNumChains()
-             for j=1:obj.subchains.GetNumTasks(i)
+             for j = 1:obj.subchains.GetNumTasks(i)
                  app_vector(j) = regularization{i}(1,j);
                  if( app_vector(j) == 0)
-                    obj.torque_func{i,j} = @(ind_subchain,ind_task,M,F,t,q,dq,u1)obj.ComputeTorqueSum(ind_subchain,ind_task,M,F,t,q,dq,u1);
+                    obj.torque_func{i,j} = @(icub_params,ind_subchain,ind_task,M,F,t,q,dq,u1)obj.ComputeTorqueSum_iCub(icub_params,ind_subchain,ind_task,M,F,t,q,dq,u1);
                  else
-                    obj.torque_func{i,j} = @(ind_subchain,ind_task,M,F,t,q,dq,u1)obj.ComputeRegularizedTorqueSum(ind_subchain,ind_task,M,F,t,q,dq,u1);
+                    obj.torque_func{i,j} = @(icub_params,ind_subchain,ind_task,M,F,t,q,dq,u1)obj.ComputeRegularizedTorqueSum_iCub(icub_params,ind_subchain,ind_task,M,F,t,q,dq,u1);
                  end
              end
              obj.regularizer{i}=app_vector;
@@ -117,7 +116,7 @@ classdef  UF_iCub < Controllers.AbstractController
           % the explicit oridnary differenial equation - ODE(1):
           q_j = chi(8:ndof + 7, :);                 % joint positions (R^ndof) 
           dq_j = chi(ndof + 14:2*ndof + 13, :);     % joint velocities (R^ndof)
-          dx_b = chi(ndof+8:ndof + 10, :);          % cartesian velocity of the floating base (R^3) 
+          dx_b = chi(ndof + 8:ndof + 10, :);          % cartesian velocity of the floating base (R^3) 
           omega_W = chi(ndof + 11:ndof + 13, :);    % velocity of the orientation of the world (SO(3))
           
           % calculate the dynamics for the iCub-Robot:
@@ -146,7 +145,7 @@ classdef  UF_iCub < Controllers.AbstractController
              for j = 1:obj.subchains.GetNumTasks(i)
 %                  cur_func = obj.torque_func{i,j};
 %                  tau = cur_func(i,j,M,F,t,q_j,dq_j,u1);
-                 tau=obj.torque_func{i,j}(i,j,M,gF,t,q_j,dq_j,u1);
+                 tau=obj.torque_func{i,j}(i, j, M, gF, t, q_j, dq_j, u1);
                  app_tau(:,j) = obj.alpha{i,j}.GetValue(t)*tau;       
              end
              
@@ -159,20 +158,20 @@ classdef  UF_iCub < Controllers.AbstractController
              for j = 1:obj.subchains.GetNumTasks(i)
 %                  cur_func = obj.torque_func{i,j};
 %                  tau = cur_func(obj,i,j,M,gF,t,q_j,dq_j,u1);
-                 tau=obj.torque_func{i,j}(i,j,M,gF,t,q_j,dq_j,u1);
+                 tau=obj.torque_func{i,j}(i, j, M, gF, t, q_j, dq_j, u1);
                  app_tau(:,j) = obj.alpha{i,j}.GetValue(t)*tau;       
              end
              
              final_tau = sum(app_tau,2);
              % compute the projector in the null space of repulsor (number of repulsor) 
              for j = 1:obj.repellers.GetNumTasks(i)
-               obj.repellers.SetJacob(cur_bot,q_j,dq_j,i,j)  
+               obj.repellers.SetJacob(cur_bot, q_j, dq_j, i, j)  
              end                                
              N = obj.repellers.ComputeProjector(i,ndof,obj.subchains.GetNumTasks(i),obj.alpha,t);
              final_tau = ((M*N)/M)*final_tau;
             
              obj.SaveTau(i,final_tau) 
-             obj.SaveTime(i,t);  
+             obj.SaveTime(i,t);
            end   
       end
       
