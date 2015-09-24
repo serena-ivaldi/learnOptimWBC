@@ -1,0 +1,14 @@
+Follow the instructions to install the optWBI toolbox.
+
+1) download from http://petercorke.com/Robotics_Toolbox.html the robotics toolbox v 9.10
+   and install it on matlab 
+
+2) run startup.m in the matlab folder of the toolbox
+
+3) compile the mex file for the newton eulero dynamic computation in the robotic toolbox   (rvctools_folder/robot/mex). then copy the resulting file in rvctools_folder/robot/@SerialLink
+
+4) run the script MainRobotGen.m in optWBI/matlab/Robot to create a symbolic model (dynamic and kinematic or only kinematic) of the robot described in the file Mdl***.m.
+The Mdl***.m files contain a D-H description of the robot plus dynamic information. the syntax used is the same of the robotics toolbox (read there for more details)
+
+
+
