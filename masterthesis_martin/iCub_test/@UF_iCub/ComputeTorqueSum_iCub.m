@@ -16,7 +16,7 @@ function [tau,Jc,x,xd,rpy,rpyd] = ComputeTorqueSum_iCub(obj, icub_params, ind_su
        
        % the hypothesis is that N is inverted directly from data ()
        N = evalin('caller',obj.metric{ind_subchain,ind_task});
-       I = eye(size(q_j, 2)); 
+       I = eye(size(q_j, 2));
        AM_inv  = A/M;
        AM_invN = AM_inv*N;
      
