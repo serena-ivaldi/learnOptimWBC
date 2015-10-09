@@ -4,10 +4,10 @@ disp('OptWBIpath version 0.2')
 p = path;
 k = strfind(p,'rvctools');
 if(isempty(k))
-   disp('before running OptWBI toolbox install robotics toolbox 9.10')
+   disp('before installing OptWBI toolbox install robotics toolbox 9.10')
    disp('<a href ="http://www.petercorke.com/RTB/3">link for the toolbox</a>')
 else
-    
+    disp('robotics toolbox is installed')
     % add path to matlab path
     OptWBIpath = fileparts( mfilename('fullpath') );
     robotpath = fullfile(OptWBIpath, 'Robot');
@@ -18,6 +18,8 @@ else
     testpath = fullfile(OptWBIpath, 'Test');
     addpath(testpath);
     addpath(fullfile(testpath,'datamat'));
+    
+    disp('updating rcvtools')
     % copy the updated file inside the robotics toolbox folder
     str = which('startup_rvc');
     to = fileparts(str);

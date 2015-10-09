@@ -1,0 +1,47 @@
+%% this object has to be use inside the fitness function defined in the same 
+%% folder
+%% this penalty function is an implementation of the method described in
+%% Multidisciplinary Optimization in the Design of Future Space Launchers, Collange et al 2010.
+
+
+
+classdef  Penalty
+    
+   properties
+       epsilon
+       weights
+       r_i_feas
+       r_i_average
+       p_target
+       pop_size
+       gamma_matrix
+       
+       
+     
+   end
+       
+    
+   methods
+       
+       function obj = Penalty(epsilon,pop)
+           obj.epsilon = epsilon;
+           obj.weights = 0.5*ones(1,lenght(epsilon));
+           obj.r_i_feas = zeros(1,lenght(epsilon));
+           obj.r_i_average = zeros(1,lenght(epsilon));
+           obj.p_target = zeros(1,lenght(epsilon));
+           obj.pop_size = pop;
+           
+       end
+       
+     
+       function ComputePenalty
+       
+       
+       
+       
+       
+       
+       
+   end
+    
+end
