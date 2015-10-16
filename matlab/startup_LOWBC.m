@@ -1,3 +1,8 @@
+clear variables
+close all
+clc
+
+
 disp('OptWBIpath version 0.2')
 
 % check for robotics toolbox 
@@ -15,7 +20,7 @@ else
     addpath(fullfile(OptWBIpath, 'Common'));
     addpath(fullfile(OptWBIpath, 'Classes'));
     addpath(fullfile(OptWBIpath, 'Interface'));
-    testpath = fullfile(OptWBIpath, 'Test');
+    testpath = fullfile(OptWBIpath, 'TestResults');
     addpath(testpath);
     addpath(fullfile(testpath,'datamat'));
     

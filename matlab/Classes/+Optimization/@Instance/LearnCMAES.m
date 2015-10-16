@@ -71,10 +71,10 @@ else
     end
 end
 
-fnForwardModel = @(obj_,actionLearn_, isMean_) TransAction(obj_,actionLearn_, isMean_, settings);
+fnForwardModel = @(obj_,actionLearn_,curr_candidate_,isMean_) TransAction(obj_,actionLearn_,curr_candidate_,isMean_, settings);
 
 
-[mean_performances(1) succeeded(1)] = fnForwardModel(obj,mean(1, :), 1);
+[mean_performances(1) succeeded(1)] = fnForwardModel(obj,mean(1, :),-1,1);
 policies(policyId,:) = mean(1, :);
 costs(policyId) = -mean_performances(1);
 policyId = policyId + 1;
@@ -98,7 +98,7 @@ for k = 1:(nIterations - 1)
     %evaluate offsprings
     disp('evaluate offsprings')
     if settings.allowEvalMultiple > 0
-        performances = fnForwardModel(obj,offsprings, 0);
+        performances = fnForwardModel(obj,offsprings,0, 0);
 %         keyboard %check correctness of ids
         ids = policyId:policyId+lambda-1;
         policies(ids,:) = offsprings;
@@ -107,7 +107,7 @@ for k = 1:(nIterations - 1)
     else
         %par
         for l = 1:lambda 
-            [performances(l) succeeded(policyId)] = fnForwardModel(obj,offsprings(l, :), 0);
+            [performances(l) succeeded(policyId)] = fnForwardModel(obj,offsprings(l, :),l, 0);
             if settings.plotState
                 fprintf('Offspring %d : %e %d\n', l, performances(l), succeeded(policyId));
             end
@@ -117,8 +117,10 @@ for k = 1:(nIterations - 1)
         end
     end
         
-         
+    %% added part to manage constraints
+     [costs,performances]=obj.penalty_handling.FitnessWithPenalty(policyId,costs,performances,k);
      
+    %%
     [sortVal, sortInd] = sort(performances, 'descend');
     
     for l = 1:mu
@@ -126,7 +128,7 @@ for k = 1:(nIterations - 1)
         mean(k + 1, :) = mean(k + 1, :) + w(l) * offsprings(index, :);
     end
 
-    [mean_performances(k + 1) succeeded(policyId)] = fnForwardModel(obj,mean(k + 1, :), 1);
+    [mean_performances(k + 1) succeeded(policyId)] = fnForwardModel(obj,mean(k + 1, :),-1,1);
     policies(policyId,:) = mean(k + 1, :);
     costs(policyId) = -mean_performances(k + 1);
     policyId = policyId + 1;
@@ -136,7 +138,7 @@ for k = 1:(nIterations - 1)
     bestAction.hist(k).parameters = mean(k + 1, :);
     bestAction.hist(k).variance =  var(offsprings);
     
-    % im building the data set to cluster in a second phase
+    % im building the data set to cluster it in a second phase
     BestActionPerEachGenPolicy(k,:)= offsprings(sortInd(1),:);
     BestActionPerEachGenFitness(k,1) = performances(sortInd(1));
 
@@ -173,7 +175,7 @@ bestAction.performance = -costs(id);
 
 end
 
-function [performance succeeded] = TransAction(obj_,actionLearn, isMean, settings)
+function [performance succeeded] = TransAction(obj_,actionLearn, curr_candidate,isMean, settings)
 
 if isfield(settings, 'activeIndices')
     if size(actionLearn,1) < 2
@@ -186,6 +188,6 @@ if isfield(settings, 'activeIndices')
 else
     actionFull = actionLearn;
 end
-    [performance succeeded] = settings.fnForwardModel(obj_, actionFull, isMean);
+    [performance succeeded] = settings.fnForwardModel(obj_, actionFull, curr_candidate ,isMean);
 
 end

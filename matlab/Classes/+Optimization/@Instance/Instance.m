@@ -6,25 +6,29 @@
 classdef  Instance
     
    properties
-      controller      % structure that contains every information about the specific instance of the problem
-      simulator       % rbt v-rep
-      qinit           % initial position 
-      qdinit          % initial velocity
-      time_sym_struct %time struct for simulation with fixed step
-      fixed_step      % if is true i use ode4 (runge-kutta)
-      options         % options for variable step 
-      fitness         % fitness function handle
-      fitness_result  % in this vector i save the value of the fitness function 
+      controller       % structure that contains every information about the specific instance of the problem
+      simulator        % rbt v-rep
+      penalty_handling % object to handle penalties inside the optimization routine
+      constraints      % flag that activates or deactivates the constraints handling (true: constraints active, false: constraints not active) 
+      qinit            % initial position 
+      qdinit           % initial velocity
+      time_sym_struct  %time struct for simulation with fixed step
+      fixed_step       % if is true i use ode4 (runge-kutta)
+      options          % options for variable step 
+      fitness          % fitness function handle
+      fitness_result   % in this vector i save the value of the fitness function 
    end
        
     
    methods
        
-       function obj = Instance(controller,simulator_type,qinit,qdinit,time_sym_struct,fixed_step,fitness,options)
+       function obj = Instance(controller,simulator_type,penalty,constraints,qinit,qdinit,time_sym_struct,fixed_step,fitness,options)
            obj.controller = controller;
            %if(getnameidx({'rbt','v-rep'} , simulator_type{1}) ~= 0 )
              obj.simulator = simulator_type;
            %end
+           obj.penalty_handling = penalty;
+           obj.constraints = constraints;
            obj.qinit = qinit;
            obj.qdinit= qdinit;
            obj.time_sym_struct = time_sym_struct;
@@ -47,21 +51,19 @@ classdef  Instance
             end
        end
        
-       function [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded]=CMAES(obj,start_action,niter,explorationRate)
+       function [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded]=CMAES(obj,start_action,niter,explorationRate,cmaes_value_range)
           %Parameter space
           NumParam = obj.controller.GetTotalParamNum();
           % start_value for action
           settings.action = start_action;
-%           settings.minAction = ones(1,NumParam).*obj.controller.alpha{1}.range(1,1);
-%           settings.maxAction = ones(1,NumParam).*obj.controller.alpha{1}.range(1,2);
-          settings.minAction = ones(1,NumParam).*(-14);
-          settings.maxAction = ones(1,NumParam).*(14);
+          settings.minAction = ones(1,NumParam).*cmaes_value_range(1,1);
+          settings.maxAction = ones(1,NumParam).*cmaes_value_range(1,2);
 
 
           %CMA-ES settings
           settings.nIterations = niter;     
           settings.explorationRate = explorationRate; %[0, 1]
-          settings.fnForwardModel = @(obj_,a_,ismean_)EvaluateCMAES(obj_,a_,ismean_);
+          settings.fnForwardModel = @(obj_,a_,curr_candidate_,ismean_)EvaluateCMAES(obj_,a_,curr_candidate_,ismean_);
           settings.plotState = 1;         %{0,1} plot offsprings yes no
 
           %search optimal parameters

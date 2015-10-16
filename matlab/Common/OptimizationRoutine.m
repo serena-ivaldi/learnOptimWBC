@@ -1,5 +1,5 @@
 % number_of_iteration is usefull only for PlotGraphPaper.m main
-function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, name_dat]=OptimizationRoutine(number_of_iteration,n_of_experiment,iter,init_parameters_from_out,generation_of_starting_point)
+function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, name_dat]=OptimizationRoutine(number_of_iteration,n_of_experiment,iter,init_parameters_from_out)
   
     
      AllRuntimeParameters
@@ -75,13 +75,15 @@ function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, co
         otherwise
             warning('Unexpected control method');
      end
-
+     %% Constraints
+     constr=Optimization.FixPenalty(controller.GetTotalParamNum(),constraints_functions,constraints_type,constraints_values);
+     
      %% Instance
 
      % im using init_value from outside
      switch generation_of_starting_point
         case 'test'
-           start_action = [-0.686896675401947,1.22650641453222,-3.27247260213565,12.6539506696606,11.9349914795820,12.3072074998126,11.4267899497361,13.3737941021526,8.77645179253447,-4.69418318274421,11.1958799565396,1.32058911902880,-0.691100222964068,0.286830798370383,-0.162567001268804];
+           start_action = user_defined_start_action;
         case 'given'
             start_action = init_parameters_from_out*ones(1,controller.GetTotalParamNum());
         case 'random'
@@ -89,10 +91,10 @@ function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, co
         
      end
 
-     inst = Instance(controller,simulator_type,qi,qdi,time_sym_struct,fixed_step,fitness,options);
+     inst = Optimization.Instance(controller,simulator_type,constr,activate_constraints_handling,qi,qdi,time_sym_struct,fixed_step,fitness,options);
 
      tic
-     [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded] = inst.CMAES(start_action,niter,explorationRate);
+     [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded] = inst.CMAES(start_action,niter,explorationRate,cmaes_value_range);
      exec_time = toc
      
      % analisys of the optimization result for building repertoire

@@ -28,7 +28,7 @@ function fit = fitness10(obj,t,q)
            joint_violation = true;
         end
         % joint limits in deg for the third joint of jaco[47 313] [19 341]
-        if(q_cur(2)*(180/pi)<47 || q_cur(2)*(180/pi)>341)
+        if(q_cur(3)*(180/pi)<47 || q_cur(3)*(180/pi)>341)
            joint_violation = true;
         end
       

@@ -64,7 +64,7 @@ switch CONTROLLERTYPE
         type_of_rep_strct={'extended_decoupled' 'extended_combine','stacked' };
 
         %% ALPHA PARAMETERS
-        choose_alpha = 'handTuned';  % RBF , constant, handTuned
+        choose_alpha = 'RBF';  % RBF , constant, handTuned
 
         %RBF
         number_of_basis = 5; %5; %10; %basis functions for the RBF
@@ -108,7 +108,7 @@ switch CONTROLLERTYPE
         transition_interval1 = [0.5 0.5;1 0.5;0.5 1];
         transition_interval(:,:,1) = transition_interval1;
         %% CONTROLLER PARAMETERS
-        max_time = 200; %50
+        max_time = 1000; %50
         combine_rule = {'sum'}; % sum or projector (with sum reppelers are removed)
         % with this term i introduce a damped least square structure inside my
         % controller if regularizer is 0 i remove the regularizer action 
@@ -117,14 +117,26 @@ switch CONTROLLERTYPE
         regularized_chain_2 = [1];
         regularizer{1} = regularizer_chain_1;
         regularizer{2} = regularized_chain_2;
-
+        
+        %% CONSTRAINTS PARAMETERS
+        constraints_functions = {'LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality',...
+        'LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality',...
+        'DistanceObs','DistanceObs','DistanceObs','DistanceObs'}; % vector of functions handle for computing the constraints
+        constraints_type = [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1];      % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
+        % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
+        constraints_values =[47*(pi/180), -313*(pi/180),47*(pi/180), -341*(pi/180), -20, -20,-20, -20,-20, -20,-20, -20,-20, -20,-20, -20,0.01,0.01,0.01,0.01];  
 
         %% CMAES PARAMETER
         % starting value of parameters
+        generation_of_starting_point = 'random'; % 'test', 'given', 'random'
         %init_parameters = 6;
+        user_defined_start_action=[-0.686896675401947,1.22650641453222,-3.27247260213565,12.6539506696606,11.9349914795820,12.3072074998126,11.4267899497361,13.3737941021526,8.77645179253447,-4.69418318274421,11.1958799565396,1.32058911902880,-0.691100222964068,0.286830798370383,-0.162567001268804];
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-        niter = 100;  %number of generations
-        fitness = @fitness10;
+        niter = 2;  %number of generations
+        fitness = @fitness11;
+        activate_constraints_handling = true;
+        cmaes_value_range = [-14 , 14];  % boudn that define the search space
+        
         %% FITNESS PARAMETERS
 
         %%%EOF    
