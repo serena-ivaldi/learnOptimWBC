@@ -108,7 +108,7 @@ switch CONTROLLERTYPE
         transition_interval1 = [0.5 0.5;1 0.5;0.5 1];
         transition_interval(:,:,1) = transition_interval1;
         %% CONTROLLER PARAMETERS
-        max_time = 1000; %50
+        max_time = 50; %50
         combine_rule = {'sum'}; % sum or projector (with sum reppelers are removed)
         % with this term i introduce a damped least square structure inside my
         % controller if regularizer is 0 i remove the regularizer action 

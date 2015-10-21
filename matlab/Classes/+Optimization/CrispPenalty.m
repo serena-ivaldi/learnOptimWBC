@@ -7,7 +7,7 @@
 % than we update the information inside the object smetimes direcrtly 
 
 
-classdef  FixPenalty < Optimization.AbstractPenalty
+classdef  CrispPenalty < Optimization.AbstractPenalty
     
    properties
        pop_size              % number of candidates for each generations
@@ -22,7 +22,7 @@ classdef  FixPenalty < Optimization.AbstractPenalty
        
    methods
        
-       function obj = FixPenalty(search_space_dimension,constraints_functions,constraints_type,constraints_values)
+       function obj = CrispPenalty(search_space_dimension,constraints_functions,constraints_type,constraints_values)
            obj.pop_size = round(4 + 3 * log(search_space_dimension)); % this choice is the same used in CMAES when lambda is not spcified
            obj.n_constraint = length(constraints_functions);
            obj.constraints_functions = constraints_functions;
@@ -33,7 +33,7 @@ classdef  FixPenalty < Optimization.AbstractPenalty
            obj.fitness_penalties = zeros(1,obj.pop_size);
        end
        
-       % To call in Fitness
+       % To call in Fitness (for the current candidate)
        function EvaluateConstraints(obj,input,iteration)
            % input is a column vector of value that we can use to compute the violation of the constraints 
            for i=1:length(input)
@@ -47,28 +47,31 @@ classdef  FixPenalty < Optimization.AbstractPenalty
        % with c_index = -1 i manage the situation where i have to update just one candidate 
        function ComputeConstraintsViolation(obj,c_index)
            % here i check if i im considering a set of candidate
+           % (c_index>1) or just one (c_index==0)
            if(c_index>0)
                for i=1:obj.n_constraint
-                   % i sum only the constraints violation it means that i have to discard value less then zero 
+                   % if index is not empty it means that i have some
+                   % constraints violations
                    index = obj.constraints_violation(i,:)>0;
-                   obj.penalties(c_index,i) = sum(obj.constraints_violation(i,index),2); 
-                   if(isempty(obj.penalties(c_index,i)))
-                       obj.penalties(c_index,i) = 0;   
-                   end
+                   if(isempty(index))
+                        obj.fitness_penalties(c_index) = 0;
+                   else
+                       obj.fitness_penalties(c_index) = 1;
+                       break;
+                   end      
                end
-
-               obj.fitness_penalties(c_index) = sum(obj.penalties(c_index,:),2);
            else
                for i=1:obj.n_constraint
-                   % i sum only the constraints violation it means that i have to discard value less then zero 
+                   % if index is not empty it means that i have some
+                   % constraints violations
                    index = obj.constraints_violation(i,:)>0;
-                   obj.penalties(1,i) = sum(obj.constraints_violation(i,index),2); 
-                   if(isempty(obj.penalties(1,i)))
-                       obj.penalties(1,i) = 0;   
-                   end
+                   if(isempty(index))
+                        obj.fitness_penalties(1) = 0;
+                   else
+                       obj.fitness_penalties(1) = 1;
+                       break;
+                   end  
                end
-               
-               obj.fitness_penalties(1) = sum(obj.penalties(1,:),2);
            end
            
        end  

@@ -11,7 +11,7 @@ function [performance succeeded] = EvaluateCMAES(obj,action,cur_candidates_index
 %% target function
 
 
- %try
+ try
     disp('i am in evaluate CMAES')
     action
     [t, q, qd]=obj.run(action);
@@ -36,12 +36,12 @@ function [performance succeeded] = EvaluateCMAES(obj,action,cur_candidates_index
     obj.controller.CleanTau();
     obj.controller.CleanTime();
     
-% catch err
-%      disp('i am in evaluate CMAES error side')
-%      obj.controller.CleanTau(); 
-%      succeeded = 0;
-%      performance = -1;
-%  end
+catch err
+     disp('i am in evaluate CMAES error side')
+     obj.controller.CleanTau(); 
+     succeeded = 0;
+     performance = -1;
+ end
 
 
 end
