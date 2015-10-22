@@ -14,10 +14,8 @@ toc
 evaluation = true;
 if (evaluation)
     performance = feval(inst.fitness,inst,t,q);
-    obj.penalty_handling.ComputeConstraintsViolation(-1)
-    if(cur_candidates_index == -1)
-        performance = performance - inst.penalty_handling.fitness_penalties(1);
-    end
+    inst.penalty_handling.ComputeConstraintsViolation(-1)
+    performance = performance - inst.penalty_handling.fitness_penalties(1); 
 end
 
 %% produce graph and copy parameters

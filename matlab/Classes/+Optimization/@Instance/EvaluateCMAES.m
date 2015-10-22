@@ -38,7 +38,8 @@ function [performance succeeded] = EvaluateCMAES(obj,action,cur_candidates_index
     
 catch err
      disp('i am in evaluate CMAES error side')
-     obj.controller.CleanTau(); 
+     obj.controller.CleanTau();
+     obj.controller.CleanTime();
      succeeded = 0;
      performance = -1;
  end
