@@ -77,6 +77,7 @@ end
 constr=Optimization.FixPenalty(controller.GetTotalParamNum(),constraints_functions,constraints_type,constraints_values);
      
  %% Instance
-inst = Optimization.Instance(controller,simulator_type,constr,activate_constraints_handling,qi,qdi,time_sym_struct,fixed_step,fitness,options);
+input{5} = controller;      
+inst = Optimization.Instance(constr,activate_constraints_handling,run_function,fitness,clean_function,input);
 
 end

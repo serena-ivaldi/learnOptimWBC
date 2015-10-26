@@ -1,4 +1,8 @@
-function fit  = fitness11(obj,t,q) 
+function fit  = fitness11(obj,output) 
+    
+    t = output{1};
+    q = output{2};
+    
     %%%;;
     downsaple = 10;
     L = 1; 
@@ -7,11 +11,11 @@ function fit  = fitness11(obj,t,q)
     weight_effort = 1;
     weight_traj_err = 1;
     %%%EOF
-    contr = obj.controller;
+    contr = obj.input_4_run{5};
     traj_err= 0;
     
     % i have to uniform the tau with the number of q
-    tau_=InterpTorque(contr,obj.time_sym_struct,0.001);
+    tau_=InterpTorque(contr,obj.input_4_run{4},0.001);
     evaluate_constraints_index = 1;
     for i=1:downsaple:size(t,2)
         q_cur = q{1}(i,:);

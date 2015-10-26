@@ -18,7 +18,7 @@ function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, co
 
   
      tic
-     [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded] = inst.CMAES(start_action,niter,explorationRate,cmaes_value_range);
+     [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded] = inst.CMAES(controller.GetTotalParamNum(),start_action,niter,explorationRate,cmaes_value_range);
      exec_time = toc
      
      % analisys of the optimization result for building repertoire

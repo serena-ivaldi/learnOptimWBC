@@ -14,13 +14,13 @@ function [performance succeeded] = EvaluateCMAES(obj,action,cur_candidates_index
  try
     disp('i am in evaluate CMAES')
     action
-    [t, q, qd]=obj.run(action);
+    [output]=obj.run(action);
     
     succeeded = 1;
     
     %tic
     % insert fitness function 
-    performance = feval(obj.fitness,obj,t,q)
+    performance = feval(obj.fitness,obj,output)
     %toc
     
     %% DO NOT CHANGE THIS PART!
@@ -33,13 +33,12 @@ function [performance succeeded] = EvaluateCMAES(obj,action,cur_candidates_index
     %%
     
     % cancel all the information relative to the current iteration (control action)
-    obj.controller.CleanTau();
-    obj.controller.CleanTime();
+    feval(obj.clean_function,obj);
     
 catch err
      disp('i am in evaluate CMAES error side')
-     obj.controller.CleanTau();
-     obj.controller.CleanTime();
+     % cancel all the information relative to the current iteration (control action)
+     feval(obj.clean_function,obj);
      succeeded = 0;
      performance = -1;
  end

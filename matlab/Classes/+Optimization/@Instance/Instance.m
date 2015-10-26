@@ -6,54 +6,39 @@
 classdef  Instance
     
    properties
-      controller       % structure that contains every information about the specific instance of the problem
-      simulator        % rbt v-rep
       penalty_handling % object to handle penalties inside the optimization routine
       constraints      % flag that activates or deactivates the constraints handling (true: constraints active, false: constraints not active) 
-      qinit            % initial position 
-      qdinit           % initial velocity
-      time_sym_struct  %time struct for simulation with fixed step
-      fixed_step       % if is true i use ode4 (runge-kutta)
-      options          % options for variable step 
+      run_function     % function called in run specific for each optimization problem
       fitness          % fitness function handle
+      clean_function   % function called to do some stuff after using the run function (optional could be empty)
+      input_4_run      % this variable is a cell array that contains the data that are needed to execute the run function
       fitness_result   % in this vector i save the value of the fitness function 
+      
    end
        
     
    methods
        
-       function obj = Instance(controller,simulator_type,penalty,constraints,qinit,qdinit,time_sym_struct,fixed_step,fitness,options)
-           obj.controller = controller;
-           %if(getnameidx({'rbt','v-rep'} , simulator_type{1}) ~= 0 )
-             obj.simulator = simulator_type;
-           %end
-           obj.penalty_handling = penalty;
+       function obj = Instance(penalty_handling,constraints,run_function,fitness,clean_function,input_4_run)
+           obj.penalty_handling = penalty_handling;
            obj.constraints = constraints;
-           obj.qinit = qinit;
-           obj.qdinit= qdinit;
-           obj.time_sym_struct = time_sym_struct;
-           obj.fixed_step = fixed_step;
+           obj.run_function = run_function;  
            obj.fitness = fitness;
-           obj.options = options;
-           
+           obj.input_4_run = input_4_run;
+           obj.clean_function = clean_function;
+         
        end
        
        % this function has to give back something that let me compute the
        % fitness function for that sample
-       function [t, q, qd]=run(obj,parameters)
-        disp('im in run')   
-            obj.controller.UpdateParameters(parameters)
-            
-            if(strcmp(obj.simulator,'rbt'))
-                %tic 
-                [t, q, qd]=DynSim(obj.time_sym_struct,obj.controller,obj.qinit,obj.qdinit,obj.fixed_step);
-                %toc 
-            end
+       function [output]=run(obj,parameters)
+            disp('im in run')   
+            [output]=feval(obj.run_function,obj,parameters);
        end
        
-       function [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded]=CMAES(obj,start_action,niter,explorationRate,cmaes_value_range)
+       function [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded]=CMAES(obj,num_of_param,start_action,niter,explorationRate,cmaes_value_range)
           %Parameter space
-          NumParam = obj.controller.GetTotalParamNum();
+          NumParam = num_of_param;
           % start_value for action
           settings.action = start_action;
           settings.minAction = ones(1,NumParam).*cmaes_value_range(1,1);
