@@ -56,12 +56,11 @@ classdef  Instance
 
           figure;
           plot(mean_performances);      
-      end
-       
-       
-       
-       
-       
+       end
+      
+       function input_vec = CreateInputFromParameters(obj,parameters) 
+            input_vec = repmat({parameters},1,obj.penalty_handling.n_constraint);  
+       end
        
    end
     

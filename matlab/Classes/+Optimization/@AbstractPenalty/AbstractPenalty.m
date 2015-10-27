@@ -1,8 +1,7 @@
 classdef (Abstract) AbstractPenalty < handle
     
 %    properties(Abstract)
-%       time_struct            % struct with time_struct.ti time_struct.tf time_struct.step
-%       sample                 % value for a specific set of theta and sampling time (sample.time sample.values sample.normvalues)
+%       n_constraint          % number of constraints to handle
 %    end
          
    methods(Abstract = true)
@@ -16,4 +15,7 @@ classdef (Abstract) AbstractPenalty < handle
        % to call in CMAES                      
        FitnessWithPenalty(obj,policyId,old_costs,old_performances,cur_index)
    end  
+   
+   
+   
 end

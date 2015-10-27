@@ -1,4 +1,3 @@
-
 %% this penalty function is an implementation of the method described in
 %% Multidisciplinary Optimization in the Design of Future Space Launchers, Collange et al 2010.
 
@@ -17,7 +16,7 @@ classdef  AdaptivePenalty < Optimization.AbstractPenalty
        pop_size
        search_space_dim      % dimesion of the search space of our problem
        gamma_matrix          % is a matrix of the epsilon normalized constrained values lambda x m where lambda is the number of candidates and m is the number of constraints   
-       n_constraint
+       n_constraint          % number of constraints to handle
        constraints_functions % vector of functions handle for computing the constraints 
        constraints_type      % vector that specifies if the constraints is a equality or an inequality. 1 is a disequalities 0 is an inequalities
        constraints_values    % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
@@ -49,7 +48,7 @@ classdef  AdaptivePenalty < Optimization.AbstractPenalty
        
        % To call in EvaluateCmaes
        % in this function i perform further elaborations witht the
-       % constratins violations. In this case i compute the epsilon
+       % constraints violations. In this case i compute the epsilon
        % normalized value of the sum of the constraints violation
        function ComputeConstraintsViolation(obj,cur_candidates_index)
            for i=1:length(constraints_vec)
