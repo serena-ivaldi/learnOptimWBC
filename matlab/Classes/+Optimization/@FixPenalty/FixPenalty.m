@@ -57,7 +57,7 @@ classdef  FixPenalty < Optimization.AbstractPenalty
                    end
                end
 
-               obj.fitness_penalties(c_index) = sum(obj.penalties(c_index,:),2);
+               obj.fitness_penalties(c_index) = sum(obj.penalties(c_index,:).^2 + 100*ones(size(obj.penalties(c_index,:))),2);
            else
                for i=1:obj.n_constraint
                    % i sum only the constraints violation it means that i have to discard value less then zero 
@@ -68,7 +68,7 @@ classdef  FixPenalty < Optimization.AbstractPenalty
                    end
                end
                
-               obj.fitness_penalties(1) = sum(obj.penalties(1,:),2);
+               obj.fitness_penalties(1) = sum(obj.penalties(1,:).^2 + 100*ones(size(obj.penalties(1,:))),2);
            end
            
        end  
