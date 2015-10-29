@@ -56,7 +56,6 @@ classdef  FixPenalty < Optimization.AbstractPenalty
                        obj.penalties(c_index,i) = 0;   
                    end
                end
-
                obj.fitness_penalties(c_index) = sum(obj.penalties(c_index,:).^2 + 100*ones(size(obj.penalties(c_index,:))),2);
            else
                for i=1:obj.n_constraint
@@ -67,7 +66,6 @@ classdef  FixPenalty < Optimization.AbstractPenalty
                        obj.penalties(1,i) = 0;   
                    end
                end
-               
                obj.fitness_penalties(1) = sum(obj.penalties(1,:).^2 + 100*ones(size(obj.penalties(1,:))),2);
            end
            

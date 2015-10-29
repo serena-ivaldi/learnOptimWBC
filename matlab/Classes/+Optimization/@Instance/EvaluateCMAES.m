@@ -11,7 +11,7 @@ function [performance succeeded] = EvaluateCMAES(obj,action,cur_candidates_index
 %% target function
 
 
- try
+ %try
     disp('i am in evaluate CMAES')
     action
     [output]=obj.run(action);
@@ -35,13 +35,13 @@ function [performance succeeded] = EvaluateCMAES(obj,action,cur_candidates_index
     % cancel all the information relative to the current iteration (control action)
     feval(obj.clean_function,obj);
     
-catch err
-     disp('i am in evaluate CMAES error side')
-     % cancel all the information relative to the current iteration (control action)
-     feval(obj.clean_function,obj);
-     succeeded = 0;
-     performance = -1;
- end
+% catch err
+%      disp('i am in evaluate CMAES error side')
+%      % cancel all the information relative to the current iteration (control action)
+%      feval(obj.clean_function,obj);
+%      succeeded = 0;
+%      performance = -1;
+%  end
 
 
 end
