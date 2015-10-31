@@ -30,21 +30,21 @@ else
     to = fileparts(str);
     from = fullfile(OptWBIpath,'ChangedFile','rvctool');
     % file to CodeGenerator
-    copyfile(fullfile(from,'TO_COPY@CodeGenerator','CodeGenerator.m'),fullfile(to,'robot','@CodeGenerator'));
-    copyfile(fullfile(from,'TO_COPY@CodeGenerator','genccodeJdot.m'),fullfile(to,'robot','@CodeGenerator'));
-    copyfile(fullfile(from,'TO_COPY@CodeGenerator','gencoriolis.m'),fullfile(to,'robot','@CodeGenerator'));
-    copyfile(fullfile(from,'TO_COPY@CodeGenerator','genJdot.m'),fullfile(to,'robot','@CodeGenerator'));
-    copyfile(fullfile(from,'TO_COPY@CodeGenerator','genmexJdot.m'),fullfile(to,'robot','@CodeGenerator'));
-    copyfile(fullfile(from,'TO_COPY@CodeGenerator','genmfunJdot.m'),fullfile(to,'robot','@CodeGenerator'));
+%     copyfile(fullfile(from,'TO_COPY@CodeGenerator','CodeGenerator.m'),fullfile(to,'robot','@CodeGenerator'));
+%     copyfile(fullfile(from,'TO_COPY@CodeGenerator','genccodeJdot.m'),fullfile(to,'robot','@CodeGenerator'));
+%     copyfile(fullfile(from,'TO_COPY@CodeGenerator','gencoriolis.m'),fullfile(to,'robot','@CodeGenerator'));
+%     copyfile(fullfile(from,'TO_COPY@CodeGenerator','genJdot.m'),fullfile(to,'robot','@CodeGenerator'));
+%     copyfile(fullfile(from,'TO_COPY@CodeGenerator','genmexJdot.m'),fullfile(to,'robot','@CodeGenerator'));
+%     copyfile(fullfile(from,'TO_COPY@CodeGenerator','genmfunJdot.m'),fullfile(to,'robot','@CodeGenerator'));
     
     % file to SerialLink
-    copyfile(fullfile(from,'TO_COPY@SerialLink','coriolis.m'),fullfile(to,'robot','@SerialLink'));
-    copyfile(fullfile(from,'TO_COPY@SerialLink','jacobn.m'),fullfile(to,'robot','@SerialLink'));
-    copyfile(fullfile(from,'TO_COPY@SerialLink','rne.m'),fullfile(to,'robot','@SerialLink'));
-    copyfile(fullfile(from,'TO_COPY@SerialLink','SerialLink.m'),fullfile(to,'robot','@SerialLink'));
-    
-    % add frne.c
-    copyfile(fullfile(from,'frne.c'),fullfile(to,'robot','mex'));
+%     copyfile(fullfile(from,'TO_COPY@SerialLink','coriolis.m'),fullfile(to,'robot','@SerialLink'));
+%     copyfile(fullfile(from,'TO_COPY@SerialLink','jacobn.m'),fullfile(to,'robot','@SerialLink'));
+%     copyfile(fullfile(from,'TO_COPY@SerialLink','rne.m'),fullfile(to,'robot','@SerialLink'));
+%     copyfile(fullfile(from,'TO_COPY@SerialLink','SerialLink.m'),fullfile(to,'robot','@SerialLink'));
+%     
+%     % add frne.c
+%     copyfile(fullfile(from,'frne.c'),fullfile(to,'robot','mex'));
     disp('installation complete!')
 end
 

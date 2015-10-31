@@ -95,6 +95,13 @@ for k = 1:(nIterations - 1)
         offsprings(l, offsprings(l,:) < minAction) = minAction(offsprings(l,:) < minAction);
     end
     
+    %% DEBUG
+    if(isnan(offsprings))
+       disp('stop it');
+    end
+    %%
+    
+    
     %evaluate offsprings
     disp('evaluate offsprings')
     if settings.allowEvalMultiple > 0
@@ -157,6 +164,9 @@ for k = 1:(nIterations - 1)
     
     p_sigma(k + 1, :) = (1 - c_sigma) * p_sigma(k,:) + (sqrt(c_sigma * (2 - c_sigma) * ueff) *(B * D ^ (-0.5) * B') * (mean(k + 1, :) - mean(k,:))' / sigma(k))';
     sigma(k + 1) = sigma(k) * exp(c_sigma/d_sigma * (norm(p_sigma(k+1,:)) / chi_n - 1));    
+    if(isnan(sigma(k + 1)))
+       sigma(k + 1) = sigma(k);
+    end
 end
 
 policies = policies(1:policyId-1,:);
