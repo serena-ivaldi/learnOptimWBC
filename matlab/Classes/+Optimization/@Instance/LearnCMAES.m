@@ -1,4 +1,4 @@
-function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succeeded] = LearnCMAES(obj,settings)
+function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = LearnCMAES(obj,settings)
 
 nIterations = settings.nIterations;
 explorationRate = settings.explorationRate;
@@ -71,13 +71,14 @@ else
     end
 end
 
-fnForwardModel = @(obj_,actionLearn_,curr_candidate_,isMean_) TransAction(obj_,actionLearn_,curr_candidate_,isMean_, settings);
+fnForwardModel = @(obj_,actionLearn_,curr_candidate_,isMean_)TransAction(obj_,actionLearn_,curr_candidate_,isMean_, settings);
 
 
-[mean_performances(1) succeeded(1)] = fnForwardModel(obj,mean(1, :),-1,1);
+[mean_performances(1), succeeded(1), data2save] = fnForwardModel(obj,mean(1, :),-1,1);
 policies(policyId,:) = mean(1, :);
 costs(policyId) = -mean_performances(1);
 policyId = policyId + 1;
+G_data2save.performance(1,1) = data2save.performance;
 
 fprintf('Mean %d: %e %d\n', 1 , mean_performances(1), succeeded(1));
 for k = 1:(nIterations - 1)
@@ -97,7 +98,7 @@ for k = 1:(nIterations - 1)
     
     %% DEBUG
     if(isnan(offsprings))
-       disp('stop it');
+       disp('stop it, offsprings is nan');
     end
     %%
     
@@ -125,7 +126,9 @@ for k = 1:(nIterations - 1)
     end
         
     %% added part to manage constraints
-     [costs,performances]=obj.penalty_handling.FitnessWithPenalty(policyId,costs,performances,k);
+    if(obj.constraints)
+         [costs,performances]=obj.penalty_handling.FitnessWithPenalty(policyId,costs,performances,k+1);
+    end
      
     %%
     [sortVal, sortInd] = sort(performances, 'descend');
@@ -135,10 +138,11 @@ for k = 1:(nIterations - 1)
         mean(k + 1, :) = mean(k + 1, :) + w(l) * offsprings(index, :);
     end
 
-    [mean_performances(k + 1) succeeded(policyId)] = fnForwardModel(obj,mean(k + 1, :),-1,1);
+    [mean_performances(k + 1), succeeded(policyId), data2save] = fnForwardModel(obj,mean(k + 1, :),-(k+1),1);
     policies(policyId,:) = mean(k + 1, :);
     costs(policyId) = -mean_performances(k + 1);
     policyId = policyId + 1;
+    G_data2save.performance(k + 1,1) = data2save.performance;
     
     bestAction.hist(k).performance = mean_performances(k + 1);
     bestAction.hist(k).listperformance = performances;
@@ -179,13 +183,13 @@ BestActionPerEachGen.fitness = BestActionPerEachGenFitness;
 
 %bestAction.parameters = mean(end, :);
 %bestAction.performance = fnForwardModel(bestAction.parameters);
-[tmp id] = min(costs);
+[tmp, id] = min(costs);
 bestAction.parameters = policies(id,:);
 bestAction.performance = -costs(id);
 
 end
 
-function [performance succeeded] = TransAction(obj_,actionLearn, curr_candidate,isMean, settings)
+function [performance, succeeded, data2save ] = TransAction(obj_,actionLearn, curr_candidate,isMean, settings)
 
 if isfield(settings, 'activeIndices')
     if size(actionLearn,1) < 2
@@ -198,6 +202,6 @@ if isfield(settings, 'activeIndices')
 else
     actionFull = actionLearn;
 end
-    [performance succeeded] = settings.fnForwardModel(obj_, actionFull, curr_candidate ,isMean);
+    [performance, succeeded, data2save] = settings.fnForwardModel(obj_, actionFull, curr_candidate ,isMean);
 
 end

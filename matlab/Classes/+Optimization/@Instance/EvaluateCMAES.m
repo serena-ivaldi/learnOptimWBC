@@ -2,7 +2,14 @@
 %%***************************************************
 %% Task dependent evaluation function
 %%***************************************************
-function [performance succeeded] = EvaluateCMAES(obj,action,cur_candidates_index,ismean)
+
+
+%% 
+%data2save             this is a structure used to collect data for visualization or debugging purposes
+
+
+
+function [performance, succeeded, data2save] = EvaluateCMAES(obj,action,cur_candidates_index,ismean)
 %%
 %% action is a row vector where each element denotes the amplitude of one
 %% Gaussian Kernel
@@ -10,6 +17,8 @@ function [performance succeeded] = EvaluateCMAES(obj,action,cur_candidates_index
 %% performance denotes the mean squared error to the one dimensional
 %% target function
 
+% i have to assign the variable to avoid error generation
+data2save = [];
 
  %try
     disp('i am in evaluate CMAES')
@@ -24,11 +33,16 @@ function [performance succeeded] = EvaluateCMAES(obj,action,cur_candidates_index
     %toc
     
     %% DO NOT CHANGE THIS PART!
-    % here i compute the final penalty value for each candidate of the
-    % current population
-    obj.penalty_handling.ComputeConstraintsViolation(cur_candidates_index)
-    if(cur_candidates_index == -1)
-        performance = performance - obj.penalty_handling.fitness_penalties(1);
+    if(obj.constraints)
+       % here i compute the final penalty value for each candidate of the
+       % current population
+       obj.penalty_handling.ComputeConstraintsViolation(cur_candidates_index)
+       if(cur_candidates_index < 0)
+          % here im going to save the average perfomance without correction
+          data2save.performance = performance;
+          % perfomance with correction
+          performance = performance - obj.penalty_handling.fitness_penalties(1);
+       end
     end
     %%
     

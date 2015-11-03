@@ -13,20 +13,26 @@ classdef  Instance
       clean_function   % function called to do some stuff after using the run function (optional could be empty)
       input_4_run      % this variable is a cell array that contains the data that are needed to execute the run function
       fitness_result   % in this vector i save the value of the fitness function 
+      data2save        % in this structure im going to save all the data that i need for visualization / debugging purpose
       
    end
        
     
    methods
        
-       function obj = Instance(penalty_handling,constraints,run_function,fitness,clean_function,input_4_run)
+       function obj = Instance(penalty_handling,run_function,fitness,clean_function,input_4_run)
+           if(isempty(penalty_handling))
+              obj.constraints = false;
+              penalty_handling.EvaluateConstraints=@(input_,iteration_)DoNothing(input_,iteration_);
+              penalty_handling.n_constraint = 0;
+           else
+              obj.constraints = true;
+           end
            obj.penalty_handling = penalty_handling;
-           obj.constraints = constraints;
            obj.run_function = run_function;  
            obj.fitness = fitness;
            obj.input_4_run = input_4_run;
            obj.clean_function = clean_function;
-         
        end
        
        % this function has to give back something that let me compute the
@@ -36,7 +42,7 @@ classdef  Instance
             [output]=feval(obj.run_function,obj,parameters);
        end
        
-       function [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded]=CMAES(obj,num_of_param,start_action,niter,explorationRate,cmaes_value_range)
+       function [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, data2save]=CMAES(obj,num_of_param,start_action,niter,explorationRate,cmaes_value_range)
           %Parameter space
           NumParam = num_of_param;
           % start_value for action
@@ -52,7 +58,7 @@ classdef  Instance
           settings.plotState = 1;         %{0,1} plot offsprings yes no
 
           %search optimal parameters
-          [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded] = obj.LearnCMAES(settings);
+          [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, data2save] = obj.LearnCMAES(settings);
 
           figure;
           plot(mean_performances);      

@@ -29,7 +29,7 @@ classdef  AdaptivePenalty < Optimization.AbstractPenalty
        
        function obj = AdaptivePenalty(epsilon,n_generation,search_space_dim,constraints_functions,constraints_type,constraints_values)
            obj.epsilon = epsilon;
-           obj.weights = ones(1,length(epsilon))*100;
+           obj.weights = ones(n_generation,length(epsilon))*100;
            obj.pop_size =  round(4 + 3 * log(search_space_dim));  % this choice is the same used in CMAES when lambda is not spcified
            obj.search_space_dim = search_space_dim;
            obj.n_constraint = length(epsilon); 
@@ -42,7 +42,6 @@ classdef  AdaptivePenalty < Optimization.AbstractPenalty
            obj.constraints_violation = zeros(obj.n_constraint,1);
            obj.fitness_penalties = zeros(obj.pop_size,obj.n_constraint);
        end
-       
        % To call in Fitness
        function EvaluateConstraints(obj,input,iteration)
            % input is a column vector of value that we can use to compute the violation of the constraints 
@@ -50,7 +49,31 @@ classdef  AdaptivePenalty < Optimization.AbstractPenalty
                 obj.constraints_violation(i,iteration) = feval(obj.constraints_functions{1,i},input{1,i},obj.constraints_values(i));
            end     
        end
-       
+       % to call in ComputeConstraintsViolation and EvaluateCmaes or FitnessWithPenalty
+       % through switch_flag i control if im computing penalties in
+       % FitnessWithPenalty or in ComputeConstraintsViolation
+       function penalties=ComputePenalties(obj,cur_index,switch_flag)
+           penalties = zeros(1,obj.pop_size);
+           if(switch_flag)
+              for i=1:obj.pop_size
+                  cur_row =obj.fitness_penalties(i,:);
+                  % i zeroing all the value minus than zero
+                  index = cur_row < 0;
+                  cur_row(1,index) = 0;
+                  penalties(1,i) = (cur_row.^(2))*obj.weights(cur_index,:)';  
+              end
+           else
+              cur_row =obj.fitness_penalties(1,:);
+              % i zeroing all the value minus than zero
+              index = cur_row < 0;
+              cur_row(1,index) = 0;
+              % in the obj.fitness_penalties(1) i store the current fitness
+              % penalty for the mean candidates and it is a solution that i
+              % introduced to be compliants with the way that we use to
+              % maanage the mean solutions
+              obj.fitness_penalties(1) = (cur_row.^(2))*obj.weights(cur_index,:)';  
+           end
+       end
        % To call in EvaluateCmaes
        % in this function i perform further elaborations witht the
        % constraints violations. In this case i compute the epsilon
@@ -84,20 +107,20 @@ classdef  AdaptivePenalty < Optimization.AbstractPenalty
                         obj.fitness_penalties(1,i) = overall_const_viol/obj.epsilon(i);
                    end
                end
+               % i have to change the sign because i need cur index to
+               % access the right entry in  the weights matrix
+               % and i need it negative to distinguish between the
+               % execution to compute the mean fitness of the mean
+               % candidates
+               c_index = - c_index;
+               obj.ComputePenalties(c_index,false);
            end
        end
        
        % to call in CMAES                      
        function [new_costs, new_performances] = FitnessWithPenalty(obj,policyId,old_costs,old_performances,cur_index)
            obj.UpHandleConstraints(cur_index)
-           penalties = zeros(1,obj.pop_size);
-           for i=1:obj.pop_size
-               cur_row =obj.fitness_penalties(i,:);
-               % i zeroing all the value minus than zero
-               index = cur_row < 0;
-               cur_row(1,index) = 0;
-               penalties(1,i) = (cur_row.^(2))*obj.weights';  
-           end
+           penalties = obj.ComputePenalties(cur_index,true);
            % for the performance because im considering negative value i have to subtract the penalties  
            new_performances = old_performances - penalties';
            % for the cost i have to add the penalties in order to obtain
@@ -145,10 +168,10 @@ classdef  AdaptivePenalty < Optimization.AbstractPenalty
        
        function UpdateWeights(obj,cur_index)
           for i=1:obj.n_constraint
-            obj.weights(1,i) =  obj.weights(1,i) * ( exp(obj.p_target - obj.r_i_feas(cur_index,i)) )^(1/obj.search_space_dim);  
+            obj.weights(cur_index,i) =  obj.weights(cur_index-1,i) * ( exp(obj.p_target - obj.r_i_feas(cur_index-1,i)) )^(1/obj.search_space_dim);  
           end
        end
        
-    end 
+   end  
     
 end

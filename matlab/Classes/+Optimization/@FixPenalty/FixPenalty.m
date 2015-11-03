@@ -41,6 +41,12 @@ classdef  FixPenalty < Optimization.AbstractPenalty
            end     
        end
        
+       
+       % to call in ComputeConstraintsViolation and EvaluateCmaes
+       function ComputePenalties(obj,c_index)
+          obj.fitness_penalties(c_index) = sum(obj.penalties(c_index,:).^2 + 100*ones(size(obj.penalties(c_index,:))),2);
+       end
+       
        % To call in EvaluateCmaes
        % in this function i perform further elaborations with the
        % constraints violations. 
@@ -50,27 +56,27 @@ classdef  FixPenalty < Optimization.AbstractPenalty
            if(c_index>0)
                for i=1:obj.n_constraint
                    % i sum only the constraints violation it means that i have to discard value less then zero 
+                   % in this part i consider only the violation on each constraint for the overall experiments
                    index = obj.constraints_violation(i,:)>0;
                    obj.penalties(c_index,i) = sum(obj.constraints_violation(i,index),2); 
                    if(isempty(obj.penalties(c_index,i)))
                        obj.penalties(c_index,i) = 0;   
                    end
                end
-               obj.fitness_penalties(c_index) = sum(obj.penalties(c_index,:).^2 + 100*ones(size(obj.penalties(c_index,:))),2);
+               obj.ComputePenalties(obj,c_index);
            else
                for i=1:obj.n_constraint
                    % i sum only the constraints violation it means that i have to discard value less then zero 
+                   % in this part i consider only the violation on each constraint for the overall experiments
                    index = obj.constraints_violation(i,:)>0;
                    obj.penalties(1,i) = sum(obj.constraints_violation(i,index),2); 
                    if(isempty(obj.penalties(1,i)))
                        obj.penalties(1,i) = 0;   
                    end
                end
-               obj.fitness_penalties(1) = sum(obj.penalties(1,:).^2 + 100*ones(size(obj.penalties(1,:))),2);
+               obj.ComputePenalties(obj,1);
            end
-           
        end  
-       
        % to call in CMAES 
        % in this case im not using cur_index
        function [new_costs, new_performances] = FitnessWithPenalty(obj,policyId,old_costs,old_performances,cur_index)
@@ -81,6 +87,5 @@ classdef  FixPenalty < Optimization.AbstractPenalty
            new_costs = old_costs;
            new_costs(1,policyId - obj.pop_size : policyId - 1) = old_costs(1,policyId - obj.pop_size : policyId - 1) + obj.fitness_penalties;  
        end
-   
    end
 end
