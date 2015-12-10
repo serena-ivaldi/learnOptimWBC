@@ -47,8 +47,13 @@ classdef  Instance
           NumParam = num_of_param;
           % start_value for action
           settings.action = start_action;
-          settings.minAction = ones(1,NumParam).*cmaes_value_range(1,1);
-          settings.maxAction = ones(1,NumParam).*cmaes_value_range(1,2);
+          if(isvec(cmaes_value_range))
+             settings.minAction = ones(1,NumParam).*cmaes_value_range(1,1);
+             settings.maxAction = ones(1,NumParam).*cmaes_value_range(1,2);
+          elseif(iscell(cmaes_value_range))
+             settings.minAction = cmaes_value_range{1};
+             settings.maxAction = cmaes_value_range{2};   
+          end
 
 
           %CMA-ES settings
@@ -57,8 +62,9 @@ classdef  Instance
           settings.fnForwardModel = @(obj_,a_,curr_candidate_,ismean_)EvaluateCMAES(obj_,a_,curr_candidate_,ismean_);
           settings.plotState = 1;         %{0,1} plot offsprings yes no
 
-          %search optimal parameters
-          [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, data2save] = obj.LearnCMAES(settings);
+          %search optimal parameters // just FOR DEBUG 
+          %[mean_performances, bestAction, BestActionPerEachGen, policies,costs, succeeded, data2save] = obj.LearnCMAES(settings);
+          [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, data2save] = obj.Learn1plus1CMAES(settings);
 
           figure;
           plot(mean_performances);      

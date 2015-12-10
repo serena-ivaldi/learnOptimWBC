@@ -1,4 +1,3 @@
-
 %% this class is an implementation of a vanilla version penalty function
 %% 
 
@@ -40,13 +39,10 @@ classdef  FixPenalty < Optimization.AbstractPenalty
                 obj.constraints_violation(i,iteration) = feval(obj.constraints_functions{1,i},input{1,i},obj.constraints_values(i));
            end     
        end
-       
-       
        % to call in ComputeConstraintsViolation and EvaluateCmaes
        function ComputePenalties(obj,c_index)
-          obj.fitness_penalties(c_index) = sum(obj.penalties(c_index,:).^2 + 100*ones(size(obj.penalties(c_index,:))),2);
+          obj.fitness_penalties(c_index) = sum(obj.penalties(c_index,:).^2 + 1000*ones(size(obj.penalties(c_index,:))),2);
        end
-       
        % To call in EvaluateCmaes
        % in this function i perform further elaborations with the
        % constraints violations. 
@@ -63,7 +59,7 @@ classdef  FixPenalty < Optimization.AbstractPenalty
                        obj.penalties(c_index,i) = 0;   
                    end
                end
-               obj.ComputePenalties(obj,c_index);
+               obj.ComputePenalties(c_index);
            else
                for i=1:obj.n_constraint
                    % i sum only the constraints violation it means that i have to discard value less then zero 
@@ -74,7 +70,7 @@ classdef  FixPenalty < Optimization.AbstractPenalty
                        obj.penalties(1,i) = 0;   
                    end
                end
-               obj.ComputePenalties(obj,1);
+               obj.ComputePenalties(1);
            end
        end  
        % to call in CMAES 

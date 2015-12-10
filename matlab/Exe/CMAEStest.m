@@ -1,36 +1,36 @@
-%% test main for the cmaes optimizer 
+%% test main for the cmaes optimizer
+%% this file is conceived to test a single function with multiple algorithm
 clear variables
 close all
 clc
 
 %% DATA 1
 function_2_test = {'g06'};
-method_to_use = {'adaptive'};  % adaptive , vanilla , empty
+function_2_test_4_comparison = {'g06Test'};
+method_to_use = {'vanilla'};  % adaptive , vanilla , empty
 search_space_dimension = 2;
-repetition_of_the_experiment = 50; % at least 2
+repetition_of_the_experiment = 10; % at least 2
 
  %% CONSTRAINTS PARAMETERS
  if(strcmp(function_2_test{1},'g06'))
-     epsilon = [1, 1, 1];
-     constraints_functions = {'g06Constr1','g06Constr2','g06Constr3'}; 
-     constraints_type = [1 1 1];      
-     constraints_values =[0,0,0];
+     epsilon = [1, 1]; % for adaptive
+     constraints_functions = {'g06Constr1','g06Constr2'}; 
+     constraints_for_test = 'g06Constr';
+     constraints_type = [1 1];      
+     constraints_values =[0,0];
      n_constraints = length(constraints_functions);
+     cmaes_value_range{1} = [13 , 0];  % lower bound that define the search space
+     cmaes_value_range{2} = [100 , 100];  % upper bound that define the search space
  end
-
+ 
  %% INSTANCE PARAMETER
  run_function = @EmptyPreprocessing;
- if(strcmp(function_2_test{1},'g06'))
-    fitness = @g06;
- end
+ fitness = str2func(function_2_test{1});
  clean_function = @EmptyPostprocessing;
  
  %% CMAES PARAMETER
- explorationRate = 0.5; %0.1; %0.5; %0.1;%[0, 1]
- niter = 100;  %number of generations
- if(strcmp(function_2_test{1},'g06'))
-    cmaes_value_range = [0 , 100];  % boudn that define the search space
- end
+ explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
+ niter = 1000;  %number of generations
  % starting value of parameters
  generation_of_starting_point = 'random'; % 'test', 'given', 'random'
  switch generation_of_starting_point
@@ -39,9 +39,17 @@ repetition_of_the_experiment = 50; % at least 2
         case 'given'
             start_action = init_parameters_from_out*ones(1,search_space_dimension);
         case 'random'
-           start_action = (cmaes_value_range(1,2)-cmaes_value_range(1,1)).*rand(1,search_space_dimension) + cmaes_value_range(1,1)*ones(1,search_space_dimension);
-        
+           if(isvec(cmaes_value_range))
+               start_action = (cmaes_value_range(1,2)-cmaes_value_range(1,1)).*rand(1,search_space_dimension) + cmaes_value_range(1,1)*ones(1,search_space_dimension);
+           elseif(iscell(cmaes_value_range))
+               start_action = (cmaes_value_range{2}-cmaes_value_range{1}).*rand(1,search_space_dimension) + cmaes_value_range{1};
+           end
  end
+
+%% OPTIMIZATION WITH DERIVATIVE METHOD FOR BENCHMARKING
+options = optimoptions(@fmincon,'Algorithm','sqp');
+x0 = start_action;
+[benchmark_x,benchmark_fval] = fmincon(str2func(function_2_test_4_comparison{1}),x0,[],[],[],[],cmaes_value_range{1},cmaes_value_range{2},str2func(constraints_for_test),options); 
  
  %% CONSTRAINTS
  
@@ -68,14 +76,25 @@ repetition_of_the_experiment = 50; % at least 2
  all_last_best_violations = zeros(repetition_of_the_experiment,n_constraints);
  
  %% OPTIMIZATION
- 
-
  for jj=1:length(method_to_use)
      for kk = 1:repetition_of_the_experiment
+         switch generation_of_starting_point
+         case 'test'
+           start_action = user_defined_start_action;
+         case 'given'
+            start_action = init_parameters_from_out*ones(1,search_space_dimension);
+         case 'random'
+           if(isvec(cmaes_value_range))
+               start_action = (cmaes_value_range(1,2)-cmaes_value_range(1,1)).*rand(1,search_space_dimension) + cmaes_value_range(1,1)*ones(1,search_space_dimension);
+           elseif(iscell(cmaes_value_range))
+               start_action = (cmaes_value_range{2}-cmaes_value_range{1}).*rand(1,search_space_dimension) + cmaes_value_range{1};
+           end 
+         end
          inst =  Optimization.Instance(constr{jj},run_function,fitness,clean_function,[]);
          tic
          [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, data2save] = inst.CMAES(search_space_dimension,start_action,niter,explorationRate,cmaes_value_range);
          exec_time = toc
+         all_covariance{kk} = data2save.C;
          all_mean_perfomance(kk,:) = mean_performances';
          all_mean_perfomance_without_correction(kk,:) = data2save.performance';
          if(strcmp(method_to_use{jj},'adaptive'))
@@ -84,25 +103,33 @@ repetition_of_the_experiment = 50; % at least 2
          all_best_action(kk,:) = bestAction.parameters;
          all_best(kk,1) = bestAction.performance;
          last_cost = costs(end-last_generation:end);
-         last_policies = policies(end-last_generation:end,:);
-         [tmp , id]=min(last_cost);
-         all_last_best(kk,1) = -costs(id);
-         
+         if(~isempty(policies))
+            last_policies = policies(end-last_generation:end,:);
+            [tmp , id]=min(last_cost);
+            all_last_best(kk,1) = -costs(id);
+            all_best_last_action(kk,:) = last_policies(id,:);
+         end
          for ii=1:n_constraints
              all_best_violations(kk,ii) = feval(constraints_functions{ii},bestAction.parameters);
-             all_last_best_violations(kk,ii) = feval(constraints_functions{ii},last_policies(id,:));
+             if(~isempty(policies))
+               all_last_best_violations(kk,ii) = feval(constraints_functions{ii},last_policies(id,:));
+             end
          end
          close all;
      end
      
-     all_perfomance_without_constraint_correction{jj} = all_mean_perfomance_without_correction;
+     if(length(data2save.performance)>1)
+        all_perfomance_without_constraint_correction{jj} = all_mean_perfomance_without_correction;
+     end
      all_perfomance_with_constraint_correction{jj} = all_mean_perfomance;
     
      
      % compute mean and variance of perfomance without correction
-     prf_pure.average  = mean(all_mean_perfomance_without_correction,1);
-     prf_pure.variance = var(all_mean_perfomance_without_correction);
-     all_prf_pure{jj} = prf_pure;
+     if(length(data2save.performance)>1)
+        prf_pure.average  = mean(all_mean_perfomance_without_correction,1);
+        prf_pure.variance = var(all_mean_perfomance_without_correction);
+        all_prf_pure{jj} = prf_pure;
+     end
      % compute the mean and variance of overall perfomance with constraints
      % correction
      prf.average  = mean(all_mean_perfomance,1);
@@ -138,31 +165,32 @@ color_list={'b','r','m','g','c','k'};
 transparent_flag = 1;
 handle_legend = [];
 
+if(exist('all_prf_pure','var'))   
+   % plot average fitness without correction
+   generation = 1:length(all_prf_pure{1}.average);
+   figure
+   hold on;
+   for z = 1:length(method_to_use)
+      plot(generation',all_prf_pure{z}.average','Color',color_list{z});
+      xlabel('generations','FontSize',16);
+      ylabel('fitness','FontSize',16);
+      text_title =  sprintf('average fitness without correction');
+      title(text_title,'FontSize',20);
+   end
 
-% plot average fitness without correction
-generation = 1:length(all_prf{1}.average);
-figure
-hold on;
-for z = 1:length(method_to_use)
-   plot(generation',all_prf_pure{z}.average','Color',color_list{z});
-   xlabel('generations','FontSize',16);
-   ylabel('fitness','FontSize',16);
-   text_title =  sprintf('average fitness without correction');
-   title(text_title,'FontSize',20);
-end
-
-% plot average and variance of fitness without correction
-figure
-hold on;
-for z = 1:length(method_to_use)
-   h = shadedErrorBar(generation',all_prf_pure{z}.average,all_prf_pure{z}.variance,{'r-o','Color',color_list{i},'markerfacecolor',color_list{i}},transparent_flag);
-   %handle_legend = [handle_legend,h.mainLine];
-   xlabel('generations','FontSize',16);
-   ylabel('fitness','FontSize',16);
-   %h_legend = legend(handle_legend,method_to_use{z});
-   %set(h_legend,'FontSize',15);
-    text_title =  sprintf('average and variance fitness without correction');
-   title(text_title,'FontSize',20);
+   % plot average and variance of fitness without correction
+   figure
+   hold on;
+   for z = 1:length(method_to_use)
+      h = shadedErrorBar(generation',all_prf_pure{z}.average,all_prf_pure{z}.variance,{'r-o','Color',color_list{i},'markerfacecolor',color_list{i}},transparent_flag);
+      %handle_legend = [handle_legend,h.mainLine];
+      xlabel('generations','FontSize',16);
+      ylabel('fitness','FontSize',16);
+      %h_legend = legend(handle_legend,method_to_use{z});
+      %set(h_legend,'FontSize',15);
+       text_title =  sprintf('average and variance fitness without correction');
+      title(text_title,'FontSize',20);
+   end
 end
 
 % plot average fitness with correction
@@ -172,7 +200,7 @@ hold on;
 for z = 1:length(method_to_use)
    plot(generation',all_prf{z}.average','Color',color_list{z});
    xlabel('generations','FontSize',16);
-   ylabel('average fitness with correction','FontSize',16);
+   ylabel('fitness','FontSize',16);
    text_title =  sprintf('average fitness with correction');
    title(text_title,'FontSize',20);
 end
@@ -203,17 +231,19 @@ for z = 1:length(method_to_use)
    end
 end
 
-% plot # number_of_plot_of_single_execution weight
-for zz = 1:number_of_plot_of_single_experiments
-   figure
-   text_title =  sprintf('experiment %d', zz);
-   title(text_title);
-   plot(generation',all_weights{zz});
-   xlabel('generations','FontSize',16);
-   ylabel('weight values','FontSize',16);
-   legend('weight 1','weight 2','weight 3');
-   text_title =  sprintf('experiment %d', zz);
-   title(text_title,'FontSize',20);
+if(strcmp(method_to_use{jj},'adaptive'))
+   % plot # number_of_plot_of_single_execution weight
+   for zz = 1:number_of_plot_of_single_experiments
+      figure
+      text_title =  sprintf('experiment %d', zz);
+      title(text_title);
+      plot(generation',all_weights{zz});
+      xlabel('generations','FontSize',16);
+      ylabel('weight values','FontSize',16);
+      legend('weight 1','weight 2','weight 3');
+      text_title =  sprintf('experiment %d', zz);
+      title(text_title,'FontSize',20);
+   end
 end
 
 

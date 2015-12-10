@@ -73,7 +73,6 @@ end
 
 fnForwardModel = @(obj_,actionLearn_,curr_candidate_,isMean_)TransAction(obj_,actionLearn_,curr_candidate_,isMean_, settings);
 
-
 [mean_performances(1), succeeded(1), data2save] = fnForwardModel(obj,mean(1, :),-1,1);
 policies(policyId,:) = mean(1, :);
 costs(policyId) = -mean_performances(1);
@@ -180,6 +179,7 @@ succeeded = succeeded(1:policyId-1);
 
 BestActionPerEachGen.policy = BestActionPerEachGenPolicy;
 BestActionPerEachGen.fitness = BestActionPerEachGenFitness;
+G_data2save.C = C;
 
 %bestAction.parameters = mean(end, :);
 %bestAction.performance = fnForwardModel(bestAction.parameters);
