@@ -5,14 +5,14 @@ close all
 clc
 
 %% DATA 1
-function_2_test = {'g06'};
-function_2_test_4_comparison = {'g06Test'};
+function_2_test = 'tr2';
 method_to_use = {'vanilla'};  % adaptive , vanilla , empty
-search_space_dimension = 2;
-repetition_of_the_experiment = 10; % at least 2
+repetition_of_the_experiment = 2; % at least 2
 
  %% CONSTRAINTS PARAMETERS
- if(strcmp(function_2_test{1},'g06'))
+ if(strcmp(function_2_test,'g06'))
+     search_space_dimension = 2;
+     function_2_test_4_comparison = {'g06Test'};
      epsilon = [1, 1]; % for adaptive
      constraints_functions = {'g06Constr1','g06Constr2'}; 
      constraints_for_test = 'g06Constr';
@@ -21,16 +21,93 @@ repetition_of_the_experiment = 10; % at least 2
      n_constraints = length(constraints_functions);
      cmaes_value_range{1} = [13 , 0];  % lower bound that define the search space
      cmaes_value_range{2} = [100 , 100];  % upper bound that define the search space
+ elseif(strcmp(function_2_test,'tr2'))
+      search_space_dimension = 2;
+     function_2_test_4_comparison = {'tr2Test'};
+     epsilon = [1]; % for adaptive
+     constraints_functions = {'tr2Constr1'}; 
+     constraints_for_test = 'tr2Constr';
+     constraints_type = [1];      
+     constraints_values =[0];
+     n_constraints = length(constraints_functions);
+     cmaes_value_range{1} = [0 , 0];  % lower bound that define the search space
+     cmaes_value_range{2} = [100 , 100];  % upper bound that define the search space
+ elseif(strcmp(function_2_test,'g07'))
+     search_space_dimension = 10;
+     function_2_test_4_comparison = {'g07Test'};
+     epsilon = [1 1 1 1 1 1 1 1]; % for adaptive
+     constraints_functions = {'g07Constr1','g07Constr2','g07Constr3','g07Constr4','g07Constr5','g07Constr6','g07Constr7','g07Constr8'}; 
+     constraints_for_test = 'g07Constr';
+     constraints_type = [1 1 1 1 1 1 1 1];      
+     constraints_values =[0 0 0 0 0 0 0 0];
+     n_constraints = length(constraints_functions);
+     cmaes_value_range{1} = [-10 , -10, -10 ,-10, -10, -10,-10,-10,-10 ,-10 ];  % lower bound that define the search space
+     cmaes_value_range{2} = [ 10, 10, 10, 10, 10, 10, 10, 10, 10 ,10];  % upper bound that define the search space
+ elseif(strcmp(function_2_test,'g09'))
+     search_space_dimension = 7;
+     function_2_test_4_comparison = {'g09Test'};
+     epsilon = [1 1 1 1]; % for adaptive
+     constraints_functions = {'g09Constr1','g09Constr2','g09Constr3','g09Constr4'}; 
+     constraints_for_test = 'g09Constr';
+     constraints_type = [1 1 1 1];      
+     constraints_values =[0 0 0 0];
+     n_constraints = length(constraints_functions);
+     cmaes_value_range{1} = [-10 , -10, -10 ,-10, -10, -10,-10 ];  % lower bound that define the search space
+     cmaes_value_range{2} = [ 10, 10, 10, 10, 10, 10, 10];  % upper bound that define the search space
+ elseif(strcmp(function_2_test,'g10')) % hard to find a feasible starting point
+     search_space_dimension = 8;
+     function_2_test_4_comparison = {'g10Test'};
+     epsilon = [1 1 1 1 1 1]; % for adaptive
+     constraints_functions = {'g10Constr1','g10Constr2','g10Constr3','g10Constr4','g10Constr5','g10Constr6'}; 
+     constraints_for_test = 'g10Constr';
+     constraints_type = [1 1 1 1 1 1];      
+     constraints_values =[0 0 0 0 0 0];
+     n_constraints = length(constraints_functions);
+     cmaes_value_range{1} = [100 , 1000, 1000 ,10, 10, 10,10,10 ];  % lower bound that define the search space
+     cmaes_value_range{2} = [ 1000, 10000, 10000, 1000, 1000, 1000, 1000, 1000];  % upper bound that define the search space
+ elseif(strcmp(function_2_test,'f240'))
+     search_space_dimension = 5;
+     function_2_test_4_comparison = {'f240Test'};
+     epsilon = [1]; % for adaptive
+     constraints_functions = {'f240Constr1'}; 
+     constraints_for_test = 'f240Constr';
+     constraints_type = [1];      
+     constraints_values =[0];
+     n_constraints = length(constraints_functions);
+     cmaes_value_range{1} = [ 0, 0, 0, 0, 0];  % lower bound that define the search space
+     cmaes_value_range{2} = [10000 , 10000, 10000 ,10000, 10000 ];  % upper bound that define the search space
+ elseif(strcmp(function_2_test,'f241'))
+     search_space_dimension = 5;
+     function_2_test_4_comparison = {'f241Test'};
+     epsilon = [1]; % for adaptive
+     constraints_functions = {'f240Constr1'}; 
+     constraints_for_test = 'f240Constr';
+     constraints_type = [1];      
+     constraints_values =[0];
+     n_constraints = length(constraints_functions);
+     cmaes_value_range{1} = [ 0, 0, 0, 0, 0];  % lower bound that define the search space
+     cmaes_value_range{2} = [100000 , 100000, 100000 ,100000, 100000 ];  % upper bound that define the search space
+ elseif(strcmp(function_2_test,'HB'))
+     search_space_dimension = 5;
+     function_2_test_4_comparison = {'HBTest'};
+     epsilon = [1 1 1 1 1 1]; % for adaptive
+     constraints_functions = {'HBConstr1','HBConstr2','HBConstr3','HBConstr4','HBConstr5','HBConstr6'}; 
+     constraints_for_test = 'HBConstr';
+     constraints_type = [1 1 1 1 1 1];      
+     constraints_values =[0 0 0 0 0 0];
+     n_constraints = length(constraints_functions);
+     cmaes_value_range{1} = [ 78 , 33, 27 ,27, 27 ];  % lower bound that define the search space
+     cmaes_value_range{2} = [ 102, 45, 45, 45, 45];  % upper bound that define the search space
  end
  
  %% INSTANCE PARAMETER
  run_function = @EmptyPreprocessing;
- fitness = str2func(function_2_test{1});
+ fitness = str2func(function_2_test);
  clean_function = @EmptyPostprocessing;
  
  %% CMAES PARAMETER
  explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
- niter = 1000;  %number of generations
+ niter = 8000;  %number of generations
  % starting value of parameters
  generation_of_starting_point = 'random'; % 'test', 'given', 'random'
  switch generation_of_starting_point

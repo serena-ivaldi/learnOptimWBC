@@ -133,6 +133,13 @@ end
 
 ret_minval = minval;
 ret_xatmin = xatmin;
+
+% just in case when the first solution is feasible i have to return back the value of the point trnasformed in the original interval
+% added by me------------------------------------------------------%
+if perror <= tol
+   ret_xatmin = (om_upper - om_lower).*ret_xatmin + om_lower;
+end
+% added by me end--------------------------------------------------%
 %-- MAIN LOOP -----------------------------------------------------%
 minval = fc(1) + con(1);
 while perror > tol

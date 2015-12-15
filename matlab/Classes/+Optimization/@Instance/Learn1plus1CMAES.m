@@ -52,12 +52,20 @@ fnForwardModel = @(obj_,actionLearn_,curr_candidate_,isMean_)TransAction(obj_,ac
 %% Initialization
 %% at the beginning i need to provide a solution that is feasible 
 bounds = [minAction',maxAction'];
-options.testflag  = 1; options.showits   = 1;  options.maxevals = 100;
-options.tol       = 0.001;
+options.testflag  = 0; options.showits   = 1;  options.maxevals = 25000;
+options.tol       = 0.001; options.maxits = 10000000000;
 Problem.f = 'FeasibleSolutionObj';
 % Call DIRECT
 [fmin,xmin,hist] = Direct(Problem,bounds,options,obj);
 mean(1, :) = xmin';
+if(fmin > 0)
+   x0 = (maxAction-minAction).*rand(1,n) + minAction;
+   options = optimoptions(@fmincon,'Algorithm','sqp');
+   func_to_optimize = str2func(Problem.f);
+   func_to_optimize = @(x)func_to_optimize(x,obj);
+   [new_xmin,new_fmin] = fmincon(func_to_optimize,x0,[],[],[],[],bounds(:,1)',bounds(:,2)',[],options); 
+   mean(1, :) = new_xmin';
+end
 [performances(1), succeeded(1), data2save] = fnForwardModel(obj,mean(1, :),1,1);
 costs(1) = - performances(1);
 
@@ -124,7 +132,7 @@ for k = 1:(nIterations - 1)
           mean(k+1,:) = offsprings;                                                                                                                             % update mean
           performances(k+1) = performances_new;
           costs(k+1) = -performances_new;
-          s(k+1,:) = (1-c)*s(k,:) + sqrt(c*(2-c))*(A{k}*z')';                                       %only if the constraints is violated udpate exponentially fading record s
+          s(k+1,:) = (1-c)*s(k,:) + sqrt(c*(2-c))*(A{k}*z')';                                       %only if the constraints are not violated udpate exponentially fading record s
           w = (A{k}^(-1)*s(k+1,:)')'; 
           A{k+1} = sqrt(1 - c_cov_plus)*A{k} + ( sqrt(1-c_cov_plus)/norm(w)^2 )*(sqrt(1 + (c_cov_plus*norm(w)^2)/(1-c_cov_plus) ) - 1 )*s(k+1,:)'*w; % update A if perfor_new > perf(k)
           V{k+1} = V{k};                                                                                                                                       % no update v
@@ -134,10 +142,9 @@ for k = 1:(nIterations - 1)
           costs(k+1) = -performances(k);
           s(k+1,:) = s(k,:);                                                                                                                                    % no update s
           V{k+1} = V{k};                                                                                                                                        % no update v
-          if(length(performances)>5)   
+          if(k>5)   
              if(performances_new > performances(k-5)) % perfomance is worse but better than the last fifth predecessor
                 A{k+1} = sqrt(1 + c_cov_minus)*A{k} + ( sqrt(1 + c_cov_minus)/norm(z)^2 )*( sqrt(1 - (c_cov_minus*norm(z)^2)/(1 + c_cov_minus)) - 1 )*A{k}*(z'*z); % update A if perf_new>perf(k-5)
-                disp('ciao');
              else
                 A{k+1} = A{k};                                                                                                                                     % A no update
              end
