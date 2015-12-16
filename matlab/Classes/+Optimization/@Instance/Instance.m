@@ -7,6 +7,7 @@ classdef  Instance
     
    properties
       penalty_handling % object to handle penalties inside the optimization routine
+      learn_procedure  % string that specify which learning method im going to use
       constraints      % flag that activates or deactivates the constraints handling (true: constraints active, false: constraints not active) 
       run_function     % function called in run specific for each optimization problem
       fitness          % fitness function handle
@@ -20,7 +21,7 @@ classdef  Instance
     
    methods
        
-       function obj = Instance(penalty_handling,run_function,fitness,clean_function,input_4_run)
+       function obj = Instance(penalty_handling,learn_procedure,run_function,fitness,clean_function,input_4_run)
            if(isempty(penalty_handling))
               obj.constraints = false;
               penalty_handling.EvaluateConstraints=@(input_,iteration_)DoNothing(input_,iteration_);
@@ -28,6 +29,7 @@ classdef  Instance
            else
               obj.constraints = true;
            end
+           obj.learn_procedure = learn_procedure;
            obj.penalty_handling = penalty_handling;
            obj.run_function = run_function;  
            obj.fitness = fitness;
@@ -62,9 +64,12 @@ classdef  Instance
           settings.fnForwardModel = @(obj_,a_,curr_candidate_,ismean_)EvaluateCMAES(obj_,a_,curr_candidate_,ismean_);
           settings.plotState = 1;         %{0,1} plot offsprings yes no
 
-          %search optimal parameters // just FOR DEBUG 
-          %[mean_performances, bestAction, BestActionPerEachGen, policies,costs, succeeded, data2save] = obj.LearnCMAES(settings);
-          [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, data2save] = obj.Learn1plus1CMAES(settings);
+          %search optimal parameters 
+          if(strcmp(obj.learn_procedure,'CMAES'))
+            [mean_performances, bestAction, BestActionPerEachGen, policies,costs, succeeded, data2save] = obj.LearnCMAES(settings);
+          elseif(strcmp(obj.learn_procedure,'(1+1)CMAES'))
+            [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, data2save] = obj.Learn1plus1CMAES(settings);
+          end
 
           figure;
           plot(mean_performances);      
