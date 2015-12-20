@@ -1,4 +1,4 @@
-﻿learnOptimWBC
+learnOptimWBC
 =============
 
 Description
