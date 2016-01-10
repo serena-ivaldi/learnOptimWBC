@@ -1,0 +1,431 @@
+@startuml
+'Class-diagram of learnOptimWBC - Classes:'
+title <b>learnOptimWBC::Classes - ClassDiagram:</b>
+
+'Class definitions:'
+abstract class handle
+
+class Obstacle {
+    'properties:'
+    +description
+    +type
+    +tol
+    'methods:'
+    +Obstacle(out obj : Obstacle, in description, in type, in tol)
+    +GetDescription(out point, in obj, in cp)
+    +PointMinDist(out dist : double, in obj, in cp, in L)
+    +Dist(out dist : double, in obj, in cp, in L)
+    +Normal(out n : double, in obj, in cp)
+    +MinDistNorm(out n : double, in obj, in cp)
+}
+
+class References {
+    'properties:'
+    +target_link
+    +type
+    +control_type
+    +traj
+    +geom_parameters
+    +time_law
+    +time_struct
+    +mask
+    +type_of_traj
+    +parameter_dim
+    +cur_param_set
+    +trajectories
+    'methods:'
+    +References(out obj : References, in target_link, in type, in control_type, in traj, in geom_parameters,
+                     in time_law, in time_struct, in mask, in type_of_traj, in varargin)
+    +BuildTrajs(in obj)
+    +GetDimTask(out n : integer, in obj, in ind_subchain, in ind_task)
+    +GetTraj(in obj, in ind_subchain, in ind_task, in t) : vector
+    +GetNumParam(out n : integer, in obj, in i)
+}
+
+class SubChains {
+    'properties:'
+    +target_link
+    +sub_chains
+    +sub_chains_vis
+    +symbolic_fla
+    'methods:'
+    +SubChains(out obj : SubChains, in target_link, in sub_chains)
+    +GetCurRobot(out rob, in obj, in current_chain)
+    +GetCurRobotVis(out rob, in obj, in current_chain)
+    +GetNumChains(out n : integer, in obj)
+    +GetNumTasks(out n : integer, in obj, in ind_subchain)
+    +GetNumLinks(out n : integer, in obj, in ind_subchain)
+    +GetNumSubLinks(out n : integer, in ind_subchain, in ind_task)
+}
+
+'Relations between the classes:'
+handle <|-- Obstacle
+handle <|-- References
+handle <|-- SubChains
+
+'Package - Alpha:'
+package "Alpha" <<Folder>> #LightSteelBlue {
+    'Class definitions:'
+    abstract class AbstractAlpha {
+        'properties:'
+        +{abstract} time_struct
+        +{abstract} sample
+        'methods:'
+        +{abstract} GetValue(in obj, in t) : double
+        +{abstract} ComputeNumValue(in obj, in theta)
+        +{abstract} GetParamNum(in obj) : integer
+        +{abstract}{static} BuildCellArray(out result : cell)
+    }
+
+    class ChainedAlpha {
+        'properties:'
+        +time_struct
+        +sample
+        +range
+        +alpha_func
+        'methods:'
+        +ChainedAlpha(out obj : ChainedAlpha, in alpha_func, in time_struct)
+        +GetValue(out result : double, in obj, in t)
+        +ComputeNumValue(in obj, in theta)
+        +GetParamNum(out r : integer, in obj)
+        +Plot(in obj)
+        +{static} TransFunc(out val : double, in ti, in current_phase, in transition_interval, in t)
+        +{static} ComputeValue(out all_value : vector, in time, in ti, in transition_matrix, in matrix_value, in transition_interval)
+        +{static} BuildChainAlpha(out all_func : cell, in matrix_value, in ti, in transition_interval, in time_struct)
+        +{static} BuildCellArray(out alphas : cell, in n_subchain, in matrix_value, in ti, in transition_interval, in time_struct)
+    }
+
+    class ConstantAlpha {
+        'properties:'
+        +time_struct
+        +sample
+        +range
+        +param
+        'methods:'
+        +ConstantAlpha(out obj : ConstantAlpha, in value, in value_range, in time_struct)
+        +GetValue(out val : double, in obj, in t)
+        +ComputeNumValue(in obj, in theta)
+        +GetParamNum(out r : integer, in obj)
+        +{static} BuildCellArray(out alphas : cell, in n_subchain, in n_task, in values, in value_range, in time_struct)
+    }
+
+    class DMP {
+        'properties:'
+        +time_struct
+        +n_of_basis
+        +redundancy
+        +basis_functions
+        +kp
+        +kd
+        +alpha_z
+        +func
+        +sample
+        'methods:'
+        +DMP(out obj : DMP, in time_struct, in n_of_basis, in redundancy, in kp, in kd, in alpha_z)
+        +BuildDMP(in obj)
+        +GetValue(out result : double, in obj, in t)
+        +ComputeNumValue(in obj, in p_init, in v_init, in pd, in vd, in theta)
+        +GetParamNum(out n : integer, in obj)
+        +PlotBasisFunction(in obj)
+        +TrainByDraw(in obj, in number_of_pivot, in step) : vector
+        +{static} BuildCellArray(out DMPs : cell, in n_subchain, in n_task, in time_struct, in n_of_basis, in redundancy,
+                               <u>in kp, in kd, in Po, in Vo, in Pd, in Vd, in alpha_z, in train, in number_of_pivot, in step)</u>
+    }
+
+    class HandTuneAlpha {
+        'properties:'
+        +time_struct
+        +sample
+        +range
+        +alpha_func
+        'methods:'
+        +HandTuneAlpha(out obj : HandTuneAlpha, in alpha_func, in time_struct)
+        +GetValue(out result : double, in obj, in t)
+        +ComputeNumValue(in obj, in theta)
+        +GetParamNum(out r : integer, in obj)
+        +Plot(in obj)
+        +{static} TransFunc(out val : double, in ti, in current_phase, in transition_interval, in t)
+        +{static} ComputeValue(out all_value : vector, in time, in starting_value, in ti, in transition_interval)
+        +{static} BuildChainAlpha(out all_func : cell, in n_subchain, in n_task, in starting_value, in ti, in transition_interval, in time_struct)
+        +{static} BuildCellArray(out alphas : cell, in n_subchain, in n_task, in starting_value, in ti, in transition_interval, in time_struct)
+    }
+
+    class RBF {
+        'properties:'
+        +time_struct
+        +n_of_basis
+        +redundancy
+        +basis_functions
+        +sumphi
+        +func
+        +param
+        +sample
+        +range
+        +precomp_sample
+        'methods:'
+        +RBF(out obj : RBF, in time_struct, in n_of_basis, in redundancy, in range, in precomp_sample, in numeric_theta)
+        +BuildRBF(in obj, in numeric_theta)
+        +GetValue(out result : double, in obj, in t)
+        +ComputeNumValue(in obj, in theta)
+        +GetParamNum(out n : integer, in obj)
+        +PlotBasisFunction(in obj)
+        +Plot(in obj)
+        +LearningFromDemo(out theta : vector, in obj, in x, in y)
+        +{static} BuildCellArray(out RBFs : cell, in n_subchain, in n_task, in time_struct, in n_of_basis, in redundancy, in range,
+                               <u>in precomp_sample, in theta, in optim)</u>
+    }
+
+    'Class relations:'
+    handle        <|-- AbstractAlpha
+    AbstractAlpha <|-- ChainedAlpha
+    AbstractAlpha <|-- ConstantAlpha
+    AbstractAlpha <|-- DMP
+    AbstractAlpha <|-- HandTuneAlpha
+    AbstractAlpha <|-- RBF
+}
+
+'Package - Controllers:'
+package "Controllers" <<Folder>> #PaleGreen {
+    'Class definitions:'
+    abstract class AbstractController {
+        'properties:'
+        +{abstract} subchains
+        +{abstract} references
+        +{abstract} torques
+        'methods:'
+        +{abstract} Policy(in obj, in t, in q, in qd) : vector
+        +{abstract} GetTotalParamNum(in obj) : integer
+    }
+
+    class GHC {
+        'properties:'
+        +subchains
+        +alpha
+        +references
+        +constraints
+        +current_chain
+        +Kp
+        +Kd
+        +regularizer
+        +epsilon
+        +delta_t
+        +max_time
+        +current_time
+        +torques
+        +torques_time
+        +display_opt
+        'methods:'
+        +GHC(out obj : GHC, in sub_chains, in references, in alpha, in constraints, in Kp,
+                 in Kd, in regularization, in epsilon, in delta_t, in max_time, in varargin)
+        +SaveTime(in obj, in ind_subchain, in time)
+        +SaveTau(in obj, in ind_subchain, in tau)
+        +CleanTau(in obj)
+        +CleanTime(in obj)
+        +SetCurRobotIndex(in obj, in index_chain)
+        +GetCurRobotIndex(out i : integer, in obj)
+        +GetActiveBot(out bot, in obj)
+        +GetActiveBotVis(out bot, in obj)
+        +Policy(out final_tau : vector, in obj, in t, in q, in qd)
+        +GetTotalParamNum(out n_param : integer, in obj)
+    }
+
+    class UF {
+        'properties:'
+        +subchains
+        +references
+        +alpha
+        +repellers
+        +metric
+        +current_chain
+        +Kp
+        +Kd
+        +combine_rule
+        +regularizer
+        +torque_func
+        +max_time
+        +current_time
+        +torques
+        +torques_time
+        +display_opt
+        'methods:'
+        +UF(out obj : UF, in sub_chains, in references, in alpha, in repellers, in metric,
+               in Kp, in Kd, in combine_rule, in regularization, in max_time, in varargin)
+        +SaveTime(in obj, in ind_subchain, in time)
+        +SaveTau(in obj, in ind_subchain, in tau)
+        +CleanTau(in obj)
+        +CleanTime(in obj)
+        +SetCurRobotIndex(in obj, in index_chain)
+        +GetCurRobotIndex(out i : integer, in obj)
+        +GetActiveBot(out bot, in obj)
+        +GetActiveBotVis(out bot, in obj)
+        +Policy(out final_tau : vector, in obj, in t, in q, in qd)
+        +UpdateParameters(in obj, in parameters)
+        +GetTotalParamNum(out n_param : integer, in obj)
+    }
+
+    'Class relations:'
+    handle             <|-- AbstractController
+    AbstractController <|-- GHC
+    AbstractController <|-- UF
+}
+
+'Package - ContrPart:'
+package  "ContrPart" <<Folder>> #Thistle {
+    'Class definitions:'
+    class Constraints {
+        'properties:'
+        +bot
+        +target_link
+        +constraints_list
+        +constraints_data
+        +constraints_handle
+        +number_of_constraint
+        'methods:'
+        +Constraints(out obj : Constraints, in rob, in target_link, in constraints_list, in constraints_data, in varargin)
+        +GetConstrValue(in obj, in constr_index, in DOF, in delta_t, in n_of_task, in J_list, in Projector_list, in q, in qd, in cp) : vector
+        +TorqueLimit(in obj, in param, in DOF, in delta_t, in n_of_task, in J_list,Projector_list, in q, in qd, in cp) : vector
+        +VelocityLimit(in obj, in param, in DOF, in delta_t, in n_of_task, in J_list,Projector_list, in q, in qd, in cp) : vector
+        +ObstacleAvoidance(in obj, in param, in DOF, in delta_t, in n_of_task, in J_list,Projector_list, in q, in qd, in cp) : vector
+    }
+
+    class Repellers {
+        'properties:'
+        +chain_dof
+        +target_link
+        +type
+        +mask
+        +J_rep_func
+        +obstacle_ref
+        +task_dimension
+        +single_alpha
+        +J_damp
+        +type_of_rep_strct
+        +n_alpha_x_chain
+        +map_from_alpha_to_rep
+        +repellers_fun
+        +Jac_rep              %
+        'methods:'
+        +Repellers(out obj : Repellers, in chain_dof, in target_link, in type, in mask, in type_of_J_rep,
+                        in obstacle_ref, in single_alpha, in J_damp, in type_of_rep_strct)
+        +ComputeNumberOfWeightFuncRep(out n : integer, in obj, in cur_chain)
+        +GetNumberOfWeightFuncRep(out n : integer, in obj, in cur_chain)
+        +GetNumTasks(out n : integer, in obj, in cur_chain)
+        +ComputeProjector(out N : matrix, in obj, in cur_chain, in cur_chain_dim, in task_per_cur_chain, in alpha, in t)
+        +SetJacob(in obj, in cur_rob, in q, in qd, in chain, in task)
+        +DirectionCartesian(out J_rep : matrix, in obj, in direct_kin, in J_old, in chain, in task)
+    }
+
+    'Class relations:'
+    handle <|-- Constraints
+    handle <|-- Repellers
+}
+
+'Package - Optimization:'
+package "Optimization" <<Folder>> #Tan {
+    'Class definitions:'
+    abstract class AbstractPenalty {
+        'properties:'
+        +{abstract} n_constraint
+        +{abstract} fitness_penalties
+        +{abstract} constraints_functions
+        +{abstract} constraints_type
+        +{abstract} constraints_values
+        +{abstract} constraints_violation
+        'methods:'
+        +{abstract} EvaluateConstraints(in obj, in input, in iteration)
+        +{abstract} ComputeConstraintsViolation(in obj, in cur_candidates_index)
+        +{abstract} FitnessWithPenalty(in obj, in policyId, in old_costs, in old_performances, in cur_index)
+    }
+
+    class AdaptivePenalty {
+        'properties:'
+        +epsilon
+        +weights
+        +r_i_feas
+        +r_i_average
+        +p_target
+        +pop_size
+        +search_space_dim
+        +fitness_penalties
+        +n_constraint
+        +constraints_functions
+        +constraints_type
+        +constraints_values
+        +constraints_violation
+        'methods:'
+        'public:'
+        +AdaptivePenalty(out obj : AdaptivePenalty, in epsilon, in n_generation, in search_space_dim,
+                                 in constraints_functions, in constraints_type, in constraints_values)
+        +EvaluateConstraints(in obj, in input, in iteration)
+        +ComputePenalties(out penalties : vector, in obj, in cur_index, in switch_flag)
+        +ComputeConstraintsViolation(in obj, in c_index)
+        +FitnessWithPenalty(in obj, in policyId, in old_costs, in old_performances, in cur_index) : vector
+        'private:'
+        -UpHandleConstraints(in obj, in cur_index)
+        -ComputeRfeas(in obj, in cur_index)
+        -ComputeRfeasAverage(in obj, in cur_index)
+        -ComputePtarget(in obj)
+        -UpdateWeights(in obj, in cur_index)
+    }
+
+    class FixPenalty {
+        'properties:'
+        +pop_size
+        +n_constraint
+        +penalties
+        +fitness_penalties
+        +constraints_functions
+        +constraints_type
+        +constraints_values
+        +constraints_violation
+        'methods:'
+        +FixPenalty(out obj : FixPenalty, in search_space_dimension, in constraints_functions, in constraints_type, in constraints_values)
+        +EvaluateConstraints(in obj, in input, in iteration)
+        +ComputePenalties(in obj, in c_index)
+        +ComputeConstraintsViolation(in obj, in c_index)
+        +FitnessWithPenalty(in obj, in policyId, in old_costs, in old_performances, in cur_index) : vector
+    }
+
+    class Instance {
+        'properties:'
+        +penalty_handling
+        +learn_procedure
+        +constraints
+        +run_function
+        +fitness
+        +clean_function
+        +input_4_run
+        +fitness_result
+        +data2save
+        'methods:'
+        +Instance(out obj : Instance, in penalty_handling, in learn_procedure, in run_function, in fitness, in clean_function, in input_4_run)
+        +run(out output : vector, in obj, in parameters)
+        +CMAES(in obj, in num_of_param, in start_action, in niter, in explorationRate, in cmaes_value_range) : vector
+        +CreateInputFromParameters(out input_vec : vector, in obj, in parameters)
+    }
+
+    class CrispPenalty {
+        'properties:'
+        +pop_size
+        +n_constraint
+        +penalties
+        +fitness_penalties
+        +constraints_functions
+        +constraints_type
+        +constraints_values
+        +constraints_violation
+        'methods:'
+        +CrispPenalty(out obj : CrispPenalty, in search_space_dimension, in constraints_functions, in constraints_type, in constraints_values)
+        +EvaluateConstraints(in obj, in input, in iteration)
+        +ComputeConstraintsViolation(in obj, in c_index)
+        +FitnessWithPenalty(in obj, in policyId, in old_costs, in old_performances, in cur_index) : vector
+    }
+
+    'Class relations:'
+    handle          <|-- AbstractPenalty
+    AbstractPenalty <|-- AdaptivePenalty
+    AbstractPenalty <|-- FixPenalty
+    AbstractPenalty <|-- CrispPenalty
+}
+
+@enduml
