@@ -270,7 +270,7 @@ package "Controllers" <<Folder>> #PaleGreen {
 }
 
 'Package - ContrPart:'
-package  "ContrPart" <<Folder>> #Thistle {
+package "ContrPart" <<Folder>> #Thistle {
     'Class definitions:'
     class Constraints {
         'properties:'

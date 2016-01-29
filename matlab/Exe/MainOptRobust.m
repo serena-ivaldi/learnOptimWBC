@@ -10,7 +10,7 @@ warning('error', 'MATLAB:ode15s:IntegrationTolNotMet');
 warning('error', 'MATLAB:illConditionedMatrix')
 
 % Parameters 
-n_of_experiment = 103;      % number that we use to distinguish between the same static parameters settings but with different runtime parameters
+n_of_experiment = 103;    % number that we use to distinguish between the same static parameters settings but with different runtime parameters
 init_parameters = 6;      % initial value for the optimization  (the scale is 0-12, so 6=0.5)
 number_of_experiment_ripetition = 1;  % number of  optimization (for robustness assesement)
 
@@ -24,8 +24,9 @@ complete_path = strcat(path,'/results/',name_folder);
 mkdir(complete_path);
 
 parfor iter=1:number_of_experiment_ripetition
-    [tau, mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded]=OptimizationRoutine(number_of_experiment_ripetition,n_of_experiment,iter,init_parameters);
-     all_results{iter} = BestActionPerEachGen;
+    %[tau, mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded]=OptimizationRoutine(number_of_experiment_ripetition,n_of_experiment,iter,init_parameters);
+    [tau, mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded] = OptimizationRoutine_iCub(number_of_experiment_ripetition, n_of_experiment, iter, init_parameters);
+    all_results{iter} = BestActionPerEachGen;
 end
 
 % rename folder at the end of the optimization procedure

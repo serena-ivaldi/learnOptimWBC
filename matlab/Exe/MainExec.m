@@ -3,7 +3,8 @@ close all
 clc
 
 %% initialize all the data
-[bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,constr,inst,~,~,~,~,qi,qdi,fixed_step,torque_saturation,rawTextFromStorage,name_dat]=Init();
+%[bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,constr,inst,~,~,~,~,qi,qdi,fixed_step,torque_saturation,rawTextFromStorage,name_dat]=Init();
+[bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,constr,inst,~,~,~,~,qi,qdi,fixed_step,torque_saturation,rawTextFromStorage,name_dat] = Init_iCub();
 
 %% Simulation
 tic
