@@ -301,25 +301,15 @@ switch op_selection
              [p,pd,pdd]=reference.GetTraj(1,1,t);
              % object that show the desired position 
              des_pos.setpos(p');
-             
              tau = controller.Policy(t,q,qd);
              %tau = tau*10^(-3);
              v_arm.SetTau(tau)
-             
-             
-             
              if(v.syncronous)
                   v.SendTriggerSync()
              end
-             
              q = v_arm.getq(); 
              qd = v_arm.GetQd();
-             
-             
              all_tau = [all_tau;tau'];
-             
-             
-             
           end
          v.simstop();
 %          qi{1} = q;
@@ -332,28 +322,16 @@ switch op_selection
 %      
          
      case 'test_torque'
-         
          v.simstart();
           for i = time_struct.ti:time_struct.step:time_struct.tf
-             
-             
-             
              v_arm.SetTau(tau);
-           
              if(v.syncronous)
                   v.SendTriggerSync()
              end
-       
-             
              q = v_arm.getq(); 
              qd = v_arm.GetQd();
-             
           end
-         v.simstop();
-         
-         
-         
-            
+         v.simstop();   
       end
 
 end
