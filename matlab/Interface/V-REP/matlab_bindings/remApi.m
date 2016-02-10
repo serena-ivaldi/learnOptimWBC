@@ -34,6 +34,42 @@ classdef remApi
     end
     properties (Constant)
     
+      % Joint properties
+      sim_jointintparam_motor_enabled = 2000 % int32 parameter : dynamic motor enable state (0 or !=0)
+      sim_jointintparam_ctrl_enabled = 2001  % int32 parameter : dynamic motor control loop enable state (0 or !=0)
+      sim_jointfloatparam_pid_p = 2002 % float parameter : dynamic motor position control P parameter
+      sim_jointfloatparam_pid_i = 2003 % float parameter : dynamic motor position control I parameter
+      sim_jointfloatparam_pid_d = 2004 % float parameter : dynamic motor position control D parameter
+      sim_jointfloatparam_intrinsic_x = 2005 % float parameter (can only be read) : joint transformation, position X
+      sim_jointfloatparam_intrinsic_y = 2006 % float parameter (can only be read) : joint transformation, position Y
+      sim_jointfloatparam_intrinsic_z = 2007 % float parameter (can only be read) : joint transformation, position Z
+      sim_jointfloatparam_intrinsic_qx= 2008 % float parameter (can only be read) : joint transformation, quaternion X
+      sim_jointfloatparam_intrinsic_qy= 2009 % float parameter (can only be read) : joint transformation, quaternion Y
+      sim_jointfloatparam_intrinsic_qz= 2010 % float parameter (can only be read) : joint transformation, quaternion Z
+      sim_jointfloatparam_intrinsic_qw= 2011 % float parameter (can only be read) : joint transformation, quaternion W
+      sim_jointfloatparam_velocity = 2012 % float parameter (can only be read) : joint velocity. This is a calculated value.
+      sim_jointfloatparam_spherical_qx = 2013 % float parameter (can only be written) : spherical joint quaternion (X part). Value is buffered (quaternion will only be written when float parameter 2016 is written)
+      sim_jointfloatparam_spherical_qy = 2014 % float parameter (can only be written) : spherical joint quaternion (Y part). Value is buffered (quaternion will only be written when float parameter 2016 is written)
+      sim_jointfloatparam_spherical_qz = 2015 % float parameter (can only be written) : spherical joint quaternion (Z part). Value is buffered (quaternion will only be written when float parameter 2016 is written)
+      sim_jointfloatparam_spherical_qw = 2016 % float parameter (can only be written) : spherical joint quaternion (W part). Writes a quaternion using also buffered values (see parameters 2013-2015)
+      sim_jointfloatparam_upper_limit = 2017 % float parameter : joint upper velocity limit. May only have an effect after simulation restart, or after resetting the joint with simResetDynamicObject
+      sim_jointfloatparam_kc_k = 2018 % float parameter : dynamic motor spring control K parameter
+      sim_jointfloatparam_kc_c = 2019 % float parameter : dynamic motor spring control C parameter
+      sim_jointfloatparam_ik_weight = 2021 % float parameter : joint IK resolution weight.
+      sim_jointfloatparam_error_x = 2022 % float parameter : joint internal position error X (when joint is dynamically enabled). Can only be read.
+      sim_jointfloatparam_error_y = 2023 % float parameter : joint internal position error Y (when joint is dynamically enabled). Can only be read.
+      sim_jointfloatparam_error_z = 2024 % float parameter : joint internal position error Z (when joint is dynamically enabled). Can only be read.
+      sim_jointfloatparam_error_a = 2025 % float parameter : joint internal orientation error alpha (euler(0)) (when joint is dynamically enabled). Can only be read.
+      sim_jointfloatparam_error_b = 2026 % float parameter : joint internal orientation error beta (euler(1)) (when joint is dynamically enabled). Can only be read.
+      sim_jointfloatparam_error_g = 2027 % float parameter : joint internal orientation error gamma (euler(2)) (when joint is dynamically enabled). Can only be read.
+      sim_jointfloatparam_error_pos = 2028 % float parameter : joint internal position error (when joint is dynamically enabled). Can only be read.
+      sim_jointfloatparam_error_angle = 2029 % float parameter : joint internal angular error (when joint is dynamically enabled). Can only be read.
+      sim_jointintparam_velocity_lock = 2030 % int32 parameter : joint velocity lock mode enable state (when enabled and joint is in velocity mode and its target velocity is zero, then the joint is locked in place).
+      sim_jointintparam_vortex_dep_handle = 2031 % int32 parameter : Vortex joint dependency, dependent joint handle. When written, the joint might have to be reset with simResetDynamicObject for the change to take effect.
+      sim_jointfloatparam_vortex_dep_multiplication = 2032 % float parameter : Vortex joint dependency, multiplication factor. When written, the joint might have to be reset with simResetDynamicObject for the change to take effect.
+      sim_jointfloatparam_vortex_dep_offset = 2033 % float parameter : Vortex joint dependency, offset. When written, the joint might have to be reset with simResetDynamicObject for the change to take effect.
+       
+       
 		% Scene object types
  		sim_object_shape_type           =0;
 		sim_object_joint_type           =1;

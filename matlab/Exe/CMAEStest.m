@@ -7,15 +7,15 @@ close all
 clc
 
 %% DATA 1
-function_2_test = {'g06','g07','tr2','g09','f240','f241','HB'};%,'g07'};
+function_2_test ={'g06','g07','g09','f240','f241','HB'};%,'g06','g07','g09','f240','f241','HB'};
 method_to_use = 'adaptive';  % adaptive , vanilla , empty
-learn_approach = 'CMAES'; %CMAES (1+1)CMAES
-repetition_of_the_experiment = 10; % at least 2
+learn_approach = 'CMAES'; %CMAES (1+1)CMAES               with (1+1)CMAES i have to use vanilla constraints management  (temporary)
+repetition_of_the_experiment = 50; % at least 2
 threshold = 50; % value to identify the beginning of steady state
 explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-niter = 10;  %number of generations
+niter = 8000;  %number of generations
 % starting value of parameters
-generation_of_starting_point = 'random'; % 'test', 'given', 'random'
+generation_of_starting_point = 'test'; % 'test', 'given', 'random'
 
 
 for jj=1:length(function_2_test)
@@ -31,6 +31,7 @@ for jj=1:length(function_2_test)
         n_constraints = length(constraints_functions);
         cmaes_value_range{1} = [13 , 0];  % lower bound that define the search space
         cmaes_value_range{2} = [100 , 100];  % upper bound that define the search space
+        user_defined_start_action = [14.6111 2.1491]; 
     elseif(strcmp(function_2_test{jj},'tr2'))
          search_space_dimension = 2;
         function_2_test_4_comparison = {'tr2Test'};
@@ -42,6 +43,7 @@ for jj=1:length(function_2_test)
         n_constraints = length(constraints_functions);
         cmaes_value_range{1} = [0 , 0];  % lower bound that define the search space
         cmaes_value_range{2} = [100 , 100];  % upper bound that define the search space
+        user_defined_start_action = [50,50];
     elseif(strcmp(function_2_test{jj},'g07'))
         search_space_dimension = 10;
         function_2_test_4_comparison = {'g07Test'};
@@ -53,6 +55,7 @@ for jj=1:length(function_2_test)
         n_constraints = length(constraints_functions);
         cmaes_value_range{1} = [-10 , -10, -10 ,-10, -10, -10,-10,-10,-10 ,-10 ];  % lower bound that define the search space
         cmaes_value_range{2} = [ 10, 10, 10, 10, 10, 10, 10, 10, 10 ,10];  % upper bound that define the search space
+        user_defined_start_action = [2.22222222222222,3.70370370370370,6.66666666666666,8.88888888888889,0,6.66666666666666,0,0,6.66666666666666,6.66666666666666];
     elseif(strcmp(function_2_test{jj},'g09'))
         search_space_dimension = 7;
         function_2_test_4_comparison = {'g09Test'};
@@ -64,6 +67,7 @@ for jj=1:length(function_2_test)
         n_constraints = length(constraints_functions);
         cmaes_value_range{1} = [-10 , -10, -10 ,-10, -10, -10,-10 ];  % lower bound that define the search space
         cmaes_value_range{2} = [ 10, 10, 10, 10, 10, 10, 10];  % upper bound that define the search space
+        user_defined_start_action = [0,0,0,0,0,0,0];
     elseif(strcmp(function_2_test{jj},'g10')) % hard to find a feasible starting point
         search_space_dimension = 8;
         function_2_test_4_comparison = {'g10Test'};
@@ -75,6 +79,7 @@ for jj=1:length(function_2_test)
         n_constraints = length(constraints_functions);
         cmaes_value_range{1} = [100 , 1000, 1000 ,10, 10, 10,10,10 ];  % lower bound that define the search space
         cmaes_value_range{2} = [ 1000, 10000, 10000, 1000, 1000, 1000, 1000, 1000];  % upper bound that define the search space
+        %user_defined_start_action =
     elseif(strcmp(function_2_test{jj},'f240'))
         search_space_dimension = 5;
         function_2_test_4_comparison = {'f240Test'};
@@ -86,6 +91,7 @@ for jj=1:length(function_2_test)
         n_constraints = length(constraints_functions);
         cmaes_value_range{1} = [ 0, 0, 0, 0, 0];  % lower bound that define the search space
         cmaes_value_range{2} = [10000 , 10000, 10000 ,10000, 10000 ];  % upper bound that define the search space
+        user_defined_start_action = [555.555555555556,1666.66666666667,555.555555555556,555.555555555556,555.555555555556];
     elseif(strcmp(function_2_test{jj},'f241'))
         search_space_dimension = 5;
         function_2_test_4_comparison = {'f241Test'};
@@ -97,6 +103,7 @@ for jj=1:length(function_2_test)
         n_constraints = length(constraints_functions);
         cmaes_value_range{1} = [ 0, 0, 0, 0, 0];  % lower bound that define the search space
         cmaes_value_range{2} = [100000 , 100000, 100000 ,100000, 100000 ];  % upper bound that define the search space
+        user_defined_start_action =[1851.85185185185,617.283950617287,617.283950617287,617.283950617287,617.283950617287];
     elseif(strcmp(function_2_test{jj},'HB'))
         search_space_dimension = 5;
         function_2_test_4_comparison = {'HBTest'};
@@ -108,6 +115,7 @@ for jj=1:length(function_2_test)
         n_constraints = length(constraints_functions);
         cmaes_value_range{1} = [ 78 , 33, 27 ,27, 27 ];  % lower bound that define the search space
         cmaes_value_range{2} = [ 102, 45, 45, 45, 45];  % upper bound that define the search space
+        user_defined_start_action = [90,35,36,36,36];
     end
 
     %% INSTANCE PARAMETER
@@ -211,7 +219,7 @@ for jj=1:length(function_2_test)
     end
     
     
-    %% data collected at the end of each 
+    %% data collected at the end of each test function
     if(length(data2save.performance)>1)
         all_perfomance_without_constraint_correction{jj} = all_mean_perfomance_without_correction;
     end
@@ -237,21 +245,30 @@ for jj=1:length(function_2_test)
     
     % compute mean and variance of the distance from optimal solutions
     G_distance_from_best_action(jj,:) = distance_from_best_action;
-    G_distance_from_last_best_action(jj,:) = distance_from_last_best_action;
     G_mean_distance_from_best_action(jj) = mean(distance_from_best_action);
     G_variance_distance_from_best_action(jj) = var(distance_from_best_action);
-    G_mean_distance_from_last_best_action(jj) = mean(distance_from_last_best_action);
-    G_var_distance_from_last_best_action(jj) = var(distance_from_last_best_action);
-    % violations 
-    for ii=1:n_constraints
-         G_best_violations.mean(1,ii) = mean(all_best_violations(:,ii),1); 
-         G_best_violations.variance(1,ii) = var(all_best_violations(:,ii)); 
-         G_last_best_violations.mean(1,ii) = mean(all_last_best_violations(:,ii),1); 
-         G_last_best_violations.variance(1,ii) = var(all_last_best_violations(:,ii)); 
+    if(~isempty(policies))
+      G_distance_from_last_best_action(jj,:) = distance_from_last_best_action;
+      G_mean_distance_from_last_best_action(jj) = mean(distance_from_last_best_action);
+      G_var_distance_from_last_best_action(jj) = var(distance_from_last_best_action);
     end
+    % compute the sum of violations per each test function (i just sum the effective violations)
+    mask = all_best_violations > 0;
+    all_best_violations = all_best_violations.*mask;
+    
+    mask = all_last_best_violations > 0;
+    all_last_best_violations = all_last_best_violations.*mask;
+    
+    % violations 
+%     for ii=1:n_constraints
+%          G_best_violations.mean(1,ii) = mean(all_best_violations(:,ii),1); 
+%          G_best_violations.variance(1,ii) = var(all_best_violations(:,ii)); 
+%          G_last_best_violations.mean(1,ii) = mean(all_last_best_violations(:,ii),1); 
+%          G_last_best_violations.variance(1,ii) = var(all_last_best_violations(:,ii)); 
+%     end
      
-    all_G_best_violations{jj} = G_best_violations;
-    all_G__last_best_violations{jj} = G_last_best_violations;
+    all_G_best_violations(:,jj) = sum(all_best_violations,2);
+    all_G_last_best_violations(:,jj) = sum(all_last_best_violations,2);
     
     % all steady state
     G_steady_state(jj,:)=begin_of_steady_state;
@@ -349,12 +366,30 @@ text_title =  'policy error';
 title(text_title,'FontSize',20);
 name_fig = strcat(local_path,'/','policy_error');
 saveas(h5,name_fig);
-h6=figure;
-boxplot(G_distance_from_last_best_action',function_2_test)
-text_title =  'last policy error';
+if(~isempty(policies))
+   h6=figure;
+   boxplot(G_distance_from_last_best_action',function_2_test)
+   text_title =  'last policy error';
+   title(text_title,'FontSize',20);
+   name_fig = strcat(local_path,'/','last_policy_error');
+   saveas(h6,name_fig);
+end
+%plotbox plot of the sum of constraints violations
+h5_1=figure;
+boxplot(all_G_best_violations,function_2_test)
+text_title =  'constraints violations';
 title(text_title,'FontSize',20);
-name_fig = strcat(local_path,'/','last_policy_error');
-saveas(h6,name_fig);
+name_fig = strcat(local_path,'/','constraints_violations');
+saveas(h5_1,name_fig);
+if(~isempty(policies))
+   h6_1=figure;
+   boxplot(all_G_last_best_violations,function_2_test)
+   text_title =  'last constraints violations';
+   title(text_title,'FontSize',20);
+   name_fig = strcat(local_path,'/','last_constraints_violations');
+   saveas(h6_1,name_fig);
+end
+
 % plotbox plot with the steady state time
 h7=figure;
 boxplot(G_steady_state',function_2_test)

@@ -21,7 +21,7 @@
 %  setq              set joint coordinates
 %  animate           animate a joint coordinate trajectory
 %
-% Superclass methods (VREP_obj)::
+% Superclass methods (VAREP_obj)::
 %  getpos              return position of object given handle
 %  setpos              set position of object given handle
 %  getorient           return orientation of object given handle
@@ -31,7 +31,7 @@
 %
 % can be used to set/get the pose of the robot base.
 %
-% Superclass methods (VREP_base)::
+% Superclass methods (VAREP_base)::
 %  setobjparam_bool    set object boolean parameter
 %  setobjparam_int     set object integer parameter
 %  setobjparam_float   set object float parameter
@@ -66,7 +66,7 @@ classdef VAREP_arm < VAREP_obj
         q
         joint            % VREP joint object handles
         n                % number of joints
-        torque_control;  % true i control te robot in torque;
+        %torque_control;  % true i control te robot in torque;
         
     end
     
@@ -113,15 +113,34 @@ classdef VAREP_arm < VAREP_obj
                 
                 j = j+1;
             end
-            
             arm.n = j - 1;
-            
-            arm.torque_control = true;
-            
-            % set all joints to passive mode
-            %             for j=1:arm.n
-            %                 arm.vrep.simxSetJointMode(arm.client, arm.joint(j), arm.vrep.sim_jointmode_passive, arm.vrep.simx_opmode_oneshot_wait);
-            %             end
+        end
+        
+        
+        %%---- with this function i change the joint mode in relation witht
+        % the kind of control that i want to apply
+        function NactiveJoints = setactivejointsmode(arm,typeofcontrol)
+           NactiveJoints = 0;
+           %set all controlled joints
+           for j=1:arm.n
+              % i check if the motor is enabled (it means if the joint is controlled)
+              val = arm.getobjparam_int(arm.joint(j), arm.sim_jointintparam_motor_enabled);
+              if(val)
+                 NactiveJoints = NactiveJoints + 1;
+                 if(strcmp(typeofcontrol,'position'))
+                    % low level control for position control
+                    arm.setobjparam_int(arm.joint(j), arm.sim_jointintparam_ctrl_enabled,1);
+                    % remove lock for zero velocity
+                    arm.setobjparam_int(arm.joint(j), arm.sim_jointintparam_velocity_lock,0);
+                 elseif(strcmp(typeofcontrol,'velocity'))
+                    arm.setobjparam_int(arm.joint(j), arm.sim_jointintparam_ctrl_enabled,0);
+                    arm.setobjparam_int(arm.joint(j), arm.sim_jointintparam_velocity_lock,1);
+                 elseif(strcmp(typeofcontrol,'torque'))
+                    arm.setobjparam_int(arm.joint(j), arm.sim_jointintparam_ctrl_enabled,0);
+                    arm.setobjparam_int(arm.joint(j), arm.sim_jointintparam_velocity_lock,0);
+                 end
+              end
+           end
         end
         
         
@@ -346,10 +365,8 @@ classdef VAREP_arm < VAREP_obj
             for j=1:arm.n
                 qd(j) = arm.vrep.getobjparam_float(arm.joint(j), paramid);
             end
-            qd
         end
-        
-        
+      
     end
 end
 

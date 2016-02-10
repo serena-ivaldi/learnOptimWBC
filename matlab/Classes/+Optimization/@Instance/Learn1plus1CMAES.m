@@ -56,16 +56,16 @@ options.testflag  = 0; options.showits   = 1;  options.maxevals = 25000;
 options.tol       = 0.001; options.maxits = 10000000000;
 Problem.f = 'FeasibleSolutionObj';
 % Call DIRECT
-[fmin,xmin,hist] = Direct(Problem,bounds,options,obj);
-mean(1, :) = xmin';
-if(fmin > 0)
-   x0 = (maxAction-minAction).*rand(1,n) + minAction;
-   options = optimoptions(@fmincon,'Algorithm','sqp');
-   func_to_optimize = str2func(Problem.f);
-   func_to_optimize = @(x)func_to_optimize(x,obj);
-   [new_xmin,new_fmin] = fmincon(func_to_optimize,x0,[],[],[],[],bounds(:,1)',bounds(:,2)',[],options); 
-   mean(1, :) = new_xmin';
-end
+% [fmin,xmin,hist] = Direct(Problem,bounds,options,obj);
+% mean(1, :) = xmin';
+% if(fmin > 0)
+%    x0 = (maxAction-minAction).*rand(1,n) + minAction;
+%    options = optimoptions(@fmincon,'Algorithm','sqp');
+%    func_to_optimize = str2func(Problem.f);
+%    func_to_optimize = @(x)func_to_optimize(x,obj);
+%    [new_xmin,new_fmin] = fmincon(func_to_optimize,x0,[],[],[],[],bounds(:,1)',bounds(:,2)',[],options); 
+%    mean(1, :) = new_xmin';
+% end
 [performances(1), succeeded(1), data2save] = fnForwardModel(obj,mean(1, :),1,1);
 costs(1) = - performances(1);
 
@@ -81,6 +81,11 @@ for k = 1:(nIterations - 1)
     %offsprings = mean(k,:) + sigma(k) *z;
     z =  mvnrnd(zeros(1, n), eye(n));
     offsprings = mean(k,:) + sigma(k) *(A{k} * z')';
+    % DEBUG
+    if(isnan(offsprings))
+       disp('somethings wrong took place');
+    end
+    %
     offsprings(1, offsprings(1,:) > maxAction) = maxAction(offsprings(1,:) > maxAction);
     offsprings(1, offsprings(1,:) < minAction) = minAction(offsprings(1,:) < minAction);
     
