@@ -1,0 +1,44 @@
+@startuml
+'Class-diagram of learnOptimWBC - WBM-Interface:'
+title <b>learnOptimWBC::IWBM - ClassDiagram:</b>
+
+'Class definitions:'
+abstract class handle
+
+class IWBM {
+    'properties:'
+    -wbm_iCub : WBM
+    -iCub_model : wbmBaseModelParams
+    -iCub_config : wbmBaseRobotConfig
+    -vqT_b : vector
+    -v_b : vector
+    -p_b : vector
+    -R_b : matrix
+    -n : integer
+    -config
+    'methods:'
+    +IWBM(out obj: IWBM, in L, in varargin)
+    +delete(in obj)
+    +display(in obj)
+    +A(out T, in obj, in joints, in q)
+    +T0_6(out T0_6, in obj, in q)
+    +jacob0(out J0 : matrix, in obj, in q, in varargin)
+    +jacob_dot(out Jdot : matrix, in obj, in q, in qd)
+    +inertia(out M : matrix, in obj, in robot, in q)
+    +coriolis(out C : vector, in obj, in robot, in q, in qd)
+    +gravload(out tg, in obj, in robot, in q, in grav)
+    '+set.tool(in obj, in v)'
+    +set.base(in obj, in v)
+    '+set.offset(in obj, in v)'
+    '+get.offset(out v, in obj)'
+    '+set.qlim(in obj, in v)'
+    '+get.qlim(out v, in obj)'
+    '+set.gravity(in obj, in v)'
+    '+get.config(out v, in obj)'
+    +payload(in obj, in m, in p)
+}
+
+'Class relations:'
+handle <|-- IWBM
+
+@enduml
