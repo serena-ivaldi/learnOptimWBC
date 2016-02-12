@@ -1,11 +1,19 @@
 learnOptimWBC
 =============
 
+
+
 Description
 -----------
 
-learnOptimWBC is a toolbox for Matlab providing the implementation of a method for the soft priority control of multiple tasks. In a multiple tasks control setting the robot has to accomplish a global task by combining different low level elementary tasks. In our method different torque controllers are associated to different tasks.
- 
+
+learnOptimWBC is a Matlab framework to study the combination of learning and prioritized multi-task control for redundant robots. In such settings, a robot has to accomplish a main global task by the simultaneous execution and combination of several different elementary tasks. 
+Our framework is specifically used to study multi-task controllers with soft task priorities: our goal is to learn the temporal profile of the task priorities in an automatic way, without the requirement of the expert user manually tuning the task priorities and their evolution in time. We are studying these methods on redundant robots (arms, humanoids). THIS IS WORK IN PROGRESS!
+
+If you are going to use parts of this code, please cite us:
+
+Modugno, V.; Neumann, G.; Rueckert, E.; Oriolo, G.; Peters, J.; Ivaldi, S. (2016) Learning soft task priorities for control of redundant robots. Proc. IEEE International Conf. on Robotics and Automation (ICRA). 
+
 
 
 Installation
