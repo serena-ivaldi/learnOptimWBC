@@ -1,8 +1,8 @@
 classdef (Abstract) WBMInterface < handle
     properties(Abstract, Dependent)
         % public properties for fast get/set methods:
-        R_b@double matrix
-        p_b@double vector
+        wf_R_bf@double matrix
+        wf_p_bf@double vector
         robot_model@WBM.wbmBaseModelParams
         robot_config@WBM.wbmBaseRobotConfig
     end
@@ -10,89 +10,59 @@ classdef (Abstract) WBMInterface < handle
     properties(Abstract, Access = protected)
         iwbm_robot@WBM.WBM
         icurr_stv@double vector
-        iR_b@double      matrix
-        ip_b@double      vector
-        indof@
+        iwf_R_bf@double  matrix
+        iwf_p_bf@double  vector
+        indof@uint16     scalar
         iconfig
     end
 
     methods(Abstract)
         % Constructor:
-        function obj = WBMInterface(robot_model, robot_config, L, varargin)
+        obj = WBMInterface(robot_model, robot_config, L, varargin)
 
-        end
+        delete(obj)
 
-        function delete(obj)
+        display(obj)
 
-        end
+        T = A(obj, joints, q_j)
 
-        function display(obj)
+        T0_6 = T0_6(obj, q_j)
 
-        end
+        J0 = jacob0(obj, q_j, varargin)
 
-        function T = A(obj, joints, q_j)
+        Jdot = jacob_dot(obj, q_j, dq_j)
 
-        end
+        M = inertia(obj, robot, q_j)
 
-        function T0_6 = T0_6(obj, q_j)
+        C = coriolis(obj, robot, q_j, dq_j)
 
-        end
+        tg = gravload(obj, robot, q_j, grav)
 
-        function J0 = jacob0(obj, q_j, varargin)
+        % set.tool(obj, v)
 
-        end
+        set.base(obj, v)
 
-        function Jdot = jacob_dot(obj, q_j, dq_j)
+        % set.offset(obj, v)
 
-        end
+        % v = get.offset(obj)
 
-        function M = inertia(obj, robot, q_j)
+        % set.qlim(obj, v)
 
-        end
+        % v = get.qlim(obj)
 
-        function C = coriolis(obj, robot, q_j, dq_j)
+        % set.gravity(obj, v)
 
-        end
+        % v = get.config(obj)
 
-        function tg = gravload(obj, robot, q_j, grav)
+        payload(obj, m, p)
 
-        end
+        wf_R_bf = get.wf_R_bf(obj)
 
-        % function set.tool(obj, v)
+        wf_p_bf = get.wf_p_bf(obj)
 
-        % end
+        robot_model = get.robot_model(obj)
 
-        function set.base(obj, v)
-
-        end
-
-        % function set.offset(obj, v)
-
-        % end
-
-        % function v = get.offset(obj)
-
-        % end
-
-        % function set.qlim(obj, v)
-
-        % end
-
-        % function v = get.qlim(obj)
-
-        % end
-
-        % function set.gravity(obj, v)
-
-        % end
-
-        % function v = get.config(obj)
-
-        % end
-
-        function payload(obj, m, p)
-
-        end
+        robot_config = get.robot_config(obj)
 
     end
 end
