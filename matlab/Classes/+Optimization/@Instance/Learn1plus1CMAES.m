@@ -109,7 +109,7 @@ for k = 1:(nIterations - 1)
          v(j,:) = (1-c_c)*V{k}(j,:) + c_c*(A{k}*z')';                                           %only if the constraints is violated udpate exponentially fading record vj 
        end
        V{k+1} = v;
-       index = 1;v(j,:)
+       index = 1;v(j,:) % to fix no commit without fixing
        for j = violated_constrained
          w(index,:) = (A{k}^(-1)*v(j,:)')';
          index = index + 1;
@@ -176,7 +176,6 @@ bestAction.performance = -costs(:,end);
 end
 
 function [performance, succeeded, data2save ] = TransAction(obj_,actionLearn, curr_candidate,isMean, settings)
-
 if isfield(settings, 'activeIndices')
     if size(actionLearn,1) < 2
         actionFull = settings.action;

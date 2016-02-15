@@ -15,12 +15,9 @@ classdef  Instance
       input_4_run      % this variable is a cell array that contains the data that are needed to execute the run function
       fitness_result   % in this vector i save the value of the fitness function 
       data2save        % in this structure im going to save all the data that i need for visualization / debugging purpose
-      
    end
        
-    
    methods
-       
        function obj = Instance(penalty_handling,learn_procedure,run_function,fitness,clean_function,input_4_run)
            if(isempty(penalty_handling))
               obj.constraints = false;
