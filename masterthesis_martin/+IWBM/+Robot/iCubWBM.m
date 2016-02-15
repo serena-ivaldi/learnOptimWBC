@@ -21,8 +21,11 @@ classdef iCubWBM < IWBM.WBMInterface
 
     methods
         % Constructor:
-        function obj = iCubWBM(robot_model, robot_config, L, varargin)
-            if ( ~exist('robot_model', 'var') && ~exist('robot_config', 'var') ) 
+        function obj = iCubWBM(robot_model, robot_config, wf2FixLnk, L, varargin)
+            if ( ~exist('robot_model', 'var') && ~exist('robot_config', 'var') &&
+                 ~exist('wf2FixLnk', 'var') )
+                wf2FixLnk = true;
+
                 % base model parameters:
                 robot_model = WBM.wbmBaseModelParams;
                 robot_model.urdfRobot    = 'icubGazeboSim';
@@ -54,7 +57,7 @@ classdef iCubWBM < IWBM.WBMInterface
             end
 
             % init the mex-WholeBodyModel for the iCub-Robot:
-            iwbm_robot = WBM(robot_model, robot_config, true);
+            iwbm_robot = WBM(robot_model, robot_config, wf2FixLnk);
         end
 
         function delete(obj)
