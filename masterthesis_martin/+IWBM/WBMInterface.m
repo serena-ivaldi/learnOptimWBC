@@ -1,18 +1,20 @@
 classdef (Abstract) WBMInterface < handle
     properties(Abstract, Dependent)
         % public properties for fast get/set methods:
-        wf_R_bf@double matrix
-        wf_p_bf@double vector
+        wf_R_b@double matrix
+        wf_p_b@double vector
+        wf_v_b@double vector
         robot_model@WBM.wbmBaseModelParams
         robot_config@WBM.wbmBaseRobotConfig
     end
 
     properties(Abstract, Access = protected)
         iwbm_robot@WBM.WBM
-        icurr_stv@double vector
-        iwf_R_bf@double  matrix
-        iwf_p_bf@double  vector
-        indof@uint16     scalar
+        istv@double    vector
+        iwf_R_b@double matrix
+        iwf_p_b@double vector
+        iwf_v_b@double vector
+        indof@uint16   scalar
         iconfig
     end
 
@@ -56,9 +58,11 @@ classdef (Abstract) WBMInterface < handle
 
         payload(obj, m, p)
 
-        wf_R_bf = get.wf_R_bf(obj)
+        wf_R_b = get.wf_R_b(obj)
 
-        wf_p_bf = get.wf_p_bf(obj)
+        wf_p_b = get.wf_p_b(obj)
+
+        wf_v_b = get.wf_v_b(obj)
 
         robot_model = get.robot_model(obj)
 
