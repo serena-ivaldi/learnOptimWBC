@@ -362,14 +362,14 @@ saveas(h4,name_fig);
 % plotbox plot with the distance from the true policy
 h5=figure;
 boxplot(G_distance_from_best_action',function_2_test)
-text_title =  'policy error';
+text_title ='policy error';
 title(text_title,'FontSize',20);
 name_fig = strcat(local_path,'/','policy_error');
 saveas(h5,name_fig);
 if(~isempty(policies))
    h6=figure;
    boxplot(G_distance_from_last_best_action',function_2_test)
-   text_title =  'last policy error';
+   text_title ='last policy error';
    title(text_title,'FontSize',20);
    name_fig = strcat(local_path,'/','last_policy_error');
    saveas(h6,name_fig);
@@ -377,23 +377,22 @@ end
 %plotbox plot of the sum of constraints violations
 h5_1=figure;
 boxplot(all_G_best_violations,function_2_test)
-text_title =  'constraints violations';
+text_title ='constraints violations';
 title(text_title,'FontSize',20);
 name_fig = strcat(local_path,'/','constraints_violations');
 saveas(h5_1,name_fig);
 if(~isempty(policies))
    h6_1=figure;
    boxplot(all_G_last_best_violations,function_2_test)
-   text_title =  'last constraints violations';
+   text_title ='last constraints violations';
    title(text_title,'FontSize',20);
    name_fig = strcat(local_path,'/','last_constraints_violations');
    saveas(h6_1,name_fig);
 end
-
 % plotbox plot with the steady state time
 h7=figure;
 boxplot(G_steady_state',function_2_test)
-text_title =  'generation to reach the steady value';
+text_title ='generation to reach the steady value';
 name_fig = strcat(local_path,'/','generation_to_steady');
 saveas(h7,name_fig);
 title(text_title,'FontSize',20);
