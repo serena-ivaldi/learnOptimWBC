@@ -8,12 +8,12 @@ clc
 
 %% DATA 1
 function_2_test ={'g06','g07','g09','f240','f241','HB'};%,'g06','g07','g09','f240','f241','HB'};
-method_to_use = 'adaptive';  % adaptive , vanilla , empty
-learn_approach = 'CMAES'; %CMAES (1+1)CMAES               with (1+1)CMAES i have to use vanilla constraints management  (temporary)
-repetition_of_the_experiment = 50; % at least 2
+method_to_use = 'vanilla';  % adaptive , vanilla , empty
+learn_approach = '(1+1)CMAES'; %CMAES (1+1)CMAES               with (1+1)CMAES i have to use vanilla constraints management  (temporary)
+repetition_of_the_experiment = 40; % at least 2
 threshold = 50; % value to identify the beginning of steady state
 explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-niter = 8000;  %number of generations
+niter_tot = 5000;  %number of generations
 % starting value of parameters
 generation_of_starting_point = 'test'; % 'test', 'given', 'random'
 
@@ -144,6 +144,21 @@ for jj=1:length(function_2_test)
     [benchmark_x,benchmark_fval] = fmincon(str2func(function_2_test_4_comparison{1}),x0,[],[],[],[],cmaes_value_range{1},cmaes_value_range{2},str2func(constraints_for_test),options); 
 
  %% CONSTRAINTS
+    % number of candidates per generation for cmaes
+    lambda = round(4 + 3 * log(search_space_dimension)); % number of candidates used in cmaes
+    % to compare the three methods i have to normalize the number of iterations with the 
+    % number of candidates per generation
+    if(strcmp(learn_approach,'CMAES'))
+       niter = round(niter_tot/lambda);
+    elseif(strcmp(learn_approach,'(1+1)CMAES'))
+       niter = niter_tot;
+    end
+    % last generation check
+    last_generation = 100; % analyze the last n = last_generation to look for the best (hopefully in steady state)
+    if(last_generation > niter)
+       last_generation = round(niter/10);
+    end
+ 
     if(strcmp(method_to_use,'vanilla'))
         constr =Optimization.FixPenalty(search_space_dimension,constraints_functions,constraints_type,constraints_values);
     elseif(strcmp(method_to_use,'adaptive'))
@@ -153,11 +168,6 @@ for jj=1:length(function_2_test)
     end
  
  %% DATA 2
-    lambda = round(4 + 3 * log(search_space_dimension)); % number of candidates used in cmaes
-    last_generation = 100; % analyze the last n = last_generation to look for the best (hopefully in steady state)
-    if(last_generation > niter)
-       last_generation = round(niter/10);
-    end
  
    %all_perfomance = zeros(repetition_of_the_experiment,niter*lambda);
     all_best = zeros(repetition_of_the_experiment,1);
@@ -271,7 +281,12 @@ for jj=1:length(function_2_test)
     all_G_last_best_violations(:,jj) = sum(all_last_best_violations,2);
     
     % all steady state
-    G_steady_state(jj,:)=begin_of_steady_state;
+    if(strcmp(learn_approach,'CMAES'))
+       G_steady_state(jj,:)=begin_of_steady_state*lambda;
+    elseif(strcmp(learn_approach,'(1+1)CMAES'))
+       G_steady_state(jj,:)=begin_of_steady_state;
+    end
+    
     
     %if(strcmp(method_to_use,'adaptive'))
     %  weight_pure.average  = mean(all_weights,1);
@@ -282,6 +297,8 @@ for jj=1:length(function_2_test)
     % clean variable
     all_best_action = [];
     all_best_last_action =[];
+    all_mean_perfomance = [];
+    all_mean_perfomance_without_correction = [];
  end
 %%  SAVE PATH
  allpath=which('FindData.m');
@@ -303,10 +320,11 @@ transparent_flag = 1;
 
 if(exist('all_prf_pure','var'))   
    % plot average fitness without correction
-   generation = 1:length(all_prf_pure{1}.average);
+   
    h1 = figure;
    hold on;
    for z = 1:length(function_2_test)
+      generation = 1:length(all_prf_pure{z}.average);
       plot(generation',all_prf_pure{z}.average','Color',color_list{z});
       xlabel('generations','FontSize',16);
       ylabel('fitness','FontSize',16);
@@ -319,6 +337,7 @@ if(exist('all_prf_pure','var'))
    h2=figure;
    hold on;
    for z = 1:length(function_2_test)
+      generation = 1:length(all_prf_pure{z}.average);
       h = shadedErrorBar(generation',all_prf_pure{z}.average,all_prf_pure{z}.variance,{'r-o','Color',color_list{z},'markerfacecolor',color_list{z}},transparent_flag);
       %handle_legend = [handle_legend,h.mainLine];
       xlabel('generations','FontSize',16);
@@ -332,10 +351,10 @@ if(exist('all_prf_pure','var'))
    saveas(h2,name_fig);
 end
 % plot average fitness with correction
-generation = 1:length(all_prf{1}.average);
 h3=figure;
 hold on;
 for z = 1:length(function_2_test)
+   generation = 1:length(all_prf{z}.average);
    plot(generation',all_prf{z}.average','Color',color_list{z});
    xlabel('generations','FontSize',16);
    ylabel('fitness','FontSize',16);
@@ -348,6 +367,7 @@ saveas(h3,name_fig);
 h4 = figure;
 hold on;
 for z = 1:length(function_2_test)
+   generation = 1:length(all_prf{z}.average);
    h = shadedErrorBar(generation',all_prf{z}.average,all_prf{z}.variance,{'r-o','Color',color_list{z},'markerfacecolor',color_list{z}},transparent_flag);
    %handle_legend = [handle_legend,h.mainLine];
    xlabel('generations','FontSize',16);
