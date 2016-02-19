@@ -6,7 +6,7 @@ classdef iCubWBM < IWBM.WBMInterface
         wf_v_b@double vector
         robot_model@WBM.wbmBaseModelParams
         robot_config@WBM.wbmBaseRobotConfig
-        base@double    matrix
+        base@double   matrix
     end
 
     properties(Access = protected)
@@ -22,10 +22,7 @@ classdef iCubWBM < IWBM.WBMInterface
     methods
         % Constructor:
         function obj = iCubWBM(robot_model, robot_config, wf2FixLnk, L, varargin)
-            if ( ~exist('robot_model', 'var') && ~exist('robot_config', 'var') &&
-                 ~exist('wf2FixLnk', 'var') )
-                wf2FixLnk = true;
-
+            if ( ~exist('robot_model', 'var') && ~exist('robot_config', 'var') )
                 % base model parameters:
                 robot_model = WBM.wbmBaseModelParams;
                 robot_model.urdfRobot    = 'icubGazeboSim';
@@ -54,6 +51,10 @@ classdef iCubWBM < IWBM.WBMInterface
                 robot_config.initStateParams.dx_b    = zeros(3,1);
                 robot_config.initStateParams.omega_b = zeros(3,1);
                 robot_config.initStateParams.dq_j    = zeros(robot_config.ndof,1);
+            end
+            
+            if ~exist('wf2FixLnk', 'var') )
+                wf2FixLnk = true;
             end
 
             % init the mex-WholeBodyModel for the iCub-Robot:
