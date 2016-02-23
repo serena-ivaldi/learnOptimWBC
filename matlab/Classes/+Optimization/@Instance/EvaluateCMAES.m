@@ -20,7 +20,7 @@ function [performance, succeeded, data2save] = EvaluateCMAES(obj,action,cur_cand
 % i have to assign the variable to avoid error generation
 data2save = [];
 
- %try
+ try
     disp('i am in evaluate CMAES')
     action
     [output]=obj.run(action);
@@ -49,13 +49,15 @@ data2save = [];
     % cancel all the information relative to the current iteration (control action)
     feval(obj.clean_function,obj);
     
-% catch err
-%      disp('i am in evaluate CMAES error side')
-%      % cancel all the information relative to the current iteration (control action)
-%      feval(obj.clean_function,obj);
-%      succeeded = 0;
-%      performance = -1;
-%  end
+catch err
+     disp('i am in evaluate CMAES error side')
+     % cancel all the information relative to the current iteration (control action)
+     feval(obj.clean_function,obj);
+     succeeded = 0;
+     performance = -1;
+     % here im going to save the average perfomance without correction
+     data2save.performance = performance;
+ end
 
 
 end

@@ -173,6 +173,7 @@ policies = [];
 
 bestAction.parameters = mean(end,:);
 bestAction.performance = -costs(:,end);
+bestAction.listperformance = performances;
 end
 
 function [performance, succeeded, data2save ] = TransAction(obj_,actionLearn, curr_candidate,isMean, settings)

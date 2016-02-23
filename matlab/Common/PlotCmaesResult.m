@@ -1,4 +1,4 @@
-function [t_, q, qd]=PlotCmaesResult(complete_path,time_sym_struct,controller,qi,qdi,fixed_step,torque_saturation,name_scenario,time_struct,bestAction,bot1)
+function [t_, q, qd]=PlotCmaesResult(complete_path,time_sym_struct,controller,qi,qdi,fixed_step,torque_saturation,name_scenario,time_struct,bestAction,bot1,learn_approach)
 % conversion from rad to deg
 RAD = 180/pi;
 % for torque
@@ -60,22 +60,34 @@ end
 % plot of fitnes function
 evolutions = size(bestAction.hist,2);
 % remove failed mean and failed variance
-% -10000000 is the penalty that is applied when i have a failure 
+% -10000000 is the penalty that is applied when i have a failure (not anymore to change)
 index = 1;
 evo = 1;
 mean = 0;
-for ww =1:evolutions
-    % i discard the evolutions with failure final mean
-    if(bestAction.hist(1,ww).performance>-1)
-        listperformance = bestAction.hist(1,ww).listperformance;
+
+if(strcmp(learn_approach,'CMAES'))
+   for ww =1:evolutions
+       % i discard the evolutions with failure final mean
+       if(bestAction.hist(1,ww).performance>-1)
+           listperformance = bestAction.hist(1,ww).listperformance;
+           %remove all the failure from the computation of the variance
+           listperformance = listperformance(listperformance~=-1);
+           variance(index) = var(listperformance);
+           mean(index) = bestAction.hist(1,ww).performance;
+           evo(index) = index;
+           index = index + 1; 
+       end
+   end
+elseif(strcmp(learn_approach,'(1+1)CMAES'))  
+  for ww =1:evolutions 
+     if(bestAction.listperformance(ww)> -1 )
         %remove all the failure from the computation of the variance
-        listperformance = listperformance(listperformance~=-1);
-        variance(index) = var(listperformance);
-        mean(index) = bestAction.hist(1,ww).performance;
+        variance(index) = 0;
+        mean= bestAction.listperformance(ww);
         evo(index) = index;
-        index = index + 1; 
-    end
-    
+        index = index + 1;  
+     end
+  end
 end
 
 handle = figure;

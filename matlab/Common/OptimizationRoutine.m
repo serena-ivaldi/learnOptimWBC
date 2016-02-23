@@ -1,9 +1,9 @@
 % number_of_iteration is usefull only for PlotGraphPaper.m main
 function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, name_dat]=OptimizationRoutine(number_of_iteration,n_of_experiment,iter,init_parameters_from_out)  
     %% initialize all the data
-    [bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,constr,inst,generation_of_starting_point,niter,...
+    [bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,learn_approach,constr,inst,generation_of_starting_point,niter,...
     explorationRate,cmaes_value_range,qi,qdi,fixed_step,torque_saturation,rawTextFromStorage,name_dat]=Init();
-     
+ 
      %% optimization 
      % im using init_value from outside
      switch generation_of_starting_point
@@ -13,10 +13,7 @@ function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, co
             start_action = init_parameters_from_out*ones(1,controller.GetTotalParamNum());
         case 'random'
            start_action = (cmaes_value_range(1,2)-cmaes_value_range(1,1)).*rand(1,controller.GetTotalParamNum()) + cmaes_value_range(1,1)*ones(1,controller.GetTotalParamNum());
-        
      end
-
-  
      tic
      [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded] = inst.CMAES(controller.GetTotalParamNum(),start_action,niter,explorationRate,cmaes_value_range);
      exec_time = toc
@@ -41,7 +38,7 @@ function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, co
      fprintf(fileID,'%s',rawTextFromStorage);
      fclose(fileID);
      % generate graph and data from the current best solution
-     [t_, q, qd]=PlotCmaesResult(complete_path,time_sym_struct,controller,qi,qdi,fixed_step,torque_saturation,name_scenario,time_struct,bestAction,bot1);
+     [t_, q, qd]=PlotCmaesResult(complete_path,time_sym_struct,controller,qi,qdi,fixed_step,torque_saturation,name_scenario,time_struct,bestAction,bot1,learn_approach);
      complete_path_to_file = strcat(complete_path,'/data.mat');
      save(complete_path_to_file) 
      % copy name_dat to the base workspace

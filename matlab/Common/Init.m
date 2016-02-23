@@ -1,6 +1,6 @@
-function [bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,constr,inst,generation_of_starting_point,...
+function [bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,constr,learn_approach,inst,generation_of_starting_point,...
          niter,explorationRate,cmaes_value_range,qi,qdi,fixed_step,torque_saturation,rawTextFromStorage,name_dat]=Init()
-
+%% parameters
 AllRuntimeParameters
 
 %% Reference
@@ -74,10 +74,15 @@ switch CONTROLLERTYPE
 end
 
  %% Constraints
-constr=Optimization.FixPenalty(controller.GetTotalParamNum(),constraints_functions,constraints_type,constraints_values);
+if(strcmp(method_to_use,'vanilla'))
+    constr=Optimization.FixPenalty(controller.GetTotalParamNum(),constraints_functions,constraints_type,constraints_values);
+elseif(strcmp(method_to_use,'adaptive'))
+     constr = Optimization.AdaptivePenalty(epsilon,niter,controller.GetTotalParamNum(),constraints_functions,constraints_type,constraints_values);
+elseif(strcmp(method_to_use,'empty'))
+     constr = [];
+end
      
  %% Instance
 input{5} = controller;      
-inst = Optimization.Instance(constr,run_function,fitness,clean_function,input);
-
+inst = Optimization.Instance(constr,learn_approach,run_function,fitness,clean_function,input);
 end

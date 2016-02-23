@@ -17,8 +17,20 @@ niter_tot = 5000;  %number of generations
 % starting value of parameters
 generation_of_starting_point = 'test'; % 'test', 'given', 'random'
 
+number_of_function_2_test = length(function_2_test);
 
-for jj=1:length(function_2_test)
+G_best_performance = zeros(repetition_of_the_experiment,number_of_function_2_test);
+G_best_difference_performance = zeros(repetition_of_the_experiment,number_of_function_2_test);
+G_last_best_performance = zeros(repetition_of_the_experiment,number_of_function_2_test);
+G_last_best_difference_performance = zeros(repetition_of_the_experiment,number_of_function_2_test);
+all_G_best_violations = zeros(repetition_of_the_experiment,number_of_function_2_test);
+all_G_last_best_violations = zeros(repetition_of_the_experiment,number_of_function_2_test);
+
+G_distance_from_best_action = zeros(repetition_of_the_experiment,number_of_function_2_test);
+G_distance_from_last_best_action =  zeros(repetition_of_the_experiment,number_of_function_2_test);
+G_steady_state =  zeros(repetition_of_the_experiment,number_of_function_2_test);
+
+for jj=1:number_of_function_2_test
     %% CONSTRAINTS PARAMETERS
     if(strcmp(function_2_test{jj},'g06'))
         search_space_dimension = 2;
@@ -170,10 +182,14 @@ for jj=1:length(function_2_test)
  %% DATA 2
  
    %all_perfomance = zeros(repetition_of_the_experiment,niter*lambda);
-    all_best = zeros(repetition_of_the_experiment,1);
-    all_last_best = zeros(repetition_of_the_experiment,1);
+    all_best_performance = zeros(repetition_of_the_experiment,1);
+    all_last_best_performance = zeros(repetition_of_the_experiment,1);
     all_best_violations = zeros(repetition_of_the_experiment,n_constraints);
     all_last_best_violations = zeros(repetition_of_the_experiment,n_constraints);
+    distance_from_last_best_action = zeros(repetition_of_the_experiment,1);
+    distance_from_best_action = zeros(repetition_of_the_experiment,1);
+    exec_time = zeros(repetition_of_the_experiment,1);
+    begin_of_steady_state = zeros(repetition_of_the_experiment,1);
  
  %% OPTIMIZATION
  
@@ -207,13 +223,13 @@ for jj=1:length(function_2_test)
          % best results
          all_best_action(kk,:) = bestAction.parameters;
          distance_from_best_action(kk) = norm(bestAction.parameters - benchmark_x);
-         all_best(kk,1) = bestAction.performance;
+         all_best_performance(kk,1) = bestAction.performance;
          % all best last result
          if(~isempty(policies))
             last_cost = costs(end-last_generation:end);
             last_policies = policies(end-last_generation:end,:);
             [tmp , id]=min(last_cost);
-            all_last_best(kk,1) = -last_cost(id);
+            all_last_best_performance(kk,1) = -last_cost(id);
             all_best_last_action(kk,:) = last_policies(id,:);
             distance_from_last_best_action(kk) = norm(last_policies(id,:) - benchmark_x);
          end
@@ -246,45 +262,31 @@ for jj=1:length(function_2_test)
     prf.variance = var(all_mean_perfomance);
     all_prf{jj} = prf;
      % mean and variance of the best perfomance over all the experiments
-    G_best(jj,1) = mean(all_best,1);
-    G_best(jj,2) = var(all_best);
+    G_best_performance(:,jj) = -all_best_performance;
+    G_best_difference_performance(:,jj) = -all_best_performance - benchmark_fval*ones(1,repetition_of_the_experiment)';
      % mean and variance of the best perfomance of the last k generations
      % over all the experiments
-    G_last_best(jj,1) = mean(all_last_best,1);
-    G_last_best(jj,2) = var(all_last_best);
+    G_last_best_performance(:,jj) = -all_last_best_performance;
+    G_last_best_difference_performance(:,jj) = -all_last_best_performance - benchmark_fval*ones(1,repetition_of_the_experiment)';
     
     % compute mean and variance of the distance from optimal solutions
-    G_distance_from_best_action(jj,:) = distance_from_best_action;
-    G_mean_distance_from_best_action(jj) = mean(distance_from_best_action);
-    G_variance_distance_from_best_action(jj) = var(distance_from_best_action);
+    G_distance_from_best_action(:,jj) = distance_from_best_action;
     if(~isempty(policies))
-      G_distance_from_last_best_action(jj,:) = distance_from_last_best_action;
-      G_mean_distance_from_last_best_action(jj) = mean(distance_from_last_best_action);
-      G_var_distance_from_last_best_action(jj) = var(distance_from_last_best_action);
+      G_distance_from_last_best_action(:,jj) = distance_from_last_best_action;
     end
     % compute the sum of violations per each test function (i just sum the effective violations)
     mask = all_best_violations > 0;
     all_best_violations = all_best_violations.*mask;
-    
     mask = all_last_best_violations > 0;
     all_last_best_violations = all_last_best_violations.*mask;
-    
-    % violations 
-%     for ii=1:n_constraints
-%          G_best_violations.mean(1,ii) = mean(all_best_violations(:,ii),1); 
-%          G_best_violations.variance(1,ii) = var(all_best_violations(:,ii)); 
-%          G_last_best_violations.mean(1,ii) = mean(all_last_best_violations(:,ii),1); 
-%          G_last_best_violations.variance(1,ii) = var(all_last_best_violations(:,ii)); 
-%     end
-     
     all_G_best_violations(:,jj) = sum(all_best_violations,2);
     all_G_last_best_violations(:,jj) = sum(all_last_best_violations,2);
     
     % all steady state
     if(strcmp(learn_approach,'CMAES'))
-       G_steady_state(jj,:)=begin_of_steady_state*lambda;
+       G_steady_state(:,jj)=begin_of_steady_state*lambda;
     elseif(strcmp(learn_approach,'(1+1)CMAES'))
-       G_steady_state(jj,:)=begin_of_steady_state;
+       G_steady_state(:,jj)=begin_of_steady_state;
     end
     
     
@@ -381,14 +383,14 @@ name_fig = strcat(local_path,'/','prf_mean_var');
 saveas(h4,name_fig);
 % plotbox plot with the distance from the true policy
 h5=figure;
-boxplot(G_distance_from_best_action',function_2_test)
+boxplot(G_distance_from_best_action,function_2_test)
 text_title ='policy error';
 title(text_title,'FontSize',20);
 name_fig = strcat(local_path,'/','policy_error');
 saveas(h5,name_fig);
 if(~isempty(policies))
    h6=figure;
-   boxplot(G_distance_from_last_best_action',function_2_test)
+   boxplot(G_distance_from_last_best_action,function_2_test)
    text_title ='last policy error';
    title(text_title,'FontSize',20);
    name_fig = strcat(local_path,'/','last_policy_error');
@@ -409,12 +411,46 @@ if(~isempty(policies))
    name_fig = strcat(local_path,'/','last_constraints_violations');
    saveas(h6_1,name_fig);
 end
-% plotbox plot with the steady state time
+
+%plotbox plot of the best performance
 h7=figure;
-boxplot(G_steady_state',function_2_test)
+boxplot(G_best_performance,function_2_test)
+text_title ='best performance';
+title(text_title,'FontSize',20);
+name_fig = strcat(local_path,'/','best_performance');
+saveas(h7,name_fig);
+if(~isempty(policies))
+   h7_1=figure;
+   boxplot(G_last_best_performance,function_2_test)
+   text_title ='last best performance';
+   title(text_title,'FontSize',20);
+   name_fig = strcat(local_path,'/','last_best_performance');
+   saveas(h7_1,name_fig);
+end
+
+%plotbox plot of of the best diffence performance between the real best and
+%the computed one
+h8=figure;
+boxplot(G_best_difference_performance,function_2_test)
+text_title ='best difference performance';
+title(text_title,'FontSize',20);
+name_fig = strcat(local_path,'/','best_difference_performance');
+saveas(h8,name_fig);
+if(~isempty(policies))
+   h8_1=figure;
+   boxplot(G_last_best_difference_performance,function_2_test)
+   text_title ='last best difference performance';
+   title(text_title,'FontSize',20);
+   name_fig = strcat(local_path,'/','last_best_difference_performance');
+   saveas(h8_1,name_fig);
+end
+
+% plotbox plot with the steady state time
+h9=figure;
+boxplot(G_steady_state,function_2_test)
 text_title ='generation to reach the steady value';
 name_fig = strcat(local_path,'/','generation_to_steady');
-saveas(h7,name_fig);
+saveas(h9,name_fig);
 title(text_title,'FontSize',20);
 % plot # number_of_plot_of_single_execution of fitness
 % for z = 1:length(function_2_test)
