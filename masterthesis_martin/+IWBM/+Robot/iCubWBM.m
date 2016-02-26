@@ -36,18 +36,19 @@ classdef iCubWBM < IWBM.WBMInterface
                 robot_config.nCstrs        = 2;
                 robot_config.cstrLinkNames = {'l_sole', 'r_sole'};
                 robot_config.dampCoeff     = 0.00; %0.75;
-                % body positions of the iCub-Robot (in degrees):
-                % (this configuration assumes an iCub-Robot with 25 DoFs.)
-                robot_config.pos_torso    = [-10.0; 0.0; 0.0];
-                robot_config.pos_leftArm  = [-19.7; 29.7; 0.0; 44.9; 0.0];
-                robot_config.pos_leftLeg  = [25.5; 0.1; 0.0; -38.5; -5.5; -0.1];
-                robot_config.pos_rightArm = robot_config.pos_leftArm;
-                robot_config.pos_rightLeg = robot_config.pos_leftLeg;
+                % setup the body of the iCub-Robot with the initial body (joint) positions (in degrees):
+                % note: this configuration assumes an iCub-Robot with 25 DoFs.
+                robot_config.body           = WBM.Robot.iCub.setupBody_iCub();
+                robot_config.jpos_torso     = [-10.0; 0.0; 0.0];
+                robot_config.jpos_left_arm  = [-19.7; 29.7; 0.0; 44.9; 0.0];
+                robot_config.jpos_left_leg  = [25.5; 0.1; 0.0; -38.5; -5.5; -0.1];
+                robot_config.jpos_right_arm = robot_config.pos_leftArm;
+                robot_config.jpos_right_leg = robot_config.pos_leftLeg;
                 % init-state parameters:
                 robot_config.initStateParams.x_b     = zeros(3,1);
                 robot_config.initStateParams.qt_b    = zeros(4,1);
-                robot_config.initStateParams.q_j     = [robot_config.pos_torso; robot_config.pos_leftArm; robot_config.pos_rightArm; ...
-                                                        robot_config.pos_leftLeg; robot_config.pos_rightLeg] * (pi/180.0); % in radians
+                robot_config.initStateParams.q_j     = [robot_config.jpos_torso; robot_config.jpos_left_arm; robot_config.jpos_right_arm; ...
+                                                        robot_config.jpos_left_leg; robot_config.jpos_right_leg] * (pi/180.0); % in radians
                 robot_config.initStateParams.dx_b    = zeros(3,1);
                 robot_config.initStateParams.omega_b = zeros(3,1);
                 robot_config.initStateParams.dq_j    = zeros(robot_config.ndof,1);
