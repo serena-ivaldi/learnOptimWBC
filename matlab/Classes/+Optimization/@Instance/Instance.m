@@ -46,12 +46,12 @@ classdef  Instance
           NumParam = num_of_param;
           % start_value for action
           settings.action = start_action;
-          if(isvector(cmaes_value_range))
+          if(iscell(cmaes_value_range))
+             settings.minAction = cmaes_value_range{1};
+             settings.maxAction = cmaes_value_range{2};  
+          elseif(isvector(cmaes_value_range))
              settings.minAction = ones(1,NumParam).*cmaes_value_range(1,1);
              settings.maxAction = ones(1,NumParam).*cmaes_value_range(1,2);
-          elseif(iscell(cmaes_value_range))
-             settings.minAction = cmaes_value_range{1};
-             settings.maxAction = cmaes_value_range{2};   
           else
              error('something wrong with cmaes_value_range')
           end

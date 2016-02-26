@@ -146,26 +146,6 @@ classdef VAREP_arm < VAREP_obj
         
         %%---- rendering method
         
-        function q = getq(arm)
-            %VREP_arm.getq  Get joint angles of V-REP robot
-            %
-            % R.getq() is the vector of joint angles (1xN) from the corresponding
-            % robot arm in the V-REP simulation.
-            for j=1:arm.n
-                q(j) = arm.vrep.getjoint(arm.joint(j));
-            end
-        end
-        
-        function setq(arm, q)
-            %VREP_arm.setq  Set joint angles of V-REP robot
-            %
-            % R.setq(Q) sets the joint angles of the corresponding
-            % robot arm in the V-REP simulation to Q (1xN).
-            for j=1:arm.n
-                arm.vrep.setjoint(arm.joint(j), q(j));
-            end
-        end
-        
         
         
         function animate(arm, qt, varargin)
@@ -324,19 +304,29 @@ classdef VAREP_arm < VAREP_obj
             end
         end
         
-         %---- custom function (dynamic method)
-        function SetTau(arm, tau)   
-            velocity = 1500.0;
+        function q = getq(arm)
+            %VREP_arm.getq  Get joint angles of V-REP robot
+            %
+            % R.getq() is the vector of joint angles (1xN) from the corresponding
+            % robot arm in the V-REP simulation.
             for j=1:arm.n
-                if(tau(j)>=0)
-                  arm.vrep.setjointvel(arm.joint(j), -velocity);
-                else
-                   arm.vrep.setjointvel(arm.joint(j), velocity);
-                end
-                arm.vrep.SetJointTorque(arm.joint(j),abs(tau(j)));
+                q(j) = arm.vrep.getjoint(arm.joint(j));
             end
         end
         
+        function setq(arm, q)
+            %VREP_arm.setq  Set joint angles of V-REP robot
+            %
+            % R.setq(Q) sets the joint angles of the corresponding
+            % robot arm in the V-REP simulation to Q (1xN).
+            for j=1:arm.n
+                arm.vrep.setjoint(arm.joint(j), q(j));
+            end
+        end
+        
+        
+         %---- dynamic actions
+       
         function SetTargetQ(arm, q)
             %VREP_arm.setq  Set joint angles of V-REP robot
             %
@@ -346,8 +336,7 @@ classdef VAREP_arm < VAREP_obj
                 arm.vrep.setjointtarget( arm.joint(j), q(j));
             end
         end
-        
-        
+             
         function SetTargetQd(arm, qd)
             %VREP_arm.setq  Set joint angles of V-REP robot
             %
@@ -361,11 +350,25 @@ classdef VAREP_arm < VAREP_obj
         
         function qd = GetQd(arm)
             qd = zeros(1,arm.n);
-            paramid = 2012;
             for j=1:arm.n
-                qd(j) = arm.vrep.getobjparam_float(arm.joint(j), paramid);
+                qd(j) = arm.vrep.getjointvel(arm.joint(j));
             end
         end
+        
+        function SetTau(arm, tau)   
+           % i need this to assure that the value i assign is exactly the 
+           % same i apply (basically 1500 is expressed in degrees)
+            velocity = 1500*(pi/180);  
+            for j=1:arm.n
+                if(tau(j)>=0)
+                  arm.vrep.setjointvel(arm.joint(j), velocity);
+                else
+                   arm.vrep.setjointvel(arm.joint(j), -velocity);
+                end
+                arm.vrep.setjointtorque(arm.joint(j),abs(tau(j)));
+            end
+        end
+        
       
     end
 end

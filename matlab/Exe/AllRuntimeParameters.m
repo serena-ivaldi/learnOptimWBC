@@ -140,7 +140,7 @@ switch CONTROLLERTYPE
         input{5} = [];                 % here i have to insert the controller i will do that in init() 
         input{6} = fixed_step;         % if is true i use ode4 (runge-kutta)
         % parameter for constraints method
-        method_to_use = 'vanilla';  % adaptive , vanilla , empty
+        method_to_use = 'adaptive';  % adaptive , vanilla , empty
         epsilon = 0.001*ones(1,length(constraints_functions)); %vector with a number of value related to the number of constraints (used only with Aaptive constraints)
         %% CMAES PARAMETER
         % starting value of parameters
@@ -150,7 +150,7 @@ switch CONTROLLERTYPE
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
         niter = 5;  %number of generations
         cmaes_value_range = [-14 , 14];  % boudn that define the search space
-        learn_approach = '(1+1)CMAES'; %CMAES (1+1)CMAES    
+        learn_approach = 'CMAES'; %CMAES (1+1)CMAES    
         %% FITNESS PARAMETERS
 
         %%%EOF    

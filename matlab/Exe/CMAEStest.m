@@ -8,8 +8,8 @@ clc
 
 %% DATA 1
 function_2_test ={'g06','g07','g09','f240','f241','HB'};%,'g06','g07','g09','f240','f241','HB'};
-method_to_use = 'vanilla';  % adaptive , vanilla , empty
-learn_approach = '(1+1)CMAES'; %CMAES (1+1)CMAES               with (1+1)CMAES i have to use vanilla constraints management  (temporary)
+method_to_use = 'adaptive';  % adaptive , vanilla , empty
+learn_approach = 'CMAES'; %CMAES (1+1)CMAES               with (1+1)CMAES i have to use vanilla constraints management  (temporary)
 repetition_of_the_experiment = 40; % at least 2
 threshold = 50; % value to identify the beginning of steady state
 explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]

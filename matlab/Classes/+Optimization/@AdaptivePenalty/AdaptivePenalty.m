@@ -81,9 +81,15 @@ classdef  AdaptivePenalty < Optimization.AbstractPenalty
        function ComputeConstraintsViolation(obj,c_index)
            if(c_index>0)    
                for i=1:obj.n_constraint 
-                   %index = obj.constraints_violation(i,:)>0;
-                   %overall_const_viol = sum(obj.constraints_violation(i,index),2); 
-                   overall_const_viol = sum(obj.constraints_violation(i,:),2); 
+                   % i have to sum only the positive value that will rapresents
+                   % the positive value. if i have no positive value i have
+                   % to sum up all the negative
+                   index = obj.constraints_violation(i,:)>0;
+                   if(any(index))
+                     overall_const_viol = sum(obj.constraints_violation(i,index),2);
+                   else
+                     overall_const_viol = sum(obj.constraints_violation(i,:),2);
+                   end
                    % inequality constraints
                    if (obj.constraints_type(i)==1)    
                         obj.fitness_penalties(c_index,i) = (overall_const_viol + obj.epsilon(i))/obj.epsilon(i);
@@ -95,10 +101,14 @@ classdef  AdaptivePenalty < Optimization.AbstractPenalty
            else
                for i=1:obj.n_constraint
                    % i have to sum only the positive value that will rapresents
-                   % the positive value
-                   %index = obj.constraints_violation(i,:)>0;
-                   %overall_const_viol = sum(obj.constraints_violation(i,index),2); 
-                   overall_const_viol = sum(obj.constraints_violation(i,:),2); 
+                   % the positive value. if i have no positive value i have
+                   % to sum up all the negative
+                   index = obj.constraints_violation(i,:)>0;
+                   if(any(index))
+                     overall_const_viol = sum(obj.constraints_violation(i,index),2);
+                   else
+                     overall_const_viol = sum(obj.constraints_violation(i,:),2);
+                   end
                    % inequality constraints
                    if (obj.constraints_type(i)==1)    
                         obj.fitness_penalties(1,i) = (overall_const_viol + obj.epsilon(i))/obj.epsilon(i);
@@ -111,7 +121,7 @@ classdef  AdaptivePenalty < Optimization.AbstractPenalty
                % access the right entry in  the weights matrix
                % and i need it negative to distinguish between the
                % execution to compute the mean fitness of the mean
-               % candidates
+               % candidates (cindex here is -1)
                c_index = - c_index;
                obj.ComputePenalties(c_index,false);
            end

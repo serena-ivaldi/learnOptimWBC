@@ -5,7 +5,7 @@ clc
 %% Instantiate a |CodeGenerator| class object
 
 % change the function to change the robot for generating mex matrix
-rob = MdlJaco();
+rob = MdlLBR4pSimple();
 genkinonly = false;
 cGen = CodeGenerator(rob,'mex','genmfun','genmex');
 if(genkinonly)

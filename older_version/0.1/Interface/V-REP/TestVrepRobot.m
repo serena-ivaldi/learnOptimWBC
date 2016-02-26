@@ -26,7 +26,7 @@ target_link{1} = subchain1;
 
 % vrep model
 v = VAREP('~');%,'nosyncronous');
-v_arm = VAREP_arm(v,'Jaco','fmt','%s_joint%d');
+v_arm = VAREP_arm(v,'LBR4p','fmt','%s_joint%d');
 
 %desired_pose pointer
 %des_pos = v.object('cur_pos');
