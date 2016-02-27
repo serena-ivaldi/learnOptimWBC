@@ -10,13 +10,13 @@ classdef iCubWBM < IWBM.WBMInterface
     end
 
     properties(Access = protected)
-        iwbm_robot@WBM.WBM
-        istv@double    vector
-        iwf_R_b@double matrix
-        iwf_p_b@double vector
-        iwf_v_b@double vector
-        indof@uint16   scalar
-        iconfig
+        mwbm_robot@WBM.WBM
+        mstv@double    vector
+        mwf_R_b@double matrix
+        mwf_p_b@double vector
+        mwf_v_b@double vector
+        mndof@uint16   scalar
+        mconfig
     end
 
     methods
@@ -59,7 +59,7 @@ classdef iCubWBM < IWBM.WBMInterface
             end
 
             % init the mex-WholeBodyModel for the iCub-Robot:
-            iwbm_robot = WBM(robot_model, robot_config, wf2FixLnk);
+            mwbm_robot = WBM(robot_model, robot_config, wf2FixLnk);
         end
 
         function delete(obj)
@@ -71,8 +71,8 @@ classdef iCubWBM < IWBM.WBMInterface
         end
 
         function actualizeState(obj)
-            [wf_vqT_b, ~, obj.iwf_v_b, ~] = obj.iwbm_robot.getState();
-            [obj.iwf_p_b, obj.iwf_R_b] = WBM.utilities.frame2posRotm(wf_vqT_b);
+            [wf_vqT_b, ~, obj.mwf_v_b, ~] = obj.mwbm_robot.getState();
+            [obj.mwf_p_b, obj.mwf_R_b] = WBM.utilities.frame2posRotm(wf_vqT_b);
         end
 
         function T = A(obj, joints, q_j)
@@ -84,23 +84,23 @@ classdef iCubWBM < IWBM.WBMInterface
         end
 
         function J0 = jacob0(obj, q_j, varargin)            
-            J0 = obj.iwbm_robot.jacobian(obj.iwf_R_b, obj.iwf_p_b, q_j);
+            J0 = obj.mwbm_robot.jacobian(obj.mwf_R_b, obj.mwf_p_b, q_j);
         end
 
         function Jdot = jacob_dot(obj, q_j, dq_j)
-            Jdot = obj.iwbm_robot.dJdq(obj.iwf_R_b, obj.iwf_p_b, q_j, dq_j, obj.iwf_v_b);
+            Jdot = obj.mwbm_robot.dJdq(obj.mwf_R_b, obj.mwf_p_b, q_j, dq_j, obj.mwf_v_b);
         end
 
         function M = inertia(obj, robot, q_j)
-            M = obj.iwbm_robot.massMatrix(obj.iwf_R_b, obj.iwf_p_b, q_j);
+            M = obj.mwbm_robot.massMatrix(obj.mwf_R_b, obj.mwf_p_b, q_j);
         end
 
         function C = coriolis(obj, robot, q_j, dq_j)
-            C = obj.iwbm_robot.coriolisCentrifugalForces(obj.iwf_R_b, obj.iwf_p_b, q_j, dq_j, obj.iwf_v_b);
+            C = obj.mwbm_robot.coriolisCentrifugalForces(obj.mwf_R_b, obj.mwf_p_b, q_j, dq_j, obj.mwf_v_b);
         end
 
         function tg = gravload(obj, robot, q_j, grav)
-            tg = obj.iwbm_robot.gravityForces(obj.iwf_R_b, obj.iwf_p_b, q_j);
+            tg = obj.mwbm_robot.gravityForces(obj.mwf_R_b, obj.mwf_p_b, q_j);
         end
 
         function set.base(obj, v)

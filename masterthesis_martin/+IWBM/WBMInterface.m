@@ -9,13 +9,13 @@ classdef (Abstract) WBMInterface < handle
     end
 
     properties(Abstract, Access = protected)
-        iwbm_robot@WBM.WBM
-        istv@double    vector
-        iwf_R_b@double matrix
-        iwf_p_b@double vector
-        iwf_v_b@double vector
-        indof@uint16   scalar
-        iconfig
+        mwbm_robot@WBM.WBM
+        mstv@double    vector
+        mwf_R_b@double matrix
+        mwf_p_b@double vector
+        mwf_v_b@double vector
+        mndof@uint16   scalar
+        mconfig
     end
 
     methods(Abstract)
