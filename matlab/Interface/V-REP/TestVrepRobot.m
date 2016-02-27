@@ -9,8 +9,8 @@ deg = pi/180;
 %    unloadlibrary remoteApi
 % end
 %% 
-op_selection = 'teach';
-control = 'tracking_velocity';
+op_selection = 'control';
+control = 'torque_control';
 % GENERAL PARAM 
 
 time_struct.ti = 0;
@@ -22,18 +22,18 @@ subchain1 = [6];
 target_link{1} = subchain1;
 
 % matlab model
-[bot] = MdlJaco();
+[bot] = MdlLBR4pSimple();
 
 % vrep model
-v = VAREP('~');%,'nosyncronous');
-v_arm = VAREP_arm(v,'Jaco','fmt','%s_joint%d');
+v = VAREP('~');
+v_arm = VAREP_arm(v,'LBR4p','fmt','%s_joint%d');
 
 %desired_pose pointer
 %des_pos = v.object('cur_pos');
 % current pose tip robot
 %ee_cur_pos = v.object('toolVis');
-% set the first joint position 
 
+%% set the first joint position and target velocity 
 q_start = qz;
 qd_start = zeros(size(q_start));
 v_arm.setq(q_start)
@@ -41,21 +41,18 @@ v_arm.SetTargetQd(qd_start);
 
 % this is usefull to check the geometric correspondance
 %between vrep and matlab
-
-
-
-% test of the dynamic control cycle (position and velocity)
+%% test of the dynamic control cycle (position and velocity)
 % activate servo controllers on the vrep robot!
 
 % generate 
 % REFERENCE PARAMETERS
 traj_type = {'cartesian_x'};
-control_type = {'tracking'};
-type_of_traj = {'func'};
-geometric_path = {'circular'};
+control_type = {'regulation'};
+type_of_traj = {'none'};
+geometric_path = {'none'};
 time_law = {'linear'};
 %parameters first chains
-geom_parameters{1,1} = [0.1, 0, pi/2,pi,-0.4, 0, 0.3]; % Circular trajectory 
+geom_parameters{1,1} = [0.42 0.45 0.49]; % regulation
 dim_of_task{1,1}={[1;1;1]};
 
 
@@ -201,7 +198,7 @@ switch op_selection
          v.simstop()
       case 'tracking_velocity'
          lambda = 0.001;
-         K_p = 10;
+         K_p = 50;
          % initialize
          T = ee_cur_pos.getpose();
          p_mes = T(1:3,4);
@@ -250,11 +247,11 @@ switch op_selection
          % the metric change between regularized and not regularized because in the
          % regularized case i have to do N^(-1) 
          % not regularized case i have N^(-1/2)
-         metric = {'M^2'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
+         metric = {'M^(2)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
 
 
-         kp = [0.5]; % row vector one for each chain
-         kd = [0.1]%[2*sqrt(kp)];
+         kp = 600; % row vector one for each chain
+         kd = 2*sqrt(kp);
 
          for i= 1:chains.GetNumChains()
             for par = 1:chains.GetNumTasks(i)
@@ -268,6 +265,7 @@ switch op_selection
         
          value1 = 1*ones(chains.GetNumTasks(1));
          values{1} = value1;
+         value_range = [];
 
 
          %CONTROLLER PARAMETERS 2
@@ -288,7 +286,7 @@ switch op_selection
             number_of_action = chains.GetNumTasks(1) + repellers.GetNumberOfWeightFuncRep(1);
          end
         
-         alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,time_struct); 
+         alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,value_range,time_struct); 
          controller = Controllers.UF(chains,reference,alphas,repellers,metric,Kp,Kd,combine_rule,regularizer,max_time);
          
          q = q_start ;
@@ -296,20 +294,24 @@ switch op_selection
          all_tau = [];
          controller.SetCurRobotIndex(1);
          v.simstart();
+         if(v.syncronous)
+            v.SendTriggerSync()
+         end
+          t=0;
           for i = time_struct.ti:time_struct.step:time_struct.tf
-             t = v.GetSimTime();
              [p,pd,pdd]=reference.GetTraj(1,1,t);
              % object that show the desired position 
-             des_pos.setpos(p');
-             tau = controller.Policy(t,q,qd);
+             %des_pos.setpos(p');
+             tau_control = controller.Policy(t,q,qd)
              %tau = tau*10^(-3);
-             v_arm.SetTau(tau)
+             v_arm.SetTau(tau_control)
              if(v.syncronous)
                   v.SendTriggerSync()
              end
-             q = v_arm.getq(); 
-             qd = v_arm.GetQd();
-             all_tau = [all_tau;tau'];
+             t = t + time_struct.step;
+             q = v_arm.getq()
+             qd = v_arm.GetQd()
+             all_tau = [all_tau;tau_control'];
           end
          v.simstop();
 %          qi{1} = q;
@@ -323,6 +325,7 @@ switch op_selection
          
      case 'test_torque'
          v.simstart();
+          tau = [80 , 0 , 0 , 0 , 0, 0, 0]
           for i = time_struct.ti:time_struct.step:time_struct.tf
              v_arm.SetTau(tau);
              if(v.syncronous)
@@ -333,7 +336,6 @@ switch op_selection
           end
          v.simstop();   
       end
-
 end
 
 

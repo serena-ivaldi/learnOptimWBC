@@ -1,3 +1,10 @@
+%% some important note 
+% 1)both for velocity and position of joints vrep expect that i send stuff in
+% radians. he will automatically convert everything internally when i
+% receive and send stuff back
+% 2) so vrep expect me to reason in radians
+
+
 %VAREP V-REP simulator communications object
 %
 % A VAREP object holds all information related to the state of a connection.
@@ -80,10 +87,13 @@ classdef VAREP < handle
         vrep          % the remApi object
         client        % the comms handle
         path          % path to V-REP root
-        mode          % the communications mode TO FIX i have to define different modalities for different function
+        mode_send     % the communications mode to send data to vrep
+        mode_rec      % communication mode to receive data from vrep
         libpath       % list of libraries added to path
         syncronous    % when true i force a synchronous simulation   
         version       % the version as given by user 304, 311 etc.
+        %delta         % simluation step
+        %time          % simulation time
     end
     
     
@@ -173,8 +183,11 @@ classdef VAREP < handle
             if obj.client < 0
                 error('VREP:noconnect:Cant connect to V-REP simulator');
             end
-            % communication mode (blocking and not buffer)
-            obj.mode = obj.vrep.simx_opmode_oneshot_wait;
+            % communication mode (blocking and not buffer) 
+            % it is necessary when we want to get handle from the 
+            obj.mode_rec = obj.vrep.simx_opmode_oneshot_wait;
+            % this modality is just for sending 
+            obj.mode_send = obj.vrep.simx_opmode_oneshot;
             
             % type of communication sync or async
             obj.syncronous = opt.syncronous;
@@ -209,7 +222,7 @@ classdef VAREP < handle
             % from sprintf(FMT, ARGLIST).
             %
             sprintf(fmt, varargin{:})
-            [s,h] = obj.vrep.simxGetObjectHandle(obj.client, sprintf(fmt, varargin{:}), obj.mode);
+            [s,h] = obj.vrep.simxGetObjectHandle(obj.client, sprintf(fmt, varargin{:}), obj.mode_rec);
         end
         
         function children = getchildren(obj, h)
@@ -219,7 +232,7 @@ classdef VAREP < handle
             % denoted by the integer handle H.
             i = 0;
             while true
-            [s,ch] = obj.vrep.simxGetObjectChild(obj.client, h, i, obj.mode);
+            [s,ch] = obj.vrep.simxGetObjectChild(obj.client, h, i, obj.mode_rec);
             if s < 0
                 break
             end
@@ -253,7 +266,7 @@ classdef VAREP < handle
             % V.simstart() starts the V-REP simulation engine.
             %
             % See also VREP.simstop, VREP.simpause.
-            s = obj.vrep.simxStartSimulation(obj.client, obj.mode);
+            s = obj.vrep.simxStartSimulation(obj.client, obj.mode_send);
         end
         
         function simstop(obj)
@@ -262,7 +275,7 @@ classdef VAREP < handle
             % V.simstop() stops the V-REP simulation engine.
             %
             % See also VREP.simstart.
-            s = obj.vrep.simxStopSimulation(obj.client, obj.mode);
+            s = obj.vrep.simxStopSimulation(obj.client, obj.mode_send);
         end
         
         function simpause(obj)
@@ -272,7 +285,7 @@ classdef VAREP < handle
             % V.simstart() to resume the simulation.
             %
             % See also VREP.simstart.
-            s = obj.vrep.simxPauseSimulation(obj.client, obj.mode);
+            s = obj.vrep.simxPauseSimulation(obj.client, obj.mode_send);
         end
         
         function v = getversion(obj)
@@ -281,7 +294,7 @@ classdef VAREP < handle
             % V.getversion() is the version of the V-REP simulator
             % server as an integer MNNNN where M is the major version
             % number and NNNN is the minor version number.
-            [s,v] = obj.vrep.simxGetIntegerParameter(obj.client, obj.vrep.sim_intparam_program_version, obj.mode);
+            [s,v] = obj.vrep.simxGetIntegerParameter(obj.client, obj.vrep.sim_intparam_program_version, obj.rec);
         end
 
         function s = checkcomms(obj)
@@ -298,7 +311,7 @@ classdef VAREP < handle
             % else resumes it.  Useful to ensure an atomic update of
             % simulator state.
             
-            s = obj.vrep.simxPauseCommunication(obj.client, onoff, obj.mode);
+            s = obj.vrep.simxPauseCommunication(obj.client, onoff, obj.mode_send);
             if s ~= 0
                 throw( obj.except(s) );
             end
@@ -311,7 +324,7 @@ classdef VAREP < handle
             %
             % V.signal_int(NAME, VAL) send an integer signal with name NAME
             % and value VAL to the V-REP simulation engine.
-            s = obj.vrep.simxSetIntegerSignal(obj.client, name, val, obj.mode);
+            s = obj.vrep.simxSetIntegerSignal(obj.client, name, val, obj.mode_send);
             if s ~= 0
                 throw( obj.except(s) );
             end            
@@ -322,7 +335,7 @@ classdef VAREP < handle
             %
             % V.signal_float(NAME, VAL) send a float signal with name NAME
             % and value VAL to the V-REP simulation engine.
-            s = obj.vrep.simxSetFloatSignal(obj.client, name, val, obj.mode);
+            s = obj.vrep.simxSetFloatSignal(obj.client, name, val, obj.mode_send);
             if s ~= 0
                 throw( obj.except(s) );
             end
@@ -333,7 +346,7 @@ classdef VAREP < handle
             %
             % V.signal_str(NAME, VAL) send a string signal with name NAME
             % and value VAL to the V-REP simulation engine.
-            s = obj.vrep.simxSetStringSignal(obj.client, name, val, obj.mode);
+            s = obj.vrep.simxSetStringSignal(obj.client, name, val, obj.mode_send);
             if s ~= 0
                 throw( obj.except(s) );
             end
@@ -345,7 +358,7 @@ classdef VAREP < handle
             %
             % V.setparam_bool(NAME, VAL) sets the boolean parameter with name NAME
             % to value VAL within the V-REP simulation engine.
-            s = obj.vrep.simxSetBooleanParameter(obj.client, paramid, val, obj.mode);
+            s = obj.vrep.simxSetBooleanParameter(obj.client, paramid, val, obj.mode_send);
             if s ~= 0
                 throw( obj.except(s) );
             end
@@ -356,7 +369,7 @@ classdef VAREP < handle
             %
             % V.setparam_int(NAME, VAL) sets the integer parameter with name NAME
             % to value VAL within the V-REP simulation engine.
-            s = obj.vrep.simxSetIntParameter(obj.client, paramid, val, obj.mode);
+            s = obj.vrep.simxSetIntParameter(obj.client, paramid, val, obj.mode_send);
             if s ~= 0
                 throw( obj.except(s) );
             end
@@ -367,7 +380,7 @@ classdef VAREP < handle
             %
             % V.setparam_float(NAME, VAL) sets the float parameter with name NAME
             % to value VAL within the V-REP simulation engine.
-            s = obj.vrep.simxSetFloatParameter(obj.client, paramid, val, obj.mode);
+            s = obj.vrep.simxSetFloatParameter(obj.client, paramid, val, obj.mode_send);
             if s ~= 0
                 throw( obj.except(s) );
             end
@@ -379,7 +392,7 @@ classdef VAREP < handle
             %
             % V.setobjparam_bool(H, PARAM, VAL) sets the boolean parameter
             % with identifier PARAM of object H to value VAL.
-            s = obj.vrep.simxSetObjectIntParameter(obj.client, h, paramid, val, obj.mode);
+            s = obj.vrep.simxSetObjectIntParameter(obj.client, h, paramid, val, obj.mode_send);
             if s ~= 0
                 throw( obj.except(s) );
             end
@@ -390,7 +403,7 @@ classdef VAREP < handle
             %
             % V.setobjparam_int(H, PARAM, VAL) sets the integer parameter
             % with identifier PARAM of object H to value VAL.
-            s = obj.vrep.simxSetObjectIntParameter(obj.client, h, paramid, val, obj.mode);
+            s = obj.vrep.simxSetObjectIntParameter(obj.client, h, paramid, val, obj.mode_send);
             if s ~= 0
                 throw( obj.except(s) );
             end
@@ -401,7 +414,7 @@ classdef VAREP < handle
             %
             % V.setobjparam_bool(H, PARAM, VAL) sets the float parameter
             % with identifier PARAM of object H to value VAL.
-            s = obj.vrep.simxSetObjectFloatParameter(obj.client, h, paramid, val, obj.mode);
+            s = obj.vrep.simxSetObjectFloatParameter(obj.client, h, paramid, val, obj.mode_send);
             if s ~= 0
                 throw( obj.except(s) );
             end
@@ -412,7 +425,7 @@ classdef VAREP < handle
             %
             % V.getobjparam_bool(H, PARAM) gets the boolean parameter
             % with identifier PARAM of object with integer handle H.
-            [s,val] = obj.vrep.simxGetObjectIntParameter(obj.client, h, paramid, obj.mode);
+            [s,val] = obj.vrep.simxGetObjectIntParameter(obj.client, h, paramid, obj.mode_rec);
             if s ~= 0
                 throw( obj.except(s) );
             end
@@ -423,7 +436,7 @@ classdef VAREP < handle
             %
             % V.getobjparam_int(H, PARAM) gets the integer parameter
             % with identifier PARAM of object with integer handle H.
-            [s,val] = obj.vrep.simxGetObjectIntParameter(obj.client, h, paramid, obj.mode);
+            [s,val] = obj.vrep.simxGetObjectIntParameter(obj.client, h, paramid, obj.mode_rec);
             if s ~= 0
                 throw( obj.except(s) );
             end
@@ -434,7 +447,7 @@ classdef VAREP < handle
             %
             % V.getobjparam_bool(H, PARAM) gets the float parameter
             % with identifier PARAM of object with integer handle H.
-            [s,val] = obj.vrep.simxGetObjectFloatParameter(obj.client, h, paramid, obj.mode);
+            [s,val] = obj.vrep.simxGetObjectFloatParameter(obj.client, h, paramid, obj.mode_rec);
             if s ~= 0
                 throw( obj.except(s) );
             end
@@ -446,14 +459,14 @@ classdef VAREP < handle
             %
             % V.setjoint(H, Q) sets the position of joint object with integer handle H
             % to the value Q.
-            s = obj.vrep.simxSetJointPosition(obj.client, h, q, obj.mode);
+            s = obj.vrep.simxSetJointPosition(obj.client, h, q, obj.mode_rec);
         end
         
         function q = getjoint(obj, h)
             %VREP.getjoint Get value of V-REP joint object
             %
             % V.getjoint(H, Q) is the position of joint object with integer handle H.
-            [s,q] = obj.vrep.simxGetJointPosition(obj.client, h, obj.mode);
+            [s,q] = obj.vrep.simxGetJointPosition(obj.client, h, obj.mode_rec);
             
             if s ~= 0
                 throw( obj.except(s) );
@@ -465,11 +478,20 @@ classdef VAREP < handle
             %
             % V.setjointtarget(H, Q) sets the target position of joint object with integer handle H
             % to the value Q.
-            s = obj.vrep.simxSetJointTargetPosition(obj.client, h, q, obj.mode);
+            s = obj.vrep.simxSetJointTargetPosition(obj.client, h, q, obj.mode_send);
             
             if s ~= 0
                 throw( obj.except(s) );
             end
+        end
+        
+        function qd = getjointvel(obj,h)
+           
+           [s,qd] = obj.vrep.simxGetObjectFloatParameter(obj.client, h, obj.vrep.sim_jointfloatparam_velocity, obj.mode_rec);
+            if s ~= 0
+                throw( obj.except(s) );
+            end
+           
         end
         
         function setjointvel(obj, h, qd)
@@ -477,11 +499,21 @@ classdef VAREP < handle
             %
             % V.setjointvel(H, QD) sets the target velocity of joint object with integer handle H
             % to the value QD.
-            s = obj.vrep.simxSetJointTargetVelocity(obj.client, h, qd, obj.mode);
+            % when vrep receive a value is expecting radians and he
+            % automatically converst everything in rad
+            s = obj.vrep.simxSetJointTargetVelocity(obj.client, h, qd, obj.mode_send);
             
-            if s ~= 0
+            if s ~= 0 && s ~= 1 
                 throw( obj.except(s) );
             end
+        end
+        
+         %---- custom function 
+        function setjointtorque(obj,h,torque)
+           s = obj.vrep.simxSetJointForce(obj.client,h,torque,obj.mode_send);
+           if s ~= 0 && s ~= 1
+                throw( obj.except(so) );
+           end
         end
         
         
@@ -499,7 +531,7 @@ classdef VAREP < handle
                 relto = -1;
             end
             
-            s = obj.vrep.simxSetObjectPosition(obj.client, h, relto, t, obj.mode);
+            s = obj.vrep.simxSetObjectPosition(obj.client, h, relto, t, obj.mode_send);
             if s ~= 0
                 throw( obj.except(s) );
             end
@@ -517,7 +549,7 @@ classdef VAREP < handle
                 relto = -1;
             end
             
-            [s,t] = obj.vrep.simxGetObjectPosition(obj.client, h, relto, obj.mode);
+            [s,t] = obj.vrep.simxGetObjectPosition(obj.client, h, relto, obj.mode_rec);
             if s ~= 0
                 throw( obj.except(s) );
             end
@@ -541,11 +573,11 @@ classdef VAREP < handle
             
             pos = transl(T);
             eul = tr2eul(T, 'deg');
-            s = obj.vrep.simxSetObjectPosition(obj.client, h, relto, pos, obj.mode);
+            s = obj.vrep.simxSetObjectPosition(obj.client, h, relto, pos, obj.mode_send);
             if s ~= 0
                 throw( obj.except(s) );
             end
-            s = obj.vrep.simxSetObjectOrientation(obj.client, h, relto, eul, obj.mode);
+            s = obj.vrep.simxSetObjectOrientation(obj.client, h, relto, eul, obj.mode_send);
             if s < 0
                 throw( obj.except(s) );
             end
@@ -565,11 +597,11 @@ classdef VAREP < handle
                 relto = relto.h;
             end
             
-            [s,pos] = obj.vrep.simxGetObjectPosition(obj.client, h, relto, obj.mode);
+            [s,pos] = obj.vrep.simxGetObjectPosition(obj.client, h, relto, obj.mode_rec);
             if s ~= 0
                 throw( obj.except(s) );
             end
-            [s,eul] = obj.vrep.simxGetObjectOrientation(obj.client, h, relto, obj.mode);
+            [s,eul] = obj.vrep.simxGetObjectOrientation(obj.client, h, relto, obj.mode_rec);
             if s ~= 0
                 throw( obj.except(s) );
             end
@@ -606,7 +638,7 @@ classdef VAREP < handle
                 eul = R;
             end
             
-            s = obj.vrep.simxSetObjectOrientation(obj.client, h, relto, eul, obj.mode);
+            s = obj.vrep.simxSetObjectOrientation(obj.client, h, relto, eul, obj.mode_send);
             if s ~= 0
                 throw( obj.except(s) );
             end
@@ -639,7 +671,7 @@ classdef VAREP < handle
             opt.euler = false;
             [opt,args] = tb_optparse(opt, varargin);
             
-            [s,eul] = obj.vrep.simxGetObjectOrientation(obj.client, h, relto, obj.mode);
+            [s,eul] = obj.vrep.simxGetObjectOrientation(obj.client, h, relto, obj.mode_get);
             if s ~= 0
                 throw( obj.except(s) );
             end
@@ -656,30 +688,32 @@ classdef VAREP < handle
         end
         
         
-        %---- custom function 
-        function SetJointTorque(obj,h,torque)
-                                     
-           so = obj.vrep.simxSetJointForce(obj.client,h,torque,obj.mode);
-           if so ~= 0
-                throw( obj.except(so) );
-           end
-           
-        end
+       
         
-        %---- custom functions (remote api)
-        function time = GetSimTime(obj)
-           [s,time] = obj.vrep.simxGetTime(obj.client,obj.mode);
+        %---- custom functions (remote api) (obsolete)
+%         function time = GetSimTime(obj)
+%            [s,time] = obj.vrep.simxGetTime(obj.client,obj.mode);
+%            if s ~= 0
+%                    throw( obj.except(s) );
+%            end
+%         end
+        
+%         function delta = GetSimDelta(obj)
+%            [s,delta] = obj.vrep.simxGetDelta(obj.client,obj.mode);
+%            if s ~= 0
+%                    throw( obj.except(s) );
+%            end
+%         end
+        %---- custom functions (remote api) (obsolete)
+        
+
+         function delta = GetSimDelta(obj)
+           [s,delta]= simxGetFloatingParameter(obj.vrep,obj.client,obj.vrep.sim_floatparam_simulation_time_step,obj.mode_rec);
            if s ~= 0
                    throw( obj.except(s) );
            end
         end
         
-        function delta = GetSimDelta(obj)
-           [s,delta] = obj.vrep.simxGetDelta(obj.client,obj.mode);
-           if s ~= 0
-                   throw( obj.except(s) );
-           end
-        end
         
         %---- factory methods to create instances of specific objects that mirror VREP objects
         function a = arm(obj, name)

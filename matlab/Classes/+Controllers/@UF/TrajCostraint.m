@@ -34,7 +34,7 @@ function [b,J] = TrajCostraint(obj,ind_subchain,ind_task,t,J_old,Jd_old,x,xd,rpy
         if(strcmp(obj.references.control_type{ind_subchain,ind_task},'regulation'))
 
             [J,J_dot] = ReshapeJacobian(J_old,Jd_old,tot_link,sub_link,obj.references.mask{ind_subchain,ind_task},'trans');
-            [x_des,xd_des,xdd_des] = obj.references.GetTraj(ind_subchain,ind_task,t);
+            [x_des,xd_des,xdd_des] = obj.references.GetTraj(ind_subchain,ind_task,t)
             b = PD(x,x_des,obj.Kp{ind_subchain,ind_task},xd,xd_des,obj.Kd{ind_subchain,ind_task},xdd_des);
 
             % J_dot is just multiplied by qd

@@ -19,7 +19,7 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
         T = eval(kinematic{1});
         %T=cur_bot.T0_6(q_cur)
         %T = cur_bot.fkine(q_cur);
-        x = T(1:3,4);
+        x = T(1:3,4)
         rpy = tr2rpy(T);
         rpy = rpy';
         % compute generalized cartesian velocities from the current

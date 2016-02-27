@@ -29,7 +29,7 @@ classdef  SubChains < handle
                app_rob.name = sub_chains{i}.name;
                app_rob.model3d = sub_chains{i}.model3d;
                app_rob.links = sub_chains{1, 1}.links; % this line is fundamental whe we want to use a symbolic KINEMATIC model with frne (mex rne)
-               app_rob.robot2 = app_rob.nofriction('all');
+               %app_rob.robot2 = app_rob.nofriction('all');
                obj.sub_chains{i} = app_rob;
                obj.sub_chains_vis{i} = sub_chains{i};
                obj.symbolic_flag(i) = 1;

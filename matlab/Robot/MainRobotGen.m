@@ -7,9 +7,13 @@ clc
 % change the function to change the robot for generating mex matrix
 %rob = MdlJaco();
 %rob = MdlJacoDH();
-rob = MdlLBR4p();
 
+rob = MdlLBR4p();
 genkinonly = true;
+
+%rob = MdlLBR4pSimple();
+%genkinonly = false;
+
 cGen = CodeGenerator(rob,'mex','genmfun','genmex');
 if(genkinonly)
    %with this function i build only the kinematic symbolic rapresentation
@@ -25,5 +29,4 @@ addpath(cGen.basepath);
 rob_name = rob.name;
 rob_name(rob_name==' ')=[]; 
 fid = fopen( strcat(cGen.basepath,'/',rob_name,'_done.m'), 'wt' );
-
 

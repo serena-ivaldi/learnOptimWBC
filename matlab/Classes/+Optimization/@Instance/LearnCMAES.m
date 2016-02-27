@@ -72,7 +72,7 @@ else
 end
 
 fnForwardModel = @(obj_,actionLearn_,curr_candidate_,isMean_)TransAction(obj_,actionLearn_,curr_candidate_,isMean_, settings);
-
+% first mean
 [mean_performances(1), succeeded(1), data2save] = fnForwardModel(obj,mean(1, :),-1,1);
 policies(policyId,:) = mean(1, :);
 costs(policyId) = -mean_performances(1);
@@ -136,7 +136,7 @@ for k = 1:(nIterations - 1)
         index = sortInd(l);
         mean(k + 1, :) = mean(k + 1, :) + w(l) * offsprings(index, :);
     end
-
+    % end generation mean
     [mean_performances(k + 1), succeeded(policyId), data2save] = fnForwardModel(obj,mean(k + 1, :),-(k+1),1);
     policies(policyId,:) = mean(k + 1, :);
     costs(policyId) = -mean_performances(k + 1);

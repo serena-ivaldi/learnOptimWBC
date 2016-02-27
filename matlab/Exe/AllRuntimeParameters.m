@@ -132,23 +132,25 @@ switch CONTROLLERTYPE
         fitness = @fitness11;
         clean_function = @RobotExperimentCleanData;
         % TODO generalize for multichain
-        input{1} = simulator_type{1};  % rbt v-rep
-        input{2} =qi;               % initial position 
-        input{3} =qdi;              % initial velocity
+        input{1} = simulator_type{1};  % rbt / v-rep
+        input{2} = qi;                 % initial position 
+        input{3} = qdi;                % initial velocity
         %------
-        input{4} =time_sym_struct;     %time struct for simulation with fixed step
-        input{5} =[];                  % here i have to insert the controller i will do that in init() 
+        input{4} = time_sym_struct;    %time struct for simulation with fixed step
+        input{5} = [];                 % here i have to insert the controller i will do that in init() 
         input{6} = fixed_step;         % if is true i use ode4 (runge-kutta)
-        
+        % parameter for constraints method
+        method_to_use = 'adaptive';  % adaptive , vanilla , empty
+        epsilon = 0.001*ones(1,length(constraints_functions)); %vector with a number of value related to the number of constraints (used only with Aaptive constraints)
         %% CMAES PARAMETER
         % starting value of parameters
         generation_of_starting_point = 'random'; % 'test', 'given', 'random'
         %init_parameters = 6;
         user_defined_start_action=[-0.686896675401947,1.22650641453222,-3.27247260213565,12.6539506696606,11.9349914795820,12.3072074998126,11.4267899497361,13.3737941021526,8.77645179253447,-4.69418318274421,11.1958799565396,1.32058911902880,-0.691100222964068,0.286830798370383,-0.162567001268804];
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-        niter = 2;  %number of generations
+        niter = 5;  %number of generations
         cmaes_value_range = [-14 , 14];  % boudn that define the search space
-        
+        learn_approach = 'CMAES'; %CMAES (1+1)CMAES    
         %% FITNESS PARAMETERS
 
         %%%EOF    

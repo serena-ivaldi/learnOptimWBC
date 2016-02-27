@@ -139,7 +139,8 @@ classdef  UF < Controllers.AbstractController
                  if(obj.subchains.GetNumSubLinks(i,j) < DOF )
                    deg = pi/180;
                     %kp = 700;
-                    kp = 5;
+                    %kp = 5;
+                    kp = 100;
                     kd = 2*sqrt(kp);
                     qd_des =zeros(size(q,2),1);
                     q_des  = [122;121; 19; 60; 90; 0]*deg; %  TODO to generalize for different lenght of kinematic chain
