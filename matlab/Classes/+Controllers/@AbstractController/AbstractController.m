@@ -8,7 +8,7 @@ classdef (Abstract) AbstractController < handle
        
     
    methods(Abstract = true)
-      Policy(obj, t, q, qd);
+      Policy(obj,t,q,qd,Fc);
       GetTotalParamNum(obj);
    end
     

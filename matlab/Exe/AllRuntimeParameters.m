@@ -110,6 +110,10 @@ switch CONTROLLERTYPE
         %% CONTROLLER PARAMETERS
         max_time = 50; %50
         combine_rule = {'sum'}; % sum or projector (with sum reppelers are removed)
+        % this three matrix are used inside the impedance control 
+        Param{1} = Md;
+        Param{2} = Dd;
+        Param{3} = Pd;   
         % with this term i introduce a damped least square structure inside my
         % controller if regularizer is 0 i remove the regularizer action 
         % ONE FOR EACH TASK

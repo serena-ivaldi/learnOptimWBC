@@ -84,21 +84,21 @@ classdef (Abstract=true) VAREP_mirror < handle
                 %
                 % V.getparam_bool(NAME, VAL) is the boolean parameter with name NAME
                 % of the corresponding V-REP object.
-                obj.vrep.setobjparam_bool(obj, obj.h, paramid, val);
+                val = obj.vrep.getobjparam_bool(obj, obj.h, paramid);
             end
-            function val = getobjparam_int(obj, paramid, val)
+            function val = getobjparam_int(obj, paramid)
                 %VREP.getparam_bool Get integer parameter of V-REP object
                 %
                 % V.getparam_int(NAME, VAL) is the integer parameter with name NAME
                 % of the corresponding V-REP object.
-                obj.vrep.setobjparam_int(obj, obj.h, paramid);
+                val = obj.vrep.getobjparam_int(obj, obj.h, paramid);
             end
-            function getobjparam_float(obj, paramid, val)
+            function val = getobjparam_float(obj, paramid)
                 %VREP.getparam_float Get float parameter of V-REP object
                 %
                 % V.getparam_float(NAME, VAL) is the float parameter with name NAME
                 % of the corresponding V-REP object.
-                val = obj.vrep.setobjparam_float(obj, obj.h, paramid);
+                val = obj.vrep.getobjparam_float(obj, obj.h, paramid);
             end
         end
 end

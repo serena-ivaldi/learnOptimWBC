@@ -10,6 +10,7 @@ classdef  UF < Controllers.AbstractController
       %ground_truth    % if true for computing the position and velocity of the end effector i will use the non perturbed model 
       Kp               % vector of matrix of proportional gain
       Kd               % vector of matrix of derivative gain
+      Param            % cell array of matrix that are used to manage force controller
       combine_rule     % projector or sum 
       regularizer      % this term transform the UF in a regularized UF if it is different from zero. it is a cell array of vector each vector has as many entry as the number of task for the current chain vector
       torque_func      % in this vector i put the handle to the function that i want to use: ComputeRegularizedTorqueSum(...) ComputeTorqueSum(...)
@@ -23,14 +24,15 @@ classdef  UF < Controllers.AbstractController
 
    methods
       
-       function obj = UF(sub_chains,references,alpha,repellers,metric,Kp,Kd,combine_rule,regularization,max_time,varargin)
+       function obj = UF(sub_chains,references,alpha,repellers,metric,Kp,Kd,Param,combine_rule,regularization,max_time,varargin)
          obj.subchains = sub_chains;
          obj.references = references;
          obj.alpha = alpha;
          obj.repellers = repellers;
          obj.metric = metric;
          obj.Kp = Kp;
-         obj.Kd = Kd;  
+         obj.Kd = Kd; 
+         obj.Param = Param;
          obj.combine_rule = combine_rule;
          % in this way i can use a generic long vector inside
          % RuntimeVariable than here i take what i need
@@ -38,9 +40,9 @@ classdef  UF < Controllers.AbstractController
              for j=1:obj.subchains.GetNumTasks(i)
                  app_vector(j) = regularization{i}(1,j);
                  if( app_vector(j) == 0)
-                    obj.torque_func{i,j} = @(ind_subchain,ind_task,M,F,t,q,qd,u1)obj.ComputeTorqueSum(ind_subchain,ind_task,M,F,t,q,qd,u1);
+                    obj.torque_func{i,j} = @(ind_subchain,ind_task,M,F,t,q,qd,u1,Fc)obj.ComputeTorqueSum(ind_subchain,ind_task,M,F,t,q,qd,u1,Fc);
                  else
-                    obj.torque_func{i,j} = @(ind_subchain,ind_task,M,F,t,q,qd,u1)obj.ComputeRegularizedTorqueSum(ind_subchain,ind_task,M,F,t,q,qd,u1);
+                    obj.torque_func{i,j} = @(ind_subchain,ind_task,M,F,t,q,qd,u1,Fc)obj.ComputeRegularizedTorqueSum(ind_subchain,ind_task,M,F,t,q,qd,u1,Fc);
                  end
              end
              obj.regularizer{i}=app_vector;
@@ -107,7 +109,7 @@ classdef  UF < Controllers.AbstractController
       end
       
       
-      function  final_tau  = Policy(obj,t,q,qd)
+      function  final_tau  = Policy(obj,t,q,qd,Fc)
           
           %DEBUG
           %t
@@ -136,19 +138,19 @@ classdef  UF < Controllers.AbstractController
                  % for stability reason when a controller use less dof
                  % then the free one i have to add a stabilizing action
                  % trough a null space porjected component
-                 if(obj.subchains.GetNumSubLinks(i,j) < DOF )
-                   deg = pi/180;
-                    %kp = 700;
-                    %kp = 5;
-                    kp = 100;
-                    kd = 2*sqrt(kp);
-                    qd_des =zeros(size(q,2),1);
-                    q_des  = [122;121; 19; 60; 90; 0]*deg; %  TODO to generalize for different lenght of kinematic chain
-                    u1 = ( kd*(qd_des - qd') + kp*(q_des - q'));
-                 else
+%                  if(obj.subchains.GetNumSubLinks(i,j) < DOF )
+%                    deg = pi/180;
+%                     %kp = 700;
+%                     %kp = 5;
+%                     kp = 100;
+%                     kd = 2*sqrt(kp);
+%                     qd_des =zeros(size(q,2),1);
+%                     q_des  = [122;121; 19; 60; 90; 0]*deg; %  TODO to generalize for different lenght of kinematic chain
+%                     u1 = ( kd*(qd_des - qd') + kp*(q_des - q'));
+%                 else
                     u1 = zeros(size(q,2),1);
-                 end
-                 tau=obj.torque_func{i,j}(i,j,M,F,t,q,qd,u1);
+%                 end
+                 tau=obj.torque_func{i,j}(i,j,M,F,t,q,qd,u1,Fc);
                  app_tau(:,j) = obj.alpha{i,j}.GetValue(t)*tau;       
              end
              
@@ -159,7 +161,7 @@ classdef  UF < Controllers.AbstractController
            elseif(strcmp(obj.combine_rule,'projector'))   
                
              for j = 1:obj.subchains.GetNumTasks(i)
-                 tau=obj.torque_func{i,j}(i,j,M,F,t,q,qd,u1);
+                 tau=obj.torque_func{i,j}(i,j,M,F,t,q,qd,u1,Fc);
                  app_tau(:,j) = obj.alpha{i,j}.GetValue(t)*tau;       
              end
              

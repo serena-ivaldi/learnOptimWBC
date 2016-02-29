@@ -44,6 +44,9 @@ v_arm.SetTargetQd(qd_start);
 %% test of the dynamic control cycle (position and velocity)
 % activate servo controllers on the vrep robot!
 
+%regulation task
+%RPY = [pi/2 0 -pi/2]
+
 % generate 
 % REFERENCE PARAMETERS
 traj_type = {'cartesian_x'};
@@ -52,8 +55,17 @@ type_of_traj = {'none'};
 geometric_path = {'none'};
 time_law = {'linear'};
 %parameters first chains
-geom_parameters{1,1} = [0.42 0.45 0.49]; % regulation
+geom_parameters{1,1} = [0.30 -0.71 0.5]; % regulation
 dim_of_task{1,1}={[1;1;1]};
+
+% traj_type = {'cartesian_x'};
+% control_type = {'impedance'};
+% type_of_traj = {'func'};
+% geometric_path = {'rectilinear'}
+% time_law = {'linear'};
+% %parameters first chains
+% geom_parameters{1,1} = [0.50 -0.76 1 -0.50 -0.76 1]; % regulation
+% dim_of_task{1,1}={[1;1;1]};
 
 
 % if type_of_task = sampled i have to specify the Time to reach the
@@ -175,7 +187,7 @@ switch op_selection
            
             for i = time_struct.ti:time_struct.step:time_struct.tf
       
-               t = v.GetSimTime();
+               %t = v.GetSimTime();
                [p,pd,pdd]=reference.GetTraj(1,1,t);
                des_pos.setpos(p');
                T(1:3,4) = p;
@@ -233,6 +245,9 @@ switch op_selection
       v.simstop();
             
       case 'torque_control' % in the vrep model yuo have to remove the low level control loop (pid or spring-damper)
+         
+         forcesensor = VAREP_forcesens(v,'Fc');
+         
          subchain1 = [7];
          target_link{1} = subchain1;
          
@@ -266,6 +281,15 @@ switch op_selection
          value1 = 1*ones(chains.GetNumTasks(1));
          values{1} = value1;
          value_range = [];
+         
+         kkp = 600;
+         Md = diag([1 1 1]);
+         Dd = diag([1 1 1]);
+         Pd = diag(kkp*[1 1 1]);
+         
+         Param{1} = Md;
+         Param{2} = Dd;
+         Param{3} = Pd;  
 
 
          %CONTROLLER PARAMETERS 2
@@ -287,7 +311,7 @@ switch op_selection
          end
         
          alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,value_range,time_struct); 
-         controller = Controllers.UF(chains,reference,alphas,repellers,metric,Kp,Kd,combine_rule,regularizer,max_time);
+         controller = Controllers.UF(chains,reference,alphas,repellers,metric,Kp,Kd,Param,combine_rule,regularizer,max_time);
          
          q = q_start ;
          qd = qd_start;
@@ -302,7 +326,8 @@ switch op_selection
              [p,pd,pdd]=reference.GetTraj(1,1,t);
              % object that show the desired position 
              %des_pos.setpos(p');
-             tau_control = controller.Policy(t,q,qd)
+             Fc = forcesensor.readforces()
+             tau_control = controller.Policy(t,q,qd,Fc);
              %tau = tau*10^(-3);
              v_arm.SetTau(tau_control)
              if(v.syncronous)

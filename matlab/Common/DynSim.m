@@ -112,6 +112,8 @@ function [t, q, qd] = DynSim(time_struct,controller,qi,qdi,fixed_step,varargin)
 end
 
 
+%% TO DO i should substitute accel with rne to obtain a one shot computation of the qdd (faster) instead of computing e every matrix of euler lagrange model
+
 %FDYN2  private function called by FDYN
 %
 %   XDD = FDYN2(T, X, FLAG, ROBOT, TORQUEFUN)
@@ -164,10 +166,16 @@ function xd = fdyn2(t, x, controller,varargin)
     
     q = x(1:n)';
     qd = x(n+1:2*n)';
+    
+    % Here i put the model for external forces (i have to see how to change the model to embed the external forces)
+    Fc = 0;
+    
+    % here i transform Fc to convert the xternal forces in forces in the
+    % joint space
 
     % evaluate the torque function if one is given
     if isobject(controller)
-        tau = controller.Policy(t,q,qd);
+        tau = controller.Policy(t,q,qd,Fc);
     else   
         tau = zeros(1,n);
     end
@@ -180,6 +188,10 @@ function xd = fdyn2(t, x, controller,varargin)
     if(~isrow(tau))
         tau = tau';    
     end
+    
+    % i add the external forces to tau to obtain a full simulation of the
+    % contact 
+    tau = tau - Fc;
     
     qdd = controller.GetActiveBot().accel(x(1:n,1)', x(n+1:2*n,1)', tau);
     xd = [x(n+1:2*n,1); qdd];

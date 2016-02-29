@@ -65,7 +65,7 @@ end
 
 switch CONTROLLERTYPE
     case 'UF'
-        controller = Controllers.UF(chains,reference,alphas,repellers,metric,Kp,Kd,combine_rule,regularizer,max_time);
+        controller = Controllers.UF(chains,reference,alphas,repellers,metric,Kp,Kd,Param,combine_rule,regularizer,max_time);
     case 'GHC'
       delta_t = time_sym_struct.tf*time_struct.step;
       controller = Controllers.GHC(chains,reference,alphas,constraints,Kp,Kd,regularization,epsilon,delta_t,max_time);

@@ -88,7 +88,7 @@ classdef  GHC < Controllers.AbstractController
       end
       
       
-      function  final_tau  = Policy(obj,t,q,qd)
+      function  final_tau  = Policy(obj,t,q,qd,Fc)
           %DEBUG
           %t
 %           q
