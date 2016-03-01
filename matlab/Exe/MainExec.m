@@ -3,15 +3,14 @@ close all
 clc
 
 %% initialize all the data
-[bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,constr,inst,~,~,~,~,qi,qdi,fixed_step,torque_saturation,rawTextFromStorage,name_dat]=Init();
-
+[bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,constr,learn_approach,inst,~,~,~,~,qi,qdi,fixed_step,torque_saturation,maxtime,rawTextFromStorage,name_dat]=Init();
 %% Simulation
 tic
-[t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step,'TorqueSat',torque_saturation);
+[t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step,'TorqueSat',torque_saturation,'maxtime',maxtime);
 toc
 
 %% Evaluate fitness 
-evaluation = true;
+evaluation = false;
 if (evaluation)
     performance = feval(inst.fitness,inst,t,q);
     inst.penalty_handling.ComputeConstraintsViolation(-1)
@@ -19,14 +18,16 @@ if (evaluation)
 end
 
 %% produce graph and copy parameters
-name_folder = 'hand_made_jaco1.3_c';
-complete_path = PlotSingleExecResult(name_folder,q,qd,t,time_sym_struct,controller,time_struct,name_scenario,bot1);
-% copy runtime parameters in the newly created folder
-fileID = fopen(strcat(complete_path,'/','runtime_parameters.txt'),'w');
-fprintf(fileID,'%s',rawTextFromStorage);
-complete_path_to_file = strcat(complete_path,'/data.mat');
-save(complete_path_to_file) 
-
+save_result_single_exec = false;
+if save_result_single_exec
+   name_folder = 'hand_made_jaco1.3_c';
+   complete_path = PlotSingleExecResult(name_folder,q,qd,t,time_sym_struct,controller,time_struct,name_scenario,bot1);
+   % copy runtime parameters in the newly created folder
+   fileID = fopen(strcat(complete_path,'/','runtime_parameters.txt'),'w');
+   fprintf(fileID,'%s',rawTextFromStorage);
+   complete_path_to_file = strcat(complete_path,'/data.mat');
+   save(complete_path_to_file) 
+end
 %% Display
 fps = 200;
 video = false;

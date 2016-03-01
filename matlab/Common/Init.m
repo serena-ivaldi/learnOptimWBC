@@ -1,14 +1,18 @@
 function [bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,constr,learn_approach,inst,generation_of_starting_point,...
-         niter,explorationRate,cmaes_value_range,qi,qdi,fixed_step,torque_saturation,rawTextFromStorage,name_dat]=Init()
+         niter,explorationRate,cmaes_value_range,qi,qdi,fixed_step,torque_saturation,maxtime,rawTextFromStorage,name_dat]=Init()
 %% parameters
 AllRuntimeParameters
 
-%% Reference
+%%  Primary Reference
 % if type_of_task = sampled i have to specify the Time to reach the
 % end of the trajectories that is equal to the simulation time
 reference = References(target_link,traj_type,control_type,geometric_path,geom_parameters,time_law,time_struct,dim_of_task,type_of_traj);
 reference.BuildTrajs();
-reference.cur_param_set = numeric_reference_parameter;
+reference.cur_param_set = numeric_reference_parameter; % some kind of trick to introduce parameters in the optimization procedure
+%% secondary reference 
+secondary_refs = References(target_link,traj_type_sec,control_type_sec,geometric_path_sec,geom_parameters_sec,time_law_sec,time_struct,dim_of_task_sec,type_of_traj_sec);
+secondary_refs.BuildTrajs();
+secondary_refs.cur_param_set = numeric_reference_parameter; % some kind of trick to introduce parameters in the optimization procedure
 %% plot scenario
 text = LoadScenario(name_scenario);
 eval(text);
@@ -65,10 +69,10 @@ end
 
 switch CONTROLLERTYPE
     case 'UF'
-        controller = Controllers.UF(chains,reference,alphas,repellers,metric,Kp,Kd,Param,combine_rule,regularizer,max_time);
+        controller = Controllers.UF(chains,reference,secondary_refs,alphas,repellers,metric,Param,Param_secondary,combine_rule,regularizer);
     case 'GHC'
       delta_t = time_sym_struct.tf*time_struct.step;
-      controller = Controllers.GHC(chains,reference,alphas,constraints,Kp,Kd,regularization,epsilon,delta_t,max_time);
+      controller = Controllers.GHC(chains,reference,alphas,constraints,Kp,Kd,regularization,epsilon,delta_t);
     otherwise
         warning('Unexpected control method')
 end

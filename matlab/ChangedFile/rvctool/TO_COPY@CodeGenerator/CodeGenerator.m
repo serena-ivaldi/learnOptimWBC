@@ -297,9 +297,9 @@ classdef CodeGenerator
             save(fullfile(CGen.sympath,fname),symname);
         end
 
-        function [] = geneverything(CGen)
+        function [] = geneverything(CGen,rpy,eul,jacob0)
             [t,allT] = CGen.genfkine;
-            [J0,Jn] = CGen.genjacobian;
+            [J0,Jn] = CGen.genjacobian(rpy,eul,jacob0);
             [Jdot] = CGen.genJdot;
             [G] = CGen.gengravload;
             [I] = CGen.geninertia;
@@ -309,9 +309,9 @@ classdef CodeGenerator
             [tau] = CGen.geninvdyn;
         end
         
-        function [] = genkinematic(CGen)
+        function [] = genkinematic(CGen,rpy,eul,jacob0)
            [t,allT] = CGen.genfkine;
-            [J0,Jn] = CGen.genjacobian;
+            [J0,Jn] = CGen.genjacobian(rpy,eul,jacob0);
             [Jdot] = CGen.genJdot;
         end
         

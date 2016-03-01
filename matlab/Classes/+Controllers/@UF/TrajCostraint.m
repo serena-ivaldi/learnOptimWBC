@@ -12,7 +12,7 @@ function [b,A] = TrajCostraint(obj,ind_subchain,ind_task,t,J_old,Jd_old,x,xd,rpy
             % space
             A=eye(obj.GetActiveBot.n);
             [x_des,xd_des,xdd_des] = obj.references.GetTraj(ind_subchain,ind_task,t);
-            b = PD(q,x_des,obj.Kp{ind_subchain,ind_task},qd,xd_des,obj.Kd{ind_subchain,ind_task},xdd_des);
+            b = PD(q,x_des,obj.Param{ind_subchain,ind_task}.Kp,qd,xd_des,obj.Param{ind_subchain,ind_task}.Kd,xdd_des);
             % J_dot is not used anymore because im imposing a trajecotry in
             % the joint
             return;
@@ -23,14 +23,14 @@ function [b,A] = TrajCostraint(obj,ind_subchain,ind_task,t,J_old,Jd_old,x,xd,rpy
      if(strcmp(obj.references.control_type{ind_subchain,ind_task},'regulation'))
          [A,J_dot] = ReshapeJacobian(J_old,Jd_old,tot_link,sub_link,obj.references.mask{ind_subchain,ind_task},'trans');
          [x_des,xd_des,xdd_des] = obj.references.GetTraj(ind_subchain,ind_task,t);
-         b = PD(x,x_des,obj.Kp{ind_subchain,ind_task},xd,xd_des,obj.Kd{ind_subchain,ind_task},xdd_des);
+         b = PD(x,x_des,obj.Param{ind_subchain,ind_task}.Kp,xd,xd_des,obj.Param{ind_subchain,ind_task}.Kd,xdd_des);
          % J_dot is just multiplied by qd
          b = b - J_dot;
          return;
      elseif(strcmp(obj.references.control_type{ind_subchain,ind_task},'tracking'))
          [A,J_dot] = ReshapeJacobian(J_old,Jd_old,tot_link,sub_link,obj.references.mask{ind_subchain,ind_task},'trans');
          [x_des,xd_des,xdd_des] = obj.references.GetTraj(ind_subchain,ind_task,t);
-         b = PD(x,x_des,obj.Kp{ind_subchain,ind_task},xd,xd_des,obj.Kd{ind_subchain,ind_task},xdd_des);  
+         b = PD(x,x_des,obj.Param{ind_subchain,ind_task}.Kp,xd,xd_des,obj.Param{ind_subchain,ind_task}.Kd,xdd_des);  
          % J_dot is just multiplied by qd
          b = b - J_dot;
          return;
@@ -40,21 +40,22 @@ function [b,A] = TrajCostraint(obj,ind_subchain,ind_task,t,J_old,Jd_old,x,xd,rpy
         % obj.Param{1} = M
         % obj.Param{2} = D
         % obj.Param{3} = P
-        A = J'*obj.Param{1};
-        b = Fc - obj.Param{1}*xdd_des - obj.Param{2}(J_dot - xd_des) - obj.Param{3}*(x-x_des) - obj.Param{1}*J_dot;
+        A = J'*obj.Param{ind_subchain,ind_task}.M;
+        b = Fc - obj.Param{ind_subchain,ind_task}.M*xdd_des - obj.Param{ind_subchain,ind_task}.D*(J_dot - xd_des) ...
+            - obj.Param{ind_subchain,ind_task}.P*(x-x_des) - obj.Param{ind_subchain,ind_task}.D*J_dot;
      end
  elseif(strcmp(obj.references.type{ind_subchain,ind_task},'cartesian_rpy'))  
      if(strcmp(obj.references.control_type{ind_subchain,ind_task},'regulation')) 
          [A,J_dot] = ReshapeJacobian(J_old,Jd_old,tot_link,sub_link,obj.references.mask{ind_subchain,ind_task},'rot');
          [rpy_des,rpyd_des,rpydd_des] = obj.references.GetTraj(ind_subchain,ind_task,t);
-         b = PD(rpy,rpy_des,obj.Kp{ind_subchain,ind_task},rpyd,rpyd_des,obj.Kd{ind_subchain,ind_task},rpydd_des);  
+         b = PD(rpy,rpy_des,obj.Param{ind_subchain,ind_task}.Kp,rpyd,rpyd_des,obj.Param{ind_subchain,ind_task}.Kd,rpydd_des);  
          % J_dot is just multiplied by qd
          b = b - J_dot; 
          return;
      elseif(strcmp(obj.references.control_type{ind_subchain,ind_task},'tracking'))
          [A,J_dot] = ReshapeJacobian(J_old,Jd_old,tot_link,sub_link,obj.references.mask{ind_subchain,ind_task},'rot');
          [rpy_des,rpyd_des,rpydd_des] = obj.references.GetTraj(ind_subchain,ind_task,t);
-         b = PD(rpy,rpy_des,obj.Kp{ind_subchain,ind_task},rpyd,rpyd_des,obj.Kd{ind_subchain,ind_task},rpydd_des);  
+         b = PD(rpy,rpy_des,obj.Param{ind_subchain,ind_task}.Kp,rpyd,rpyd_des,obj.Param{ind_subchain,ind_task}.Kp,rpydd_des);  
          % J_dot is just multiplied by qd
          b = b - J_dot;
          return;
@@ -64,8 +65,9 @@ function [b,A] = TrajCostraint(obj,ind_subchain,ind_task,t,J_old,Jd_old,x,xd,rpy
         % obj.Param{1} = M
         % obj.Param{2} = D
         % obj.Param{3} = P
-        A = J'*obj.Param{1};
-        b = Fc - obj.Param{1}*rpydd_des - obj.Param{2}(J_dot - rpyd_des) - obj.Param{3}*(x-rpy_des) - obj.Param{1}*J_dot;
+        A = J'*obj.Param{ind_subchain,ind_task}.M;
+        b = Fc - obj.Param{ind_subchain,ind_task}.M*rpydd_des - obj.Param{ind_subchain,ind_task}.D*(J_dot - rpyd_des)...
+            - obj.Param{ind_subchain,ind_task}.P*(x-rpy_des) - obj.Param{ind_subchain,ind_task}.M*J_dot;
      end 
  end
 end

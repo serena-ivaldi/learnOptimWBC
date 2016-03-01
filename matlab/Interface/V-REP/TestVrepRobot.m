@@ -44,35 +44,6 @@ v_arm.SetTargetQd(qd_start);
 %% test of the dynamic control cycle (position and velocity)
 % activate servo controllers on the vrep robot!
 
-%regulation task
-%RPY = [pi/2 0 -pi/2]
-
-% generate 
-% REFERENCE PARAMETERS
-traj_type = {'cartesian_x'};
-control_type = {'regulation'};
-type_of_traj = {'none'};
-geometric_path = {'none'};
-time_law = {'linear'};
-%parameters first chains
-geom_parameters{1,1} = [0.30 -0.71 0.5]; % regulation
-dim_of_task{1,1}={[1;1;1]};
-
-% traj_type = {'cartesian_x'};
-% control_type = {'impedance'};
-% type_of_traj = {'func'};
-% geometric_path = {'rectilinear'}
-% time_law = {'linear'};
-% %parameters first chains
-% geom_parameters{1,1} = [0.50 -0.76 1 -0.50 -0.76 1]; % regulation
-% dim_of_task{1,1}={[1;1;1]};
-
-
-% if type_of_task = sampled i have to specify the Time to reach the
-% end of the trajectories that is equal to the simulation time
-reference = References(target_link,traj_type,control_type,geometric_path,geom_parameters,time_law,time_struct,dim_of_task,type_of_traj);
-reference.BuildTrajs();
-
 
 switch op_selection
    
@@ -257,48 +228,114 @@ switch op_selection
          % repellers parameters
          repellers = [];
          
+         %% primary task
+         traj_type = {'cartesian_x'};
+         control_type = {'regulation'};
+         type_of_traj = {'none'};
+         geometric_path = {'none'};
+         time_law = {'linear'};
+         %parameters first chains
+         geom_parameters{1,1} = [0.30 -0.71 0.5]; % regulation
+         dim_of_task{1,1}={[1;1;1]};
+
+%          traj_type = {'cartesian_rpy'};
+%          control_type = {'regulation'};
+%          type_of_traj = {'none'};
+%          geometric_path = {'none'};
+%          time_law = {'linear'};
+%          %parameters first chains
+%          geom_parameters{1,1} = [pi/2 0 -pi/2]; % regulation
+%          dim_of_task{1,1}={[1;1;1]};
+
+         %% secondary task
+%          traj_type_sec = {'cartesian_x'};
+%          control_type_sec = {'regulation'};
+%          type_of_traj_sec = {'none'};
+%          geometric_path_sec = {'none'};
+%          time_law_sec = {'linear'};
+%          %parameters first chains
+%          geom_parameters_sec{1,1} = [0.30 -0.71 0.5]; % regulation
+%          dim_of_task_sec{1,1}={[1;1;1]};
+         
+         traj_type_sec = {'empty'};
+         control_type_sec = {'regulation'};
+         type_of_traj_sec = {'none'};
+         geometric_path_sec = {'none'};
+         time_law_sec = {'linear'};
+         %parameters first chains
+         geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
+         dim_of_task_sec{1,1}={[1;1;1]};
+
+         % traj_type = {'cartesian_x'};
+         % control_type = {'impedance'};
+         % type_of_traj = {'func'};
+         % geometric_path = {'rectilinear'}
+         % time_law = {'linear'};
+         % %parameters first chains
+         % geom_parameters{1,1} = [0.50 -0.76 1 -0.50 -0.76 1]; % regulation
+         % dim_of_task{1,1}={[1;1;1]}
+
+         % if type_of_task = sampled i have to specify the Time to reach the
+         % end of the trajectories that is equal to the simulation time
+         reference = References(target_link,traj_type,control_type,geometric_path,geom_parameters,time_law,time_struct,dim_of_task,type_of_traj);
+         reference.BuildTrajs();
+
+         secondary_refs = References(target_link,traj_type_sec,control_type_sec,geometric_path_sec,geom_parameters_sec,time_law_sec,time_struct,dim_of_task_sec,type_of_traj_sec);
+         secondary_refs.BuildTrajs();
+
+         
          
          %CONTROLLER PARAMETERS 1
          % the metric change between regularized and not regularized because in the
          % regularized case i have to do N^(-1) 
          % not regularized case i have N^(-1/2)
-         metric = {'M^(2)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
+         metric = {'M^(1/2)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
 
-
-         kp = 600; % row vector one for each chain
-         kd = 2*sqrt(kp);
-
+         % primary task gain
+         kd = 200;
+         kp = 100; % row vector one for each chain
+         
          for i= 1:chains.GetNumChains()
             for par = 1:chains.GetNumTasks(i)
                 K_p = kp(i,par)*eye(size(dim_of_task{i,par},1));  
                 K_d = kd(i,par)*eye(size(dim_of_task{i,par},1)); 
-                Kp{i,par} = K_p;
-                Kd{i,par} = K_d;
+                obj.Kp = K_p;
+                obj.Kd = K_d;
+                Param{i,par} = obj;
             end
 
+         end
+         % secondary task gains
+         kd = 110;
+         kp = 70; % row vector one for each chain
+         
+         for i= 1:chains.GetNumChains()
+            for par = 1:chains.GetNumTasks(i)
+                K_p = kp(i,par)*eye(size(dim_of_task{i,par},1));  
+                K_d = kd(i,par)*eye(size(dim_of_task{i,par},1)); 
+                obj.Kp = K_p;
+                obj.Kd = K_d;
+                Param_secondary{i,par} = obj;
+            end
          end
         
          value1 = 1*ones(chains.GetNumTasks(1));
          values{1} = value1;
          value_range = [];
          
-         kkp = 600;
-         Md = diag([1 1 1]);
-         Dd = diag([1 1 1]);
-         Pd = diag(kkp*[1 1 1]);
-         
-         Param{1} = Md;
-         Param{2} = Dd;
-         Param{3} = Pd;  
+         %kkp = 600;
+         %Md = diag([1 1 1]);
+         %Dd = diag([1 1 1]);
+         %Pd = diag(kkp*[1 1 1]);
+       
 
 
          %CONTROLLER PARAMETERS 2
-         max_time = 1000000; %50
          combine_rule = {'sum'}; % sum or projector (with sum reppelers are removed)
          % with this term i introduce a damped least square structure inside my
          % controller if regularizer is 0 i remove the regularizer action 
          % ONE FOR EACH TASK
-         regularizer_chain_1 = [0.001 0.001 0.001]; 
+         regularizer_chain_1 = [0 0.001 0.001]; 
          regularized_chain_2 = [1];
          regularizer{1} = regularizer_chain_1;
          regularizer{2} = regularized_chain_2;
@@ -311,7 +348,7 @@ switch op_selection
          end
         
          alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,value_range,time_struct); 
-         controller = Controllers.UF(chains,reference,alphas,repellers,metric,Kp,Kd,Param,combine_rule,regularizer,max_time);
+         controller = Controllers.UF(chains,reference,secondary_refs,alphas,repellers,metric,Param,Param_secondary,combine_rule,regularizer);
          
          q = q_start ;
          qd = qd_start;

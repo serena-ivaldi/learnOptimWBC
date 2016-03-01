@@ -2,7 +2,7 @@ classdef  References < handle
     
    properties
       target_link           %  vector that define wich kind of link i want to control with the e-e effector too (row vector) one for every kinematic chain
-      type;                 % cartesian_x,cartesian_rpy, joint vector 
+      type;                 % cartesian_x,cartesian_rpy, joint vector or empty 
       control_type;         % tracking,regulation vector
       traj;                 % circular, rectilinear, point-point_quintic, point-point_trapezoidal vector
       geom_parameters;      % vector of parameters that define the properties of every trajectories (both functional and sampled)

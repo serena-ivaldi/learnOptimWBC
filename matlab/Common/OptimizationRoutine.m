@@ -2,7 +2,7 @@
 function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, name_dat]=OptimizationRoutine(number_of_iteration,n_of_experiment,iter,init_parameters_from_out)  
     %% initialize all the data
     [bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,learn_approach,constr,inst,generation_of_starting_point,niter,...
-    explorationRate,cmaes_value_range,qi,qdi,fixed_step,torque_saturation,rawTextFromStorage,name_dat]=Init();
+    explorationRate,cmaes_value_range,qi,qdi,fixed_step,torque_saturation,maxtime,rawTextFromStorage,name_dat]=Init();
  
      %% optimization 
      % im using init_value from outside
