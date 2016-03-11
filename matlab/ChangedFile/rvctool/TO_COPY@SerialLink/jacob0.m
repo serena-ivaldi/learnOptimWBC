@@ -67,10 +67,15 @@ function J0 = jacob0(robot, q, varargin)
         B = rpy2jac(rpy);
         if(~isa(B, 'sym'))
            if rcond(B) < eps
-               error('Representational singularity');
+               disp('Representational singularity');
+                J0 = blkdiag( eye(3,3), inv(B + 0.001*eye(size(B,1))) ) * J0;
+           else
+               J0 = blkdiag( eye(3,3), inv(B) ) * J0;
            end
+            
+        else
+            J0 = blkdiag( eye(3,3), inv(B) ) * J0;
         end
-        J0 = blkdiag( eye(3,3), inv(B) ) * J0;
     elseif opt.eul
         eul = tr2eul( fkine(robot, q) );
         B = eul2jac(eul);

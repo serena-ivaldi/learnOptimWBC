@@ -4,10 +4,9 @@ function [tau,J,x,xd,rpy,rpyd] = ComputeTorqueSum(obj,ind_subchain,ind_task,M,F,
        [J,Jd,x,xd,rpy,rpyd] = obj.subchains.DirKin(q,qd,ind_subchain,ind_task);
        % the hypothesis is that N is inverted directly from data ()
        N = evalin('caller',obj.metric{ind_subchain,ind_task});
-       
+       I = eye(size(q,2)); 
        %% primary controller
        [b,A] = TrajCostraint(obj,ind_subchain,ind_task,t,J,Jd,x,xd,rpy,rpyd,q',qd',Fc);
-       I = eye(size(q,2)); 
        AM_inv  = A/M;
        AM_invN = AM_inv*N;
        t1 = pinv(AM_invN);
@@ -17,15 +16,14 @@ function [tau,J,x,xd,rpy,rpyd] = ComputeTorqueSum(obj,ind_subchain,ind_task,M,F,
     %   zz = svd(AM_invN); 
        %---   
         %% secondary controller
-       if(strcmp(obj.Secondary_refs.type{ind_subchain,ind_task},'empty')~=1)
-          [b1,A1] = obj.TrajCostraintSecondary(ind_subchain,ind_task,t,J,Jd,x,xd,rpy,rpyd,q',qd',Fc);
-          I = eye(size(q,2)); 
-          A1M_inv  = A1/M;
-          A1M_invN = A1M_inv*N;
-          t2 = pinv(A1M_invN);
-          u1 = N*t2*(b1);
+       if(strcmp(obj.Secondary_refs.type{ind_subchain,ind_task},'none')~=1)
+          [b2,A2] = obj.TrajCostraintSecondary(ind_subchain,ind_task,t,J,Jd,x,xd,rpy,rpyd,q',qd',Fc);
+          A2M_inv  = A2/M;
+          A2M_invN = A2M_inv*N;
+          t2 = pinv(A2M_invN);
+          u2 = N*t2*(b2);
        else
-          u1 = zeros(size(q,2),1);
+          u2 = zeros(size(q,2),1);
        end
        
        %% final controller
@@ -36,12 +34,18 @@ function [tau,J,x,xd,rpy,rpyd] = ComputeTorqueSum(obj,ind_subchain,ind_task,M,F,
 %         tau0 = tau0_1*A';
 %         tau1 =A'/tau0;
 %         tau = tau1*(b+tau0_1*F);
-
-      % test for projector 
-      tau = N*t1*(b) + ( I - N*t1*AM_inv)*u1 + F;
-      % debug
+      tau = N*t1*(b) + ( I - N*t1*AM_inv)*u2;
+      %% debug
       %torque_controller = tau
       %F_controller=F
+      % debug 2
+      %comparison1 =  N*t1*(b)
+      %comparison2 = u1
+      %tau = u1 + F;
+      % debug
+      %( I - N*t1*AM_inv)
+      %( I - N*t1*AM_inv)*( I - N*t1*AM_inv)
+      %AM_inv*( I - N*t1*AM_inv) = 0;
     catch error
         rethrow(error);
     end

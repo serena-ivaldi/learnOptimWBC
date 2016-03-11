@@ -124,32 +124,52 @@ switch CONTROLLERTYPE
         % the metric change between regularized and not regularized because in the
         % regularized case i have to do N^(-1) 
         % not regularized case i have N^(-1/2)
-        metric = {'M^(1/2)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
+        metric = {'M^(1)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
+        kd = 110;
+        kp = 70; % row vector one for each chain
+        for i= 1:chains.GetNumChains()
+            for par = 1:chains.GetNumTasks(i)
+                if(strcmp(traj_type{i},'impedance'))
+                    M = diag([1 1 1]);
+                    D = diag([110 110 110]);
+                    P =  kp(i,par)*eye(size(dim_of_task{i,par},1));
+                    obj.M = M;
+                    obj.D = D;
+                    obj.P = P;
+                    Param{i,par} = obj;
+                else
+                    K_p = kp(i,par)*eye(size(dim_of_task{i,par},1));  
+                    K_d = kd(i,par)*eye(size(dim_of_task{i,par},1)); 
+                    obj.Kp = K_p;
+                    obj.Kd = K_d;
+                    Param{i,par} = obj;
+                end
+            end
 
-        % Parameters for primary tasks 
-        kd = 200;
-        kp = 100; % row vector one for each chain
-        for i= 1:chains.GetNumChains()
-           for par = 1:chains.GetNumTasks(i)
-               K_p = kp(i,par)*eye(size(dim_of_task{i,par},1));  
-               K_d = kd(i,par)*eye(size(dim_of_task{i,par},1)); 
-               obj.Kp = K_p;
-               obj.Kd = K_d;
-               Param{i,par} = obj;
-           end
-        end
-        % Parameters for secondary tasks
-        kd = 0;
-        kp = 150; % row vector one for each chain
-        for i= 1:chains.GetNumChains()
-           for par = 1:chains.GetNumTasks(i)
-               K_p = kp(i,par)*eye(size(dim_of_task{i,par},1));  
-               K_d = kd(i,par)*eye(size(dim_of_task{i,par},1)); 
-               obj.Kp = K_p;
-               obj.Kd = K_d;
-               Param_secondary{i,par} = obj;
-           end
-        end
+         end
+         % secondary task gains
+         kd = 110;
+         kp = 70; % row vector one for each chain
+         
+         for i= 1:chains.GetNumChains()
+            for par = 1:chains.GetNumTasks(i)
+                 if(strcmp(traj_type_sec{i},'impedance'))
+                    M = diag([1 1 1]);
+                    D = diag([110 10 110]);
+                    P =  kp(i,par)*eye(size(dim_of_task{i,par},1));
+                    obj.M = M;
+                    obj.D = D;
+                    obj.P = P;
+                    Param_secondary{i,par} = obj;
+                else
+                    K_p = kp(i,par)*eye(size(dim_of_task{i,par},1));  
+                    K_d = kd(i,par)*eye(size(dim_of_task{i,par},1)); 
+                    obj.Kp = K_p;
+                    obj.Kd = K_d;
+                    Param_secondary{i,par} = obj;
+                end
+            end
+         end
         % with this term i introduce a damped least square structure inside my
         % controller if regularizer is 0 i remove the regularizer action 
         % ONE FOR EACH TASK
@@ -203,14 +223,12 @@ switch CONTROLLERTYPE
 
         %% Constraints
         constraints_list={'vellimit','vellimit','torquelimit','torquelimit','obsavoid'}; %'obsavoid'
-
         cdata1 = [1;1000];
         cdata2 = [0;1000];
         cdata3 = [1;2000];
         cdata4 = [0;2000];
         cdata5 = [1;7];
         constraints_data = [cdata1, cdata2, cdata3, cdata4, cdata5];
-
 
         %% flag to choose type of alpha 
         % RBF or chained
@@ -233,15 +251,12 @@ switch CONTROLLERTYPE
         numeric_theta = [5.545380 6.292794 4.686268 4.954681 2.166321 3.780383 6.104651 6.199604 4.132309 7.537761 8.678486 9.190867 8.804879 7.583105 7.401123 5.246353 3.797951 10.289526 10.088667 9.602943 ];
         %numeric_theta =[12 12 12 12 12 12 12 12 12 12 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0];
 
-
         %% Controller Parameters
-        %UF and GHC
-        
+        %UF and GHC   
         % GHC
         epsilon = 0.002;
         regularization = 0.01;
-       
-
+     
         %% CMAES PARAMETER
         % starting value of parameters
         %init_parameters = 6;
@@ -256,9 +271,7 @@ switch CONTROLLERTYPE
         warning('Unexpected control method')
 end
 
-
 %% DO NOT CHANGE THIS PART!
-
 
 % backup data 
 rawTextFromStorage = fileread(which(mfilename));
@@ -266,4 +279,3 @@ rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF'],'match','
 
 % join the general static parameter with the particular static one
 rawTextFromStorage = strcat(rawTextFromStorage,rawTextFromStoragePart);
-

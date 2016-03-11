@@ -22,7 +22,7 @@
 
 
 
-classdef VAREP_forcesens < VAREP_mirror
+classdef VAREP_forcesens < VAREP_obj
     
     properties
     end
@@ -34,13 +34,17 @@ classdef VAREP_forcesens < VAREP_mirror
             %
             % v = VREP_base(NAME) creates a V-REP mirror object for a
             % simple V-REP object type.
-            obj = obj@VAREP_mirror(vrep, name);
+            obj = obj@VAREP_obj(vrep, name);
         end
         
-        function Fc = readforces(obj)
+        function Fc = readforces(obj,world)
             [force,momentum]=obj.vrep.readforcesensor(obj.h);
             % column vector
             Fc = [force';momentum'];
+            if(nargin>1)
+                T = obj.getpose();
+                Fc = [(T(1:3,1:3)*force');(T(1:3,1:3)*momentum')];
+            end
         end
     end
 end

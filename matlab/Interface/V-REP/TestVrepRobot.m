@@ -18,7 +18,7 @@ time_struct.tf = 10;
 time_struct.step = 0.001;
 
 %SUBCHAIN PARAMETERS 
-subchain1 = [6];
+subchain1 = [7];
 target_link{1} = subchain1;
 
 % matlab model
@@ -218,10 +218,6 @@ switch op_selection
       case 'torque_control' % in the vrep model yuo have to remove the low level control loop (pid or spring-damper)
          
          forcesensor = VAREP_forcesens(v,'Fc');
-         
-         subchain1 = [7];
-         target_link{1} = subchain1;
-         
          robots{1} = bot;
          chains = SubChains(target_link,robots);
          
@@ -229,39 +225,39 @@ switch op_selection
          repellers = [];
          
          %% primary task
-         traj_type = {'cartesian_x'};
-         control_type = {'regulation'};
-         type_of_traj = {'none'};
-         geometric_path = {'none'};
-         time_law = {'linear'};
+         traj_type = {'impedance'};
+         control_type = {'x'};
+         type_of_traj = {'func'};
+         geometric_path = {'fixed'};
+         time_law = {'none'};
          %parameters first chains
-         geom_parameters{1,1} = [0.30 -0.71 0.5]; % regulation
+         geom_parameters{1,1} = [0.30 -0.75 0.5]; % regulation
          dim_of_task{1,1}={[1;1;1]};
 
-%          traj_type = {'cartesian_rpy'};
-%          control_type = {'regulation'};
-%          type_of_traj = {'none'};
-%          geometric_path = {'none'};
-%          time_law = {'linear'};
+%          traj_type = {'cartesian'};
+%          control_type = {'rpy'};
+%          type_of_traj = {'func'};
+%          geometric_path = {'fixed'};
+%          time_law = {'none'};
 %          %parameters first chains
 %          geom_parameters{1,1} = [pi/2 0 -pi/2]; % regulation
 %          dim_of_task{1,1}={[1;1;1]};
 
          %% secondary task
-%          traj_type_sec = {'cartesian_x'};
-%          control_type_sec = {'regulation'};
-%          type_of_traj_sec = {'none'};
-%          geometric_path_sec = {'none'};
+%          traj_type_sec = {'cartesian'};
+%          control_type_sec = {'x'};
+%          type_of_traj_sec = {'func'};
+%          geometric_path_sec = {'fixed'};
 %          time_law_sec = {'linear'};
 %          %parameters first chains
 %          geom_parameters_sec{1,1} = [0.30 -0.71 0.5]; % regulation
 %          dim_of_task_sec{1,1}={[1;1;1]};
          
-         traj_type_sec = {'empty'};
-         control_type_sec = {'regulation'};
-         type_of_traj_sec = {'none'};
-         geometric_path_sec = {'none'};
-         time_law_sec = {'linear'};
+         traj_type_sec = {'cartesian'};
+         control_type_sec = {'rpy'};
+         type_of_traj_sec = {'func'};
+         geometric_path_sec = {'fixed'};
+         time_law_sec = {'none'};
          %parameters first chains
          geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
          dim_of_task_sec{1,1}={[1;1;1]};
@@ -270,7 +266,7 @@ switch op_selection
          % control_type = {'impedance'};
          % type_of_traj = {'func'};
          % geometric_path = {'rectilinear'}
-         % time_law = {'linear'};
+         % time_law = {'none'};
          % %parameters first chains
          % geom_parameters{1,1} = [0.50 -0.76 1 -0.50 -0.76 1]; % regulation
          % dim_of_task{1,1}={[1;1;1]}
@@ -297,11 +293,21 @@ switch op_selection
          
          for i= 1:chains.GetNumChains()
             for par = 1:chains.GetNumTasks(i)
-                K_p = kp(i,par)*eye(size(dim_of_task{i,par},1));  
-                K_d = kd(i,par)*eye(size(dim_of_task{i,par},1)); 
-                obj.Kp = K_p;
-                obj.Kd = K_d;
-                Param{i,par} = obj;
+                if(strcmp(traj_type{i},'impedance'))
+                    M = diag([1 1 1]);
+                    D = diag([1 10 1]);
+                    P =  kp(i,par)*eye(size(dim_of_task{i,par},1));
+                    obj.M = M;
+                    obj.D = D;
+                    obj.P = P;
+                    Param{i,par} = obj;
+                else
+                    K_p = kp(i,par)*eye(size(dim_of_task{i,par},1));  
+                    K_d = kd(i,par)*eye(size(dim_of_task{i,par},1)); 
+                    obj.Kp = K_p;
+                    obj.Kd = K_d;
+                    Param{i,par} = obj;
+                end
             end
 
          end
@@ -311,11 +317,21 @@ switch op_selection
          
          for i= 1:chains.GetNumChains()
             for par = 1:chains.GetNumTasks(i)
-                K_p = kp(i,par)*eye(size(dim_of_task{i,par},1));  
-                K_d = kd(i,par)*eye(size(dim_of_task{i,par},1)); 
-                obj.Kp = K_p;
-                obj.Kd = K_d;
-                Param_secondary{i,par} = obj;
+                 if(strcmp(traj_type_sec{i},'impedance'))
+                    M = diag([1 1 1]);
+                    D = diag([1 10 1]);
+                    P =  kp(i,par)*eye(size(dim_of_task{i,par},1));
+                    obj.M = M;
+                    obj.D = D;
+                    obj.P = P;
+                    Param_secondary{i,par} = obj;
+                else
+                    K_p = kp(i,par)*eye(size(dim_of_task{i,par},1));  
+                    K_d = kd(i,par)*eye(size(dim_of_task{i,par},1)); 
+                    obj.Kp = K_p;
+                    obj.Kd = K_d;
+                    Param_secondary{i,par} = obj;
+                end
             end
          end
         
@@ -363,7 +379,8 @@ switch op_selection
              [p,pd,pdd]=reference.GetTraj(1,1,t);
              % object that show the desired position 
              %des_pos.setpos(p');
-             Fc = forcesensor.readforces()
+             %Fc2 =  forcesensor.readforces();
+             Fc = forcesensor.readforces(true);
              tau_control = controller.Policy(t,q,qd,Fc);
              %tau = tau*10^(-3);
              v_arm.SetTau(tau_control)
@@ -371,8 +388,8 @@ switch op_selection
                   v.SendTriggerSync()
              end
              t = t + time_struct.step;
-             q = v_arm.getq()
-             qd = v_arm.GetQd()
+             q = v_arm.getq();
+             qd = v_arm.GetQd();
              all_tau = [all_tau;tau_control'];
           end
          v.simstop();

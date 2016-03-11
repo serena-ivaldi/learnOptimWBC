@@ -93,7 +93,7 @@ function [t, q, qd] = DynSim(time_struct,controller,qi,qdi,fixed_step,varargin)
                 y = Ode1(@fdyn2,time,yi,controller,varargin{:}); 
             else
                 disp('NOT fixed_step')
-                [T,y] = ode15s(@fdyn2,time,yi,[],controller,varargin{:});     
+                [T,y] = ode45(@fdyn2,time,yi,[],controller,varargin{:});     
             end  
             q{index_chain} = y(:,1:n);
             qd{index_chain} = y(:,n+1:2*n);

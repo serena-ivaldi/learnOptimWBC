@@ -24,25 +24,44 @@ chains = SubChains(target_link,robots);
 %%  REFERENCE PARAMETERS
 deg = pi/180;
 % primary trajectory
-traj_type = {'cartesian_x'};
-control_type = {'regulation'};
-type_of_traj = {'none'};
-geometric_path = {'none'};
+traj_type = {'impedance'};
+control_type = {'x'};
+type_of_traj = {'func'};
+geometric_path = {'fixed'};
 time_law = {'none'};
 %parameters first chains
 geom_parameters{1,1} = [0.30 -0.71 0.5]; 
 %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
 dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
 
+% traj_type = {'cartesian'};
+% control_type = {'rpy'};
+% type_of_traj = {'func'};
+% geometric_path = {'fixed'};
+% time_law = {'none'};
+% %parameters first chains
+% geom_parameters{1,1} = [pi/2 0 -pi/2]; 
+% %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
+% dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
+
 % secondary trajectory
-traj_type_sec = {'empty'};
-control_type_sec = {'regulation'};
-type_of_traj_sec = {'none'};
-geometric_path_sec = {'none'};
+traj_type_sec = {'none'};
+control_type_sec = {'rpy'};
+type_of_traj_sec = {'func'};
+geometric_path_sec = {'fixed'};
 time_law_sec = {'linear'};
 %parameters first chains
 geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
 dim_of_task_sec{1,1}={[1;1;1]};
+
+% traj_type_sec = {'cartesian_x'};
+% control_type_sec = {'regulation'};
+% type_of_traj_sec = {'none'};
+% geometric_path_sec = {'none'};
+% time_law_sec = {'linear'};
+% parameters first chains
+% geom_parameters_sec{1,1} = [0.30 -0.71 0.5]; % regulation
+% dim_of_task_sec{1,1}={[1;1;1]};
 
 
 %% FROM THIS POINT YOU CAN FIND PARAMETERS IN THE STATIC PARAMETERS FILE RELATED TO EACH ALGORITHM 

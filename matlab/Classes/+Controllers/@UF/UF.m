@@ -150,6 +150,7 @@ classdef  UF < Controllers.AbstractController
              end
              
              final_tau = sum(app_tau,2);
+             final_tau = final_tau + F; 
              obj.SaveTau(i,final_tau); 
              obj.SaveTime(i,t);
              
@@ -166,7 +167,7 @@ classdef  UF < Controllers.AbstractController
                obj.repellers.SetJacob(cur_bot,q,qd,i,j)  
              end                                
              N = obj.repellers.ComputeProjector(i,DOF,obj.subchains.GetNumTasks(i),obj.alpha,t);
-             final_tau = ((M*N)/M)*final_tau;
+             final_tau = ((M*N)/M)*(final_tau + F);
             
              obj.SaveTau(i,final_tau) 
              obj.SaveTime(i,t);  

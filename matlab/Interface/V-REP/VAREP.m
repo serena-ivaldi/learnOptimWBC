@@ -547,7 +547,7 @@ classdef VAREP < handle
             %
             % V.getpos(H, HR) as above but position is relative to the
             % position of object with integer handle HR.
-            if nargin < 4
+            if nargin < 3
                 relto = -1;
             end
             
@@ -574,7 +574,7 @@ classdef VAREP < handle
             end
             
             pos = transl(T);
-            eul = tr2eul(T, 'deg');
+            eul = tr2eul(T);
             s = obj.vrep.simxSetObjectPosition(obj.client, h, relto, pos, obj.mode_send);
             if s ~= 0
                 throw( obj.except(s) );
@@ -593,7 +593,7 @@ classdef VAREP < handle
             %
             % V.getpose(H, HR) as above but pose is relative to the
             % pose of object with integer handle R.
-            if nargin < 4
+            if nargin < 3
                 relto = -1;
             elseif isa(relto, 'VREP_base')
                 relto = relto.h;
@@ -608,7 +608,7 @@ classdef VAREP < handle
                 throw( obj.except(s) );
             end
             
-            T = transl(pos) * eul2tr(eul, 'deg');
+            T = transl(pos) * eul2tr(eul,'vrep');
         end
         
         %---- wrapper functions for orientation of objects
@@ -664,7 +664,7 @@ classdef VAREP < handle
             % Options::
             % See tr2eul.
             
-            if nargin < 4
+            if nargin < 3
                 relto = -1;
             elseif isa(relto, 'VREP_base')
                 relto = relto.h;
@@ -681,7 +681,7 @@ classdef VAREP < handle
             if opt.euler
                 R = eul;
             else
-                R = eul2tr(eul, args{:});
+                R = eul2tr(eul,'vrep',args{:});
             end
         end
         
