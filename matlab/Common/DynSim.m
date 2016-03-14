@@ -87,30 +87,32 @@ function [t, q, qd] = DynSim(time_struct,controller,qi,qdi,fixed_step,varargin)
         % TODO add managment of multiple chain in fdyn2
         controller.SetCurRobotIndex(index_chain);
         n = controller.GetActiveBot.n;
-        try
+       % try
             if(fixed_step)
                 disp('fixed_step') 
                 y = Ode1(@fdyn2,time,yi,controller,varargin{:}); 
             else
                 disp('NOT fixed_step')
-                [T,y] = ode15s(@fdyn2,time,yi,[],controller,varargin{:});     
+                [T,y] = ode45(@fdyn2,time,yi,[],controller,varargin{:});     
             end  
             q{index_chain} = y(:,1:n);
             qd{index_chain} = y(:,n+1:2*n);
-        catch err
-            
-            q{index_chain} = y(:,1:n);
-            qd{index_chain} = y(:,n+1:2*n); 
-            %because of i have failed i need to cut the time till the last
-            %position computed
-            t = time(1,1:size(q{index_chain},1));
-            rethrow(err);
-        end
+%         catch err
+%             disp('integration error');
+%             q{index_chain} = y(:,1:n);
+%             qd{index_chain} = y(:,n+1:2*n); 
+%             %because of i have failed i need to cut the time till the last
+%             %position computed
+%             t = time(1,1:size(q{index_chain},1));
+%             rethrow(err);
+%         end
     end
     % i have to use the same sample time for every chain 
     t = time;
 end
 
+
+%% TO DO i should substitute accel with rne to obtain a one shot computation of the qdd (faster) instead of computing e every matrix of euler lagrange model
 
 %FDYN2  private function called by FDYN
 %
@@ -130,7 +132,7 @@ function xd = fdyn2(t, x, controller,varargin)
 
 
     %% varargin settings
-    options = struct('torquesat',10000);
+    options = struct('torquesat',10000,'maxtime',10000);
 
     %# read the acceptable names
     optionNames = fieldnames(options);
@@ -164,10 +166,16 @@ function xd = fdyn2(t, x, controller,varargin)
     
     q = x(1:n)';
     qd = x(n+1:2*n)';
+    
+    % Here i put the model for external forces (i have to see how to change the model to embed the external forces)
+    Fc = 0;
+    
+    % here i transform Fc to convert the xternal forces in forces in the
+    % joint space
 
     % evaluate the torque function if one is given
     if isobject(controller)
-        tau = controller.Policy(t,q,qd);
+        tau = controller.Policy(t,q,qd,Fc);
     else   
         tau = zeros(1,n);
     end
@@ -181,10 +189,16 @@ function xd = fdyn2(t, x, controller,varargin)
         tau = tau';    
     end
     
+    % i add the external forces to tau to obtain a full simulation of the
+    % contact 
+    tau = tau - Fc;
+    
     qdd = controller.GetActiveBot().accel(x(1:n,1)', x(n+1:2*n,1)', tau);
+    % FOR DEBUG PURPOSE IN COUPLE WITH accel2()!
+    %qdd = controller.GetActiveBotVis().accel2(x(1:n,1)', x(n+1:2*n,1)', tau);
     xd = [x(n+1:2*n,1); qdd];
     
-    if toc(controller.current_time) > controller.max_time
+    if toc(controller.current_time) > options.('maxtime');
       controller.current_time = []; 
     	error('Stopped. Taking too long.')
     end

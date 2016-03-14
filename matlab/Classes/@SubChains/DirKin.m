@@ -19,12 +19,17 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
         T = eval(kinematic{1});
         %T=cur_bot.T0_6(q_cur)
         %T = cur_bot.fkine(q_cur);
-        x = T(1:3,4)
+        x = T(1:3,4);
         rpy = tr2rpy(T);
         rpy = rpy';
         % compute generalized cartesian velocities from the current
         % subchain
-        J = cur_bot.jacob0(q_cur);
+        try
+          J = cur_bot.jacob0(q_cur,'rpy');
+        catch error
+          error('jacob0 is symbolic. remove the corresponding mex file in the robot folder to make it works','could be a representation singularity');
+        end
+        
         v=J*qd_cur';
         xd = v(1:3);rpyd=v(4:6);
         % compute J_dot from the the current subchain

@@ -114,7 +114,7 @@ classdef VAREP < handle
             % 'port',P        Override communications port
             % 'reconnect'     Reconnect on error (default noreconnect)
             
-            opt.version = '313_custom';
+            opt.version = 330;
             opt.timeout = 2000;
             opt.cycle = 5;
             opt.port = [];
@@ -134,15 +134,11 @@ classdef VAREP < handle
             obj.path = path;
             
             switch opt.version
-                case '313_custom'
-                   libpath = { fullfile(path, 'git', 'learnOptimWBC','matlab','Interface','V-REP','matlab_bindings')};
-                    port = 19996;
+                case 330
+                   libpath = { fullfile(path, 'git', 'learnOptimWBC','matlab','Interface','V-REP','matlab_bindings','3_3_0')};
+                    port = 19997;
                 case 313
-                    % for 3.1.3
-                    libpath = { fullfile(path, 'programming', 'remoteApi')
-                        fullfile(path, 'programming', 'remoteApiBindings', 'matlab', 'matlab')
-                        fullfile(path, 'programming', 'remoteApiBindings', 'lib', 'lib','64Bit')
-                        }
+                   libpath = { fullfile(path, 'git', 'learnOptimWBC','matlab','Interface','V-REP','matlab_bindings','3_1_3')};
                     port = 19996;
                 case 311
                     % for 3.1.1
@@ -516,8 +512,14 @@ classdef VAREP < handle
            end
         end
         
-        
-        
+         %---- wrapper functions for force sensors
+         function [force,momentum]=readforcesensor(obj,h) 
+            [s,state,force,momentum]=obj.vrep.simxReadForceSensor(obj.client,h,obj.mode_rec);
+            if s ~= 0
+                throw( obj.except(s) );
+            end
+         end
+       
         %---- wrapper functions for position of objects
         function setpos(obj, h, t, relto)
             %VREP.setpos Set position of V-REP object             
@@ -545,7 +547,7 @@ classdef VAREP < handle
             %
             % V.getpos(H, HR) as above but position is relative to the
             % position of object with integer handle HR.
-            if nargin < 4
+            if nargin < 3
                 relto = -1;
             end
             
@@ -572,7 +574,7 @@ classdef VAREP < handle
             end
             
             pos = transl(T);
-            eul = tr2eul(T, 'deg');
+            eul = tr2eul(T);
             s = obj.vrep.simxSetObjectPosition(obj.client, h, relto, pos, obj.mode_send);
             if s ~= 0
                 throw( obj.except(s) );
@@ -591,7 +593,7 @@ classdef VAREP < handle
             %
             % V.getpose(H, HR) as above but pose is relative to the
             % pose of object with integer handle R.
-            if nargin < 4
+            if nargin < 3
                 relto = -1;
             elseif isa(relto, 'VREP_base')
                 relto = relto.h;
@@ -606,7 +608,7 @@ classdef VAREP < handle
                 throw( obj.except(s) );
             end
             
-            T = transl(pos) * eul2tr(eul, 'deg');
+            T = transl(pos) * eul2tr(eul,'vrep');
         end
         
         %---- wrapper functions for orientation of objects
@@ -662,7 +664,7 @@ classdef VAREP < handle
             % Options::
             % See tr2eul.
             
-            if nargin < 4
+            if nargin < 3
                 relto = -1;
             elseif isa(relto, 'VREP_base')
                 relto = relto.h;
@@ -679,7 +681,7 @@ classdef VAREP < handle
             if opt.euler
                 R = eul;
             else
-                R = eul2tr(eul, args{:});
+                R = eul2tr(eul,'vrep',args{:});
             end
         end
         
@@ -716,56 +718,56 @@ classdef VAREP < handle
         
         
         %---- factory methods to create instances of specific objects that mirror VREP objects
-        function a = arm(obj, name)
-            %VREP.arm Return VREP_arm object
-            %
-            % V.arm(name) is a factory method that returns a VREP_arm object for the V-REP robot
-            % object named NAME.
-            %
-            % See also VREP_arm.
-
-            a = VREP_arm(obj, name);
-        end
-        
-        function o = object(obj, name)
-            %VREP.arm Return VREP_obj object
-            %
-            % V.objet(name) is a factory method that returns a VREP_obj object for the V-REP
-            % object named NAME.
-            %
-            % See also VREP_obj.
-            o = VREP_obj(obj, name);
-        end
-        
-        function m = mobile(obj, name)
-            %VREP.mobile Return VREP_mobile object
-            %
-            % V.mobile(name) is a factory method that returns a
-            % VREP_mobile object for the V-REP mobile base object named NAME.
-            %
-            % See also VREP_mobile.
-            m = VREP_mobile(obj, name);
-        end
-        
-        function m = camera(obj, name)
-            %VREP.camera Return VREP_camera object
-            %
-            % V.camera(name) is a factory method that returns a VREP_camera object for the V-REP vision
-            % sensor object named NAME.
-            %
-            % See also VREP_camera.
-            m = VREP_camera(obj, name);
-        end
-        
-        function m = hokuyo(obj, name)
-            %VREP.hokuyo Return VREP_hokuyo object
-            %
-            % V.hokuyo(name) is a factory method that returns a VREP_hokuyo 
-            % object for the V-REP Hokuyo laser scanner object named NAME.
-            %
-            % See also VREP_hokuyo.
-            m = VREP_mobile(obj, name);
-        end
+%         function a = arm(obj, name)
+%             %VREP.arm Return VREP_arm object
+%             %
+%             % V.arm(name) is a factory method that returns a VREP_arm object for the V-REP robot
+%             % object named NAME.
+%             %
+%             % See also VREP_arm.
+% 
+%             a = VREP_arm(obj, name);
+%         end
+%         
+%         function o = object(obj, name)
+%             %VREP.arm Return VREP_obj object
+%             %
+%             % V.objet(name) is a factory method that returns a VREP_obj object for the V-REP
+%             % object named NAME.
+%             %
+%             % See also VREP_obj.
+%             o = VREP_obj(obj, name);
+%         end
+%         
+%         function m = mobile(obj, name)
+%             %VREP.mobile Return VREP_mobile object
+%             %
+%             % V.mobile(name) is a factory method that returns a
+%             % VREP_mobile object for the V-REP mobile base object named NAME.
+%             %
+%             % See also VREP_mobile.
+%             m = VREP_mobile(obj, name);
+%         end
+%         
+%         function m = camera(obj, name)
+%             %VREP.camera Return VREP_camera object
+%             %
+%             % V.camera(name) is a factory method that returns a VREP_camera object for the V-REP vision
+%             % sensor object named NAME.
+%             %
+%             % See also VREP_camera.
+%             m = VREP_camera(obj, name);
+%         end
+%         
+%         function m = hokuyo(obj, name)
+%             %VREP.hokuyo Return VREP_hokuyo object
+%             %
+%             % V.hokuyo(name) is a factory method that returns a VREP_hokuyo 
+%             % object for the V-REP Hokuyo laser scanner object named NAME.
+%             %
+%             % See also VREP_hokuyo.
+%             m = VREP_mobile(obj, name);
+%         end
         
 %         function m = youbot(obj, name)
 %             %VREP.youbot Return VREP_youbot object

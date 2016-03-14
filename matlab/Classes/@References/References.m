@@ -2,7 +2,7 @@ classdef  References < handle
     
    properties
       target_link           %  vector that define wich kind of link i want to control with the e-e effector too (row vector) one for every kinematic chain
-      type;                 % cartesian_x,cartesian_rpy, joint vector 
+      type;                 % cartesian_x,cartesian_rpy, joint vector or empty 
       control_type;         % tracking,regulation vector
       traj;                 % circular, rectilinear, point-point_quintic, point-point_trapezoidal vector
       geom_parameters;      % vector of parameters that define the properties of every trajectories (both functional and sampled)
@@ -27,10 +27,10 @@ classdef  References < handle
          obj.target_link = target_link;
        
          %warning: getnameidx is in the financial toolbox
-         %if(getnameidx({'joint' 'cartesian_x' 'cartesian_rpy'} , type) ~= 0 )
+         %if(getnameidx({'joint' 'cartesian' 'impedance'} , type) ~= 0 )
             obj.type = type;
          %end
-         %if(getnameidx({'tracking' 'regulation'} , control_type) ~= 0)
+         %if(getnameidx({'x' 'rpy'} , control_type) ~= 0)
             obj.control_type = control_type;
          %end
          %if(getnameidx({ 'circular','rectilinear', 'point-point_quintic' , 'point-point_trapezoidal' 'none'} , traj) ~= 0)
@@ -70,47 +70,34 @@ classdef  References < handle
           n = nnz(obj.mask{ind_subchain,ind_task});
       end
       
-      function [p,pd,pdd]=GetTraj(obj,ind_subchain,ind_task,t)
-         
-         if(strcmp(obj.control_type{ind_subchain,ind_task},'regulation'))
-             p  = obj.trajectories{ind_subchain,ind_task}.p;
-             pd = obj.trajectories{ind_subchain,ind_task}.pd;
-             pdd= obj.trajectories{ind_subchain,ind_task}.pdd; 
-
-         elseif(strcmp(obj.control_type{ind_subchain,ind_task},'tracking'))
-             
-             if(strcmp(obj.type_of_traj{ind_subchain,ind_task},'func')) 
-
-                if(obj.parameter_dim{ind_subchain,ind_task} > 0 )
-                   p=feval(obj.trajectories{ind_subchain,ind_task}.p,t,obj.cur_param_set{ind_subchain,ind_task});
-                   p=p(1:3,:); % i have to do that for manage the case in which i have constant function
-                   pd=feval(obj.trajectories{ind_subchain,ind_task}.pd,t,obj.cur_param_set{ind_subchain,ind_task});
-                   pd = pd(1:3,:); % i have to do that for manage the case in which i have constant function
-                   pdd=feval(obj.trajectories{ind_subchain,ind_task}.pdd,t,obj.cur_param_set{ind_subchain,ind_task});
-                   pdd = pdd(1:3,:); % i have to do that for manage the case in which i have constant function
-                else
-                   p=feval(obj.trajectories{ind_subchain,ind_task}.p,t);
-                   p=p(1:3,:); % i have to do that for manage the case in which i have constant function
-                   pd=feval(obj.trajectories{ind_subchain,ind_task}.pd,t);
-                   pd = pd(1:3,:); % i have to do that for manage the case in which i have constant function
-                   pdd=feval(obj.trajectories{ind_subchain,ind_task}.pdd,t);
-                   pdd = pdd(1:3,:); % i have to do that for manage the case in which i have constant function
-                end
-
-             elseif(strcmp(obj.type_of_traj{ind_subchain,ind_task},'sampled'))
-
-                % index to the current value
-                [~,ind] = min(abs(obj.trajectories{ind_subchain,ind_task}.time-t));
-                %DEBUG
-                %cur_time = f(ind); % Finds first one only! 
-                %disp(cur_time);
-                %--
-                p  = obj.trajectories{ind_subchain,ind_task}.p(1:3,ind);   % i have to do that for manage the case in which i have constant function
-                pd = obj.trajectories{ind_subchain,ind_task}.pd(1:3,ind);  % i have to do that for manage the case in which i have constant function
-                pdd= obj.trajectories{ind_subchain,ind_task}.pdd(1:3,ind); % i have to do that for manage the case in which i have constant function
-             end
-         end   
-         
+      function [p,pd,pdd]=GetTraj(obj,ind_subchain,ind_task,t)   
+         if(strcmp(obj.type_of_traj{ind_subchain,ind_task},'func')) 
+            if(obj.parameter_dim{ind_subchain,ind_task} > 0 ) % i need this block for elastic trajectory because i need to change the trajectory each generation
+               p=feval(obj.trajectories{ind_subchain,ind_task}.p,t,obj.cur_param_set{ind_subchain,ind_task});
+               p=p(1:3,:); % i have to do that for manage the case in which i have constant function
+               pd=feval(obj.trajectories{ind_subchain,ind_task}.pd,t,obj.cur_param_set{ind_subchain,ind_task});
+               pd = pd(1:3,:); % i have to do that for manage the case in which i have constant function
+               pdd=feval(obj.trajectories{ind_subchain,ind_task}.pdd,t,obj.cur_param_set{ind_subchain,ind_task});
+               pdd = pdd(1:3,:); % i have to do that for manage the case in which i have constant function
+            else
+               p=feval(obj.trajectories{ind_subchain,ind_task}.p,t);
+               p=p(1:3,:); % i have to do that for manage the case in which i have constant function
+               pd=feval(obj.trajectories{ind_subchain,ind_task}.pd,t);
+               pd = pd(1:3,:); % i have to do that for manage the case in which i have constant function
+               pdd=feval(obj.trajectories{ind_subchain,ind_task}.pdd,t);
+               pdd = pdd(1:3,:); % i have to do that for manage the case in which i have constant function
+            end
+         elseif(strcmp(obj.type_of_traj{ind_subchain,ind_task},'sampled'))
+            % index to the current value
+            [~,ind] = min(abs(obj.trajectories{ind_subchain,ind_task}.time-t));
+            %DEBUG
+            %cur_time = f(ind); % Finds first one only! 
+            %disp(cur_time);
+            %--
+            p  = obj.trajectories{ind_subchain,ind_task}.p(1:3,ind);   % i have to do that for manage the case in which i have constant function
+            pd = obj.trajectories{ind_subchain,ind_task}.pd(1:3,ind);  % i have to do that for manage the case in which i have constant function
+            pdd= obj.trajectories{ind_subchain,ind_task}.pdd(1:3,ind); % i have to do that for manage the case in which i have constant function
+         end
       end 
       
       function n=GetNumParam(obj,i)

@@ -4,15 +4,8 @@
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
-time_struct.tf = 20;
+time_struct.tf = 10;
 time_struct.step = 0.001;
-
-%% for simulation 
-time_sym_struct = time_struct;
-time_sym_struct.step = 0.001; 
-% define the type of integration of the sytem of differential equation
-fixed_step = false; %true;
-torque_saturation =20; % high value no saturation
 
 %% TASK PARAMETERS
 %name_dat = 'sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE';
@@ -21,21 +14,30 @@ torque_saturation =20; % high value no saturation
 %name_dat = 'LBR4p11.0_scene9_UF_mulitple_task_stability_Null_space_projectors';
 %name_dat = 'LBR4p10.0_scene10_UF_lemniscate';
 %name_dat = 'LBR4p12.0_scene0_UF_test_elastic_reference';
-name_dat = 'Jaco1.3_scene1.1';
+%name_dat = 'Jaco1.3_scene1.1';
 %name_dat = 'LBR4p2.2_scene2_generalization';
+name_dat = 'lwrsimple1.0_scene_test_obs';
 path=LoadParameters(name_dat);
 load(path);
 
 %% SCENARIO
-name_scenario = 'jaco_scenario1.1';%'lbr_scenario_2_gen' lbr_scenario2; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
+name_scenario = 'lwrsimple_test_noobs';%'lbr_scenario_2_gen' lbr_scenario2; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
 
-%% STARTING CONDITION FOR SIMULATION
+%% SIMULATOR PARAMETERS
+time_sym_struct = time_struct;
+time_sym_struct.step = 0.001; 
 % TODO generalize for multichain
 qi{1} = qz;
 %qi{1} = zeros(1,chains.GetNumLinks(1)); %stretched arm
 qdi{1} = zeros(1,chains.GetNumLinks(1));
 options= [];
 simulator_type = {'rbt'};
+% rbt sim
+% define the type of integration of the sytem of differential equation
+fixed_step = false; %true;
+torque_saturation =10000; % high value no saturation
+maxtime = 1000; % maximum time before a simulation is stopped for being too long
+% other sim
 
 %% Parameters Dependant on the type of controller
 
@@ -47,9 +49,17 @@ switch CONTROLLERTYPE
 
         %%%;;
 
-        %% REFERENCE PARAMETERS (this parameter only works if one of the specific trajectory has runtime parameters)
+        %% PRIMARY REFERENCE PARAMETERS (this parameter only works if one of the specific trajectory has runtime parameters)
         numeric_reference_parameter{1,1} = [0.047180 0.359539 1.045565 0.374223 -0.069047 0.013630 -0.495463 -0.131683 0.668327 -0.184017 1.115775 0.884010 0.120701 0.837400 1.189048]';
-
+        %% SECONDARY REFERENCE PARAMETERS they has to be in the same number or more of the primary reference
+%         traj_type_sec = {'empty','empty','empty','empty'};
+%         control_type_sec = {'regulation'};
+%         type_of_traj_sec = {'none'};
+%         geometric_path_sec = {'none'};
+%         time_law_sec = {'linear'};
+%         %parameters first chains
+%         geom_parameters_sec{1,1} = [0.30 -0.71 0.5]; % regulation
+%         dim_of_task_sec{1,1}={[1;1;1]};
 
         %% REPELLERS PARAMETERS
         % GENERALIZE TO MULTICHAIN !!!
@@ -64,7 +74,7 @@ switch CONTROLLERTYPE
         type_of_rep_strct={'extended_decoupled' 'extended_combine','stacked' };
 
         %% ALPHA PARAMETERS
-        choose_alpha = 'RBF';  % RBF , constant, handTuned
+        choose_alpha = 'constant';  % RBF , constant, handTuned
 
         %RBF
         number_of_basis = 5; %5; %10; %basis functions for the RBF
@@ -110,10 +120,60 @@ switch CONTROLLERTYPE
         %% CONTROLLER PARAMETERS
         max_time = 50; %50
         combine_rule = {'sum'}; % sum or projector (with sum reppelers are removed)
+        
+        % the metric change between regularized and not regularized because in the
+        % regularized case i have to do N^(-1) 
+        % not regularized case i have N^(-1/2)
+        metric = {'M^(1)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
+        kd = 110;
+        kp = 70; % row vector one for each chain
+        for i= 1:chains.GetNumChains()
+            for par = 1:chains.GetNumTasks(i)
+                if(strcmp(traj_type{i},'impedance'))
+                    M = diag([1 1 1]);
+                    D = diag([110 110 110]);
+                    P =  kp(i,par)*eye(size(dim_of_task{i,par},1));
+                    obj.M = M;
+                    obj.D = D;
+                    obj.P = P;
+                    Param{i,par} = obj;
+                else
+                    K_p = kp(i,par)*eye(size(dim_of_task{i,par},1));  
+                    K_d = kd(i,par)*eye(size(dim_of_task{i,par},1)); 
+                    obj.Kp = K_p;
+                    obj.Kd = K_d;
+                    Param{i,par} = obj;
+                end
+            end
+
+         end
+         % secondary task gains
+         kd = 110;
+         kp = 70; % row vector one for each chain
+         
+         for i= 1:chains.GetNumChains()
+            for par = 1:chains.GetNumTasks(i)
+                 if(strcmp(traj_type_sec{i},'impedance'))
+                    M = diag([1 1 1]);
+                    D = diag([110 10 110]);
+                    P =  kp(i,par)*eye(size(dim_of_task{i,par},1));
+                    obj.M = M;
+                    obj.D = D;
+                    obj.P = P;
+                    Param_secondary{i,par} = obj;
+                else
+                    K_p = kp(i,par)*eye(size(dim_of_task{i,par},1));  
+                    K_d = kd(i,par)*eye(size(dim_of_task{i,par},1)); 
+                    obj.Kp = K_p;
+                    obj.Kd = K_d;
+                    Param_secondary{i,par} = obj;
+                end
+            end
+         end
         % with this term i introduce a damped least square structure inside my
         % controller if regularizer is 0 i remove the regularizer action 
         % ONE FOR EACH TASK
-        regularizer_chain_1 = [0.001 0.001 0.001 0.001]; 
+        regularizer_chain_1 = [0 0.001 0.001 0.001]; 
         regularized_chain_2 = [1];
         regularizer{1} = regularizer_chain_1;
         regularizer{2} = regularized_chain_2;
@@ -139,6 +199,8 @@ switch CONTROLLERTYPE
         input{4} = time_sym_struct;    %time struct for simulation with fixed step
         input{5} = [];                 % here i have to insert the controller i will do that in init() 
         input{6} = fixed_step;         % if is true i use ode4 (runge-kutta)
+        input{7} = torque_saturation;  % i define the torque saturation that i want to apply
+        input{8} = maxtime;            % maxtime before the simulation is stopped because is too long
         % parameter for constraints method
         method_to_use = 'adaptive';  % adaptive , vanilla , empty
         epsilon = 0.001*ones(1,length(constraints_functions)); %vector with a number of value related to the number of constraints (used only with Aaptive constraints)
@@ -161,14 +223,12 @@ switch CONTROLLERTYPE
 
         %% Constraints
         constraints_list={'vellimit','vellimit','torquelimit','torquelimit','obsavoid'}; %'obsavoid'
-
         cdata1 = [1;1000];
         cdata2 = [0;1000];
         cdata3 = [1;2000];
         cdata4 = [0;2000];
         cdata5 = [1;7];
         constraints_data = [cdata1, cdata2, cdata3, cdata4, cdata5];
-
 
         %% flag to choose type of alpha 
         % RBF or chained
@@ -191,13 +251,12 @@ switch CONTROLLERTYPE
         numeric_theta = [5.545380 6.292794 4.686268 4.954681 2.166321 3.780383 6.104651 6.199604 4.132309 7.537761 8.678486 9.190867 8.804879 7.583105 7.401123 5.246353 3.797951 10.289526 10.088667 9.602943 ];
         %numeric_theta =[12 12 12 12 12 12 12 12 12 12 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0];
 
-
         %% Controller Parameters
+        %UF and GHC   
+        % GHC
         epsilon = 0.002;
         regularization = 0.01;
-        max_time = 500;
-
-
+     
         %% CMAES PARAMETER
         % starting value of parameters
         %init_parameters = 6;
@@ -212,9 +271,7 @@ switch CONTROLLERTYPE
         warning('Unexpected control method')
 end
 
-
 %% DO NOT CHANGE THIS PART!
-
 
 % backup data 
 rawTextFromStorage = fileread(which(mfilename));
@@ -222,4 +279,3 @@ rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF'],'match','
 
 % join the general static parameter with the particular static one
 rawTextFromStorage = strcat(rawTextFromStorage,rawTextFromStoragePart);
-

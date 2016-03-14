@@ -1,19 +1,19 @@
 classdef  UF < Controllers.AbstractController
     
    properties
-      subchains;       % object that contains the subchain of the robot and the J dot for each subchain;   (maybe i can leave it) 
-      references;      % object that contains the reference trajectory for each tasks; 
-      alpha;           % cell array of weight function
-      repellers;       % object of repellers
-      metric;          % vector of matlab command     for example M_inv^2, M_inv,eye(lenght(q)) 
+      subchains        % object that contains the subchain of the robot and the J dot for each subchain  (maybe i can leave it) 
+      references       % object that contains the reference trajectory for each primary tasks 
+      Secondary_refs   % object that contains the reference trajecotry for secondary tasks when specified
+      alpha            % cell array of weight function
+      repellers        % object of repellers
+      metric           % vector of matlab command     for example M_inv^2, M_inv,eye(lenght(q)) 
       current_chain    % index that define the current robot that i want to move
       %ground_truth    % if true for computing the position and velocity of the end effector i will use the non perturbed model 
-      Kp               % vector of matrix of proportional gain
-      Kd               % vector of matrix of derivative gain
+      Param            % cell array of matrix that are contains to kind of object Param{i,j}.Kp, Param{i,j}.Kd  and Param{i,j}.M, obj.Param{i,j}.D, obj.Param{i,j}.P 
+      Param_secondary  % cell array of matrix that are contains to kind of object Param{i,j}.Kp, Param{i,j}.Kd  and Param{i,j}.M, obj.Param{i,j}.D, obj.Param{i,j}.P 
       combine_rule     % projector or sum 
       regularizer      % this term transform the UF in a regularized UF if it is different from zero. it is a cell array of vector each vector has as many entry as the number of task for the current chain vector
       torque_func      % in this vector i put the handle to the function that i want to use: ComputeRegularizedTorqueSum(...) ComputeTorqueSum(...)
-      max_time         % maximum time simulation allowed
       current_time     % current time to force stop for long iteration
       torques          %  resulting torque (cell array of matrix)
       torques_time     % all the time istant when i aply a torque.
@@ -23,14 +23,15 @@ classdef  UF < Controllers.AbstractController
 
    methods
       
-       function obj = UF(sub_chains,references,alpha,repellers,metric,Kp,Kd,combine_rule,regularization,max_time,varargin)
+       function obj = UF(sub_chains,references,Secondary_refs,alpha,repellers,metric,Param,Param_secondary,combine_rule,regularization,varargin)
          obj.subchains = sub_chains;
          obj.references = references;
+         obj.Secondary_refs = Secondary_refs;
          obj.alpha = alpha;
          obj.repellers = repellers;
          obj.metric = metric;
-         obj.Kp = Kp;
-         obj.Kd = Kd;  
+         obj.Param = Param;
+         obj.Param_secondary = Param_secondary;
          obj.combine_rule = combine_rule;
          % in this way i can use a generic long vector inside
          % RuntimeVariable than here i take what i need
@@ -38,9 +39,9 @@ classdef  UF < Controllers.AbstractController
              for j=1:obj.subchains.GetNumTasks(i)
                  app_vector(j) = regularization{i}(1,j);
                  if( app_vector(j) == 0)
-                    obj.torque_func{i,j} = @(ind_subchain,ind_task,M,F,t,q,qd,u1)obj.ComputeTorqueSum(ind_subchain,ind_task,M,F,t,q,qd,u1);
+                    obj.torque_func{i,j} = @(ind_subchain,ind_task,M,F,t,q,qd,Fc)obj.ComputeTorqueSum(ind_subchain,ind_task,M,F,t,q,qd,Fc);
                  else
-                    obj.torque_func{i,j} = @(ind_subchain,ind_task,M,F,t,q,qd,u1)obj.ComputeRegularizedTorqueSum(ind_subchain,ind_task,M,F,t,q,qd,u1);
+                    obj.torque_func{i,j} = @(ind_subchain,ind_task,M,F,t,q,qd,Fc)obj.ComputeRegularizedTorqueSum(ind_subchain,ind_task,M,F,t,q,qd,Fc);
                  end
              end
              obj.regularizer{i}=app_vector;
@@ -55,7 +56,6 @@ classdef  UF < Controllers.AbstractController
          for i = 1 :obj.subchains.GetNumChains()
             obj.torques_time{i} = [];
          end
-         obj.max_time = max_time;
          obj.current_time = [];
          % default settings for smoothing and trajectory tracking display (desidered position) 
          obj.display_opt.fixed_step = false;
@@ -107,16 +107,13 @@ classdef  UF < Controllers.AbstractController
       end
       
       
-      function  final_tau  = Policy(obj,t,q,qd)
+      function  final_tau  = Policy(obj,t,q,qd,Fc)
           
           %DEBUG
           %t
           %q
           %qd
           %---
-         
-         
-         
           % active robot 
           cur_bot = obj.GetActiveBot;
           % current chain index
@@ -136,30 +133,31 @@ classdef  UF < Controllers.AbstractController
                  % for stability reason when a controller use less dof
                  % then the free one i have to add a stabilizing action
                  % trough a null space porjected component
-                 if(obj.subchains.GetNumSubLinks(i,j) < DOF )
-                   deg = pi/180;
-                    %kp = 700;
-                    %kp = 5;
-                    kp = 100;
-                    kd = 2*sqrt(kp);
-                    qd_des =zeros(size(q,2),1);
-                    q_des  = [122;121; 19; 60; 90; 0]*deg; %  TODO to generalize for different lenght of kinematic chain
-                    u1 = ( kd*(qd_des - qd') + kp*(q_des - q'));
-                 else
-                    u1 = zeros(size(q,2),1);
-                 end
-                 tau=obj.torque_func{i,j}(i,j,M,F,t,q,qd,u1);
+%                  if(obj.subchains.GetNumSubLinks(i,j) < DOF )
+%                    deg = pi/180;
+%                     %kp = 700;
+%                     %kp = 5;
+%                     kp = 100;
+%                     kd = 2*sqrt(kp);
+%                     qd_des =zeros(size(q,2),1);
+%                     q_des  = [122;121; 19; 60; 90; 0]*deg; %  TODO to generalize for different lenght of kinematic chain
+%                     u1 = ( kd*(qd_des - qd') + kp*(q_des - q'));
+%                 else
+%                     u1 = zeros(size(q,2),1);
+%                 end
+                 tau=obj.torque_func{i,j}(i,j,M,F,t,q,qd,Fc);
                  app_tau(:,j) = obj.alpha{i,j}.GetValue(t)*tau;       
              end
              
              final_tau = sum(app_tau,2);
+             final_tau = final_tau + F; 
              obj.SaveTau(i,final_tau); 
              obj.SaveTime(i,t);
              
            elseif(strcmp(obj.combine_rule,'projector'))   
                
              for j = 1:obj.subchains.GetNumTasks(i)
-                 tau=obj.torque_func{i,j}(i,j,M,F,t,q,qd,u1);
+                 tau=obj.torque_func{i,j}(i,j,M,F,t,q,qd,Fc);
                  app_tau(:,j) = obj.alpha{i,j}.GetValue(t)*tau;       
              end
              
@@ -169,7 +167,7 @@ classdef  UF < Controllers.AbstractController
                obj.repellers.SetJacob(cur_bot,q,qd,i,j)  
              end                                
              N = obj.repellers.ComputeProjector(i,DOF,obj.subchains.GetNumTasks(i),obj.alpha,t);
-             final_tau = ((M*N)/M)*final_tau;
+             final_tau = ((M*N)/M)*(final_tau + F);
             
              obj.SaveTau(i,final_tau) 
              obj.SaveTime(i,t);  

@@ -11,7 +11,6 @@ classdef  GHC < Controllers.AbstractController
       regularizer      % value of the regularization term for each chain (column vector) 
       epsilon          % parameter used in the computation of the orthogonal basis for 
       delta_t          % sampling rate used during simulation
-      max_time         % maximum time simulation allowed
       current_time     % current time to force stop for long iteration
       torques          %  resulting torque (cell array of matrix)
       torques_time     % all the time istant when i aply a torque.
@@ -21,7 +20,7 @@ classdef  GHC < Controllers.AbstractController
 
    methods
       
-       function obj = GHC(sub_chains,references,alpha,constraints,Kp,Kd,regularization,epsilon,delta_t,max_time,varargin)
+       function obj = GHC(sub_chains,references,alpha,constraints,Kp,Kd,regularization,epsilon,delta_t,varargin)
          
         
          obj.subchains = sub_chains;
@@ -41,7 +40,6 @@ classdef  GHC < Controllers.AbstractController
          for i = 1 :obj.subchains.GetNumChains()
             obj.torques_time{i} = [];
          end
-         obj.max_time = max_time;
          obj.current_time = [];
          % default settings for smoothing and trajectory tracking display (desidered position) 
          obj.display_opt.fixed_step = false;
@@ -88,7 +86,7 @@ classdef  GHC < Controllers.AbstractController
       end
       
       
-      function  final_tau  = Policy(obj,t,q,qd)
+      function  final_tau  = Policy(obj,t,q,qd,Fc)
           %DEBUG
           %t
 %           q

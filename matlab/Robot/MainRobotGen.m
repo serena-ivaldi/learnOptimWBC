@@ -1,3 +1,6 @@
+%% if you generate Jacob0 with rpy active is gonna take a big take to compute
+
+
 close all
 clear variables
 clc
@@ -5,6 +8,7 @@ clc
 %% Instantiate a |CodeGenerator| class object
 
 % change the function to change the robot for generating mex matrix
+<<<<<<< HEAD
 %rob = MdlJaco();
 %rob = MdlJacoDH();
 
@@ -14,13 +18,17 @@ genkinonly = true;
 %rob = MdlLBR4pSimple();
 %genkinonly = false;
 
+=======
+rob = MdlLBR4pSimple();
+genkinonly = true;
+>>>>>>> master
 cGen = CodeGenerator(rob,'mex','genmfun','genmex');
 if(genkinonly)
    %with this function i build only the kinematic symbolic rapresentation
-   cGen.genkinematic();
+   cGen.genkinematic('norpy','noeul',false);
 else
    %with this function i build all the symbolic rapresentation of the robot
-   cGen.geneverything();
+   cGen.geneverything('norpy','noeul',false);
 end
 % add the generated class to matlab path
 addpath(cGen.basepath);

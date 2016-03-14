@@ -50,6 +50,8 @@ function [LBR4p] = MdlLBR4pSimple()
    l4 = 0.2;
    l5 = 0.19;
    offset = 0.078;
+   tool_offset = 0.0738;
+   offset = offset  + tool_offset;
    
    
    L(1) = Revolute('d', l0 + l1 , 'a', 0, 'alpha', -pi/2, ...

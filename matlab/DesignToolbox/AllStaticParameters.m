@@ -13,28 +13,56 @@ CONTROLLERTYPE ='UF';   % GHC or UF
 %%
 
 %SUBCHAIN PARAMETERS 
-subchain1 = [6 4 6];
+subchain1 = [7];
 target_link{1} = subchain1;
 
 
 %% Robot
-[bot1] = MdlJaco();
+[bot1] =  MdlLBR4pSimple();
 robots{1} = bot1;
 chains = SubChains(target_link,robots);
-%%
+%%  REFERENCE PARAMETERS
 deg = pi/180;
-% REFERENCE PARAMETERS
-traj_type = {'cartesian_x','cartesian_x','joint'};
-control_type = {'regulation','regulation','regulation'};
-type_of_traj = {'none','none','none'};
-geometric_path = {'none','none','none'};
-time_law = {'none','none','none'};
+% primary trajectory
+traj_type = {'impedance'};
+control_type = {'x'};
+type_of_traj = {'func'};
+geometric_path = {'fixed'};
+time_law = {'none'};
 %parameters first chains
-geom_parameters{1,1} = [0,-0.63,0.70]; 
-geom_parameters{1,2} = [-0.309 -0.469 0.581];
-geom_parameters{1,3} = [120 116 90 0 0 0]* deg;
-%geom_parameters{1,4} = [0 0 0 0 0 0 0];
-dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
+geom_parameters{1,1} = [0.30 -0.71 0.5]; 
+%geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
+dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
+
+% traj_type = {'cartesian'};
+% control_type = {'rpy'};
+% type_of_traj = {'func'};
+% geometric_path = {'fixed'};
+% time_law = {'none'};
+% %parameters first chains
+% geom_parameters{1,1} = [pi/2 0 -pi/2]; 
+% %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
+% dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
+
+% secondary trajectory
+traj_type_sec = {'none'};
+control_type_sec = {'rpy'};
+type_of_traj_sec = {'func'};
+geometric_path_sec = {'fixed'};
+time_law_sec = {'linear'};
+%parameters first chains
+geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
+dim_of_task_sec{1,1}={[1;1;1]};
+
+% traj_type_sec = {'cartesian_x'};
+% control_type_sec = {'regulation'};
+% type_of_traj_sec = {'none'};
+% geometric_path_sec = {'none'};
+% time_law_sec = {'linear'};
+% parameters first chains
+% geom_parameters_sec{1,1} = [0.30 -0.71 0.5]; % regulation
+% dim_of_task_sec{1,1}={[1;1;1]};
+
 
 %% FROM THIS POINT YOU CAN FIND PARAMETERS IN THE STATIC PARAMETERS FILE RELATED TO EACH ALGORITHM 
 
@@ -42,6 +70,16 @@ dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1
 
 switch CONTROLLERTYPE
     case 'UF'
+        % REPELLER PARAMETERS
+        % scenario dependant
+        rep_subchain = [7];
+        rep_target_link{1} = rep_subchain;
+        rep_type = {'cartesian_x'};
+        rep_mask {1,1}=[1,1,1]; 
+        rep_type_of_J_rep = {'DirectionCartesian'};
+        for ii=1:chains.GetNumChains()
+             chain_dof(ii) = chains.GetNumLinks(ii);
+        end
         UF_StaticParameters
     case 'GHC'
         GHC_StaticParameters
@@ -55,10 +93,10 @@ end
 % i have to set the name of the robot plus a number equal to the number of experiment for that scenario 
 % like bot#.# (where n.i means that the file is reffered to the n-scenario and is the i-th data setting)
 % multiple data setting for the same scenario 
-id = 'Jaco1.3';
+id = 'lwrsimple1.0';
 name_backup = strcat(id,'.m');
 %namebot_scene#_briefdescription.mat
-name_file = 'scene1.1';
+name_file = 'scene_test_obs';
 name_file = strcat(id,'_',name_file,'.mat');
 
 %% DO NOT CHANGE THIS PART!
