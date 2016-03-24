@@ -37,7 +37,7 @@ classdef Particle < handle
          obj.sigma = zeros(nIterations,1);
          % initialize sigma
          obj.sigma(1) = explorationRate;
-         obj.C{1} = diag((maxAction - minAction).^2);
+         obj.C{1} = diag((maxAction - minAction)/2);
          obj.A{1} = chol(obj.C{1});  
          for j = 1 : n_constraints
             obj.v(j,:) = zeros(1,obj.n);    
@@ -122,7 +122,7 @@ classdef Particle < handle
       end
       function SetCov(obj,cov,index)
          %DEBUG 
-         cov
+         %cov
          %--
          obj.C{index} = cov;
          obj.A{index} = chol(obj.C{index}); 
@@ -136,10 +136,10 @@ classdef Particle < handle
       function Sample()
       end
       
-      function PLot(obj,iter)
-        Z = mvnpdf([obj.X_mesh(:) obj.Y_mesh(:)],obj.mean{iter},obj.C{iter}); %// compute Gaussian pdf
-        Z = reshape(Z,size(X)); %// put into same size as X, Y
-        contour(X,Y,Z), axis equal  %// contour plot; set same scale for x and y...
+      function Plot(obj,iter)
+        Z = mvnpdf([obj.X_mesh(:) obj.Y_mesh(:)],obj.GetMean(iter),obj.GetCov(iter)); %// compute Gaussian pdf
+        Z = reshape(Z,size(obj.X_mesh)); %// put into same size as X, Y
+        contour(obj.X_mesh,obj.Y_mesh,Z), axis equal, hold on  %// contour plot; set same scale for x and y...
         %surf(X,Y,Z) %// ... or 3D plot
       end
   

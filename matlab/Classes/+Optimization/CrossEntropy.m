@@ -21,6 +21,8 @@ classdef CrossEntropy < handle
       fnForwardModel;
       constraints_active;
       gamma; % percentile value for the elites selection
+      learning_rate;
+      y_prc;
    end
    
    methods
@@ -51,6 +53,8 @@ classdef CrossEntropy < handle
          % flag that control the activation of the constraints
          obj.constraints_active = instance.constraints;
          obj.gamma = -inf; 
+         obj.y_prc =-inf;
+         obj.learning_rate = 0.1;
       end
       
       function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = CrossEntropyOptimzation(obj)         
@@ -65,13 +69,13 @@ classdef CrossEntropy < handle
             end
             %% create offspring
             disp('create offsprings')
-            for l = 1:obj.lambda 
+            for l = 1:(obj.lambda*2) 
                [candidate,mixtureIndex] = obj.Sample(iter); 
                particleIndex(l) = mixtureIndex;
                offsprings(l , :) = candidate;
             end
             %% compute perfomance for each candidates
-            for l = 1:obj.lambda 
+            for l = 1:(obj.lambda*2) 
                [performances(l) succeeded] = ForwardModel(obj,offsprings(l, :),l, 0);
                %% added part to manage constraints
                 if(obj.constraints_active)      
@@ -88,7 +92,10 @@ classdef CrossEntropy < handle
             [sortPerf, sortInd] = sort(performances, 'ascend');
             % update percentile
             Y = prctile(sortPerf,50);
-            index = sortPerf>=Y;
+            if(Y>obj.y_prc)
+                obj.y_prc = Y;
+            end
+            index = sortPerf>=obj.y_prc;
             elites = offsprings(sortInd(index),:);
             % update mixture of gaussian
             obj.MembershipAnalisys(elites,iter)
@@ -97,11 +104,15 @@ classdef CrossEntropy < handle
                 obj.UpdateMeanCE(k,elites,iter + 1 );
                 obj.UpdateCovarianceCE(k,elites,iter + 1);
             end
-            
+            % plot particles on line
             if(true)
                 for k=1:length(obj.particles)
                     obj.particles{k}.Plot(iter)
                 end
+            end
+            disp('iteration end')
+            if(true)
+                close all
             end
          end
       end
@@ -128,32 +139,48 @@ classdef CrossEntropy < handle
       % i update the particle k-th weight using the information from all the
       % particle
       function UpdateWeightsCE(obj,k)
+          % number of elites
           N = size(obj.membership_weights,1);
           % sum along rows for the k-th column (N_k)
-          obj.weigths(:,k) = sum(obj.membership_weights(:,k),1)/N;
+          norm_factor = sum(obj.membership_weights(:,k),1);
+          obj.weigths(:,k) = obj.weigths(:,k) + obj.learning_rate*norm_factor/N; 
       end
       % i update the particle k-th mean using the information from all the
       % particle
       function UpdateMeanCE(obj,k,elites,iter)
+          norm_factor = sum(obj.membership_weights(:,k),1);
           new_mean = zeros(size(elites(1,:)));
           for i = 1:size(elites,1)
               % read the column of the membership_weights and i sum up the
               % contributions of each elite to the k-th particle
-              new_mean = new_mean + elites(i,:) * obj.membership_weights(i,k);
+              new_mean = new_mean + ( elites(i,:) - obj.particles{k}.GetMean(iter - 1) ) * obj.membership_weights(i,k);
           end
+          %%DEBUG
+          new_mean
+          %%
           % normalization for N_k
-          new_mean = new_mean/sum(obj.membership_weights(:,k),1);
+          new_mean = obj.particles{k}.GetMean(iter - 1) + obj.learning_rate*(new_mean/norm_factor);
           obj.particles{k}.SetMean(new_mean,iter);
+          %end
       end
       % i update the particle k-th covariance using the information from all the
       % particle
       function UpdateCovarianceCE(obj,k,elites,iter)
+          norm_factor = sum(obj.membership_weights(:,k),1);
           new_C = zeros(size(obj.particles{1}.GetCov(iter-1)));
           for i = 1:size(elites,1)
-              dist = (elites(i,:) - obj.particles{k}.GetMean(iter));
+              dist = (elites(i,:) - obj.particles{k}.GetMean(iter-1));
               new_C = new_C + obj.membership_weights(i,k)*(dist'*dist);
           end
-          new_C = new_C / sum(obj.membership_weights(:,k),1);
+          new_C = new_C / norm_factor;
+          % with this i prevent the covariance to shrink to zero but to
+          % keep a small value
+          new_C = new_C + eye(length(elites(1,:)))*0.001;
+
+          new_C = obj.particles{k}.GetCov(iter-1) + obj.learning_rate*new_C;
+          %%DEBUG
+          new_C
+          %%
           obj.particles{k}.SetCov(new_C,iter);
       end
       
