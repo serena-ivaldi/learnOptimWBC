@@ -5,8 +5,7 @@ classdef Particle < handle
    properties
       % external parameters (visible from mixture of gaussian)-------------
       mean;    % mean vector 
-      C;       % covarinace matrix
-      weight;  % particle weight   
+      C;       % covariance matrix  
       % internal parameters -----------------------------------------------
       n;       % dimension of parameter space
       sigma;   % exploration rate
@@ -25,6 +24,9 @@ classdef Particle < handle
       beta;     
       performances;
       active; % this is a flag that determines if the particle is active so i have to use the internal evolution agorithm of the particle
+      % for visualization (2d only)
+      X_mesh;
+      Y_mesh;
    end
             
    methods
@@ -35,8 +37,8 @@ classdef Particle < handle
          obj.sigma = zeros(nIterations,1);
          % initialize sigma
          obj.sigma(1) = explorationRate;
-         obj.C{1} = diag((maxAction - minAction).^2);
-         obj.A{1} = chol(obj.C);  
+         obj.C{1} = diag((maxAction - minAction)/2);
+         obj.A{1} = chol(obj.C{1});  
          for j = 1 : n_constraints
             obj.v(j,:) = zeros(1,obj.n);    
          end
@@ -53,6 +55,10 @@ classdef Particle < handle
          obj.beta = 0.1/(obj.n + 2);
          obj.performances = zeros(nIterations,1);
          obj.active = false;
+         
+         x_mesh = minAction(1):.1:maxAction(1); %// x axis
+         y_mesh = minAction(2):.1:maxAction(2); %// y axis
+         [obj.X_mesh,obj.Y_mesh] = meshgrid(x_mesh,y_mesh); %// all combinations of x, y
       end
    
       function Evolve(obj,constraints_active,constraints,k,z,offsprings,performances_new)
@@ -112,21 +118,31 @@ classdef Particle < handle
           end
       end
       function SetMean(obj,mean,index)
-         obj.mean(index) = mean;
+         obj.mean(index,:) = mean;
       end
       function SetCov(obj,cov,index)
-         obj.C(index) = cov;
-         obj.A{index} = chol(obj.C(index)); 
+         %DEBUG 
+         %cov
+         %--
+         obj.C{index} = cov;
+         obj.A{index} = chol(obj.C{index}); 
       end
-      function mean = GetMean(obj,mean,index)
-         mean = obj.mean(index);
+      function mean = GetMean(obj,index)
+         mean = obj.mean(index,:);
       end
-      function cov = GetCov(obj,cov,index)
-         obj.C(index) = cov;
+      function cov = GetCov(obj,index)
+         cov=obj.C{index};
       end
       function Sample()
       end
-   
+      
+      function Plot(obj,iter)
+        Z = mvnpdf([obj.X_mesh(:) obj.Y_mesh(:)],obj.GetMean(iter),obj.GetCov(iter)); %// compute Gaussian pdf
+        Z = reshape(Z,size(obj.X_mesh)); %// put into same size as X, Y
+        contour(obj.X_mesh,obj.Y_mesh,Z), axis equal, hold on  %// contour plot; set same scale for x and y...
+        %surf(X,Y,Z) %// ... or 3D plot
+      end
+  
    end
    
       

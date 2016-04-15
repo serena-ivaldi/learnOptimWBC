@@ -68,6 +68,8 @@ classdef  Instance
             [mean_performances, bestAction, BestActionPerEachGen, policies,costs, succeeded, data2save] = obj.LearnCMAES(settings);
           elseif(strcmp(obj.learn_procedure,'(1+1)CMAES'))
             [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, data2save] = obj.Learn1plus1CMAES(settings);
+          elseif(strcmp(obj.learn_procedure,'CEM'))
+            [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = obj.CEM(settings);
           end
 
           figure;

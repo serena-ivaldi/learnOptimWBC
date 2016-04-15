@@ -15,7 +15,7 @@ classdef  FixPenalty < Optimization.AbstractPenalty
        fitness_penalties     % value to add to the fintess function of each candidates
        constraints_functions % vector of functions handle for computing the constraints
        constraints_type      % vector that specifies if the constraints is a equality or an inequality
-       constraints_values    % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
+       constraints_values    % vector that contains some constants that are used by the function in constraints_functions to compute the constraints_violation
        constraints_violation % amount of violations at the end of the rollout for the current candidate. it is a matrix where on the column we have the sampled violations and on the row we have the constraints
    end
        
