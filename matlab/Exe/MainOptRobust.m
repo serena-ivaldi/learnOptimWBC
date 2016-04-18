@@ -11,7 +11,7 @@ warning('error', 'MATLAB:illConditionedMatrix')
 
 % Parameters 
 n_of_experiment = 103;      % number that we use to distinguish between the same static parameters settings but with different runtime parameters
-init_parameters = 6;      % initial value for the optimization  (the scale is 0-12, so 6=0.5)
+init_parameters = 6;      % initial value for the optimization  (the scale is 0-14, so 6=0.5)
 number_of_experiment_ripetition = 1;  % number of  optimization (for robustness assesement)
 
 all_results = cell(number_of_experiment_ripetition);
