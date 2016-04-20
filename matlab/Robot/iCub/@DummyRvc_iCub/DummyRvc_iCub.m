@@ -16,8 +16,7 @@ classdef DummyRvc_iCub < handle
             obj.link = 'iCub';
             obj.name = 'iCub';
             obj.model3d = 'iCub';
-            obj.tag = tag;
-            
+            obj.tag = tag;      
         end   
         
         function T = fkine(obj,q)

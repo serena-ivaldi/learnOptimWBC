@@ -13,9 +13,9 @@ target_link{1} = subchain1;
 robots{1} = chain_1;
 chains = SubChains(target_link,robots);
 
+param.chains = chains;
 
-%% simulator parameters
-
+%% Setup params for balancing controller
 % balancing on two feet or one foot
 feet_on_ground           =  [1,1];                                  %either 0 or 1; [left,right] (in the simulator)
 % allows the visualization of torques, forces and other user-defined graphics 
@@ -23,7 +23,7 @@ visualizer_graphics      =  1;                                      %either 0 or
 visualizer_demo          =  1;                                      %either 0 or 1
 visualizer_jointsPos     =  0;                                      %either 0 or 1; only if visualizer_graphics = 1
 
-% for the simulator            
+%% for the simulator   
 leftArmInit  = [ -20   30  0.0  45   0.0]';          
 rightArmInit = [ -20   30  0.0  45   0.0]'; 
 torsoInit    = [ -10.0   0.0    0.0]';
@@ -40,8 +40,26 @@ elseif   obj.feet_on_ground(1) == 0 && params.feet_on_ground(2) == 1
     leftLegInit  = [  25.5   5.0    0.0  -40    -5.5  -0.1]';
     rightLegInit = [  25.5   15.0   0.0  -18.5  -5.5  -0.1]'; 
 end
-qjInit      = [torsoInit;leftArmInit;rightArmInit;leftLegInit;rightLegInit]*(pi/180);
-dqjInit     = zeros(obj.ndof,1);
-dx_bInit    = zeros(3,1);
-omega_bInit = zeros(3,1);
+params.qjInit      = [torsoInit;leftArmInit;rightArmInit;leftLegInit;rightLegInit]*(pi/180);
+params.dqjInit     = zeros(obj.ndof,1);
+
+%% specify limits
+param.limits;
+
+%% Setup integration
+ plot_set
+ 
+ params.tStart   = 0;
+ params.tEnd     = 10;   
+ params.sim_step = 0.01;
+ params.wait     = waitbar(0,'State integration in progress...');
+
+
+%% simulator
+DynSim_iCub(params) 
+
+%% Visualize forward dynamics
+%params.wait     = waitbar(0,'Graphics generation in progress...');
+
+%visualizer_SoT(t,chi,params)
 
