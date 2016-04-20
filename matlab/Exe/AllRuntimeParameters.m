@@ -74,7 +74,7 @@ switch CONTROLLERTYPE
         type_of_rep_strct={'extended_decoupled' 'extended_combine','stacked' };
 
         %% ALPHA PARAMETERS
-        choose_alpha = 'constant';  % RBF , constant, handTuned
+        choose_alpha = 'RBF';  % RBF , constant, handTuned
 
         %RBF
         number_of_basis = 5; %5; %10; %basis functions for the RBF

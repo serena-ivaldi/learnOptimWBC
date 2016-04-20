@@ -6,7 +6,7 @@ interpolation_step = 0.001;
 % build numeric theta for best action 
 controller.UpdateParameters(bestAction.parameters)
 % change the computation time more than i consider the execution a fail (useful whn i recompute the solution on another machine)
-controller.max_time = 1000;
+%controller.max_time = 1000;
 % recompute the best solution
 [t_, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step,'TorqueSat',torque_saturation);
 % generate cartesian position and cartesian velocity
