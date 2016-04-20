@@ -2,18 +2,16 @@ clear all
 close all
 clc
 
-robot = iCub();
+icub = iCub();
+chain_1 = DummyRvc_iCub(icub,'left_arm');
 
 
 %SUBCHAIN PARAMETERS 
-subchain1 = [7];
+subchain1 = [5];
 target_link{1} = subchain1;
 
-robots{1} = 'l_arm';
+robots{1} = chain_1;
 chains = SubChains(target_link,robots);
-
-
-
 
 
 %% simulator parameters

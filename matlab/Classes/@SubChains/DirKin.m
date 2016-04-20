@@ -11,17 +11,26 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
         qd_cur= zeros(1,obj.sub_chains{ind_subchain}.n);
         q_cur(1:obj.GetNumSubLinks(ind_subchain,ind_task)) = q(1:obj.GetNumSubLinks(ind_subchain,ind_task));
         qd_cur(1:obj.GetNumSubLinks(ind_subchain,ind_task)) = qd(1:obj.GetNumSubLinks(ind_subchain,ind_task));
-        
         cur_bot = obj.GetCurRobot(ind_subchain);
-        % compute pose (position + rool pitch yaw) from the current
-        % subchain
-        kinematic=CStrCatStr({'cur_bot.T0_'},num2str(obj.GetNumSubLinks(ind_subchain,ind_task)),{'(q_cur)'});
-        T = eval(kinematic{1});
-        %T=cur_bot.T0_6(q_cur)
-        %T = cur_bot.fkine(q_cur);
-        x = T(1:3,4);
-        rpy = tr2rpy(T);
-        rpy = rpy';
+        % i have to distinguish between icub and rbt robots (hopefully provisory)
+        if(isa(cur_bot,'DummyRvc_iCub'))
+            % compute pose (position + rool pitch yaw) from the current
+            % subchain
+            T = cur_bot.fkine(q);
+            x = T(1:3,4);
+            rpy = tr2rpy(T);
+            rpy = rpy';
+        elseif(isa(cur_bot,'SerialLink'))
+            % compute pose (position + rool pitch yaw) from the current
+            % subchain
+            kinematic=CStrCatStr({'cur_bot.T0_'},num2str(obj.GetNumSubLinks(ind_subchain,ind_task)),{'(q_cur)'});
+            T = eval(kinematic{1});
+            %T=cur_bot.T0_6(q_cur)
+            %T = cur_bot.fkine(q_cur);
+            x = T(1:3,4);
+            rpy = tr2rpy(T);
+            rpy = rpy';
+        end
         % compute generalized cartesian velocities from the current
         % subchain
         try
