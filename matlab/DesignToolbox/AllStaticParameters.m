@@ -16,7 +16,6 @@ CONTROLLERTYPE ='UF';   % GHC or UF
 subchain1 = [7];
 target_link{1} = subchain1;
 
-
 %% Robot
 [bot1] =  MdlLBR4pSimple();
 robots{1} = bot1;

@@ -1,4 +1,4 @@
-function jacob0 = jacob0(rob,q)
+function jacob0 = jacob0(rob,q,tag)
 %% JACOB0 - Jacobian with respect to the base coordinate frame of the LBR4p copy arm. 
 % ========================================================================= 
 %    
@@ -16,5 +16,5 @@ function jacob0 = jacob0(rob,q)
 %  Output:: 
 %    J0:  [6x7] Jacobian matrix 
 
-jacob0 = wholeBodyModel('jacobian',rob.R_b,rob.x_b,q,rob.kinematic_chain_selector(rob.cur_chain));
+jacob0 = wholeBodyModel('jacobian',rob.R_b,rob.x_b,q,tag);
 %wbm_jacobian(rob.R_b,rob.x_b,q,rob.kinematic_chain_selector[rob.cur_chain]);

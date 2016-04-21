@@ -1,62 +1,90 @@
 classdef iCub < handle
  
-	properties
-        %% Setup params for balancing controller
-        demo_movements           %=  1;                                      %either 0 or 1; only for two feet on the ground
-        use_QPsolver             %=  0;                                      %either 0 or 1
-        use_Orientation          %=  1;                                      %either 0 or 1
-        % balancing on two feet or one foot
-        feet_on_ground            %=  [1,1];                                  %either 0 or 1; [left,right]
-        % allows the visualization of torques, forces and other user-defined graphics 
-        visualizer_graphics      %=  1;                                      %either 0 or 1
-        visualizer_demo          %=  1;                                      %either 0 or 1
-        visualizer_jointsPos     %=  0;                                      %either 0 or 1; only if visualizer_graphics = 1
-        %% Setup general params
-        % this is assuming a 25DoF iCub
-        ndof         %$= 25;
-        x_b           %the cartesian position of the base (R^3)
-        qt_b     %the quaternion describing the orientation of the base (global parametrization of SO(3))
+	properties     
+        %% Structural Parameters
+        active_floating_base          % switch to control if the icub has or not a floating base
+        ndof                          % dependant on the model used for the simulaztion
+        list_of_kin_chain             % string matching URDF name of the link (frame)
+        dim_of_kin_chain 
+        access_index;                 % vector of index used for accesing the infromation stored in the structural parameters
+        %% Floating base parameter
+        % I use this value inside the computation of the dynamical
+        % parameters of the robot (i need to udpate them each iteration)
+        x_b      %the cartesian position of the base (R^3)
+        R_b     %the quaternion describing the orientation of the base (global parametrization of SO(3))
         dx_b     %the cartesian velocity of the base (R^3)
-        omega_b  %the velocity describing the orientation of the base (SO(3))
-        kinematic_chain_selector % list of kinematic chain in the icub
-        cur_chain                % current chain that we want to control
+        omega_w  %the velocity describing the orientation of the base (SO(3))
+        %% Whole body dynamic parameters
+        M
+        F
+        Omega
+        %% for visualization
+        visual_param;
+        
+        %kinematic_chain_selector % list of kinematic chain in the icub
+        %cur_chain                % current chain that we want to control
     end
 	
 	methods
-		function ro = iCub(obj)
-			%% Initialize the mexWholeBodyModel
-	        wbm_modelInitialise('icubGazeboSim');
-			leftArmInit  = [ -20   30  0.0  45   0.0]';          
-            rightArmInit = [ -20   30  0.0  45   0.0]'; 
-            torsoInit    = [ -10.0   0.0    0.0]';
-			if     obj.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 1
-				% initial conditions for balancing on two feet 
-				 leftLegInit  = [  25.5   0.1   0.0  -18.5  -5.5  -0.1]';
-				 rightLegInit = [  25.5   0.1   0.0  -18.5  -5.5  -0.1]';
-			elseif   obj.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 0
-			% initial conditions for the robot standing on the left foot
-				 leftLegInit  = [  25.5   15.0   0.0  -18.5  -5.5  -0.1]';
-				 rightLegInit = [  25.5   5.0    0.0  -40    -5.5  -0.1]'; 	 
-			elseif   obj.feet_on_ground(1) == 0 && params.feet_on_ground(2) == 1
-			% initial conditions for the robot standing on the right foot
-				leftLegInit  = [  25.5   5.0    0.0  -40    -5.5  -0.1]';
-				rightLegInit = [  25.5   15.0   0.0  -18.5  -5.5  -0.1]'; 
-			end
-			qjInit      = [torsoInit;leftArmInit;rightArmInit;leftLegInit;rightLegInit]*(pi/180);
-			dqjInit     = zeros(obj.ndof,1)
-			dx_bInit    = zeros(3,1);
-			omega_bInit = zeros(3,1);
-			%% Updating the robot position
+		function ro = iCub(obj,model)
+            if(strcmp(model,'icubGazeboSim'))
+                obj.active_floating_base = true;
+                % Initialize the mexWholeBodyModel
+                wbm_modelInitialise('icubGazeboSim');	
+                obj.list_of_kin_chain = {'com','left_arm','right_arm','l_sole','r_sole'}; %string matching URDF name of the link (frame)
+                obj.dim_of_kin_chain  = {3,5,5,6,6};
+                obj.sum_ind = {0,3,8,13,19,25};
+                
+                obj.ndof = 25;
+            else
+                obj.active_floating_base = false;
+                wbm_modelInitialiseFromURDF(model);  
+            end
+        end
+        
+        function SetWorldFrameiCub(obj,qjInit,reference_link)
+            %% Updating the robot position
 			wbm_updateState(qjInit,dqjInit,[dx_bInit;omega_bInit]);
 			% fixing the world reference frame w.r.t. the foot on ground position
-			if obj.feet_on_ground(1) == 1
-				[obj.R_b0,obj.x_b0] = wbm_getWorldFrameFromFixedLink('l_sole',qjInit);
-			else  
-				[obj.R_b0,obj.x_b0] = wbm_getWorldFrameFromFixedLink('r_sole',qjInit);    
-			end
+			[R_b0,x_b0] = wbm_getWorldFrameFromFixedLink(reference_link,qjInit);
 			% define world frame
-			wbm_setWorldFrame(R_b0,x_b0,[0 0 -9.81]')	 
-		end
+			wbm_setWorldFrame(R_b0,x_b0,[0 0 -9.81]');
+            % update position and orientation of the floating base repect of the root base 
+            obj.x_b = x_b0;
+            obj.R_b = R_b0;
+            % initial velocity floating base
+            obj.dx_b   = zeros(3,1);
+            obj.omega_b = zeros(3,1);
+        end
+        
+        %   qj  - joint angles (NumDoF x 1)
+        %   xTb - base rototranslation (7 x 1) with 3 for position of frame and 4 for orientation quaternion
+        %         (return is already flipped so that quaternion organised as real
+        %         followed by imaginary)
+        %   dqj - joint velocities (NumDoF x 1)
+        %   vxb - floating base velocity (6 x 1)
+        function [qj,xTb,qjDot,vb] = GetState(obj)
+            [qj,xTb,qjDot,vb]=wbm_getState();
+        end
+       
+        %x_b        position of the floating base
+        %qt_b       orientation fo the floating base with quaternion
+        %dx_b       linear velocity of the floating base 
+        %omega_w    angular velocity of the floating base       
+        function  SetFloatingBaseState(obj,x_b,qt_b,dx_b,omega_w)
+            obj.x_b = x_b;
+            obj.dx_b = dx_b;
+            obj.omega_w = omega_w;
+            % Obtaining the rotation matrix from root link to world frame
+            qT         = [x_b;qt_b];
+            [~,obj.R_b]    = frame2posrot(qT);
+        end
+        
+        function WholeBodyDynamics(obj,q,qd)
+            obj.M = obj.inertia(q); 
+            obj.F = wbm_generalisedBiasForces(obj.R_b,obj.x_b,q,qd,[obj.dx_b;obj.omega_w]);
+            obj.Omega = CentroidalMomentum(q,qd);
+        end
 	end
 	 
 end

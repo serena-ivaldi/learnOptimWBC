@@ -1,4 +1,4 @@
-function fkine = fkine(rob,q)
+function fkine = fkine(rob,q,tag)
 %% FKINE - Forward kinematics solution including tool transformation for the LBR4p copy arm. 
 % ========================================================================= 
 %    
@@ -19,5 +19,5 @@ function fkine = fkine(rob,q)
 %    T:  [4x4] Homogenous transformation matrix relating the pose of the tool 
 %              for the given joint values to the base frame. 
 %    
-fkine = wholeBodyModel('forward-kinematics',rob.R_b,rob.x_b,q,rob.kinematic_chain_selector(rob.cur_chain));
+fkine = wholeBodyModel('forward-kinematics',rob.R_b,rob.x_b,q,tag);
 end

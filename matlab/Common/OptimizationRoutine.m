@@ -14,15 +14,21 @@ function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, co
         case 'random'
            start_action = (cmaes_value_range(1,2)-cmaes_value_range(1,1)).*rand(1,controller.GetTotalParamNum()) + cmaes_value_range(1,1)*ones(1,controller.GetTotalParamNum());
      end
+     
+     %% do all the checks on the input
+     if(controller.GetTotalParamNum() == 0)
+        error('the activation policy used do not contains any parameters. Change the activation policy in AllRuntimeParameters to proceed')
+     end
+     
+     %% execution of the optimization routine
      tic
      [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded] = inst.CMAES(controller.GetTotalParamNum(),start_action,niter,explorationRate,cmaes_value_range);
      exec_time = toc
-     
      % analisys of the optimization result for building repertoire
      %[index, search_params ] = flann_build_index(BestActionPerEachGen.policy, struct('algorithm','kmeans','branching',32,'iterations',3,'checks',120)); 
-     BestActionPerEachGen.start_point = start_action;
      
-
+     %% collecting results
+     BestActionPerEachGen.start_point = start_action;
      %scriptname = 'AllRuntimeParameters';
      % i have to change this number everytime i perform the same test with
      % different runtime parameters

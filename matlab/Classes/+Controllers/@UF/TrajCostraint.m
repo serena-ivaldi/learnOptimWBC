@@ -50,8 +50,8 @@ function [b,A] = TrajCostraint(obj,ind_subchain,ind_task,t,J_old,Jd_old,x,xd,rpy
         b = Fc - obj.Param{ind_subchain,ind_task}.M*xdd_des - obj.Param{ind_subchain,ind_task}.D*(xd_cur - xd_des)...
             - obj.Param{ind_subchain,ind_task}.P*(x_cur-x_des) - obj.Param{ind_subchain,ind_task}.M*J_dot;
         %% DEBUG
-        errorx = norm(x_des - x_cur)
-        errorxd= norm(xd_des - xd_cur)
+        %errorx_impedance  = norm(x_des - x_cur)
+        %errorxd_impedance = norm(xd_des - xd_cur)
         %%---
     end
 end
