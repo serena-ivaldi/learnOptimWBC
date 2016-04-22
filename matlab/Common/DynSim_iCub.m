@@ -5,37 +5,32 @@
 %  plot forces, torques and joints variables, and activate a demo of the
 %  robot's movements.
 
-function DynSim_iCub(icub,params) 
-%% Updating the robot position
-wbm_updateState(params.qjInit,params.dqjInit,[params.dx_bInit;params.omega_bInit]);
+% #TODO substitute icub with controller.subchains
+function DynSim_iCub(controller,params) 
+    %% Updating the robot position
+    wbm_updateState(params.qjInit,params.dqjInit,[params.dx_bInit;params.omega_bInit]);
 
-icub.SetWorldFrameiCub(params.qjInit,reference_link)
-[~,T_b,~,~] = icub.GetState();
+    icub.SetWorldFrameiCub(params.qjInit,reference_link)
+    [~,T_b,~,~] = icub.GetState();
 
-params.chiInit = [T_b; params.qjInit; icub.dx_b; icub.omega_b; params.dqjInit];
-%integration function
-forwardDynFunc  = @(t,chi)forwardDynamics_SoT(t,chi,icub,params);
-    
-%% Integrate forward dynamics
-if params.demo_movements == 0 
+    params.chiInit = [T_b; params.qjInit; icub.dx_b; icub.omega_b; params.dqjInit];
+    %integration function
+    forwardDynFunc  = @(t,chi)forwardDynamics(t,chi,icub,params);
+    %% Integrate forward dynamics
+    if params.demo_movements == 0 
 
-  options = odeset('RelTol',1e-3,'AbsTol', 1e-4);
+      options = odeset('RelTol',1e-3,'AbsTol', 1e-4);
 
-else
+    else
 
-  options = odeset('RelTol',1e-6,'AbsTol',1e-6);
+      options = odeset('RelTol',1e-6,'AbsTol',1e-6);
 
-end   
-
- [t,chi] = ode15s(forwardDynFunc,params.tStart:params.sim_step:params.tEnd,params.chiInit,options);
-
- delete(params.wait)       
+    end   
+    [t,chi,visual_param] = ode15s(forwardDynFunc,params.tStart:params.sim_step:params.tEnd,params.chiInit,options);
+    delete(params.wait)       
 end 
 
-
-
-
-function [dchi,visual_param]=forwardDynamics_SoT(t,chi,icub,param)
+function [dchi,visual_param]=forwardDynamics(t,chi,icub,param)
 %% forwardDynamics_SoT
 %  This is the forward dynamics of the model loaded in the 
 %  wholeBodyInterface from the URDF description. The dynamic model is
@@ -59,9 +54,9 @@ function [dchi,visual_param]=forwardDynamics_SoT(t,chi,icub,param)
 % disp(t)
 
 %% Extraction of state
-% position and orientation
-x_b  = chi(1:3,:); 
-qt_b = chi(4:7,:);
+
+x_b  = chi(1:3,:);  %TODO floating base flag required (parameter of the simulator)
+qt_b = chi(4:7,:);  %TODO floating base flag required (parameter of the simulator)
 
 % normalize quaternions to avoid numerical errors
 % qt_b = qt_b/norm(qt_b);
@@ -69,8 +64,8 @@ qt_b = chi(4:7,:);
 qj   = chi(8:ndof+7,:);
 
 % linear and angular velocity
-dx_b    = chi(ndof+8:ndof+10,:);
-omega_w = chi(ndof+11:ndof+13,:);
+dx_b    = chi(ndof+8:ndof+10,:);   %TODO floating base flag required (parameter of the simulator)
+omega_w = chi(ndof+11:ndof+13,:);  %TODO floating base flag required (parameter of the simulator)
 dqj     = chi(ndof+14:2*ndof+13,:);
 
 Nu      = [dx_b;omega_w;dqj];
@@ -78,28 +73,6 @@ Nu      = [dx_b;omega_w;dqj];
 % Obtaining the rotation matrix from root link to world frame
 qT         = [x_b;qt_b];
 [~,R_b]    = frame2posrot(qT);
-
-% this part has to deactivated qith a flag if the robot is not mounted on
-% a floating base
-icub.SetFloatingBaseState(x_b,qt_b,dx_b,omega_w);
-
-%% MexWholeBodyModel functions
-% dynamics
-icub.WholeBodyDynamics(q,qd)
-%% Building up jacobians and dJNu
-% % contact jacobians
-% Jc    = zeros(6*param.numConstraints,6+ndof);
-% dJcNu = zeros(6*param.numConstraints,1);
-% 
-% for i=1:param.numConstraints
-%     
-%     Jc(6*(i-1)+1:6*i,:)    = wbm_jacobian(R_b,x_b,qj,param.constraintLinkNames{i});
-%     dJcNu(6*(i-1)+1:6*i,:) = wbm_djdq(R_b,x_b,qj,dqj,[dx_b;omega_w],param.constraintLinkNames{i});
-%     
-% end
-% 
-% % CoM jacobian
-% J_CoM  = wbm_jacobian(R_b,x_b,qj,'com');
 
 %% Joints limits check
 limits = param.limits;
@@ -120,6 +93,35 @@ else
 
 end
 
+%% Building up contact jacobian
+% % contact jacobians
+% Jc    = zeros(6*param.numConstraints,6+ndof);
+% dJcNu = zeros(6*param.numConstraints,1);
+% 
+% for i=1:param.numConstraints
+%     
+%     Jc(6*(i-1)+1:6*i,:)    = wbm_jacobian(R_b,x_b,qj,param.constraintLinkNames{i});
+%     dJcNu(6*(i-1)+1:6*i,:) = wbm_djdq(R_b,x_b,qj,dqj,[dx_b;omega_w],param.constraintLinkNames{i});
+%     
+% end
+% 
+% % CoM jacobian
+% J_CoM  = wbm_jacobian(R_b,x_b,qj,'com');
+
+%% compute contact forces
+% % Real contact forces computation
+% S               = [ zeros(6,ndof);
+%                     eye(ndof,ndof)];
+% JcMinv          = Jc/M;
+% JcMinvS         = JcMinv*S;
+% 
+% fc              = (JcMinv*transpose(Jc))\(JcMinv*h -JcMinvS*tau -dJcNu -K_corr_vel.*Jc*Nu -K_corr_pos.*pos_feet_delta);
+fc = zeros(1,ndof);
+%% MexWholeBodyModel functions
+% dynamics for controllers
+icub.WholeBodyDynamics(q,qd,fc)
+%TODO floating base flag required (parameter of the simulator)
+icub.SetFloatingBaseState(x_b,qt_b,dx_b,omega_w);
 %% Feet correction to avoid numerical integration errors
 % % feet correction gain
 % K_corr_pos  = 2.5;
@@ -178,18 +180,11 @@ end
 % controller
 tau = stackOfTaskController(param, constraints, feet, gains, Nu, M, h, H, Jc, dJcNu, xCoM, J_CoM, desired_x_dx_ddx_CoM);    
         
-% % Real contact forces computation
-% S               = [ zeros(6,ndof);
-%                     eye(ndof,ndof)];
-% JcMinv          = Jc/M;
-% JcMinvS         = JcMinv*S;
-% 
-% fc              = (JcMinv*transpose(Jc))\(JcMinv*h -JcMinvS*tau -dJcNu -K_corr_vel.*Jc*Nu -K_corr_pos.*pos_feet_delta);
 
 %% State derivative computation
 % Need to calculate the quaternions derivative
-omega_b = transpose(R_b)*omega_w;                               
-dqt_b   = quaternionDerivative(omega_b,qt_b);       
+omega_b = transpose(R_b)*omega_w; %TODO floating base flag required (parameter of the simulator)                          
+dqt_b   = quaternionDerivative(omega_b,qt_b);   %TODO floating base flag required (parameter of the simulator)    
 
 dx      = [dx_b;dqt_b;dqj];
 dNu     = M\(Jc'*fc + [zeros(6,1); tau]-h);
@@ -199,14 +194,14 @@ dchi    = [dx;dNu];
 %% Visualization 
 % These are the variables that can be plotted by the visualizer.m
 % function
- icub.visual_param.Href      =  [M(1,1)*desired_x_dx_ddx_CoM(:,2);zeros(3,1)];
- icub.visual_param.H         =  H;
- icub.visual_param.pos_feet  =  [l_sole;r_sole];
- icub.visual_param.fc        =  fc;
- icub.visual_param.tau       =  tau;
- icub.visual_param.qj        =  qj;
- icub.visual_param.error_com =  errorCoM;
- icub.visual_param.f0        =  f0;
+ visual_param.Href      =  [M(1,1)*desired_x_dx_ddx_CoM(:,2);zeros(3,1)];
+ visual_param.H         =  H;
+ visual_param.pos_feet  =  [l_sole;r_sole];
+ visual_param.fc        =  fc;
+ visual_param.tau       =  tau;
+ visual_param.qj        =  qj;
+ visual_param.error_com =  errorCoM;
+ visual_param.f0        =  f0;
 
 end
 

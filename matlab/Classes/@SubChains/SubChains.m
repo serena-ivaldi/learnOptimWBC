@@ -1,5 +1,16 @@
 
 % SubChains became really usefull when i have DIFERRENT kinematic chains
+
+% TODO: to manage different kinematic the idea is to create an extended
+% dynamic matrix to simulate the system as a unique object
+% some hypothesis to solve the problem
+% we can add a pointer to an object that build the extended dynamical
+% matrix and then call it during the computation of the tau 
+%(like having an iCub object to query the dynamical matrix... 7
+%and then use the local informations inside the single subchain...
+%to compute the control actions) 
+% maybe i can define an abstract class called whole system to distinguish
+% between single subchain and the total system.
 classdef  SubChains < handle
 
 
