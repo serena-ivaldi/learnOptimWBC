@@ -23,7 +23,7 @@ load(path);
 %% SCENARIO
 name_scenario = 'lwrsimple_test_noobs';%'lbr_scenario_2_gen' lbr_scenario2; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
 
-%% SIMULATOR PARAMETERS
+%% RBT SIMULATOR PARAMETERS
 time_sym_struct = time_struct;
 time_sym_struct.step = 0.001; 
 % TODO generalize for multichain

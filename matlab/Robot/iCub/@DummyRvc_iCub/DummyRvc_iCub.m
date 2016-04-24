@@ -8,7 +8,7 @@ classdef DummyRvc_iCub < handle
         name             % dummy parameter to be compliant with the subchain class
         model3d          % dummy parameter to be compliant with the subchain class
         tag              % string that represent the kinematic link that i want to control
-        index            % numeric pointer to grab the part of the dynamical matrix that are of interest for the current dynamic model
+        
     end
     
     methods
@@ -17,8 +17,7 @@ classdef DummyRvc_iCub < handle
             obj.link = 'iCub';
             obj.name = 'iCub';
             obj.model3d = 'iCub';
-            obj.tag = tag; 
-            obj.index = find(ismember(icub.list_of_kin_chain,tag));
+            obj.tag = tag;
             
         end   
         
@@ -71,7 +70,7 @@ classdef DummyRvc_iCub < handle
         % structure of my controller because i compute everything in
         % advance inside the icub structure 
         function M = inertia(obj,q)
-            M = obj.icub.M(obj.icub.access_index(obj.index)+1:obj.icub.access_index(obj.index + 1));
+            M = obj.icub.M;
         end
         
         

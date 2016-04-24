@@ -5,8 +5,8 @@ classdef iCub < handle
         active_floating_base          % switch to control if the icub has or not a floating base
         ndof                          % dependant on the model used for the simulaztion
         list_of_kin_chain             % string matching URDF name of the link (frame)
-        dim_of_kin_chain 
-        access_index;                 % vector of index used for accesing the infromation stored in the structural parameters
+        %dim_of_kin_chain 
+        %access_index;                 % vector of index used for accesing the infromation stored in the structural parameters
         %% Floating base parameter
         % I use this value inside the computation of the dynamical
         % parameters of the robot (i need to udpate them each iteration)
@@ -18,9 +18,6 @@ classdef iCub < handle
         M
         F
         Omega
-        %% for visualization
-        visual_param;
-        
         %kinematic_chain_selector % list of kinematic chain in the icub
         %cur_chain                % current chain that we want to control
     end
@@ -32,9 +29,8 @@ classdef iCub < handle
                 % Initialize the mexWholeBodyModel
                 wbm_modelInitialise('icubGazeboSim');	
                 obj.list_of_kin_chain = {'com','left_arm','right_arm','l_sole','r_sole'}; %string matching URDF name of the link (frame)
-                obj.dim_of_kin_chain  = {3,5,5,6,6};
-                obj.sum_ind = {0,3,8,13,19,25};
-                
+                %obj.dim_of_kin_chain  = {3,5,5,6,6};
+                %obj.sum_ind = {0,3,8,13,19,25};
                 obj.ndof = 25;
             else
                 obj.active_floating_base = false;
@@ -80,10 +76,10 @@ classdef iCub < handle
             [~,obj.R_b]    = frame2posrot(qT);
         end
         
-        function WholeBodyDynamics(obj,q,qd)
+        function WholeBodyDynamics(obj,q,qd,fc)
             obj.M = obj.inertia(q); 
-            obj.F = wbm_generalisedBiasForces(obj.R_b,obj.x_b,q,qd,[obj.dx_b;obj.omega_w]);
-            obj.Omega = CentroidalMomentum(q,qd);
+            obj.F = wbm_generalisedBiasForces(obj.R_b,obj.x_b,q,qd,[obj.dx_b;obj.omega_w]) - fc;
+            obj.Omega = CentroidalMomentum(q,qd); 
         end
 	end
 	 
