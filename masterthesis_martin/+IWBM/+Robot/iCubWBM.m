@@ -21,7 +21,7 @@ classdef iCubWBM < IWBM.WBMInterface
 
     methods
         % Constructor:
-        function obj = iCubWBM(robot_model, robot_config, wf2FixLnk, L, varargin)
+        function obj = iCubWBM(@init_robot, wf2FixLnk, L, varargin)
             if ~exist('wf2FixLnk', 'var') )
                 wf2FixLnk = true;
             end
@@ -38,8 +38,8 @@ classdef iCubWBM < IWBM.WBMInterface
         end
 
         function actualizeState(obj)
-            [wf_vqT_b, ~, obj.mwf_v_b, ~] = obj.mwbm_robot.getState();
-            [obj.mwf_p_b, obj.mwf_R_b] = WBM.utilities.frame2posRotm(wf_vqT_b);
+            [wf_vqT_b,~, obj.mwf_v_b,~] = obj.mwbm_robot.getState();
+            [obj.mwf_p_b, obj.mwf_R_b]  = WBM.utilities.frame2posRotm(wf_vqT_b);
         end
 
         function T = A(obj, joints, q_j)
@@ -85,23 +85,23 @@ classdef iCubWBM < IWBM.WBMInterface
         end
 
         function wf_R_b = get.wf_R_b(obj)
-
+            wf_R_b = obj.mwf_R_b;
         end
 
         function wf_p_b = get.wf_p_b(obj)
-
+            wf_p_b = obj.mwf_p_b;
         end
 
         function wf_v_b = get.wf_v_b(obj)
-
+            wf_v_b = obj.mwf_v_b;
         end
 
         function robot_model = get.robot_model(obj)
-
+            robot_model = obj.mwbm_robot.robot_model;
         end
 
         function robot_config = get.robot_config(obj)
-
+            robot_config = obj.mwbm_robot.robot_config;
         end
 
     end

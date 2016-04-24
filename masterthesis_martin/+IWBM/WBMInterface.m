@@ -20,7 +20,7 @@ classdef (Abstract) WBMInterface < handle
 
     methods(Abstract)
         % Constructor:
-        obj = WBMInterface(robot_model, robot_config, wf2FixLnk, L, varargin)
+        %obj = WBMInterface(robot_model, robot_config, wf2FixLnk, L, varargin)
 
         delete(obj)
 
