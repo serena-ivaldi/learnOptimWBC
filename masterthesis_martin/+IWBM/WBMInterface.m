@@ -1,21 +1,21 @@
 classdef (Abstract) WBMInterface < handle
     properties(Abstract, Dependent)
         % public properties for fast get/set methods:
-        wf_R_b@double matrix
-        wf_p_b@double vector
-        wf_v_b@double vector
+        ndof@uint16 scalar
         robot_model@WBM.wbmBaseModelParams
         robot_config@WBM.wbmBaseRobotConfig
+        stFltBase@WBM.wbmFltgBaseState
+        base@double matrix % ??
     end
 
     properties(Abstract, Access = protected)
-        mwbm_robot@WBM.WBM
-        mstv@double    vector
-        mwf_R_b@double matrix
-        mwf_p_b@double vector
-        mwf_v_b@double vector
-        mndof@uint16   scalar
-        mconfig
+        mwbm_icub@WBM.WBM
+        mstFltBase@WBM.wbmFltgBaseState;
+        mstv@double vector
+    end
+
+    properties(SetAccess = private, GetAccess = public)
+        config % ??
     end
 
     methods(Abstract)
@@ -28,21 +28,21 @@ classdef (Abstract) WBMInterface < handle
 
         T = A(obj, joints, q_j)
 
-        T0_6 = T0_6(obj, q_j)
+        T0_m = T0_m(obj, q_j, lnk_name)
 
-        J0 = jacob0(obj, q_j, varargin)
+        J_0 = jacob0(obj, q_j, lnk_name)
 
-        Jdot = jacob_dot(obj, q_j, dq_j)
+        J_dot = jacob_dot(obj, q_j, dq_j, lnk_name)
 
-        M = inertia(obj, robot, q_j)
+        M = inertia(obj, q_j)
 
-        C = coriolis(obj, robot, q_j, dq_j)
+        f_c = coriolis(obj, q_j, dq_j)
 
-        tg = gravload(obj, robot, q_j, grav)
+        f_g = gravload(obj, q_j, g_wf)
 
         % set.tool(obj, v)
 
-        set.base(obj, v)
+        set.base(obj, v) % ??
 
         % set.offset(obj, v)
 
@@ -56,17 +56,15 @@ classdef (Abstract) WBMInterface < handle
 
         % v = get.config(obj)
 
-        payload(obj, m, p)
+        payload(obj, m, p) % ??
 
-        wf_R_b = get.wf_R_b(obj)
-
-        wf_p_b = get.wf_p_b(obj)
-
-        wf_v_b = get.wf_v_b(obj)
+        stFltBase = get.stFltBase(obj)
 
         robot_model = get.robot_model(obj)
 
         robot_config = get.robot_config(obj)
+
+        ndof = get.ndof(obj)
 
     end
 end
