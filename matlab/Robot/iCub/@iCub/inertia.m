@@ -18,4 +18,4 @@ function I = inertia(rob,q)
 %  Output:: 
 %    I:  [7x7] inertia matrix 
 %    
-I = wholeBodyModel('mass-matrix',rob.R_b,rob.x_b,q);
+I = wholeBodyModel('mass-matrix',reshape(rob.R_b,[],1),rob.x_b,q);

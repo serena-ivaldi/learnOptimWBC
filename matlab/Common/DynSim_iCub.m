@@ -6,16 +6,15 @@
 %  robot's movements.
 
 % #TODO substitute icub with controller.subchains
-function DynSim_iCub(controller,params) 
-    %% Updating the robot position
-    wbm_updateState(params.qjInit,params.dqjInit,[params.dx_bInit;params.omega_bInit]);
+function [t,chi,visual_param] = DynSim_iCub(controller,params) 
+    WS = controller.GetWholeSystem();
+    %% Updating the robot position and define the world link
+    WS.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
+    [~,T_b,~,~] = WS.GetState();
 
-    icub.SetWorldFrameiCub(params.qjInit,reference_link)
-    [~,T_b,~,~] = icub.GetState();
-
-    params.chiInit = [T_b; params.qjInit; icub.dx_b; icub.omega_b; params.dqjInit];
+    params.chiInit = [T_b; params.qjInit; WS.dx_b; WS.omega_b; params.dqjInit];
     %integration function
-    forwardDynFunc  = @(t,chi)forwardDynamics(t,chi,icub,params);
+    forwardDynFunc  = @(t,chi)forwardDynamics(t,chi,controller,params);
     %% Integrate forward dynamics
     if params.demo_movements == 0 
 
@@ -30,7 +29,7 @@ function DynSim_iCub(controller,params)
     delete(params.wait)       
 end 
 
-function [dchi,visual_param]=forwardDynamics(t,chi,icub,param)
+function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
 %% forwardDynamics_SoT
 %  This is the forward dynamics of the model loaded in the 
 %  wholeBodyInterface from the URDF description. The dynamic model is
@@ -48,7 +47,8 @@ function [dchi,visual_param]=forwardDynamics(t,chi,icub,param)
 %  dx_b:     the cartesian velocity of the base (R^3)
 %  omega_b:  the velocity describing the orientation of the base (SO(3))
 %  dqj:      the joint velocities (R^ndof)
-
+  % i get the pointer to the whole system
+  icub = controller.GetWholeSystem();
   waitbar(t/param.tEnd,param.wait)
   ndof = icub.ndof;
 % disp(t)
@@ -116,12 +116,10 @@ end
 % JcMinvS         = JcMinv*S;
 % 
 % fc              = (JcMinv*transpose(Jc))\(JcMinv*h -JcMinvS*tau -dJcNu -K_corr_vel.*Jc*Nu -K_corr_pos.*pos_feet_delta);
-fc = zeros(1,ndof);
+fc = zeros(ndof + 6,1);
 %% MexWholeBodyModel functions
-% dynamics for controllers
-icub.WholeBodyDynamics(q,qd,fc)
 %TODO floating base flag required (parameter of the simulator)
-icub.SetFloatingBaseState(x_b,qt_b,dx_b,omega_w);
+icub.SetFloatingBaseState(x_b,qt_b,dx_b,omega_w); %TODO floating base flag required (parameter of the simulator)
 %% Feet correction to avoid numerical integration errors
 % % feet correction gain
 % K_corr_pos  = 2.5;
@@ -178,10 +176,17 @@ icub.SetFloatingBaseState(x_b,qt_b,dx_b,omega_w);
 %desired_x_dx_ddx_CoM = generTraj_SoT(xCoMDes,t,trajectory);
 
 % controller
-tau = stackOfTaskController(param, constraints, feet, gains, Nu, M, h, H, Jc, dJcNu, xCoM, J_CoM, desired_x_dx_ddx_CoM);    
-        
+%tau = stackOfTaskController(param, constraints, feet, gains, Nu, M, h, H, Jc, dJcNu, xCoM, J_CoM, desired_x_dx_ddx_CoM);    
+% evaluate the torque function if one is given
+if isobject(controller)
+    tau = controller.Policy(t,qj,dqj,fc);
+else   
+    tau = zeros(ndof + 6,1);
+end        
 
 %% State derivative computation
+% this is for advancing the simulation 
+[M,h,~] = icub.WholeBodyDynamics(qj,dqj);
 % Need to calculate the quaternions derivative
 omega_b = transpose(R_b)*omega_w; %TODO floating base flag required (parameter of the simulator)                          
 dqt_b   = quaternionDerivative(omega_b,qt_b);   %TODO floating base flag required (parameter of the simulator)    
@@ -194,14 +199,14 @@ dchi    = [dx;dNu];
 %% Visualization 
 % These are the variables that can be plotted by the visualizer.m
 % function
- visual_param.Href      =  [M(1,1)*desired_x_dx_ddx_CoM(:,2);zeros(3,1)];
- visual_param.H         =  H;
- visual_param.pos_feet  =  [l_sole;r_sole];
- visual_param.fc        =  fc;
- visual_param.tau       =  tau;
- visual_param.qj        =  qj;
- visual_param.error_com =  errorCoM;
- visual_param.f0        =  f0;
+%  visual_param.Href      =  [M(1,1)*desired_x_dx_ddx_CoM(:,2);zeros(3,1)];
+%  visual_param.H         =  H;
+%  visual_param.pos_feet  =  [l_sole;r_sole];
+%  visual_param.fc        =  fc;
+%  visual_param.tau       =  tau;
+%  visual_param.qj        =  qj;
+%  visual_param.error_com =  errorCoM;
+%  visual_param.f0        =  f0;
 
 end
 

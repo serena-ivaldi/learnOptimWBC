@@ -89,7 +89,10 @@ classdef  UF < Controllers.AbstractController
             obj.torques_time{i} = [];
          end
       end
-      
+      %% TODO
+      % this management of multiple chain has to changed in favor of a 
+      % a unique system to refer to to compute the dynamics component of
+      % the robot
       function SetCurRobotIndex(obj,index_chain)
           obj.current_chain = index_chain;
       end
@@ -105,7 +108,13 @@ classdef  UF < Controllers.AbstractController
       function bot = GetActiveBotVis(obj)
           bot = obj.subchains.GetCurRobotVis(obj.current_chain);
       end
+      %% end
       
+      function WS = GetWholeSystem(obj)
+          WS = obj.subchains.whole_system;
+      end
+      
+      % get pointer to the complete dynamic object
       
       function  final_tau  = Policy(obj,t,q,qd,Fc)
           
@@ -114,39 +123,34 @@ classdef  UF < Controllers.AbstractController
           %q
           %qd
           %---
-          % active robot 
-          cur_bot = obj.GetActiveBot;
-          % current chain index
-          i = obj.GetCurRobotIndex;
-          DOF = cur_bot.n;
+          
          
           % the dynamic computation between controller and simulator has
           % to be different
-          M = cur_bot.inertia(q);
-          F = cur_bot.coriolis(q,qd)*qd' + cur_bot.gravload(q)';
-          % adding the stabilization part in joint space if i have only one
+          %% provisory structure 
+          new = 1;
+          if(~new) 
+              % active robot 
+              cur_bot = obj.GetActiveBot;
+              % current chain index
+              %i = obj.GetCurRobotIndex;
+              DOF = cur_bot.n; % is used in the projector
+              M = cur_bot.inertia(q);
+              F = cur_bot.coriolis(q,qd)*qd' + cur_bot.gravload(q)' - Fc;
+          else      
+              M = obj.subchains.GetM(q);
+              % i include the external forces inside F
+              F = obj.subchains.GetF(q,qd,Fc);
+          end
           % controller 
-         
           if(strcmp(obj.combine_rule,'sum')) 
-             
-             for j = 1:obj.subchains.GetNumTasks(i)
-                 % for stability reason when a controller use less dof
-                 % then the free one i have to add a stabilizing action
-                 % trough a null space porjected component
-%                  if(obj.subchains.GetNumSubLinks(i,j) < DOF )
-%                    deg = pi/180;
-%                     %kp = 700;
-%                     %kp = 5;
-%                     kp = 100;
-%                     kd = 2*sqrt(kp);
-%                     qd_des =zeros(size(q,2),1);
-%                     q_des  = [122;121; 19; 60; 90; 0]*deg; %  TODO to generalize for different lenght of kinematic chain
-%                     u1 = ( kd*(qd_des - qd') + kp*(q_des - q'));
-%                 else
-%                     u1 = zeros(size(q,2),1);
-%                 end
-                 tau=obj.torque_func{i,j}(i,j,M,F,t,q,qd,Fc);
-                 app_tau(:,j) = obj.alpha{i,j}.GetValue(t)*tau;       
+             count = 1;
+             for i = 1:obj.subchains.GetNumChains();
+                 for j = 1:obj.subchains.GetNumTasks(i)
+                     tau=obj.torque_func{i,j}(i,j,M,F,t,q,qd,Fc);
+                     app_tau(:,count) = obj.alpha{i,j}.GetValue(t)*tau;
+                     count = count + 1;
+                 end
              end
              
              final_tau = sum(app_tau,2);
@@ -155,10 +159,13 @@ classdef  UF < Controllers.AbstractController
              obj.SaveTime(i,t);
              
            elseif(strcmp(obj.combine_rule,'projector'))   
-               
-             for j = 1:obj.subchains.GetNumTasks(i)
-                 tau=obj.torque_func{i,j}(i,j,M,F,t,q,qd,Fc);
-                 app_tau(:,j) = obj.alpha{i,j}.GetValue(t)*tau;       
+             count = 1;
+             for i = 1:obj.subchains.GetNumChains();
+                 for j = 1:obj.subchains.GetNumTasks(i)
+                     tau=obj.torque_func{i,j}(i,j,M,F,t,q,qd,Fc);
+                     app_tau(:,j) = obj.alpha{i,j}.GetValue(t)*tau;
+                     count = count + 1;
+                 end
              end
              
              final_tau = sum(app_tau,2);

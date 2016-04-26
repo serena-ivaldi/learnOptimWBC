@@ -79,15 +79,15 @@ function [t, q, qd] = DynSim(time_struct,controller,qi,qdi,fixed_step,varargin)
         
         % concatenate q and qd into the initial state vector
         yi = [qi{index_chain}(:);qdi{index_chain}(:)];
-          % preallocate q and qd for handle failure situations
-%         q = zeros(size(qi{index_chain}(:)));
-%         qd = zeros(size(qdi{index_chain}(:)));
+        % preallocate q and qd for handle failure situations
+        % q = zeros(size(qi{index_chain}(:)));
+        % qd = zeros(size(qdi{index_chain}(:)));
         
         % set the index for the current chain in use
         % TODO add managment of multiple chain in fdyn2
         controller.SetCurRobotIndex(index_chain);
         n = controller.GetActiveBot.n;
-       % try
+        try
             if(fixed_step)
                 disp('fixed_step') 
                 y = Ode1(@fdyn2,time,yi,controller,varargin{:}); 
@@ -97,15 +97,15 @@ function [t, q, qd] = DynSim(time_struct,controller,qi,qdi,fixed_step,varargin)
             end  
             q{index_chain} = y(:,1:n);
             qd{index_chain} = y(:,n+1:2*n);
-%         catch err
-%             disp('integration error');
-%             q{index_chain} = y(:,1:n);
-%             qd{index_chain} = y(:,n+1:2*n); 
-%             %because of i have failed i need to cut the time till the last
-%             %position computed
-%             t = time(1,1:size(q{index_chain},1));
-%             rethrow(err);
-%         end
+        catch err
+            disp('integration error');
+            q{index_chain} = y(:,1:n);
+            qd{index_chain} = y(:,n+1:2*n); 
+            %because of i have failed i need to cut the time till the last
+            %position computed
+            t = time(1,1:size(q{index_chain},1));
+            rethrow(err);
+        end
     end
     % i have to use the same sample time for every chain 
     t = time;
@@ -168,6 +168,7 @@ function xd = fdyn2(t, x, controller,varargin)
     qd = x(n+1:2*n)';
     
     % Here i put the model for external forces (i have to see how to change the model to embed the external forces)
+    % and i have to compute the contact jacobian
     Fc = 0;
     
     % here i transform Fc to convert the xternal forces in forces in the
