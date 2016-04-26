@@ -19,5 +19,5 @@ function fkine = fkine(rob,q,tag)
 %    T:  [4x4] Homogenous transformation matrix relating the pose of the tool 
 %              for the given joint values to the base frame. 
 %    
-fkine = wholeBodyModel('forward-kinematics',rob.R_b,rob.x_b,q,tag);
+fkine = wholeBodyModel('forward-kinematics',reshape(rob.R_b,[],1),rob.x_b,q,tag);
 end

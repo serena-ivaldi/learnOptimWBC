@@ -16,5 +16,5 @@ function jacob0 = jacob0(rob,q,tag)
 %  Output:: 
 %    J0:  [6x7] Jacobian matrix 
 
-jacob0 = wholeBodyModel('jacobian',rob.R_b,rob.x_b,q,tag);
+jacob0 = wholeBodyModel('jacobian',reshape(rob.R_b,[],1),rob.x_b,q,tag);
 %wbm_jacobian(rob.R_b,rob.x_b,q,rob.kinematic_chain_selector[rob.cur_chain]);

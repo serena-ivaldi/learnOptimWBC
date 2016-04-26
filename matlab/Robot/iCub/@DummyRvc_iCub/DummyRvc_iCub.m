@@ -1,9 +1,10 @@
-% this class is an iterface between the icub robot class and the subchain class
-
+% this class is an iterface between the icub robot class and the subchain_class
+% we need icub both in DummyRvc_iCub and subchain because we need to compute the overall dynamic and the single kinematic values for each kinematic chain 
 classdef DummyRvc_iCub < handle
 
     properties
         icub             % pointer to the icub structure (to reproduce the same structure of )
+        n                % degrees of freedom
         link             % dummy parameter to be compliant with the subchain class
         name             % dummy parameter to be compliant with the subchain class
         model3d          % dummy parameter to be compliant with the subchain class
@@ -17,12 +18,13 @@ classdef DummyRvc_iCub < handle
             obj.link = 'iCub';
             obj.name = 'iCub';
             obj.model3d = 'iCub';
+            obj.n = icub.ndof;
             obj.tag = tag;
             
         end   
         
         function T = fkine(obj,q)
-            T = obj.icub.fkine(obj,q,obj.tag);
+            T = obj.icub.fkine(q,obj.tag);
         end
         
         function J0 = jacob0(obj,q,varargin)
@@ -32,7 +34,7 @@ classdef DummyRvc_iCub < handle
             opt.rot = false;
     
             opt = tb_optparse(opt, varargin);
-            J0 = obj.icub.jacob0(obj,q,obj.tag);
+            J0 = obj.icub.jacob0(q,obj.tag);
             
             if opt.rpy
                 rpy = tr2rpy( fkine(robot, q) );
@@ -69,9 +71,9 @@ classdef DummyRvc_iCub < handle
         % here q is just a dummy variable to be compliant with the
         % structure of my controller because i compute everything in
         % advance inside the icub structure 
-        function M = inertia(obj,q)
-            M = obj.icub.M;
-        end
+        %function M = inertia(obj,q)
+        %    M = obj.icub.M;
+        %end
         
         
     end

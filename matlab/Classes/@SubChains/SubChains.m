@@ -19,14 +19,17 @@ classdef  SubChains < handle
        sub_chains;     %  cell array of kinematic model symbolic and not
        sub_chains_vis; %  cell array of robot for visualization purpose
        symbolic_flag;  %  is true if i have a symbolic counterpart fo the kinematic chains
-       
+       whole_system;   %  this field is a pointer to the whole dynamic structure where i define complex multichain body connected to each other
+                       % in this case the kinematic information has to specified for each chain separately (inside sub_chains) but the dynamic infomarmation 
+                       % depends on the overall structure
     end
     
     
     methods
   
-      function obj = SubChains(target_link,sub_chains)        
+      function obj = SubChains(target_link,sub_chains,varargin)        
          
+         obj.whole_system = []; 
          obj.target_link = target_link;
          
          for i = 1:size(target_link,1)
@@ -51,10 +54,16 @@ classdef  SubChains < handle
                obj.symbolic_flag(i) = 0;
             end
             
+            if(~isempty(varargin))
+                obj.whole_system = varargin{1};
+            end
             
          end
       end
-      
+      %% TODO
+      % this management of multiple chain has to changed in favor of a 
+      % a unique system to refer to to compute the dynamics component of
+      % the robot
       % get active subchain
       function rob = GetCurRobot(obj,current_chain)
           rob = obj.sub_chains{current_chain};
@@ -64,6 +73,7 @@ classdef  SubChains < handle
       function rob = GetCurRobotVis(obj,current_chain)
           rob = obj.sub_chains_vis{current_chain};
       end
+      %% end
       
       % number of subchains
       function n=GetNumChains(obj)
@@ -83,6 +93,29 @@ classdef  SubChains < handle
        function n=GetNumSubLinks(obj,ind_subchain,ind_task)
           n=obj.target_link{ind_subchain}(ind_task);
        end 
+       
+       %% dynamic interface
+       
+       function M = GetM(obj,q)
+           if(~isempty(obj.whole_system))
+               M = obj.whole_system.inertia(q);
+           else
+               % TODO i need to build the inertia matrix of the overall
+               % system
+           end
+       end
+       
+       function F = GetF(obj,q,qd,fc)
+           % in the case i compute the F using an external object like icub
+           if(~isempty(obj.whole_system))
+               F = obj.whole_system.F(q,qd,fc);
+           else
+               % TODO i need to build the coriolis and gravload of the
+               % overall system before computing it
+               F = coriolis(q,qd)'*qd + gravload(q) - Fc;
+           end
+           
+       end
        
        
        

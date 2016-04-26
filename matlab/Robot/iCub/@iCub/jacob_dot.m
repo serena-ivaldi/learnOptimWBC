@@ -16,5 +16,5 @@ function jacob_dot = jacob_dot(rob,q,dq,tag)
 %    
 %  Output:: 
 %    Jdot: 6x1 vector equal to Jdot*qd. 
-jacob_dot = wholeBodyModel('djdq',rob.R_b,rob.x_b,q,dq,[rob.dx_b;rob.omega_w],tag); 
+jacob_dot = wholeBodyModel('djdq',reshape(rob.R_b,[],1),rob.x_b,q,dq,[rob.dx_b;rob.omega_w],tag); 
 %wbm_djdq(rob.R_b,rob.x_b,qj,dqj,[rob.dx_b;rob.omega_w],rob.kinematic_chain_selector[rob.cur_chain]));
