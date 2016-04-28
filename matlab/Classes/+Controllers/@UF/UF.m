@@ -116,7 +116,7 @@ classdef  UF < Controllers.AbstractController
       
       % get pointer to the complete dynamic object
       
-      function  final_tau  = Policy(obj,t,q,qd,Fc)
+      function  final_tau  = Policy(obj,t,q,qd,Fc,Jc_t)
           
           %DEBUG
           %t
@@ -140,7 +140,8 @@ classdef  UF < Controllers.AbstractController
           else      
               M = obj.subchains.GetM(q);
               % i include the external forces inside F
-              F = obj.subchains.GetF(q,qd,Fc);
+              F = obj.subchains.GetF(q,qd,Fc,Jc_t);
+              [M,F] = obj.subchains.RemoveFloatingBase(M,F,7);
           end
           % controller 
           if(strcmp(obj.combine_rule,'sum')) 

@@ -161,7 +161,9 @@ function xd = fdyn2(t, x, controller,varargin)
     if isempty(controller.current_time)
       controller.current_time = tic;
     end
-
+    
+    % TODO this part has to be changed to take into account the fact that
+    % we consider the whole system
     n = controller.GetActiveBot().n;
     
     q = x(1:n)';
@@ -169,8 +171,8 @@ function xd = fdyn2(t, x, controller,varargin)
     
     % Here i put the model for external forces (i have to see how to change the model to embed the external forces)
     % and i have to compute the contact jacobian
-    Fc = 0;
-    
+    Fc = zeros(6,1);
+    Jc_t = zeros(n,6);
     % here i transform Fc to convert the xternal forces in forces in the
     % joint space
 

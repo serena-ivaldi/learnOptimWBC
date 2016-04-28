@@ -20,4 +20,9 @@ function fkine = fkine(rob,q,tag)
 %              for the given joint values to the base frame. 
 %    
 fkine = wholeBodyModel('forward-kinematics',reshape(rob.R_b,[],1),rob.x_b,q,tag);
+% Obtaining the rotation matrix from root link to world frame
+[x,R]    = frame2posrot(fkine);
+fkine = eye(4);
+fkine(1:3,1:3) = R;
+fkine(1:3,4) = x;
 end

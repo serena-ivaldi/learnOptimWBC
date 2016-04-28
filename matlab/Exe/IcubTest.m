@@ -55,23 +55,24 @@ params.tEnd     = time_struct.tf;
 params.sim_step = 0.01;
 params.wait     = waitbar(0,'State integration in progress...');
 
+%% SUBCHAIN PARAMETERS 
+ 
+icub = iCub('icubGazeboSim');
+chain_1 = DummyRvc_iCub(icub,'l_sole');
+ 
+subchain1 = [5];
+target_link{1} = subchain1;
+
+robots{1} = chain_1;
+% we have to specify floating base for the icub because it gives us 
+% extended dynamic matrix even if the robot is fixed base
+chains = SubChains(target_link,robots,icub,'floating_base');
 
 %% limit parameters
 
 [jl1,jl2]        = wbm_jointLimits();
 limits           = [jl1 jl2];
 params.limits    = limits;
-
-%% SUBCHAIN PARAMETERS 
- 
-icub = iCub('icubGazeboSim');
-chain_1 = DummyRvc_iCub(icub,'left_arm');
- 
-subchain1 = [5];
-target_link{1} = subchain1;
-
-robots{1} = chain_1;
-chains = SubChains(target_link,robots,icub);
 
 %%  REFERENCE PARAMETERS
 deg = pi/180;
@@ -120,7 +121,7 @@ combine_rule = {'sum'}; % sum or projector (with sum reppelers are removed)
 % the metric change between regularized and not regularized because in the
 % regularized case i have to do N^(-1) 
 % not regularized case i have N^(-1/2)
-metric = {'M^(1)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
+metric = {'M*transpose(M)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
 kd = 110;
 kp = 70; % row vector one for each chain
 for i= 1:chains.GetNumChains()
