@@ -37,7 +37,7 @@ classdef DummyRvc_iCub < handle
             J0 = obj.icub.jacob0(q,obj.tag);
             
             if opt.rpy
-                rpy = tr2rpy( fkine(robot, q) );
+                rpy = tr2rpy( fkine(obj, q) );
                 B = rpy2jac(rpy);
 %                 if(~isa(B, 'sym'))
 %                    if rcond(B) < eps
@@ -50,7 +50,7 @@ classdef DummyRvc_iCub < handle
                     J0 = blkdiag( eye(3,3), inv(B) ) * J0;
                % end
             elseif opt.eul
-                eul = tr2eul( fkine(robot, q) );
+                eul = tr2eul( fkine(obj, q) );
                 B = eul2jac(eul);
                 if rcond(B) < eps
                     error('Representational singularity');

@@ -10,11 +10,10 @@ function jacob0 = jacob0(rob,q,tag)
 %    computes the robot jacobian with respect to the base frame. 
 %    
 %  Input:: 
-%    q:  7-element vector of generalized coordinates. 
+%    q:  n-element vector of generalized coordinates. 
 %    Angles have to be given in radians! 
 %    
 %  Output:: 
-%    J0:  [6x7] Jacobian matrix 
-
+%    J0:  [6xn] Jacobian matrix 
 jacob0 = wholeBodyModel('jacobian',reshape(rob.R_b,[],1),rob.x_b,q,tag);
 %wbm_jacobian(rob.R_b,rob.x_b,q,rob.kinematic_chain_selector[rob.cur_chain]);

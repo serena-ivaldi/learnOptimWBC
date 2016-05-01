@@ -7,10 +7,7 @@
 
 function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
 
-        q_cur = zeros(1,obj.sub_chains{ind_subchain}.n);
-        qd_cur= zeros(1,obj.sub_chains{ind_subchain}.n);
-        q_cur(1:obj.GetNumSubLinks(ind_subchain,ind_task)) = q(1:obj.GetNumSubLinks(ind_subchain,ind_task));
-        qd_cur(1:obj.GetNumSubLinks(ind_subchain,ind_task)) = qd(1:obj.GetNumSubLinks(ind_subchain,ind_task));
+        
         cur_bot = obj.GetCurRobot(ind_subchain);
         % i have to distinguish between icub and rbt robots (hopefully provisory)
         if(isa(cur_bot,'DummyRvc_iCub'))
@@ -20,7 +17,22 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
             x = T(1:3,4);
             rpy = tr2rpy(T);
             rpy = rpy';
+            %try
+              J = cur_bot.jacob0(q,'rpy');
+            %catch error
+            %  error('jacob0 is symbolic. remove the corresponding mex file in the robot folder to make it works','could be a representation singularity');
+            %end
+            full_qd = [obj.whole_system.dx_b;obj.whole_system.omega_b;qd];
+            v=J*full_qd;
+            xd = v(1:3);rpyd=v(4:6);
+            % compute J_dot from the the current subchain
+            J_dot = cur_bot.jacob_dot(q,qd);   
         elseif(isa(cur_bot,'SerialLink'))
+            % TODO this part has to be removed it those not make any sense
+            q_cur = zeros(1,obj.sub_chains{ind_subchain}.n);
+            qd_cur= zeros(1,obj.sub_chains{ind_subchain}.n);
+            q_cur(1:obj.GetNumSubLinks(ind_subchain,ind_task)) = q(1:obj.GetNumSubLinks(ind_subchain,ind_task));
+            qd_cur(1:obj.GetNumSubLinks(ind_subchain,ind_task)) = qd(1:obj.GetNumSubLinks(ind_subchain,ind_task));
             % compute pose (position + rool pitch yaw) from the current
             % subchain
             kinematic=CStrCatStr({'cur_bot.T0_'},num2str(obj.GetNumSubLinks(ind_subchain,ind_task)),{'(q_cur)'});
@@ -30,18 +42,29 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
             x = T(1:3,4);
             rpy = tr2rpy(T);
             rpy = rpy';
+            
+            % i ahve to provide a common way to manage the jacobian
+            %try
+            J = cur_bot.jacob0(q_cur,'rpy');
+            %catch error
+            %  error('jacob0 is symbolic. remove the corresponding mex file in the robot folder to make it works','could be a representation singularity');
+            %end
+            v=J*qd_cur';
+            xd = v(1:3);rpyd=v(4:6);
+            % compute J_dot from the the current subchain
+            J_dot = cur_bot.jacob_dot(q_cur,qd_cur);  
         end
-        % compute generalized cartesian velocities from the current
-        % subchain
-        try
-          J = cur_bot.jacob0(q_cur,'rpy');
-        catch error
-          error('jacob0 is symbolic. remove the corresponding mex file in the robot folder to make it works','could be a representation singularity');
-        end
-        
-        v=J*qd_cur';
-        xd = v(1:3);rpyd=v(4:6);
-        % compute J_dot from the the current subchain
-        J_dot = cur_bot.jacob_dot(q_cur,qd_cur);   
+%         % compute generalized cartesian velocities from the current
+%         % subchain
+%         %try
+%           J = cur_bot.jacob0(q_cur,'rpy');
+%         %catch error
+%         %  error('jacob0 is symbolic. remove the corresponding mex file in the robot folder to make it works','could be a representation singularity');
+%         %end
+%         
+%         v=J*qd_cur';
+%         xd = v(1:3);rpyd=v(4:6);
+%         % compute J_dot from the the current subchain
+%         J_dot = cur_bot.jacob_dot(q_cur,qd_cur);   
   
 end

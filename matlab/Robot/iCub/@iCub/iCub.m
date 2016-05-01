@@ -83,8 +83,8 @@ classdef iCub < handle
         end
         
         % the hypothesis is that fc is already premultiplied by the Jc (contact jacobian)
-        function f = F(obj,q,qd,fc)
-            f = wbm_generalisedBiasForces(obj.R_b,obj.x_b,q,qd,[obj.dx_b;obj.omega_b]) -fc;
+        function f = F(obj,q,qd,fc,Jc_t)
+            f = wbm_generalisedBiasForces(obj.R_b,obj.x_b,q,qd,[obj.dx_b;obj.omega_b]) -Jc_t*fc;
         end
         
 	end

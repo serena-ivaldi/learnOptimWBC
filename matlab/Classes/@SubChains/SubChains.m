@@ -22,6 +22,7 @@ classdef  SubChains < handle
        whole_system;   %  this field is a pointer to the whole dynamic structure where i define complex multichain body connected to each other
                        % in this case the kinematic information has to specified for each chain separately (inside sub_chains) but the dynamic infomarmation 
                        % depends on the overall structure
+       floating_base;  % a flag that tell us if in the computation of the controller we hanve to take into account the floating base 
     end
     
     
@@ -31,6 +32,7 @@ classdef  SubChains < handle
          
          obj.whole_system = []; 
          obj.target_link = target_link;
+         obj.floating_base = false;
          
          for i = 1:size(target_link,1)
             
@@ -54,8 +56,11 @@ classdef  SubChains < handle
                obj.symbolic_flag(i) = 0;
             end
             
-            if(~isempty(varargin))
+            if(length(varargin) == 1)
                 obj.whole_system = varargin{1};
+            elseif(length(varargin) == 2);
+                obj.whole_system = varargin{1};
+                obj.floating_base = true;
             end
             
          end
@@ -105,10 +110,10 @@ classdef  SubChains < handle
            end
        end
        
-       function F = GetF(obj,q,qd,fc)
+       function F = GetF(obj,q,qd,fc,Jc_t)
            % in the case i compute the F using an external object like icub
            if(~isempty(obj.whole_system))
-               F = obj.whole_system.F(q,qd,fc);
+               F = obj.whole_system.F(q,qd,fc,Jc_t);
            else
                % TODO i need to build the coriolis and gravload of the
                % overall system before computing it
@@ -117,8 +122,13 @@ classdef  SubChains < handle
            
        end
        
-       
-       
+       % i do not need to remove F because is contained in F;
+       function [M,F,Jc_t] = RemoveFloatingBase(obj,M,F,start) 
+           % here i make the hypotesis that the floating base part is in
+           % the upper part of the dynamic matrices
+           M = M(start:end,:);
+           F = F(start:end,:);        
+       end
       
     end
       

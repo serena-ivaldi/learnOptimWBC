@@ -116,7 +116,10 @@ end
 % JcMinvS         = JcMinv*S;
 % 
 % fc              = (JcMinv*transpose(Jc))\(JcMinv*h -JcMinvS*tau -dJcNu -K_corr_vel.*Jc*Nu -K_corr_pos.*pos_feet_delta);
-fc = zeros(ndof + 6,1);
+
+% i make the hypothesis that i compute the contact jacobian outside 
+fc = zeros(6,1);
+Jc_t = zeros(ndof + 6,6);
 %% MexWholeBodyModel functions
 %TODO floating base flag required (parameter of the simulator)
 icub.SetFloatingBaseState(x_b,qt_b,dx_b,omega_w); %TODO floating base flag required (parameter of the simulator)
@@ -179,7 +182,7 @@ icub.SetFloatingBaseState(x_b,qt_b,dx_b,omega_w); %TODO floating base flag requi
 %tau = stackOfTaskController(param, constraints, feet, gains, Nu, M, h, H, Jc, dJcNu, xCoM, J_CoM, desired_x_dx_ddx_CoM);    
 % evaluate the torque function if one is given
 if isobject(controller)
-    tau = controller.Policy(t,qj,dqj,fc);
+    tau = controller.Policy(t,qj,dqj,fc,Jc_t);
 else   
     tau = zeros(ndof + 6,1);
 end        
@@ -192,7 +195,7 @@ omega_b = transpose(R_b)*omega_w; %TODO floating base flag required (parameter o
 dqt_b   = quaternionDerivative(omega_b,qt_b);   %TODO floating base flag required (parameter of the simulator)    
 
 dx      = [dx_b;dqt_b;dqj];
-dNu     = M\(Jc'*fc + [zeros(6,1); tau]-h);
+dNu     = M\(Jc_t*fc + [zeros(6,1); tau]-h);
 
 dchi    = [dx;dNu];  
 
