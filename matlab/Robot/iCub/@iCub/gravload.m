@@ -19,5 +19,5 @@ function G = gravload(rob,q)
 %    G:  [7x1] vector of gravitational load forces/torques 
 %  
 qd = zeros(size(q));
-G = wholeBodyModel('generalised-forces',reshape(rob.R_b,[],1),rob.x_b,q,qd,[rob.dx_b;rob.omega_b]);
+G = wholeBodyModel('generalised-forces',reshape(rob.R_b,[],1),rob.x_b,q,qd,[rob.dx_b;rob.omega_W]);
 end

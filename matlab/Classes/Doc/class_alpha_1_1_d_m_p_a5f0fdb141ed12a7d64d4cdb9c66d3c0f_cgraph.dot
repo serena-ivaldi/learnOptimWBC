@@ -1,0 +1,10 @@
+digraph "Alpha::DMP::TrainByDraw"
+{
+  bgcolor="transparent";
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="Alpha::DMP::TrainByDraw",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="Alpha::RecordTrajectory",height=0.2,width=0.4,color="black",URL="$namespace_alpha.html#a67ca08fb5295b7c0c34e6dfa7dfe3184"];
+}

@@ -1,4 +1,5 @@
-% regularized version
+% regularized version this version ha sto be updated to deal with floating
+% base robot
 function [tau,J,x,xd,rpy,rpyd] = ComputeRegularizedTorqueSum(obj,ind_subchain,ind_task,M,F,t,q,qd,Fc)
    
     try

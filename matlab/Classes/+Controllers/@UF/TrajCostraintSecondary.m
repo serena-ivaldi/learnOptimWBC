@@ -25,7 +25,7 @@ function [b,A] = TrajCostraintSecondary(obj,ind_subchain,ind_task,t,J_old,Jd_old
              xd_cur = rpyd;    
              jacob_type = 'rot';
         end
-        [A,J_dot] = ReshapeJacobian(J_old,Jd_old,tot_link,sub_link,obj.Secondary_refs.mask{ind_subchain,ind_task},jacob_type);
+        [A,J_dot] = ReshapeJacobian(J_old,Jd_old,Fc,tot_link,sub_link,obj.Secondary_refs.mask{ind_subchain,ind_task},jacob_type);
         [x_des,xd_des,xdd_des] = obj.Secondary_refs.GetTraj(ind_subchain,ind_task,t);
         b = PD(x_cur,x_des,obj.Param_secondary{ind_subchain,ind_task}.Kp,xd_cur,xd_des,obj.Param_secondary{ind_subchain,ind_task}.Kd,xdd_des);
         % J_dot is already multiplied by qd
@@ -41,7 +41,7 @@ function [b,A] = TrajCostraintSecondary(obj,ind_subchain,ind_task,t,J_old,Jd_old
              xd_cur = rpyd;    
              jacob_type = 'rot';
         end
-        [J,J_dot] = ReshapeJacobian(J_old,Jd_old,tot_link,sub_link,obj.Secondary_refs.mask{ind_subchain,ind_task},jacob_type);
+        [J,J_dot] = ReshapeJacobian(J_old,Jd_old,Fc,tot_link,sub_link,obj.Secondary_refs.mask{ind_subchain,ind_task},jacob_type);
         [x_des,xd_des,xdd_des] = obj.Secondary_refs.GetTraj(ind_subchain,ind_task,t);
         % obj.Param{1} = M
         % obj.Param{2} = D

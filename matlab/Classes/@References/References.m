@@ -1,7 +1,12 @@
 classdef  References < handle
     
    properties
-      target_link           %  vector that define wich kind of link i want to control with the e-e effector too (row vector) one for every kinematic chain
+      
+       
+      % vector that define wich kind of link i want to control with the e-e effector too (row vector) one for every kinematic chain
+      %
+      % @type char 
+      target_link           %  
       type;                 % cartesian_x,cartesian_rpy, joint vector or empty 
       control_type;         % tracking,regulation vector
       traj;                 % circular, rectilinear, point-point_quintic, point-point_trapezoidal vector
@@ -22,6 +27,7 @@ classdef  References < handle
     
    methods
       %#TODO add control of the input
+      
       function obj = References(target_link,type,control_type,traj,geom_parameters,time_law,time_struct,mask,type_of_traj,varargin) % i can specify through varargin the time duration of the sampled trajectories 
           
          obj.target_link = target_link;

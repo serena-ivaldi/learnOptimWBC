@@ -18,6 +18,42 @@ hold on;axis equal;
 %% modify from this point
 global G_OB;
 
+%%%;;
+plot_subchain1 = [7];
+plot_target_link{1} = plot_subchain1;
+% reference parameters
+traj_type = {'cartesian'};
+control_type = {'x'};
+type_of_traj = {'func'};
+geometric_path = {'circular'};
+time_law = {'linear'};
+%parameters first chains
+geom_parameters{1,1} = [0.3 pi/2 pi/2 0 0.30 -0.75 0.5]; % regulation
+dim_of_task{1,1}={[1;1;1]}; 
+plot_time_struct.ti = 0;
+plot_time_struct.tf = 10;
+plot_time_struct.step = 0.1;
+plot_dim_of_task{1,1}={[1;1;1]};
+
+%% reference
+% if type_of_task = sampled i have to specify the Time to reach the
+% end of the trajectories that is equal to the simulation time
+plot_reference = References(plot_target_link,traj_type,control_type,geometric_path,geom_parameters,time_law,plot_time_struct,plot_dim_of_task,type_of_traj);
+plot_reference.BuildTrajs();
+
+
+p_tot=[];
+for t=plot_time_struct.ti:plot_time_struct.step:plot_time_struct.tf
+ 
+	p_cur=plot_reference.GetTraj(1,1,t);
+	p_tot = [p_tot,p_cur];
+
+end
+    
+plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
+
+
+
 % hold on;axis equal;
 % [X,Y,Z]=meshgrid(-0.05:0.001:0.3,-0.5,0.45:0.001:1.0);
 % %Y = -0.4*ones(1,size(X,1));

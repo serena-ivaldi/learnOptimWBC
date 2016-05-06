@@ -23,15 +23,25 @@ chains = SubChains(target_link,robots);
 %%  REFERENCE PARAMETERS
 deg = pi/180;
 % primary trajectory
-traj_type = {'impedance'};
+% traj_type = {'impedance'};
+% control_type = {'x'};
+% type_of_traj = {'func'};
+% geometric_path = {'fixed'};
+% time_law = {'none'};
+% %parameters first chains
+% geom_parameters{1,1} = [0.30 -0.71 0.5]; 
+% %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
+% dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
+
+traj_type = {'cartesian'};
 control_type = {'x'};
 type_of_traj = {'func'};
-geometric_path = {'fixed'};
-time_law = {'none'};
+geometric_path = {'circular'};
+time_law = {'linear'};
 %parameters first chains
-geom_parameters{1,1} = [0.30 -0.71 0.5]; 
-%geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
-dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
+geom_parameters{1,1} = [0.2 pi/2 pi/2 0 0.0 -0.75 0.5]; % regulation
+dim_of_task{1,1}={[1;1;1]};
+
 
 % traj_type = {'cartesian'};
 % control_type = {'rpy'};
