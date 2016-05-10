@@ -2,6 +2,7 @@ classdef iCub < handle
  
 	properties     
         %% Structural Parameters
+        model_name
         active_floating_base          % switch to control if the icub has or not a floating base
         ndof                          % dependant on the model used for the simulaztion
         list_of_kin_chain             % string matching URDF name of the link (frame)
@@ -11,36 +12,41 @@ classdef iCub < handle
         % I use this value inside the computation of the dynamical
         % parameters of the robot (i need to udpate them each iteration)
         x_b      %the cartesian position of the base (R^3)
-        R_b     %the quaternion describing the orientation of the base (global parametrization of SO(3))
+        R_b      %the rotation matrix describing the orientation of the base (global parametrization of SO(3))
         dx_b     %the cartesian velocity of the base (R^3)
-        omega_b  %the velocity describing the orientation of the base (SO(3))
+        omega_W  %the velocity describing the orientation of the base (SO(3))
         %% Whole body dynamic parameters
         %M
         %F
         %Omega
         %kinematic_chain_selector % list of kinematic chain in the icub
-        %cur_chain                % current chain that we want to control
     end
 	
 	methods
-		function obj = iCub(model)
+		function obj = iCub(model,list_of_kin_chain)
             if(strcmp(model,'icubGazeboSim'))
+                obj.model_name = model;
                 obj.active_floating_base = true;
                 % Initialize the mexWholeBodyModel
                 wbm_modelInitialise('icubGazeboSim');	
-                obj.list_of_kin_chain = {'com','left_arm','right_arm','l_sole','r_sole'}; %string matching URDF name of the link (frame)
+                obj.list_of_kin_chain = list_of_kin_chain; %{'com','left_arm','right_arm','l_sole','r_sole'}; %string matching URDF name of the link (frame)
                 %obj.dim_of_kin_chain  = {3,5,5,6,6};
                 %obj.sum_ind = {0,3,8,13,19,25};
                 obj.ndof = 25; % degrees of freedom without floating base
-            else
+            elseif(strcmp(model,'model_arms_torso_free'))
+                obj.model_name = model;
                 obj.active_floating_base = false;
-                wbm_modelInitialiseFromURDF(model);  
+                obj.list_of_kin_chain =list_of_kin_chain; % {'com','left_arm','right_arm'}; %string matching URDF name of the link (frame)
+                model = strcat(model,'.urdf');
+                path = which(model);
+                wbm_modelInitialiseFromURDF(path); 
+                obj.ndof = 17;
             end
         end
         
-        function SetWorldFrameiCub(obj,qjInit,dqjInit,dx_bInit,omega_bInit,reference_link)
+        function SetWorldFrameiCub(obj,qjInit,dqjInit,dx_bInit,omega_WInit,reference_link)
             %% Updating the robot position
-			wbm_updateState(qjInit,dqjInit,[dx_bInit;omega_bInit]);
+			wbm_updateState(qjInit,dqjInit,[dx_bInit;omega_WInit]);
 			% fixing the world reference frame w.r.t. the foot on ground position
 			[R_b0,x_b0] = wbm_getWorldFrameFromFixedLink(reference_link,qjInit);
 			% define world frame
@@ -49,8 +55,8 @@ classdef iCub < handle
             obj.x_b = x_b0;
             obj.R_b = R_b0;
             % initial velocity floating base
-            obj.dx_b   = zeros(3,1);
-            obj.omega_b = zeros(3,1);
+            obj.dx_b   = dx_bInit;
+            obj.omega_W = omega_WInit;
         end
         
         %   qj  - joint angles (NumDoF x 1)
@@ -66,11 +72,11 @@ classdef iCub < handle
         %x_b        position of the floating base
         %qt_b       orientation fo the floating base with quaternion
         %dx_b       linear velocity of the floating base 
-        %omega_w    angular velocity of the floating base       
-        function  SetFloatingBaseState(obj,x_b,qt_b,dx_b,omega_b)
+        %omega_w    angular velocity of the floating base in world frame       
+        function  SetFloatingBaseState(obj,x_b,qt_b,dx_b,omega_W)
             obj.x_b = x_b;
             obj.dx_b = dx_b;
-            obj.omega_b = omega_b;
+            obj.omega_b = omega_W;
             % Obtaining the rotation matrix from root link to world frame
             qT         = [x_b;qt_b];
             [~,obj.R_b]    = frame2posrot(qT);
@@ -78,13 +84,13 @@ classdef iCub < handle
         
         function [M,F,Omega]=WholeBodyDynamics(obj,q,qd)
                 M = obj.inertia(q); 
-                F = wbm_generalisedBiasForces(obj.R_b,obj.x_b,q,qd,[obj.dx_b;obj.omega_b]);
+                F = wbm_generalisedBiasForces(obj.R_b,obj.x_b,q,qd,[obj.dx_b;obj.omega_W]);
                 Omega = obj.CentroidalMomentum(q,qd); 
         end
         
         % the hypothesis is that fc is already premultiplied by the Jc (contact jacobian)
         function f = F(obj,q,qd,fc,Jc_t)
-            f = wbm_generalisedBiasForces(obj.R_b,obj.x_b,q,qd,[obj.dx_b;obj.omega_b]) -Jc_t*fc;
+            f = wbm_generalisedBiasForces(obj.R_b,obj.x_b,q,qd,[obj.dx_b;obj.omega_W]) -Jc_t*fc;
         end
         
 	end

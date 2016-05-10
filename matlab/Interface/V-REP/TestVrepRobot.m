@@ -225,14 +225,24 @@ switch op_selection
          repellers = [];
          
          %% primary task
-         traj_type = {'impedance'};
+%          traj_type = {'cartesian'};
+%          control_type = {'x'};
+%          type_of_traj = {'func'};
+%          geometric_path = {'fixed'};
+%          time_law = {'none'};
+%          %parameters first chains
+%          geom_parameters{1,1} = [0.30 -0.75 0.5]; % regulation
+%          dim_of_task{1,1}={[1;1;1]};
+               
+         traj_type = {'cartesian'};
          control_type = {'x'};
          type_of_traj = {'func'};
-         geometric_path = {'fixed'};
-         time_law = {'none'};
+         geometric_path = {'circular'};
+         time_law = {'linear'};
          %parameters first chains
-         geom_parameters{1,1} = [0.30 -0.75 0.5]; % regulation
+         geom_parameters{1,1} = [0.2 pi/2 pi/2 0 0.0 -0.75 0.5]; % regulation
          dim_of_task{1,1}={[1;1;1]};
+         
 
 %          traj_type = {'cartesian'};
 %          control_type = {'rpy'};
@@ -253,7 +263,7 @@ switch op_selection
 %          geom_parameters_sec{1,1} = [0.30 -0.71 0.5]; % regulation
 %          dim_of_task_sec{1,1}={[1;1;1]};
          
-         traj_type_sec = {'cartesian'};
+         traj_type_sec = {'none'};
          control_type_sec = {'rpy'};
          type_of_traj_sec = {'func'};
          geometric_path_sec = {'fixed'};
@@ -285,11 +295,11 @@ switch op_selection
          % the metric change between regularized and not regularized because in the
          % regularized case i have to do N^(-1) 
          % not regularized case i have N^(-1/2)
-         metric = {'M^(1/2)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
+         metric = {'M^(1)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
 
          % primary task gain
-         kd = 200;
-         kp = 100; % row vector one for each chain
+         kd = 110;
+         kp = 70; % row vector one for each chain
          
          for i= 1:chains.GetNumChains()
             for par = 1:chains.GetNumTasks(i)
@@ -380,8 +390,11 @@ switch op_selection
              % object that show the desired position 
              %des_pos.setpos(p');
              %Fc2 =  forcesensor.readforces();
-             Fc = forcesensor.readforces(true);
-             tau_control = controller.Policy(t,q,qd,Fc);
+             %Fc = forcesensor.readforces(false);
+             Fc = zeros(6,1);
+             Jc = chains.sub_chains{1}.jacob0(q,'rpy');
+             Jc_t = Jc';
+             tau_control = controller.Policy(t,q,qd,Fc,Jc_t);
              %tau = tau*10^(-3);
              v_arm.SetTau(tau_control)
              if(v.syncronous)

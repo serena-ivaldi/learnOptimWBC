@@ -12,8 +12,8 @@ function [t,chi,visual_param] = DynSim_iCub(controller,params)
     WS.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
     [~,T_b,~,~] = WS.GetState();
 
-    params.chiInit = [T_b; params.qjInit; WS.dx_b; WS.omega_b; params.dqjInit];
-    %integration function
+    params.chiInit = [T_b; params.qjInit; WS.dx_b; WS.omega_W; params.dqjInit];
+    %integration functio
     forwardDynFunc  = @(t,chi)forwardDynamics(t,chi,controller,params);
     %% Integrate forward dynamics
     if params.demo_movements == 0 

@@ -17,8 +17,8 @@ function F = coriolis(rob,q,qd)
 %  Output:: 
 %    C:   Coriolis matrix 
 zero = zeros(size(q));
-G = wholeBodyModel('generalised-forces',reshape(rob.R_b,[],1),rob.x_b,q,zero,[rob.dx_b;rob.omega_b]);
-F_tot = wholeBodyModel('generalised-forces',reshape(rob.R_b,[],1),rob.x_b,q,qd,[rob.dx_b;rob.omega_b]);
+G = wholeBodyModel('generalised-forces',reshape(rob.R_b,[],1),rob.x_b,q,zero,[rob.dx_b;rob.omega_W]);
+F_tot = wholeBodyModel('generalised-forces',reshape(rob.R_b,[],1),rob.x_b,q,qd,[rob.dx_b;rob.omega_W]);
 F = F_tot - G;
 %wbm_generalisedBiasForces(rob.R_b,rob.x_b,q,qd,[rob.dx_b;rob.omega_w]);
 

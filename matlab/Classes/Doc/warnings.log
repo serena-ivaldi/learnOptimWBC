@@ -1,0 +1,114 @@
+Warning: Tag `SYMBOL_CACHE_SIZE' at line 363 of file /home/vale/git/learnOptimWBC/matlab/Classes/Doc/config/Doxyfile has become obsolete.
+To avoid this warning please remove this line from your configuration file or upgrade it using "doxygen -u"
+Warning: doxygen no longer ships with the FreeSans font.
+You may want to clear or change DOT_FONTNAME.
+Otherwise you run the risk that the wrong font is being used for dot generated graphs.
+MTOC++:+ContrPart/@Constraints/Constraints.m: PARSE ERROR in line 76 (Most common issue: wrong MatLab-indentation)
+Message: Grrrr!!!!
+Next 20 characters to parse: 
+function [g,hi]=Velo
+------------------------------------
+States are: ClassPart: Method
+PropParams: constant = 0
+MethodParams: 
+AccessStruct: full = Public get  = Public set  = Public
+
+------------------------------------
+MTOC++:+ContrPart/@Constraints/Constraints.m: PARSE ERROR in line 76 (Most common issue: wrong MatLab-indentation)
+Message: Grrrr!!!!
+Next 20 characters to parse: 
+function [g,hi]=Velo
+------------------------------------
+States are: ClassPart: Method
+PropParams: constant = 0
+MethodParams: 
+AccessStruct: full = Public get  = Public set  = Public
+
+------------------------------------
+MTOC++:+ContrPart/@Constraints/Constraints.m: PARSE ERROR in line 76 (Most common issue: wrong MatLab-indentation)
+Message: Grrrr!!!!
+Next 20 characters to parse: 
+function [g,hi]=Velo
+------------------------------------
+States are: ClassPart: Method
+PropParams: constant = 0
+MethodParams: 
+AccessStruct: full = Public get  = Public set  = Public
+
+------------------------------------
+QGDict::hashAsciiKey: Invalid null key
+QGDict::hashAsciiKey: Invalid null key
+QGDict::hashAsciiKey: Invalid null key
+QGDict::hashAsciiKey: Invalid null key
+/home/vale/git/learnOptimWBC/matlab/Classes/+Controllers/@AbstractController/animate.m:19: warning: documented symbol `noret::substitute Controllers::AbstractController::animate' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Controllers/@AbstractController/display.m:19: warning: no matching class member found for 
+  noret::substitute Controllers::AbstractController::display(matlabtypesubstitute q, matlabtypesubstitute time, matlabtypesubstitute stl)
+
+/home/vale/git/learnOptimWBC/matlab/Classes/+Controllers/@AbstractController/plot.m:19: warning: documented symbol `noret::substitute Controllers::AbstractController::plot' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Controllers/@AbstractController/plot3d.m:19: warning: documented symbol `noret::substitute Controllers::AbstractController::plot3d' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Controllers/@GHC/ComputeGeneralizedProjector.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, projector_list > Controllers::GHC::ComputeGeneralizedProjector' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Controllers/@GHC/ControlLaw.m:19: warning: documented symbol `mlhsSubst< mlhsInnerSubst< matlabtypesubstitute, b >,mlhsInnerSubst< matlabtypesubstitute, J >,mlhsInnerSubst< matlabtypesubstitute, J_dot > > Controllers::GHC::ControlLaw' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Controllers/@GHC/DisequalityConstraints.m:19: warning: documented symbol `mlhsSubst< mlhsInnerSubst< matlabtypesubstitute, A >,mlhsInnerSubst< matlabtypesubstitute, b > > Controllers::GHC::DisequalityConstraints' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Controllers/@GHC/EqualityConstraints.m:19: warning: documented symbol `mlhsSubst< mlhsInnerSubst< matlabtypesubstitute, Aeq >,mlhsInnerSubst< matlabtypesubstitute, beq > > Controllers::GHC::EqualityConstraints' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Controllers/@GHC/ObjectiveFunction.m:19: warning: documented symbol `mlhsSubst< mlhsInnerSubst< matlabtypesubstitute, H >,mlhsInnerSubst< matlabtypesubstitute, f >,mlhsInnerSubst< matlabtypesubstitute, J_list >,mlhsInnerSubst< matlabtypesubstitute, cp > > Controllers::GHC::ObjectiveFunction' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Controllers/@UF/ComputeRegularizedTorqueSum.m:19: warning: documented symbol `mlhsSubst< mlhsInnerSubst< matlabtypesubstitute, tau >,mlhsInnerSubst< matlabtypesubstitute, J >,mlhsInnerSubst< matlabtypesubstitute, x >,mlhsInnerSubst< matlabtypesubstitute, xd >,mlhsInnerSubst< matlabtypesubstitute, rpy >,mlhsInnerSubst< matlabtypesubstitute, rpyd > > Controllers::UF::ComputeRegularizedTorqueSum' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Controllers/@UF/ComputeTorqueSum.m:19: warning: documented symbol `mlhsSubst< mlhsInnerSubst< matlabtypesubstitute, tau >,mlhsInnerSubst< matlabtypesubstitute, J >,mlhsInnerSubst< matlabtypesubstitute, x >,mlhsInnerSubst< matlabtypesubstitute, xd >,mlhsInnerSubst< matlabtypesubstitute, rpy >,mlhsInnerSubst< matlabtypesubstitute, rpyd > > Controllers::UF::ComputeTorqueSum' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Controllers/@UF/TrajCostraint.m:19: warning: documented symbol `mlhsSubst< mlhsInnerSubst< matlabtypesubstitute, b >,mlhsInnerSubst< matlabtypesubstitute, A > > Controllers::UF::TrajCostraint' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Controllers/@UF/TrajCostraintSecondary.m:19: warning: documented symbol `mlhsSubst< mlhsInnerSubst< matlabtypesubstitute, b >,mlhsInnerSubst< matlabtypesubstitute, A > > Controllers::UF::TrajCostraintSecondary' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+ContrPart/@Repellers/DirKin.m:19: warning: documented symbol `mlhsSubst< mlhsInnerSubst< matlabtypesubstitute, J >,mlhsInnerSubst< matlabtypesubstitute, J_dot >,mlhsInnerSubst< matlabtypesubstitute, x >,mlhsInnerSubst< matlabtypesubstitute, xd >,mlhsInnerSubst< matlabtypesubstitute, rpy >,mlhsInnerSubst< matlabtypesubstitute, rpyd > > ContrPart::Repellers::DirKin' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+ContrPart/@Repellers/Repellers.m:101: warning: documented symbol `ContrPart::Repellers::repellers_fun' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/CEM.m:19: warning: documented symbol `mlhsSubst< mlhsInnerSubst< matlabtypesubstitute, performances >,mlhsInnerSubst< matlabtypesubstitute, bestAction >,mlhsInnerSubst< matlabtypesubstitute, BestActionPerEachGen >,mlhsInnerSubst< matlabtypesubstitute, policies >,mlhsInnerSubst< matlabtypesubstitute, costs >,mlhsInnerSubst< matlabtypesubstitute, succeeded >,mlhsInnerSubst< matlabtypesubstitute, G_data2save > > Optimization::Instance::CEM' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/EmptyPostprocessing.m:19: warning: documented symbol `noret::substitute Optimization::Instance::EmptyPostprocessing' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/EmptyPreprocessing.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, output > Optimization::Instance::EmptyPreprocessing' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/EvaluateCMAES.m:19: warning: documented symbol `mlhsSubst< mlhsInnerSubst< matlabtypesubstitute, performance >,mlhsInnerSubst< matlabtypesubstitute, succeeded >,mlhsInnerSubst< matlabtypesubstitute, data2save > > Optimization::Instance::EvaluateCMAES' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/EvaluateCMAES.m:66: warning: documented symbol `mlhsSubst< mlhsInnerSubst< matlabtypesubstitute, performance >,mlhsInnerSubst< matlabtypesubstitute, succeeded >,mlhsInnerSubst< matlabtypesubstitute, data2save > > Optimization::Instance::EvaluateCMAES' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/f240.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, fit > Optimization::Instance::f240' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/f241.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, fit > Optimization::Instance::f241' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/fitness10.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, fit > Optimization::Instance::fitness10' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/fitness11.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, fit > Optimization::Instance::fitness11' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/fitness4.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, fit > Optimization::Instance::fitness4' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/fitness5.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, fit > Optimization::Instance::fitness5' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/fitness6.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, fit > Optimization::Instance::fitness6' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/fitness7.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, fit > Optimization::Instance::fitness7' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/fitness7_1.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, fit > Optimization::Instance::fitness7_1' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/fitness7_2.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, fit > Optimization::Instance::fitness7_2' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/fitness8.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, fit > Optimization::Instance::fitness8' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/fitness9.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, fit > Optimization::Instance::fitness9' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/g06.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, fit > Optimization::Instance::g06' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/g07.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, fit > Optimization::Instance::g07' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/g09.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, fit > Optimization::Instance::g09' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/g10.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, fit > Optimization::Instance::g10' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/HB.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, fit > Optimization::Instance::HB' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/Learn1plus1CMAES.m:19: warning: documented symbol `mlhsSubst< mlhsInnerSubst< matlabtypesubstitute, performances >,mlhsInnerSubst< matlabtypesubstitute, bestAction >,mlhsInnerSubst< matlabtypesubstitute, BestActionPerEachGen >,mlhsInnerSubst< matlabtypesubstitute, policies >,mlhsInnerSubst< matlabtypesubstitute, costs >,mlhsInnerSubst< matlabtypesubstitute, succeeded >,mlhsInnerSubst< matlabtypesubstitute, G_data2save > > Optimization::Instance::Learn1plus1CMAES' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/LearnCMAES.m:19: warning: documented symbol `mlhsSubst< mlhsInnerSubst< matlabtypesubstitute, mean_performances >,mlhsInnerSubst< matlabtypesubstitute, bestAction >,mlhsInnerSubst< matlabtypesubstitute, BestActionPerEachGen >,mlhsInnerSubst< matlabtypesubstitute, policies >,mlhsInnerSubst< matlabtypesubstitute, costs >,mlhsInnerSubst< matlabtypesubstitute, succeeded >,mlhsInnerSubst< matlabtypesubstitute, G_data2save > > Optimization::Instance::LearnCMAES' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/RobotExperiment.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, output > Optimization::Instance::RobotExperiment' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/RobotExperimentCleanData.m:19: warning: documented symbol `noret::substitute Optimization::Instance::RobotExperimentCleanData' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/+Optimization/@Instance/tr2.m:19: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, fit > Optimization::Instance::tr2' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/@References/SetTraj.m:18: warning: documented symbol `noret::substitute References::SetTraj' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/@SubChains/CartPos.m:18: warning: documented symbol `mlhsInnerSubst< matlabtypesubstitute, x > SubChains::CartPos' was not declared or defined.
+/home/vale/git/learnOptimWBC/matlab/Classes/@SubChains/DirKin.m:18: warning: documented symbol `mlhsSubst< mlhsInnerSubst< matlabtypesubstitute, J >,mlhsInnerSubst< matlabtypesubstitute, J_dot >,mlhsInnerSubst< matlabtypesubstitute, x >,mlhsInnerSubst< matlabtypesubstitute, xd >,mlhsInnerSubst< matlabtypesubstitute, rpy >,mlhsInnerSubst< matlabtypesubstitute, rpyd > > SubChains::DirKin' was not declared or defined.
+MTOC++:+ContrPart/@Constraints/Constraints.m: PARSE ERROR in line 76 (Most common issue: wrong MatLab-indentation)
+Message: Grrrr!!!!
+Next 20 characters to parse: 
+function [g,hi]=Velo
+------------------------------------
+States are: ClassPart: Method
+PropParams: constant = 0
+MethodParams: 
+AccessStruct: full = Public get  = Public set  = Public
+
+------------------------------------
+MTOC++:+ContrPart/@Constraints/Constraints.m: PARSE ERROR in line 76 (Most common issue: wrong MatLab-indentation)
+Message: Grrrr!!!!
+Next 20 characters to parse: 
+function [g,hi]=Velo
+------------------------------------
+States are: ClassPart: Method
+PropParams: constant = 0
+MethodParams: 
+AccessStruct: full = Public get  = Public set  = Public
+
+------------------------------------
+/home/vale/git/learnOptimWBC/matlab/Classes/@Obstacle/Obstacle.m:59: warning: explicit link request to 'TODO' could not be resolved
+/home/vale/git/learnOptimWBC/matlab/Classes/@Obstacle/Obstacle.m:59: warning: explicit link request to 'TODO' could not be resolved
+/home/vale/git/learnOptimWBC/matlab/Classes/@Obstacle/Obstacle.m:59: warning: explicit link request to 'TODO' could not be resolved
