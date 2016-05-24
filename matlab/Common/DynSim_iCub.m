@@ -75,23 +75,23 @@ qT         = [x_b;qt_b];
 [~,R_b]    = frame2posrot(qT);
 
 %% Joints limits check
-limits = param.limits;
-l_min  = limits(:,1);
-l_max  = limits(:,2);
-tol    = 0.01;
-
-res = qj < l_min + tol | qj > l_max - tol;
-res = sum(res);
-
-if res==0
-
-else
- 
- disp('Joint limits reached at time:')    
- disp(t)
- error('Joint limits reached '); 
-
-end
+% % % limits = param.limits;
+% % % l_min  = limits(:,1);
+% % % l_max  = limits(:,2);
+% % % tol    = 0.01;
+% % % 
+% % % res = qj < l_min + tol | qj > l_max - tol;
+% % % res = sum(res);
+% % % 
+% % % if res==0
+% % % 
+% % % else
+% % %  
+% % %  disp('Joint limits reached at time:')    
+% % %  disp(t)
+% % %  error('Joint limits reached '); 
+% % % 
+% % % end
 
 %% Building up contact jacobian
 % % contact jacobians

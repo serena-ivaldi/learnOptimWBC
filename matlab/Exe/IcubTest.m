@@ -1,6 +1,7 @@
 clear variables
 close all
 clc
+
 %% test selection
 
 visualization_test = true;
@@ -11,11 +12,13 @@ time_struct.ti = 0;
 time_struct.tf = 10;
 time_struct.step = 0.001;
 
+
+
 %% Parameters for simulator
 ndof = 17;
 % balancing on two feet or one foot
 params.feet_on_ground           =  [1,1];                                  %either 0 or 1; [left,right] (in the simulator)
-% allows the visualization of torques, forces and other user-defined graphics 
+% allows the visualization of torques, forces and other user-defined graphics
 visualizer_graphics      =  1;                                      %either 0 or 1
 visualizer_demo          =  1;                                      %either 0 or 1
 visualizer_jointsPos     =  0;                                      %either 0 or 1; only if visualizer_graphics = 1
@@ -24,40 +27,72 @@ params.demo_movements = 0;
 
 list_of_kin_chain = {'com','left_arm','right_arm'};
 
-% building initial configuration
-params.qjInit      = [];
+%% SUBCHAIN PARAMETERS
+
+icub = iCub('model_arms_torso_free',list_of_kin_chain);
+chain_1 = DummyRvc_iCub(icub,'l_sole');
+ 
+subchain1 = [5];
+target_link{1} = subchain1;
+
+robots{1} = chain_1;
+% we have to specify floating base for the icub because it gives us 
+% extended dynamic matrix even if the robot is fixed base
+chains = SubChains(target_link,robots,icub,'floating_base');
+
+%% building initial configuration
+%params.qjInit      = [];
+params.qjInit      = zeros(icub.ndof,1);
+
 if(~isempty(find(SubStrFind('com',list_of_kin_chain),1)))
-    torsoInit    = [ -10.0   0.0    0.0]';
-    params.qjInit = [params.qjInit;torsoInit];
+    torsoInit    = [0.0  0.0  0.0]'; %yaw roll pitch
+    %params.qjInit = [params.qjInit;torsoInit];
+    string_search = {'torso_yaw','torso_roll','torso_pitch'};
+    params.qjInit = icub.sortJointValue(string_search,params.qjInit,torsoInit);
 end
+
 if(~isempty(find(SubStrFind('left_arm',list_of_kin_chain),1)))
-    leftArmInit  = [ -20   30  0.0  45   0.0 0.0 0.0]'; 
-    params.qjInit = [params.qjInit;leftArmInit];
+    leftArmInit  = [ -20.0  30.0  0.0  45.0  0.0 0.0 0.0]';
+    %params.qjInit = [params.qjInit;leftArmInit];
+    string_search = {'l_shoulder_pitch','l_shoulder_roll','l_shoulder_yaw',...
+        'l_elbow','l_wrist_prosup','l_wrist_pitch','l_wrist_yaw'};
+    params.qjInit = icub.sortJointValue(string_search,params.qjInit,leftArmInit);
 end
+
 if(~isempty(find(SubStrFind('right_arm',list_of_kin_chain),1)))
-    rightArmInit = [ -20   30  0.0  45   0.0 0.0 0.0]'; 
-    params.qjInit = [params.qjInit;rightArmInit];
+    rightArmInit = [  -20.0  30.0  0.0  45.0  0.0 0.0 0.0]';
+    %params.qjInit = [params.qjInit;rightArmInit];
+    string_search = {'r_shoulder_pitch','r_shoulder_roll','r_shoulder_yaw',...
+        'r_elbow','r_wrist_prosup','r_wrist_pitch','r_wrist_yaw'};
+    params.qjInit = icub.sortJointValue(string_search,params.qjInit,rightArmInit);
 end
+
 if(~isempty(find(SubStrFind('l_sole',list_of_kin_chain),1)) || ~isempty(find(SubStrFind('r_sole',list_of_kin_chain),1)))
     if     params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 1
-        % initial conditions for balancing on two feet 
-         leftLegInit  = [  25.5   0.1   0.0  -18.5  -5.5  -0.1]';
-         rightLegInit = [  25.5   0.1   0.0  -18.5  -5.5  -0.1]';
-         params.qjInit = [params.qjInit;leftLegInit;rightLegInit];
+        % initial conditions for balancing on two feet
+        leftLegInit  = [  25.5   0.1   0.0  -18.5  -5.5  -0.1]';
+        rightLegInit = [  25.5   0.1   0.0  -18.5  -5.5  -0.1]';
+        %params.qjInit = [params.qjInit;leftLegInit;rightLegInit];
     elseif   params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 0
-    % initial conditions for the robot standing on the left foot
-         leftLegInit  = [  25.5   15.0   0.0  -18.5  -5.5  -0.1]';
-         rightLegInit = [  25.5   5.0    0.0  -40    -5.5  -0.1]'; 	 
-         params.qjInit = [params.qjInit;leftLegInit;rightLegInit];
+        % initial conditions for the robot standing on the left foot
+        leftLegInit  = [  25.5   15.0   0.0  -18.5  -5.5  -0.1]';
+        rightLegInit = [  25.5   5.0    0.0  -40    -5.5  -0.1]';
+        %params.qjInit = [params.qjInit;leftLegInit;rightLegInit];
     elseif   params.feet_on_ground(1) == 0 && params.feet_on_ground(2) == 1
-    % initial conditions for the robot standing on the right foot
+        % initial conditions for the robot standing on the right foot
         leftLegInit  = [  25.5   5.0    0.0  -40    -5.5  -0.1]';
         rightLegInit = [  25.5   15.0   0.0  -18.5  -5.5  -0.1]';
-        params.qjInit = [params.qjInit;leftLegInit;rightLegInit];
+        %params.qjInit = [params.qjInit;leftLegInit;rightLegInit];
     end
+    string_search = {'l_hip_pitch','l_hip_roll','l_hip_yaw','l_knee',...
+        'l_ankle_pitch','l_ankle_roll'};
+    params.qjInit = icub.sortJointValue(string_search,params.qjInit,leftLegInit);
+    string_search = {'r_hip_pitch','r_hip_roll','r_hip_yaw','r_knee',...
+        'r_ankle_pitch','r_ankle_roll'};
+    params.qjInit = icub.sortJointValue(string_search,params.qjInit,rightLegInit);
 end
 params.qjInit      = params.qjInit*(pi/180);
-params.dqjInit     = zeros(ndof,1);
+params.dqjInit     = zeros(icub.ndof,1);
 
 % icub starting velocity floating base
 params.dx_bInit    = zeros(3,1);
@@ -70,26 +105,15 @@ params.root_reference_link ='l_sole';
 %param.limits;
 
 % Setup integration
- %plot_set
- 
+%plot_set
+
 params.tStart   = time_struct.ti;
-params.tEnd     = time_struct.tf;   
+params.tEnd     = time_struct.tf;
 params.sim_step = 0.01;
 params.wait     = waitbar(0,'State integration in progress...');
 
-%% SUBCHAIN PARAMETERS 
- 
-icub = iCub('model_arms_torso_free',list_of_kin_chain);
-chain_1 = DummyRvc_iCub(icub,'l_sole');
- 
-subchain1 = [5];
-target_link{1} = subchain1;
 
-robots{1} = chain_1;
-% we have to specify floating base for the icub because it gives us 
-% extended dynamic matrix even if the robot is fixed base
-chains = SubChains(target_link,robots,icub,'floating_base');
-
+%% Visualization
 
 if (visualization_test)
     [~,xTb,~,~] = icub.GetState();
@@ -97,11 +121,11 @@ if (visualization_test)
     icub.plot(chi,params)
 else
     %% limit parameters
-
+    
     [jl1,jl2]        = wbm_jointLimits();
     limits           = [jl1 jl2];
     params.limits    = limits;
-
+    
     %%  REFERENCE PARAMETERS
     deg = pi/180;
     % primary trajectory

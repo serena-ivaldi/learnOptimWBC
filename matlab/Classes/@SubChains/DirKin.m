@@ -22,7 +22,7 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
             %catch error
             %  error('jacob0 is symbolic. remove the corresponding mex file in the robot folder to make it works','could be a representation singularity');
             %end
-            full_qd = [obj.whole_system.dx_b;obj.whole_system.omega_b;qd];
+            full_qd = [obj.whole_system.dx_b;obj.whole_system.omega_W;qd];
             v=J*full_qd;
             xd = v(1:3);rpyd=v(4:6);
             % compute J_dot from the the current subchain
