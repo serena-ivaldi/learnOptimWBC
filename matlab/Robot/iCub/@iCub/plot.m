@@ -283,8 +283,8 @@ xyzpatch.faces    = zeros(6,4);
 
 
 mult_patch = ones(n_plot,2);
-mult_patch(:,1) = mult_patch(:,1)*0.05;
-mult_patch(:,2) = mult_patch(:,2)*0.05;
+mult_patch(:,1) = mult_patch(:,1)*0.04;
+mult_patch(:,2) = mult_patch(:,2)*0.03;
 
 % plot the lines depicting the links
 
