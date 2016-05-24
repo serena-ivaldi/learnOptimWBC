@@ -76,7 +76,7 @@ classdef iCub < handle
         function  SetFloatingBaseState(obj,x_b,qt_b,dx_b,omega_W)
             obj.x_b = x_b;
             obj.dx_b = dx_b;
-            obj.omega_b = omega_W;
+            obj.omega_W = omega_W;
             % Obtaining the rotation matrix from root link to world frame
             qT         = [x_b;qt_b];
             [~,obj.R_b]    = frame2posrot(qT);

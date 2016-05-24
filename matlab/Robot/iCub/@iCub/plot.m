@@ -402,16 +402,16 @@ end
 params.plot_objs{1} = [lnkpatch';lin';x_b0'];
 
 % copy all objects to other axes with different views
-axes(params.plot_main(2));
-params.plot_objs{2} = copyobj(params.plot_objs{1},params.plot_main(2));
-view(-90,90);
-axes(params.plot_main(3));
-params.plot_objs{3} = copyobj(params.plot_objs{1},params.plot_main(3));
-view(0,1);
-axes(params.plot_main(4));
-params.plot_objs{4} = copyobj(params.plot_objs{1},params.plot_main(4));
-view(-90,1);
-axes(params.plot_main(1));
+% axes(params.plot_main(2));
+% params.plot_objs{2} = copyobj(params.plot_objs{1},params.plot_main(2));
+% view(-90,90);
+% axes(params.plot_main(3));
+% params.plot_objs{3} = copyobj(params.plot_objs{1},params.plot_main(3));
+% view(0,1);
+% axes(params.plot_main(4));
+% params.plot_objs{4} = copyobj(params.plot_objs{1},params.plot_main(4));
+% view(-90,1);
+% axes(params.plot_main(1));
 
 % %% UPDATING THE PLOTS
 % ii=2; 
