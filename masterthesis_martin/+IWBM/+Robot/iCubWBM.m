@@ -16,6 +16,7 @@ classdef iCubWBM < IWBM.WBMInterface
 
     properties(Access = protected)
         mwbm_icub@WBM.WBM
+        msim_config@WBM.genericSimConfig
         mtform_b@double matrix
     end
 
@@ -26,7 +27,7 @@ classdef iCubWBM < IWBM.WBMInterface
     methods
         % Constructor:
         function obj = iCubWBM(robot_model, robot_config, wf2FixLnk)
-            mtform_b = eye(4,4);
+            obj.mtform_b = eye(4,4);
 
             switch nargin
                 % init the mex-WholeBodyModel for the iCub-Robot:
@@ -74,28 +75,20 @@ classdef iCubWBM < IWBM.WBMInterface
             ddq_j = M \ I_acc';
         end
 
-        function I_acc = Iqdd(obj, q_j, dq_j, tau) % ??
-
-        end
-
-        function tau = invdyn(obj, q_j, dq_j, ddq_j)
-            stFltb = obj.getFloatingBaseState();
-
-            M      = obj.mwbm_icub.massMatrix(stFltb.wf_R_b, stFltb.wf_p_b, q_j);
-            tau_c  = obj.mwbm_icub.coriolisCentrifugalForces(stFltb.wf_R_b, stFltb.wf_p_b, q_j, dq_j, stFltb.wf_v_b);
-            tau_g  = obj.mwbm_icub.gravityForces(stFltb.wf_R_b, stFltb.wf_p_b, q_j);
-            tau_fr = obj.friction(dq_j);
-
-            tau = M*ddq_j + tau_c + tau_g - tau_fr;
-        end
-
         % function T = A(obj, joints, q_j) % ??
 
         % end
 
         function tau_c = coriolis(obj, q_j, dq_j)
-            stFltb = obj.getFloatingBaseState();
+            stFltb = obj.mwbm_icub.getFloatingBaseState();
             tau_c  = obj.mwbm_icub.coriolisCentrifugalForces(stFltb.wf_R_b, stFltb.wf_p_b, q_j, dq_j, stFltb.wf_v_b);
+        end
+
+        function w_H_rlnk = fkine(obj, q_j, link_name)
+            stFltb = obj.mwbm_icub.getFloatingBaseState();
+
+            w_vqT_rlnk = obj.mwbm_icub.forwardKinematics(link_name, stFltb.wf_R_b, stFltb.wf_p_b, q_j);
+            w_H_rlnk   = WBM.utilities.frame2tform(w_vqT_rlnk);
         end
 
         function tau_fr = friction(obj, dq_j)
@@ -111,28 +104,32 @@ classdef iCubWBM < IWBM.WBMInterface
                 obj.mwbm_icub.updateWorldFrame();
             end
 
-            stFltb = obj.getFloatingBaseState();
+            stFltb = obj.mwbm_icub.getFloatingBaseState();
             tau_g  = obj.mwbm_icub.gravityForces(stFltb.wf_R_b, stFltb.wf_p_b, q_j);
         end
 
         function M = inertia(obj, q_j)
-            stFltb = obj.getFloatingBaseState();
+            stFltb = obj.mwbm_icub.getFloatingBaseState();
             M = obj.mwbm_icub.massMatrix(stFltb.wf_R_b, stFltb.wf_p_b, q_j);
         end
 
-        function J_0 = jacob0(obj, q_j, lnk_name)
-            stFltb = obj.getFloatingBaseState();
+        function tau = invdyn(obj, q_j, dq_j, ddq_j)
+            stFltb = obj.mwbm_icub.getFloatingBaseState();
 
-            if exist('lnk_name', 'var')
-                J_0 = obj.mwbm_icub.jacobian(lnk_name, stFltb.wf_R_b, stFltb.wf_p_b, q_j);
-                return
-            end
-            % else, use the default link ...
-            J_0 = obj.mwbm_icub.jacobian(stFltb.wf_R_b, stFltb.wf_p_b, q_j);
+            M      = obj.mwbm_icub.massMatrix(stFltb.wf_R_b, stFltb.wf_p_b, q_j);
+            tau_c  = obj.mwbm_icub.coriolisCentrifugalForces(stFltb.wf_R_b, stFltb.wf_p_b, q_j, dq_j, stFltb.wf_v_b);
+            tau_g  = obj.mwbm_icub.gravityForces(stFltb.wf_R_b, stFltb.wf_p_b, q_j);
+            tau_fr = obj.friction(dq_j);
+
+            tau = M*ddq_j + tau_c + tau_g - tau_fr;
+        end
+
+        function I_acc = Iqdd(obj, q_j, dq_j, tau) % ??
+
         end
 
         function dJ = jacob_dot(obj, q_j, dq_j, lnk_name)
-            stFltb = obj.getFloatingBaseState();
+            stFltb = obj.mwbm_icub.getFloatingBaseState();
 
             if exist('lnk_name', 'var')
                 dJ = obj.mwbm_icub.dJdq(lnk_name, stFltb.wf_R_b, stFltb.wf_p_b, q_j, dq_j, stFltb.wf_v_b);
@@ -142,10 +139,23 @@ classdef iCubWBM < IWBM.WBMInterface
             dJ = obj.mwbm_icub.dJdq(stFltb.wf_R_b, stFltb.wf_p_b, q_j, dq_j, stFltb.wf_v_b);
         end
 
+        function J_0 = jacob0(obj, q_j, lnk_name)
+            stFltb = obj.mwbm_icub.getFloatingBaseState();
 
+            if exist('lnk_name', 'var')
+                J_0 = obj.mwbm_icub.jacobian(lnk_name, stFltb.wf_R_b, stFltb.wf_p_b, q_j);
+                return
+            end
+            % else, use the default link ...
+            J_0 = obj.mwbm_icub.jacobian(stFltb.wf_R_b, stFltb.wf_p_b, q_j);
+        end
+
+        function jacobn = jacobn(obj, q_j) % ??
+
+        end
 
         function T0_n = T0_m(obj, q_j, lnk_name)
-            stFltb = obj.getFloatingBaseState();
+            stFltb = obj.mwbm_icub.getFloatingBaseState();
 
             % forward kinematics for the iCub-Robot up to frame m of n with m = [1, n] ...
             if exist('lnk_name', 'var')
@@ -156,13 +166,31 @@ classdef iCubWBM < IWBM.WBMInterface
             T0_n = obj.mwbm_icub.forwardKinematics(stFltb.wf_R_b, stFltb.wf_p_b, q_j);
         end
 
-
-
         % function payload(obj, m, p) % ??
 
         % end
 
-        function display(obj, prec)
+        function [M, C_qv, h_c] = wholeBodyDyn(obj, q_j, dq_j)
+            stFltb = obj.mwbm_icub.getFloatingBaseState();
+
+            M    = obj.mwbm_icub.massMatrix(stFltb.wf_R_b, stFltb.wf_p_b, q_j);
+            C_qv = obj.mwbm_icub.generalizedBiasForces(stFltb.wf_R_b, stFltb.wf_p_b, q_j, dq_j, stFltb.wf_v_b);
+            h_c  = obj.mwbm_icub.centroidalMomentum(stFltb.wf_R_b, stFltb.wf_p_b, q_j, dq_j, stFltb.wf_v_b); % = omega
+        end
+
+        function setupSim(obj, sim_config)
+            obj.msim_config = obj.mwbm_icub.setupSimulation(sim_config);
+        end
+
+        function visualizeFDyn(obj, x_out, sim_tstep, vis_ctrl)
+            obj.mwbm_icub.visualizeForwardDynamics(x_out, obj.msim_config, sim_tstep, vis_ctrl);
+        end
+
+        function qjout = sortJointValue(obj, string_search, q_j, valueVector) % ??
+
+        end
+
+        function disp(obj, prec)
             if exist('prec', 'var')
                obj.mwbm_icub.dispWBMParams(prec);
                obj.mwbm_icub.dispWBMConfig(prec);
@@ -174,7 +202,7 @@ classdef iCubWBM < IWBM.WBMInterface
         end
 
         % function stFltb = get.stFltBase(obj)
-        %     stFltb = obj.getFloatingBaseState();
+        %     stFltb = obj.mwbm_icub.getFloatingBaseState();
         % end
 
         function set.base_tform(obj, tform)
