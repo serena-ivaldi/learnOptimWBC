@@ -16,14 +16,16 @@ function [b,A] = TrajCostraint(obj,ind_subchain,ind_task,t,J_old,Jd_old,x,xd,rpy
          % the joint
          return;
     elseif(strcmp(obj.references.type{ind_subchain,ind_task},'cartesian'))
-         if(strcmp(obj.references.control_type,'x'))
+         if(strcmp(obj.references.control_type{ind_subchain,ind_task},'x'))
              x_cur  = x;
              xd_cur = xd;
              jacob_type = 'trans';   
-         elseif(strcmp(obj.references.control_type,'rpy'))
+         elseif(strcmp(obj.references.control_type{ind_subchain,ind_task},'rpy'))
              x_cur  = rpy;
              xd_cur = rpyd;    
              jacob_type = 'rot';
+         else
+             error('wrong specification of the control_type. it should be x or rpy');
          end
          [A,J_dot,~] = ReshapeJacobian(J_old,Jd_old,Fc,tot_link,sub_link,obj.references.mask{ind_subchain,ind_task},jacob_type);
          [x_des,xd_des,xdd_des] = obj.references.GetTraj(ind_subchain,ind_task,t);
@@ -32,11 +34,11 @@ function [b,A] = TrajCostraint(obj,ind_subchain,ind_task,t,J_old,Jd_old,x,xd,rpy
          b = b - J_dot;
          return;     
     elseif(strcmp(obj.references.type{ind_subchain,ind_task},'impedance'))
-         if(strcmp(obj.references.control_type,'x'))
+         if(strcmp(obj.references.control_type{ind_subchain,ind_task},'x'))
              x_cur  = x;
              xd_cur = xd;
              jacob_type = 'trans';   
-         elseif(strcmp(obj.references.control_type,'rpy'))
+         elseif(strcmp(obj.references.control_type{ind_subchain,ind_task},'rpy'))
              x_cur  = rpy;
              xd_cur = rpyd;    
              jacob_type = 'rot';

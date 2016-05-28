@@ -4,7 +4,7 @@
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
-time_struct.tf = 10;
+time_struct.tf = 15;
 time_struct.step = 0.001;
 
 %% TASK PARAMETERS
@@ -16,12 +16,13 @@ time_struct.step = 0.001;
 %name_dat = 'LBR4p12.0_scene0_UF_test_elastic_reference';
 %name_dat = 'Jaco1.3_scene1.1';
 %name_dat = 'LBR4p2.2_scene2_generalization';
-name_dat = 'lwrsimple1.0_scene_test_obs';
+%name_dat = 'lwrsimple1.0_scene_test_obs';
+name_dat = 'humanoid_bench_lbrsimple_1.0';
 path=LoadParameters(name_dat);
 load(path);
 
 %% SCENARIO
-name_scenario = 'lwrsimple_test_noobs';%'lbr_scenario_2_gen' lbr_scenario2; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
+name_scenario = 'humanoids_rob_benck_1';%'lbr_scenario_2_gen' lbr_scenario2; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
 
 %% RBT SIMULATOR PARAMETERS
 time_sym_struct = time_struct;
@@ -51,15 +52,6 @@ switch CONTROLLERTYPE
 
         %% PRIMARY REFERENCE PARAMETERS (this parameter only works if one of the specific trajectory has runtime parameters)
         numeric_reference_parameter{1,1} = [0.047180 0.359539 1.045565 0.374223 -0.069047 0.013630 -0.495463 -0.131683 0.668327 -0.184017 1.115775 0.884010 0.120701 0.837400 1.189048]';
-        %% SECONDARY REFERENCE PARAMETERS they has to be in the same number or more of the primary reference
-%         traj_type_sec = {'empty','empty','empty','empty'};
-%         control_type_sec = {'regulation'};
-%         type_of_traj_sec = {'none'};
-%         geometric_path_sec = {'none'};
-%         time_law_sec = {'linear'};
-%         %parameters first chains
-%         geom_parameters_sec{1,1} = [0.30 -0.71 0.5]; % regulation
-%         dim_of_task_sec{1,1}={[1;1;1]};
 
         %% REPELLERS PARAMETERS
         % GENERALIZE TO MULTICHAIN !!!
@@ -86,7 +78,7 @@ switch CONTROLLERTYPE
         %numeric_theta = [0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[2.3218    2.5695    6.8006    4.6558    5.7475    8.7383    3.5058    5.2817    6.9910    6.7590    4.5235    6.3875    7.3247    6.7258 8.5637];
-        numeric_theta =[12 12 12 12 12];
+        numeric_theta =[-11.708097 -0.818781 13.710811 12.975091 12.322242 -1.626655 -14.000000 13.568485 9.149776 7.695255 7.564063 10.830460 -8.508163 3.799826 -12.588740];
 
         % from sere 1
         %numeric_theta = [5.819383 4.412794 5.286902 7.786384 7.599614 3.512520 5.989917 9.410994 7.444834 7.472545 4.532512 5.614148 7.970080 4.498142 6.194601 6.925731 4.815911 5.490313 5.294776 6.011380 ]
@@ -118,15 +110,14 @@ switch CONTROLLERTYPE
         transition_interval1 = [0.5 0.5;1 0.5;0.5 1];
         transition_interval(:,:,1) = transition_interval1;
         %% CONTROLLER PARAMETERS
-        max_time = 50; %50
         combine_rule = {'sum'}; % sum or projector (with sum reppelers are removed)
         
         % the metric change between regularized and not regularized because in the
         % regularized case i have to do N^(-1) 
         % not regularized case i have N^(-1/2)
-        metric = {'M^(1)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
-        kd = 110;
-        kp = 70; % row vector one for each chain
+        metric = {'M^(1)','M^(1)','M^(1)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
+        kd = [30,30,30];
+        kp = [10,10,10]; % row vector one for each chain
         for i= 1:chains.GetNumChains()
             for par = 1:chains.GetNumTasks(i)
                 if(strcmp(traj_type{i},'impedance'))
@@ -145,12 +136,10 @@ switch CONTROLLERTYPE
                     Param{i,par} = obj;
                 end
             end
-
          end
          % secondary task gains
-         kd = 110;
-         kp = 70; % row vector one for each chain
-         
+         kd = [110,110,110];
+         kp = [70,70,70]; % row vector one for each chain
          for i= 1:chains.GetNumChains()
             for par = 1:chains.GetNumTasks(i)
                  if(strcmp(traj_type_sec{i},'impedance'))
@@ -173,23 +162,28 @@ switch CONTROLLERTYPE
         % with this term i introduce a damped least square structure inside my
         % controller if regularizer is 0 i remove the regularizer action 
         % ONE FOR EACH TASK
-        regularizer_chain_1 = [0 0.001 0.001 0.001]; 
+        regularizer_chain_1 = [0 0 0 0.001]; 
         regularized_chain_2 = [1];
         regularizer{1} = regularizer_chain_1;
         regularizer{2} = regularized_chain_2;
         
         %% CONSTRAINTS PARAMETERS
-        constraints_functions = {'LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality',...
-        'LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality',...
-        'DistanceObs','DistanceObs','DistanceObs','DistanceObs'}; % vector of functions handle for computing the constraints
-        constraints_type = [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1];      % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
+        constraints_functions = {'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
+                                 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
+                                 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
+                                 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
+                                 'DistanceObs','DistanceObs','DistanceObs','DistanceObs'}; % vector of functions handle for computing the constraints
+        constraints_type = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];  % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
         % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
-        constraints_values =[47*(pi/180), -313*(pi/180),47*(pi/180), -341*(pi/180), -20, -20,-20, -20,-20, -20,-20, -20,-20, -20,-20, -20,0.01,0.01,0.01,0.01];  
+        constraints_values =[+170*(pi/180), -170*(pi/180),120*(pi/180), -120*(pi/180),+170*(pi/180), -170*(pi/180),120*(pi/180), -120*(pi/180),...
+                             +170*(pi/180),-170*(pi/180),120*(pi/180), -120*(pi/180),+170*(pi/180), -170*(pi/180),...
+                             320, -320,320, -320,176, -176,176, -176,110, -110,40, -40,40, -40,...
+                             0.01,0.01,0.01,0.01];  
         activate_constraints_handling = true;
         
         %% INSTANCE PARAMETER
         run_function = @RobotExperiment;
-        fitness = @fitness11;
+        fitness = @fitnessHumanoids1;
         clean_function = @RobotExperimentCleanData;
         % TODO generalize for multichain
         input{1} = simulator_type{1};  % rbt / v-rep
@@ -201,20 +195,21 @@ switch CONTROLLERTYPE
         input{6} = fixed_step;         % if is true i use ode4 (runge-kutta)
         input{7} = torque_saturation;  % i define the torque saturation that i want to apply
         input{8} = maxtime;            % maxtime before the simulation is stopped because is too long
-        % parameter for constraints method
-        method_to_use = 'adaptive';  % adaptive , vanilla , empty
-        epsilon = 0.001*ones(1,length(constraints_functions)); %vector with a number of value related to the number of constraints (used only with Aaptive constraints)
+        
         %% CMAES PARAMETER
-        % starting value of parameters
+        %--- Starting value of parameters
         generation_of_starting_point = 'random'; % 'test', 'given', 'random'
         %init_parameters = 6;
         user_defined_start_action=[-0.686896675401947,1.22650641453222,-3.27247260213565,12.6539506696606,11.9349914795820,12.3072074998126,11.4267899497361,13.3737941021526,8.77645179253447,-4.69418318274421,11.1958799565396,1.32058911902880,-0.691100222964068,0.286830798370383,-0.162567001268804];
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-        niter = 5;  %number of generations
+        niter = 35;  %number of generations
         cmaes_value_range = [-14 , 14];  % boudn that define the search space
         learn_approach = 'CMAES'; %CMAES (1+1)CMAES    
+        %--- Parameter for constraints method
+        method_to_use = 'vanilla';  % adaptive , vanilla , empty
+        epsilon = 0.001*ones(1,length(constraints_functions)); %vector with a number of value related to the number of constraints (used only with Aaptive constraints)
         %% FITNESS PARAMETERS
-
+        
         %%%EOF    
     case 'GHC'
         disp('GHC_RUNTIMEPARAM')
@@ -245,11 +240,8 @@ switch CONTROLLERTYPE
         value_range = [0 , 12];
         precomp_sample = false;
         % value of theta that we have to change when we want to execute the result
-        % from the optimization step
-
-        %from 10 generation of CMAES: collision with end-eff and table
-        numeric_theta = [5.545380 6.292794 4.686268 4.954681 2.166321 3.780383 6.104651 6.199604 4.132309 7.537761 8.678486 9.190867 8.804879 7.583105 7.401123 5.246353 3.797951 10.289526 10.088667 9.602943 ];
-        %numeric_theta =[12 12 12 12 12 12 12 12 12 12 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0];
+        % from the optimization step in MainExec
+        numeric_theta =[12 12 12 12 12 12 12 12 12 12 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0];
 
         %% Controller Parameters
         %UF and GHC   

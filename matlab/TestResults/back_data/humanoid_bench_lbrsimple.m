@@ -1,7 +1,3 @@
-clear variables
-close all
-clc
-
 %%%;;
 
 %% comment
@@ -76,68 +72,44 @@ dim_of_task_sec{1,1}={[1;1;1]}; dim_of_task_sec{1,2}= [1;1;1]; dim_of_task_sec{1
 
 %% FROM THIS POINT YOU CAN FIND PARAMETERS IN THE STATIC PARAMETERS FILE RELATED TO EACH ALGORITHM 
 
+%%%EOF%%%;;
+
+%MOVED INTO  static parameters
+
+% REPELLER PARAMETERS 
+% scenario dependant
+% rep_subchain = [7];
+% rep_target_link{1} = rep_subchain;
+% rep_type = {'cartesian_x'};
+% rep_mask {1,1}=[1,1,1]; 
+% rep_type_of_J_rep = {'DirectionCartesian'};
+% for ii=1:chains.GetNumChains()
+%     chain_dof(ii) = chains.GetNumLinks(ii);
+% end
+
+
+%MOVED INTO  runtime parameters
+
+% %CONTROLLER PARAMETERS
+% % the metric change between regularized and not regularized because in the
+% % regularized case i have to do N^(-1) 
+% % not regularized case i have N^(-1/2)
+% metric = {'M','M','M','M'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
+% 
+% 
+% kp = [50,10,5,700]; % row vector one for each chain 50,1,5
+% kd = [2*sqrt(kp),2*sqrt(kp),2*sqrt(kp),2*sqrt(kp)];
+% 
+% for i= 1:chains.GetNumChains()
+%    for par = 1:chains.GetNumTasks(i)
+%        K_p = kp(i,par)*eye(size(dim_of_task{i,par},1));  
+%        K_d = kd(i,par)*eye(size(dim_of_task{i,par},1)); 
+%        Kp{i,par} = K_p;
+%        Kd{i,par} = K_d;
+%    end
+%    
+% end
+
+
+
 %%%EOF
-
-switch CONTROLLERTYPE
-    case 'UF'
-        % REPELLER PARAMETERS
-        % scenario dependant
-        rep_subchain = [7];
-        rep_target_link{1} = rep_subchain;
-        rep_type = {'cartesian_x'};
-        rep_mask {1,1}=[1,1,1]; 
-        rep_type_of_J_rep = {'DirectionCartesian'};
-        for ii=1:chains.GetNumChains()
-             chain_dof(ii) = chains.GetNumLinks(ii);
-        end
-        UF_StaticParameters
-    case 'GHC'
-        GHC_StaticParameters
-    otherwise
-        warning('Unexpected control method')
-end
-
-
-%% Name of the file (backup and .mat)
-% id specify wich is the backup data that I have to look at. 
-% i have to set the name of the robot plus a number equal to the number of experiment for that scenario 
-% like bot#.# (where n.i means that the file is reffered to the n-scenario and is the i-th data setting)
-% multiple data setting for the same scenario 
-id = 'humanoid_bench_lbrsimple';
-name_backup = strcat(id,'.m');
-%namebot_scene#_briefdescription.mat
-number = '1.0';
-name_file = strcat(id,'_',number,'.mat');
-
-%% DO NOT CHANGE THIS PART!
-% build the correct path for .mat
-allpath=which('FindData.m');
-path=fileparts(allpath);
-save(strcat(path,'/datamat/',name_file));
-
-% backup data 
-rawTextFromStorage = fileread(which(mfilename));
-rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF'],'match','once');
-
-% join the general static parameter with the particular static one
-rawTextFromStorage = strcat(rawTextFromStorage,rawTextFromStoragePart);
-
-existence = exist(strcat(path,'/back_data/',name_backup),'file');
-if(~existence)
-    fileID = fopen(strcat(path,'/back_data/',name_backup),'w');
-    fprintf(fileID,'%s',rawTextFromStorage);
-    fclose(fileID);
-    disp('FINISH!')
-else
-    adv = strcat('The file: /',name_backup,' allready exist');
-    b=questdlg(adv, 'Overwrite?','Yes','No','No');
-    switch b
-        case 'Yes'
-            fileID = fopen(strcat(path,'/back_data/',name_backup),'w');
-            fprintf(fileID,'%s',rawTextFromStorage);
-            fclose(fileID);
-            disp('FINISH!')
-    end
-end
-
-

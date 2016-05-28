@@ -10,11 +10,14 @@ tic
 toc
 
 %% Evaluate fitness 
-evaluation = false;
+evaluation = true;
 if (evaluation)
-    performance = feval(inst.fitness,inst,t,q);
+    output{1} = t;
+    output{2} = q;
+    output{3} = qd;
+    performance = feval(inst.fitness,inst,output);
     inst.penalty_handling.ComputeConstraintsViolation(-1)
-    performance = performance - inst.penalty_handling.fitness_penalties(1); 
+    %performance = performance - inst.penalty_handling.fitness_penalties(1); 
 end
 
 %% produce graph and copy parameters

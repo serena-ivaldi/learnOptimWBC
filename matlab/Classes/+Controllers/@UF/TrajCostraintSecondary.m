@@ -16,11 +16,11 @@ function [b,A] = TrajCostraintSecondary(obj,ind_subchain,ind_task,t,J_old,Jd_old
         % the joint
         return;
     elseif(strcmp(obj.Secondary_refs.type{ind_subchain,ind_task},'cartesian'))
-        if(strcmp(obj.references.control_type,'x'))
+        if(strcmp(obj.references.control_type{ind_subchain,ind_task},'x'))
              x_cur  = x;
              xd_cur = xd;
              jacob_type = 'trans';   
-         elseif(strcmp(obj.references.control_type,'rpy'))
+         elseif(strcmp(obj.references.control_type{ind_subchain,ind_task},'rpy'))
              x_cur  = rpy;
              xd_cur = rpyd;    
              jacob_type = 'rot';
@@ -32,11 +32,11 @@ function [b,A] = TrajCostraintSecondary(obj,ind_subchain,ind_task,t,J_old,Jd_old
         b = b - J_dot;
         return;
     elseif(strcmp(obj.Secondary_refs.type{ind_subchain,ind_task},'impedance'))    
-         if(strcmp(obj.references.control_type,'x'))
+         if(strcmp(obj.references.control_type{ind_subchain,ind_task},'x'))
              x_cur  = x;
              xd_cur = xd;
              jacob_type = 'trans';   
-         elseif(strcmp(obj.references.control_type,'rpy'))
+         elseif(strcmp(obj.references.control_type{ind_subchain,ind_task},'rpy'))
              x_cur  = rpy;
              xd_cur = rpyd;    
              jacob_type = 'rot';
