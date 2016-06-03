@@ -13,7 +13,7 @@
 
 function output = RobotExperiment(obj,parameters)
 
-    simulator         = obj.input_4_run{1}; % rbt v-rep
+    simulator         = obj.input_4_run{1}; % rbt or v-rep
     qinit             = obj.input_4_run{2}; % initial position 
     qdinit            = obj.input_4_run{3}; % initial velocity
     time_sym_struct   = obj.input_4_run{4}; %time struct for simulation with fixed step

@@ -128,7 +128,7 @@ classdef  UF < Controllers.AbstractController
           % the dynamic computation between controller and simulator has
           % to be different
           %% provisory structure 
-          new = 1;
+          new = false;
           if(~new) 
               % active robot 
               cur_bot = obj.GetActiveBot;
@@ -136,7 +136,7 @@ classdef  UF < Controllers.AbstractController
               %i = obj.GetCurRobotIndex;
               DOF = cur_bot.n; % is used in the projector
               M = cur_bot.inertia(q);
-              F = cur_bot.coriolis(q,qd)*qd' + cur_bot.gravload(q)' - Jc_t*Fc
+              F = cur_bot.coriolis(q,qd)*qd' + cur_bot.gravload(q)' - Jc_t*Fc;
           else      
               M = obj.subchains.GetM(q);
               % i include the external forces inside F

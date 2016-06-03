@@ -68,7 +68,7 @@ function J0 = jacob0(robot, q, varargin)
         if(~isa(B, 'sym'))
            if rcond(B) < eps
                disp('Representational singularity');
-                J0 = blkdiag( eye(3,3), inv(B + 0.001*eye(size(B,1))) ) * J0;
+                J0 = blkdiag( eye(3,3), inv(B + 0.01*eye(size(B,1))) ) * J0;
            else
                J0 = blkdiag( eye(3,3), inv(B) ) * J0;
            end
