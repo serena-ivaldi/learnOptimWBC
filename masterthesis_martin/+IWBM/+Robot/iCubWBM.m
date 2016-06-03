@@ -2,7 +2,8 @@ classdef iCubWBM < IWBM.WBMInterface
     properties(Dependent)
         % public properties for fast get/set methods:
         base_tform@double matrix
-        robot_model@WBM.wbmBaseModelParams
+        tool_tform@double matrix
+        robot_model@WBM.wbmBaseRobotModel
         robot_config@WBM.wbmBaseRobotConfig
         model_name@char
         ndof@uint16 scalar
@@ -15,7 +16,8 @@ classdef iCubWBM < IWBM.WBMInterface
     properties(Access = protected)
         mwbm_icub@WBM.WBM
         msim_config@WBM.genericSimConfig
-        mtform_b@double matrix
+        mbase_tform@double matrix
+        mtool_tform@double matrix
     end
 
     % properties(SetAccess = private, GetAccess = public)
@@ -24,15 +26,16 @@ classdef iCubWBM < IWBM.WBMInterface
 
     methods
         % Constructor:
-        function obj = iCubWBM(robot_model, robot_config, wf2FixLnk)
-            obj.mtform_b = eye(4,4);
+        function obj = iCubWBM(robot_model, robot_config, wf2fixLnk)
+            obj.mbase_tform = eye(4,4);
+            obj.mtool_tform = obj.mbase_tform;
 
             switch nargin
                 % init the mex-WholeBodyModel for the iCub-Robot:
                 case 2
                     obj.mwbm_icub = WBM.WBM(robot_model, robot_config);
                 case 3
-                    obj.mwbm_icub = WBM.WBM(robot_model, robot_config, wf2FixLnk);
+                    obj.mwbm_icub = WBM.WBM(robot_model, robot_config, wf2fixLnk);
             end
             % else, do nothing ...
         end
@@ -44,22 +47,22 @@ classdef iCubWBM < IWBM.WBMInterface
             obj.mwbm_icub = copy(wbm_robot);
         end
 
-        function initRobotFcn(obj, fhInitRobotWBM, wf2FixLnk)
+        function initRobotFcn(obj, fhInitRobotWBM, wf2fixLnk)
             if ~ishandle(fhInitRobotWBM)
                 error('iCubWBM::initRobotFcn: %s', WBM.wbmErrorMsg.WRONG_DATA_TYPE)
             end
 
-            if ~exist('wf2FixLnk', 'var')
-                wf2FixLnk = true;
+            if ~exist('wf2fixLnk', 'var')
+                wf2fixLnk = true;
             end
-            obj.mwbm_icub = @fhInitRobotWBM(wf2FixLnk); % to check if it works ...
+            obj.mwbm_icub = @fhInitRobotWBM(wf2fixLnk); % to check if it works ...
         end
 
-        function initRobotBaseParams(obj, base_params)
-            if ~isa(base_params, 'WBM.wbmRobotBaseParams')
-                error('iCubWBM::initRobotBaseParams: %s', WBM.wbmErrorMsg.WRONG_DATA_TYPE);
+        function initBaseRobotParams(obj, base_params)
+            if ~isa(base_params, 'WBM.wbmBaseRobotParams')
+                error('iCubWBM::initBaseRobotParams: %s', WBM.wbmErrorMsg.WRONG_DATA_TYPE);
             end
-            obj.mwbm_icub = WBM.WBM(base_params.robot_model, base_params.robot_config, base_params.wf2FixLnk);
+            obj.mwbm_icub = WBM.WBM(base_params.robot_model, base_params.robot_config, base_params.wf2fixLnk);
         end
 
         function delete(obj)
@@ -99,11 +102,8 @@ classdef iCubWBM < IWBM.WBMInterface
             w_H_rlnk   = WBM.utilities.frame2tform(w_vqT_rlnk);
         end
 
-        function tau_fr = friction(obj, dq_j) % where we can get the friction coefficients?
-            stvLen = obj.mwbm_icub.stvLen;
-            friction_coeff = ones(stvLen,1); % dummy-vector
-
-            tau_fr = dq_j.*friction_coeff;
+        function tau_fr = friction(obj, dq_j)
+            tau_fr = mwbm_icub.frictionForces(dq_j);
         end
 
         function tau_g = gravload(obj, q_j, stFltb)
@@ -166,7 +166,7 @@ classdef iCubWBM < IWBM.WBMInterface
 
         end
 
-        function T0_n = T0_m(obj, q_j, lnk_name, stFltb)
+        function T0_n = T0_m(obj, q_j, lnk_name, stFltb) % ??
             if ~exist('stFltb', 'var')
                 stFltb = obj.mwbm_icub.getFloatingBaseState();
             end
@@ -174,7 +174,7 @@ classdef iCubWBM < IWBM.WBMInterface
             T0_n = obj.mwbm_icub.forwardKinematics(stFltb.wf_R_b, stFltb.wf_p_b, q_j, lnk_name);
         end
 
-        % function payload(obj, m, p) % ??
+        % function payload(obj, pt_mass, pos, link_name)
 
         % end
 
@@ -213,16 +213,30 @@ classdef iCubWBM < IWBM.WBMInterface
 
         function set.base_tform(obj, tform)
             if isempty(tform)
-                obj.mtform_b = eye(4,4);
+                obj.mbase_tform = eye(4,4);
             elseif ~WBM.utilities.isHomog(tform)
-                error('iCubWBM::set.base_tform: The base must be a homogeneous transformation!');
+                error('iCubWBM::set.base_tform: %s', WBM.wbmErrorMsg.NOT_HOMOG_MAT);
             else
-                obj.mtform_b = tform;
+                obj.mbase_tform = tform;
             end
         end
 
         function tform = get.base_tform(obj)
-            tform = obj.mtform_b;
+            tform = obj.mbase_tform;
+        end
+
+        function set.tool_tform(obj, tform)
+            if isempty(tform)
+                obj.mtool_tform = eye(4,4);
+            elseif ~WBM.utilities.isHomog(tform)
+                error('iCubWBM::set.tool_tform: %s', WBM.wbmErrorMsg.NOT_HOMOG_MAT);
+            else
+                obj.mtool_tform = tform;
+            end
+        end
+
+        function tform = get.tool_tform(obj)
+            tform = obj.mtool_tform;
         end
 
         function robot_model = get.robot_model(obj)
@@ -244,7 +258,7 @@ classdef iCubWBM < IWBM.WBMInterface
             if isempty(obj.mwbm_icub)
                 ndof = 0; return
             end
-            ndof = obj.mwbm_icub.robot_config.ndof;
+            ndof = obj.mwbm_icub.robot_model.ndof;
         end
 
     end
