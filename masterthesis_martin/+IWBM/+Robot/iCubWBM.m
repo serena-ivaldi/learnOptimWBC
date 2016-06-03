@@ -103,7 +103,7 @@ classdef iCubWBM < IWBM.WBMInterface
         end
 
         function tau_fr = friction(obj, dq_j)
-            tau_fr = mwbm_icub.frictionForces(dq_j);
+            tau_fr = obj.mwbm_icub.frictionForces(dq_j);
         end
 
         function tau_g = gravload(obj, q_j, stFltb)
@@ -135,7 +135,7 @@ classdef iCubWBM < IWBM.WBMInterface
             tau_g  = obj.mwbm_icub.gravityForces(stFltb.wf_R_b, stFltb.wf_p_b, q_j);
             tau_fr = obj.friction(dq_j);
 
-            tau = M*ddq_j + tau_c + tau_g - tau_fr;
+            tau = M*ddq_j + tau_c + tau_g + tau_fr;
         end
 
         function I_acc = Iqdd(obj, q_j, dq_j, tau, stFltb) % ??
@@ -174,9 +174,13 @@ classdef iCubWBM < IWBM.WBMInterface
             T0_n = obj.mwbm_icub.forwardKinematics(stFltb.wf_R_b, stFltb.wf_p_b, q_j, lnk_name);
         end
 
-        % function payload(obj, pt_mass, pos, link_name)
-
-        % end
+        function payload(obj, pt_mass, pos, link_names)
+            if (~iscolumn(pt_mass) || ~ismatrix(pos) || (size(pt_mass,1) ~= size(pos,1))
+                error('iCubWBM::payload: %s', WBM.utilities.DIM_MISMATCH);
+            end
+            pl_data = horzcat(pt_mass, pos);
+            obj.mwbm_icub.setLinkPayloads(link_names, pl_data);
+        end
 
         function [M, C_qv, h_c] = wholeBodyDyn(obj, q_j, dq_j, stFltb)
             if ~exist('stFltb', 'var')
