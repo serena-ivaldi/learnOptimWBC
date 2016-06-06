@@ -19,7 +19,41 @@ Modugno, V.; Neumann, G.; Rueckert, E.; Oriolo, G.; Peters, J.; Ivaldi, S. (2016
 Installation
 ------------
 
-For the installation process follow the instructions in matlab/INSTALL.txt 
+- Unzip /learnOptimWBC/matlab/Dependecies/robot-9.10.zip somewhere handy (or in place). This operation will create a folder called rvctools, containing the robotics toolbox that we rely upon. Add /rcvtools and its subfolder to the Matlab PATH (you can right-click on the folder name in the Matlab panel list). To install the robotics toolbox run the rvctools/startup_rvc.m (Every time you have to run a script from the Matlab shell you have to change the current Matlab folder using the directory view that is usually on the right side of the Matlab window) from the Matlab shell. 
+
+- You need to compile the mex file for the robotics toolbox. Depending on your Matlab version, you will need an appropriate compiler version.
+
+For example: Matlab 2013a supports gcc until version 4.4. If you have a newer gcc (probably 4.8 if you have Ubuntu 14.04) then add it to your system:
+
+sudo apt-get install gcc-4.4
+sudo apt-get install g++-4.4
+
+Then manually edit the file:
+/home/<YOUR_NAME>/.matlab/R2013a/mexopts.sh
+
+and update the name of your compiler:
+CC='gcc-4.4'
+CXX='g++-4.4'
+
+More instructions on how to set up your compiler: 
+http://fr.mathworks.com/help/matlab/matlab_external/changing-default-compiler.html
+
+
+- compile the mex file for the Newton-Eulero dynamic computation in the robotic toolbox (/rvctools/robot/mex). Check that you added rcvtools to the Matlab PATH (including subfolders). Then run make.m from /rcvtools/robot.
+
+Note: Matlab may complain about line 304 in frne.c and lines 465-468 in ne.c, manually edit the files to change all the \\ comments into /* ... */ comments.
+
+If everything works well, you will read:
+>> make
+** building mex file
+
+
+- Move the MEX file frne.xxx (where xxx is the extension of the mex files on your platform - for example frne.mexa64) in rvctools/robot/@SerialLink. The MEX file will now be used instead of the M-file, and thus anything that calls rne() will use the MEX file and be faster. This applies to inertia(), coriolis(), gravload(), and fdyn().
+
+
+- once the installation of the robotics toolbox is done go to /learnOptimWBC/matlab and run startup_LOWBC.m. This script will add the paths to Matlab and it will update some files inside the robotics toolbox copying them from the folder /ChangedFile. After this, please remove from the PATH the folder /ChangedFile.
+
+Now you are ready to try learnOptimWBC toolbox on your machine.
 
 
 Code Structure
