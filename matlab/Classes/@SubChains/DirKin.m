@@ -1,13 +1,13 @@
-% this function return the current position and velocity of and effector 
+% this function return the current position and velocity of and effector
 % and for every subchain i recompute the jacobian (very idiot method TO FIX)
 % in this functio we can compute the position using the current model (perturbed in general)
-% and the ground truth model supposing that we perform the measure using 
+% and the ground truth model supposing that we perform the measure using
 % external sensors like a set of cameras
 
 
 function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
 
-        
+
         cur_bot = obj.GetCurRobot(ind_subchain);
         % i have to distinguish between icub and rbt robots (hopefully provisory)
         if(isa(cur_bot,'DummyRvc_iCub'))
@@ -26,7 +26,22 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
             v=J*full_qd;
             xd = v(1:3);rpyd=v(4:6);
             % compute J_dot from the the current subchain
-            J_dot = cur_bot.jacob_dot(q,qd);   
+            J_dot = cur_bot.jacob_dot(q,qd);
+        elseif isa(cur_bot, 'MultChainTree')
+            fk_tform = cur_bot.fkine(q);
+
+            x   = fk_tform(1:3,4);
+            rpy = WBM.tform2eul(fk_tform, 'ZYX');
+
+            J = cur_bot.jacob0(q, 'rpy');
+
+            v = vertcat(obj.whole_system.dx_b, obj.whole_system.omega_W, qd);
+            dv = J*v;
+
+            xd   = dv(1:3,1);
+            rpyd = dv(4:6,1);
+
+            J_dot = cur_bot.jacob_dot(q, qd);
         elseif(isa(cur_bot,'SerialLink'))
             % TODO this part has to be removed it those not make any sense
             q_cur = zeros(1,obj.sub_chains{ind_subchain}.n);
@@ -42,7 +57,7 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
             x = T(1:3,4);
             rpy = tr2rpy(T);
             rpy = rpy';
-            
+
             % i ahve to provide a common way to manage the jacobian
             %try
             J = cur_bot.jacob0(q_cur,'rpy');
@@ -52,7 +67,7 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
             v=J*qd_cur';
             xd = v(1:3);rpyd=v(4:6);
             % compute J_dot from the the current subchain
-            J_dot = cur_bot.jacob_dot(q_cur,qd_cur);  
+            J_dot = cur_bot.jacob_dot(q_cur,qd_cur);
         end
 %         % compute generalized cartesian velocities from the current
 %         % subchain
@@ -61,10 +76,10 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
 %         %catch error
 %         %  error('jacob0 is symbolic. remove the corresponding mex file in the robot folder to make it works','could be a representation singularity');
 %         %end
-%         
+%
 %         v=J*qd_cur';
 %         xd = v(1:3);rpyd=v(4:6);
 %         % compute J_dot from the the current subchain
-%         J_dot = cur_bot.jacob_dot(q_cur,qd_cur);   
-  
+%         J_dot = cur_bot.jacob_dot(q_cur,qd_cur);
+
 end

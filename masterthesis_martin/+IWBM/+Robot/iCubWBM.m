@@ -3,10 +3,13 @@ classdef iCubWBM < IWBM.WBMInterface
         % public properties for fast get/set methods:
         base_tform@double matrix
         tool_tform@double matrix
-        robot_model@WBM.wbmBaseRobotModel
-        robot_config@WBM.wbmBaseRobotConfig
         model_name@char
-        ndof@uint16 scalar
+        robot_manuf@char
+        robot_name@char
+        robot_parameters@WBM.wbmBaseRobotParams
+        sim_config@WBM.absSimConfig
+        gravity@double    vector
+        ndof@uint16       scalar
     end
 
     % properties(SetAccess = private, GetAccess = public)
@@ -15,7 +18,8 @@ classdef iCubWBM < IWBM.WBMInterface
 
     properties(Access = protected)
         mwbm_icub@WBM.WBM
-        msim_config@WBM.genericSimConfig
+        mrobot_manuf@char
+        msim_config@WBM.absSimConfig
         mbase_tform@double matrix
         mtool_tform@double matrix
     end
@@ -27,8 +31,9 @@ classdef iCubWBM < IWBM.WBMInterface
     methods
         % Constructor:
         function obj = iCubWBM(robot_model, robot_config, wf2fixLnk)
-            obj.mbase_tform = eye(4,4);
-            obj.mtool_tform = obj.mbase_tform;
+            obj.mbase_tform  = eye(4,4);
+            obj.mtool_tform  = obj.mbase_tform;
+            obj.mrobot_manuf = 'Istituto Italiano di Tecnologia (IIT) - Genoa, Italy.';
 
             switch nargin
                 % init the mex-WholeBodyModel for the iCub-Robot:
@@ -40,11 +45,11 @@ classdef iCubWBM < IWBM.WBMInterface
             % else, do nothing ...
         end
 
-        function initRobot(wbm_robot)
-            if ~isa(wbm_robot, 'WBM.WBM')
+        function initRobot(robot_wbm)
+            if ~isa(robot_wbm, 'WBM.WBM')
                 error('iCubWBM::initRobot: %s', WBM.wbmErrorMsg.WRONG_DATA_TYPE);
             end
-            obj.mwbm_icub = copy(wbm_robot);
+            obj.mwbm_icub = copy(robot_wbm);
         end
 
         function initRobotFcn(obj, fhInitRobotWBM, wf2fixLnk)
@@ -175,7 +180,7 @@ classdef iCubWBM < IWBM.WBMInterface
         end
 
         function payload(obj, pt_mass, pos, link_names)
-            if (~iscolumn(pt_mass) || ~ismatrix(pos) || (size(pt_mass,1) ~= size(pos,1))
+            if ( ~iscolumn(pt_mass) || ~ismatrix(pos) || (size(pt_mass,1) ~= size(pos,1) )
                 error('iCubWBM::payload: %s', WBM.utilities.DIM_MISMATCH);
             end
             pl_data = horzcat(pt_mass, pos);
@@ -204,15 +209,15 @@ classdef iCubWBM < IWBM.WBMInterface
 
         end
 
-        function disp(obj, prec)
+        function dispParams(obj, prec)
             if exist('prec', 'var')
-               obj.mwbm_icub.dispWBMParams(prec);
-               obj.mwbm_icub.dispWBMConfig(prec);
+               obj.mwbm_icub.dispModel(prec);
+               obj.mwbm_icub.dispConfig(prec);
                return
             end
             % else, display the values with the default precision ...
-            obj.mwbm_icub.dispWBMParams();
-            obj.mwbm_icub.dispWBMConfig();
+            obj.mwbm_icub.dispModel();
+            obj.mwbm_icub.dispConfig();
         end
 
         function set.base_tform(obj, tform)
@@ -243,26 +248,59 @@ classdef iCubWBM < IWBM.WBMInterface
             tform = obj.mtool_tform;
         end
 
-        function robot_model = get.robot_model(obj)
-            robot_model = obj.mwbm_icub.robot_model;
-        end
-
-        function robot_config = get.robot_config(obj)
-            robot_config = obj.mwbm_icub.robot_config;
+        function set.model_name(obj, model_name)
+            obj.mstr_model_name = model_name;
         end
 
         function model_name = get.model_name(obj)
-            if isempty(obj.mwbm_icub)
+            if isempty(obj.mstr_model_name)
                 model_name = 'unknown'; return
             end
-            model_name = obj.mwbm_icub.robot_model.urdfRobot;
+            % else ...
+            model_name = obj.mstr_model_name;
+        end
+
+        function set.robot_manuf(obj, manuf)
+            obj.mrobot_manuf = manuf;
+        end
+
+        function robot_manuf = get.robot_manuf(obj)
+            if isempty(obj.mrobot_manuf)
+                robot_manuf = 'unknown'; return
+            end
+            % else ...
+            robot_manuf = obj.mrobot_manuf;
+        end
+
+        function robot_name = get.robot_name(obj)
+            if isempty(obj.mstr_model_name)
+                if ~isempty(obj.mwbm_icub)
+                    [~,model_name, ext] = fileparts(obj.mwbm_icub.robot_model.urdfRobot);
+                    model_name = strcat(model_name, ext);
+                else
+                    model_name = 'unknown';
+                end
+            end
+            robot_name = strcat('iCub, model: ', model_name);
+        end
+
+        function robot_params = get.robot_parameters(obj)
+            robot_params = obj.mwbm_icub.base_robot_params;
+        end
+
+        function sim_config = get.sim_config(obj)
+            sim_config = obj.msim_config;
+        end
+
+        function g_wf = get.gravity(obj)
+            g_wf = obj.mwbm_icub.g_wf;
         end
 
         function ndof = get.ndof(obj)
             if isempty(obj.mwbm_icub)
                 ndof = 0; return
             end
-            ndof = obj.mwbm_icub.robot_model.ndof;
+            ndof = obj.mwbm_icub.ndof;
         end
 
     end
