@@ -22,7 +22,6 @@ Installation
 - Unzip /learnOptimWBC/matlab/Dependecies/robot-9.10.zip somewhere handy (or in place). This operation will create a folder called rvctools, containing the robotics toolbox that we rely upon. Add /rcvtools and its subfolder to the Matlab PATH (you can right-click on the folder name in the Matlab panel list). To install the robotics toolbox run the rvctools/startup_rvc.m (Every time you have to run a script from the Matlab shell you have to change the current Matlab folder using the directory view that is usually on the right side of the Matlab window) from the Matlab shell. 
 
 - You need to compile the mex file for the robotics toolbox. Depending on your Matlab version, you will need an appropriate compiler version.
-
 For example: Matlab 2013a supports gcc until version 4.4. If you have a newer gcc (probably 4.8 if you have Ubuntu 14.04) then add it to your system:
 
 sudo apt-get install gcc-4.4
