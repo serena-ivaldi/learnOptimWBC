@@ -23,28 +23,24 @@ Installation
 
 - You need to compile the mex file for the robotics toolbox. Depending on your Matlab version, you will need an appropriate compiler version.
 For example: Matlab 2013a supports gcc until version 4.4. If you have a newer gcc (probably 4.8 if you have Ubuntu 14.04) then add it to your system:
-
-sudo apt-get install gcc-4.4
-sudo apt-get install g++-4.4
+`sudo apt-get install gcc-4.4`
+`sudo apt-get install g++-4.4`
 
 Then manually edit the file:
-/home/<YOUR_NAME>/.matlab/R2013a/mexopts.sh
+`/home/<YOUR_NAME>/.matlab/R2013a/mexopts.sh`
 
 and update the name of your compiler:
-CC='gcc-4.4'
-CXX='g++-4.4'
+> CC='gcc-4.4'
+> CXX='g++-4.4'
 
 More instructions on how to set up your compiler: 
 http://fr.mathworks.com/help/matlab/matlab_external/changing-default-compiler.html
 
 
-- compile the mex file for the Newton-Eulero dynamic computation in the robotic toolbox (/rvctools/robot/mex). Check that you added rcvtools to the Matlab PATH (including subfolders). Then run make.m from /rcvtools/robot.
-
-Note: Matlab may complain about line 304 in frne.c and lines 465-468 in ne.c, manually edit the files to change all the \\ comments into /* ... */ comments.
-
+- compile the mex file for the Newton-Eulero dynamic computation in the robotic toolbox (`/rvctools/robot/mex`). Check that you added rcvtools to the Matlab PATH (including subfolders). Then run make.m from /rcvtools/robot. Note: Matlab may complain about line 304 in frne.c and lines 465-468 in ne.c, manually edit the files to change all the \\ comments into /* ... */ comments.
 If everything works well, you will read:
->> make
-** building mex file
+> `>> make`
+> `** building mex file`
 
 
 - Move the MEX file frne.xxx (where xxx is the extension of the mex files on your platform - for example frne.mexa64) in rvctools/robot/@SerialLink. The MEX file will now be used instead of the M-file, and thus anything that calls rne() will use the MEX file and be faster. This applies to inertia(), coriolis(), gravload(), and fdyn().
