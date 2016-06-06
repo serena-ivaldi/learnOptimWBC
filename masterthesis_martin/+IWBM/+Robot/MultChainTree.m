@@ -1,12 +1,13 @@
 %classdef MultLinkTree < handle
 classdef MultChainTree < handle
     properties(Dependent)
-        name@char    % the name of the robot.
-        manuf@char   % the name of the manufacturer (annotation)
-        comment@char % general comment (annotation)
+        wbm_info@struct % general information about whole body model of the robot.
+        name@char       % the name of the robot.
+        manuf@char      % the name of the manufacturer (annotation)
+        comment@char    % general comment (annotation)
 
-        n@uint16     % number of joints (equivalent to number of DoFs)
-        config       % base model and configuration parameters of the robot
+        n@uint16                % number of joints (equivalent to number of DoFs)
+        config@WBM.absSimConfig % base model and configuration parameters of the robot
 
         gravity@double vector  % gravity vector (direction of the gravity)
         base@double    matrix  % base transform of the robot (pose of the robot)
@@ -15,11 +16,11 @@ classdef MultChainTree < handle
         %interface % interface to a real robot platform
 
         %model3d
-        plotopt3d
+        plotopt3d@WBM.absSimConfig
 
         %links
 
-        link      % current kinematic link of the robot that is controlled by the system.
+        link@char % current kinematic link of the robot that is controlled by the system.
     end
 
     properties
@@ -30,12 +31,12 @@ classdef MultChainTree < handle
         mrobot_wbm@WBMInterface
         mrobot_name@char
         mrobot_manuf@char
-        mrobot_comment@char
+        mwbm_comment@char
         mlink_name@char
     end
 
     methods
-        function obj = MultChainTree(robot_wbm, link_name, robot_info)
+        function obj = MultChainTree(robot_wbm, link_name, wbm_info)
             if ~isa(robot_wbm, 'WBMInterface')
                 error('MultChainTree::MultChainTree: %s', WBM.wbmErrorMsg.WRONG_DATA_TYPE);
             end
@@ -45,16 +46,16 @@ classdef MultChainTree < handle
 
             switch nargin
                 case 2
-                    obj.mrobot_name    = robot_wbm.robot_name;
-                    obj.mrobot_manuf   = robot_wbm.robot_manuf;
-                    obj.mrobot_comment = ''; % 'Whole Body Model for the iCub-Robot.'
+                    obj.mrobot_name  = robot_wbm.robot_name;
+                    obj.mrobot_manuf = robot_wbm.robot_manuf;
+                    obj.mwbm_comment = ''; % 'Whole Body Model for the iCub-Robot.'
                 case 3
                     if ~isstruct(robot_info)
                         error('MultChainTree::MultChainTree: %s', WBM.wbmErrorMsg.WRONG_DATA_TYPE);
                     end
-                    obj.mrobot_name    = robot_info.name;
-                    obj.mrobot_manuf   = robot_info.manuf;
-                    obj.mrobot_comment = robot_info.comment;
+                    obj.mrobot_name  = wbm_info.robot_name;
+                    obj.mrobot_manuf = wbm_info.robot_manuf;
+                    obj.mwbm_comment = wbm_info.comment;
                 otherwise
                     error('MultChainTree::MultChainTree: %s', WBM.wbmErrorMsg.WRONG_ARG);
             end
@@ -99,26 +100,26 @@ classdef MultChainTree < handle
             end
         end
 
-        function robot_info = get.info(obj)
-            robot_info.name    = obj.mrobot_name;
-            robot_info.manuf   = obj.mrobot_manuf;
-            robot_info.comment = obj.mrobot_comment;
+        function wbm_info = get.wbm_info(obj)
+            wbm_info.robot_name  = obj.mrobot_name;
+            wbm_info.robot_manuf = obj.mrobot_manuf;
+            wbm_info.comment     = obj.mwbm_comment;
         end
 
         function robot_name = get.name(obj)
             robot_name = obj.mrobot_name;
         end
 
-        function get.manuf(obj, robot_manuf)
+        function robot_manuf = get.manuf(obj, robot_manuf)
             robot_manuf = obj.mrobot_manuf;
         end
 
         function set.comment(obj, comment)
-            obj.mrobot_comment = comment;
+            obj.mwbm_comment = comment;
         end
 
         function comment = get.comment(obj)
-            comment = obj.mrobot_comment;
+            comment = obj.mwbm_comment;
         end
 
         function ndof = get.n(obj)
@@ -150,9 +151,9 @@ classdef MultChainTree < handle
         end
 
         function set.plotopt3d(obj, sim_config)
-            if ~isa(sim_config, 'WBM.absSimConfig')
-                error('MultChainTree::set.plotopt3d: %s', WBM.wbmErrorMsg.WRONG_DATA_TYPE);
-            end
+            % if ~isa(sim_config, 'WBM.absSimConfig')
+            %     error('MultChainTree::set.plotopt3d: %s', WBM.wbmErrorMsg.WRONG_DATA_TYPE);
+            % end
             obj.mrobot_wbm.setupSim(obj, sim_config);
         end
 
