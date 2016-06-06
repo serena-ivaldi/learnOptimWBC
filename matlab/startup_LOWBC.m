@@ -32,6 +32,7 @@ else
     from = fullfile(OptWBIpath,'ChangedFile','rvctool');
     % file to CodeGenerator
     copyfile(fullfile(from,'TO_COPY@CodeGenerator','CodeGenerator.m'),fullfile(to,'robot','@CodeGenerator'));
+    copyfile(fullfile(from,'TO_COPY@CodeGenerator','genccodejacobian.m'),fullfile(to,'robot','@CodeGenerator'));
     copyfile(fullfile(from,'TO_COPY@CodeGenerator','genccodeJdot.m'),fullfile(to,'robot','@CodeGenerator'));
     copyfile(fullfile(from,'TO_COPY@CodeGenerator','gencoriolis.m'),fullfile(to,'robot','@CodeGenerator'));
     copyfile(fullfile(from,'TO_COPY@CodeGenerator','genJdot.m'),fullfile(to,'robot','@CodeGenerator'));
