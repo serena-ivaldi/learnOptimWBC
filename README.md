@@ -25,14 +25,11 @@ Installation
 For example: Matlab 2013a supports gcc until version 4.4. If you have a newer gcc (probably 4.8 if you have Ubuntu 14.04) then add it to your system:
 `sudo apt-get install gcc-4.4`
 `sudo apt-get install g++-4.4`
-
 Then manually edit the file:
 `/home/<YOUR_NAME>/.matlab/R2013a/mexopts.sh`
-
 and update the name of your compiler:
-> CC='gcc-4.4'
-> CXX='g++-4.4'
-
+ `CC='gcc-4.4`
+ `CXX='g++-4.4`.
 More instructions on how to set up your compiler: 
 http://fr.mathworks.com/help/matlab/matlab_external/changing-default-compiler.html
 
