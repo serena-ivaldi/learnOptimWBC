@@ -9,7 +9,7 @@ clc
 
 % change the function to change the robot for generating mex matrix
 rob = MdlLBR4pSimple();
-genkinonly = true;
+genkinonly = false;
 cGen = CodeGenerator(rob,'mex','genmfun','genmex');
 if(genkinonly)
    %with this function i build only the kinematic symbolic rapresentation
