@@ -30,7 +30,7 @@ for i = 1:length(problem_name)
     for iter=1:nbrep
         currentProblem.randStartPoint();
         fminconPb.X0 = currentProblem.X0;
-        [m1(iter),m2(iter),m3(iter),m4(iter)] = currentProblem.minimize(length(fminconPb.X0),fminconPb.X0,{fminconPb.LB;fminconPb.UB});
+        [m1(iter),m2(iter),m3(iter),m4(iter)] = currentProblem.minimize(length(fminconPb.X0),fminconPb.X0,[],[],{fminconPb.LB;fminconPb.UB});
     end
     metric1 =  [metric1,  m1]; %metric 1 = fitness error
     metric2 =  [metric2,  m2]; %metric 2 = constraints violation
