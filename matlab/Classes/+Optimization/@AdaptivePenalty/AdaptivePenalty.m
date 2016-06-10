@@ -17,7 +17,7 @@ classdef  AdaptivePenalty < Optimization.AbstractPenalty
        search_space_dim      % dimesion of the search space of our problem
        fitness_penalties     % is a matrix of the epsilon normalized constrained values (lambda x m) where lambda is the number of candidates and m is the number of constraints   
        n_constraint          % number of constraints to handle
-       constraints_functions % vector of functions handle for computing the constraints 
+       constraints_functions % vector of functions handle for computing the constraints (actually a string vector that need str2func conversion to get the handles)
        constraints_type      % vector that specifies if the constraints is a equality or an inequality. 1 is a disequalities 0 is an inequalities
        constraints_values    % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
        constraints_violation % amount of violation at the end of the rollout

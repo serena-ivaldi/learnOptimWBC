@@ -7,8 +7,8 @@ close all
 nbrep = 50; %50
 b = 50; %radius of the topologic ball for the metric3 (express as a % of difference from the optimal
 
-problem_name = {'g07'};
-%problem_name = {'g07','g09','HB'};
+%problem_name = {'g07'};
+problem_name = {'g07','g09','HB'};
 metric1 = [];
 metric2 = [];
 metric3 = [];
@@ -30,7 +30,7 @@ for i = 1:length(problem_name)
     for iter=1:nbrep
         currentProblem.randStartPoint();
         fminconPb.X0 = currentProblem.X0;
-        [m1(iter),m2(iter),m3(iter),m4(iter)] = runFmincon(currentProblem,fminconPb,b);
+        [m1(iter),m2(iter),m3(iter),m4(iter)] = currentProblem.minimize(length(fminconPb.X0),fminconPb.X0,{fminconPb.LB;fminconPb.UB});
     end
     metric1 =  [metric1,  m1]; %metric 1 = fitness error
     metric2 =  [metric2,  m2]; %metric 2 = constraints violation
