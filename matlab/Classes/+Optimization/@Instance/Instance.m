@@ -11,7 +11,7 @@ classdef  Instance
       constraints      % flag that activates or deactivates the constraints handling (true: constraints active, false: constraints not active) 
       run_function     % function called in run specific for each optimization problem
       fitness          % fitness function handle
-      clean_function   % function called to do some stuff after using the run function (optional could be empty)
+      clean_function   % function called to do some stuff after using the run function (optionally could be empty)
       input_4_run      % this variable is a cell array that contains the data that are needed to execute the run function
       fitness_result   % in this vector i save the value of the fitness function 
       data2save        % in this structure im going to save all the data that i need for visualization / debugging purpose

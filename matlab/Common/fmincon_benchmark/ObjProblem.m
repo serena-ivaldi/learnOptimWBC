@@ -65,9 +65,9 @@ classdef ObjProblem < handle
                     %the case where we are using the same structure as Optimization.Instance
                     %see Optimization.Instance for more details
                     obj.name = 'custom';
-                    obj.penalty_handling = varargin{1};
-                    obj.run_function = varargin{3};
-                    obj.fitness = varargin{4};
+                    %obj.penalty_handling = varargin{1};
+                    %obj.run_function = varargin{3};
+                    %obj.fitness = varargin{4};
                     
                     obj.penalty_handling = varargin{1};
                     obj.learn_procedure = varargin{2}; % useless in this object
@@ -104,7 +104,7 @@ classdef ObjProblem < handle
             %                 fitvalue = obj.fitness(input);
             %             else
             [output]=obj.run(input);
-            fitvalue = obj.fitness(output);
+            fitvalue = obj.fitness(obj,output);
             %end
         end
         
@@ -164,8 +164,8 @@ classdef ObjProblem < handle
                     obj.ceq = [];
                     
                 case 'custom'
-                    for i = 1:obj.constr_handling.n_constraints
-                        g = str2func(obj.constr_handling.constraints_functions{i});
+                    for i = 1:obj.penalty_handling.n_constraint
+                        g = str2func(obj.penalty_handling.constraints_functions{i});
                         obj.c = [obj.c; g(input)];
                     end
                     obj.ceq = [];
