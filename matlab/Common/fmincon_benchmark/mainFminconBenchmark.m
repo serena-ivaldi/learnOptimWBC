@@ -5,7 +5,6 @@ clear all
 close all
 
 nbrep = 50; %50
-b = 50; %radius of the topologic ball for the metric3 (express as a % of difference from the optimal
 
 %problem_name = {'g07'};
 problem_name = {'g07','g09','HB'};

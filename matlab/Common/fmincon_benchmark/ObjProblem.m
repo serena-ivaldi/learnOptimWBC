@@ -25,7 +25,7 @@ classdef ObjProblem < handle
         clean_function   % function called to do some stuff after using the run function (optional could be empty)
         input_4_run      % this variable is a cell array that contains the data that are needed to execute the run function
         
-        b  %radius of the topologic ball for the metric3 (express as a % of difference from the optimal
+        b  %radius of the topologic ball for the metric3 (express as a % of difference from the optimal)
     end
     
     methods
@@ -38,7 +38,7 @@ classdef ObjProblem < handle
             switch nargin
                 case 1
                     obj.name = varargin{1};
-                    obj.run_function = @obj.EmptyPreprocessing;
+                    obj.run_function = @EmptyPreprocessing;
                     switch obj.name
                         case 'g07'
                             obj.n_search_space = 10;
@@ -65,12 +65,12 @@ classdef ObjProblem < handle
                     %the case where we are using the same structure as Optimization.Instance
                     %see Optimization.Instance for more details
                     obj.name = 'custom';
-                    %obj.penalty_handling = varargin{1};
-                    %obj.run_function = varargin{3};
-                    %obj.fitness = varargin{4};
+                    obj.penalty_handling = varargin{1};
+                    obj.run_function = varargin{3};
+                    obj.fitness = varargin{4};
                     
                     obj.penalty_handling = varargin{1};
-                    obj.learn_procedure = varargin{2}; % useless in this object
+                    %obj.learn_procedure = varargin{2}; % useless in this object
                     obj.run_function = varargin{3};
                     obj.fitness = varargin{4};
                     obj.clean_function = varargin{5};
@@ -86,7 +86,7 @@ classdef ObjProblem < handle
             obj.c = [];
             obj.ceq = [];
             obj.X0 = zeros(obj.n_search_space,1);
-            obj.b = 50;
+            obj.b = 2.5; %ie +/- 2,5% from the steady value
         end
         
         %generation of a random starting point inside the limit boundaries
@@ -97,29 +97,38 @@ classdef ObjProblem < handle
             end
         end
         
-        % compute the fitness value (and is suppose to store each
-        % computation in the vector computed_fitness_values)
+        % compute the fitness value
         function fitvalue = computFit(obj,input)
-            %             if ~strcmp(obj.name, 'custom')
-            %                 fitvalue = obj.fitness(input);
-            %             else
-            [output]=obj.run(input);
-            fitvalue = obj.fitness(obj,output);
-            %end
+            if ~strcmp(obj.name, 'custom')
+                fitvalue = obj.fitness(input);
+            else
+                try
+                    disp('i am in computFit')
+                    [output]=obj.run(input);
+                    fitvalue = obj.fitness(obj,output);
+                catch err
+                    disp('i am in computFit error side')
+                    fitvalue = -1; %test
+                end
+            end
         end
         
         % this function has to give back something that let me compute the
         % fitness function for that sample
         function [output]=run(obj,parameters)
-            %disp('im in run')   
+            %disp('im in run')
             [output]=feval(obj.run_function,obj,parameters);
-       end
+        end
         
         % function to be compliante with fmincon
         function [c, ceq] = contraintesFactice(obj,input)
-            obj.computConstrViol(input);
-            c = obj.c;
-            ceq = obj.ceq;
+            try
+                obj.computConstrViol(input);
+                c = obj.c;
+                ceq = obj.ceq;
+            catch err
+                disp('contraintesFactice failed');
+            end
         end
         
         % compute the constraints violation
@@ -164,10 +173,11 @@ classdef ObjProblem < handle
                     obj.ceq = [];
                     
                 case 'custom'
-                    for i = 1:obj.penalty_handling.n_constraint
-                        g = str2func(obj.penalty_handling.constraints_functions{i});
-                        obj.c = [obj.c; g(input)];
-                    end
+                    %                     for i = 1:obj.penalty_handling.n_constraint
+                    %                         g = str2func(obj.penalty_handling.constraints_functions{i});
+                    %                         obj.c = [obj.c; g(input)];
+                    %                     end
+                    obj.c = [];
                     obj.ceq = [];
                 otherwise
                     disp('Unknown problem.')
@@ -222,19 +232,12 @@ classdef ObjProblem < handle
         function zzz = IndentifySteadyState(obj,vector,tresh)
             steady_value = vector(end);
             for zzz = 1:length(vector)
-                if(abs(steady_value-vector(zzz))<tresh)
+                if(abs(steady_value-vector(zzz))<(tresh/100*steady_value))
                     break
                 end
             end
         end
         
-        function [output] = EmptyPreprocessing(~,obj,parameters)            
-            output = parameters;            
-        end
-        
-        
     end
-    
-    
 end
 
