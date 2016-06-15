@@ -17,7 +17,6 @@ classdef ObjProblem < handle
         ceq                 % constraints value (to be compliant with fmincon)
         
         penalty_handling % object to handle constraints/penalties inside the optimization routine
-        learn_procedure  % string that specify which learning method im going to use
         constraints      % flag that activates or deactivates the constraints handling (true: constraints active, false: constraints not active)
         run_function     % function called in run specific for each optimization problem
         fitness          % fitness function handle
@@ -65,12 +64,8 @@ classdef ObjProblem < handle
                     %the case where we are using the same structure as Optimization.Instance
                     %see Optimization.Instance for more details
                     obj.name = 'custom';
-                    obj.penalty_handling = varargin{1};
-                    obj.run_function = varargin{3};
-                    obj.fitness = varargin{4};
                     
                     obj.penalty_handling = varargin{1};
-                    %obj.learn_procedure = varargin{2}; % useless in this object
                     obj.run_function = varargin{3};
                     obj.fitness = varargin{4};
                     obj.clean_function = varargin{5};
@@ -97,7 +92,7 @@ classdef ObjProblem < handle
             end
         end
         
-        % compute the fitness value
+        % This function compute the fitness value
         function fitvalue = computFit(obj,input)
             if ~strcmp(obj.name, 'custom')
                 fitvalue = obj.fitness(input);
@@ -105,22 +100,25 @@ classdef ObjProblem < handle
                 try
                     disp('i am in computFit')
                     [output]=obj.run(input);
-                    fitvalue = obj.fitness(obj,output);
+                    fitvalue =  - obj.fitness(obj,output); %minus because we are maximizing and fmincon only minimize
+                    if isnan(fitvalue)
+                        disp('Fitness is equal to NaN.') %i can put a breakpoint here to understand how in heaven it's possible that i sometimes get effort = NaN
+                        fitvalue = 1;
+                    end
                 catch err
                     disp('i am in computFit error side')
-                    fitvalue = -1; %test
+                    fitvalue = 1; %penalty if the computation of the fitness failed
                 end
             end
         end
         
-        % this function has to give back something that let me compute the
-        % fitness function for that sample
+        % This function has to give back something that let me compute the fitness function
         function [output]=run(obj,parameters)
             %disp('im in run')
             [output]=feval(obj.run_function,obj,parameters);
         end
         
-        % function to be compliante with fmincon
+        % Function to be compliante with how fmincon handle constraints
         function [c, ceq] = contraintesFactice(obj,input)
             try
                 obj.computConstrViol(input);
@@ -131,10 +129,32 @@ classdef ObjProblem < handle
             end
         end
         
-        % compute the constraints violation
-        % this is my black box constraints
-        function obj = computConstrViol(obj,input)
-            %display('im in computConstrViol');
+        % Compute the constraints violation
+        function obj = computConstrViol(obj,input)            
+            switch obj.name
+                case {'g07','g09','HB'}
+                    [c,ceq] = obj.standardProblemConstrViol(input);
+                case 'custom'
+                    c_index = -1; %i'm just considering one candidate (cf. FixPenalty class)
+                    obj.penalty_handling.ComputeConstraintsViolation(c_index);
+                    c = [];
+                    ceq = [];
+                    for i=1:length(obj.penalty_handling.constraints_type)
+                        if  obj.penalty_handling.constraints_type(i)
+                            c = [c; obj.penalty_handling.penalties(1,i)];
+                        else
+                            ceq = [ceq; obj.penalty_handling.penalties(1,i)];
+                        end
+                    end
+                otherwise
+                    disp('Unknown problem.')
+            end
+            obj.c = c;
+            obj.ceq = ceq;
+        end
+        
+        % Compute the constraints violation forg07, g09 or HB problems
+        function [c,ceq] = standardProblemConstrViol(obj,input)
             switch obj.name
                 case 'g07'
                     % Nonlinear inequality constraints
@@ -146,20 +166,18 @@ classdef ObjProblem < handle
                     c6 = g07Constr6(input,obj.constraints_parameters);
                     c7 = g07Constr7(input,obj.constraints_parameters);
                     c8 = g07Constr8(input,obj.constraints_parameters);
-                    obj.c = [c1; c2; c3; c4; c5; c6; c7; c8];
+                    c = [c1; c2; c3; c4; c5; c6; c7; c8];
                     % Nonlinear equality constraints
-                    obj.ceq = [];
-                    
+                    ceq = [];                    
                 case 'g09'
                     % Nonlinear inequality constraints
                     c1 = g09Constr1(input,obj.constraints_parameters);
                     c2 = g09Constr2(input,obj.constraints_parameters);
                     c3 = g09Constr3(input,obj.constraints_parameters);
                     c4 = g09Constr4(input,obj.constraints_parameters);
-                    obj.c = [c1; c2; c3; c4];
+                    c = [c1; c2; c3; c4];
                     % Nonlinear equality constraints
-                    obj.ceq = [];
-                    
+                    ceq = [];                    
                 case 'HB'
                     % Nonlinear inequality constraints
                     c1 = HBConstr1(input,obj.constraints_parameters);
@@ -168,24 +186,16 @@ classdef ObjProblem < handle
                     c4 = HBConstr4(input,obj.constraints_parameters);
                     c5 = HBConstr5(input,obj.constraints_parameters);
                     c6 = HBConstr6(input,obj.constraints_parameters);
-                    obj.c = [c1; c2; c3; c4; c5; c6];
+                    c = [c1; c2; c3; c4; c5; c6];
                     % Nonlinear equality constraints
-                    obj.ceq = [];
-                    
-                case 'custom'
-                    %                     for i = 1:obj.penalty_handling.n_constraint
-                    %                         g = str2func(obj.penalty_handling.constraints_functions{i});
-                    %                         obj.c = [obj.c; g(input)];
-                    %                     end
-                    obj.c = [];
-                    obj.ceq = [];
-                otherwise
-                    disp('Unknown problem.')
+                    ceq = [];
             end
         end
         
         
-        %will need a flag later to switch between fmincon and ipopt
+        % Do the optimization (only with fmincon for now )
+        % the signature is exactly the same as optimization.CMAES
+        % will need a flag later to switch between fmincon and ipopt
         function [m1,m2,m3,m4] = minimize(obj,num_of_param,start_action,~,~,boundaries)
             options = optimoptions('fmincon','OutputFcn',@obj.outfun,'Display','iter','Algorithm','sqp');
             options.MaxFunEvals = 500;
@@ -208,7 +218,7 @@ classdef ObjProblem < handle
             fminconPb.NONLCON = @obj.contraintesFactice;
             
             tic
-            [X,FVAL,exitflag,output] = fmincon(fminconPb);
+            [X,FVAL] = fmincon(fminconPb);
             m4 =  toc;
             
             m1 = obj.J0 - FVAL; %metric 1 = fitness error
@@ -219,16 +229,18 @@ classdef ObjProblem < handle
             m3 = obj.IndentifySteadyState(obj.fitness_result,obj.b); %metric 3 = # of steps to steady value
         end
         
+        
+        % My output function which allow me to store the computed fitness
+        % for each step chosen point
         function stop = outfun(obj, x, optimValues, state)
             stop = false;
             if strcmp(state, 'iter')
-                % Concatenate current objective function value with history
                 obj.fitness_result = [obj.fitness_result; optimValues.fval];
             end
         end
         
-        %find the index after which the values of the vector stay inside (last
-        %value of the vecto - treshold) and  (last value of the vecto + treshold)
+        
+        % Used to determine the number needed to reach stability
         function zzz = IndentifySteadyState(obj,vector,tresh)
             steady_value = vector(end);
             for zzz = 1:length(vector)
