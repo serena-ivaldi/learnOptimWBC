@@ -199,6 +199,8 @@ classdef ObjProblem < handle
         function [m1,m2,m3,m4] = minimize(obj,num_of_param,start_action,~,~,boundaries)
             options = optimoptions('fmincon','OutputFcn',@obj.outfun,'Display','iter','Algorithm','sqp');
             options.MaxFunEvals = 500;
+            options.TolX = 1e-15; % the step size tolerance
+            %options.UseParallel = true;
             fminconPb.options = options;
             fminconPb.solver = 'fmincon';
             fminconPb.X0 = start_action;
