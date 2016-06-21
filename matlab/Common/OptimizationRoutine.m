@@ -25,7 +25,7 @@ function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, co
      if ~fminconFlag
         [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded] = inst.CMAES(controller.GetTotalParamNum(),start_action,niter,explorationRate,cmaes_value_range);
      else
-         [~,~,~,~] = inst.minimize(controller.GetTotalParamNum(),start_action,niter,explorationRate,cmaes_value_range);
+         [~,~,~,~] = inst.minimize(controller.GetTotalParamNum(),start_action,cmaes_value_range);
      end
      exec_time = toc
      % analisys of the optimization result for building repertoire

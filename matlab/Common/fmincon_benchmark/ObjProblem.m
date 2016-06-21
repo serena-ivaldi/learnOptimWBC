@@ -6,25 +6,29 @@ classdef ObjProblem < handle
     %written by ugo chervet
     
     properties
-        name                % name of the problem
-        n_search_space      % size of the parameter vector
-        J0                  % optimal fitness
-        LB                  % lower boundaries
-        UB                  % upper boundaries
-        X0                  % starting point
-        constraints_parameters  % parameters of the black box constraints
-        c                   % constraints value (to be compliant with fmincon)
-        ceq                 % constraints value (to be compliant with fmincon)
+        name                    % name of the problem
+        n_search_space          % size of the parameter vector
+        J0                      % optimal fitness (for metric)
+        LB                      % lower bound
+        UB                      % upper bound
+        X0                      % starting point
+        current_point_for_inspection % for debug
+        c                       % constraints value (to be compliant with fmincon)
+        ceq                     % constraints value (to be compliant with fmincon)
         
-        penalty_handling % object to handle constraints/penalties inside the optimization routine
-        constraints      % flag that activates or deactivates the constraints handling (true: constraints active, false: constraints not active)
-        run_function     % function called in run specific for each optimization problem
-        fitness          % fitness function handle
-        fitness_result   % in this vector i save the value of the fitness function
-        clean_function   % function called to do some stuff after using the run function (optional could be empty)
-        input_4_run      % this variable is a cell array that contains the data that are needed to execute the run function
+        penalty_handling        % object to handle constraints/penalties inside the optimization routine
+        constraints             % flag that activates or deactivates the constraints handling (true: constraints active, false: constraints not active)
+        run_function            % function called in run specific for each optimization problem
+        fitness                 % fitness function handle
+        fitness_result          % in this vector i save the value of the fitness function
+        clean_function          % function called to do some stuff after using the run function (optional could be empty)
+        input_4_run             % this variable is a cell array that contains the data that are needed to execute the run function
         
-        b  %radius of the topologic ball for the metric3 (express as a % of difference from the optimal)
+        b                       % radius of the topologic ball for the metric3 (express as a % of difference from the optimal)
+        
+        algorithm_selector      % flag to select the optimization algorithm  
+        
+        
     end
     
     methods
@@ -33,56 +37,31 @@ classdef ObjProblem < handle
         %signature than Optimization.Instance
         %   ObjProblem(name)        or
         %   ObjProblem(constr,learn_procedure,run_function,fitness,clean_function,input_4_run)
-        function obj = ObjProblem(varargin)
-            switch nargin
-                case 1
-                    obj.name = varargin{1};
-                    obj.run_function = @EmptyPreprocessing;
-                    switch obj.name
-                        case 'g07'
-                            obj.n_search_space = 10;
-                            obj.J0 = 24.3062091;
-                            obj.LB = -10*ones(obj.n_search_space,1);
-                            obj.UB = 10*ones(obj.n_search_space,1);
-                            obj.fitness = @g07Test;
-                        case 'g09'
-                            obj.n_search_space = 7;
-                            obj.J0 = 680.630057;
-                            obj.LB = -10*ones(obj.n_search_space,1);
-                            obj.UB = 10*ones(obj.n_search_space,1);
-                            obj.fitness = @g09Test;
-                        case 'HB'
-                            obj.n_search_space = 5;
-                            obj.J0 = -30665.539;
-                            obj.LB = [78;33;27;27;27];
-                            obj.UB = [102.33;45;45;45;45];
-                            obj.fitness = @HBTest;
-                        otherwise
-                            disp('Unknown problem.')
-                    end
-                case 6
-                    %the case where we are using the same structure as Optimization.Instance
-                    %see Optimization.Instance for more details
-                    obj.name = 'custom';
-                    
-                    obj.penalty_handling = varargin{1};
-                    obj.run_function = varargin{3};
-                    obj.fitness = varargin{4};
-                    obj.clean_function = varargin{5};
-                    obj.input_4_run = varargin{6};
-                    
-                    obj.n_search_space = [];
-                    obj.J0 = 0;
-                    obj.LB = [];
-                    obj.UB = [];
-                otherwise
-                    disp('ObjProblem invalid number of arguments');
+        function obj = ObjProblem(n_search_space,boundaries,constr,algorithm_selector,run_function,fitness,clean_function,input_4_run)                   
+            obj.penalty_handling = constr;
+            obj.algorithm_selector = algorithm_selector;
+            obj.run_function =run_function;
+            obj.fitness = fitness;
+            obj.clean_function = clean_function;
+            obj.input_4_run = input_4_run;
+
+            obj.n_search_space = n_search_space;
+            obj.J0 = 0;
+            if(iscell(boundaries))
+                obj.LB = boundaries{1};
+                obj.UB = boundaries{2};
+            elseif(isvector(boundaries))
+                obj.LB = ones(1,num_of_param).*boundaries(1,1);
+                obj.UB = ones(1,num_of_param).*boundaries(1,2);
+            else
+                error('something wrong with cmaes_value_range')
             end
-            obj.c = [];
-            obj.ceq = [];
-            obj.X0 = zeros(obj.n_search_space,1);
             obj.b = 2.5; %ie +/- 2,5% from the steady value
         end
+        
+        function input_vec = CreateInputFromParameters(obj,parameters) 
+            input_vec = repmat({parameters},1,obj.penalty_handling.n_constraint);  
+       end
         
         %generation of a random starting point inside the limit boundaries
         function randStartPoint(obj)
@@ -94,9 +73,6 @@ classdef ObjProblem < handle
         
         % This function compute the fitness value
         function fitvalue = computFit(obj,input)
-            if ~strcmp(obj.name, 'custom')
-                fitvalue = obj.fitness(input);
-            else
                 try
                     disp('i am in computFit')
                     [output]=obj.run(input);
@@ -108,8 +84,7 @@ classdef ObjProblem < handle
                 catch err
                     disp('i am in computFit error side')
                     fitvalue = 1; %penalty if the computation of the fitness failed
-                end
-            end
+                end 
         end
         
         % This function has to give back something that let me compute the fitness function
@@ -119,7 +94,7 @@ classdef ObjProblem < handle
         end
         
         % Function to be compliante with how fmincon handle constraints
-        function [c, ceq] = contraintesFactice(obj,input)
+        function [c, ceq] = computeConstr(obj,input)
             try
                 obj.computConstrViol(input);
                 c = obj.c;
@@ -130,94 +105,50 @@ classdef ObjProblem < handle
         end
         
         % Compute the constraints violation
-        function obj = computConstrViol(obj,input)            
-            switch obj.name
-                case {'g07','g09','HB'}
-                    [c,ceq] = obj.standardProblemConstrViol(input);
-                case 'custom'
-                    c_index = -1; %i'm just considering one candidate (cf. FixPenalty class)
-                    obj.penalty_handling.ComputeConstraintsViolation(c_index);
-                    c = [];
-                    ceq = [];
-                    for i=1:length(obj.penalty_handling.constraints_type)
-                        if  obj.penalty_handling.constraints_type(i)
-                            c = [c; obj.penalty_handling.penalties(1,i)];
-                        else
-                            ceq = [ceq; obj.penalty_handling.penalties(1,i)];
-                        end
-                    end
-                otherwise
-                    disp('Unknown problem.')
-            end
+        % input is a fake value
+        function obj = computConstrViol(obj,input)                    
+            % each time i have to compute this 
+            try
+                disp('i am in computConstrViol fitness computation')
+                [output]=obj.run(input);
+                obj.fitness(obj,output); %minus because we are maximizing and fmincon only minimize
+            catch err
+                disp('i am in computConstrViol error side fitness computation ')
+                fitvalue = 1; %penalty if the computation of the fitness failed
+            end 
+            c_index = -1; %i'm just considering one candidate (cf. FixPenalty class)
+            obj.penalty_handling.ComputeConstraintsViolation(c_index);
+            c = [];
+            ceq = [];
+            for i=1:length(obj.penalty_handling.constraints_type)
+                if  obj.penalty_handling.constraints_type(i)
+                    c = [c; obj.penalty_handling.penalties(1,i)];
+                else
+                    ceq = [ceq; obj.penalty_handling.penalties(1,i)];
+                end
+            end   
             obj.c = c;
             obj.ceq = ceq;
         end
         
-        % Compute the constraints violation forg07, g09 or HB problems
-        function [c,ceq] = standardProblemConstrViol(obj,input)
-            switch obj.name
-                case 'g07'
-                    % Nonlinear inequality constraints
-                    c1 = g07Constr1(input,obj.constraints_parameters);
-                    c2 = g07Constr2(input,obj.constraints_parameters);
-                    c3 = g07Constr3(input,obj.constraints_parameters);
-                    c4 = g07Constr4(input,obj.constraints_parameters);
-                    c5 = g07Constr5(input,obj.constraints_parameters);
-                    c6 = g07Constr6(input,obj.constraints_parameters);
-                    c7 = g07Constr7(input,obj.constraints_parameters);
-                    c8 = g07Constr8(input,obj.constraints_parameters);
-                    c = [c1; c2; c3; c4; c5; c6; c7; c8];
-                    % Nonlinear equality constraints
-                    ceq = [];                    
-                case 'g09'
-                    % Nonlinear inequality constraints
-                    c1 = g09Constr1(input,obj.constraints_parameters);
-                    c2 = g09Constr2(input,obj.constraints_parameters);
-                    c3 = g09Constr3(input,obj.constraints_parameters);
-                    c4 = g09Constr4(input,obj.constraints_parameters);
-                    c = [c1; c2; c3; c4];
-                    % Nonlinear equality constraints
-                    ceq = [];                    
-                case 'HB'
-                    % Nonlinear inequality constraints
-                    c1 = HBConstr1(input,obj.constraints_parameters);
-                    c2 = HBConstr2(input,obj.constraints_parameters);
-                    c3 = HBConstr3(input,obj.constraints_parameters);
-                    c4 = HBConstr4(input,obj.constraints_parameters);
-                    c5 = HBConstr5(input,obj.constraints_parameters);
-                    c6 = HBConstr6(input,obj.constraints_parameters);
-                    c = [c1; c2; c3; c4; c5; c6];
-                    % Nonlinear equality constraints
-                    ceq = [];
-            end
-        end
         
         
         % Do the optimization (only with fmincon for now )
         % the signature is exactly the same as optimization.CMAES
         % will need a flag later to switch between fmincon and ipopt
-        function [m1,m2,m3,m4] = minimize(obj,num_of_param,start_action,~,~,boundaries)
+        function [m1,m2,m3,m4] = minimize(obj)
             options = optimoptions('fmincon','OutputFcn',@obj.outfun,'Display','iter','Algorithm','sqp');
             options.MaxFunEvals = 500;
             options.TolX = 1e-15; % the step size tolerance
             %options.UseParallel = true;
             fminconPb.options = options;
             fminconPb.solver = 'fmincon';
-            fminconPb.X0 = start_action;
+            fminconPb.X0 = obj.X0;
             fminconPb.objective = @obj.computFit;
             obj.fitness_result = [];
-            
-            if(iscell(boundaries))
-                fminconPb.LB = boundaries{1};
-                fminconPb.UB = boundaries{2};
-            elseif(isvector(boundaries))
-                fminconPb.LB = ones(1,num_of_param).*boundaries(1,1);
-                fminconPb.UB = ones(1,num_of_param).*boundaries(1,2);
-            else
-                error('something wrong with cmaes_value_range')
-            end
-            
-            fminconPb.NONLCON = @obj.contraintesFactice;
+            fminconPb.LB = obj.LB;
+            fminconPb.UB = obj.UB;
+            fminconPb.NONLCON = @obj.computeConstr;
             
             tic
             [X,FVAL] = fmincon(fminconPb);
@@ -225,7 +156,7 @@ classdef ObjProblem < handle
             
             m1 = obj.J0 - FVAL; %metric 1 = fitness error
             
-            [obj.c, obj.ceq] = obj.contraintesFactice(X); %metric constr violation
+            obj.computConstrViol(X); %metric constr violation
             m2 = sum(abs((obj.c > 0).*obj.c)) + sum(abs((obj.ceq ~= 0).*obj.ceq));
             
             m3 = obj.IndentifySteadyState(obj.fitness_result,obj.b); %metric 3 = # of steps to steady value
