@@ -8,8 +8,9 @@ classdef iCubWBM < IWBM.WBMInterface
         robot_name@char
         robot_parameters@WBM.wbmBaseRobotParams
         sim_config@WBM.absSimConfig
-        gravity@double    vector
-        ndof@uint16       scalar
+        gravity@double vector
+        qlim@struct
+        ndof@uint16    scalar
     end
 
     % properties(SetAccess = private, GetAccess = public)
@@ -53,14 +54,14 @@ classdef iCubWBM < IWBM.WBMInterface
         end
 
         function initRobotFcn(obj, fhInitRobotWBM, wf2fixLnk)
-            if ~ishandle(fhInitRobotWBM)
+            if ~isa(fhInitRobotWBM, 'function_handle')
                 error('iCubWBM::initRobotFcn: %s', WBM.wbmErrorMsg.WRONG_DATA_TYPE)
             end
 
             if ~exist('wf2fixLnk', 'var')
                 wf2fixLnk = true;
             end
-            obj.mwbm_icub = @fhInitRobotWBM(wf2fixLnk); % to check if it works ...
+            obj.mwbm_icub = fhInitRobotWBM(wf2fixLnk);
         end
 
         function initBaseRobotParams(obj, base_params)
@@ -85,7 +86,7 @@ classdef iCubWBM < IWBM.WBMInterface
             M     = obj.mwbm_icub.massMatrix(stFltb.wf_R_b, stFltb.wf_p_b, q_j);
             I_acc = obj.Iqdd(q_j, dq_j, tau, stFltb);
 
-            ddq_j = M \ I_acc';
+            ddq_j = M \ I_acc.';
         end
 
         % function T = A(obj, joints, q_j) % ??
@@ -97,6 +98,16 @@ classdef iCubWBM < IWBM.WBMInterface
                 stFltb = obj.mwbm_icub.getFloatingBaseState();
             end
             tau_c = obj.mwbm_icub.coriolisCentrifugalForces(stFltb.wf_R_b, stFltb.wf_p_b, q_j, dq_j, stFltb.wf_v_b);
+        end
+
+        function [t, stmChi] = fdyn(obj, tspan, fhCtrlTrqs, stvChi_0, ode_opt)
+            if ~exist('ode_opt',. 'var')
+                % use the default options for the ODE-solver ...
+                [t, stmChi] = obj.mwbm_icub.intForwardDynamics(fhCtrlTrqs, tspan, stvChi_0);
+                return
+            end
+            % else ...
+            [t, stmChi] = obj.mwbm_icub.intForwardDynamics(fhCtrlTrqs, tspan, stvChi_0, ode_opt);
         end
 
         function w_H_rlnk = fkine(obj, q_j, link_name, stFltb)
@@ -130,17 +141,24 @@ classdef iCubWBM < IWBM.WBMInterface
             M = obj.mwbm_icub.massMatrix(stFltb.wf_R_b, stFltb.wf_p_b, q_j);
         end
 
-        function tau = invdyn(obj, q_j, dq_j, ddq_j, stFltb)
+        function tau_gen = invdyn(obj, q_j, dq_j, ddq_j, lnk_name, stFltb)
             if ~exist('stFltb', 'var')
                 stFltb = obj.mwbm_icub.getFloatingBaseState();
             end
 
-            M      = obj.mwbm_icub.massMatrix(stFltb.wf_R_b, stFltb.wf_p_b, q_j);
-            tau_c  = obj.mwbm_icub.coriolisCentrifugalForces(stFltb.wf_R_b, stFltb.wf_p_b, q_j, dq_j, stFltb.wf_v_b);
-            tau_g  = obj.mwbm_icub.gravityForces(stFltb.wf_R_b, stFltb.wf_p_b, q_j);
-            tau_fr = obj.friction(dq_j);
+            % M      = obj.mwbm_icub.massMatrix(stFltb.wf_R_b, stFltb.wf_p_b, q_j);
+            % tau_c  = obj.mwbm_icub.coriolisCentrifugalForces(stFltb.wf_R_b, stFltb.wf_p_b, q_j, dq_j, stFltb.wf_v_b);
+            % tau_g  = obj.mwbm_icub.gravityForces(stFltb.wf_R_b, stFltb.wf_p_b, q_j);
+            % tau_fr = obj.mwbm_icub.frictionForces(dq_j);
 
-            tau = M*ddq_j + tau_c + tau_g + tau_fr;
+            % tau_gen = M*ddq_j + tau_c + tau_g + tau_fr;
+
+            dv_b = ones(6,1); % dummy ...
+            tau_gen = obj.mwbm_icub.inverseDynamics(stFltb.wf_R_b, stFltb.wf_p_b, q_j, dq_j, stFltb.v_b, ddq_j, dv_b, lnk_name);
+        end
+
+        function resv = islimit(obj, q_j)
+            resv = obj.mwbm_icub.isJointLimit(q_j);
         end
 
         function I_acc = Iqdd(obj, q_j, dq_j, tau, stFltb) % ??
@@ -164,11 +182,13 @@ classdef iCubWBM < IWBM.WBMInterface
             J_0 = obj.mwbm_icub.jacobian(stFltb.wf_R_b, stFltb.wf_p_b, q_j, lnk_name);
         end
 
-        function jacobn = jacobn(obj, q_j, stFltb) % ??
+        function J_n = jacobn(obj, q_j, stFltb) % Jacobian matrix in tool frame (end-effector frame)
             if ~exist('stFltb', 'var')
                 stFltb = obj.mwbm_icub.getFloatingBaseState();
             end
-
+            % compute the jacobian of the tooltip:
+            % use the default tool (1st element of the tool list)
+            J_n = obj.mwbm_icub.jacobianTool(obj, stFltb.wf_R_b, stFltb.wf_p_b, q_j, 1);
         end
 
         function T0_n = T0_m(obj, q_j, lnk_name, stFltb) % ??
@@ -221,13 +241,19 @@ classdef iCubWBM < IWBM.WBMInterface
         end
 
         function set.base_tform(obj, tform)
-            if isempty(tform)
-                obj.mbase_tform = eye(4,4);
-            elseif ~WBM.utilities.isHomog(tform)
-                error('iCubWBM::set.base_tform: %s', WBM.wbmErrorMsg.NOT_HOMOG_MAT);
-            else
-                obj.mbase_tform = tform;
+            if ~exist('tform', 'var') % is initialization correct here, or only eye(4,4)? (not sure)
+                R_rlnk = obj.mwbm_icub.wf_R_rootLnk;
+                p_rlnk = obj.mwbm_icub.wf_p_rootLnk;
+                obj.mbase_tform = WBM.utilities.posRotm2tform(p_rlnk, R_rlnk);
+                return
             end
+            % else ...
+            if ~WBM.utilities.isHomog(tform)
+                error('iCubWBM::set.base_tform: %s', WBM.wbmErrorMsg.NOT_HOMOG_MAT);
+            end
+            [p_rlnk, R_rlnk] = WBM.utilities.tform2posRotm(tform);
+            mwbm_icub.updateWorldFrame(R_rlnk, p_rlnk);
+            obj.mbase_tform = tform;
         end
 
         function tform = get.base_tform(obj)
@@ -235,13 +261,21 @@ classdef iCubWBM < IWBM.WBMInterface
         end
 
         function set.tool_tform(obj, tform)
-            if isempty(tform)
+            if ~exist('tform', 'var')
                 obj.mtool_tform = eye(4,4);
-            elseif ~WBM.utilities.isHomog(tform)
-                error('iCubWBM::set.tool_tform: %s', WBM.wbmErrorMsg.NOT_HOMOG_MAT);
-            else
-                obj.mtool_tform = tform;
+
+                [tool_lnks, nTools] = obj.mwbm_icub.getToolLinks();
+                if (nTools > 0)
+                    % use the default tool (is always the first element of the list)
+                    obj.mtool_tform(1:3,4) = tool_lnks(1,1).rlnk_p_tp;
+                end
+                return
             end
+            % else ...
+            if ~WBM.utilities.isHomog(tform)
+                error('iCubWBM::set.tool_tform: %s', WBM.wbmErrorMsg.NOT_HOMOG_MAT);
+            end
+            obj.mtool_tform = tform;
         end
 
         function tform = get.tool_tform(obj)
@@ -294,6 +328,10 @@ classdef iCubWBM < IWBM.WBMInterface
 
         function g_wf = get.gravity(obj)
             g_wf = obj.mwbm_icub.g_wf;
+        end
+
+        function lmts = get.qlim(obj)
+            lmts = obj.mwbm_icub.joint_limits;
         end
 
         function ndof = get.ndof(obj)

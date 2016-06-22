@@ -1,70 +1,83 @@
 classdef (Abstract) WBMInterface < handle
     properties(Abstract, Dependent)
         % public properties for fast get/set methods:
-        ndof@uint16 scalar
-        robot_model@WBM.wbmBaseModelParams
-        robot_config@WBM.wbmBaseRobotConfig
-        stFltBase@WBM.wbmFltgBaseState
-        base@double matrix % ??
+        base_tform@double matrix
+        tool_tform@double matrix
+        model_name@char
+        robot_manuf@char
+        robot_name@char
+        robot_parameters@WBM.wbmBaseRobotParams
+        sim_config@WBM.absSimConfig
+        gravity@double vector
+        qlim@double    vector
+        ndof@uint16    scalar
     end
 
-    properties(Abstract, Access = protected)
-        mwbm_icub@WBM.WBM
-        mstFltBase@WBM.wbmFltgBaseState;
-        mstv@double vector
-    end
-
-    properties(SetAccess = private, GetAccess = public)
-        config % ??
-    end
+    % properties(SetAccess = private, GetAccess = public)
+    %     config % ??
+    % end
 
     methods(Abstract)
         % Constructor:
-        %obj = WBMInterface(robot_model, robot_config, wf2FixLnk, L, varargin)
+        %obj = WBMInterface(robot_model, robot_config, wf2fixLnk)
+
+        initRobot(robot_wbm)
+
+        initRobotFcn(obj, fhInitRobotWBM, wf2fixLnk)
+
+        initBaseRobotParams(obj, base_params)
 
         delete(obj)
 
-        display(obj)
+        stFltb = getFltgBase(obj)
 
-        T = A(obj, joints, q_j)
+        ddq_j = accel(obj, q_j, dq_j, tau, stFltb) % joint acceleration
 
-        T0_m = T0_m(obj, q_j, lnk_name)
+        %T = A(obj, joints, q_j) % ??
 
-        J_0 = jacob0(obj, q_j, lnk_name)
+        tau_c = coriolis(obj, q_j, dq_j, stFltb)
 
-        J_dot = jacob_dot(obj, q_j, dq_j, lnk_name)
+        [dstvChi, C_vq] = fdyn(obj, t, stvChi, ctrlTrqs)
 
-        M = inertia(obj, q_j)
+        w_H_rlnk = fkine(obj, q_j, link_name, stFltb)
 
-        f_c = coriolis(obj, q_j, dq_j)
+        tau_fr = friction(obj, dq_j)
 
-        f_g = gravload(obj, q_j, g_wf)
+        tau_g = gravload(obj, q_j, stFltb)
 
-        % set.tool(obj, v)
+        updateGrav(obj, g_wf)
 
-        set.base(obj, v) % ??
+        M = inertia(obj, q_j, stFltb)
+
+        tau_gen = invdyn(obj, q_j, dq_j, ddq_j, stFltb)
+
+        resv = islimit(obj, q_j)
+
+        I_acc = Iqdd(obj, q_j, dq_j, tau, stFltb) % ??
+
+        dJ = jacob_dot(obj, q_j, dq_j, lnk_name, stFltb)
+
+        J_0 = jacob0(obj, q_j, lnk_name, stFltb) % jacobian in the wolrd frame.
+
+        J_n = jacobn(obj, q_j, stFltb) % jacobian in the tool frame.
+
+        T0_n = T0_m(obj, q_j, lnk_name, stFltb) % ??
+
+        payload(obj, pt_mass, pos, link_names)
+
+        [M, C_qv, h_c] = wholeBodyDyn(obj, q_j, dq_j, stFltb)
+
+        setupSim(obj, sim_config)
+
+        visualizeFDyn(obj, x_out, sim_tstep, vis_ctrl)
+
+        qjout = sortJointValue(obj, string_search, q_j, valueVector) % ??
+
+        dispParams(obj, prec)
 
         % set.offset(obj, v)
 
         % v = get.offset(obj)
-
-        % set.qlim(obj, v)
-
-        % v = get.qlim(obj)
-
-        % set.gravity(obj, v)
-
-        % v = get.config(obj)
-
-        payload(obj, m, p) % ??
-
-        stFltBase = get.stFltBase(obj)
-
-        robot_model = get.robot_model(obj)
-
-        robot_config = get.robot_config(obj)
-
-        ndof = get.ndof(obj)
 
     end
 end
