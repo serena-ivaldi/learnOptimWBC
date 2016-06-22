@@ -2,7 +2,7 @@
 function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, name_dat]=OptimizationRoutine(number_of_iteration,n_of_experiment,iter,init_parameters_from_out)  
     %% initialize all the data
     [bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,learn_approach,constr,inst,generation_of_starting_point,niter,...
-    explorationRate,cmaes_value_range,qi,qdi,fixed_step,torque_saturation,maxtime,rawTextFromStorage,name_dat]=Init();
+    explorationRate,cmaes_value_range,qi,qdi,fixed_step,torque_saturation,maxtime,rawTextFromStorage,name_dat,fminconFlag]=Init();
  
      %% optimization 
      % im using init_value from outside
@@ -22,7 +22,11 @@ function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, co
      
      %% execution of the optimization routine
      tic
-     [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded] = inst.CMAES(controller.GetTotalParamNum(),start_action,niter,explorationRate,cmaes_value_range);
+     if ~fminconFlag
+        [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded] = inst.CMAES(controller.GetTotalParamNum(),start_action,niter,explorationRate,cmaes_value_range);
+     else
+         [~,~,~,~] = inst.minimize(controller.GetTotalParamNum(),start_action,cmaes_value_range);
+     end
      exec_time = toc
      % analisys of the optimization result for building repertoire
      %[index, search_params ] = flann_build_index(BestActionPerEachGen.policy, struct('algorithm','kmeans','branching',32,'iterations',3,'checks',120)); 

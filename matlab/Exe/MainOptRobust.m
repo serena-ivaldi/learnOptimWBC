@@ -23,7 +23,7 @@ path=fileparts(allpath);
 complete_path = strcat(path,'/results/',name_folder);
 mkdir(complete_path);
 
-parfor iter=1:number_of_experiment_ripetition
+for iter=1:number_of_experiment_ripetition
     [tau, mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded]=OptimizationRoutine(number_of_experiment_ripetition,n_of_experiment,iter,init_parameters);
      all_results{iter} = BestActionPerEachGen;
 end

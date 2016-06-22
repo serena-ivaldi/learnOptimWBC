@@ -52,7 +52,7 @@ data2save = [];
 catch err
      disp('i am in evaluate CMAES error side')
      % cancel all the information relative to the current iteration (control action)
-     feval(obj.clean_function,obj);
+     feval(obj.clean_function,obj,'fake_input');
      succeeded = 0;
      performance = -1;
      % here im going to save the average perfomance without correction

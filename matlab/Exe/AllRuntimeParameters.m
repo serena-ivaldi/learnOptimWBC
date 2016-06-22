@@ -173,7 +173,7 @@ switch CONTROLLERTYPE
                                  'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
                                  'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
                                  'DistanceObs','DistanceObs','DistanceObs','DistanceObs'}; % vector of functions handle for computing the constraints
-        constraints_type = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];  % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
+        constraints_type = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];  % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
         % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
         constraints_values =[+170*(pi/180), -170*(pi/180),120*(pi/180), -120*(pi/180),+170*(pi/180), -170*(pi/180),120*(pi/180), -120*(pi/180),...
                              +170*(pi/180),-170*(pi/180),120*(pi/180), -120*(pi/180),+170*(pi/180), -170*(pi/180),...
@@ -271,3 +271,6 @@ rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF'],'match','
 
 % join the general static parameter with the particular static one
 rawTextFromStorage = strcat(rawTextFromStorage,rawTextFromStoragePart);
+
+%% flag debug fmincon test
+fminconFlag = true;

@@ -1,4 +1,4 @@
-%% this class is an implementation of a vanilla version penalty function
+%% this class is an implementation of constraints computation for ipopt and fmincon
 %% 
 
 
@@ -6,12 +6,12 @@
 % than we update the information inside the object smetimes direcrtly 
 
 
-classdef  FixPenalty < Optimization.AbstractPenalty
+classdef  ObjProblemPenalty < Optimization.AbstractPenalty
     
    properties
-       pop_size              % number of candidates for each generations
+       pop_size              % number of candidates for each generations (NOT USED)
        n_constraint          % number of constraints to handle
-       penalties             % matrix of penalties each column is a constraints each row is a candidate
+       penalties             % matrix of penalties each column is a constraints each row is a candidate (NOT USED)
        fitness_penalties     % value to add to the fintess function of each candidates
        constraints_functions % vector of functions handle for computing the constraints (actually a string vector that need str2func conversion to get the handles)
        constraints_type      % vector that specifies if the constraints is a equality or an inequality
@@ -21,7 +21,7 @@ classdef  FixPenalty < Optimization.AbstractPenalty
        
    methods
        
-       function obj = FixPenalty(search_space_dimension,constraints_functions,constraints_type,constraints_values)
+       function obj = ObjProblemPenalty(search_space_dimension,constraints_functions,constraints_type,constraints_values)
            obj.pop_size = round(4 + 3 * log(search_space_dimension)); % this choice is the same used in CMAES when lambda is not spcified
            obj.n_constraint = length(constraints_functions);
            obj.constraints_functions = constraints_functions;
@@ -46,34 +46,22 @@ classdef  FixPenalty < Optimization.AbstractPenalty
        % To call in EvaluateCmaes
        % in this function i perform further elaborations with the
        % constraints violations. 
-       % with c_index = -1 i manage the situation where i have to update just one candidate 
+       % with c_index = is not used anymore and i will put -1 only for compatibility with the other functions 
        function ComputeConstraintsViolation(obj,c_index)
            % here i check if i im considering a set of candidate
-           if(c_index>0)
-               for i=1:obj.n_constraint
-                   % i sum only the constraints violation it means that i have to discard value less then zero 
-                   % in this part i consider only the violation on each constraint for the overall experiments
-                   index = obj.constraints_violation(i,:)>0;
-                   obj.penalties(c_index,i) = sum(obj.constraints_violation(i,index),2); 
-                   if(isempty(obj.penalties(c_index,i)))
-                       obj.penalties(c_index,i) = 0;   
-                   end
+           for i=1:obj.n_constraint
+               % i sum only the constraints violation it means that i have to discard value less then zero 
+               % in this part i consider only the violation on each constraint for the overall experiments
+               index = obj.constraints_violation(i,:)>0;
+               obj.penalties(1,i) = sum(obj.constraints_violation(i,index),2); 
+               if(isempty(obj.penalties(1,i)))
+                   obj.penalties(1,i) = 0;   
                end
-               obj.ComputePenalties(c_index);
-           else
-               for i=1:obj.n_constraint
-                   % i sum only the constraints violation it means that i have to discard value less then zero 
-                   % in this part i consider only the violation on each constraint for the overall experiments
-                   index = obj.constraints_violation(i,:)>0;
-                   obj.penalties(1,i) = sum(obj.constraints_violation(i,index),2); 
-                   if(isempty(obj.penalties(1,i)))
-                       obj.penalties(1,i) = 0;   
-                   end
-               end
-               obj.ComputePenalties(1);
            end
+           %c_index = 1;
+           %obj.ComputePenalties(c_index);
        end  
-       % to call in CMAES 
+       % to call in CMAES (NOT USED)
        % in this case im not using cur_index
        function [new_costs, new_performances] = FitnessWithPenalty(obj,policyId,old_costs,old_performances,cur_index)
            % for the performance because im considering negative value i have to subtract the penalties  
