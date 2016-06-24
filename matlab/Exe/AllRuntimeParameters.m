@@ -4,7 +4,7 @@
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
-time_struct.tf = 15;
+time_struct.tf = 20;
 time_struct.step = 0.001;
 
 %% TASK PARAMETERS
@@ -116,8 +116,8 @@ switch CONTROLLERTYPE
         % regularized case i have to do N^(-1) 
         % not regularized case i have N^(-1/2)
         metric = {'M^(1)','M^(1)','M^(1)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
-        kd = [30,30,30];
-        kp = [10,10,10]; % row vector one for each chain
+        kd = [110,110,110];
+        kp = [70,70,70]; % row vector one for each chain
         for i= 1:chains.GetNumChains()
             for par = 1:chains.GetNumTasks(i)
                 if(strcmp(traj_type{i},'impedance'))
@@ -272,5 +272,3 @@ rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF'],'match','
 % join the general static parameter with the particular static one
 rawTextFromStorage = strcat(rawTextFromStorage,rawTextFromStoragePart);
 
-%% flag debug fmincon test
-fminconFlag = true;

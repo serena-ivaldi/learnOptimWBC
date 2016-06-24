@@ -12,7 +12,7 @@ classdef ObjProblem < handle
         LB                      % lower bound
         UB                      % upper bound
         X0                      % starting point
-        current_point_for_inspection % for debug
+        %current_point_for_inspection % for DEBUG
         c                       % constraints value (to be compliant with fmincon)
         ceq                     % constraints value (to be compliant with fmincon)
         
@@ -33,9 +33,6 @@ classdef ObjProblem < handle
     
     methods
         % Constructor which define the object according to the problem
-        %either you just passe in the name (g07,g09 or HB) or the same
-        %signature than Optimization.Instance
-        %   ObjProblem(name)        or
         %   ObjProblem(constr,learn_procedure,run_function,fitness,clean_function,input_4_run)
         function obj = ObjProblem(n_search_space,boundaries,constr,algorithm_selector,run_function,fitness,clean_function,input_4_run)                   
             obj.penalty_handling = constr;
@@ -51,8 +48,8 @@ classdef ObjProblem < handle
                 obj.LB = boundaries{1};
                 obj.UB = boundaries{2};
             elseif(isvector(boundaries))
-                obj.LB = ones(1,num_of_param).*boundaries(1,1);
-                obj.UB = ones(1,num_of_param).*boundaries(1,2);
+                obj.LB = ones(1,n_search_space).*boundaries(1,1);
+                obj.UB = ones(1,n_search_space).*boundaries(1,2);
             else
                 error('something wrong with cmaes_value_range')
             end
@@ -62,14 +59,6 @@ classdef ObjProblem < handle
         function input_vec = CreateInputFromParameters(obj,parameters) 
             input_vec = repmat({parameters},1,obj.penalty_handling.n_constraint);  
        end
-        
-        %generation of a random starting point inside the limit boundaries
-        function randStartPoint(obj)
-            obj.X0=zeros(obj.n_search_space,1);
-            for i=1:length(obj.LB)
-                obj.X0(i) = ( obj.UB(i) -  obj.LB(i))*rand() +  obj.LB(i);
-            end
-        end
         
         % This function compute the fitness value
         function fitvalue = computFit(obj,input)
@@ -100,7 +89,7 @@ classdef ObjProblem < handle
                 c = obj.c;
                 ceq = obj.ceq;
             catch err
-                disp('contraintesFactice failed');
+                disp('computeConstr failed');
             end
         end
         
@@ -130,36 +119,40 @@ classdef ObjProblem < handle
             obj.c = c;
             obj.ceq = ceq;
         end
-        
-        
-        
+       
         % Do the optimization (only with fmincon for now )
         % the signature is exactly the same as optimization.CMAES
         % will need a flag later to switch between fmincon and ipopt
-        function [m1,m2,m3,m4] = minimize(obj)
-            options = optimoptions('fmincon','OutputFcn',@obj.outfun,'Display','iter','Algorithm','sqp');
-            options.MaxFunEvals = 500;
-            options.TolX = 1e-15; % the step size tolerance
-            %options.UseParallel = true;
-            fminconPb.options = options;
-            fminconPb.solver = 'fmincon';
-            fminconPb.X0 = obj.X0;
-            fminconPb.objective = @obj.computFit;
-            obj.fitness_result = [];
-            fminconPb.LB = obj.LB;
-            fminconPb.UB = obj.UB;
-            fminconPb.NONLCON = @obj.computeConstr;
-            
-            tic
-            [X,FVAL] = fmincon(fminconPb);
-            m4 =  toc;
-            
-            m1 = obj.J0 - FVAL; %metric 1 = fitness error
-            
-            obj.computConstrViol(X); %metric constr violation
-            m2 = sum(abs((obj.c > 0).*obj.c)) + sum(abs((obj.ceq ~= 0).*obj.ceq));
-            
-            m3 = obj.IndentifySteadyState(obj.fitness_result,obj.b); %metric 3 = # of steps to steady value
+        function [fitness,bestAction] = minimize(obj,starting_point,MaxFunEvals,threshold)   
+            switch obj.algorithm_selector
+                case 'fmincon'    
+                    options = optimoptions('fmincon','OutputFcn',@obj.outfun,'Display','iter','Algorithm','sqp');
+                    options.MaxFunEvals = MaxFunEvals;
+                    options.TolX = 1e-15; % the step size tolerance
+                    %options.UseParallel = true;
+                    fminconPb.options = options;
+                    fminconPb.solver = 'fmincon';
+                    fminconPb.X0 = starting_point;
+                    fminconPb.objective = @obj.computFit;
+                    obj.fitness_result = [];
+                    fminconPb.LB = obj.LB;
+                    fminconPb.UB = obj.UB;
+                    fminconPb.NONLCON = @obj.computeConstr;
+                    %tic
+                    [X,FVAL] = fmincon(fminconPb);
+                    %m4 = toc;
+                otherwise
+                    fprintf('Error, no such method is found! \n')
+            end
+%             m1 = obj.J0 - FVAL; %metric 1 = fitness error
+%             
+%             obj.computConstrViol(X); %metric constr violation
+%             m2 = sum(abs((obj.c > 0).*obj.c)) + sum(abs((obj.ceq ~= 0).*obj.ceq));
+%             
+%             m3 = obj.IndentifySteadyState(obj.fitness_result,threshold); %metric 3 = # of steps to steady value
+            fitness = obj.fitness_result;
+            bestAction.parameters = X;
+            bestAction.performance = FVAL;
         end
         
         

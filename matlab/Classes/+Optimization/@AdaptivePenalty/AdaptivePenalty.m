@@ -17,6 +17,7 @@ classdef  AdaptivePenalty < Optimization.AbstractPenalty
        search_space_dim      % dimesion of the search space of our problem
        fitness_penalties     % is a matrix of the epsilon normalized constrained values (lambda x m) where lambda is the number of candidates and m is the number of constraints   
        n_constraint          % number of constraints to handle
+       penalties             % matrix of penalties each column is a constraints each row is a candidate
        constraints_functions % vector of functions handle for computing the constraints (actually a string vector that need str2func conversion to get the handles)
        constraints_type      % vector that specifies if the constraints is a equality or an inequality. 1 is a disequality, 0 is an equality
        constraints_values    % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
@@ -39,6 +40,7 @@ classdef  AdaptivePenalty < Optimization.AbstractPenalty
            obj.constraints_type = constraints_type;   
            obj.constraints_values = constraints_values;   
            obj.constraints_violation = zeros(obj.n_constraint,1);
+           obj.penalties = zeros(obj.pop_size,obj.n_constraint);
            obj.fitness_penalties = zeros(obj.pop_size,obj.n_constraint);
        end
        % To call in Fitness
@@ -51,15 +53,15 @@ classdef  AdaptivePenalty < Optimization.AbstractPenalty
        % to call in ComputeConstraintsViolation and EvaluateCmaes or FitnessWithPenalty
        % through switch_flag i control if im computing penalties in
        % FitnessWithPenalty or in ComputeConstraintsViolation
-       function penalties=ComputePenalties(obj,cur_index,switch_flag)
-           penalties = zeros(1,obj.pop_size);
+       function penalt=ComputePenalties(obj,cur_index,switch_flag)
+           penalt = zeros(1,obj.pop_size);
            if(switch_flag)
               for i=1:obj.pop_size
                   cur_row =obj.fitness_penalties(i,:);
                   % i zeroing all the value minus than zero
                   index = cur_row < 0;
                   cur_row(1,index) = 0;
-                  penalties(1,i) = (cur_row.^(2))*obj.weights(cur_index,:)';  
+                  penalt(1,i) = (cur_row.^(2))*obj.weights(cur_index,:)';  
               end
            else
               cur_row =obj.fitness_penalties(1,:);
@@ -85,16 +87,16 @@ classdef  AdaptivePenalty < Optimization.AbstractPenalty
                    % to sum up all the negative
                    index = obj.constraints_violation(i,:)>0;
                    if(any(index))
-                     overall_const_viol = sum(obj.constraints_violation(i,index),2);
+                     obj.penalties(c_index,i) = sum(obj.constraints_violation(i,index),2);
                    else
-                     overall_const_viol = sum(obj.constraints_violation(i,:),2);
+                     obj.penalties(c_index,i) = sum(obj.constraints_violation(i,:),2);
                    end
                    % inequality constraints
                    if (obj.constraints_type(i)==1)    
-                        obj.fitness_penalties(c_index,i) = (overall_const_viol + obj.epsilon(i))/obj.epsilon(i);
+                        obj.fitness_penalties(c_index,i) = (obj.penalties(c_index,i) + obj.epsilon(i))/obj.epsilon(i);
                    % equality constraints
                    else
-                        obj.fitness_penalties(c_index,i) = overall_const_viol/obj.epsilon(i);
+                        obj.fitness_penalties(c_index,i) = obj.penalties(c_index,i)/obj.epsilon(i);
                    end
                end
            else
@@ -104,16 +106,16 @@ classdef  AdaptivePenalty < Optimization.AbstractPenalty
                    % to sum up all the negative
                    index = obj.constraints_violation(i,:)>0;
                    if(any(index))
-                     overall_const_viol = sum(obj.constraints_violation(i,index),2);
+                     obj.penalties(1,i) = sum(obj.constraints_violation(i,index),2);
                    else
-                     overall_const_viol = sum(obj.constraints_violation(i,:),2);
+                     obj.penalties(1,i) = sum(obj.constraints_violation(i,:),2);
                    end
                    % inequality constraints
                    if (obj.constraints_type(i)==1)    
-                        obj.fitness_penalties(1,i) = (overall_const_viol + obj.epsilon(i))/obj.epsilon(i);
+                        obj.fitness_penalties(1,i) = (obj.penalties(1,i) + obj.epsilon(i))/obj.epsilon(i);
                    % equality constraints
                    else
-                        obj.fitness_penalties(1,i) = overall_const_viol/obj.epsilon(i);
+                        obj.fitness_penalties(1,i) = obj.penalties(1,i)/obj.epsilon(i);
                    end
                end
                % i have to change the sign because i need cur index to

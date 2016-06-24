@@ -1,5 +1,5 @@
 function [bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,constr,learn_approach,inst,generation_of_starting_point,...
-    niter,explorationRate,cmaes_value_range,qi,qdi,fixed_step,torque_saturation,maxtime,rawTextFromStorage,name_dat,fminconFlag]=Init()
+    niter,explorationRate,cmaes_value_range,qi,qdi,fixed_step,torque_saturation,maxtime,rawTextFromStorage,name_dat]=Init()
 %% parameters
 AllRuntimeParameters
 
@@ -88,9 +88,6 @@ end
 
 %% Instance
 input{5} = controller;
-if ~fminconFlag
-    inst = Optimization.Instance(constr,learn_approach,run_function,fitness,clean_function,input);
-else
-    inst = ObjProblem(constr,learn_approach,run_function,fitness,clean_function,input);
-end
+inst = Optimization.Instance(constr,learn_approach,run_function,fitness,clean_function,input);
+
 end

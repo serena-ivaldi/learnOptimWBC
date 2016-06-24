@@ -80,6 +80,69 @@ classdef  Instance
             input_vec = repmat({parameters},1,obj.penalty_handling.n_constraint);  
        end
        
+       % to have a common interface with Objproblem im introducing a
+       % function to evaluate constraints at some point
+       function [c, ceq] = computeConstr(obj,input)
+            try
+               [c, ceq] = obj.computConstrViol(input);
+            catch err
+                disp('computeConstr failed');
+            end
+       end
+       
+       % inner function to have a common interface with Objproblem im introducing a
+       % function to evaluate constraints at some point
+       function [c, ceq] = computConstrViol(obj,input)                    
+            % each time i have to compute this 
+            try
+                disp('i am in computConstrViol fitness computation')
+                [output]=obj.run(input);
+                obj.fitness(obj,output); %minus because we are maximizing and fmincon only minimize
+                c_index = -1; %i'm just considering one candidate (cf. FixPenalty class)
+                obj.penalty_handling.ComputeConstraintsViolation(c_index);
+                c = [];
+                ceq = [];
+                for i=1:length(obj.penalty_handling.constraints_type)
+                    if  obj.penalty_handling.constraints_type(i)
+                        c = [c; obj.penalty_handling.penalties(1,i)];
+                    else
+                        ceq = [ceq; obj.penalty_handling.penalties(1,i)];
+                    end
+                end 
+                % i need to check the emptyness to be sure that im giving back
+                % something meanigfull
+                if(isempty(c))
+                    c = 0;
+                end
+                if(isempty(ceq))  
+                    c = 0;
+                end
+            catch err
+                disp('i am in computConstrViol error side fitness computation ')
+                fitvalue = 1; %penalty if the computation of the fitness failed
+                c_index = -1; %i'm just considering one candidate (cf. FixPenalty class)
+                obj.penalty_handling.ComputeConstraintsViolation(c_index);
+                c = [];
+                ceq = [];
+                for i=1:length(obj.penalty_handling.constraints_type)
+                    if  obj.penalty_handling.constraints_type(i)
+                        c = [c; obj.penalty_handling.penalties(1,i)];
+                    else
+                        ceq = [ceq; obj.penalty_handling.penalties(1,i)];
+                    end
+                end 
+                % i need to check the emptyness to be sure that im giving back
+                % something meanigfull
+                if(isempty(c))
+                    c = 0;
+                end
+                if(isempty(ceq))  
+                    ceq = 0;
+                end
+            end 
+           
+       end
+       
    end
     
 end
