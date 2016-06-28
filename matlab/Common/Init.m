@@ -1,5 +1,5 @@
 function [bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,constr,learn_approach,inst,generation_of_starting_point,...
-    niter,explorationRate,cmaes_value_range,qi,qdi,fixed_step,torque_saturation,maxtime,rawTextFromStorage,name_dat]=Init()
+    niter,explorationRate,cmaes_value_range,qi,qdi,fixed_step,torque_saturation,maxtime,rawTextFromStorage,name_dat]=Init(optim)
 %% parameters
 AllRuntimeParameters
 
@@ -40,7 +40,7 @@ switch CONTROLLERTYPE
                     number_of_action = chains.GetNumTasks(1) + repellers.GetNumberOfWeightFuncRep(1);
                 end
                 %---
-                alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,value_range,precomp_sample,numeric_theta,false);
+                alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,value_range,precomp_sample,numeric_theta,optim);
             case 'constant'
                 alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,value_range_for_optimization_routine,time_struct);
             case 'handTuned'

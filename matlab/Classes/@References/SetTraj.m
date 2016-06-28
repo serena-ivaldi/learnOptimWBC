@@ -65,7 +65,24 @@ function SetTraj(obj,ind_subchain,ind_task)
          obj.trajectories{ind_subchain,ind_task}.p = p;
          obj.trajectories{ind_subchain,ind_task}.pd = pd;
          obj.trajectories{ind_subchain,ind_task}.pdd = pdd;
-         obj.trajectories{ind_subchain,ind_task}.time =t;  
+         obj.trajectories{ind_subchain,ind_task}.time =t;
+         % if type_of_traj is sampled the value of p pd and pdd is
+         % overwritten with only one value
+         if(strcmp(obj.type_of_traj{ind_subchain,ind_task},'sampled'))
+             [p,pd,pdd]=GetFuncTraj(obj,ind_subchain,ind_task,0);
+             obj.trajectories{ind_subchain,ind_task}.p = p;
+             obj.trajectories{ind_subchain,ind_task}.pd = pd;
+             obj.trajectories{ind_subchain,ind_task}.pdd = pdd;
+         end
+     elseif(strcmp(obj.traj{ind_subchain,ind_task},'ball'))
+         [p,pd,pdd,t]=FixedBall(obj.geom_parameters{ind_subchain,ind_task});
+         obj.trajectories{ind_subchain,ind_task}.p = p;
+         obj.trajectories{ind_subchain,ind_task}.pd = pd;
+         obj.trajectories{ind_subchain,ind_task}.pdd = pdd;
+         obj.trajectories{ind_subchain,ind_task}.time =t;
+         obj.parameter_dim{ind_subchain,ind_task} = 3;
      end 
+  
+     
 end
 

@@ -6,10 +6,10 @@ function fit  = fitnessHumanoids1(obj,output)
     %%%;;
     downsaple = 10;
     L = 1; 
-    max_effort = 1.0000e+07;
-    max_traj_error = 4000;
+    max_effort = 4.0000e+07;
+    max_traj_error = 2000;
     weight_effort = 1;
-    weight_traj_err = 1;
+    weight_traj_err = 2;
     %%%EOF
     contr = obj.input_4_run{5};
     traj_err= 0;

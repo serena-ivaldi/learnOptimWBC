@@ -4,7 +4,7 @@
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
-time_struct.tf = 20;
+time_struct.tf = 15;
 time_struct.step = 0.001;
 
 %% TASK PARAMETERS
@@ -17,7 +17,8 @@ time_struct.step = 0.001;
 %name_dat = 'Jaco1.3_scene1.1';
 %name_dat = 'LBR4p2.2_scene2_generalization';
 %name_dat = 'lwrsimple1.0_scene_test_obs';
-name_dat = 'humanoid_bench_lbrsimple_1.0';
+%name_dat = 'humanoid_bench_lbrsimple_1.1';
+name_dat = 'humanoid_bench_generator_lbrsimple_1.0';
 path=LoadParameters(name_dat);
 load(path);
 
@@ -36,7 +37,7 @@ simulator_type = {'rbt'};
 % rbt sim
 % define the type of integration of the sytem of differential equation
 fixed_step = false; %true;
-torque_saturation =10000; % high value no saturation
+torque_saturation =10000; % high value == no saturation
 maxtime = 1000; % maximum time before a simulation is stopped for being too long
 % other sim
 
@@ -63,7 +64,7 @@ switch CONTROLLERTYPE
         single_alpha_chain2 = [1];
         single_alpha{1} = single_alpha_chain1;
         single_alpha{2} = single_alpha_chain2;
-        type_of_rep_strct={'extended_decoupled' 'extended_combine','stacked' };
+        type_of_rep_strct={'extended_decoupled','extended_combine','stacked' };
 
         %% ALPHA PARAMETERS
         choose_alpha = 'RBF';  % RBF , constant, handTuned
@@ -115,9 +116,9 @@ switch CONTROLLERTYPE
         % the metric change between regularized and not regularized because in the
         % regularized case i have to do N^(-1) 
         % not regularized case i have N^(-1/2)
-        metric = {'M^(1)','M^(1)','M^(1)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
-        kd = [110,110,110];
-        kp = [70,70,70]; % row vector one for each chain
+        metric = {'M^(1)','M^(1)','M^(1)','M^(1)','M^(1)','M^(1)','M^(1)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
+        kd = [110,110,110,110,110,110,110];
+        kp = [70,70,70,70,70,70,70]; % row vector one for each chain
         for i= 1:chains.GetNumChains()
             for par = 1:chains.GetNumTasks(i)
                 if(strcmp(traj_type{i},'impedance'))
@@ -138,8 +139,8 @@ switch CONTROLLERTYPE
             end
          end
          % secondary task gains
-         kd = [110,110,110];
-         kp = [70,70,70]; % row vector one for each chain
+         kd = [110,110,110,110,110,110,110];
+         kp = [70,70,70,70,70,70,70]; % row vector one for each chain
          for i= 1:chains.GetNumChains()
             for par = 1:chains.GetNumTasks(i)
                  if(strcmp(traj_type_sec{i},'impedance'))
@@ -162,7 +163,7 @@ switch CONTROLLERTYPE
         % with this term i introduce a damped least square structure inside my
         % controller if regularizer is 0 i remove the regularizer action 
         % ONE FOR EACH TASK
-        regularizer_chain_1 = [0 0 0 0.001]; 
+        regularizer_chain_1 = [0 0 0 0 0 0 0 0.001]; 
         regularized_chain_2 = [1];
         regularizer{1} = regularizer_chain_1;
         regularizer{2} = regularized_chain_2;
@@ -203,7 +204,9 @@ switch CONTROLLERTYPE
         user_defined_start_action=[-0.686896675401947,1.22650641453222,-3.27247260213565,12.6539506696606,11.9349914795820,12.3072074998126,11.4267899497361,13.3737941021526,8.77645179253447,-4.69418318274421,11.1958799565396,1.32058911902880,-0.691100222964068,0.286830798370383,-0.162567001268804];
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
         niter = 35;  %number of generations
-        cmaes_value_range = [-14 , 14];  % boudn that define the search space
+        %cmaes_value_range = [-14 , 14];  % boudn that define the search space
+        cmaes_value_range{1} = [-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-0.005,-0.005,-0.005 ];  % lower bound that define the search space
+        cmaes_value_range{2} = [14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,0.005,0.005,0.005];  % upper bound that define the search space
         learn_approach = 'CMAES'; %CMAES (1+1)CMAES    
         %--- Parameter for constraints method
         method_to_use = 'vanilla';  % adaptive , vanilla , empty

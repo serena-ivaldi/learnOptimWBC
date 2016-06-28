@@ -1,5 +1,5 @@
 function [epsilon,search_space_dimension,explorationRate,cmaes_value_range,...
-         n_constraints,constraints_functions,constraints_type,constraints_values,run_function,fitness,clean_function,input]=InitForBenchmark(name_of_file)
+         n_constraints,constraints_functions,constraints_type,constraints_values,run_function,fitness,clean_function,input]=InitForBenchmark(name_of_file,optim)
     %% parameters
     AllRuntimeParameters
 
@@ -40,7 +40,7 @@ function [epsilon,search_space_dimension,explorationRate,cmaes_value_range,...
                         number_of_action = chains.GetNumTasks(1) + repellers.GetNumberOfWeightFuncRep(1);
                     end
                     %---
-                    alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,value_range,precomp_sample,numeric_theta,false);
+                    alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,value_range,precomp_sample,numeric_theta,optim);
                 case 'constant'
                     alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,value_range_for_optimization_routine,time_struct);
                 case 'handTuned'

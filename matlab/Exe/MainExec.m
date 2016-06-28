@@ -3,7 +3,8 @@ close all
 clc
 
 %% initialize all the data
-[bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,constr,learn_approach,inst,~,~,~,~,qi,qdi,fixed_step,torque_saturation,maxtime,rawTextFromStorage,name_dat]=Init();
+optim = false;
+[bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,constr,learn_approach,inst,~,~,~,~,qi,qdi,fixed_step,torque_saturation,maxtime,rawTextFromStorage,name_dat]=Init(optim);
 %% Simulation
 tic
 [t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step,'TorqueSat',torque_saturation,'maxtime',maxtime);

@@ -8,10 +8,10 @@ clc
 
 %% DATA 1
 robotics_experiment = [1,0]; % series of value that say if the current experiment is a robotics experiments or not
-niter_tot = 20;  %number of generations 
+niter_tot = 10;  %number of functions evaluations 
 function_2_test ={'robotic_experiments'};%,'g06','g07','g09','f240','f241','HB'};
-learn_approach = 'fmincon'; %CMAES (1+1)CMAES  CEM,fmincon    with (1+1)CMAES i have to use vanilla constraints management  (temporary) 
-method_to_use = 'fmincon';  % adaptive , vanilla ,empty,fmincon
+learn_approach = 'CMAES'; %CMAES (1+1)CMAES  CEM,fmincon    with (1+1)CMAES i have to use vanilla constraints management  (temporary) 
+method_to_use = 'vanilla';  % adaptive , vanilla ,empty,fmincon
 
 repetition_of_the_experiment = 2; % at least 2
 threshold = 50; % value to identify the beginning of steady state
@@ -36,8 +36,9 @@ for jj=1:number_of_function_2_test
     %% CONSTRAINTS PARAMETERS
     if(robotics_experiment(jj))
         %% initialize all the data
+        optim = true;
         [epsilon,search_space_dimension,explorationRate,cmaes_value_range,...
-         n_constraints,constraints_functions,constraints_type,constraints_values,run_function,fitness,clean_function,input]=InitForBenchmark(function_2_test{jj});
+         n_constraints,constraints_functions,constraints_type,constraints_values,run_function,fitness,clean_function,input]=InitForBenchmark(function_2_test{jj},optim);
          user_defined_start_action = []; % to use for  (1+1)cmaes
     else  
         if(strcmp(function_2_test{jj},'g06'))
@@ -159,21 +160,6 @@ for jj=1:number_of_function_2_test
         clean_function = @EmptyPostprocessing;
         input = [];
     end
-
-    %% CMAES PARAMETER
-    
-%     switch generation_of_starting_point
-%            case 'test'
-%               start_action = user_defined_start_action;
-%            case 'given'
-%                start_action = init_parameters_from_out*ones(1,search_space_dimension);
-%            case 'random'
-%               if(isvec(cmaes_value_range))
-%                   start_action = (cmaes_value_range(1,2)-cmaes_value_range(1,1)).*rand(1,search_space_dimension) + cmaes_value_range(1,1)*ones(1,search_space_dimension);
-%               elseif(iscell(cmaes_value_range))
-%                   start_action = (cmaes_value_range{2}-cmaes_value_range{1}).*rand(1,search_space_dimension) + cmaes_value_range{1};
-%               end
-%     end
 
 %% OPTIMIZATION WITH DERIVATIVE METHOD FOR BENCHMARKING
 %     options = optimoptions(@fmincon,'Algorithm','sqp');

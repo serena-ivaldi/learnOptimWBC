@@ -35,12 +35,13 @@ deg = pi/180;
 
 traj_type = {'cartesian','cartesian','joint'};
 control_type = {'x','x','none'};
-type_of_traj = {'func','func','func'};
-geometric_path = {'fixed','fixed','fixed'};
+type_of_traj = {'sampled','func','sampled'};
+geometric_path = {'fixed','ball','fixed'};
 time_law = {'none','none','none'};
 %parameters first chains
 geom_parameters{1,1} = [-0.001,-0.694,0.714]; 
-geom_parameters{1,2} = [-0.179 -0.326 0.457]; geom_parameters{1,3} = [-90 90 0 -90 0 0 0]* deg;
+geom_parameters{1,2} = [-0.309 -0.469 0.581];
+geom_parameters{1,3} = [-90 90 0 -90 0 0 0]* deg;
 dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); 
 
 % traj_type = {'cartesian'};
@@ -61,8 +62,19 @@ geometric_path_sec = {'fixed','fixed','fixed'};
 time_law_sec = {'linear','linear','linear'};
 %parameters first chains
 geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
-geom_parameters_sec{1,2} = [-0.309 -0.469 0.581]; geom_parameters_sec{1,3} = [120 116 90 0 0 0 0]* deg; 
-dim_of_task_sec{1,1}={[1;1;1]}; dim_of_task_sec{1,2}= [1;1;1]; dim_of_task_sec{1,3}= ones(bot1.n,1); 
+geom_parameters_sec{1,2} = [-0.309 -0.469 0.581];
+geom_parameters_sec{1,3} = [-0.309 -0.469 0.581];
+geom_parameters_sec{1,4} = [-0.309 -0.469 0.581];
+geom_parameters_sec{1,5} = [-0.309 -0.469 0.581];
+geom_parameters_sec{1,6} = [-0.309 -0.469 0.581];
+geom_parameters_sec{1,7} = [120 116 90 0 0 0 0]* deg; 
+dim_of_task_sec{1,1}=[1;1;1]; 
+dim_of_task_sec{1,2}=[1;1;1]; 
+dim_of_task_sec{1,3}=[1;1;1]; 
+dim_of_task_sec{1,4}=[1;1;1]; 
+dim_of_task_sec{1,5}=[1;1;1]; 
+dim_of_task_sec{1,6}=[1;1;1]; 
+dim_of_task_sec{1,7}= ones(bot1.n,1); 
 
 % traj_type_sec = {'cartesian_x'};
 % control_type_sec = {'regulation'};
@@ -103,7 +115,7 @@ end
 % i have to set the name of the robot plus a number equal to the number of experiment for that scenario 
 % like bot#.# (where n.i means that the file is reffered to the n-scenario and is the i-th data setting)
 % multiple data setting for the same scenario 
-id = 'humanoid_bench_lbrsimple';
+id = 'humanoid_bench_generator_lbrsimple';
 name_backup = strcat(id,'.m');
 %namebot_scene#_briefdescription.mat
 number = '1.0';
@@ -122,18 +134,18 @@ rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF'],'match','
 % join the general static parameter with the particular static one
 rawTextFromStorage = strcat(rawTextFromStorage,rawTextFromStoragePart);
 
-existence = exist(strcat(path,'/back_data/',name_backup),'file');
+existence = exist(strcat(path,'/back_data/',name_file),'file');
 if(~existence)
-    fileID = fopen(strcat(path,'/back_data/',name_backup),'w');
+    fileID = fopen(strcat(path,'/back_data/',name_file),'w');
     fprintf(fileID,'%s',rawTextFromStorage);
     fclose(fileID);
     disp('FINISH!')
 else
-    adv = strcat('The file: /',name_backup,' allready exist');
+    adv = strcat('The file: /',name_file,' allready exist');
     b=questdlg(adv, 'Overwrite?','Yes','No','No');
     switch b
         case 'Yes'
-            fileID = fopen(strcat(path,'/back_data/',name_backup),'w');
+            fileID = fopen(strcat(path,'/back_data/',name_file),'w');
             fprintf(fileID,'%s',rawTextFromStorage);
             fclose(fileID);
             disp('FINISH!')

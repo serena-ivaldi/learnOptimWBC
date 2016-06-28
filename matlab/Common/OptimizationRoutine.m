@@ -1,18 +1,25 @@
 % number_of_iteration is usefull only for PlotGraphPaper.m main
 function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, name_dat]=OptimizationRoutine(number_of_iteration,n_of_experiment,iter,init_parameters_from_out)  
     %% initialize all the data
+    optim = true;
     [bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,learn_approach,constr,inst,generation_of_starting_point,niter,...
-    explorationRate,cmaes_value_range,qi,qdi,fixed_step,torque_saturation,maxtime,rawTextFromStorage,name_dat]=Init();
+    explorationRate,cmaes_value_range,qi,qdi,fixed_step,torque_saturation,maxtime,rawTextFromStorage,name_dat]=Init(optim);
  
      %% optimization 
      % im using init_value from outside
      switch generation_of_starting_point
-        case 'test'
+         case 'test'
            start_action = user_defined_start_action;
-        case 'given'
+         case 'given'
             start_action = init_parameters_from_out*ones(1,controller.GetTotalParamNum());
-        case 'random'
-           start_action = (cmaes_value_range(1,2)-cmaes_value_range(1,1)).*rand(1,controller.GetTotalParamNum()) + cmaes_value_range(1,1)*ones(1,controller.GetTotalParamNum());
+         case 'random'
+           if(iscell(cmaes_value_range))
+               start_action = (cmaes_value_range{2}-cmaes_value_range{1}).*rand(1,controller.GetTotalParamNum()) + cmaes_value_range{1};
+           elseif(isvector(cmaes_value_range))
+               start_action = (cmaes_value_range(1,2)-cmaes_value_range(1,1)).*rand(1,controller.GetTotalParamNum()) + cmaes_value_range(1,1)*ones(1,controller.GetTotalParamNum());
+           end
+         otherwise
+               disp('wrong generation_of_starting_point choosed!')
      end
      
      %% do all the checks on the input

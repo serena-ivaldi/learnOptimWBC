@@ -24,13 +24,14 @@ function output = RobotExperiment(obj,parameters)
     %options         = input{7}; % options 
     
 
-
+    % update of the parameters of activation functions and some reference
+    % (if they are optimized)
     controller.UpdateParameters(parameters)
 
     if(strcmp(simulator,'rbt'))
-        %tic 
+        tic 
         [t, q, qd]=DynSim(time_sym_struct,controller,qinit,qdinit,fixed_step,'TorqueSat',torque_saturation,'maxtime',maxtime);
-        %toc 
+        toc 
     end
 
     output{1} = t;

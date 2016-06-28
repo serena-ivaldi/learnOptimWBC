@@ -90,7 +90,7 @@ classdef  UF < Controllers.AbstractController
          end
       end
       %% TODO
-      % this management of multiple chain has to changed in favor of a 
+      % this management of multiple chain has to be changed in favor of a 
       % a unique system to refer to to compute the dynamics component of
       % the robot
       function SetCurRobotIndex(obj,index_chain)
@@ -203,18 +203,17 @@ classdef  UF < Controllers.AbstractController
          end
          % update parameters of the references (if there are some)
          for i=1:size(obj.references.parameter_dim,1) 
-             index = 1;
              for j=1:size(obj.references.parameter_dim,2)  
                  n_param = obj.references.parameter_dim{i,j};
                  app_param = parameters(index:index+n_param - 1);
                  if(n_param>0)
                      obj.references.cur_param_set{i,j} = (app_param');
                      index = index+n_param;
+                 else
+                     obj.references.cur_param_set{i,j} = app_param;
                  end
-                
              end
-         end
-         
+         end         
       end
       
        

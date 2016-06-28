@@ -180,7 +180,7 @@ classdef  RBF < Alpha.AbstractAlpha
         
         function RBFs = BuildCellArray(n_subchain,n_task,time_struct,n_of_basis,redundancy,range,precomp_sample,theta,optim)
             
-            % if i not optimizing i want to read  value from theta 
+            % if im not optimizing i want to read  value from theta 
             if(~optim)   
                 % this branch is active if i give the correct number of
                 % parameter    
