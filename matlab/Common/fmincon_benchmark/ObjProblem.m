@@ -24,24 +24,24 @@ classdef ObjProblem < handle
         clean_function          % function called to do some stuff after using the run function (optional could be empty)
         input_4_run             % this variable is a cell array that contains the data that are needed to execute the run function
         
-        b                       % radius of the topologic ball for the metric3 (express as a % of difference from the optimal)
+        %b                       % radius of the topologic ball for the metric3 (express as a % of difference from the optimal)
         
-        algorithm_selector      % flag to select the optimization algorithm  
-        
+        algorithm_selector      % flag to select the optimization algorithm
+        stored_input_4_check
         
     end
     
     methods
         % Constructor which define the object according to the problem
         %   ObjProblem(constr,learn_procedure,run_function,fitness,clean_function,input_4_run)
-        function obj = ObjProblem(n_search_space,boundaries,constr,algorithm_selector,run_function,fitness,clean_function,input_4_run)                   
+        function obj = ObjProblem(n_search_space,boundaries,constr,algorithm_selector,run_function,fitness,clean_function,input_4_run)
             obj.penalty_handling = constr;
             obj.algorithm_selector = algorithm_selector;
             obj.run_function =run_function;
             obj.fitness = fitness;
             obj.clean_function = clean_function;
             obj.input_4_run = input_4_run;
-
+            
             obj.n_search_space = n_search_space;
             obj.J0 = 0;
             if(iscell(boundaries))
@@ -53,27 +53,28 @@ classdef ObjProblem < handle
             else
                 error('something wrong with cmaes_value_range')
             end
-            obj.b = 2.5; %ie +/- 2,5% from the steady value
+            %obj.b = 2.5; %ie +/- 2,5% from the steady value
         end
         
-        function input_vec = CreateInputFromParameters(obj,parameters) 
-            input_vec = repmat({parameters},1,obj.penalty_handling.n_constraint);  
-       end
+        function input_vec = CreateInputFromParameters(obj,parameters)
+            input_vec = repmat({parameters},1,obj.penalty_handling.n_constraint);
+        end
         
         % This function compute the fitness value
         function fitvalue = computFit(obj,input)
-                try
-                    disp('i am in computFit')
-                    [output]=obj.run(input);
-                    fitvalue =  - obj.fitness(obj,output); %minus because we are maximizing and fmincon only minimize
-                    if isnan(fitvalue)
-                        disp('Fitness is equal to NaN.') %i can put a breakpoint here to understand how in heaven it's possible that i sometimes get effort = NaN
-                        fitvalue = 1;
-                    end
-                catch err
-                    disp('i am in computFit error side')
-                    fitvalue = 1; %penalty if the computation of the fitness failed
-                end 
+            obj.stored_input_4_check = input;
+            try
+                disp('i am in computFit')
+                [output]=obj.run(input);
+                fitvalue =  - obj.fitness(obj,output); %minus because we are maximizing and fmincon only minimize
+                if isnan(fitvalue)
+                    disp('Fitness is equal to NaN.') %i can put a breakpoint here to understand how in heaven it's possible that i sometimes get effort = NaN
+                    fitvalue = 1;
+                end
+            catch err
+                disp('i am in computFit error side')
+                fitvalue = 1; %penalty if the computation of the fitness failed
+            end
         end
         
         % This function has to give back something that let me compute the fitness function
@@ -95,16 +96,19 @@ classdef ObjProblem < handle
         
         % Compute the constraints violation
         % input is a fake value
-        function obj = computConstrViol(obj,input)                    
-            % each time i have to compute this 
-            try
-                disp('i am in computConstrViol fitness computation')
-                [output]=obj.run(input);
-                obj.fitness(obj,output); %minus because we are maximizing and fmincon only minimize
-            catch err
-                disp('i am in computConstrViol error side fitness computation ')
-                fitvalue = 1; %penalty if the computation of the fitness failed
-            end 
+        function obj = computConstrViol(obj,input)
+            % it is sometimes necessary to recompute this because the value
+            % of the paramters vector differ from the one used in computFit
+            if (input ~= obj.stored_input_4_check)
+                try
+                    disp('i am in computConstrViol fitness computation')
+                    [output]=obj.run(input);
+                    obj.fitness(obj,output); 
+                catch err
+                    disp('i am in computConstrViol error side fitness computation ')
+                    fitvalue = 1;
+                end
+            end
             c_index = -1; %i'm just considering one candidate (cf. FixPenalty class)
             obj.penalty_handling.ComputeConstraintsViolation(c_index);
             c = [];
@@ -115,17 +119,17 @@ classdef ObjProblem < handle
                 else
                     ceq = [ceq; obj.penalty_handling.penalties(1,i)];
                 end
-            end   
+            end
             obj.c = c;
             obj.ceq = ceq;
         end
-       
+        
         % Do the optimization (only with fmincon for now )
         % the signature is exactly the same as optimization.CMAES
         % will need a flag later to switch between fmincon and ipopt
-        function [fitness,bestAction] = minimize(obj,starting_point,MaxFunEvals,threshold)   
+        function [fitness,bestAction] = minimize(obj,starting_point,MaxFunEvals,threshold)
             switch obj.algorithm_selector
-                case 'fmincon'    
+                case 'fmincon'
                     options = optimoptions('fmincon','OutputFcn',@obj.outfun,'Display','iter','Algorithm','sqp');
                     options.MaxFunEvals = MaxFunEvals;
                     options.TolX = 1e-15; % the step size tolerance
@@ -144,12 +148,12 @@ classdef ObjProblem < handle
                 otherwise
                     fprintf('Error, no such method is found! \n')
             end
-%             m1 = obj.J0 - FVAL; %metric 1 = fitness error
-%             
-%             obj.computConstrViol(X); %metric constr violation
-%             m2 = sum(abs((obj.c > 0).*obj.c)) + sum(abs((obj.ceq ~= 0).*obj.ceq));
-%             
-%             m3 = obj.IndentifySteadyState(obj.fitness_result,threshold); %metric 3 = # of steps to steady value
+            %             m1 = obj.J0 - FVAL; %metric 1 = fitness error
+            %
+            %             obj.computConstrViol(X); %metric constr violation
+            %             m2 = sum(abs((obj.c > 0).*obj.c)) + sum(abs((obj.ceq ~= 0).*obj.ceq));
+            %
+            %             m3 = obj.IndentifySteadyState(obj.fitness_result,threshold); %metric 3 = # of steps to steady value
             fitness = obj.fitness_result;
             bestAction.parameters = X;
             bestAction.performance = FVAL;
@@ -167,14 +171,14 @@ classdef ObjProblem < handle
         
         
         % Used to determine the number needed to reach stability
-        function zzz = IndentifySteadyState(obj,vector,tresh)
-            steady_value = vector(end);
-            for zzz = 1:length(vector)
-                if(abs(steady_value-vector(zzz))<(tresh/100*steady_value))
-                    break
-                end
-            end
-        end
+        %         function zzz = IndentifySteadyState(obj,vector,tresh)
+        %             steady_value = vector(end);
+        %             for zzz = 1:length(vector)
+        %                 if(abs(steady_value-vector(zzz))<(tresh/100*steady_value))
+        %                     break
+        %                 end
+        %             end
+        %         end
         
     end
 end

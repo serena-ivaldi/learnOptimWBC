@@ -7,14 +7,15 @@ close all
 clc
 
 %% DATA 1
-robotics_experiment = [1,0]; % series of value that say if the current experiment is a robotics experiments or not
-niter_tot = 10;  %number of functions evaluations 
-function_2_test ={'robotic_experiments'};%,'g06','g07','g09','f240','f241','HB'};
-learn_approach = 'CMAES'; %CMAES (1+1)CMAES  CEM,fmincon    with (1+1)CMAES i have to use vanilla constraints management  (temporary) 
-method_to_use = 'vanilla';  % adaptive , vanilla ,empty,fmincon
+robotics_experiment = [1]; % series of value that say if the current experiment is a robotics experiments or not
+niter_tot = 50;  %number of functions evaluations 
+function_2_test ={'robotic_experiments'};%'robotic_experiments','g06','g07','g09','f240','f241','HB'};
+learn_approach = 'fmincon'; %CMAES (1+1)CMAES  CEM,fmincon    with (1+1)CMAES i have to use vanilla constraints management  (temporary) 
+method_to_use = 'fmincon';  % adaptive , vanilla ,empty,fmincon
 
-repetition_of_the_experiment = 2; % at least 2
-threshold = 50; % value to identify the beginning of steady state
+repetition_of_the_experiment = 50; % at least 2
+threshold = 2.5; % value to identify the beginning of steady state
+% the threshold is express in %, means +/- 2,5% from the steady value
 
 % starting value of parameters
 generation_of_starting_point = 'random'; % 'test', 'given', 'random'
@@ -196,7 +197,7 @@ m2 = zeros(repetition_of_the_experiment,n_constraints);  % constraints violation
 m3 = zeros(repetition_of_the_experiment,1); % steady state solutions
 m4 = zeros(repetition_of_the_experiment,1); % execution time
 %-----------------------------------------------------------------------------------
-m5 = [];  % total_performance
+m5 = []; %or cell(repetition_of_the_experiment,1) ?  % total_performance
 m6 = zeros(repetition_of_the_experiment,search_space_dimension);      % best action
 m7 = zeros(repetition_of_the_experiment,1);                           % best perfomance
  
@@ -389,7 +390,7 @@ end
 function zzz = IndetifySteadyState(vector,tresh)
    steady_value = vector(end);
    for zzz = 1:length(vector)
-      if(abs(steady_value-vector(zzz))<tresh)
+      if(abs(steady_value-vector(zzz))<(tresh/100*steady_value))
          break
       end
    end
