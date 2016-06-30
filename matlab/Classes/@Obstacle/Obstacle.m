@@ -36,13 +36,13 @@ classdef Obstacle < handle
 
             if(L==1)
               dist_matrix = abs((cp(1,1) - obj.description.X)) + abs((cp(1,2) - obj.description.Y)) + abs((cp(1,3) - obj.description.Z));
-              [dist ind] = min(dist_matrix(:)); 
+              [dist,ind] = min(dist_matrix(:)); 
               pwall(1,1) = obj.description.X(ind);
               pwall(2,1) = obj.description.Y(ind);
               pwall(3,1) = obj.description.Z(ind);
             elseif(L==2)
               dist_matrix = (cp(1,1) - obj.description.X).^2 + (cp(1,2) - obj.description.Y).^2 + (cp(1,3) - obj.description.Z).^2;
-              [dist ind]= min(dist_matrix(:)); 
+              [dist,ind]= min(dist_matrix(:)); 
               pwall(1,1) = obj.description.X(ind);
               pwall(2,1) = obj.description.Y(ind);
               pwall(3,1) = obj.description.Z(ind);
@@ -61,15 +61,29 @@ classdef Obstacle < handle
         end
 
         function dist = MinDist(obj,cp,L)
-
-
           if(L==1)
-              dist_matrix = abs((cp(1,1) - obj.description.X)) + abs((cp(1,2) - obj.description.Y)) + abs((cp(1,3) - obj.description.Z));
-              dist = min(dist_matrix(:)); 
+              dist_matrixX = abs(cp(1,1) - obj.description.X);
+              dist_matrixY = abs(cp(1,2) - obj.description.Y);
+              dist_matrixZ = abs(cp(1,3) - obj.description.Z);
+              dist_x = min(dist_matrixX);
+              dist_y = min(dist_matrixY);
+              dist_z = min(dist_matrixZ);
+              dist = sqrt(dist_x + dist_y + dist_z);
+%               dist_matrix = abs((cp(1,1) - obj.description.X)) + abs((cp(1,2) - obj.description.Y)) + abs((cp(1,3) - obj.description.Z));
+%               dist = min(dist_matrix(:)); 
           elseif(L==2)
-              dist_matrix = (cp(1,1) - obj.description.X).^2 + (cp(1,2) - obj.description.Y).^2 + (cp(1,3) - obj.description.Z).^2;
-              dist = min(dist_matrix(:)); 
-              dist = sqrt(dist);
+              dist_matrixX = (cp(1,1) - obj.description.X).^2;
+              dist_matrixY = (cp(1,2) - obj.description.Y).^2;
+              dist_matrixZ = (cp(1,3) - obj.description.Z).^2;
+              dist_x = min(dist_matrixX);
+              dist_y = min(dist_matrixY);
+              dist_z = min(dist_matrixZ);
+              dist = sqrt(dist_x + dist_y + dist_z);
+              
+              
+%             dist_matrix = (cp(1,1) - obj.description.X).^2 + (cp(1,2) - obj.description.Y).^2 + (cp(1,3) - obj.description.Z).^2;
+              %dist = min(dist_matrix(:)); 
+              %dist = sqrt(dist);
           end
 
         end

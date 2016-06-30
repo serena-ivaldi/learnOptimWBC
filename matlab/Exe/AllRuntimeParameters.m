@@ -4,7 +4,7 @@
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
-time_struct.tf = 15;
+time_struct.tf = 20;
 time_struct.step = 0.001;
 
 %% TASK PARAMETERS
@@ -17,8 +17,8 @@ time_struct.step = 0.001;
 %name_dat = 'Jaco1.3_scene1.1';
 %name_dat = 'LBR4p2.2_scene2_generalization';
 %name_dat = 'lwrsimple1.0_scene_test_obs';
-%name_dat = 'humanoid_bench_lbrsimple_1.1';
-name_dat = 'humanoid_bench_generator_lbrsimple_1.0';
+name_dat = 'humanoid_bench_lbrsimple_1.1';
+%name_dat = 'humanoid_bench_generator_lbrsimple_1.0';
 path=LoadParameters(name_dat);
 load(path);
 
@@ -38,7 +38,7 @@ simulator_type = {'rbt'};
 % define the type of integration of the sytem of differential equation
 fixed_step = false; %true;
 torque_saturation =10000; % high value == no saturation
-maxtime = 1000; % maximum time before a simulation is stopped for being too long
+maxtime = 10000; % maximum time before a simulation is stopped for being too long
 % other sim
 
 %% Parameters Dependant on the type of controller
@@ -53,7 +53,8 @@ switch CONTROLLERTYPE
 
         %% PRIMARY REFERENCE PARAMETERS (this parameter only works if one of the specific trajectory has runtime parameters)
         numeric_reference_parameter{1,1} = [0.047180 0.359539 1.045565 0.374223 -0.069047 0.013630 -0.495463 -0.131683 0.668327 -0.184017 1.115775 0.884010 0.120701 0.837400 1.189048]';
-
+        %% SECONDARY REFERENCE PARAMETERS
+        secondary_numeric_reference_parameter{1,1} = []; 
         %% REPELLERS PARAMETERS
         % GENERALIZE TO MULTICHAIN !!!
         rep_obstacle_ref = [1 2]; % if i change the order of ref obstacle i change the order of repellor in the stacked case
@@ -79,7 +80,7 @@ switch CONTROLLERTYPE
         %numeric_theta = [0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[2.3218    2.5695    6.8006    4.6558    5.7475    8.7383    3.5058    5.2817    6.9910    6.7590    4.5235    6.3875    7.3247    6.7258 8.5637];
-        numeric_theta =[-11.708097 -0.818781 13.710811 12.975091 12.322242 -1.626655 -14.000000 13.568485 9.149776 7.695255 7.564063 10.830460 -8.508163 3.799826 -12.588740];
+        numeric_theta =[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0];
 
         % from sere 1
         %numeric_theta = [5.819383 4.412794 5.286902 7.786384 7.599614 3.512520 5.989917 9.410994 7.444834 7.472545 4.532512 5.614148 7.970080 4.498142 6.194601 6.925731 4.815911 5.490313 5.294776 6.011380 ]
@@ -97,7 +98,7 @@ switch CONTROLLERTYPE
         %numeric_theta =[12 12 12 12 12 12 12 12 12 12];
 
         %constant alpha
-        value1 = 1*ones(chains.GetNumTasks(1));
+        value1 = 0*ones(chains.GetNumTasks(1));
         values{1} = value1;
         value_range_for_optimization_routine = [-0.5 , 1.5]; % this is a trick that im using to provide bound to the optimization procedure for parametric reference
 
@@ -139,8 +140,8 @@ switch CONTROLLERTYPE
             end
          end
          % secondary task gains
-         kd = [110,110,110,110,110,110,110];
-         kp = [70,70,70,70,70,70,70]; % row vector one for each chain
+         kd = [90,90,90,110,110,110,110];
+         kp = [40,40,40,70,70,70,70]; % row vector one for each chain
          for i= 1:chains.GetNumChains()
             for par = 1:chains.GetNumTasks(i)
                  if(strcmp(traj_type_sec{i},'impedance'))
@@ -203,10 +204,10 @@ switch CONTROLLERTYPE
         %init_parameters = 6;
         user_defined_start_action=[-0.686896675401947,1.22650641453222,-3.27247260213565,12.6539506696606,11.9349914795820,12.3072074998126,11.4267899497361,13.3737941021526,8.77645179253447,-4.69418318274421,11.1958799565396,1.32058911902880,-0.691100222964068,0.286830798370383,-0.162567001268804];
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-        niter = 35;  %number of generations
-        %cmaes_value_range = [-14 , 14];  % boudn that define the search space
-        cmaes_value_range{1} = [-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-0.005,-0.005,-0.005 ];  % lower bound that define the search space
-        cmaes_value_range{2} = [14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,0.005,0.005,0.005];  % upper bound that define the search space
+        niter = 45;  %number of generations
+        cmaes_value_range = [-14 , 14];  % boudn that define the search space
+        %cmaes_value_range{1} = [-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-0.15,-0.15,-0.15 ];  % lower bound that define the search space
+        %cmaes_value_range{2} = [14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,0.15,0.15,0.15];  % upper bound that define the search space
         learn_approach = 'CMAES'; %CMAES (1+1)CMAES    
         %--- Parameter for constraints method
         method_to_use = 'vanilla';  % adaptive , vanilla , empty

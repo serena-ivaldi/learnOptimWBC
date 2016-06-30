@@ -12,7 +12,7 @@ reference.cur_param_set = numeric_reference_parameter; % some kind of trick to i
 %% secondary reference
 secondary_refs = References(target_link,traj_type_sec,control_type_sec,geometric_path_sec,geom_parameters_sec,time_law_sec,time_struct,dim_of_task_sec,type_of_traj_sec);
 secondary_refs.BuildTrajs();
-secondary_refs.cur_param_set = numeric_reference_parameter; % some kind of trick to introduce parameters in the optimization procedure
+secondary_refs.cur_param_set = secondary_numeric_reference_parameter; % some kind of trick to introduce parameters in the optimization procedure
 %% plot scenario
 text = LoadScenario(name_scenario);
 eval(text);

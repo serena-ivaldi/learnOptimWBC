@@ -44,17 +44,19 @@ classdef  RBF < Alpha.AbstractAlpha
             cof = 2*sigma^2;
             sumphi = 0;
             for i=0:(obj.n_of_basis-1)
-                
                 phi(i+1) = exp(-(t-(i*T)/(obj.n_of_basis-1))^2/cof);
                 obj.basis_functions{i+1} = matlabFunction(phi(i+1));
                 sumphi = sumphi + phi(i+1);
             end
             obj.sumphi = matlabFunction(sumphi);
-            
             c=obj.range(1,2)/2;
             
             rbf = (phi*theta)/sumphi;
-            rbf =  (exp(rbf-c)) / (1 + exp(rbf-c));
+            % sigmoid 
+            % the small displacement assure that if i have a zero in the
+            % parameters i will have a 0 (of an order 10^(-16) ) as a
+            % result of the sigmoid
+            rbf =  (exp(rbf-c)) / (1 + exp(rbf-c)) - 0.002472623156634;
             rbf = matlabFunction(rbf,'vars', {t,theta});
             obj.func = rbf;
             

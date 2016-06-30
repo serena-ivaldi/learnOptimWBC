@@ -33,7 +33,7 @@ if save_result_single_exec
    save(complete_path_to_file) 
 end
 %% Display
-fps = 200;
+fps = 1000;
 video = false;
 step_save_fig = 20;
 save_fig = false;

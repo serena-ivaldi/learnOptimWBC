@@ -48,14 +48,14 @@ classdef  UF < Controllers.AbstractController
          end
          
          % initialize torque and torque time
-         obj.torques = cell(obj.subchains.GetNumChains());
-         for i = 1:obj.subchains.GetNumChains()
-            obj.torques{i} = [];  %tau(n_of_total_joint on the chain x 1)
-         end
-         obj.torques_time = cell(obj.subchains.GetNumChains());
-         for i = 1 :obj.subchains.GetNumChains()
-            obj.torques_time{i} = [];
-         end
+%          obj.torques = cell(obj.subchains.GetNumChains());
+%          for i = 1:obj.subchains.GetNumChains()
+%             obj.torques{i} = [];  %tau(n_of_total_joint on the chain x 1)
+%          end
+%          obj.torques_time = cell(obj.subchains.GetNumChains());
+%          for i = 1 :obj.subchains.GetNumChains()
+%             obj.torques_time{i} = [];
+%          end
          obj.current_time = [];
          % default settings for smoothing and trajectory tracking display (desidered position) 
          obj.display_opt.fixed_step = false;
@@ -69,24 +69,26 @@ classdef  UF < Controllers.AbstractController
 %          end
          
        end    
-
+      % i do  not need cell object because the time is unique
       function SaveTime(obj,ind_subchain,time)
-         obj.torques_time{ind_subchain} = [obj.torques_time{ind_subchain}(:,:),time];
+         obj.torques_time = [obj.torques_time,time];
       end
        
+      % i do not need cell object because the simulated model is a unique
+      % big system of differential equations
       function SaveTau(obj,ind_subchain,tau)
-         obj.torques{ind_subchain} = [obj.torques{ind_subchain}(:,:),tau];   
+         obj.torques = [obj.torques,tau];   
       end
       
       function CleanTau(obj)
           for i = 1 :obj.subchains.GetNumChains()
-            obj.torques{i} = [];
+            obj.torques = [];
           end
       end
       
       function CleanTime(obj)
          for i = 1 :obj.subchains.GetNumChains()
-            obj.torques_time{i} = [];
+            obj.torques_time = [];
          end
       end
       %% TODO

@@ -35,12 +35,12 @@ deg = pi/180;
 
 traj_type = {'cartesian','cartesian','joint'};
 control_type = {'x','x','none'};
-type_of_traj = {'sampled','func','sampled'};
-geometric_path = {'fixed','ball','fixed'};
+type_of_traj = {'sampled','sampled','sampled'};
+geometric_path = {'fixed','fixed','fixed'};
 time_law = {'none','none','none'};
 %parameters first chains
-geom_parameters{1,1} = [-0.001,-0.694,0.714]; 
-geom_parameters{1,2} = [-0.309 -0.469 0.581];
+geom_parameters{1,1} = [-0.022,-0.722,0.709]; 
+geom_parameters{1,2} = [-0.161,-0.357,0.473];
 geom_parameters{1,3} = [-90 90 0 -90 0 0 0]* deg;
 dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); 
 
@@ -115,10 +115,10 @@ end
 % i have to set the name of the robot plus a number equal to the number of experiment for that scenario 
 % like bot#.# (where n.i means that the file is reffered to the n-scenario and is the i-th data setting)
 % multiple data setting for the same scenario 
-id = 'humanoid_bench_generator_lbrsimple';
+id = 'humanoid_bench_lbrsimple';
 name_backup = strcat(id,'.m');
 %namebot_scene#_briefdescription.mat
-number = '1.0';
+number = '1.1';
 name_file = strcat(id,'_',number,'.mat');
 
 %% DO NOT CHANGE THIS PART!
