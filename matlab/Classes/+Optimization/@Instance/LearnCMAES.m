@@ -86,7 +86,7 @@ for k = 1:(nIterations - 1)
         fprintf('iteration %d\n',k);
     end
     %create offsprings
-    disp('create offsprings')
+    %disp('create offsprings')
     for l = 1:lambda 
 
         offsprings(l, :) = mean(k,:) + sigma(k) * mvnrnd(zeros(1, n), C{k});
@@ -103,7 +103,7 @@ for k = 1:(nIterations - 1)
     
     
     %evaluate offsprings
-    disp('evaluate offsprings')
+    %disp('evaluate offsprings')
     if settings.allowEvalMultiple > 0
         performances = fnForwardModel(obj,offsprings,0, 0);
 %         keyboard %check correctness of ids
