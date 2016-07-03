@@ -38,7 +38,7 @@ simulator_type = {'rbt'};
 % define the type of integration of the sytem of differential equation
 fixed_step = false; %true;
 torque_saturation =10000; % high value == no saturation
-maxtime = 10000; % maximum time before a simulation is stopped for being too long
+maxtime = 100; % maximum time before a simulation is stopped for being too long
 % other sim
 
 %% Parameters Dependant on the type of controller
