@@ -21,6 +21,8 @@ threshold = 2.5; % value to identify the beginning of steady state
 generation_of_starting_point = 'test'; % 'test', 'given', 'random'
 number_of_function_2_test = length(function_2_test);
 
+current_experiment=0;
+
 %% INSTANCE PARAMETER
 
 %% global metric
@@ -41,6 +43,18 @@ for jj=1:number_of_function_2_test
         [epsilon,search_space_dimension,explorationRate,cmaes_value_range,...
             n_constraints,constraints_functions,constraints_type,constraints_values,run_function,fitness,clean_function,input]=InitForBenchmark(function_2_test{jj},optim);
         user_defined_start_action = [1.842937 -14.000000 -4.879213 -13.203852 -11.829260 13.030888 6.271638 -4.567344 14.000000 -14.000000 0.235390 -0.978116 6.752068 8.869473 -12.031930]; % to use for  (1+1)cmaes
+        %[epsilon,search_space_dimension,explorationRate,cmaes_value_range,...
+        %    n_constraints,constraints_functions,constraints_type,constraints_values,run_function,fitness,clean_function,input]=InitForBenchmark(function_2_test{jj},optim);
+       % user_defined_start_action = []; % to use for  (1+1)cmaes
+        
+         [epsilon,search_space_dimension,explorationRate,cmaes_value_range,...
+           n_constraints,constraints_functions,constraints_type,constraints_values,run_function,fitness,clean_function,input]=InitForBenchmark(function_2_test{jj},optim);
+       user_defined_start_action = [1.842937 -14.000000 -4.879213 -13.203852 -11.829260 13.030888 6.271638 -4.567344 14.000000 -14.000000 0.235390 -0.978116 6.752068 8.869473 -12.031930]; 
+       % to use for  (1+1)cmaes
+
+        
+        
+        
     else
         if(strcmp(function_2_test{jj},'g06'))
             search_space_dimension = 2;
@@ -204,6 +218,10 @@ for jj=1:number_of_function_2_test
     %% OPTIMIZATION
     
     parfor kk = 1:repetition_of_the_experiment
+        
+        current_experiment=kk;
+        disp(strcat('********* current experiment = ',num2str(current_experiment), '****** '))
+        
         switch generation_of_starting_point
             case 'test'
                 start_action = user_defined_start_action;

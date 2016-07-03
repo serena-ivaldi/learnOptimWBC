@@ -37,7 +37,7 @@ classdef  Instance
        % this function has to give back something that let me compute the
        % fitness function for that sample
        function [output]=run(obj,parameters)
-            disp('im in run')   
+            %disp('im in run')   
             [output]=feval(obj.run_function,obj,parameters);
        end
        

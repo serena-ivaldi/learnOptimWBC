@@ -21,15 +21,15 @@ function [performance, succeeded, data2save] = EvaluateCMAES(obj,action,cur_cand
     data2save = [];
 
      try
-        disp('i am in evaluate CMAES')
-        action
+        %disp('i am in evaluate CMAES')
+        %action
         [output]=obj.run(action);
 
         succeeded = 1;
 
         %tic
         % insert fitness function 
-        performance = feval(obj.fitness,obj,output)
+        performance = feval(obj.fitness,obj,output);
         %toc
 
         %% DO NOT CHANGE THIS PART!
@@ -50,7 +50,7 @@ function [performance, succeeded, data2save] = EvaluateCMAES(obj,action,cur_cand
         feval(obj.clean_function,obj);
 
     catch err
-         disp('i am in evaluate CMAES error side')
+         %disp('i am in evaluate CMAES error side')
          % cancel all the information relative to the current iteration (control action)
          feval(obj.clean_function,obj,'fake_input');
          succeeded = 0;

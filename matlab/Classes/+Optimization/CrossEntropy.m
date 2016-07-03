@@ -68,7 +68,7 @@ classdef CrossEntropy < handle
                fprintf('iteration %d\n',iter);
             end
             %% create offspring
-            disp('create offsprings')
+            %disp('create offsprings')
             for l = 1:(obj.lambda*2) 
                [candidate,mixtureIndex] = obj.Sample(iter); 
                particleIndex(l) = mixtureIndex;
@@ -110,7 +110,7 @@ classdef CrossEntropy < handle
                     obj.particles{k}.Plot(iter)
                 end
             end
-            disp('iteration end')
+            %disp('iteration end')
             if(true)
                 close all
             end

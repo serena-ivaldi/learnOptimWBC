@@ -13,6 +13,7 @@ warning('error', 'MATLAB:illConditionedMatrix')
 n_of_experiment = 10;      % number that we use to distinguish between the same static parameters settings but with different runtime parameters
 init_parameters = 6;      % initial value for the optimization  (the scale is 0-14, so 6=0.5)
 number_of_experiment_ripetition = 5;  % number of  optimization (for robustness assesement)
+current_experiment=0;
 
 all_results = cell(number_of_experiment_ripetition,1);
 
@@ -24,6 +25,7 @@ complete_path = strcat(path,'/results/',name_folder);
 mkdir(complete_path);
 
 parfor iter=1:number_of_experiment_ripetition
+    current_experiment=iter;
     [tau, mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded]=OptimizationRoutine(number_of_experiment_ripetition,n_of_experiment,iter,init_parameters);
      all_results{iter} = BestActionPerEachGen;
 end

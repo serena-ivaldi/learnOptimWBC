@@ -58,20 +58,6 @@ for ii=1:size(chi(1,:))
     
 end
 
-        set(gca,'Color',[0.8 0.8 0.8]);
-        set(gca,'XColor',[0.8 0.8 0.8]);
-        set(gca,'YColor',[0.8 0.8 0.8]);
-        set(gca,'ZColor',[0.8 0.8 0.8]);
-        set(gca,'ydir','reverse')
-        set(gca,'xdir','reverse')
-        set(gca, 'drawmode', 'fast');
-        param.draw_init = 1;
-        rotate3d(gca,'on');
-
-        figure(figure_main);
-        
-end
-    
 %axes(param.plot_main(1))
 %axis tight
 % CoM trajectory
@@ -114,7 +100,7 @@ vis_speed = 1;         % this variable is set to change the visualization speed,
 % information stored in the joints structure (we keep also the info if the
 % joint is revolute = 1, prismatic joint = 2; fixed = 3 and 0 is equal no connection);
 
-n_plot = length(L);
+n_plot = length(obj.linkList);
 n_lin = n_plot-1;
 
 A = zeros(n_plot,n_plot);
@@ -364,7 +350,7 @@ xyzpatch.vertices = [xyzpairs(4,2)+qq1(1)      , xyzpairs(4,4)+qq1(2) , xyzpairs
 lnkpatch(jj)      = patch('vertices',xyzpatch.vertices,'faces',xyzpatch.faces,'FaceAlpha',0.2);
 
 % left foot patch
-jj=n_lin+2; 
+jj=n_lin+2;
 
 orthlnk1 = [0 0.03 0]';
 orthlnk2 = [0 0 0.03]';
@@ -407,16 +393,6 @@ params.plot_objs{1} = [lnkpatch';lin';x_b0'];
 % params.plot_objs{4} = copyobj(params.plot_objs{1},params.plot_main(4));
 % view(-90,1);
 % axes(params.plot_main(1));
-% % % axes(params.plot_main(2));
-% % % params.plot_objs{2} = copyobj(params.plot_objs{1},params.plot_main(2));
-% % % view(-90,90);
-% % % axes(params.plot_main(3));
-% % % params.plot_objs{3} = copyobj(params.plot_objs{1},params.plot_main(3));
-% % % view(0,1);
-% % % axes(params.plot_main(4));
-% % % params.plot_objs{4} = copyobj(params.plot_objs{1},params.plot_main(4));
-% % % view(-90,1);
-% % % axes(params.plot_main(1));
 
 % %% UPDATING THE PLOTS
 % ii=2;

@@ -193,7 +193,7 @@ classdef  UF < Controllers.AbstractController
       % for repellers 
       % and then i update the parameter that govern the reference
       function UpdateParameters(obj,parameters)
-       disp('im in update parameters')   
+       %disp('im in update parameters')   
          for i=1:size(obj.alpha,1) 
              index = 1;
              for j=1:size(obj.alpha,2)  
