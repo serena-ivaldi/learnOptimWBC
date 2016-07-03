@@ -40,16 +40,13 @@ for jj=1:number_of_function_2_test
     if(robotics_experiment(jj))
         %% initialize all the data
         optim = true;
-        [epsilon,search_space_dimension,explorationRate,cmaes_value_range,...
-            n_constraints,constraints_functions,constraints_type,constraints_values,run_function,fitness,clean_function,input]=InitForBenchmark(function_2_test{jj},optim);
-        user_defined_start_action = [1.842937 -14.000000 -4.879213 -13.203852 -11.829260 13.030888 6.271638 -4.567344 14.000000 -14.000000 0.235390 -0.978116 6.752068 8.869473 -12.031930]; % to use for  (1+1)cmaes
         %[epsilon,search_space_dimension,explorationRate,cmaes_value_range,...
         %    n_constraints,constraints_functions,constraints_type,constraints_values,run_function,fitness,clean_function,input]=InitForBenchmark(function_2_test{jj},optim);
        % user_defined_start_action = []; % to use for  (1+1)cmaes
         
          [epsilon,search_space_dimension,explorationRate,cmaes_value_range,...
            n_constraints,constraints_functions,constraints_type,constraints_values,run_function,fitness,clean_function,input]=InitForBenchmark(function_2_test{jj},optim);
-       user_defined_start_action = [1.842937 -14.000000 -4.879213 -13.203852 -11.829260 13.030888 6.271638 -4.567344 14.000000 -14.000000 0.235390 -0.978116 6.752068 8.869473 -12.031930]; 
+       user_defined_start_action = [0 0 0 0 0 14 14 14 14 14 0 0 0 0 0 ]; 
        % to use for  (1+1)cmaes
 
         
@@ -217,7 +214,7 @@ for jj=1:number_of_function_2_test
     
     %% OPTIMIZATION
     
-    parfor kk = 1:repetition_of_the_experiment
+    for kk = 1:repetition_of_the_experiment
         
         current_experiment=kk;
         disp(strcat('********* current experiment = ',num2str(current_experiment), '****** '))
