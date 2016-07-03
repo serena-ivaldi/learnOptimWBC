@@ -9,7 +9,7 @@ CONTROLLERTYPE ='UF';   % GHC or UF
 %%
 
 %SUBCHAIN PARAMETERS 
-subchain1 = [7 4 7];
+subchain1 = [7 3 7];
 target_link{1} = subchain1;
 
 %% Robot
@@ -36,7 +36,7 @@ geometric_path = {'fixed','fixed','fixed'};
 time_law = {'none','none','none'};
 %parameters first chains
 geom_parameters{1,1} = [-0.022,-0.722,0.709]; 
-geom_parameters{1,2} = [-0.161,-0.357,0.473];
+geom_parameters{1,2} = [-0.174361502780852,-0.317162396144149,0.480311716626029];
 geom_parameters{1,3} = [-90 90 0 -90 0 0 0]* deg;
 dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); 
 

@@ -56,7 +56,7 @@ classdef  RBF < Alpha.AbstractAlpha
             % the small displacement assure that if i have a zero in the
             % parameters i will have a 0 (of an order 10^(-16) ) as a
             % result of the sigmoid
-            rbf =  (exp(rbf-c)) / (1 + exp(rbf-c)) - 0.002472623156634;
+            rbf =  (exp(rbf-c)) / (1 + exp(rbf-c)) - 0.002472623156634; % - 0.002472623156634
             rbf = matlabFunction(rbf,'vars', {t,theta});
             obj.func = rbf;
             
