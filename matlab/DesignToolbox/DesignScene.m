@@ -31,8 +31,8 @@ x = x*r + x0;
 y = y*r + y0;
 z = z*r + z0;
 
-lightGrey = 0.8*[1 1 1]; % It looks better if the lines are lighter
-surface(x,y,z,'FaceColor', 'none','EdgeColor',lightGrey)
+%lightGrey = 0.8*[1 1 1]; % It looks better if the lines are lighter
+%surface(x,y,z,'FaceColor', 'none','EdgeColor',lightGrey)
 
 
 %%%;;
@@ -41,7 +41,7 @@ surface(x,y,z,'FaceColor', 'none','EdgeColor',lightGrey)
 for i=1:size(X,2) 
     scatter3(X(:,:,i),Y(:,:,i),Z(:,:,i))
 end
-wrist_point = [x0,y0,z0] + [-0.124388 -0.137898 0.133180];
+wrist_point = [-0.174,-0.317,0.480];
 e_e_point = [-0.022,-0.722,0.709];
 %intermediate_e_e_point = [ -0.3,-0.2,0.7];
 scatter3(wrist_point(1,1),wrist_point(1,2),wrist_point(1,3),130,'b');

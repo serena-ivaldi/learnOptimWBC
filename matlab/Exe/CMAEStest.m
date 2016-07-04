@@ -18,7 +18,7 @@ threshold = 2.5; % value to identify the beginning of steady state
 % the threshold is express in %, means +/- 2,5% from the steady value
 
 % starting value of parameters
-generation_of_starting_point = 'test'; %'random'; % 'test', 'given', 'random'
+generation_of_starting_point = 'test'; % 'test', 'given', 'random'
 number_of_function_2_test = length(function_2_test);
 
 current_experiment=0;
@@ -46,7 +46,7 @@ for jj=1:number_of_function_2_test
         
          [epsilon,search_space_dimension,explorationRate,cmaes_value_range,...
            n_constraints,constraints_functions,constraints_type,constraints_values,run_function,fitness,clean_function,input]=InitForBenchmark(function_2_test{jj},optim);
-       user_defined_start_action = [1.842937 -14.000000 -4.879213 -13.203852 -11.829260 13.030888 6.271638 -4.567344 14.000000 -14.000000 0.235390 -0.978116 6.752068 8.869473 -12.031930]; 
+       user_defined_start_action = [0 0 0 0 0 14 14 14 14 14 0 0 0 0 0 ]; 
        % to use for  (1+1)cmaes
 
         
@@ -429,5 +429,4 @@ for row = 1:size(out,1)
         end
     end
 end
-
 end

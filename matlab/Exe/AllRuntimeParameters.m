@@ -38,7 +38,7 @@ simulator_type = {'rbt'};
 % define the type of integration of the sytem of differential equation
 fixed_step = false; %true;
 torque_saturation =10000; % high value == no saturation
-maxtime = 10000; % maximum time before a simulation is stopped for being too long
+maxtime = 100; % maximum time before a simulation is stopped for being too long
 % other sim
 
 %% Parameters Dependant on the type of controller
@@ -80,7 +80,7 @@ switch CONTROLLERTYPE
         %numeric_theta = [0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[2.3218    2.5695    6.8006    4.6558    5.7475    8.7383    3.5058    5.2817    6.9910    6.7590    4.5235    6.3875    7.3247    6.7258 8.5637];
-        numeric_theta =[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0];
+        numeric_theta =[0 0 0 0 0 14 14 14 14 14 0 0 0 0 0 ];
 
         % from sere 1
         %numeric_theta = [5.819383 4.412794 5.286902 7.786384 7.599614 3.512520 5.989917 9.410994 7.444834 7.472545 4.532512 5.614148 7.970080 4.498142 6.194601 6.925731 4.815911 5.490313 5.294776 6.011380 ]
@@ -118,8 +118,8 @@ switch CONTROLLERTYPE
         % regularized case i have to do N^(-1) 
         % not regularized case i have N^(-1/2)
         metric = {'M^(1)','M^(1)','M^(1)','M^(1)','M^(1)','M^(1)','M^(1)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
-        kd = [110,110,110,110,110,110,110];
-        kp = [70,70,70,70,70,70,70]; % row vector one for each chain
+        kd = [110,90,90,110,110,110,110];
+        kp = [70,40,40,70,70,70,70]; % row vector one for each chain
         for i= 1:chains.GetNumChains()
             for par = 1:chains.GetNumTasks(i)
                 if(strcmp(traj_type{i},'impedance'))
@@ -174,12 +174,13 @@ switch CONTROLLERTYPE
                                  'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
                                  'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
                                  'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
-                                 'DistanceObs','DistanceObs','DistanceObs','DistanceObs'}; % vector of functions handle for computing the constraints
+                                 'DistanceObs','DistanceObs','DistanceObs','DistanceObs'}; % vector of functions handle for computing the constraints 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
         constraints_type = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];  % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
         % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
         constraints_values =[+170*(pi/180), -170*(pi/180),120*(pi/180), -120*(pi/180),+170*(pi/180), -170*(pi/180),120*(pi/180), -120*(pi/180),...
                              +170*(pi/180),-170*(pi/180),120*(pi/180), -120*(pi/180),+170*(pi/180), -170*(pi/180),...
-                             320, -320,320, -320,176, -176,176, -176,110, -110,40, -40,40, -40,...
+                             320, -320,320, -320,176, -176,176, -176,...
+                             110, -110,40, -40,40, -40,...
                              0.01,0.01,0.01,0.01];  
         activate_constraints_handling = true;
         
