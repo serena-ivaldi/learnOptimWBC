@@ -11,11 +11,10 @@ function I = inertia(rob,q)
 %    
 %  Input:: 
 %    rob: robot object of LBR4p copy specific class 
-%    q:  7-element vector of generalized 
+%    q:  n-element vector of generalized 
 %         coordinates 
 %    Angles have to be given in radians! 
 %    
-%  Output:: 
-%    I:  [7x7] inertia matrix 
+ 
 %    
 I = wholeBodyModel('mass-matrix',reshape(rob.R_b,[],1),rob.x_b,q);

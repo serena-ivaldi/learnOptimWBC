@@ -12,27 +12,26 @@ time_struct.ti = 0;
 time_struct.tf = 10;
 time_struct.step = 0.001;
 
-
-
 %% Parameters for simulator
 ndof = 17;
 % balancing on two feet or one foot
-params.feet_on_ground           =  [1,1];                                  %either 0 or 1; [left,right] (in the simulator)
+params.feet_on_ground =  [1,1];                                  %either 0 or 1; [left,right] (in the simulator)
 % allows the visualization of torques, forces and other user-defined graphics
-visualizer_graphics      =  1;                                      %either 0 or 1
-visualizer_demo          =  1;                                      %either 0 or 1
-visualizer_jointsPos     =  0;                                      %either 0 or 1; only if visualizer_graphics = 1
+visualizer_graphics   =  1;                                      %either 0 or 1
+visualizer_demo       =  1;                                      %either 0 or 1
+visualizer_jointsPos  =  0;                                      %either 0 or 1; only if visualizer_graphics = 1
 
 params.demo_movements = 0;
-
+% list of kin is a way to establish the kinematic part that are inside the
+% current model
 list_of_kin_chain = {'com','left_arm','right_arm'};
 
 %% SUBCHAIN PARAMETERS
 
-icub = iCub('model_arms_torso_free',list_of_kin_chain);
+icub = iCub('model_arms_torso_free');
 chain_1 = DummyRvc_iCub(icub,'l_sole');
  
-subchain1 = [5];
+subchain1 = {'l_hand'};
 target_link{1} = subchain1;
 
 robots{1} = chain_1;
@@ -135,7 +134,7 @@ else
     geometric_path = {'fixed'};
     time_law = {'none'};
     %parameters first chains
-    geom_parameters{1,1} = [0.30 -0.71 0.5]; 
+    geom_parameters{1,1} = [0.209290598956330,0.147080124030923,0.607101111147211]; 
     %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
     dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
 
@@ -265,10 +264,15 @@ else
     controller = Controllers.UF(chains,reference,secondary_refs,alphas,repellers,metric,Param,Param_secondary,combine_rule,regularizer);
 
     %% simulator
-    DynSim_iCub(controller,params);
+    [t,chi,visual_param]=DynSim_iCub(controller,params);
 
     %% Visualize forward dynamics
     %params.wait     = waitbar(0,'Graphics generation in progress...');
-
-    %visualizer_SoT(t,chi,params)
+    for i = 1:10:size(chi,1)
+        close all
+        cur_chi = chi(i,1:24);
+        icub.plot(cur_chi,params);
+        pause(0.5);
+    end  
+  
 end

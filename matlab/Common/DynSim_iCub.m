@@ -13,7 +13,7 @@ function [t,chi,visual_param] = DynSim_iCub(controller,params)
     [~,T_b,~,~] = WS.GetState();
 
     params.chiInit = [T_b; params.qjInit; WS.dx_b; WS.omega_W; params.dqjInit];
-    %integration functio
+    %integration function
     forwardDynFunc  = @(t,chi)forwardDynamics(t,chi,controller,params);
     %% Integrate forward dynamics
     if params.demo_movements == 0 
@@ -25,6 +25,10 @@ function [t,chi,visual_param] = DynSim_iCub(controller,params)
       options = odeset('RelTol',1e-6,'AbsTol',1e-6);
 
     end   
+   
+    %disp('fixed_step') 
+    %chi = Ode1(forwardDynFunc,params.tStart:params.sim_step:params.tEnd,params.chiInit,controller,params); 
+           
     [t,chi,visual_param] = ode15s(forwardDynFunc,params.tStart:params.sim_step:params.tEnd,params.chiInit,options);
     delete(params.wait)       
 end 
@@ -45,7 +49,7 @@ function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
 %  qt_b:     the quaternion describing the orientation of the base (global parametrization of SO(3))
 %  qj:       the joint positions (R^ndof)
 %  dx_b:     the cartesian velocity of the base (R^3)
-%  omega_b:  the velocity describing the orientation of the base (SO(3))
+%  omega_w:  the velocity describing the orientation of the base (SO(3))
 %  dqj:      the joint velocities (R^ndof)
   % i get the pointer to the whole system
   icub = controller.GetWholeSystem();
@@ -61,7 +65,7 @@ qt_b = chi(4:7,:);  %TODO floating base flag required (parameter of the simulato
 % normalize quaternions to avoid numerical errors
 % qt_b = qt_b/norm(qt_b);
 
-qj   = chi(8:ndof+7,:);
+qj   = chi(8:8+ndof-1,:);
 
 % linear and angular velocity
 dx_b    = chi(ndof+8:ndof+10,:);   %TODO floating base flag required (parameter of the simulator)
@@ -70,7 +74,7 @@ dqj     = chi(ndof+14:2*ndof+13,:);
 
 Nu      = [dx_b;omega_w;dqj];
 
-% Obtaining the rotation matrix from root link to world frame
+% Obtaining the otation matrix from root link to world frame
 qT         = [x_b;qt_b];
 [~,R_b]    = frame2posrot(qT);
 
@@ -122,6 +126,8 @@ fc = zeros(6,1);
 Jc_t = zeros(ndof + 6,6);
 %% MexWholeBodyModel functions
 %TODO floating base flag required (parameter of the simulator)
+dx_b = zeros(3,1);
+omega_w = zeros(3,1);
 icub.SetFloatingBaseState(x_b,qt_b,dx_b,omega_w); %TODO floating base flag required (parameter of the simulator)
 %% Feet correction to avoid numerical integration errors
 % % feet correction gain
@@ -181,11 +187,11 @@ icub.SetFloatingBaseState(x_b,qt_b,dx_b,omega_w); %TODO floating base flag requi
 % controller
 %tau = stackOfTaskController(param, constraints, feet, gains, Nu, M, h, H, Jc, dJcNu, xCoM, J_CoM, desired_x_dx_ddx_CoM);    
 % evaluate the torque function if one is given
-if isobject(controller)
-    tau = controller.Policy(t,qj,dqj,fc,Jc_t);
-else   
-    tau = zeros(ndof + 6,1);
-end        
+% if isobject(controller)
+%     tau = controller.Policy(t,qj,dqj,fc,Jc_t);
+% else   
+    tau = zeros(ndof,1);
+%end        
 
 %% State derivative computation
 % this is for advancing the simulation 
@@ -195,8 +201,13 @@ omega_b = transpose(R_b)*omega_w; %TODO floating base flag required (parameter o
 dqt_b   = quaternionDerivative(omega_b,qt_b);   %TODO floating base flag required (parameter of the simulator)    
 
 dx      = [dx_b;dqt_b;dqj];
-dNu     = M\(Jc_t*fc + [zeros(6,1); tau]-h);
-
+%dNu     = M\(Jc_t*fc + [zeros(6,1); tau]-h);
+%% FIXED BASE
+M_small = M(7:end,7:end);
+h_small = h(7:end,1);
+dNu_small = M_small\( + [tau]-h_small);
+dNu = [zeros(6,1); dNu_small];
+%% FIXED BASE
 dchi    = [dx;dNu];  
 
 %% Visualization 

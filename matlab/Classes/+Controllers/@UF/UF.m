@@ -130,7 +130,7 @@ classdef  UF < Controllers.AbstractController
           % the dynamic computation between controller and simulator has
           % to be different
           %% provisory structure 
-          new = false;
+          new = true;
           if(~new) 
               % active robot 
               cur_bot = obj.GetActiveBot;

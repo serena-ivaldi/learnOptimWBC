@@ -5,7 +5,7 @@ classdef iCub < handle
         model_name
         active_floating_base          % switch to control if the icub has or not a floating base
         ndof                          % dependant on the model used for the simulaztion
-        list_of_kin_chain             % string matching URDF name of the link (frame)
+        %list_of_kin_chain             % string matching URDF name of the link (frame)
         %dim_of_kin_chain
         %access_index;                 % vector of index used for accesing the infromation stored in the structural parameters
         %% Floating base parameter
@@ -27,13 +27,13 @@ classdef iCub < handle
     end
     
     methods
-        function obj = iCub(model,list_of_kin_chain)
+        function obj = iCub(model)
             if(strcmp(model,'icubGazeboSim'))
                 obj.model_name = model;
                 obj.active_floating_base = true;
                 % Initialize the mexWholeBodyModel
                 wbm_modelInitialise('icubGazeboSim');
-                obj.list_of_kin_chain = list_of_kin_chain; %{'com','left_arm','right_arm','l_sole','r_sole'}; %string matching URDF name of the link (frame)
+                %obj.list_of_kin_chain = list_of_kin_chain; %{'com','left_arm','right_arm','l_sole','r_sole'}; %string matching URDF name of the link (frame)
                 %obj.dim_of_kin_chain  = {3,5,5,6,6};
                 %obj.sum_ind = {0,3,8,13,19,25};
                 obj.ndof = 25; % degrees of freedom without floating base
@@ -45,7 +45,7 @@ classdef iCub < handle
                 end
                 obj.model_name = model;
                 obj.active_floating_base = false;
-                obj.list_of_kin_chain =list_of_kin_chain; % {'com','left_arm','right_arm'}; %string matching URDF name of the link (frame)
+                %obj.list_of_kin_chain =list_of_kin_chain; % {'com','left_arm','right_arm'}; %string matching URDF name of the link (frame)
                 model = strcat(model,'.urdf');
                 path = which(model);
                 wbm_modelInitialiseFromURDF(path);
