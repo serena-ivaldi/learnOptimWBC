@@ -188,9 +188,9 @@ icub.SetFloatingBaseState(x_b,qt_b,dx_b,omega_w); %TODO floating base flag requi
 %tau = stackOfTaskController(param, constraints, feet, gains, Nu, M, h, H, Jc, dJcNu, xCoM, J_CoM, desired_x_dx_ddx_CoM);    
 % evaluate the torque function if one is given
 % if isobject(controller)
-%     tau = controller.Policy(t,qj,dqj,fc,Jc_t);
+     tau = controller.Policy(t,qj,dqj,fc,Jc_t);
 % else   
-    tau = zeros(ndof,1);
+%    tau = zeros(ndof,1);
 %end        
 
 %% State derivative computation

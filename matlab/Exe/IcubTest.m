@@ -4,7 +4,7 @@ clc
 
 %% test selection
 
-visualization_test = true;
+visualization_test = false;
 
 %% GENERAL PARAMETERS
 % for other strucutures
@@ -37,7 +37,7 @@ target_link{1} = subchain1;
 robots{1} = chain_1;
 % we have to specify floating base for the icub because it gives us 
 % extended dynamic matrix even if the robot is fixed base
-chains = SubChains(target_link,robots,icub,'floating_base');
+chains = SubChains(target_link,robots,icub);
 
 %% building initial configuration
 %params.qjInit      = [];
@@ -172,7 +172,7 @@ else
     % the metric change between regularized and not regularized because in the
     % regularized case i have to do N^(-1) 
     % not regularized case i have N^(-1/2)
-    metric = {'M*transpose(M)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
+    metric = {'M^(1)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
     kd = 110;
     kp = 70; % row vector one for each chain
     for i= 1:chains.GetNumChains()

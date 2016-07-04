@@ -20,13 +20,20 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
             rpy = tr2rpy(T);
             rpy = rpy';
             %try
-            J = cur_bot.jacob0(q,'rpy');
+            if(obj.floating_base)
+                J = cur_bot.jacob0(q,'rpy');
+                full_qd = [obj.whole_system.dx_b;obj.whole_system.omega_W;qd];
+                v=J*full_qd;
+                xd = v(1:3);rpyd=v(4:6);
+            else
+                J = cur_bot.jacob0(q,'rpy');
+                J = J(:,7:end);
+                v=J*qd;
+                xd = v(1:3);rpyd=v(4:6);
+            end
             %catch error
             %  error('jacob0 is symbolic. remove the corresponding mex file in the robot folder to make it works','could be a representation singularity');
             %end
-            full_qd = [obj.whole_system.dx_b;obj.whole_system.omega_W;qd];
-            v=J*full_qd;
-            xd = v(1:3);rpyd=v(4:6);
             % compute J_dot from the the current subchain
             J_dot = cur_bot.jacob_dot(q,qd);   
         elseif(isa(cur_bot,'SerialLink'))

@@ -126,7 +126,7 @@ classdef  SubChains < handle
        function [M,F,Jc_t] = RemoveFloatingBase(obj,M,F,start) 
            % here i make the hypotesis that the floating base part is in
            % the upper part of the dynamic matrices
-           M = M(start:end,:);
+           M = M(start:end,start:end);
            F = F(start:end,:);        
        end
       
