@@ -17,49 +17,30 @@ time_struct.step = 0.001;
 %name_dat = 'Jaco1.3_scene1.1';
 %name_dat = 'LBR4p2.2_scene2_generalization';
 %name_dat = 'lwrsimple1.0_scene_test_obs';
-name_dat = 'iCub_1.0';
+name_dat = 'humanoid_bench_lbrsimple_1.1';
 %name_dat = 'humanoid_bench_generator_lbrsimple_1.0';
 path=LoadParameters(name_dat);
 load(path);
 
 %% SCENARIO
-name_scenario = 'iCub_1';%'lbr_scenario_2_gen' lbr_scenario2; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
+name_scenario = 'humanoids_rob_benck_1';%'lbr_scenario_2_gen' lbr_scenario2; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
 
 %% RBT SIMULATOR PARAMETERS
 time_sym_struct = time_struct;
 time_sym_struct.step = 0.001; 
 % TODO generalize for multichain
+qi{1} = qz;
+%qi{1} = zeros(1,chains.GetNumLinks(1)); %stretched arm
+qdi{1} = zeros(1,chains.GetNumLinks(1));
+options= [];
+simulator_type = {'rbt'};
+% rbt sim
+% define the type of integration of the sytem of differential equation
+fixed_step = false; %true;
+torque_saturation =10000; % high value == no saturation
+maxtime = 100; % maximum time before a simulation is stopped for being too long
+% other sim
 
-simulator_type = {'icub_matlab'};
-if strcmp(simulator_type{1},'rbt')
-    % rbt sim
-    qi{1} = qz;
-    %qi{1} = zeros(1,chains.GetNumLinks(1)); %stretched arm
-    qdi{1} = zeros(1,chains.GetNumLinks(1));
-    options= [];
-    % define the type of integration of the sytem of differential equation
-    fixed_step = false; %true;
-    torque_saturation =10000; % high value == no saturation
-    maxtime = 100; % maximum time before a simulation is stopped for being too long
-elseif strcmp(simulator_type{1},'icub_matlab')
-    % iCub sim
-    %% building initial configuration
-    list_of_kin_chain = {'trunk','left_arm','right_arm'};
-    params.feet_on_ground =  [1,1];
-    params.qjInit      = bot1.InitializeState(list_of_kin_chain, params.feet_on_ground);
-    params.dqjInit     = zeros(bot1.ndof,1);
-    % icub starting velocity floating base
-    params.dx_bInit    = zeros(3,1);
-    params.omega_bInit = zeros(3,1);
-    % root reference link;
-    params.root_reference_link ='l_sole';
-    params.tStart   = time_sym_struct.ti;
-    params.tEnd     = time_sym_struct.tf;
-    params.sim_step = 0.01;
-    params.demo_movements = 0 ;
-    params.wait     = waitbar(0,'State integration in progress...');
-
-end
 %% Parameters Dependant on the type of controller
 
 %%%EOF
@@ -205,23 +186,19 @@ switch CONTROLLERTYPE
         
         %% INSTANCE PARAMETER
         run_function = @RobotExperiment;
-        fitness = @fitnessHumanoidsIcub;
+        fitness = @fitnessHumanoids1;
         clean_function = @RobotExperimentCleanData;
+        % TODO generalize for multichain
+        input{1} = simulator_type{1};  % rbt / v-rep
+        input{2} = qi;                 % initial position 
+        input{3} = qdi;                % initial velocity
+        %------
+        input{4} = time_sym_struct;    %time struct for simulation with fixed step
+        input{5} = [];                 % here i have to insert the controller i will do that in init() 
+        input{6} = fixed_step;         % if is true i use ode4 (runge-kutta)
+        input{7} = torque_saturation;  % i define the torque saturation that i want to apply
+        input{8} = maxtime;            % maxtime before the simulation is stopped because is too long
         
-        if strcmp(simulator_type{1},'rbt') 
-            % TODO generalize for multichain
-            input{1} = simulator_type{1};  % rbt / v-rep
-            input{2} = qi;                 % initial position 
-            input{3} = qdi;                % initial velocity
-            %------
-            input{4} = time_sym_struct;    %time struct for simulation with fixed step
-            input{5} = [];                 % here i have to insert the controller i will do that in init() 
-            input{6} = fixed_step;         % if is true i use ode4 (runge-kutta)
-            input{7} = torque_saturation;  % i define the torque saturation that i want to apply
-            input{8} = maxtime;            % maxtime before the simulation is stopped because is too long
-        elseif strcmp(simulator_type{1},'icub_matlab')
-            input{1} = params;
-        end
         %% CMAES PARAMETER
         %--- Starting value of parameters
         generation_of_starting_point = 'random'; % 'test', 'given', 'random'

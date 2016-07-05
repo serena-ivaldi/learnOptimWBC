@@ -4,12 +4,17 @@ clc
 
 %% initialize all the data
 optim = false;
-[bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,constr,learn_approach,inst,~,~,~,~,qi,qdi,fixed_step,torque_saturation,maxtime,rawTextFromStorage,name_dat]=Init(optim);
+[bot1,name_scenario,time_struct,time_sym_struct,simulator_type,reference,alphas,controller,constr,learn_approach,inst,~,~,~,~,input,rawTextFromStorage,name_dat]=Init(optim);
 %% Simulation
-tic
-[t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step,'TorqueSat',torque_saturation,'maxtime',maxtime);
-toc
-
+if(strcmp(simulator_type{1},'rbt'))
+    tic
+    [t, q, qd] = DynSim(time_sym_struct,controller,input{2},input{3},input{6},'TorqueSat',input{7},'maxtime',input{8});
+    toc
+elseif (strcmp(simulator_type{1},'icub_matlab'))
+    tic
+    [t, q, qd]=DynSim_iCub(controller,input{1});
+    toc
+end
 %% Evaluate fitness 
 evaluation = true;
 if (evaluation)

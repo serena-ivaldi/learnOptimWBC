@@ -130,8 +130,7 @@ classdef  UF < Controllers.AbstractController
           % the dynamic computation between controller and simulator has
           % to be different
           %% provisory structure 
-          new = true;
-          if(~new) 
+          if ~(isa(obj.subchains.sub_chains{1},'DummyRvc_iCub')) 
               % active robot 
               cur_bot = obj.GetActiveBot;
               % current chain index
@@ -144,6 +143,8 @@ classdef  UF < Controllers.AbstractController
               % i include the external forces inside F
               F = obj.subchains.GetF(q,qd,Fc,Jc_t);
               [M,F] = obj.subchains.RemoveFloatingBase(M,F,7);
+              q = q';
+              qd = qd';
           end
           % controller 
           if(strcmp(obj.combine_rule,'sum')) 

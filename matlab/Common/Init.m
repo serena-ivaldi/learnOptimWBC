@@ -1,5 +1,5 @@
-function [bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,constr,learn_approach,inst,generation_of_starting_point,...
-    niter,explorationRate,cmaes_value_range,qi,qdi,fixed_step,torque_saturation,maxtime,rawTextFromStorage,name_dat]=Init(optim)
+function [bot1,name_scenario,time_struct,time_sym_struct,simulator_type,reference,alphas,controller,constr,learn_approach,inst,generation_of_starting_point,...
+    niter,explorationRate,cmaes_value_range,input,rawTextFromStorage,name_dat]=Init(optim)
 %% parameters
 AllRuntimeParameters
 

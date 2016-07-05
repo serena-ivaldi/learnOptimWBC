@@ -38,7 +38,7 @@ classdef iCub < handle
                 %obj.sum_ind = {0,3,8,13,19,25};
                 obj.ndof = 25; % degrees of freedom without floating base
             elseif(strcmp(model,'model_arms_torso_free')||strcmp(model,'model32dof'))
-                if strcmp(model,'model32dof') 
+                if strcmp(model,'model32dof')
                     obj.ndof = 32;
                 else
                     obj.ndof = 17;
@@ -56,7 +56,7 @@ classdef iCub < handle
                         obj.linkList{iii} = scheme.robot.link{i}.Attributes.name;
                         iii = iii + 1;
                     end
-                end                
+                end
                 iii = 1;
                 for i = 1:length(scheme.robot.joint)
                     obj.jointList{i} = scheme.robot.joint{i};
@@ -116,7 +116,76 @@ classdef iCub < handle
         function f = F(obj,q,qd,fc,Jc_t)
             f = wbm_generalisedBiasForces(obj.R_b,obj.x_b,q,qd,[obj.dx_b;obj.omega_W]) -Jc_t*fc;
         end
-
+        
+        % This function initialize and allow to use different limbs of the
+        % robot according to the current URDF
+        % The possible values of kin_chain are
+        % 'com','left_arm','right_arm','l_sole','r_sole'
+        % return qjInit in degres
+        function qjInit = InitializeState(obj, list_of_kin_chain, feet_on_ground)
+            qjInit      = zeros(obj.ndof,1);
+            
+            if(~isempty(find(SubStrFind('trunk',list_of_kin_chain),1)))
+                torsoInit    = [0.0  0.0  0.0]'; %yaw roll pitch
+                %params.qjInit = [params.qjInit;torsoInit];
+                string_search = {'torso_yaw','torso_roll','torso_pitch'};
+                qjInit = obj.sortJointValue(string_search,qjInit,torsoInit);
+            end
+            
+            if(~isempty(find(SubStrFind('left_arm',list_of_kin_chain),1)))
+                leftArmInit  = [ -20.0  30.0  0.0  45.0  0.0 0.0 0.0]';
+                %params.qjInit = [params.qjInit;leftArmInit];
+                string_search = {'l_shoulder_pitch','l_shoulder_roll','l_shoulder_yaw',...
+                    'l_elbow','l_wrist_prosup','l_wrist_pitch','l_wrist_yaw'};
+                qjInit = obj.sortJointValue(string_search,qjInit,leftArmInit);
+            end
+            
+            if(~isempty(find(SubStrFind('right_arm',list_of_kin_chain),1)))
+                rightArmInit = [0.0  30.0  0.0  45.0  0.0 0.0 0.0]'; %-20.0  30.0  0.0  45.0  0.0 0.0 0.0
+                %params.qjInit = [params.qjInit;rightArmInit];
+                string_search = {'r_shoulder_pitch','r_shoulder_roll','r_shoulder_yaw',...
+                    'r_elbow','r_wrist_prosup','r_wrist_pitch','r_wrist_yaw'};
+                qjInit = obj.sortJointValue(string_search,qjInit,rightArmInit);
+            end
+            
+            if(~isempty(find(SubStrFind('l_sole',list_of_kin_chain),1)) || ~isempty(find(SubStrFind('r_sole',list_of_kin_chain),1)))
+                if     feet_on_ground(1) == 1 && feet_on_ground(2) == 1
+                    % initial conditions for balancing on two feet
+                    leftLegInit  = [  25.5   0.1   0.0  -18.5  -5.5  -0.1]';
+                    rightLegInit = [  25.5   0.1   0.0  -18.5  -5.5  -0.1]';
+                    %params.qjInit = [params.qjInit;leftLegInit;rightLegInit];
+                elseif   feet_on_ground(1) == 1 && feet_on_ground(2) == 0
+                    % initial conditions for the robot standing on the left foot
+                    leftLegInit  = [  25.5   15.0   0.0  -18.5  -5.5  -0.1]';
+                    rightLegInit = [  25.5   5.0    0.0  -40    -5.5  -0.1]';
+                    %params.qjInit = [params.qjInit;leftLegInit;rightLegInit];
+                elseif   feet_on_ground(1) == 0 && feet_on_ground(2) == 1
+                    % initial conditions for the robot standing on the right foot
+                    leftLegInit  = [  25.5   5.0    0.0  -40    -5.5  -0.1]';
+                    rightLegInit = [  25.5   15.0   0.0  -18.5  -5.5  -0.1]';
+                    %params.qjInit = [params.qjInit;leftLegInit;rightLegInit];
+                end
+                string_search = {'l_hip_pitch','l_hip_roll','l_hip_yaw','l_knee',...
+                    'l_ankle_pitch','l_ankle_roll'};
+                qjInit = obj.sortJointValue(string_search,qjInit,leftLegInit);
+                string_search = {'r_hip_pitch','r_hip_roll','r_hip_yaw','r_knee',...
+                    'r_ankle_pitch','r_ankle_roll'};
+                qjInit = obj.sortJointValue(string_search,qjInit,rightLegInit);
+            end
+            qjInit      = qjInit*(pi/180);
         end
-  
+        
+        
+        function  [x,R] = offlineFkine(rob,chi,tag) 
+            x_base  = chi(1:3,:);  %TODO floating base flag required (parameter of the simulator)
+            qt_b = chi(4:7,:);  %TODO floating base flag required (parameter of the simulator)
+            q   = chi(8:8+rob.ndof-1,:);
+            [~,R_base]    = frame2posrot([x_base;qt_b]);
+            fkine = wholeBodyModel('forward-kinematics',reshape(R_base,[],1),x_base,q,tag);
+            % Obtaining the rotation matrix from root link to world frame
+            [x,R]    = frame2posrot(fkine);
+        end  
+        
+    end
+    
 end

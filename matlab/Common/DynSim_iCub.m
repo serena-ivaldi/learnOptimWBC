@@ -6,7 +6,7 @@
 %  robot's movements.
 
 % #TODO substitute icub with controller.subchains
-function [t,chi,visual_param] = DynSim_iCub(controller,params) 
+function [t, q, qd] = DynSim_iCub(controller,params) 
     WS = controller.GetWholeSystem();
     %% Updating the robot position and define the world link
     WS.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
@@ -30,6 +30,8 @@ function [t,chi,visual_param] = DynSim_iCub(controller,params)
     %chi = Ode1(forwardDynFunc,params.tStart:params.sim_step:params.tEnd,params.chiInit,controller,params); 
            
     [t,chi,visual_param] = ode15s(forwardDynFunc,params.tStart:params.sim_step:params.tEnd,params.chiInit,options);
+    q = chi(:,1:7+WS.ndof);
+    qd = chi(:,8+WS.ndof:end);
     delete(params.wait)       
 end 
 
