@@ -31,7 +31,7 @@ list_of_kin_chain = {'com','left_arm','right_arm'};
 icub = iCub('model_arms_torso_free');
 chain_1 = DummyRvc_iCub(icub,'l_sole');
  
-subchain1 = {'l_hand'};
+subchain1 = {'r_gripper'};
 target_link{1} = subchain1;
 
 robots{1} = chain_1;
@@ -134,7 +134,7 @@ else
     geometric_path = {'fixed'};
     time_law = {'none'};
     %parameters first chains
-    geom_parameters{1,1} = [0.209290598956330,0.147080124030923,0.607101111147211]; 
+    geom_parameters{1,1} = [0.236247320698301 -0.295336915231286 0.995201661433111]; %[0.209290598956330,0.147080124030923,0.607101111147211]; 
     %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
     dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
 
@@ -268,11 +268,10 @@ else
 
     %% Visualize forward dynamics
     %params.wait     = waitbar(0,'Graphics generation in progress...');
-    for i = 1:10:size(chi,1)
-        close all
-        cur_chi = chi(i,1:24);
-        icub.plot(cur_chi,params);
-        pause(0.5);
-    end  
+    figure
+    hold on
+    plot3(geom_parameters{1,1}(1),geom_parameters{1,1}(2),geom_parameters{1,1}(3),'g.','MarkerSize', 30);
+    icub.plot(chi,params);
+
   
 end
