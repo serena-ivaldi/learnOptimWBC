@@ -23,18 +23,32 @@ function fit  = fitnessHumanoidsIcub(obj,output)
         tau_cur = tau_(i,:);
         %compute position of the all control points
        
-        ee = WS.offlineFkine(q_cur,'r_gripper');
-        p1 = WS.offlineFkine(q_cur,'r_wrist_1');
-        p2 = WS.offlineFkine(q_cur,'r_elbow_1');
-        p3 = WS.offlineFkine(q_cur,'r_shoulder_1');
-        p4 = WS.offlineFkine(q_cur,'head');
+        ee = iCub.offlineFkine(q_cur,'r_gripper');
+        p1 = iCub.offlineFkine(q_cur,'r_wrist_1');
+        p2 = iCub.offlineFkine(q_cur,'r_elbow_1');
+        p3 = iCub.offlineFkine(q_cur,'r_shoulder_1');
+        p4 = iCub.offlineFkine(q_cur,'head');
         control_points =[ee'; p1'; p2'; p3'; p4'];
         % here i build the input vector to compute the constraints
         % violations
-        input_vector = {q_cur(1),q_cur(1),q_cur(2),q_cur(2),q_cur(3),q_cur(3),q_cur(4),q_cur(4),q_cur(5),q_cur(5),q_cur(6),q_cur(6),q_cur(7),q_cur(7),...
-                        tau_cur(1),tau_cur(1),tau_cur(2),tau_cur(2),tau_cur(3),tau_cur(3),tau_cur(4),tau_cur(4),tau_cur(5),tau_cur(5),tau_cur(6),tau_cur(6),tau_cur(7),tau_cur(7),...
-                        control_points(1,:),control_points(2,:),control_points(3,:),control_points(4,:)};
+%         input_vector = {q_cur(1),q_cur(1),q_cur(2),q_cur(2),q_cur(3),q_cur(3),q_cur(4),q_cur(4),q_cur(5),q_cur(5),q_cur(6),q_cur(6),q_cur(7),q_cur(7),...
+%                         tau_cur(1),tau_cur(1),tau_cur(2),tau_cur(2),tau_cur(3),tau_cur(3),tau_cur(4),tau_cur(4),tau_cur(5),tau_cur(5),tau_cur(6),tau_cur(6),tau_cur(7),tau_cur(7),...
+%                         control_points(1,:),control_points(2,:),control_points(3,:),control_points(4,:)};
         
+        input_vector = {};
+        for kk = i:iCub.ndof
+            input_vector{end +1} = q_cur(kk);
+            input_vector{end +1} = q_cur(kk);
+        end
+        for kk = i:iCub.ndof
+            input_vector{end +1} = tau_cur(kk);
+            input_vector{end +1} = tau_cur(kk);
+        end
+        for kk = i:length(control_points)
+            input_vector{end +1} = control_points(i,:)
+        end
+                    
+                    
         % here i update the value inside the penalty        
         obj.penalty_handling.EvaluateConstraints(input_vector,evaluate_constraints_index);
         evaluate_constraints_index = evaluate_constraints_index + 1;

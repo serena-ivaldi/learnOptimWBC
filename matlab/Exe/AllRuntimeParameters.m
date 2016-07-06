@@ -189,20 +189,19 @@ switch CONTROLLERTYPE
         regularizer{2} = regularized_chain_2;
         
         %% CONSTRAINTS PARAMETERS
-        constraints_functions = {'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
-                                 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
-                                 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
-                                 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
-                                 'DistanceObs','DistanceObs','DistanceObs','DistanceObs'}; % vector of functions handle for computing the constraints 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
-        constraints_type = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];  % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
-        % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
-        constraints_values =[+170*(pi/180), -170*(pi/180),120*(pi/180), -120*(pi/180),+170*(pi/180), -170*(pi/180),120*(pi/180), -120*(pi/180),...
-                             +170*(pi/180),-170*(pi/180),120*(pi/180), -120*(pi/180),+170*(pi/180), -170*(pi/180),...
-                             320, -320,320, -320,176, -176,176, -176,...
-                             110, -110,40, -40,40, -40,...
-                             0.01,0.01,0.01,0.01];  
-        activate_constraints_handling = true;
+        constraints_values = bot1.createConstraintsVector;
+        for k = 1:2:length(constraints_values)
+            constraints_functions{k} = 'LinInequality';
+            constraints_functions{k+1} = 'LinInequality2';
+        end
+        distConstraints_values = [0.01, 0.01, 0.01, 0.01, 0.01]; % distances for the collissions constraints
+        for k = 1:length(distConstraints_values)
+            constraints_functions{end+1} = 'DistanceObs';
+        end
+        constraints_values = [constraints_values, distConstraints_values];   % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
+        constraints_type = ones(1,length(constraints_values)); % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
         
+        activate_constraints_handling = true;        
         %% INSTANCE PARAMETER
         run_function = @RobotExperiment;
         fitness = @fitnessHumanoidsIcub;

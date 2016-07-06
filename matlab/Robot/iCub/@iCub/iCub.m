@@ -21,9 +21,12 @@ classdef iCub < handle
         %Omega
         %kinematic_chain_selector % list of kinematic chain in the icub
         %% URDF parameter
-        jointList   %the list of all the joints in the same order than the urdf
-        linkList    %the list of all the links in the same order than the urdf
-        revoluteJointList %the list of all the not fixed joints in the same order than the urdf
+        jointList           % the list of all the joints in the same order than the urdf
+        linkList            % the list of all the links in the same order than the urdf
+        revoluteJointList   % the list of all the not fixed joints in the same order than the urdf
+        UBjointLimit        % Upper limit boundarie of all the revolute joints
+        LBjointLimit        % Lower limit boundarie of all the revolute joints
+        effortLimit         % Limit efforts of all the revolute joints
     end
     
     methods
@@ -38,11 +41,6 @@ classdef iCub < handle
                 %obj.sum_ind = {0,3,8,13,19,25};
                 obj.ndof = 25; % degrees of freedom without floating base
             elseif(strcmp(model,'model_arms_torso_free')||strcmp(model,'model32dof'))
-                if strcmp(model,'model32dof')
-                    obj.ndof = 32;
-                else
-                    obj.ndof = 17;
-                end
                 obj.model_name = model;
                 obj.active_floating_base = false;
                 %obj.list_of_kin_chain =list_of_kin_chain; % {'com','left_arm','right_arm'}; %string matching URDF name of the link (frame)
@@ -50,6 +48,9 @@ classdef iCub < handle
                 path = which(model);
                 wbm_modelInitialiseFromURDF(path);
                 scheme = xml2struct(path);
+                obj.UBjointLimit = [];
+                obj.LBjointLimit = [];
+                obj.effortLimit = [];
                 iii = 1;
                 for i = 1:length(scheme.robot.link)
                     if(~strcmp(scheme.robot.link{i}.Attributes.name,'base_link'))
@@ -62,9 +63,13 @@ classdef iCub < handle
                     obj.jointList{i} = scheme.robot.joint{i};
                     if  strcmp(obj.jointList{i}.Attributes.type,'revolute')
                         obj.revoluteJointList{iii} = scheme.robot.joint{i};
+                        obj.UBjointLimit = [obj.UBjointLimit, str2double(scheme.robot.joint{i}.limit.Attributes.upper)];
+                        obj.LBjointLimit = [obj.LBjointLimit, str2double(scheme.robot.joint{i}.limit.Attributes.lower)];
+                        obj.effortLimit = [obj.effortLimit, str2double(scheme.robot.joint{i}.limit.Attributes.effort)];
                         iii = iii +1;
                     end
                 end
+                obj.ndof = length(obj.revoluteJointList);
             end
         end
         
@@ -176,7 +181,7 @@ classdef iCub < handle
         end
         
         
-        function  [x,R] = offlineFkine(rob,chi,tag) 
+        function  [x,R] = offlineFkine(rob,chi,tag)
             x_base  = chi(1:3,:);  %TODO floating base flag required (parameter of the simulator)
             qt_b = chi(4:7,:);  %TODO floating base flag required (parameter of the simulator)
             q   = chi(8:8+rob.ndof-1,:);
@@ -184,7 +189,18 @@ classdef iCub < handle
             fkine = wholeBodyModel('forward-kinematics',reshape(R_base,[],1),x_base,q,tag);
             % Obtaining the rotation matrix from root link to world frame
             [x,R]    = frame2posrot(fkine);
-        end  
+        end
+        
+        % Create the constraints_values vector need to compute the constraints
+        % Used in AllRUntimeParameters
+        function vector = createConstraintsVector(obj)
+            vector = [];
+            deg = (pi/180);
+            for i = 1:obj.ndof
+                vector = [vector, obj.UBjointLimit(i)*deg, ...
+                    obj.LBjointLimit(i)*deg, obj.effortLimit(i), -obj.effortLimit(i)];
+            end
+        end
         
     end
     
