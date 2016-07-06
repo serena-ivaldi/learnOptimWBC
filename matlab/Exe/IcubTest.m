@@ -4,7 +4,7 @@ clc
 
 %% test selection
 
-visualization_test = false;
+visualization_test = true;
 
 %% GENERAL PARAMETERS
 % for other strucutures
