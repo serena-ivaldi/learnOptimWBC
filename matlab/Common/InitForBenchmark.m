@@ -1,8 +1,13 @@
 function [epsilon,search_space_dimension,explorationRate,cmaes_value_range,...
          n_constraints,constraints_functions,constraints_type,constraints_values,run_function,fitness,clean_function,input]=InitForBenchmark(name_of_file,optim)
     %% parameters
-    AllRuntimeParameters
-
+%     allpath = which('FindData.m');
+%     path =fileparts(allpath);
+%     path = strcat(path,'/configuration_files/',name_of_file);
+%     init_func = str2func(path);
+%     init_func
+      data_storage = str2func(name_of_file);
+      data_storage()
     %%  Primary Reference
     % if type_of_task = sampled i have to specify the Time to reach the
     % end of the trajectories that is equal to the simulation time
