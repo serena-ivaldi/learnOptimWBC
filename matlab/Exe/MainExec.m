@@ -12,7 +12,7 @@ if(strcmp(simulator_type{1},'rbt'))
     toc
 elseif (strcmp(simulator_type{1},'icub_matlab'))
     tic
-    [t, q, qd]=DynSim_iCub(controller,input{1});
+    [t, q, qd]=DynSim_iCub(controller,input{2});
     toc
 end
 %% Evaluate fitness 
@@ -44,14 +44,20 @@ step_save_fig = 20;
 save_fig = false;
 ee_trajectory = true; 
 elbow_traj    = true;
+cur_bot = controller.subchains.sub_chains{1};
 %---
 
 % plot the trajectory of the elbow or e-e or both
 if(ee_trajectory || elbow_traj)
    figure; hold on;
-   text = LoadScenario(name_scenario);
-   eval(text);
-   [ee,elbow] = ComputePositions(q{1},t,controller);
+%    text = LoadScenario(name_scenario);
+%    eval(text);
+   
+   if ~(isa(cur_bot,'DummyRvc_iCub'))
+    [ee,elbow] = ComputePositions(q{1},t,controller);
+   else
+    [ee,elbow] = ComputePositionsIcub(q,t,controller);
+   end
    ee = ee';
    elbow = elbow';
    izy = 1;
@@ -79,7 +85,11 @@ if(~video && ~save_fig)
    set(gca,'CameraViewAngle',zoom);
    camera_position = [14.3762    9.7004   15.0093];
    campos(camera_position)
-   bot1.plot(q{1},'fps',fps);
+   if ~(isa(cur_bot,'DummyRvc_iCub'))
+       bot1.plot(q{1},'fps',fps);
+   else
+       bot1.plot(q,input{2});
+   end
 elseif(video)
    %at the end of the video simulation after chosing a good camera pos and
    %zoom

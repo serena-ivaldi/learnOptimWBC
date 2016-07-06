@@ -11,14 +11,19 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
         cur_bot = obj.GetCurRobot(ind_subchain);
         % i have to distinguish between icub and rbt robots (hopefully provisory)
         if(isa(cur_bot,'DummyRvc_iCub'))
-            % UPDATE OF THE TAG VALUE INSIDE DUMMY_ROBOT
-            cur_bot.tag = obj.target_link{ind_subchain}{ind_subchain,ind_subchain};
-            % compute pose (position + rool pitch yaw) from the current
-            % subchain
-            T = cur_bot.fkine(q');
-            x = T(1:3,4);
-            rpy = tr2rpy(T);
-            rpy = rpy';
+            if ~(strcmp(obj.target_link{ind_subchain}{ind_subchain,ind_task},'none'))
+                % UPDATE OF THE TAG VALUE INSIDE DUMMY_ROBOT 
+                cur_bot.tag = obj.target_link{ind_subchain}{ind_subchain,ind_task};
+                % compute pose (position + rool pitch yaw) from the current
+                % subchain
+                T = cur_bot.fkine(q');
+                x = T(1:3,4);
+                rpy = tr2rpy(T);
+                rpy = rpy';
+            else
+                x = [];
+                rpy = [];
+            end
             %try
             if(obj.floating_base)
                 J = cur_bot.jacob0(q','rpy');

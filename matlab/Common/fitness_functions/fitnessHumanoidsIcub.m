@@ -16,18 +16,18 @@ function fit  = fitnessHumanoidsIcub(obj,output)
     traj_err= 0;
     
     % i have to uniform the tau with the number of q
-    tau_=InterpTorque(contr,obj.input_4_run{4},0.001);
+    tau_=InterpTorque(contr,obj.input_4_run{3},0.001);
     evaluate_constraints_index = 1;
     for i=1:downsaple:size(t,2)
         q_cur = q(i,:);
         tau_cur = tau_(i,:);
         %compute position of the all control points
        
-        ee = iCub.offlineFkine(q_cur,'r_gripper');
-        p1 = iCub.offlineFkine(q_cur,'r_wrist_1');
-        p2 = iCub.offlineFkine(q_cur,'r_elbow_1');
-        p3 = iCub.offlineFkine(q_cur,'r_shoulder_1');
-        p4 = iCub.offlineFkine(q_cur,'head');
+        ee = iCub.offlineFkine(q_cur','r_gripper');
+        p1 = iCub.offlineFkine(q_cur','r_wrist_1');
+        p2 = iCub.offlineFkine(q_cur','r_elbow_1');
+        p3 = iCub.offlineFkine(q_cur','r_shoulder_1');
+        p4 = iCub.offlineFkine(q_cur','head');
         control_points =[ee'; p1'; p2'; p3'; p4'];
         % here i build the input vector to compute the constraints
         % violations
@@ -45,7 +45,7 @@ function fit  = fitnessHumanoidsIcub(obj,output)
             input_vector{end +1} = tau_cur(kk);
         end
         for kk = i:length(control_points)
-            input_vector{end +1} = control_points(i,:)
+            input_vector{end +1} = control_points(i,:);
         end
                     
                     

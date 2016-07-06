@@ -13,7 +13,7 @@ CONTROLLERTYPE ='UF';   % GHC or UF
 %%
 
 %SUBCHAIN PARAMETERS 
-subchain1 =  {'r_gripper','r_elbow_1','j_wb'};
+subchain1 =  {'r_gripper','r_elbow_1','none'};
 target_link{1} = subchain1;
 
 

@@ -219,7 +219,9 @@ switch CONTROLLERTYPE
             input{7} = torque_saturation;  % i define the torque saturation that i want to apply
             input{8} = maxtime;            % maxtime before the simulation is stopped because is too long
         elseif strcmp(simulator_type{1},'icub_matlab')
-            input{1} = params;
+            input{1} = simulator_type{1};  % rbt / v-rep
+            input{2} = params;
+            input{3} = time_sym_struct;
         end
         %% CMAES PARAMETER
         %--- Starting value of parameters

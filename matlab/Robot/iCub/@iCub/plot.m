@@ -226,8 +226,48 @@ xyzpatch.faces    = zeros(6,4);
 
 %TO DO adapt approx. the size of the boxes to iCub dimension
 mult_patch = ones(n_lin,2);
-mult_patch(:,1) = mult_patch(:,1)*0.04;
+mult_patch(:,1) = mult_patch(:,1)*0.03;
 mult_patch(:,2) = mult_patch(:,2)*0.03;
+
+try
+%legs
+mult_patch(strcmp(obj.linkList,'r_lower_leg'),:) = [0.035 0.03];
+mult_patch(strcmp(obj.linkList,'r_ankle_1'),:) = [0.025 0.03];
+mult_patch(strcmp(obj.linkList,'l_lower_leg'),:) = [0.035 0.03];
+mult_patch(strcmp(obj.linkList,'l_ankle_1'),:) = [0.025 0.03];
+%remove dh_frame and skin frames
+mult_patch(strcmp(obj.linkList,'r_hand_dh_frame'),:) = [0 0];
+mult_patch(strcmp(obj.linkList,'l_forearm_dh_frame'),:) = [0 0];
+mult_patch(strcmp(obj.linkList,'r_forearm_dh_frame'),:) = [0 0];
+mult_patch(strcmp(obj.linkList,'l_hand_dh_frame'),:) = [0 0];
+mult_patch(strcmp(obj.linkList,'r_foot_dh_frame'),:) = [0 0];
+mult_patch(strcmp(obj.linkList,'l_foot_dh_frame'),:) = [0 0];
+mult_patch(strcmp(obj.linkList,'chest_skin_frame'),:) = [0 0];
+%torso
+mult_patch(strcmp(obj.linkList,'r_hip_1'),:) = [0.02 0.02];
+mult_patch(strcmp(obj.linkList,'l_hip_1'),:) = [0.02 0.02];
+mult_patch(strcmp(obj.linkList,'r_shoulder_1'),:) = [0.02 0.02];
+mult_patch(strcmp(obj.linkList,'l_shoulder_1'),:) = [0.02 0.02];
+%arms
+mult_patch(strcmp(obj.linkList,'r_gripper'),:) = [0.01 0.035];
+mult_patch(strcmp(obj.linkList,'r_hand'),:) = [0.01 0.01];
+mult_patch(strcmp(obj.linkList,'r_forearm'),:) = [0.01 0.01];
+mult_patch(strcmp(obj.linkList,'r_shoulder_2'),:) = [0.01 0.01];
+mult_patch(strcmp(obj.linkList,'r_shoulder_3'),:) = [0.01 0.01];
+
+mult_patch(strcmp(obj.linkList,'r_shoulder_3'),:) = [0.01 0.01];
+mult_patch(strcmp(obj.linkList,'l_shoulder_2'),:) = [0.01 0.01];
+mult_patch(strcmp(obj.linkList,'l_gripper'),:) = [0.01 0.035];
+mult_patch(strcmp(obj.linkList,'l_hand'),:) = [0.01 0.01];
+mult_patch(strcmp(obj.linkList,'l_forearm'),:) = [0.01 0.01];
+%head
+mult_patch(strcmp(obj.linkList,'imu_frame'),:) = [0.05 0.05];
+mult_patch(strcmp(obj.linkList,'head'),:) = [0.01 0.01];
+mult_patch(strcmp(obj.linkList,'neck_2'),:) = [0.02 0.02];
+catch err
+    disp('The URDF file seems to disrespect name convention or some links are missing in the URDF');
+end
+
 
 % plot the lines depicting the links
 for jj=1:n_lin
