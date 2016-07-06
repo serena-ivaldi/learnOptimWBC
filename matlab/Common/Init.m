@@ -1,7 +1,8 @@
 function [bot1,name_scenario,time_struct,time_sym_struct,simulator_type,reference,alphas,controller,constr,learn_approach,inst,generation_of_starting_point,...
-    niter,explorationRate,cmaes_value_range,input,rawTextFromStorage,name_dat]=Init(optim)
+    niter,explorationRate,cmaes_value_range,input,rawTextFromStorage,name_dat]=Init(name_of_file,optim)
 %% parameters
-AllRuntimeParameters
+ data_storage = str2func(name_of_file);
+ data_storage()
 
 %%  Primary Reference
 % if type_of_task = sampled i have to specify the Time to reach the
@@ -87,7 +88,11 @@ elseif(strcmp(method_to_use,'empty'))
 end
 
 %% Instance
-input{5} = controller;
+if strcmp(simulator_type{1},'rbt')
+    input{5} = controller;
+elseif strcmp(simulator_type{1},'icub_matlab')
+    input{4} = controller;
+end
 inst = Optimization.Instance(constr,learn_approach,run_function,fitness,clean_function,input);
 
 end

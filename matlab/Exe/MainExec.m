@@ -4,7 +4,8 @@ clc
 
 %% initialize all the data
 optim = false;
-[bot1,name_scenario,time_struct,time_sym_struct,simulator_type,reference,alphas,controller,constr,learn_approach,inst,~,~,~,~,input,rawTextFromStorage,name_dat]=Init(optim);
+configuration_file_name = 'RP_humanoid_test_iCub_1';
+[bot1,name_scenario,time_struct,time_sym_struct,simulator_type,reference,alphas,controller,constr,learn_approach,inst,~,~,~,~,input,rawTextFromStorage,name_dat]=Init(configuration_file_name,optim);
 %% Simulation
 if(strcmp(simulator_type{1},'rbt'))
     tic

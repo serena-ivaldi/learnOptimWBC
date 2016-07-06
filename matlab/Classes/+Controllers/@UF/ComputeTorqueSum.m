@@ -1,5 +1,4 @@
 function [tau,J,x,xd,rpy,rpyd] = ComputeTorqueSum(obj,ind_subchain,ind_task,M,F,t,q,qd,Fc)
-   
     try
        [J,Jd,x,xd,rpy,rpyd] = obj.subchains.DirKin(q,qd,ind_subchain,ind_task);
        % the hypothesis is that N is inverted directly from data ()

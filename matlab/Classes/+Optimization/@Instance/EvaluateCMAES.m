@@ -20,7 +20,7 @@ function [performance, succeeded, data2save] = EvaluateCMAES(obj,action,cur_cand
     % i have to assign the variable to avoid error generation
     data2save = [];
 
-     try
+    try
         %disp('i am in evaluate CMAES')
         %action
         [output]=obj.run(action);

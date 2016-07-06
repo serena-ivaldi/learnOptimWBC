@@ -14,11 +14,19 @@
 % as a method of the class where the obj belongs to
 function RobotExperimentCleanData(obj,fake_input)
 
-controller = obj.input_4_run{5};
-
+if(strcmp(obj.input_4_run{1},'rbt'))
+    controller = obj.input_4_run{5};
+elseif(strcmp(obj.input_4_run{1},'icub_matlab'))
+    controller = obj.input_4_run{4};
+end
 controller.CleanTau();
 controller.CleanTime();
+controller.current_time = [];
+if(strcmp(obj.input_4_run{1},'rbt'))
+    obj.input_4_run{5} = controller;
+elseif(strcmp(obj.input_4_run{1},'icub_matlab'))
+    obj.input_4_run{4} = controller;
+end
 
-obj.input_4_run{5} = controller;
 
 end

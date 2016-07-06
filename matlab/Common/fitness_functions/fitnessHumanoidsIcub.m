@@ -6,19 +6,19 @@ function fit  = fitnessHumanoidsIcub(obj,output)
     %%%;;
     downsaple = 10;
     L = 1; 
-    max_effort = 4.0000e+07;
-    max_traj_error = 2000;
+    max_effort = 3.5000e+05;
+    max_traj_error = 120;
     weight_effort = 1;
     weight_traj_err = 3;
     %%%EOF
-    contr = obj.input_4_run{5};
+    contr = obj.input_4_run{4};
     iCub = contr.GetWholeSystem();
     traj_err= 0;
     
     % i have to uniform the tau with the number of q
     tau_=InterpTorque(contr,obj.input_4_run{3},0.001);
     evaluate_constraints_index = 1;
-    for i=1:downsaple:size(t,2)
+    for i=1:downsaple:size(t,1)
         q_cur = q(i,:);
         tau_cur = tau_(i,:);
         %compute position of the all control points
@@ -31,24 +31,14 @@ function fit  = fitnessHumanoidsIcub(obj,output)
         control_points =[ee'; p1'; p2'; p3'; p4'];
         % here i build the input vector to compute the constraints
         % violations
-%         input_vector = {q_cur(1),q_cur(1),q_cur(2),q_cur(2),q_cur(3),q_cur(3),q_cur(4),q_cur(4),q_cur(5),q_cur(5),q_cur(6),q_cur(6),q_cur(7),q_cur(7),...
-%                         tau_cur(1),tau_cur(1),tau_cur(2),tau_cur(2),tau_cur(3),tau_cur(3),tau_cur(4),tau_cur(4),tau_cur(5),tau_cur(5),tau_cur(6),tau_cur(6),tau_cur(7),tau_cur(7),...
-%                         control_points(1,:),control_points(2,:),control_points(3,:),control_points(4,:)};
-        
-        input_vector = {};
-        for kk = i:iCub.ndof
-            input_vector{end +1} = q_cur(kk);
-            input_vector{end +1} = q_cur(kk);
-        end
-        for kk = i:iCub.ndof
-            input_vector{end +1} = tau_cur(kk);
-            input_vector{end +1} = tau_cur(kk);
-        end
-        for kk = i:length(control_points)
-            input_vector{end +1} = control_points(i,:);
-        end
-                    
-                    
+        input_vector = {q_cur(8),q_cur(8),q_cur(9),q_cur(9),q_cur(10),q_cur(10),q_cur(11),q_cur(11),q_cur(12),q_cur(12),q_cur(13),q_cur(13),q_cur(14),q_cur(14),...
+                        q_cur(15),q_cur(15),q_cur(16),q_cur(16),q_cur(17),q_cur(17),q_cur(18),q_cur(18),q_cur(19),q_cur(19),q_cur(20),q_cur(20),q_cur(21),q_cur(21),...
+                        q_cur(22),q_cur(22),q_cur(23),q_cur(23),q_cur(24),q_cur(24),...
+                        tau_cur(1),tau_cur(1),tau_cur(2),tau_cur(2),tau_cur(3),tau_cur(3),tau_cur(4),tau_cur(4),tau_cur(5),tau_cur(5),tau_cur(6),tau_cur(6),tau_cur(7),tau_cur(7),...
+                        tau_cur(8),tau_cur(8),tau_cur(9),tau_cur(9),tau_cur(10),tau_cur(10),tau_cur(11),tau_cur(11),tau_cur(12),tau_cur(12),tau_cur(13),tau_cur(13),tau_cur(14),tau_cur(14),...
+                        tau_cur(15),tau_cur(15),tau_cur(16),tau_cur(16),tau_cur(17),tau_cur(17),...
+                        control_points(1,:),control_points(2,:),control_points(3,:),control_points(4,:),control_points(5,:)};            
+
         % here i update the value inside the penalty        
         obj.penalty_handling.EvaluateConstraints(input_vector,evaluate_constraints_index);
         evaluate_constraints_index = evaluate_constraints_index + 1;
