@@ -51,8 +51,8 @@ cur_bot = controller.subchains.sub_chains{1};
 % plot the trajectory of the elbow or e-e or both
 if(ee_trajectory || elbow_traj)
    figure; hold on;
-%    text = LoadScenario(name_scenario);
-%    eval(text);
+    %text = LoadScenario(name_scenario);
+    %eval(text);
    
    if ~(isa(cur_bot,'DummyRvc_iCub'))
     [ee,elbow] = ComputePositions(q{1},t,controller);

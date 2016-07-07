@@ -23,7 +23,7 @@ path=LoadParameters(name_dat);
 load(path);
 
 %% SCENARIO
-name_scenario = 'humanoids_rob_benck_1';%'lbr_scenario_2_gen' lbr_scenario2; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
+name_scenario = 'humanoids_rob_benck_2';%'lbr_scenario_2_gen' lbr_scenario2; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
 
 %% RBT SIMULATOR PARAMETERS
 time_sym_struct = time_struct;
@@ -170,23 +170,27 @@ switch CONTROLLERTYPE
         regularizer{2} = regularized_chain_2;
         
         %% CONSTRAINTS PARAMETERS
-        constraints_functions = {'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
-                                 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
-                                 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
-                                 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
-                                 'DistanceObs','DistanceObs','DistanceObs','DistanceObs'}; % vector of functions handle for computing the constraints 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
-        constraints_type = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];  % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
+        constraints_functions = {'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',... joints limits
+                                 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',... joints limits
+                                 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',... velocity limits 
+                                 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',... velocity limits              
+                                 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',... torque limits
+                                 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',... torque limits
+                                 'DistanceObs','DistanceObs','DistanceObs','DistanceObs'}; 
+                                  % vector of functions handle for computing the constraints 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
+        constraints_type = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];  % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
         % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
-        constraints_values =[+170*(pi/180), -170*(pi/180),100*(pi/180), -100*(pi/180),+170*(pi/180), -170*(pi/180),120*(pi/180), -120*(pi/180),...
-                             +170*(pi/180),-170*(pi/180),120*(pi/180), -120*(pi/180),+170*(pi/180), -170*(pi/180),...
-                             30, -30,55, -55,20, -20,20, -20,...
-                             20, -20,10, -10,10, -10,...
-                             0.01,0.01,0.01,0.01];  
+        constraints_values =[+170*(pi/180), -170*(pi/180),120*(pi/180), -120*(pi/180),+170*(pi/180), -170*(pi/180),120*(pi/180), -120*(pi/180),... joints limits
+                             +170*(pi/180),-170*(pi/180),120*(pi/180), -120*(pi/180),+170*(pi/180), -170*(pi/180),... joints limits (14)
+                             1.7,-1.7,1.7,-1.7,1.72,-1.72,2.26,-2.26,2.44,-2.44,3.14,-3.14,3.14,-3.14,... velocity limits (28) 
+                             320, -320,320, -320,176, -176,176, -176,... torque limits 
+                             110, -110,40, -40,40, -40,... torque limits (42)
+                             0.01,0.01,0.01,0.01];  % obstacles
         activate_constraints_handling = true;
         
         %% INSTANCE PARAMETER
         run_function = @RobotExperiment;
-        fitness = @fitnessHumanoids1;
+        fitness = @fitnessHumanoids2;
         clean_function = @RobotExperimentCleanData;
         % TODO generalize for multichain
         input{1} = simulator_type{1};  % rbt / v-rep
