@@ -5,7 +5,7 @@ clc
 %% initialize all the data
 optim = false;
 configuration_file_name = 'RP_humanoid_test_iCub_1';
-[bot1,name_scenario,time_struct,time_sym_struct,simulator_type,reference,alphas,controller,constr,learn_approach,inst,~,~,~,~,input,rawTextFromStorage,name_dat]=Init(configuration_file_name,optim);
+[bot1,name_scenario,time_struct,time_sym_struct,simulator_type,reference,alphas,controller,constr,learn_approach,inst,~,~,~,~,~,input,rawTextFromStorage,name_dat]=Init(configuration_file_name,optim);
 %% Simulation
 if(strcmp(simulator_type{1},'rbt'))
     tic
@@ -50,7 +50,8 @@ cur_bot = controller.subchains.sub_chains{1};
 
 % plot the trajectory of the elbow or e-e or both
 if(ee_trajectory || elbow_traj)
-   figure; hold on;
+   %figure;
+   hold on;
 %    text = LoadScenario(name_scenario);
 %    eval(text);
    

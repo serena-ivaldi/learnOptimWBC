@@ -138,7 +138,7 @@ classdef iCub < handle
             end
             
             if(~isempty(find(SubStrFind('left_arm',list_of_kin_chain),1)))
-                leftArmInit  = [ -20.0  30.0  0.0  45.0  0.0 0.0 0.0]';
+                leftArmInit  = [0.0  5.0  0.0  10.0  0.0 0.0 0.0]';%0.0  5.0  0.0  10.0  0.0 0.0 0.0
                 %params.qjInit = [params.qjInit;leftArmInit];
                 string_search = {'l_shoulder_pitch','l_shoulder_roll','l_shoulder_yaw',...
                     'l_elbow','l_wrist_prosup','l_wrist_pitch','l_wrist_yaw'};
@@ -146,7 +146,7 @@ classdef iCub < handle
             end
             
             if(~isempty(find(SubStrFind('right_arm',list_of_kin_chain),1)))
-                rightArmInit = [0.0  30.0  0.0  45.0  0.0 0.0 0.0]'; %-20.0  30.0  0.0  45.0  0.0 0.0 0.0
+                rightArmInit = [0.0  5.0  0.0  10.0  0.0 0.0 0.0]'; %-20.0  30.0  0.0  45.0  0.0 0.0 0.0
                 %params.qjInit = [params.qjInit;rightArmInit];
                 string_search = {'r_shoulder_pitch','r_shoulder_roll','r_shoulder_yaw',...
                     'r_elbow','r_wrist_prosup','r_wrist_pitch','r_wrist_yaw'};
@@ -191,14 +191,24 @@ classdef iCub < handle
             [x,R]    = frame2posrot(fkine);
         end
         
+        function  jacob0 = offlineJacob0(rob,chi,tag)
+            x_base  = chi(1:3,:);  %TODO floating base flag required (parameter of the simulator)
+            qt_b = chi(4:7,:);  %TODO floating base flag required (parameter of the simulator)
+            q   = chi(8:8+rob.ndof-1,:);
+            [~,R_base]    = frame2posrot([x_base;qt_b]);
+            jacob0 = wholeBodyModel('jacobian',reshape(R_base,[],1),x_base,q,tag);
+        end
+        
         % Create the constraints_values vector need to compute the constraints
         % Used in AllRUntimeParameters
         function vector = createConstraintsVector(obj)
             vector = [];
-            deg = (pi/180);
+            %deg = (pi/180);
             for i = 1:obj.ndof
-                vector = [vector, obj.UBjointLimit(i)*deg, ...
-                    obj.LBjointLimit(i)*deg, obj.effortLimit(i), -obj.effortLimit(i)];
+                vector = [vector, obj.UBjointLimit(i), obj.LBjointLimit(i)];
+            end
+            for i = 1:obj.ndof
+                vector = [vector, obj.effortLimit(i), -obj.effortLimit(i)];
             end
         end
         

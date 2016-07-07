@@ -26,7 +26,7 @@ CONTROLLERTYPE ='UF';   % GHC or UF
 %%
 
 %SUBCHAIN PARAMETERS 
-subchain1 =  {'r_hand','r_elbow_1','none'};
+subchain1 =  {'r_hand','r_elbow_1','l_hand','l_elbow_1','none'};
 target_link{1} = subchain1;
 
 
@@ -48,16 +48,20 @@ deg = pi/180;
 % %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
 % dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
 
-traj_type = {'cartesian','cartesian','joint'};
-control_type = {'x','x','none'};
-type_of_traj = {'sampled','sampled','sampled'};
-geometric_path = {'fixed','fixed','fixed'};
-time_law = {'none','none','none'};
+traj_type = {'cartesian','cartesian','cartesian','cartesian','joint'};
+control_type = {'x','x','x','x','none'};
+type_of_traj = {'sampled','sampled','sampled','sampled','sampled'};
+geometric_path = {'fixed','fixed','fixed','fixed','fixed'};
+time_law = {'none','none','none','none','none'};
 %parameters first chains
 geom_parameters{1,1} = [0.35,-0.15,0.7]; %[0.38,-0.1,0.7]; 
 geom_parameters{1,2} = [0.24,-0.23,0.7]; %[0.24,-0.23,0.7];
-geom_parameters{1,3} = [0;0.785398163397448;0;0;-0.349065850398866;0.523598775598299;0;0;0.785398163397448;0;0;0;0.523598775598299;0;0;0;0]';
-dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.ndof,1); 
+geom_parameters{1,3} = [0.35,0.0138,0.7];
+geom_parameters{1,4} = [0.24,0.0938,0.7];
+geom_parameters{1,5} = [0;0.785398163397448;0;0;-0.349065850398866;0.523598775598299;0;0;0.785398163397448;0;0;0;0.523598775598299;0;0;0;0]';
+dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; 
+dim_of_task{1,3}= [1;1;1]; dim_of_task{1,4}= [1;1;1];
+dim_of_task{1,5}= ones(bot1.ndof,1); 
 
 % traj_type = {'cartesian'};
 % control_type = {'rpy'};
@@ -70,11 +74,11 @@ dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1
 % dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
 
 % secondary trajectory
-traj_type_sec = {'none','none','none'};
-control_type_sec = {'rpy','rpy','rpy'};
-type_of_traj_sec = {'func','func','func'};
-geometric_path_sec = {'fixed','fixed','fixed'};
-time_law_sec = {'linear','linear','linear'};
+traj_type_sec = {'none','none','none','none','none'};
+control_type_sec = {'rpy','rpy','rpy','rpy','rpy'};
+type_of_traj_sec = {'func','func','func','func','func'};
+geometric_path_sec = {'fixed','fixed','fixed','fixed','fixed'};
+time_law_sec = {'linear','linear','linear','linear','linear'};
 %parameters first chains
 geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
 geom_parameters_sec{1,2} = [-0.309 -0.469 0.581];
@@ -191,7 +195,7 @@ switch CONTROLLERTYPE
         %numeric_theta = [0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[2.3218    2.5695    6.8006    4.6558    5.7475    8.7383    3.5058    5.2817    6.9910    6.7590    4.5235    6.3875    7.3247    6.7258 8.5637];
-        a = 0; b = 0; c = 14;
+        a = 14; b = 5; c = 1;
         numeric_theta =[a a a a a b b b b b c c c c c];
                          
         % from sere 1
@@ -320,9 +324,9 @@ switch CONTROLLERTYPE
         end
         %% CMAES PARAMETER
         %--- Starting value of parameters
-        generation_of_starting_point = 'test'; % 'test', 'given', 'random'
+        generation_of_starting_point = 'random'; % 'test', 'given', 'random'
         %init_parameters = 6;
-        user_defined_start_action=[0 0 0 0 0 0 0 0 0 0 14 14 14 14 14];
+        user_defined_start_action=[-0.686896675401947,1.22650641453222,-3.27247260213565,12.6539506696606,11.9349914795820,12.3072074998126,11.4267899497361,13.3737941021526,8.77645179253447,-4.69418318274421,11.1958799565396,1.32058911902880,-0.691100222964068,0.286830798370383,-0.162567001268804];
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
         niter = 40;  %number of generations
         cmaes_value_range = [-14 , 14];  % boudn that define the search space
