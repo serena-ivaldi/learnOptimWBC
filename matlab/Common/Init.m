@@ -1,7 +1,8 @@
-function [bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,constr,learn_approach,inst,generation_of_starting_point,...
-    niter,explorationRate,cmaes_value_range,qi,qdi,fixed_step,torque_saturation,maxtime,rawTextFromStorage,name_dat,fminconFlag]=Init()
+function [bot1,name_scenario,time_struct,time_sym_struct,simulator_type,reference,alphas,controller,constr,learn_approach,inst,generation_of_starting_point,...
+    niter,explorationRate,cmaes_value_range,input,rawTextFromStorage,name_dat]=Init(name_of_file,optim)
 %% parameters
-AllRuntimeParameters
+ data_storage = str2func(name_of_file);
+ data_storage()
 
 %%  Primary Reference
 % if type_of_task = sampled i have to specify the Time to reach the
@@ -12,7 +13,7 @@ reference.cur_param_set = numeric_reference_parameter; % some kind of trick to i
 %% secondary reference
 secondary_refs = References(target_link,traj_type_sec,control_type_sec,geometric_path_sec,geom_parameters_sec,time_law_sec,time_struct,dim_of_task_sec,type_of_traj_sec);
 secondary_refs.BuildTrajs();
-secondary_refs.cur_param_set = numeric_reference_parameter; % some kind of trick to introduce parameters in the optimization procedure
+secondary_refs.cur_param_set = secondary_numeric_reference_parameter; % some kind of trick to introduce parameters in the optimization procedure
 %% plot scenario
 text = LoadScenario(name_scenario);
 eval(text);
@@ -40,7 +41,7 @@ switch CONTROLLERTYPE
                     number_of_action = chains.GetNumTasks(1) + repellers.GetNumberOfWeightFuncRep(1);
                 end
                 %---
-                alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,value_range,precomp_sample,numeric_theta,false);
+                alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,value_range,precomp_sample,numeric_theta,optim);
             case 'constant'
                 alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,value_range_for_optimization_routine,time_struct);
             case 'handTuned'
@@ -87,10 +88,11 @@ elseif(strcmp(method_to_use,'empty'))
 end
 
 %% Instance
-input{5} = controller;
-if ~fminconFlag
-    inst = Optimization.Instance(constr,learn_approach,run_function,fitness,clean_function,input);
-else
-    inst = ObjProblem(constr,learn_approach,run_function,fitness,clean_function,input);
+if strcmp(simulator_type{1},'rbt')
+    input{5} = controller;
+elseif strcmp(simulator_type{1},'icub_matlab')
+    input{4} = controller;
 end
+inst = Optimization.Instance(constr,learn_approach,run_function,fitness,clean_function,input);
+
 end

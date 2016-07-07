@@ -6,7 +6,8 @@ close all
 clc
 
 nbrep = 10; %50
-
+MaxFunEvals = 50;
+threshold = 20;
 problem_name = {'g07'};
 metric1 = [];
 metric2 = [];
@@ -97,16 +98,16 @@ for i = 1:length(problem_name)
     end
     
     constr =Optimization.ObjProblemPenalty(search_space_dimension,constraints_functions,constraints_type,constraints_values);
-    learn_approach = {};
+    algorithm = 'fmincon';
     run_function = @EmptyPreprocessing;
     fitness = str2func(problem_name{i});
     clean_function = @EmptyPostprocessing;
     input = {};
-    inst = ObjProblem(search_space_dimension,cmaes_value_range,constr,learn_approach,run_function,fitness,clean_function,input);
+    inst = ObjProblem(search_space_dimension,cmaes_value_range,constr,algorithm,run_function,fitness,clean_function,input);
     
     for iter=1:nbrep
         inst.randStartPoint();
-        [m1(iter),m2(iter),m3(iter),m4(iter)] = inst.minimize();
+        [~,~,m1(iter),m2(iter),m3(iter),m4(iter)] = inst.minimize(user_defined_start_action,MaxFunEvals,threshold);
     end
     metric1 =  [metric1,  m1]; %metric 1 = fitness error
     metric2 =  [metric2,  m2]; %metric 2 = constraints violation
@@ -114,7 +115,7 @@ for i = 1:length(problem_name)
     metric4 =  [metric4,  m4]; %metric 4 = compuating duration
 end
 
-%matrice to automaticly adpat the box plot to the number of problems
+%matrix to automaticly adpat the box plot to the number of problems
 A=[];
 for i=1:length(problem_name)
     A = [A; i*ones(nbrep,1)];

@@ -6,10 +6,10 @@ function fit  = fitnessHumanoids1(obj,output)
     %%%;;
     downsaple = 10;
     L = 1; 
-    max_effort = 1.0000e+07;
-    max_traj_error = 4000;
+    max_effort = 4.0000e+07;
+    max_traj_error = 2000;
     weight_effort = 1;
-    weight_traj_err = 1;
+    weight_traj_err = 3;
     %%%EOF
     contr = obj.input_4_run{5};
     traj_err= 0;
@@ -53,7 +53,7 @@ function fit  = fitnessHumanoids1(obj,output)
         traj_err = traj_err + norm((ee - attr_pos),L);
     end 
     % max effort
-    effort = sum((contr.torques{1}(:).*contr.torques{1}(:)),2);
+    effort = sum((contr.torques(:).*contr.torques(:)),2);
     effort = sum(effort,1);
     % saturations 
     if(effort>max_effort)

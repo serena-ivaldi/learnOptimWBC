@@ -1,18 +1,24 @@
 % number_of_iteration is usefull only for PlotGraphPaper.m main
-function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, name_dat]=OptimizationRoutine(number_of_iteration,n_of_experiment,iter,init_parameters_from_out)  
+function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, name_dat]=OptimizationRoutine(number_of_iteration,n_of_experiment,iter,init_parameters_from_out,name_file)  
     %% initialize all the data
-    [bot1,name_scenario,time_struct,time_sym_struct,reference,alphas,controller,learn_approach,constr,inst,generation_of_starting_point,niter,...
-    explorationRate,cmaes_value_range,qi,qdi,fixed_step,torque_saturation,maxtime,rawTextFromStorage,name_dat,fminconFlag]=Init();
- 
+    optim = true;
+    [bot1,name_scenario,time_struct,time_sym_struct,simulator_type,reference,alphas,controller,constr,learn_approach,inst,generation_of_starting_point,niter,...
+    explorationRate,cmaes_value_range,input,rawTextFromStorage,name_dat]=Init(name_file,optim);
      %% optimization 
      % im using init_value from outside
      switch generation_of_starting_point
-        case 'test'
+         case 'test'
            start_action = user_defined_start_action;
-        case 'given'
+         case 'given'
             start_action = init_parameters_from_out*ones(1,controller.GetTotalParamNum());
-        case 'random'
-           start_action = (cmaes_value_range(1,2)-cmaes_value_range(1,1)).*rand(1,controller.GetTotalParamNum()) + cmaes_value_range(1,1)*ones(1,controller.GetTotalParamNum());
+         case 'random'
+           if(iscell(cmaes_value_range))
+               start_action = (cmaes_value_range{2}-cmaes_value_range{1}).*rand(1,controller.GetTotalParamNum()) + cmaes_value_range{1};
+           elseif(isvector(cmaes_value_range))
+               start_action = (cmaes_value_range(1,2)-cmaes_value_range(1,1)).*rand(1,controller.GetTotalParamNum()) + cmaes_value_range(1,1)*ones(1,controller.GetTotalParamNum());
+           end
+         otherwise
+               disp('wrong generation_of_starting_point choosed!')
      end
      
      %% do all the checks on the input
@@ -22,11 +28,7 @@ function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, co
      
      %% execution of the optimization routine
      tic
-     if ~fminconFlag
         [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded] = inst.CMAES(controller.GetTotalParamNum(),start_action,niter,explorationRate,cmaes_value_range);
-     else
-         [~,~,~,~] = inst.minimize(controller.GetTotalParamNum(),start_action,cmaes_value_range);
-     end
      exec_time = toc
      % analisys of the optimization result for building repertoire
      %[index, search_params ] = flann_build_index(BestActionPerEachGen.policy, struct('algorithm','kmeans','branching',32,'iterations',3,'checks',120)); 
@@ -48,7 +50,7 @@ function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, co
      fprintf(fileID,'%s',rawTextFromStorage);
      fclose(fileID);
      % generate graph and data from the current best solution
-     [t_, q, qd]=PlotCmaesResult(complete_path,time_sym_struct,controller,qi,qdi,fixed_step,torque_saturation,name_scenario,time_struct,bestAction,bot1,learn_approach);
+     %[t_, q, qd]=PlotCmaesResult(complete_path,time_sym_struct,controller,qi,qdi,fixed_step,torque_saturation,name_scenario,time_struct,bestAction,bot1,learn_approach);
      complete_path_to_file = strcat(complete_path,'/data.mat');
      save(complete_path_to_file) 
      % copy name_dat to the base workspace

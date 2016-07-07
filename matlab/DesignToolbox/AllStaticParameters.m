@@ -13,13 +13,15 @@ CONTROLLERTYPE ='UF';   % GHC or UF
 %%
 
 %SUBCHAIN PARAMETERS 
-subchain1 = [7 4 7];
+subchain1 =  {'r_gripper','r_elbow_1','none'};
 target_link{1} = subchain1;
 
+
 %% Robot
-[bot1] =  MdlLBR4pSimple();
-robots{1} = bot1;
-chains = SubChains(target_link,robots);
+bot1 = iCub('model_arms_torso_free');
+chain_1 = DummyRvc_iCub(bot1,'l_sole'); 
+robots{1} = chain_1;
+chains = SubChains(target_link,robots,bot1);
 %%  REFERENCE PARAMETERS
 deg = pi/180;
 % primary trajectory
@@ -35,13 +37,14 @@ deg = pi/180;
 
 traj_type = {'cartesian','cartesian','joint'};
 control_type = {'x','x','none'};
-type_of_traj = {'func','func','func'};
+type_of_traj = {'sampled','sampled','sampled'};
 geometric_path = {'fixed','fixed','fixed'};
 time_law = {'none','none','none'};
 %parameters first chains
-geom_parameters{1,1} = [-0.001,-0.694,0.714]; 
-geom_parameters{1,2} = [-0.179 -0.326 0.457]; geom_parameters{1,3} = [-90 90 0 -90 0 0 0]* deg;
-dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); 
+geom_parameters{1,1} = [0.45,-0.1,0.7]; 
+geom_parameters{1,2} = [0.25,-0.25,0.7];
+geom_parameters{1,3} = [0;0.785398163397448;0;0;-0.349065850398866;0.523598775598299;0;0;0.785398163397448;0;0;0;0.523598775598299;0;0;0;0]';
+dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.ndof,1); 
 
 % traj_type = {'cartesian'};
 % control_type = {'rpy'};
@@ -61,8 +64,19 @@ geometric_path_sec = {'fixed','fixed','fixed'};
 time_law_sec = {'linear','linear','linear'};
 %parameters first chains
 geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
-geom_parameters_sec{1,2} = [-0.309 -0.469 0.581]; geom_parameters_sec{1,3} = [120 116 90 0 0 0 0]* deg; 
-dim_of_task_sec{1,1}={[1;1;1]}; dim_of_task_sec{1,2}= [1;1;1]; dim_of_task_sec{1,3}= ones(bot1.n,1); 
+geom_parameters_sec{1,2} = [-0.309 -0.469 0.581];
+geom_parameters_sec{1,3} = [-0.309 -0.469 0.581];
+geom_parameters_sec{1,4} = [-0.309 -0.469 0.581];
+geom_parameters_sec{1,5} = [-0.309 -0.469 0.581];
+geom_parameters_sec{1,6} = [-0.309 -0.469 0.581];
+geom_parameters_sec{1,7} = [120 116 90 0 0 0 0]* deg; 
+dim_of_task_sec{1,1}=[1;1;1]; 
+dim_of_task_sec{1,2}=[1;1;1]; 
+dim_of_task_sec{1,3}=[1;1;1]; 
+dim_of_task_sec{1,4}=[1;1;1]; 
+dim_of_task_sec{1,5}=[1;1;1]; 
+dim_of_task_sec{1,6}=[1;1;1]; 
+dim_of_task_sec{1,7}= ones(bot1.ndof,1); 
 
 % traj_type_sec = {'cartesian_x'};
 % control_type_sec = {'regulation'};
@@ -103,7 +117,7 @@ end
 % i have to set the name of the robot plus a number equal to the number of experiment for that scenario 
 % like bot#.# (where n.i means that the file is reffered to the n-scenario and is the i-th data setting)
 % multiple data setting for the same scenario 
-id = 'humanoid_bench_lbrsimple';
+id = 'iCub';
 name_backup = strcat(id,'.m');
 %namebot_scene#_briefdescription.mat
 number = '1.0';
@@ -122,18 +136,18 @@ rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF'],'match','
 % join the general static parameter with the particular static one
 rawTextFromStorage = strcat(rawTextFromStorage,rawTextFromStoragePart);
 
-existence = exist(strcat(path,'/back_data/',name_backup),'file');
+existence = exist(strcat(path,'/back_data/',name_file),'file');
 if(~existence)
-    fileID = fopen(strcat(path,'/back_data/',name_backup),'w');
+    fileID = fopen(strcat(path,'/back_data/',name_file),'w');
     fprintf(fileID,'%s',rawTextFromStorage);
     fclose(fileID);
     disp('FINISH!')
 else
-    adv = strcat('The file: /',name_backup,' allready exist');
+    adv = strcat('The file: /',name_file,' allready exist');
     b=questdlg(adv, 'Overwrite?','Yes','No','No');
     switch b
         case 'Yes'
-            fileID = fopen(strcat(path,'/back_data/',name_backup),'w');
+            fileID = fopen(strcat(path,'/back_data/',name_file),'w');
             fprintf(fileID,'%s',rawTextFromStorage);
             fclose(fileID);
             disp('FINISH!')

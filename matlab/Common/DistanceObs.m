@@ -7,5 +7,4 @@ function violation = DistanceObs(input,constraints_values)
            violation = violation + (constraints_values - dist); 
         end  
     end
-
 end

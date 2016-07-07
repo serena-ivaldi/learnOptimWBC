@@ -1,16 +1,36 @@
+%% When we design the scene is really important to check that each task
+%% is in the reachibilty region of the robot. if it is not the case the
+%% integration will take ages to finish
+
 clear all
 close all
 clc
 
 % in this variable we have to specify the name of the scenario:
 % bot_scenario# where # is incremental
-name_scenario = 'humanoids_rob_benck_1';
+name_scenario = 'iCub_1';
 % with this variable i decide when i want to save the designed scenario
 save_now =true;
 
 
 %% plot scene
-plot_bot = MdlLBR4pSimple();
+list_of_kin_chain = {'trunk','left_arm','right_arm'};
+feet_on_ground = [1 1];
+plot_bot = iCub('model_arms_torso_free');
+qjInit = plot_bot.InitializeState(list_of_kin_chain, feet_on_ground);
+dqjInit     = zeros(plot_bot.ndof,1);
+% icub starting velocity floating base
+dx_bInit    = zeros(3,1);
+omega_bInit = zeros(3,1);
+
+% root reference link;
+root_reference_link ='l_sole'; 
+
+plot_bot.SetWorldFrameiCub(qjInit,dqjInit,dx_bInit,omega_bInit,root_reference_link);
+
+[~,T_b,~,~] = plot_bot.GetState();
+
+chiInit = [T_b; qjInit; plot_bot.dx_b; plot_bot.omega_W; dqjInit]';
 
 %%%;;
 
@@ -18,22 +38,40 @@ hold on;axis equal;
 %% modify from this point
 global G_OB;
 
+% plot sphere
+r = 0.15;
+x0 = -0.20; y0 = -0.286; z0 = 0.5;
+[x,y,z] = sphere(50);
+
+x = x*r + x0;
+y = y*r + y0;
+z = z*r + z0;
+
+%lightGrey = 0.8*[1 1 1]; % It looks better if the lines are lighter
+%surface(x,y,z,'FaceColor', 'none','EdgeColor',lightGrey)
+
+
 %%%;;
-[X,Y,Z]=meshgrid(-0.05:0.001:0.3,-0.5,0.45:0.001:1.0);
+depth = 0.25;
+width = 0.22;
+center = -0.0681;
+[X,Y,Z]=meshgrid(depth,center-width/2:0.001:center+width/2,0.45:0.001:1.0 );
 %Y = -0.4*ones(1,size(X,1));
-for i=1:size(X,2) 
+for i=1:size(X,3) 
     scatter3(X(:,:,i),Y(:,:,i),Z(:,:,i))
 end
-wrist_point = [-0.179 -0.326 0.457];
-e_e_point = [-0.001,-0.694,0.714];
+
+
+elbow_point = [0.25,-0.25,0.7];
+e_e_point = [0.45,-0.1,0.7];
 %intermediate_e_e_point = [ -0.3,-0.2,0.7];
-scatter3(wrist_point(1,1),wrist_point(1,2),wrist_point(1,3),130,'b');
-scatter3(e_e_point(1,1),e_e_point(1,2),e_e_point(1,3),130,'b');
+scatter3(elbow_point(1,1),elbow_point(1,2),elbow_point(1,3),130,'b');
+scatter3(e_e_point(1,1),e_e_point(1,2),e_e_point(1,3),130,'r');
 %scatter3(intermediate_e_e_point(1,1),intermediate_e_e_point(1,2),intermediate_e_e_point(1,3),130,'b');
 % global obstacle
-rapresentation.X = X;
-rapresentation.Y = Y;
-rapresentation.Z = Z;
+rapresentation.X = X(1,:,1);
+rapresentation.Y = Y(:,1,1)';
+rapresentation.Z = permute(Z(1,1,:),[2 3 1]);
 ob1 = Obstacle(rapresentation,'wall',0.002);
 G_OB = [ob1];
 
@@ -95,7 +133,9 @@ G_OB = [ob1];
 
 
 %plot_bot.plot(qz);
-plot_bot.teach();
+%plot_bot.teach();
+params.sim_step = 0.01;
+plot_bot.plot(chiInit,params);
 
 %% DO NOT CHANGE THIS PART!
 

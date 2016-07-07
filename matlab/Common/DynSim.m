@@ -51,7 +51,7 @@
 % http://www.petercorke.com
 
 function [t, q, qd] = DynSim(time_struct,controller,qi,qdi,fixed_step,varargin)
-    disp('im in dynsim')
+    %disp('im in dynsim')
     % check the Matlab version, since ode45 syntax has changed
     if verLessThan('matlab', '7')  
         error('fdyn now requires Matlab version >= 7');
@@ -89,21 +89,21 @@ function [t, q, qd] = DynSim(time_struct,controller,qi,qdi,fixed_step,varargin)
         n = controller.GetActiveBot.n;
         try
             if(fixed_step)
-                disp('fixed_step') 
+                %disp('fixed_step') 
                 y = Ode1(@fdyn2,time,yi,controller,varargin{:}); 
             else
-                disp('NOT fixed_step')
+                %disp('NOT fixed_step')
                 [T,y] = ode45(@fdyn2,time,yi,[],controller,varargin{:});     
             end  
             q{index_chain} = y(:,1:n);
             qd{index_chain} = y(:,n+1:2*n);
         catch err
             disp('integration error');
-            q{index_chain} = y(:,1:n);
-            qd{index_chain} = y(:,n+1:2*n); 
+            %q{index_chain} = y(:,1:n);
+            %qd{index_chain} = y(:,n+1:2*n); 
             %because of i have failed i need to cut the time till the last
             %position computed
-            t = time(1,1:size(q{index_chain},1));
+            %t = time(1,1:size(q{index_chain},1));
             rethrow(err);
         end
     end

@@ -48,14 +48,14 @@ classdef  UF < Controllers.AbstractController
          end
          
          % initialize torque and torque time
-         obj.torques = cell(obj.subchains.GetNumChains());
-         for i = 1:obj.subchains.GetNumChains()
-            obj.torques{i} = [];  %tau(n_of_total_joint on the chain x 1)
-         end
-         obj.torques_time = cell(obj.subchains.GetNumChains());
-         for i = 1 :obj.subchains.GetNumChains()
-            obj.torques_time{i} = [];
-         end
+%          obj.torques = cell(obj.subchains.GetNumChains());
+%          for i = 1:obj.subchains.GetNumChains()
+%             obj.torques{i} = [];  %tau(n_of_total_joint on the chain x 1)
+%          end
+%          obj.torques_time = cell(obj.subchains.GetNumChains());
+%          for i = 1 :obj.subchains.GetNumChains()
+%             obj.torques_time{i} = [];
+%          end
          obj.current_time = [];
          % default settings for smoothing and trajectory tracking display (desidered position) 
          obj.display_opt.fixed_step = false;
@@ -69,28 +69,30 @@ classdef  UF < Controllers.AbstractController
 %          end
          
        end    
-
+      % i do  not need cell object because the time is unique
       function SaveTime(obj,ind_subchain,time)
-         obj.torques_time{ind_subchain} = [obj.torques_time{ind_subchain}(:,:),time];
+         obj.torques_time = [obj.torques_time,time];
       end
        
+      % i do not need cell object because the simulated model is a unique
+      % big system of differential equations
       function SaveTau(obj,ind_subchain,tau)
-         obj.torques{ind_subchain} = [obj.torques{ind_subchain}(:,:),tau];   
+         obj.torques = [obj.torques,tau];   
       end
       
       function CleanTau(obj)
           for i = 1 :obj.subchains.GetNumChains()
-            obj.torques{i} = [];
+            obj.torques = [];
           end
       end
       
       function CleanTime(obj)
          for i = 1 :obj.subchains.GetNumChains()
-            obj.torques_time{i} = [];
+            obj.torques_time = [];
          end
       end
       %% TODO
-      % this management of multiple chain has to changed in favor of a 
+      % this management of multiple chain has to be changed in favor of a 
       % a unique system to refer to to compute the dynamics component of
       % the robot
       function SetCurRobotIndex(obj,index_chain)
@@ -128,8 +130,7 @@ classdef  UF < Controllers.AbstractController
           % the dynamic computation between controller and simulator has
           % to be different
           %% provisory structure 
-          new = false;
-          if(~new) 
+          if ~(isa(obj.subchains.sub_chains{1},'DummyRvc_iCub')) 
               % active robot 
               cur_bot = obj.GetActiveBot;
               % current chain index
@@ -142,6 +143,8 @@ classdef  UF < Controllers.AbstractController
               % i include the external forces inside F
               F = obj.subchains.GetF(q,qd,Fc,Jc_t);
               [M,F] = obj.subchains.RemoveFloatingBase(M,F,7);
+              q = q';
+              qd = qd';
           end
           % controller 
           if(strcmp(obj.combine_rule,'sum')) 
@@ -191,7 +194,7 @@ classdef  UF < Controllers.AbstractController
       % for repellers 
       % and then i update the parameter that govern the reference
       function UpdateParameters(obj,parameters)
-       disp('im in update parameters')   
+       %disp('im in update parameters')   
          for i=1:size(obj.alpha,1) 
              index = 1;
              for j=1:size(obj.alpha,2)  
@@ -203,18 +206,17 @@ classdef  UF < Controllers.AbstractController
          end
          % update parameters of the references (if there are some)
          for i=1:size(obj.references.parameter_dim,1) 
-             index = 1;
              for j=1:size(obj.references.parameter_dim,2)  
                  n_param = obj.references.parameter_dim{i,j};
                  app_param = parameters(index:index+n_param - 1);
                  if(n_param>0)
                      obj.references.cur_param_set{i,j} = (app_param');
                      index = index+n_param;
+                 else
+                     obj.references.cur_param_set{i,j} = app_param;
                  end
-                
              end
-         end
-         
+         end         
       end
       
        
