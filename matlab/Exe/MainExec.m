@@ -4,7 +4,7 @@ clc
 
 %% initialize all the data
 optim = false;
-configuration_file_name = 'RP_humanoid_test_iCub_1';
+configuration_file_name = 'RP_humanoid_bench_lbrsimple_more_constrained';
 [bot1,name_scenario,time_struct,time_sym_struct,simulator_type,reference,alphas,controller,constr,learn_approach,inst,~,~,~,~,~,input,rawTextFromStorage,name_dat]=Init(configuration_file_name,optim);
 %% Simulation
 if(strcmp(simulator_type{1},'rbt'))
@@ -52,8 +52,8 @@ cur_bot = controller.subchains.sub_chains{1};
 if(ee_trajectory || elbow_traj)
    %figure;
    hold on;
-%    text = LoadScenario(name_scenario);
-%    eval(text);
+    %text = LoadScenario(name_scenario);
+    %eval(text);
    
    if ~(isa(cur_bot,'DummyRvc_iCub'))
     [ee,elbow] = ComputePositions(q{1},t,controller);

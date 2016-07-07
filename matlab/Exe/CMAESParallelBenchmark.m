@@ -11,7 +11,7 @@ function CMAESParallelBenchmark
     %% DATA 1
     robotics_experiment = [1]; % series of value that say if the current experiment is a robotics experiments or not
     niter_tot = 400;  %number of functions evaluations
-    function_2_test ={'RP_humanoid_bench_lbrsimple'};%'robotic_experiments','g06','g07','g09','f240','f241','HB'}; % 
+    function_2_test ={'RP_humanoid_bench_lbrsimple_more_constrained'};%'robotic_experiments','g06','g07','g09','f240','f241','HB'}; % 
     learn_approach = 'CMAES'; %CMAES (1+1)CMAES  CEM,fmincon    with (1+1)CMAES i have to use vanilla constraints management  (temporary)
     method_to_use = 'vanilla';  % adaptive , vanilla ,empty,fmincon
 
@@ -22,8 +22,6 @@ function CMAESParallelBenchmark
     % starting value of parameters
     generation_of_starting_point = 'test'; % 'test', 'given', 'random'
     
-
-
      %%  SAVE PATH
     allpath=which('FindData.m');
     local_path=fileparts(allpath);
@@ -31,8 +29,6 @@ function CMAESParallelBenchmark
     name_folder = strcat(learn_approach,'-',method_to_use);
     mkdir(local_path,name_folder);
     local_path = strcat(local_path,'/',name_folder);
-
-
     %% INSTANCE PARAMETER
     number_of_function_2_test = length(function_2_test);
     for jj=1:number_of_function_2_test
