@@ -53,8 +53,9 @@ function fit  = fitnessHumanoidsIcub(obj,output)
         % here GetTraj(1,1,t(i)) mean i take the reference of the first
         % subchain in the first chain.
         %%
-        attr_pos = contr.references.GetTraj(1,1,t(i)); 
-        traj_err = traj_err + norm((ee_r - attr_pos),L);
+        attr_pos_r = contr.references.GetTraj(1,1,t(i)); 
+        attr_pos_l = contr.references.GetTraj(1,2,t(i)); 
+        traj_err = traj_err + norm((ee_r - attr_pos_r),L) + norm((ee_l - attr_pos_l),L);
     end 
     % max effort
     effort = sum((contr.torques(:).*contr.torques(:)),2);
