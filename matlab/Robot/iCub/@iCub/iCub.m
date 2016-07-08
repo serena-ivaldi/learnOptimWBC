@@ -127,7 +127,7 @@ classdef iCub < handle
         % The possible values of kin_chain are
         % 'com','left_arm','right_arm','l_sole','r_sole'
         % return qjInit in degres
-        function qjInit = InitializeState(obj, list_of_kin_chain, feet_on_ground)
+        function qjInit = InitializeState(obj, list_of_kin_chain, feet_on_ground, varargin)
             qjInit      = zeros(obj.ndof,1);
             
             if(~isempty(find(SubStrFind('trunk',list_of_kin_chain),1)))

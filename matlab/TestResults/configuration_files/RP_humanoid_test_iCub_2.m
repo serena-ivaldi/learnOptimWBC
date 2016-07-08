@@ -54,9 +54,9 @@ type_of_traj = {'sampled','sampled','sampled','sampled','sampled'};
 geometric_path = {'fixed','fixed','fixed','fixed','fixed'};
 time_law = {'none','none','none','none','none'};
 %parameters first chains
-geom_parameters{1,1} = [0.35,-0.15,0.7]; %[0.38,-0.1,0.7]; 
-geom_parameters{1,2} = [0.24,-0.23,0.7]; %[0.24,-0.23,0.7];
-geom_parameters{1,3} = [0.35,0.0138,0.7];
+geom_parameters{1,1} = [0.32,-0.15,0.7];    %[0.38,-0.1,0.7]; 
+geom_parameters{1,2} = [0.24,-0.23,0.7];	%[0.24,-0.23,0.7];
+geom_parameters{1,3} = [0.32,0.0138,0.7];
 geom_parameters{1,4} = [0.24,0.0938,0.7];
 geom_parameters{1,5} = [0;0.785398163397448;0;0;-0.349065850398866;0.523598775598299;0;0;0.785398163397448;0;0;0;0.523598775598299;0;0;0;0]';
 dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; 
@@ -195,8 +195,8 @@ switch CONTROLLERTYPE
         %numeric_theta = [0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[2.3218    2.5695    6.8006    4.6558    5.7475    8.7383    3.5058    5.2817    6.9910    6.7590    4.5235    6.3875    7.3247    6.7258 8.5637];
-        a = 14; b = 5; c = 1;
-        numeric_theta =[a a a a a b b b b b c c c c c];
+        a = 11; b = 5; c = 11; d = 5; e = 1;
+        numeric_theta =[a a a a a b b b b b c c c c c d d d d d e e e e e];
                          
         % from sere 1
         %numeric_theta = [5.819383 4.412794 5.286902 7.786384 7.599614 3.512520 5.989917 9.410994 7.444834 7.472545 4.532512 5.614148 7.970080 4.498142 6.194601 6.925731 4.815911 5.490313 5.294776 6.011380 ]
@@ -234,8 +234,8 @@ switch CONTROLLERTYPE
         % regularized case i have to do N^(-1) 
         % not regularized case i have N^(-1/2)
         metric = {'M^(1)','M^(1)','M^(1)','M^(1)','M^(1)','M^(1)','M^(1)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
-        kd = [110,90,90,110,110,110,110];
-        kp = [70,40,40,70,70,70,70]; % row vector one for each chain
+        kd = [110,110,110,110,110,110,110];
+        kp = [70,70,70,70,70,70,70]; % row vector one for each chain
         for i= 1:chains.GetNumChains()
             for par = 1:chains.GetNumTasks(i)
                 if(strcmp(traj_type{i},'impedance'))
@@ -291,7 +291,7 @@ switch CONTROLLERTYPE
             constraints_functions{k} = 'LinInequality';
             constraints_functions{k+1} = 'LinInequality2';
         end
-        distConstraints_values = [0.01, 0.01, 0.01, 0.01, 0.01]; % distances for the collissions constraints
+        distConstraints_values = [0.03, 0.03, 0.03, 0.03, 0.03,0.03, 0.03, 0.03, 0.03]; % distances for the collissions constraints
         for k = 1:length(distConstraints_values)
             constraints_functions{end+1} = 'DistanceObs';
         end
@@ -301,7 +301,7 @@ switch CONTROLLERTYPE
         activate_constraints_handling = true;        
         %% INSTANCE PARAMETER
         run_function = @RobotExperiment;
-        fitness = @fitnessHumanoidsIcub;
+        fitness = @fitnessHumanoidsIcub2arms;
         clean_function = @RobotExperimentCleanData;
         
         if strcmp(simulator_type{1},'rbt') 

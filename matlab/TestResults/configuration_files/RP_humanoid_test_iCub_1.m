@@ -192,7 +192,7 @@ switch CONTROLLERTYPE
         %numeric_theta =[0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[2.3218    2.5695    6.8006    4.6558    5.7475    8.7383    3.5058    5.2817    6.9910    6.7590    4.5235    6.3875    7.3247    6.7258 8.5637];
         a = 0; b = 0; c = 14;
-        numeric_theta =[a a a a a b b b b b c c c c c];
+        numeric_theta = [2.79858924180364 9.49716997018595 12.8263606810647 9.02005503061110 -0.394856563710598 4.04280319822902 -1.19734040244116 -5.26543007744964 -0.0201693695522485 6.32555148074320 2.53193881239817 3.64676131273431 7.29673727435514 3.23134083026330 0.690521555529028];
                          
         % from sere 1
         %numeric_theta = [5.819383 4.412794 5.286902 7.786384 7.599614 3.512520 5.989917 9.410994 7.444834 7.472545 4.532512 5.614148 7.970080 4.498142 6.194601 6.925731 4.815911 5.490313 5.294776 6.011380 ]
@@ -287,7 +287,7 @@ switch CONTROLLERTYPE
             constraints_functions{k} = 'LinInequality';
             constraints_functions{k+1} = 'LinInequality2';
         end
-        distConstraints_values = [0.01, 0.01, 0.01, 0.01, 0.01]; % distances for the collissions constraints
+        distConstraints_values = [0.03, 0.03, 0.03, 0.03, 0.03]; % distances for the collissions constraints
         for k = 1:length(distConstraints_values)
             constraints_functions{end+1} = 'DistanceObs';
         end
