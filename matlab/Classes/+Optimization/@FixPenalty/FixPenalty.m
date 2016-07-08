@@ -41,7 +41,12 @@ classdef  FixPenalty < Optimization.AbstractPenalty
        end
        % to call in ComputeConstraintsViolation and EvaluateCmaes
        function ComputePenalties(obj,c_index)
-          obj.fitness_penalties(c_index) = sum(obj.penalties(c_index,:).^2 + 1000*ones(size(obj.penalties(c_index,:))),2);
+          value = sum(obj.penalties(c_index,:).^2 ,2);
+          if(value>0)
+            obj.fitness_penalties(c_index) =value  + 1000;
+          else
+             obj.fitness_penalties(c_index) =value;
+          end
        end
        % To call in EvaluateCmaes
        % in this function i perform further elaborations with the
