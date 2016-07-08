@@ -138,7 +138,7 @@ classdef iCub < handle
             end
             
             if(~isempty(find(SubStrFind('left_arm',list_of_kin_chain),1)))
-                leftArmInit  = [0.0  5.0  0.0  10.0  0.0 0.0 0.0]';%0.0  5.0  0.0  10.0  0.0 0.0 0.0
+                leftArmInit  = [-20.0  30.0  0.0  45.0  0.0 0.0 0.0]';%0.0  5.0  0.0  10.0  0.0 0.0 0.0
                 %params.qjInit = [params.qjInit;leftArmInit];
                 string_search = {'l_shoulder_pitch','l_shoulder_roll','l_shoulder_yaw',...
                     'l_elbow','l_wrist_prosup','l_wrist_pitch','l_wrist_yaw'};
@@ -146,7 +146,7 @@ classdef iCub < handle
             end
             
             if(~isempty(find(SubStrFind('right_arm',list_of_kin_chain),1)))
-                rightArmInit = [0.0  5.0  0.0  10.0  0.0 0.0 0.0]'; %-20.0  30.0  0.0  45.0  0.0 0.0 0.0
+                rightArmInit = [0.0  30.0  0.0  45.0  0.0 0.0 0.0]'; %-20.0  30.0  0.0  45.0  0.0 0.0 0.0
                 %params.qjInit = [params.qjInit;rightArmInit];
                 string_search = {'r_shoulder_pitch','r_shoulder_roll','r_shoulder_yaw',...
                     'r_elbow','r_wrist_prosup','r_wrist_pitch','r_wrist_yaw'};
