@@ -2,7 +2,7 @@
 function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, name_dat]=OptimizationRoutine(number_of_iteration,n_of_experiment,iter,init_parameters_from_out,name_file)  
     %% initialize all the data
     optim = true;
-    [bot1,name_scenario,time_struct,time_sym_struct,simulator_type,reference,alphas,controller,constr,learn_approach,inst,generation_of_starting_point,niter,...
+    [bot1,name_scenario,time_struct,time_sym_struct,simulator_type,reference,alphas,controller,constr,learn_approach,inst,generation_of_starting_point,user_defined_start_action,niter,...
     explorationRate,cmaes_value_range,input,rawTextFromStorage,name_dat]=Init(name_file,optim);
      %% optimization 
      % im using init_value from outside
@@ -49,8 +49,7 @@ function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, co
      fileID = fopen(strcat(complete_path,'/','optimization_parameters.txt'),'w');
      fprintf(fileID,'%s',rawTextFromStorage);
      fclose(fileID);
-     % generate graph and data from the current best solution
-     %[t_, q, qd]=PlotCmaesResult(complete_path,time_sym_struct,controller,qi,qdi,fixed_step,torque_saturation,name_scenario,time_struct,bestAction,bot1,learn_approach);
+     %[t_, q, qd]=PlotCmaesResult(complete_path,input,name_scenario,time_struct,bestAction,bot1,learn_approach);
      complete_path_to_file = strcat(complete_path,'/data.mat');
      save(complete_path_to_file) 
      % copy name_dat to the base workspace

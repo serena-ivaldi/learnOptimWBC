@@ -1,23 +1,63 @@
-function [t_, q, qd]=PlotCmaesResult(complete_path,time_sym_struct,controller,qi,qdi,fixed_step,torque_saturation,name_scenario,time_struct,bestAction,bot1,learn_approach)
+function [t_, q, qd]=PlotCmaesResult(complete_path,input,name_scenario,time_struct,bestAction,bot1,learn_approach)
 % conversion from rad to deg
 RAD = 180/pi;
 % for torque
-interpolation_step = 0.001;
-% build numeric theta for best action 
-controller.UpdateParameters(bestAction.parameters)
+interpolation_step = 0.001; 
+
 % change the computation time more than i consider the execution a fail (useful whn i recompute the solution on another machine)
 %controller.max_time = 1000;
-% recompute the best solution
-[t_, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step,'TorqueSat',torque_saturation);
-% generate cartesian position and cartesian velocity
-p=[];
-pd=[];
-for ii =1:size(q{1},1) % generalize to multichain
-   T =controller.subchains.sub_chains{1}.fkine(q{1}(ii,:)); % generalize to multichain
-   p = [p;T(1:3,4)'];
-   J = controller.subchains.sub_chains{1}.jacob0(q{1}(ii,:)); % generalize to multichain
-   pd_cur = J*(qd{1}(ii,:))';% generalize to multichain
-   pd = [pd ; pd_cur'];  
+% global variables for the function
+simulator         = input{1}; % rbt or v-rep
+controller = [];
+time_sym_struct = [];
+p = [];
+pd = [];
+if(strcmp(simulator,'rbt'))
+    qinit             = input{2}; % initial position
+    qdinit            = input{3}; % initial velocity
+    time_sym_struct   = input{4}; %time struct for simulation with fixed step
+    controller        = input{5}; % structure that contains every information about the specific instance of the problem
+    fixed_step        = input{6}; % if is true i use ode4 (runge-kutta)
+    torque_saturation = input{7};
+    maxtime           = input{8};
+    %options         = input{7}; % options
+    
+    % update of the parameters of activation functions and some reference
+    % (if they are optimized)
+    controller.UpdateParameters(bestAction.parameters)
+    
+    tic
+    [t, q, qd] = DynSim(time_sym_struct,controller,qinit,qdinit,fixed_step,'TorqueSat',torque_saturation,'maxtime',maxtime);
+    toc
+    %toc(controller.current_time) for debugging the time deadline
+    % generate cartesian position and cartesian velocity
+    for ii =1:size(q{1},1) % generalize to multichain
+        T =controller.subchains.sub_chains{1}.fkine(q{1}(ii,:)); % generalize to multichain
+        p = [p;T(1:3,4)'];
+        J = controller.subchains.sub_chains{1}.jacob0(q{1}(ii,:)); % generalize to multichain
+        pd_cur = J*(qd{1}(ii,:))';% generalize to multichain
+        pd = [pd ; pd_cur'];  
+    end
+elseif (strcmp(simulator,'icub_matlab'))
+    controller = input{4}; % structure that contains every information about the specific instance of the problem
+    time_sym_struct = input{3};
+    % update of the parameters of activation functions and some reference
+    % (if they are optimized)
+    controller.UpdateParameters(bestAction.parameters)
+    
+    tic
+    [t, q, qd]=DynSim_iCub(controller,input{2});
+    toc
+    %toc(controller.current_time) for debugging the time deadline
+    for ii =1:size(q,1) % generalize to multichain
+        cur_q = q(ii,:);
+        cur_qd = qd(ii,:);
+        p_cur = bot1.offlineFkine(cur_q','r_hand'); % generalize to multichain
+        p = [p;p_cur];
+        J = bot1.offlineJacob0(cur_q','r_hand'); % generalize to multichain
+        pd_cur = J*(cur_qd)';% generalize to multichain
+        pd = [pd ; pd_cur'];  
+    end
 end
 % compute the torque interpolated   
 tau_=InterpTorque(controller,time_sym_struct,interpolation_step);
@@ -102,33 +142,37 @@ xlab = xlabel('evolutions');
 set(xlab,'FontSize',dim_lab,'Interpreter','latex');
 ylab = ylabel('fitness');
  set(ylab,'FontSize',dim_lab,'Interpreter','latex');
-saveas(handle,strcat(complete_path,'/','fit'),'pdf');
-saveas(handle,strcat(complete_path,'/','fit'));
+%saveas(handle,strcat(complete_path,'/','fit'),'pdf');
+%saveas(handle,strcat(complete_path,'/','fit'));
 % plot 3d graph 
-handle = figure; hold on;
-text = LoadScenario(name_scenario);
-eval(text);
-grid on;
-% plot trace
-[ee,elbow] = ComputePositions(q{1},t_,controller);
-ee = ee';
-elbow = elbow';
-izy = 1;
-handle_vector = [];
-% ee_trajectory
-name_of_trace {1,izy} = 'end-effector';  
-handle1 = plot3(ee(:,1)',ee(:,2)',ee(:,3)','Color','r','LineWidth',2);
-handle_vector=[handle_vector,handle1];
-izy = izy + 1;
-% elbow_traj
-name_of_trace{1,izy} = 'elbow';  
-handle2 = plot3(elbow(:,1)',elbow(:,2)',elbow(:,3)','Color','g','LineWidth',2);
-handle_vector=[handle_vector,handle2];
-leg = legend(handle_vector,name_of_trace);
-set(leg,'FontSize',dim_leg,'Interpreter','latex','Location','Best');
-saveas(handle,strcat(complete_path,'/','3d_traj'));
-bot1.plot(qi{1});
-saveas(handle,strcat(complete_path,'/','3d_traj_bot'));
+% handle = figure; hold on;
+% text = LoadScenario(name_scenario);
+% eval(text);
+% grid on;
+% % plot trace
+% [ee,elbow] = ComputePositions(q{1},t_,controller);
+% ee = ee';
+% elbow = elbow';
+% izy = 1;
+% handle_vector = [];
+% % ee_trajectory
+% name_of_trace {1,izy} = 'end-effector';  
+% handle1 = plot3(ee(:,1)',ee(:,2)',ee(:,3)','Color','r','LineWidth',2);
+% handle_vector=[handle_vector,handle1];
+% izy = izy + 1;
+% % elbow_traj
+% name_of_trace{1,izy} = 'elbow';  
+% handle2 = plot3(elbow(:,1)',elbow(:,2)',elbow(:,3)','Color','g','LineWidth',2);
+% handle_vector=[handle_vector,handle2];
+% leg = legend(handle_vector,name_of_trace);
+% set(leg,'FontSize',dim_leg,'Interpreter','latex','Location','Best');
+% saveas(handle,strcat(complete_path,'/','3d_traj'));
+% if(strcmp(simulator,'rbt'))
+%     bot1.plot(input{2});
+% elseif(strcmp(simulator,'icub_matlab'))
+%     bot1.plot(q,input{2});
+% end
+% saveas(handle,strcat(complete_path,'/','3d_traj_bot'));
 
 % plot x y z
 handle = figure;
@@ -140,8 +184,8 @@ xlab=xlabel('time [ms]'); % x-axis label
 set(xlab,'FontSize',dim_lab,'Interpreter','latex');
 ylab=ylabel('cartesian position [m]'); % y-axis label
 set(ylab,'FontSize',dim_lab,'Interpreter','latex');
-saveas(handle,strcat(complete_path,'/','e_e'),'pdf');
-saveas(handle,strcat(complete_path,'/','e_e'));
+%saveas(handle,strcat(complete_path,'/','e_e'),'pdf');
+%saveas(handle,strcat(complete_path,'/','e_e'));
 %plot q 
 handle = figure;
 plot(q{1}*RAD);
@@ -155,8 +199,8 @@ for i = 1:size(q{1},2)
 end
 leg=legend(str_name);
 set(leg,'FontSize',dim_leg,'Location','best');
-saveas(handle,strcat(complete_path,'/','q'),'pdf');
-saveas(handle,strcat(complete_path,'/','q'));
+%saveas(handle,strcat(complete_path,'/','q'),'pdf');
+%saveas(handle,strcat(complete_path,'/','q'));
 % plot tau
 handle = figure;
 plot(tau_)
@@ -170,18 +214,18 @@ for i = 1:size(q{1},2)
 end
 leg=legend(str_name1);
 set(leg,'FontSize',dim_leg,'Location','best');
-saveas(handle,strcat(complete_path,'/','tau'),'pdf');
-saveas(handle,strcat(complete_path,'/','tau'));
+%saveas(handle,strcat(complete_path,'/','tau'),'pdf');
+%saveas(handle,strcat(complete_path,'/','tau'));
 
 close all;
 
 % build file for the execution on kinova
-WriteFF(p(:,1:3),3,strcat(complete_path,'/','cart_pos.txt'));
-WriteFF(pd(:,1:3),3,strcat(complete_path,'/','cart_vel.txt'));
-WriteFF(q{1},size(q{1},2),strcat(complete_path,'/','joint_pos.txt'));
-WriteFF(qd{1},size(qd{1},2),strcat(complete_path,'/','joint_vel.txt'));
-WriteFF(q{1}(1,:),size(q{1},2),strcat(complete_path,'/','start_joint_pos.txt'));
-WriteFF(p(1,1:3),3,strcat(complete_path,'/','start_cart_pos.txt'));
+% WriteFF(p(:,1:3),3,strcat(complete_path,'/','cart_pos.txt'));
+% WriteFF(pd(:,1:3),3,strcat(complete_path,'/','cart_vel.txt'));
+% WriteFF(q{1},size(q{1},2),strcat(complete_path,'/','joint_pos.txt'));
+% WriteFF(qd{1},size(qd{1},2),strcat(complete_path,'/','joint_vel.txt'));
+% WriteFF(q{1}(1,:),size(q{1},2),strcat(complete_path,'/','start_joint_pos.txt'));
+% WriteFF(p(1,1:3),3,strcat(complete_path,'/','start_cart_pos.txt'));
 
 
 % figure

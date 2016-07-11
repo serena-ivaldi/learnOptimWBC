@@ -26,7 +26,7 @@ CONTROLLERTYPE ='UF';   % GHC or UF
 %%
 
 %SUBCHAIN PARAMETERS 
-subchain1 =  {'r_hand','r_elbow_1','none'};
+subchain1 =  {'r_hand','r_elbow_1','l_hand','l_elbow_1','none'};
 target_link{1} = subchain1;
 
 
@@ -48,16 +48,20 @@ deg = pi/180;
 % %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
 % dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
 
-traj_type = {'cartesian','cartesian','joint'};
-control_type = {'x','x','none'};
-type_of_traj = {'sampled','sampled','sampled'};
-geometric_path = {'fixed','fixed','fixed'};
-time_law = {'none','none','none'};
+traj_type = {'cartesian','cartesian','cartesian','cartesian','joint'};
+control_type = {'x','x','x','x','none'};
+type_of_traj = {'sampled','sampled','sampled','sampled','sampled'};
+geometric_path = {'fixed','fixed','fixed','fixed','fixed'};
+time_law = {'none','none','none','none','none'};
 %parameters first chains
-geom_parameters{1,1} = [0.35,-0.15,0.7]; %[0.38,-0.1,0.7]; 
-geom_parameters{1,2} = [0.24,-0.23,0.7]; %[0.24,-0.23,0.7];
-geom_parameters{1,3} = [0;0.785398163397448;0;0;-0.349065850398866;0.523598775598299;0;0;0.785398163397448;0;0;0;0.523598775598299;0;0;0;0]';
-dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.ndof,1); 
+geom_parameters{1,1} = [0.3,-0.17,0.68];    %r_e_e_point
+geom_parameters{1,2} = [0.21,-0.25,0.68];	%r_elbow_point
+geom_parameters{1,3} = [0.3,0.0248,0.68];   %l_e_e_point
+geom_parameters{1,4} = [0.21,0.1138,0.68];   %l_elbow_point
+geom_parameters{1,5} = [0;0.785398163397448;0;0;-0.349065850398866;0.523598775598299;0;0;0.785398163397448;0;0;0;0.523598775598299;0;0;0;0]';
+dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; 
+dim_of_task{1,3}= [1;1;1]; dim_of_task{1,4}= [1;1;1];
+dim_of_task{1,5}= ones(bot1.ndof,1); 
 
 % traj_type = {'cartesian'};
 % control_type = {'rpy'};
@@ -70,11 +74,11 @@ dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1
 % dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
 
 % secondary trajectory
-traj_type_sec = {'none','none','none'};
-control_type_sec = {'rpy','rpy','rpy'};
-type_of_traj_sec = {'func','func','func'};
-geometric_path_sec = {'fixed','fixed','fixed'};
-time_law_sec = {'linear','linear','linear'};
+traj_type_sec = {'none','none','none','none','none'};
+control_type_sec = {'rpy','rpy','rpy','rpy','rpy'};
+type_of_traj_sec = {'func','func','func','func','func'};
+geometric_path_sec = {'fixed','fixed','fixed','fixed','fixed'};
+time_law_sec = {'linear','linear','linear','linear','linear'};
 %parameters first chains
 geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
 geom_parameters_sec{1,2} = [-0.309 -0.469 0.581];
@@ -192,9 +196,9 @@ switch CONTROLLERTYPE
         %numeric_theta = [0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[2.3218    2.5695    6.8006    4.6558    5.7475    8.7383    3.5058    5.2817    6.9910    6.7590    4.5235    6.3875    7.3247    6.7258 8.5637];
-        a = 0; b = 0; c = 14;
-        numeric_theta = [2.79858924180364 9.49716997018595 12.8263606810647 9.02005503061110 -0.394856563710598 4.04280319822902 -1.19734040244116 -5.26543007744964 -0.0201693695522485 6.32555148074320 2.53193881239817 3.64676131273431 7.29673727435514 3.23134083026330 0.690521555529028];
-        %numeric_theta = [1.34808936568616 7.65801020911318 11.4142276222402 11.0490983940875 5.40014056365278 3.15896271495000 2.49526509728241 3.38786911220609 3.59148669099237 -3.99404815876146 0.150175087891493 3.67130705179767 4.44576652255605 5.52547896983619 -5.09694541976550];
+        a = 5; b = 5; c = 5; d = 5; e = 0;
+        numeric_theta = [a a a a a b b b b b c c c c c d d d d d e e e e e];
+        %numeric_theta = [-0.957996071516245 -2.68530655568182 -1.44602898905862 -0.938192537546517 0.631817834607880 -3.11795447475711 -4.67805627289191 2.38718745292942 -2.31679113713718 -7.28712546102794 0.695581354013146 -0.321464579206936 0.821169246092270 1.42670377919523 0.396149398718321 -6.60373501821164 -2.64636400483896 1.17734247927243 -3.80591442414002 -2.15728844266908 12.9713452513666 14 14 13.7076537003139 11.9701656852103];
         
         % from sere 1
         %numeric_theta = [5.819383 4.412794 5.286902 7.786384 7.599614 3.512520 5.989917 9.410994 7.444834 7.472545 4.532512 5.614148 7.970080 4.498142 6.194601 6.925731 4.815911 5.490313 5.294776 6.011380 ]
@@ -232,8 +236,8 @@ switch CONTROLLERTYPE
         % regularized case i have to do N^(-1) 
         % not regularized case i have N^(-1/2)
         metric = {'M^(1)','M^(1)','M^(1)','M^(1)','M^(1)','M^(1)','M^(1)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
-        kd = [110,90,90,110,110,110,110];
-        kp = [70,40,40,70,70,70,70]; % row vector one for each chain
+        kd = [110,110,110,110,110,110,110];
+        kp = [70,70,70,70,70,70,70]; % row vector one for each chain
         for i= 1:chains.GetNumChains()
             for par = 1:chains.GetNumTasks(i)
                 if(strcmp(traj_type{i},'impedance'))
@@ -289,7 +293,7 @@ switch CONTROLLERTYPE
             constraints_functions{k} = 'LinInequality';
             constraints_functions{k+1} = 'LinInequality2';
         end
-        distConstraints_values = [0.03, 0.03, 0.03, 0.03, 0.03]; % distances for the collissions constraints
+        distConstraints_values = [0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03]; % distances for the collissions constraints
         for k = 1:length(distConstraints_values)
             constraints_functions{end+1} = 'DistanceObs';
         end
@@ -299,7 +303,7 @@ switch CONTROLLERTYPE
         activate_constraints_handling = true;        
         %% INSTANCE PARAMETER
         run_function = @RobotExperiment;
-        fitness = @fitnessHumanoidsIcub;
+        fitness = @fitnessHumanoidsIcub2arms;
         clean_function = @RobotExperimentCleanData;
         
         if strcmp(simulator_type{1},'rbt') 
@@ -324,13 +328,14 @@ switch CONTROLLERTYPE
         %--- Starting value of parameters
         generation_of_starting_point = 'test'; % 'test', 'given', 'random'
         %init_parameters = 6;
-        user_defined_start_action=[0 0 0 0 0 0 0 0 0 0 14 14 14 14 14];
+        a = 5; b = 5; c = 5; d = 5; e = 6;
+        user_defined_start_action = [a a a a a b b b b b c c c c c d d d d d e e e e e];
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-        niter = 40;  %number of generations
+        niter = 100;  %number of generations
         cmaes_value_range = [-14 , 14];  % boudn that define the search space
         %cmaes_value_range{1} = [-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-0.15,-0.15,-0.15 ];  % lower bound that define the search space
         %cmaes_value_range{2} = [14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,0.15,0.15,0.15];  % upper bound that define the search space
-        learn_approach = 'CMAES'; %CMAES (1+1)CMAES    
+        learn_approach = '(1+1)CMAES'; %CMAES (1+1)CMAES    
         %--- Parameter for constraints method
         method_to_use = 'vanilla';  % adaptive , vanilla , empty
         epsilon = 0.001*ones(1,length(constraints_functions)); %vector with a number of value related to the number of constraints (used only with Aaptive constraints)

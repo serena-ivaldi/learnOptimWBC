@@ -17,142 +17,30 @@ time_struct.step = 0.001;
 %name_dat = 'Jaco1.3_scene1.1';
 %name_dat = 'LBR4p2.2_scene2_generalization';
 %name_dat = 'lwrsimple1.0_scene_test_obs';
-name_dat = 'iCub_1.0';
+name_dat = 'humanoid_bench_lbrsimple_1.1';
 %name_dat = 'humanoid_bench_generator_lbrsimple_1.0';
-%path=LoadParameters(name_dat);
-%load(path);
-%% TYPE OF CONTROLLER 
-CONTROLLERTYPE ='UF';   % GHC or UF
-%%
-
-%SUBCHAIN PARAMETERS 
-subchain1 =  {'r_hand','r_elbow_1','none'};
-target_link{1} = subchain1;
-
-
-%% Robot
-bot1 = iCub('model_arms_torso_free');
-chain_1 = DummyRvc_iCub(bot1,'l_sole'); 
-robots{1} = chain_1;
-chains = SubChains(target_link,robots,bot1);
-%%  REFERENCE PARAMETERS
-deg = pi/180;
-% primary trajectory
-% traj_type = {'impedance'};
-% control_type = {'x'};
-% type_of_traj = {'func'};
-% geometric_path = {'fixed'};
-% time_law = {'none'};
-% %parameters first chains
-% geom_parameters{1,1} = [0.30 -0.71 0.5]; 
-% %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
-% dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
-
-traj_type = {'cartesian','cartesian','joint'};
-control_type = {'x','x','none'};
-type_of_traj = {'sampled','sampled','sampled'};
-geometric_path = {'fixed','fixed','fixed'};
-time_law = {'none','none','none'};
-%parameters first chains
-geom_parameters{1,1} = [0.35,-0.15,0.7]; %[0.38,-0.1,0.7]; 
-geom_parameters{1,2} = [0.24,-0.23,0.7]; %[0.24,-0.23,0.7];
-geom_parameters{1,3} = [0;0.785398163397448;0;0;-0.349065850398866;0.523598775598299;0;0;0.785398163397448;0;0;0;0.523598775598299;0;0;0;0]';
-dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.ndof,1); 
-
-% traj_type = {'cartesian'};
-% control_type = {'rpy'};
-% type_of_traj = {'func'};
-% geometric_path = {'fixed'};
-% time_law = {'none'};
-% %parameters first chains
-% geom_parameters{1,1} = [pi/2 0 -pi/2]; 
-% %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
-% dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
-
-% secondary trajectory
-traj_type_sec = {'none','none','none'};
-control_type_sec = {'rpy','rpy','rpy'};
-type_of_traj_sec = {'func','func','func'};
-geometric_path_sec = {'fixed','fixed','fixed'};
-time_law_sec = {'linear','linear','linear'};
-%parameters first chains
-geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
-geom_parameters_sec{1,2} = [-0.309 -0.469 0.581];
-geom_parameters_sec{1,3} = [-0.309 -0.469 0.581];
-geom_parameters_sec{1,4} = [-0.309 -0.469 0.581];
-geom_parameters_sec{1,5} = [-0.309 -0.469 0.581];
-geom_parameters_sec{1,6} = [-0.309 -0.469 0.581];
-geom_parameters_sec{1,7} = [120 116 90 0 0 0 0]* deg; 
-dim_of_task_sec{1,1}=[1;1;1]; 
-dim_of_task_sec{1,2}=[1;1;1]; 
-dim_of_task_sec{1,3}=[1;1;1]; 
-dim_of_task_sec{1,4}=[1;1;1]; 
-dim_of_task_sec{1,5}=[1;1;1]; 
-dim_of_task_sec{1,6}=[1;1;1]; 
-dim_of_task_sec{1,7}= ones(bot1.ndof,1); 
-
-switch CONTROLLERTYPE
-    case 'UF'
-        % REPELLER PARAMETERS
-        % scenario dependant
-        rep_subchain = [7];
-        rep_target_link{1} = rep_subchain;
-        rep_type = {'cartesian_x'};
-        rep_mask {1,1}=[1,1,1]; 
-        rep_type_of_J_rep = {'DirectionCartesian'};
-        for ii=1:chains.GetNumChains()
-             chain_dof(ii) = chains.GetNumLinks(ii);
-        end
-        UF_StaticParameters
-    case 'GHC'
-        GHC_StaticParameters
-    otherwise
-        warning('Unexpected control method')
-end
+path=LoadParameters(name_dat);
+load(path);
 
 %% SCENARIO
-name_scenario = 'iCub_1';%'lbr_scenario_2_gen' lbr_scenario2; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
+name_scenario = 'humanoids_rob_benck_2';%'lbr_scenario_2_gen' lbr_scenario2; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
 
 %% RBT SIMULATOR PARAMETERS
 time_sym_struct = time_struct;
 time_sym_struct.step = 0.001; 
 % TODO generalize for multichain
+qi{1} = qz;
+%qi{1} = zeros(1,chains.GetNumLinks(1)); %stretched arm
+qdi{1} = zeros(1,chains.GetNumLinks(1));
+options= [];
+simulator_type = {'rbt'};
+% rbt sim
+% define the type of integration of the sytem of differential equation
+fixed_step = false; %true;
+torque_saturation =10000; % high value == no saturation
+maxtime = 100; % maximum time before a simulation is stopped for being too long
+% other sim
 
-simulator_type = {'icub_matlab'};
-if strcmp(simulator_type{1},'rbt')
-    % rbt sim
-    qi{1} = qz;
-    %qi{1} = zeros(1,chains.GetNumLinks(1)); %stretched arm
-    qdi{1} = zeros(1,chains.GetNumLinks(1));
-    options= [];
-    % define the type of integration of the sytem of differential equation
-    fixed_step = false; %true;
-    torque_saturation =100000; % high value == no saturation
-    maxtime = 100; % maximum time before a simulation is stopped for being too long
-elseif strcmp(simulator_type{1},'icub_matlab')
-    % iCub sim
-    %% building initial configuration
-    qi{1} = [];
-    qdi{1} = [];
-    list_of_kin_chain = {'trunk','left_arm','right_arm'};
-    params.feet_on_ground =  [1,1];
-    params.active_floating_base = false;
-    params.qjInit      = bot1.InitializeState(list_of_kin_chain, params.feet_on_ground);
-    params.dqjInit     = zeros(bot1.ndof,1);
-    % icub starting velocity floating base
-    params.dx_bInit    = zeros(3,1);
-    params.omega_bInit = zeros(3,1);
-    % root reference link;
-    params.root_reference_link ='l_sole';
-    params.tStart   = time_sym_struct.ti;
-    params.tEnd     = time_sym_struct.tf;
-    params.sim_step = 0.01;
-    params.demo_movements = 0 ;
-    params.wait     = waitbar(0,'State integration in progress...');
-    params.maxtime = 100;
-    params.torque_saturation = 100000;
-
-end
 %% Parameters Dependant on the type of controller
 
 %%%EOF
@@ -192,10 +80,8 @@ switch CONTROLLERTYPE
         %numeric_theta = [0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[2.3218    2.5695    6.8006    4.6558    5.7475    8.7383    3.5058    5.2817    6.9910    6.7590    4.5235    6.3875    7.3247    6.7258 8.5637];
-        a = 0; b = 0; c = 14;
-        numeric_theta = [2.79858924180364 9.49716997018595 12.8263606810647 9.02005503061110 -0.394856563710598 4.04280319822902 -1.19734040244116 -5.26543007744964 -0.0201693695522485 6.32555148074320 2.53193881239817 3.64676131273431 7.29673727435514 3.23134083026330 0.690521555529028];
-        %numeric_theta = [1.34808936568616 7.65801020911318 11.4142276222402 11.0490983940875 5.40014056365278 3.15896271495000 2.49526509728241 3.38786911220609 3.59148669099237 -3.99404815876146 0.150175087891493 3.67130705179767 4.44576652255605 5.52547896983619 -5.09694541976550];
-        
+        numeric_theta =[0 0 0 0 0 14 14 14 14 14 0 0 0 0 0 ];
+
         % from sere 1
         %numeric_theta = [5.819383 4.412794 5.286902 7.786384 7.599614 3.512520 5.989917 9.410994 7.444834 7.472545 4.532512 5.614148 7.970080 4.498142 6.194601 6.925731 4.815911 5.490313 5.294776 6.011380 ]
 
@@ -232,8 +118,8 @@ switch CONTROLLERTYPE
         % regularized case i have to do N^(-1) 
         % not regularized case i have N^(-1/2)
         metric = {'M^(1)','M^(1)','M^(1)','M^(1)','M^(1)','M^(1)','M^(1)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
-        kd = [110,90,90,110,110,110,110];
-        kp = [70,40,40,70,70,70,70]; % row vector one for each chain
+        kd = [110,60,90,110,110,110,110];
+        kp = [70,20,40,70,70,70,70]; % row vector one for each chain
         for i= 1:chains.GetNumChains()
             for par = 1:chains.GetNumTasks(i)
                 if(strcmp(traj_type{i},'impedance'))
@@ -284,49 +170,46 @@ switch CONTROLLERTYPE
         regularizer{2} = regularized_chain_2;
         
         %% CONSTRAINTS PARAMETERS
-        constraints_values = bot1.createConstraintsVector;
-        for k = 1:2:length(constraints_values)
-            constraints_functions{k} = 'LinInequality';
-            constraints_functions{k+1} = 'LinInequality2';
-        end
-        distConstraints_values = [0.03, 0.03, 0.03, 0.03, 0.03]; % distances for the collissions constraints
-        for k = 1:length(distConstraints_values)
-            constraints_functions{end+1} = 'DistanceObs';
-        end
-        constraints_values = [constraints_values, distConstraints_values];   % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
-        constraints_type = ones(1,length(constraints_values)); % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
+        constraints_functions = {'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',... joints limits
+                                 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',... joints limits
+                                 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',... velocity limits 
+                                 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',... velocity limits              
+                                 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',... torque limits
+                                 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',... torque limits
+                                 'DistanceObs','DistanceObs','DistanceObs','DistanceObs'}; 
+                                  % vector of functions handle for computing the constraints 'LinInequality','LinInequality2','LinInequality','LinInequality2','LinInequality','LinInequality2',...
+        constraints_type = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];  % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
+        % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
+        constraints_values =[+170*(pi/180), -170*(pi/180),120*(pi/180), -120*(pi/180),+170*(pi/180), -170*(pi/180),120*(pi/180), -120*(pi/180),... joints limits
+                             +170*(pi/180),-170*(pi/180),120*(pi/180), -120*(pi/180),+170*(pi/180), -170*(pi/180),... joints limits (14)
+                             1.7,-1.7,1.7,-1.7,1.72,-1.72,2.26,-2.26,2.44,-2.44,3.14,-3.14,3.14,-3.14,... velocity limits (28) 
+                             320, -320,320, -320,176, -176,176, -176,... torque limits 
+                             110, -110,40, -40,40, -40,... torque limits (42)
+                             0.01,0.01,0.01,0.01];  % obstacles
+        activate_constraints_handling = true;
         
-        activate_constraints_handling = true;        
         %% INSTANCE PARAMETER
         run_function = @RobotExperiment;
-        fitness = @fitnessHumanoidsIcub;
+        fitness = @fitnessHumanoids2;
         clean_function = @RobotExperimentCleanData;
+        % TODO generalize for multichain
+        input{1} = simulator_type{1};  % rbt / v-rep
+        input{2} = qi;                 % initial position 
+        input{3} = qdi;                % initial velocity
+        %------
+        input{4} = time_sym_struct;    %time struct for simulation with fixed step
+        input{5} = [];                 % here i have to insert the controller i will do that in init() 
+        input{6} = fixed_step;         % if is true i use ode4 (runge-kutta)
+        input{7} = torque_saturation;  % i define the torque saturation that i want to apply
+        input{8} = maxtime;            % maxtime before the simulation is stopped because is too long
         
-        if strcmp(simulator_type{1},'rbt') 
-            % TODO generalize for multichain
-            input{1} = simulator_type{1};  % rbt / v-rep
-            input{2} = qi;                 % initial position 
-            input{3} = qdi;                % initial velocity
-            %------
-            input{4} = time_sym_struct;    %time struct for simulation with fixed step
-            input{5} = [];                 % here i have to insert the controller i will do that in init() 
-            input{6} = fixed_step;         % if is true i use ode4 (runge-kutta)
-            input{7} = torque_saturation;  % i define the torque saturation that i want to apply
-            input{8} = maxtime;            % maxtime before the simulation is stopped because is too long
-        elseif strcmp(simulator_type{1},'icub_matlab')
-            input{1} = simulator_type{1};  % rbt / v-rep
-            input{2} = params;
-            input{3} = time_sym_struct;
-            input{4} = [];                 % here i have to insert the controller i will do that in init() 
-    
-        end
         %% CMAES PARAMETER
         %--- Starting value of parameters
-        generation_of_starting_point = 'test'; % 'test', 'given', 'random'
+        generation_of_starting_point = 'random'; % 'test', 'given', 'random'
         %init_parameters = 6;
-        user_defined_start_action=[0 0 0 0 0 0 0 0 0 0 14 14 14 14 14];
+        user_defined_start_action=[-0.686896675401947,1.22650641453222,-3.27247260213565,12.6539506696606,11.9349914795820,12.3072074998126,11.4267899497361,13.3737941021526,8.77645179253447,-4.69418318274421,11.1958799565396,1.32058911902880,-0.691100222964068,0.286830798370383,-0.162567001268804];
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-        niter = 40;  %number of generations
+        niter = 45;  %number of generations
         cmaes_value_range = [-14 , 14];  % boudn that define the search space
         %cmaes_value_range{1} = [-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-0.15,-0.15,-0.15 ];  % lower bound that define the search space
         %cmaes_value_range{2} = [14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,0.15,0.15,0.15];  % upper bound that define the search space
@@ -396,5 +279,5 @@ rawTextFromStorage = fileread(which(mfilename));
 rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF'],'match','once');
 
 % join the general static parameter with the particular static one
-%rawTextFromStorage = strcat(rawTextFromStorage,rawTextFromStoragePart);
+rawTextFromStorage = strcat(rawTextFromStorage,rawTextFromStoragePart);
 
