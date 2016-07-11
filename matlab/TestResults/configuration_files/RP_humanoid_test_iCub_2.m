@@ -54,10 +54,10 @@ type_of_traj = {'sampled','sampled','sampled','sampled','sampled'};
 geometric_path = {'fixed','fixed','fixed','fixed','fixed'};
 time_law = {'none','none','none','none','none'};
 %parameters first chains
-geom_parameters{1,1} = [0.32,-0.15,0.7];    %[0.38,-0.1,0.7]; 
-geom_parameters{1,2} = [0.24,-0.23,0.7];	%[0.24,-0.23,0.7];
-geom_parameters{1,3} = [0.32,0.0138,0.7];
-geom_parameters{1,4} = [0.24,0.0938,0.7];
+geom_parameters{1,1} = [0.3,-0.17,0.68];    %r_e_e_point
+geom_parameters{1,2} = [0.21,-0.25,0.68];	%r_elbow_point
+geom_parameters{1,3} = [0.3,0.0248,0.68];   %l_e_e_point
+geom_parameters{1,4} = [0.21,0.1138,0.68];   %l_elbow_point
 geom_parameters{1,5} = [0;0.785398163397448;0;0;-0.349065850398866;0.523598775598299;0;0;0.785398163397448;0;0;0;0.523598775598299;0;0;0;0]';
 dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; 
 dim_of_task{1,3}= [1;1;1]; dim_of_task{1,4}= [1;1;1];
@@ -140,6 +140,7 @@ elseif strcmp(simulator_type{1},'icub_matlab')
     qdi{1} = [];
     list_of_kin_chain = {'trunk','left_arm','right_arm'};
     params.feet_on_ground =  [1,1];
+    params.active_floating_base = false;
     params.qjInit      = bot1.InitializeState(list_of_kin_chain, params.feet_on_ground);
     params.dqjInit     = zeros(bot1.ndof,1);
     % icub starting velocity floating base
@@ -195,9 +196,10 @@ switch CONTROLLERTYPE
         %numeric_theta = [0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[2.3218    2.5695    6.8006    4.6558    5.7475    8.7383    3.5058    5.2817    6.9910    6.7590    4.5235    6.3875    7.3247    6.7258 8.5637];
-        a = 0; b = 0; c = 0; d = 0; e = 14;
-        numeric_theta =[a a a a a b b b b b c c c c c d d d d d e e e e e];
-                         
+        a = 5; b = 5; c = 5; d = 5; e = 0;
+        numeric_theta = [a a a a a b b b b b c c c c c d d d d d e e e e e];
+        %numeric_theta = [-0.957996071516245 -2.68530655568182 -1.44602898905862 -0.938192537546517 0.631817834607880 -3.11795447475711 -4.67805627289191 2.38718745292942 -2.31679113713718 -7.28712546102794 0.695581354013146 -0.321464579206936 0.821169246092270 1.42670377919523 0.396149398718321 -6.60373501821164 -2.64636400483896 1.17734247927243 -3.80591442414002 -2.15728844266908 12.9713452513666 14 14 13.7076537003139 11.9701656852103];
+        
         % from sere 1
         %numeric_theta = [5.819383 4.412794 5.286902 7.786384 7.599614 3.512520 5.989917 9.410994 7.444834 7.472545 4.532512 5.614148 7.970080 4.498142 6.194601 6.925731 4.815911 5.490313 5.294776 6.011380 ]
 
@@ -291,7 +293,7 @@ switch CONTROLLERTYPE
             constraints_functions{k} = 'LinInequality';
             constraints_functions{k+1} = 'LinInequality2';
         end
-        distConstraints_values = [0.03, 0.03, 0.03, 0.03, 0.03,0.03, 0.03, 0.03, 0.03]; % distances for the collissions constraints
+        distConstraints_values = [0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03]; % distances for the collissions constraints
         for k = 1:length(distConstraints_values)
             constraints_functions{end+1} = 'DistanceObs';
         end
@@ -324,15 +326,16 @@ switch CONTROLLERTYPE
         end
         %% CMAES PARAMETER
         %--- Starting value of parameters
-        generation_of_starting_point = 'random'; % 'test', 'given', 'random'
+        generation_of_starting_point = 'test'; % 'test', 'given', 'random'
         %init_parameters = 6;
-        user_defined_start_action=[-0.686896675401947,1.22650641453222,-3.27247260213565,12.6539506696606,11.9349914795820,12.3072074998126,11.4267899497361,13.3737941021526,8.77645179253447,-4.69418318274421,11.1958799565396,1.32058911902880,-0.691100222964068,0.286830798370383,-0.162567001268804];
+        a = 5; b = 5; c = 5; d = 5; e = 6;
+        user_defined_start_action = [a a a a a b b b b b c c c c c d d d d d e e e e e];
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-        niter = 40;  %number of generations
+        niter = 100;  %number of generations
         cmaes_value_range = [-14 , 14];  % boudn that define the search space
         %cmaes_value_range{1} = [-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-0.15,-0.15,-0.15 ];  % lower bound that define the search space
         %cmaes_value_range{2} = [14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,0.15,0.15,0.15];  % upper bound that define the search space
-        learn_approach = 'CMAES'; %CMAES (1+1)CMAES    
+        learn_approach = '(1+1)CMAES'; %CMAES (1+1)CMAES    
         %--- Parameter for constraints method
         method_to_use = 'vanilla';  % adaptive , vanilla , empty
         epsilon = 0.001*ones(1,length(constraints_functions)); %vector with a number of value related to the number of constraints (used only with Aaptive constraints)

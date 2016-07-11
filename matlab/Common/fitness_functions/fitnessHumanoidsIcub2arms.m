@@ -1,4 +1,4 @@
-function fit  = fitnessHumanoidsIcub(obj,output) 
+function fit  = fitnessHumanoidsIcub2arms(obj,output) 
     
     t = output{1};
     q = output{2};
@@ -7,7 +7,7 @@ function fit  = fitnessHumanoidsIcub(obj,output)
     downsaple = 10;
     L = 1; 
     max_effort = 3.5000e+05;
-    max_traj_error = 120;
+    max_traj_error = 250;
     weight_effort = 1;
     weight_traj_err = 3;
     %%%EOF

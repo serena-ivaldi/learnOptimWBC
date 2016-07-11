@@ -131,15 +131,15 @@ classdef iCub < handle
             qjInit      = zeros(obj.ndof,1);
             
             if(~isempty(find(SubStrFind('trunk',list_of_kin_chain),1)))
-                torsoInit    = [0.0  0.0  0.0]'; %yaw roll pitch
-                %params.qjInit = [params.qjInit;torsoInit];
+                torsoInit    = [0.0  0.0  0.0]';
                 string_search = {'torso_yaw','torso_roll','torso_pitch'};
                 qjInit = obj.sortJointValue(string_search,qjInit,torsoInit);
             end
             
             if(~isempty(find(SubStrFind('left_arm',list_of_kin_chain),1)))
-                leftArmInit  = [-20.0  30.0  0.0  45.0  0.0 0.0 0.0]';%0.0  5.0  0.0  10.0  0.0 0.0 0.0
-                %params.qjInit = [params.qjInit;leftArmInit];
+                leftArmInit  = [0.0  30.0  0.0  45.0  0.0 0.0 0.0]';%0.0  5.0  0.0  10.0  0.0 0.0 0.0
+                %1 arm exp = -20.0  30.0  0.0  45.0  0.0 0.0 0.0
+                %2 arms exp = 0.0  30.0  0.0  45.0  0.0 0.0 0.0
                 string_search = {'l_shoulder_pitch','l_shoulder_roll','l_shoulder_yaw',...
                     'l_elbow','l_wrist_prosup','l_wrist_pitch','l_wrist_yaw'};
                 qjInit = obj.sortJointValue(string_search,qjInit,leftArmInit);
@@ -147,7 +147,8 @@ classdef iCub < handle
             
             if(~isempty(find(SubStrFind('right_arm',list_of_kin_chain),1)))
                 rightArmInit = [0.0  30.0  0.0  45.0  0.0 0.0 0.0]'; %-20.0  30.0  0.0  45.0  0.0 0.0 0.0
-                %params.qjInit = [params.qjInit;rightArmInit];
+                %1 arm exp = 0.0  30.0  0.0  45.0  0.0 0.0 0.0
+                %2 arms exp = 0.0  30.0  0.0  45.0  0.0 0.0 0.0
                 string_search = {'r_shoulder_pitch','r_shoulder_roll','r_shoulder_yaw',...
                     'r_elbow','r_wrist_prosup','r_wrist_pitch','r_wrist_yaw'};
                 qjInit = obj.sortJointValue(string_search,qjInit,rightArmInit);
@@ -158,17 +159,14 @@ classdef iCub < handle
                     % initial conditions for balancing on two feet
                     leftLegInit  = [  25.5   0.1   0.0  -18.5  -5.5  -0.1]';
                     rightLegInit = [  25.5   0.1   0.0  -18.5  -5.5  -0.1]';
-                    %params.qjInit = [params.qjInit;leftLegInit;rightLegInit];
                 elseif   feet_on_ground(1) == 1 && feet_on_ground(2) == 0
                     % initial conditions for the robot standing on the left foot
                     leftLegInit  = [  25.5   15.0   0.0  -18.5  -5.5  -0.1]';
                     rightLegInit = [  25.5   5.0    0.0  -40    -5.5  -0.1]';
-                    %params.qjInit = [params.qjInit;leftLegInit;rightLegInit];
                 elseif   feet_on_ground(1) == 0 && feet_on_ground(2) == 1
                     % initial conditions for the robot standing on the right foot
                     leftLegInit  = [  25.5   5.0    0.0  -40    -5.5  -0.1]';
                     rightLegInit = [  25.5   15.0   0.0  -18.5  -5.5  -0.1]';
-                    %params.qjInit = [params.qjInit;leftLegInit;rightLegInit];
                 end
                 string_search = {'l_hip_pitch','l_hip_roll','l_hip_yaw','l_knee',...
                     'l_ankle_pitch','l_ankle_roll'};
