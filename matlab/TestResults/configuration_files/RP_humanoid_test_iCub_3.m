@@ -4,7 +4,7 @@
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
-time_struct.tf = 20;
+time_struct.tf = 5;
 time_struct.step = 0.001;
 
 %% TASK PARAMETERS
@@ -26,12 +26,12 @@ CONTROLLERTYPE ='UF';   % GHC or UF
 %%
 
 %SUBCHAIN PARAMETERS
-subchain1 =  {'r_hand','r_elbow_1','none'};
+subchain1 =  {'r_hand','r_elbow_1','l_hand','l_elbow_1','none'};
 target_link{1} = subchain1;
 
 
 %% Robot
-bot1 = iCub('model_arms_torso_free');
+bot1 = iCub('model32dof');
 chain_1 = DummyRvc_iCub(bot1,'l_sole');
 robots{1} = chain_1;
 chains = SubChains(target_link,robots,bot1);
@@ -48,16 +48,20 @@ deg = pi/180;
 % %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
 % dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
 
-traj_type = {'cartesian','cartesian','joint'};
-control_type = {'x','x','none'};
-type_of_traj = {'sampled','sampled','sampled'};
-geometric_path = {'fixed','fixed','fixed'};
-time_law = {'none','none','none'};
+traj_type = {'cartesian','cartesian','cartesian','cartesian','joint'};
+control_type = {'x','x','x','x','none'};
+type_of_traj = {'sampled','sampled','sampled','sampled','sampled'};
+geometric_path = {'fixed','fixed','fixed','fixed','fixed'};
+time_law = {'none','none','none','none','none'};
 %parameters first chains
-geom_parameters{1,1} = [0.35,-0.15,0.7]; %[0.38,-0.1,0.7];
-geom_parameters{1,2} = [0.24,-0.23,0.7]; %[0.24,-0.23,0.7];
-geom_parameters{1,3} = [0;0.785398163397448;0;0;-0.349065850398866;0.523598775598299;0;0;0.785398163397448;0;0;0;0.523598775598299;0;0;0;0]';
-dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.ndof,1);
+geom_parameters{1,1} = [0.3,-0.17,0.68];    %r_e_e_point
+geom_parameters{1,2} = [0.21,-0.25,0.68];	%r_elbow_point
+geom_parameters{1,3} = [0.3,0.0248,0.68];   %l_e_e_point
+geom_parameters{1,4} = [0.21,0.1138,0.68];   %l_elbow_point
+geom_parameters{1,5} = zeros(1,32);
+dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1];
+dim_of_task{1,3}= [1;1;1]; dim_of_task{1,4}= [1;1;1];
+dim_of_task{1,5}= ones(1,32);
 
 % traj_type = {'cartesian'};
 % control_type = {'rpy'};
@@ -70,11 +74,11 @@ dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1
 % dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
 
 % secondary trajectory
-traj_type_sec = {'none','none','none'};
-control_type_sec = {'rpy','rpy','rpy'};
-type_of_traj_sec = {'func','func','func'};
-geometric_path_sec = {'fixed','fixed','fixed'};
-time_law_sec = {'linear','linear','linear'};
+traj_type_sec = {'none','none','none','none','none'};
+control_type_sec = {'rpy','rpy','rpy','rpy','rpy'};
+type_of_traj_sec = {'func','func','func','func','func'};
+geometric_path_sec = {'fixed','fixed','fixed','fixed','fixed'};
+time_law_sec = {'linear','linear','linear','linear','linear'};
 %parameters first chains
 geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
 geom_parameters_sec{1,2} = [-0.309 -0.469 0.581];
@@ -111,7 +115,7 @@ switch CONTROLLERTYPE
 end
 
 %% SCENARIO
-name_scenario = 'iCub_1';%'lbr_scenario_2_gen' lbr_scenario2; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
+name_scenario = 'iCub_3';%'lbr_scenario_2_gen' lbr_scenario2; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
 
 %% RBT SIMULATOR PARAMETERS
 time_sym_struct = time_struct;
@@ -134,16 +138,19 @@ elseif strcmp(simulator_type{1},'icub_matlab')
     %% building initial configuration
     qi{1} = [];
     qdi{1} = [];
-    list_of_kin_chain = {'trunk','left_arm','right_arm'};;
-    joints_initial_values{1,1} = [0.0  0.0  0.0];
-    joints_initial_values{1,2} = [-20.0  30.0  0.0  45.0  0.0 0.0 0.0];
-    joints_initial_values{1,3} = [0.0  30.0  0.0  45.0  0.0 0.0 0.0];
+    list_of_kin_chain = {'trunk','left_arm','right_arm','l_sole','r_sole'};
+    joints_initial_values{1,1} = [0 0 0];%[-10.0  0.0  0.0];
+    joints_initial_values{1,2} = [0 0 0 0 0 0 0];%[-20.0  30.0  0.0  45.0  0.0 0.0 0.0];
+    joints_initial_values{1,3} = [0 0 0 0 0 0 0];%[-20.0  30.0  0.0  45.0  0.0 0.0 0.0];
+    joints_initial_values{1,4} = [0 0 0 0 0 0];%[25.5   0.1   0.0  -18.5  -5.5  -0.1];
+    joints_initial_values{1,5} = [0 0 0 0 0 0];%[25.5   0.1   0.0  -18.5  -5.5  -0.1];
+    %'l_hip_pitch','l_hip_roll','l_hip_yaw','l_knee', l_ankle_pitch','l_ankle_roll'
     
     params.feet_on_ground =  [1,1];
     params.numContacts = sum(params.feet_on_ground,2);
-    if       params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 1
+    if       params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 1 
         % contact constraints for 2 feet on ground
-        params.contactLinkNames      = {'l_sole','r_sole'};
+        params.contactLinkNames      = {'l_sole','r_sole'};     
     elseif   params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 0
         % contact constraints for left foot on ground
         params.contactLinkNames      = {'l_sole'};
@@ -151,14 +158,18 @@ elseif strcmp(simulator_type{1},'icub_matlab')
         % contact constraints for right foot on ground
         params.contactLinkNames      = {'r_sole'};
     end
-    params.active_floating_base = false;
+    params.active_floating_base = true;
     params.qjInit      = bot1.InitializeState(list_of_kin_chain, params.feet_on_ground,joints_initial_values);
     params.dqjInit     = zeros(bot1.ndof,1);
     % icub starting velocity floating base
     params.dx_bInit    = zeros(3,1);
     params.omega_bInit = zeros(3,1);
     % root reference link;
-    params.root_reference_link ='l_sole';
+    if params.feet_on_ground(1) == 1
+        params.root_reference_link ='l_sole';
+    else
+        params.root_reference_link ='r_sole';
+    end
     params.tStart   = time_sym_struct.ti;
     params.tEnd     = time_sym_struct.tf;
     params.sim_step = 0.01;
@@ -207,10 +218,25 @@ switch CONTROLLERTYPE
         %numeric_theta = [0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[2.3218    2.5695    6.8006    4.6558    5.7475    8.7383    3.5058    5.2817    6.9910    6.7590    4.5235    6.3875    7.3247    6.7258 8.5637];
-        a = 0; b = 0; c = 14;
-        %numeric_theta = [a a a a a b b b b b c c c c c d d d d d];
-        numeric_theta = [3.20305113572125 10.8877163581950 5.67160605557737 13.2847739134155 13.5650592137061 0.784134976492228 6.93632629872815 -12.5393467704411 -1.27347378019226 -10.1810411492540 -2.20867630883808 5.71190130701425 3.84648716268273 5.41392782619462 -0.989102829864618];
+        a = 0; b = 0; c = 0; d = 0; e = 14;
+        numeric_theta = [a a a a a b b b b b c c c c c d d d d d e e e e e];
+        %numeric_theta = [2.57544496747598 7.01519063016628 9.33466044394969 10.1544321858847 13.1254460308235 2.99937245873210 0.663798653803501 2.31146286139437 6.31668373767193 8.15654233633997 -1.96317454733317 14 0.896047278859740 3.02636865632732 0.318892795068443 -2.08120585139028 7.77742246609418 2.42184730905170 1.07732226822533 4.13677097043036 1.00482399484291 3.53893999351795 6.23352188066088 1.01100054091959 14];
+
+
+        % from sere 1
+        %numeric_theta = [5.819383 4.412794 5.286902 7.786384 7.599614 3.512520 5.989917 9.410994 7.444834 7.472545 4.532512 5.614148 7.970080 4.498142 6.194601 6.925731 4.815911 5.490313 5.294776 6.011380 ]
         
+        %from 10 generation of CMAES: collision with end-eff and table
+        %numeric_theta = [1.351681 10.784147 9.724284 6.550806 7.740233 5.928500 8.123806 7.776163 6.548935 5.474038 7.455956 4.011111 6.704292 1.089315 3.712038 6.041540 5.098971 5.054418 6.312087 6.223340 ];
+        
+        % this is a good one (obtained by 80 generations of CMAES)
+        %numeric_theta = [2.885347 7.054374 6.510485 4.220996 3.779241 7.292772 6.753379 4.039816 3.503077 7.105706 7.242047 5.176997 6.656641 7.282674 6.310105 2.320801 6.164860 5.949270 5.958774 3.349248];
+        
+        %numeric_theta = [2.718340 0.238570 4.959242 5.150985 10.810089 5.561797 6.436029 3.089579 7.488959 5.577574 5.300494 9.360753 5.395630 3.646393 5.427430 5.963953 10.538157 8.951330 7.672437 2.743474];
+        %numeric_theta = [3.493783 6.211959 7.883578 11.988846 7.900086 9.468388 6.525209 11.867391 7.355206 8.158990 0.000000 0.054878 11.131856 8.063698 1.871041 9.107188 3.646651 8.656589 11.419753 4.346246 ];
+        
+        %this is the task without the constraints of the table
+        %numeric_theta =[12 12 12 12 12 12 12 12 12 12];
         
         %constant alpha
         value1 = 0*ones(chains.GetNumTasks(1));
@@ -233,8 +259,8 @@ switch CONTROLLERTYPE
         % regularized case i have to do N^(-1)
         % not regularized case i have N^(-1/2)
         metric = {'M^(1)','M^(1)','M^(1)','M^(1)','M^(1)','M^(1)','M^(1)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);
-        kd = [110,90,90,110,110,110,110];
-        kp = [70,40,40,70,70,70,70]; % row vector one for each chain
+        kd = [110,110,110,110,110,110,110];
+        kp = [70,70,70,70,70,70,70]; % row vector one for each chain
         for i= 1:chains.GetNumChains()
             for par = 1:chains.GetNumTasks(i)
                 if(strcmp(traj_type{i},'impedance'))
@@ -290,7 +316,7 @@ switch CONTROLLERTYPE
             constraints_functions{k} = 'LinInequality';
             constraints_functions{k+1} = 'LinInequality2';
         end
-        distConstraints_values = [0.03, 0.03, 0.03, 0.03, 0.03]; % distances for the collissions constraints
+        distConstraints_values = [0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03]; % distances for the collissions constraints
         for k = 1:length(distConstraints_values)
             constraints_functions{end+1} = 'DistanceObs';
         end
@@ -300,7 +326,7 @@ switch CONTROLLERTYPE
         activate_constraints_handling = true;
         %% INSTANCE PARAMETER
         run_function = @RobotExperiment;
-        fitness = @fitnessHumanoidsIcub;
+        fitness = @fitnessHumanoidsIcub2arms;
         clean_function = @RobotExperimentCleanData;
         
         if strcmp(simulator_type{1},'rbt')
@@ -325,13 +351,14 @@ switch CONTROLLERTYPE
         %--- Starting value of parameters
         generation_of_starting_point = 'test'; % 'test', 'given', 'random'
         %init_parameters = 6;
-        user_defined_start_action=[0 0 0 0 0 0 0 0 0 0 14 14 14 14 14];
+        a = 5; b = 5; c = 5; d = 5; e = 6;
+        user_defined_start_action = [a a a a a b b b b b c c c c c d d d d d e e e e e];
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-        niter = 40;  %number of generations
+        niter = 100;  %number of generations
         cmaes_value_range = [-14 , 14];  % boudn that define the search space
         %cmaes_value_range{1} = [-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-0.15,-0.15,-0.15 ];  % lower bound that define the search space
         %cmaes_value_range{2} = [14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,0.15,0.15,0.15];  % upper bound that define the search space
-        learn_approach = 'CMAES'; %CMAES (1+1)CMAES
+        learn_approach = '(1+1)CMAES'; %CMAES (1+1)CMAES
         %--- Parameter for constraints method
         method_to_use = 'vanilla';  % adaptive , vanilla , empty
         epsilon = 0.001*ones(1,length(constraints_functions)); %vector with a number of value related to the number of constraints (used only with Aaptive constraints)

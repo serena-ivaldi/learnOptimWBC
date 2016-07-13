@@ -8,7 +8,7 @@ for i = 1:length(string_search)
     j = 1;
     while( j <= length(obj.revoluteJointList))
         if (strcmp(obj.revoluteJointList{j}.Attributes.name, string_search{i}))
-            qjout(j) = valueVector(i,1);
+            qjout(j) = valueVector(1,i);
         end
         j = j+1;
     end

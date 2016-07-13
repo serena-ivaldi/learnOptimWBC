@@ -18,6 +18,7 @@ classdef  UF < Controllers.AbstractController
       torques          %  resulting torque (cell array of matrix)
       torques_time     % all the time istant when i aply a torque.
       display_opt      % display settings display_opt.step display_opt.trajtrack
+      visual_param     % temporary
    end
 
 
@@ -67,7 +68,7 @@ classdef  UF < Controllers.AbstractController
 %             obj.display_opt.step =disp_opt.step;
 %             obj.display_opt.trajtrack = disp_opt.trajtrack;   
 %          end
-         
+         obj.visual_param.fc = []; % temporary
        end    
       % i do  not need cell object because the time is unique
       function SaveTime(obj,ind_subchain,time)
