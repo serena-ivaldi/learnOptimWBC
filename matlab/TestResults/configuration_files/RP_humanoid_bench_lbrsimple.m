@@ -80,7 +80,7 @@ switch CONTROLLERTYPE
         %numeric_theta = [0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[2.3218    2.5695    6.8006    4.6558    5.7475    8.7383    3.5058    5.2817    6.9910    6.7590    4.5235    6.3875    7.3247    6.7258 8.5637];
-        numeric_theta =[0 0 0 0 0 14 14 14 14 14 0 0 0 0 0 ];
+        numeric_theta =[3.55498320069203	-2.21105473199699	3.64979230821401	-13.2405467710918	-8.32519142824835	2.11986954813174	4.35391222827495	-9.39484632587680	-1.81216994419852	6.90698790549830	-1.26560276312864	11.3159061013738	14	14	2.13643248766752];
 
         % from sere 1
         %numeric_theta = [5.819383 4.412794 5.286902 7.786384 7.599614 3.512520 5.989917 9.410994 7.444834 7.472545 4.532512 5.614148 7.970080 4.498142 6.194601 6.925731 4.815911 5.490313 5.294776 6.011380 ]
@@ -209,9 +209,9 @@ switch CONTROLLERTYPE
         cmaes_value_range = [-14 , 14];  % boudn that define the search space
         %cmaes_value_range{1} = [-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-0.15,-0.15,-0.15 ];  % lower bound that define the search space
         %cmaes_value_range{2} = [14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,0.15,0.15,0.15];  % upper bound that define the search space
-        learn_approach = 'CMAES'; %CMAES (1+1)CMAES    
+        learn_approach = 'CMAES'; %CMAES (1+1)CMAES  fmincon 
         %--- Parameter for constraints method
-        method_to_use = 'vanilla';  % adaptive , vanilla , empty
+        method_to_use = 'adaptive';  % adaptive , vanilla , empty fmincon
         epsilon = 0.001*ones(1,length(constraints_functions)); %vector with a number of value related to the number of constraints (used only with Aaptive constraints)
         %% FITNESS PARAMETERS
         

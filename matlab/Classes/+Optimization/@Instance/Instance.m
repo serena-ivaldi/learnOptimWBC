@@ -69,7 +69,7 @@ classdef  Instance
           elseif(strcmp(obj.learn_procedure,'(1+1)CMAES'))
             [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, data2save] = obj.Learn1plus1CMAES(settings);
           elseif(strcmp(obj.learn_procedure,'CEM'))
-            [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = obj.CEM(settings);
+            [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = obj.CEM(settings);
           end
 
           figure;
@@ -82,9 +82,9 @@ classdef  Instance
        
        % to have a common interface with Objproblem im introducing a
        % function to evaluate constraints at some point
-       function [c, ceq] = computeConstr(obj,input)
+       function [c, ceq,performance] = computeConstr(obj,input)
             try
-               [c, ceq] = obj.computConstrViol(input);
+               [c, ceq,performance] = obj.computConstrViol(input);
             catch err
                 disp('computeConstr failed');
             end
@@ -92,16 +92,27 @@ classdef  Instance
        
        % inner function to have a common interface with Objproblem im introducing a
        % function to evaluate constraints at some point
-       function [c, ceq] = computConstrViol(obj,input)                    
+       function [c, ceq,performance] = computConstrViol(obj,input)                    
             % each time i have to compute this 
             try
                 disp('i am in computConstrViol fitness computation')
                 [output]=obj.run(input);
-                obj.fitness(obj,output); %minus because we are maximizing and fmincon only minimize
-                c_index = -1; %i'm just considering one candidate (cf. FixPenalty class)
-                obj.penalty_handling.ComputeConstraintsViolation(c_index);
-                c = [];
-                ceq = [];
+                
+                performance = feval(obj.fitness,obj,output);
+                %toc
+
+                %% DO NOT CHANGE THIS PART!
+                if(obj.constraints)
+                   c_index = -1; %i'm just considering one candidate (cf. FixPenalty class)
+                   obj.penalty_handling.ComputeConstraintsViolation(c_index);
+                   c = [];
+                   ceq = [];
+                   if(strcmp(obj.learn_procedure ,'CMAES'))
+                      % perfomance with correction
+                      performance = performance - obj.penalty_handling.fitness_penalties(1);
+                   end
+                end
+                
                 for i=1:length(obj.penalty_handling.constraints_type)
                     if  obj.penalty_handling.constraints_type(i)
                         c = [c; obj.penalty_handling.penalties(1,i)];
@@ -115,11 +126,11 @@ classdef  Instance
                     c = 0;
                 end
                 if(isempty(ceq))  
-                    c = 0;
+                    ceq = 0;
                 end
             catch err
-                disp('i am in computConstrViol error side fitness computation ')
-                fitvalue = 1; %penalty if the computation of the fitness failed
+                disp('intergration error in  ComputeConstraintViolation and perfomance')
+                performance = -1; %penalty if the computation of the fitness failed
                 c_index = -1; %i'm just considering one candidate (cf. FixPenalty class)
                 obj.penalty_handling.ComputeConstraintsViolation(c_index);
                 c = [];

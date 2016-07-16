@@ -83,6 +83,8 @@ if(strcmp(method_to_use,'vanilla'))
     constr=Optimization.FixPenalty(controller.GetTotalParamNum(),constraints_functions,constraints_type,constraints_values);
 elseif(strcmp(method_to_use,'adaptive'))
     constr = Optimization.AdaptivePenalty(epsilon,niter,controller.GetTotalParamNum(),constraints_functions,constraints_type,constraints_values);
+ elseif(strcmp(method_to_use,'fmincon'))
+    constr =Optimization.ObjProblemPenalty(controller.GetTotalParamNum(),constraints_functions,constraints_type,constraints_values);
 elseif(strcmp(method_to_use,'empty'))
     constr = [];
 end
@@ -93,6 +95,10 @@ if strcmp(simulator_type{1},'rbt')
 elseif strcmp(simulator_type{1},'icub_matlab')
     input{4} = controller;
 end
-inst = Optimization.Instance(constr,learn_approach,run_function,fitness,clean_function,input);
 
+% i added it for the using it in the preprocessing methods for benchmarks
+if(strcmp(learn_approach,'fmincon'))
+    inst = ObjProblem(controller.GetTotalParamNum(),cmaes_value_range,constr,learn_approach,run_function,fitness,clean_function,input);       
+else
+    inst = Optimization.Instance(constr,learn_approach,run_function,fitness,clean_function,input);
 end

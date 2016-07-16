@@ -84,31 +84,32 @@ classdef ObjProblem < handle
         end
         
         % Function to be compliante with how fmincon handle constraints
-        function [c, ceq] = computeConstr(obj,input)
+        function [c, ceq, fitvalue] = computeConstr(obj,input)
             try
-                obj.computConstrViol(input);
+                fitvalue = obj.computConstrViol(input);
                 c = obj.c;
                 ceq = obj.ceq;
             catch err
+                fitvalue = 1;
+                c = obj.c;
+                ceq = obj.ceq;
                 disp('computeConstr failed');
             end
         end
         
         % Compute the constraints violation
         % input is a fake value
-        function obj = computConstrViol(obj,input)
+        function fitvalue = computConstrViol(obj,input)
             % it is sometimes necessary to recompute this because the value
             % of the paramters vector differ from the one used in computFit
-            if (input ~= obj.stored_input_4_check)
-                try
-                    disp('i am in computConstrViol fitness computation')
-                    [output]=obj.run(input);
-                    obj.fitness(obj,output); 
-                catch err
-                    disp('i am in computConstrViol error side fitness computation ')
-                    fitvalue = 1;
-                end
-            end
+            try
+                disp('i am in computConstrViol fitness computation')
+                [output]=obj.run(input);
+                fitvalue = obj.fitness(obj,output); 
+            catch err
+                disp('i am in computConstrViol error side fitness computation ')
+                fitvalue = 1;
+            end 
             c_index = -1; %i'm just considering one candidate (cf. FixPenalty class)
             obj.penalty_handling.ComputeConstraintsViolation(c_index);
             c = [];
@@ -122,6 +123,7 @@ classdef ObjProblem < handle
             end
             obj.c = c;
             obj.ceq = ceq;
+            fitvalue = 1;
         end
         
         % Do the optimization (only with fmincon for now )
@@ -148,12 +150,6 @@ classdef ObjProblem < handle
                 otherwise
                     fprintf('Error, no such method is found! \n')
             end
-            %             m1 = obj.J0 - FVAL; %metric 1 = fitness error
-            %
-            %             obj.computConstrViol(X); %metric constr violation
-            %             m2 = sum(abs((obj.c > 0).*obj.c)) + sum(abs((obj.ceq ~= 0).*obj.ceq));
-            %
-            %             m3 = obj.IndentifySteadyState(obj.fitness_result,threshold); %metric 3 = # of steps to steady value
             fitness = obj.fitness_result;
             bestAction.parameters = X;
             bestAction.performance = FVAL;

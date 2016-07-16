@@ -1,6 +1,7 @@
-%% DATA TO STORE 
+%% METRICS
 % m1 = % distance from best action
-% m2 = % constraints violations
+% m2 = % sum of constraints violations 
+% m2_1 = constraintsviolations
 % m3 = % steady state solutions
 % m4 = % execution time
 % %-----------------------------------------------------------------------------------
@@ -8,6 +9,9 @@
 % m6 = % best action
 % m7 = % best perfomance
 
+% IMPORTANT!!! this executable the optimization method that we are going to use is defined in the
+% main while in MainOptRobust.m the optimization method is defined in the
+% configuration files
 
 function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,function_2_test,n_of_experiment,robotics_experiment,generation_of_starting_point,niter_tot,threshold)  
     
@@ -67,7 +71,7 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
         elseif(strcmp(function_2_test,'g09'))
             search_space_dimension = 7;
             function_2_test_4_comparison = {'g09Test'};
-            epsilon = [1 1 1 1]; % for adaptive
+            epsilon = [0.001 0.001 0.001 0.001]; % for adaptive
             constraints_functions = {'g09Constr1','g09Constr2','g09Constr3','g09Constr4'};
             constraints_for_test = 'g09Constr';
             constraints_type = [1 1 1 1];
@@ -95,7 +99,7 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
         elseif(strcmp(function_2_test,'f240'))
             search_space_dimension = 5;
             function_2_test_4_comparison = {'f240Test'};
-            epsilon = [1]; % for adaptive
+            epsilon = [0.001]; % for adaptive
             constraints_functions = {'f240Constr1'};
             constraints_for_test = 'f240Constr';
             constraints_type = [1];
@@ -109,7 +113,7 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
         elseif(strcmp(function_2_test,'f241'))
             search_space_dimension = 5;
             function_2_test_4_comparison = {'f241Test'};
-            epsilon = [1]; % for adaptive
+            epsilon = [0.001]; % for adaptive
             constraints_functions = {'f240Constr1'};
             constraints_for_test = 'f240Constr';
             constraints_type = [1];
@@ -123,7 +127,7 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
         elseif(strcmp(function_2_test,'HB'))
             search_space_dimension = 5;
             function_2_test_4_comparison = {'HBTest'};
-            epsilon = [1 1 1 1 1 1]; % for adaptive
+            epsilon = [0.001 0.001 0.001 0.001 0.001 0.001]; % for adaptive
             constraints_functions = {'HBConstr1','HBConstr2','HBConstr3','HBConstr4','HBConstr5','HBConstr6'};
             constraints_for_test = 'HBConstr';
             constraints_type = [1 1 1 1 1 1];
@@ -195,7 +199,20 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
     end
     %% collect all the data from each experiments
     % perfomance
-    m5 = mean_performances';
+    if(strcmp(learn_approach,'fmincon'))
+        if(isrow(mean_performances))
+            m5{1} = mean_performances';
+        else
+            m5{1} = mean_performances;
+        end
+    else
+        if(isrow(mean_performances))
+            m5 = mean_performances';
+        else
+            m5 = mean_performances;
+        end
+    end
+    
     %m3(kk,1) = IndetifySteadyState(m5{kk,:},threshold);
     % best results
     m6 = bestAction.parameters;
@@ -206,21 +223,23 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
     end
     % best perfomance
     m7 = bestAction.performance;
-    
-    % violations
-    %for ii=1:n_constraints
-    %    m2(kk,ii) = feval(constraints_functions{ii},bestAction.parameters);
-    %end
     % violations
     [c, ceq] = inst.computeConstr(bestAction.parameters);
     m2 = sum(abs((c > 0).*c)) + sum(abs((ceq ~= 0).*ceq));
-
+    m2_1 = inst.penalty_handling.penalties(1,:);
     close all 
     if(robotics_experiment)
         robotic_flag = true;
     else
         robotic_flag = false;
     end
-    name_to_save = strcat(local_path,'/',num2str(n_of_experiment),'.mat');
-    save(name_to_save,'m1','m2','m4','m5','m6','m7','robotic_flag');
+    
+    m8 = inst;
+    
+    if(strcmp(learn_approach,'fmincon'))
+        name_to_save = strcat(local_path,'/','mn.mat');
+    else
+        name_to_save = strcat(local_path,'/',num2str(n_of_experiment),'.mat');
+    end
+    save(name_to_save,'m1','m2','m2_1','m4','m5','m6','m7','m8','robotic_flag');
 end

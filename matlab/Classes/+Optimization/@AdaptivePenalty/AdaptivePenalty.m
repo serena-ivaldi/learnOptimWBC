@@ -86,17 +86,25 @@ classdef  AdaptivePenalty < Optimization.AbstractPenalty
                    % the positive value. if i have no positive value i have
                    % to sum up all the negative
                    index = obj.constraints_violation(i,:)>0;
+                   % here i update penalties in the same way of fixed
+                   % penalties by collectint only the actual violations of
+                   % the current constraint
+                   obj.penalties(c_index,i) = sum(obj.constraints_violation(i,index),2);
                    if(any(index))
-                     obj.penalties(c_index,i) = sum(obj.constraints_violation(i,index),2);
+                      overall_const_viol = sum(obj.constraints_violation(i,index),2);
                    else
-                     obj.penalties(c_index,i) = sum(obj.constraints_violation(i,:),2);
+                      overall_const_viol = sum(obj.constraints_violation(i,:),2);
                    end
                    % inequality constraints
-                   if (obj.constraints_type(i)==1)    
-                        obj.fitness_penalties(c_index,i) = (obj.penalties(c_index,i) + obj.epsilon(i))/obj.epsilon(i);
+                   if (obj.constraints_type(i)==1)
+                        % fitness penalties correspond to the epsilon
+                        % normalized constraind value of the collange paper
+                        obj.fitness_penalties(c_index,i) = ( overall_const_viol + obj.epsilon(i))/obj.epsilon(i);
                    % equality constraints
                    else
-                        obj.fitness_penalties(c_index,i) = obj.penalties(c_index,i)/obj.epsilon(i);
+                        % fitness penalties correspond to the epsilon
+                        % normalized constraind value of the collange paper
+                        obj.fitness_penalties(c_index,i) = overall_const_viol/obj.epsilon(i);
                    end
                end
            else
@@ -105,17 +113,22 @@ classdef  AdaptivePenalty < Optimization.AbstractPenalty
                    % the positive value. if i have no positive value i have
                    % to sum up all the negative
                    index = obj.constraints_violation(i,:)>0;
+                   obj.penalties(1,i) = sum(obj.constraints_violation(i,index),2);
                    if(any(index))
-                     obj.penalties(1,i) = sum(obj.constraints_violation(i,index),2);
+                     overall_const_viol = sum(obj.constraints_violation(i,index),2);
                    else
-                     obj.penalties(1,i) = sum(obj.constraints_violation(i,:),2);
+                     overall_const_viol = sum(obj.constraints_violation(i,:),2);
                    end
                    % inequality constraints
-                   if (obj.constraints_type(i)==1)    
-                        obj.fitness_penalties(1,i) = (obj.penalties(1,i) + obj.epsilon(i))/obj.epsilon(i);
+                   if (obj.constraints_type(i)==1)  
+                        % fitness penalties correspond to the epsilon
+                        % normalized constraind value of the collange paper
+                        obj.fitness_penalties(1,i) = (overall_const_viol + obj.epsilon(i))/obj.epsilon(i);
                    % equality constraints
                    else
-                        obj.fitness_penalties(1,i) = obj.penalties(1,i)/obj.epsilon(i);
+                        % fitness penalties correspond to the epsilon
+                        % normalized constraind value of the collange paper
+                        obj.fitness_penalties(1,i) = overall_const_viol/obj.epsilon(i);
                    end
                end
                % i have to change the sign because i need cur index to
@@ -129,45 +142,47 @@ classdef  AdaptivePenalty < Optimization.AbstractPenalty
        end
        
        % to call in CMAES                      
-       function [new_costs, new_performances] = FitnessWithPenalty(obj,policyId,old_costs,old_performances,cur_index)
-           obj.UpHandleConstraints(cur_index)
-           penalties = obj.ComputePenalties(cur_index,true);
+       function [new_costs, new_performances] = FitnessWithPenalty(obj,policyId,old_costs,old_performances,cur_generation_index)
+           % update of the r_{i}^{feas}, E[r_{i}^{feas}] and P_{target}
+           obj.UpHandleConstraints(cur_generation_index)
+           % compute penalties
+           penalty_factor = obj.ComputePenalties(cur_generation_index,true);
            % for the performance because im considering negative value i have to subtract the penalties  
-           new_performances = old_performances - penalties';
+           new_performances = old_performances - penalty_factor';
            % for the cost i have to add the penalties in order to obtain
            % the corrected cost
            new_costs = old_costs;
-           new_costs(1,policyId - obj.pop_size : policyId - 1) = old_costs(1, policyId - obj.pop_size : policyId - 1) + penalties;  
+           new_costs(1,policyId - obj.pop_size : policyId - 1) = old_costs(1, policyId - obj.pop_size : policyId - 1) + penalty_factor;  
        end
        
    end
    
    % private methods
    methods (Access = private)
-       function UpHandleConstraints(obj,cur_index)
-           obj.ComputeRfeas(cur_index);
-           obj.ComputeRfeasAverage(cur_index);
+       function UpHandleConstraints(obj,cur_generation_index)
+           obj.ComputeRfeas(cur_generation_index);
+           obj.ComputeRfeasAverage(cur_generation_index);
            obj.ComputePtarget() 
-           obj.UpdateWeights(cur_index);
+           obj.UpdateWeights(cur_generation_index);
        end
        
-       function ComputeRfeas(obj,cur_index)
+       function ComputeRfeas(obj,cur_generation_index)
            for i=1:obj.n_constraint
                % Im looking for all the candidates that are feasible in the
                % constraint i
                index = obj.fitness_penalties(:,i) <= 1;
-               obj.r_i_feas(cur_index,i) = sum(index)/obj.pop_size; 
+               obj.r_i_feas(cur_generation_index,i) = sum(index)/obj.pop_size; 
            end          
        end
        
-       function ComputeRfeasAverage(obj,cur_index)
-           if(cur_index <= obj.search_space_dim+2)    
+       function ComputeRfeasAverage(obj,cur_generation_index)
+           if(cur_generation_index <= obj.search_space_dim+2)    
                for i=1:obj.n_constraint
-                  obj.r_i_average(1,i) = mean(obj.r_i_feas(1:cur_index,i),1);  
+                  obj.r_i_average(1,i) = mean(obj.r_i_feas(1:cur_generation_index,i),1);  
                end
            else
                for i=1:obj.n_constraint
-                  obj.r_i_average(1,i) = mean(obj.r_i_feas( cur_index - (obj.search_space_dim + 1):cur_index , i ),1);  
+                  obj.r_i_average(1,i) = mean(obj.r_i_feas( cur_generation_index - (obj.search_space_dim + 1):cur_generation_index , i ),1);  
                end  
            end
        end

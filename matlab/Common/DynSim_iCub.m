@@ -32,7 +32,7 @@ try
     [t,chi,visual_param] = ode15s(forwardDynFunc,params.tStart:params.sim_step:params.tEnd,params.chiInit,options);
     q = chi(:,1:7+WS.ndof);
     qd = chi(:,8+WS.ndof:end);
-    delete(params.wait)
+    %delete(params.wait)
 catch err
     disp('integration error');
     %q{index_chain} = y(:,1:n);

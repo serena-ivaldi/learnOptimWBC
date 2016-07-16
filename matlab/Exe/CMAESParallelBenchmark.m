@@ -10,10 +10,10 @@ function CMAESParallelBenchmark
     
     %% DATA 1
     robotics_experiment = [1]; % series of value that say if the current experiment is a robotics experiments or not
-    niter_tot = 400;  %number of functions evaluations
-    function_2_test ={'RP_humanoid_bench_lbrsimple_more_constrained'};%'robotic_experiments','g06','g07','g09','f240','f241','HB'}; % 
+    niter_tot = 1500;  %number of functions evaluations
+    function_2_test ={'RP_humanoid_bench_lbrsimple_more_constrained'};%'robotic_experiments','g06','g07','g09','f240','f241','HB'};RP_humanoid_bench_lbrsimple_more_constrained% 
     learn_approach = 'CMAES'; %CMAES (1+1)CMAES  CEM,fmincon    with (1+1)CMAES i have to use vanilla constraints management  (temporary)
-    method_to_use = 'vanilla';  % adaptive , vanilla ,empty,fmincon
+    method_to_use = 'adaptive';  % adaptive , vanilla ,empty,fmincon
 
     repetition_of_the_experiment = 20; % at least 2
     threshold = 2.5; % value to identify the beginning of steady state
@@ -49,41 +49,3 @@ function CMAESParallelBenchmark
     matlabpool close
 end
     
-    
-
-
-
-
-
-
-
-
-
-
-
-
-% function steady_state_begin = IndetifySteadyState(vector,tresh)
-%     steady_value = vector(end);
-%     keep_search = true;
-%     for zzz = 1:length(vector)
-%         if(abs(steady_value-vector(zzz))<(tresh/100*steady_value) && keep_search)
-%             steady_state_begin = zzz;
-%             keep_search = false;
-%         end
-%     end
-% end
-% 
-% 
-% % convert a cell with rows of different length in a matrix  by completing
-% % the short row with
-% function out = convert2mat(in)
-%     maxLength=max(cellfun(@(x)numel(x),in));
-%     out=cell2mat(cellfun(@(x)cat(2,x,zeros(1,maxLength-length(x))),in,'UniformOutput',false));
-%     for row = 1:size(out,1)
-%         for col = 2:size(out,2)        
-%             if out(row,col) == 0
-%                 out(row,col) = out(row,col-1);
-%             end
-%         end
-%     end
-% end
