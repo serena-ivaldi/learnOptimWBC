@@ -10,7 +10,7 @@ function CMAESParallelBenchmark
     
     %% DATA 1
     robotics_experiment = [1]; % series of value that say if the current experiment is a robotics experiments or not
-    niter_tot = 1500;  %number of functions evaluations
+    niter_tot = 400;  %number of functions evaluations
     function_2_test ={'RP_humanoid_bench_lbrsimple_more_constrained'};%'robotic_experiments','g06','g07','g09','f240','f241','HB'};RP_humanoid_bench_lbrsimple_more_constrained% 
     learn_approach = 'CMAES'; %CMAES (1+1)CMAES  CEM,fmincon    with (1+1)CMAES i have to use vanilla constraints management  (temporary)
     method_to_use = 'adaptive';  % adaptive , vanilla ,empty,fmincon

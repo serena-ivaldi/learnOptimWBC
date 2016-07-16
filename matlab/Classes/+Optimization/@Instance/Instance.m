@@ -41,7 +41,7 @@ classdef  Instance
             [output]=feval(obj.run_function,obj,parameters);
        end
        
-       function [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, data2save]=CMAES(obj,num_of_param,start_action,niter,explorationRate,cmaes_value_range)
+       function [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, G_data2save]=CMAES(obj,num_of_param,start_action,niter,explorationRate,cmaes_value_range)
           %Parameter space
           NumParam = num_of_param;
           % start_value for action
@@ -55,23 +55,19 @@ classdef  Instance
           else
              error('something wrong with cmaes_value_range')
           end
-
-
           %CMA-ES settings
           settings.nIterations = niter;     
           settings.explorationRate = explorationRate; %[0, 1]
           settings.fnForwardModel = @(obj_,a_,curr_candidate_,ismean_)EvaluateCMAES(obj_,a_,curr_candidate_,ismean_);
           settings.plotState = 1;         %{0,1} plot offsprings yes no
-
           %search optimal parameters 
           if(strcmp(obj.learn_procedure,'CMAES'))
-            [mean_performances, bestAction, BestActionPerEachGen, policies,costs, succeeded, data2save] = obj.LearnCMAES(settings);
+            [mean_performances, bestAction, BestActionPerEachGen, policies,costs, succeeded,G_data2save] = obj.LearnCMAES(settings);
           elseif(strcmp(obj.learn_procedure,'(1+1)CMAES'))
-            [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, data2save] = obj.Learn1plus1CMAES(settings);
+            [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded,G_data2save] = obj.Learn1plus1CMAES(settings);
           elseif(strcmp(obj.learn_procedure,'CEM'))
             [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = obj.CEM(settings);
-          end
-
+          end   
           figure;
           plot(mean_performances);      
        end

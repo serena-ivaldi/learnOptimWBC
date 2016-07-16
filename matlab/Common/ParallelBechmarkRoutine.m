@@ -193,11 +193,17 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
     else
         inst =  Optimization.Instance(constr,learn_approach,run_function,fitness,clean_function,input);
         tic
-        [mean_performances, bestAction] = inst.CMAES(search_space_dimension,start_action,niter,explorationRate,cmaes_value_range);
+        [mean_performances, bestAction,~,~,~,~,G_data2save] = inst.CMAES(search_space_dimension,start_action,niter,explorationRate,cmaes_value_range); 
         % execution time
         m4 = toc;
+        % many data on the experiment
+        inst.data2save = G_data2save;
+        m8 = inst;
     end
     %% collect all the data from each experiments
+    
+    
+    
     % perfomance
     if(strcmp(learn_approach,'fmincon'))
         if(isrow(mean_performances))
@@ -233,8 +239,6 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
     else
         robotic_flag = false;
     end
-    
-    m8 = inst;
     
     if(strcmp(learn_approach,'fmincon'))
         name_to_save = strcat(local_path,'/','mn.mat');
