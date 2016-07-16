@@ -1,9 +1,7 @@
 %%
 %  This is the main program for integrating the forward dynamics of the robot iCub in matlab.
 %  It integrates the robot state defined in forwardDynamics_SoT.m and the user can set
-%  how many feet are on the ground, decide if activate the robot's movements,
-%  plot forces, torques and joints variables, and activate a demo of the
-%  robot's movements.
+%  how many feet are on the ground, decide if activate floating base or not
 
 % #TODO substitute icub with controller.subchains
 function [t, q, qd] = DynSim_iCub(controller,params)
@@ -16,18 +14,12 @@ params.chiInit = [T_b; params.qjInit; WS.dx_b; WS.omega_W; params.dqjInit];
 %integration function
 forwardDynFunc  = @(t,chi)forwardDynamics(t,chi,controller,params);
 %% Integrate forward dynamics
-if params.demo_movements == 0
-    
-    options = odeset('RelTol',1e-3,'AbsTol', 1e-4);
-    
-else
-    
-    options = odeset('RelTol',1e-6,'AbsTol',1e-6);
-    
+if params.demo_movements == 0    
+    options = odeset('RelTol',1e-3,'AbsTol', 1e-4);    
+else    
+    options = odeset('RelTol',1e-6,'AbsTol',1e-6);    
 end
 
-%disp('fixed_step')
-%chi = Ode1(forwardDynFunc,params.tStart:params.sim_step:params.tEnd,params.chiInit,controller,params);
 try
     [t,chi,visual_param] = ode15s(forwardDynFunc,params.tStart:params.sim_step:params.tEnd,params.chiInit,options);
     q = chi(:,1:7+WS.ndof);
@@ -35,11 +27,6 @@ try
     %delete(params.wait)
 catch err
     disp('integration error');
-    %q{index_chain} = y(:,1:n);
-    %qd{index_chain} = y(:,n+1:2*n); 
-    %because of i have failed i need to cut the time till the last
-    %position computed
-    %t = time(1,1:size(q{index_chain},1));
     rethrow(err);
 end
 
@@ -63,6 +50,7 @@ function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
 %  dx_b:     the cartesian velocity of the base (R^3)
 %  omega_w:  the velocity describing the orientation of the base (SO(3))
 %  dqj:      the joint velocities (R^ndof)
+
 % i get the pointer to the whole system
 if isempty(controller.current_time)
       controller.current_time = tic;
@@ -73,6 +61,10 @@ ndof = icub.ndof;
 % disp(t)
 
 %% Extraction of state
+
+if param.active_floating_base == true %for now it's just to avoid to modify it directly iin iCub.m
+    icub.active_floating_base = true;
+end
 
 x_b  = chi(1:3,:);  %TODO floating base flag required (parameter of the simulator)
 qt_b = chi(4:7,:);  %TODO floating base flag required (parameter of the simulator)
@@ -89,9 +81,11 @@ dqj     = chi(ndof+14:2*ndof+13,:);
 
 Nu      = [dx_b;omega_w;dqj];
 
-% Obtaining the otation matrix from root link to world frame
+% Obtaining the rotation matrix from root link to world frame
 qT         = [x_b;qt_b];
 [~,R_b]    = frame2posrot(qT);
+
+
 
 %% Joints limits check
 % % % limits = param.limits;
@@ -140,10 +134,11 @@ qT         = [x_b;qt_b];
 fc = zeros(6,1);
 Jc_t = zeros(ndof + 6,6);
 %% MexWholeBodyModel functions
-%TODO floating base flag required (parameter of the simulator)
-dx_b = zeros(3,1);
-omega_w = zeros(3,1);
-icub.SetFloatingBaseState(x_b,qt_b,dx_b,omega_w); %TODO floating base flag required (parameter of the simulator)
+if (icub.active_floating_base == 0) %if the base is fixed, it's velocity is forced at zero
+    dx_b = zeros(3,1);
+    omega_w = zeros(3,1);
+end
+icub.SetFloatingBaseState(x_b,qt_b,dx_b,omega_w);
 %% Feet correction to avoid numerical integration errors
 % % feet correction gain
 % K_corr_pos  = 2.5;
@@ -223,12 +218,18 @@ dqt_b   = quaternionDerivative(omega_b,qt_b);   %TODO floating base flag require
 
 dx      = [dx_b;dqt_b;dqj];
 %dNu     = M\(Jc_t*fc + [zeros(6,1); tau]-h);
-%% FIXED BASE
-M_small = M(7:end,7:end);
-h_small = h(7:end,1);
-dNu_small = M_small\( + [tau]-h_small);
-dNu = [zeros(6,1); dNu_small];
-%% FIXED BASE
+
+if (icub.active_floating_base == 0)
+    % FIXED BASE
+    M_small = M(7:end,7:end);
+    h_small = h(7:end,1);
+    dNu_small = M_small\( + [tau]-h_small);
+    dNu = [zeros(6,1); dNu_small];
+else
+    % FLOATING BASE
+    dNu     = M\(Jc_t*fc + [zeros(6,1); tau]-h);
+end
+
 dchi    = [dx;dNu];
 
 if toc(controller.current_time) > param.maxtime;

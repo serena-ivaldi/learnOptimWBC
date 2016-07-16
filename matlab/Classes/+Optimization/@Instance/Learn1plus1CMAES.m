@@ -109,7 +109,8 @@ for k = 1:(nIterations - 1)
          v(j,:) = (1-c_c)*V{k}(j,:) + c_c*(A{k}*z')';                                           %only if the constraints is violated udpate exponentially fading record vj 
        end
        V{k+1} = v;
-       index = 1;v(j,:) % to fix no commit without fixing
+       index = 1;
+       %v(j,:); % to fix no commit without fixing
        for j = violated_constrained
          w(index,:) = (A{k}^(-1)*v(j,:)')';
          index = index + 1;

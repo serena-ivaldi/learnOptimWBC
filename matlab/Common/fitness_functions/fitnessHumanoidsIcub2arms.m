@@ -1,4 +1,4 @@
-function fit  = fitnessHumanoidsIcub(obj,output) 
+function fit  = fitnessHumanoidsIcub2arms(obj,output) 
     
     t = output{1};
     q = output{2};
@@ -7,7 +7,7 @@ function fit  = fitnessHumanoidsIcub(obj,output)
     downsaple = 10;
     L = 1; 
     max_effort = 3.5000e+05;
-    max_traj_error = 120;
+    max_traj_error = 250;
     weight_effort = 1;
     weight_traj_err = 3;
     %%%EOF
@@ -53,8 +53,9 @@ function fit  = fitnessHumanoidsIcub(obj,output)
         % here GetTraj(1,1,t(i)) mean i take the reference of the first
         % subchain in the first chain.
         %%
-        attr_pos = contr.references.GetTraj(1,1,t(i)); 
-        traj_err = traj_err + norm((ee_r - attr_pos),L);
+        attr_pos_r = contr.references.GetTraj(1,1,t(i)); 
+        attr_pos_l = contr.references.GetTraj(1,2,t(i)); 
+        traj_err = traj_err + norm((ee_r - attr_pos_r),L) + norm((ee_l - attr_pos_l),L);
     end 
     % max effort
     effort = sum((contr.torques(:).*contr.torques(:)),2);

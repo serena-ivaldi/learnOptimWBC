@@ -1,8 +1,15 @@
-function plot(obj,chi,param)
+function plot(obj,chi,param, varargin)
 
 
-
+param.movie = false;
+param.moviepath = [];
 ndof  = obj.ndof;
+if ~(isempty(varargin))
+    if strcmp(varargin(1),'movie')
+        param.movie = true;
+        param.moviepath = varargin(2);
+    end
+end
 
 
 for ii=1:1 %for now we have just one view
@@ -230,40 +237,40 @@ mult_patch(:,1) = mult_patch(:,1)*0.03;
 mult_patch(:,2) = mult_patch(:,2)*0.03;
 
 try
-%legs
-mult_patch(strcmp(obj.linkList,'r_lower_leg'),:) = [0.035 0.03];
-mult_patch(strcmp(obj.linkList,'r_ankle_1'),:) = [0.025 0.03];
-mult_patch(strcmp(obj.linkList,'l_lower_leg'),:) = [0.035 0.03];
-mult_patch(strcmp(obj.linkList,'l_ankle_1'),:) = [0.025 0.03];
-%remove dh_frame and skin frames
-mult_patch(strcmp(obj.linkList,'r_hand_dh_frame'),:) = [0 0];
-mult_patch(strcmp(obj.linkList,'l_forearm_dh_frame'),:) = [0 0];
-mult_patch(strcmp(obj.linkList,'r_forearm_dh_frame'),:) = [0 0];
-mult_patch(strcmp(obj.linkList,'l_hand_dh_frame'),:) = [0 0];
-mult_patch(strcmp(obj.linkList,'r_foot_dh_frame'),:) = [0 0];
-mult_patch(strcmp(obj.linkList,'l_foot_dh_frame'),:) = [0 0];
-mult_patch(strcmp(obj.linkList,'chest_skin_frame'),:) = [0 0];
-%torso
-mult_patch(strcmp(obj.linkList,'r_hip_1'),:) = [0.02 0.02];
-mult_patch(strcmp(obj.linkList,'l_hip_1'),:) = [0.02 0.02];
-mult_patch(strcmp(obj.linkList,'r_shoulder_1'),:) = [0.02 0.02];
-mult_patch(strcmp(obj.linkList,'l_shoulder_1'),:) = [0.02 0.02];
-%arms
-mult_patch(strcmp(obj.linkList,'r_gripper'),:) = [0.01 0.035];
-mult_patch(strcmp(obj.linkList,'r_hand'),:) = [0.01 0.01];
-mult_patch(strcmp(obj.linkList,'r_forearm'),:) = [0.01 0.01];
-mult_patch(strcmp(obj.linkList,'r_shoulder_2'),:) = [0.01 0.01];
-mult_patch(strcmp(obj.linkList,'r_shoulder_3'),:) = [0.01 0.01];
-
-mult_patch(strcmp(obj.linkList,'r_shoulder_3'),:) = [0.01 0.01];
-mult_patch(strcmp(obj.linkList,'l_shoulder_2'),:) = [0.01 0.01];
-mult_patch(strcmp(obj.linkList,'l_gripper'),:) = [0.01 0.035];
-mult_patch(strcmp(obj.linkList,'l_hand'),:) = [0.01 0.01];
-mult_patch(strcmp(obj.linkList,'l_forearm'),:) = [0.01 0.01];
-%head
-mult_patch(strcmp(obj.linkList,'imu_frame'),:) = [0.05 0.05];
-mult_patch(strcmp(obj.linkList,'head'),:) = [0.01 0.01];
-mult_patch(strcmp(obj.linkList,'neck_2'),:) = [0.02 0.02];
+    %legs
+    mult_patch(strcmp(obj.linkList,'r_lower_leg'),:) = [0.035 0.03];
+    mult_patch(strcmp(obj.linkList,'r_ankle_1'),:) = [0.025 0.03];
+    mult_patch(strcmp(obj.linkList,'l_lower_leg'),:) = [0.035 0.03];
+    mult_patch(strcmp(obj.linkList,'l_ankle_1'),:) = [0.025 0.03];
+    %remove dh_frame and skin frames
+    mult_patch(strcmp(obj.linkList,'r_hand_dh_frame'),:) = [0 0];
+    mult_patch(strcmp(obj.linkList,'l_forearm_dh_frame'),:) = [0 0];
+    mult_patch(strcmp(obj.linkList,'r_forearm_dh_frame'),:) = [0 0];
+    mult_patch(strcmp(obj.linkList,'l_hand_dh_frame'),:) = [0 0];
+    mult_patch(strcmp(obj.linkList,'r_foot_dh_frame'),:) = [0 0];
+    mult_patch(strcmp(obj.linkList,'l_foot_dh_frame'),:) = [0 0];
+    mult_patch(strcmp(obj.linkList,'chest_skin_frame'),:) = [0 0];
+    %torso
+    mult_patch(strcmp(obj.linkList,'r_hip_1'),:) = [0.02 0.02];
+    mult_patch(strcmp(obj.linkList,'l_hip_1'),:) = [0.02 0.02];
+    mult_patch(strcmp(obj.linkList,'r_shoulder_1'),:) = [0.02 0.02];
+    mult_patch(strcmp(obj.linkList,'l_shoulder_1'),:) = [0.02 0.02];
+    %arms
+    mult_patch(strcmp(obj.linkList,'r_gripper'),:) = [0.01 0.035];
+    mult_patch(strcmp(obj.linkList,'r_hand'),:) = [0.01 0.01];
+    mult_patch(strcmp(obj.linkList,'r_forearm'),:) = [0.01 0.01];
+    mult_patch(strcmp(obj.linkList,'r_shoulder_2'),:) = [0.01 0.01];
+    mult_patch(strcmp(obj.linkList,'r_shoulder_3'),:) = [0.01 0.01];
+    
+    mult_patch(strcmp(obj.linkList,'r_shoulder_3'),:) = [0.01 0.01];
+    mult_patch(strcmp(obj.linkList,'l_shoulder_2'),:) = [0.01 0.01];
+    mult_patch(strcmp(obj.linkList,'l_gripper'),:) = [0.01 0.035];
+    mult_patch(strcmp(obj.linkList,'l_hand'),:) = [0.01 0.01];
+    mult_patch(strcmp(obj.linkList,'l_forearm'),:) = [0.01 0.01];
+    %head
+    mult_patch(strcmp(obj.linkList,'imu_frame'),:) = [0.05 0.05];
+    mult_patch(strcmp(obj.linkList,'head'),:) = [0.01 0.01];
+    mult_patch(strcmp(obj.linkList,'neck_2'),:) = [0.02 0.02];
 catch err
     disp('The URDF file seems to disrespect name convention or some links are missing in the URDF');
 end
@@ -362,12 +369,13 @@ lnkpatch(jj)      = patch('vertices',xyzpatch.vertices,'faces',xyzpatch.faces,'F
 params.plot_objs{1} = [lnkpatch';lin';x_b0'];
 %% UPDATING THE PLOTS
 ii=2;
+movieframenum = 1;
 
 while ii<n+1   % the visualization instance
     
     tic;      % visualizer step timer start (to setting the visualizer speed)
     
-    % get the positions for the current instance    
+    % get the positions for the current instance
     for jj=1:n_joint
         [x_btemp,~] = frame2posrot(kin(ii,:,jj)');
         x(jj) = x_btemp(1);
@@ -388,7 +396,7 @@ while ii<n+1   % the visualization instance
         end
     end
     
-    % update the lines for the links wrt the new joint positions    
+    % update the lines for the links wrt the new joint positions
     for jj=1:n_lin
         
         set(lin(jj),xaxis,xyzpairs(jj,1:2),yaxis,xyzpairs(jj,3:4),zaxis,xyzpairs(jj,5:6));
@@ -416,7 +424,7 @@ while ii<n+1   % the visualization instance
     end
     
     % feet patches
-    % right foot    
+    % right foot
     jj=n_lin+1;
     
     orthlnk1 = [0 0.03 0]';
@@ -480,6 +488,14 @@ while ii<n+1   % the visualization instance
     end
     
     ii=ii+vis_speed;
+    
+    % add a frame to the movie
+    if params.movie
+        % write the frame to the movie folder
+        path = fullfile(params.moviepath, sprintf('%04d.png', movieframenum));
+        saveas(gcf, path{1});
+        movieframenum = movieframenum + 1;
+    end
 end
 
 end

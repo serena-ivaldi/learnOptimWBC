@@ -136,6 +136,7 @@ elseif strcmp(simulator_type{1},'icub_matlab')
     qdi{1} = [];
     list_of_kin_chain = {'trunk','left_arm','right_arm'};
     params.feet_on_ground =  [1,1];
+    params.active_floating_base = false;
     params.qjInit      = bot1.InitializeState(list_of_kin_chain, params.feet_on_ground);
     params.dqjInit     = zeros(bot1.ndof,1);
     % icub starting velocity floating base
@@ -193,7 +194,8 @@ switch CONTROLLERTYPE
         %numeric_theta =[2.3218    2.5695    6.8006    4.6558    5.7475    8.7383    3.5058    5.2817    6.9910    6.7590    4.5235    6.3875    7.3247    6.7258 8.5637];
         a = 0; b = 0; c = 14;
         numeric_theta = [0 0 0 0 0 0 0 0 0 0 14 14 14 14 14];
-                         
+        %numeric_theta = [1.34808936568616 7.65801020911318 11.4142276222402 11.0490983940875 5.40014056365278 3.15896271495000 2.49526509728241 3.38786911220609 3.59148669099237 -3.99404815876146 0.150175087891493 3.67130705179767 4.44576652255605 5.52547896983619 -5.09694541976550];
+        
         % from sere 1
         %numeric_theta = [5.819383 4.412794 5.286902 7.786384 7.599614 3.512520 5.989917 9.410994 7.444834 7.472545 4.532512 5.614148 7.970080 4.498142 6.194601 6.925731 4.815911 5.490313 5.294776 6.011380 ]
 

@@ -10,7 +10,7 @@ clc
 % bot_scenario# where # is incremental
 name_scenario = 'iCub_1';
 % with this variable i decide when i want to save the designed scenario
-save_now =true;
+save_now = true;
 
 
 %% plot scene
@@ -64,7 +64,7 @@ global G_OB;
 
 
 %%%;;
-depth = 0.25;
+depth = 0.21;
 width = 0.22;
 center = -0.0681;
 thickness = 0.01;
@@ -104,13 +104,13 @@ xyzpatch.faces   = [ 1 2 3 4;
 
 lnkpatch = patch('vertices',xyzpatch.vertices,'faces',xyzpatch.faces,'FaceColor','red'); %'FaceAlpha',0.2,
 
-r_e_e_point = [0.32,-0.15,0.7]; %[0.35,-0.15,0.7]
-r_elbow_point = [0.24,-0.23,0.7];
+r_e_e_point = [0.3,-0.16,0.68]; %[0.35,-0.15,0.7]
+r_elbow_point = [0.21,-0.24,0.68];
 scatter3(r_elbow_point(1,1),r_elbow_point(1,2),r_elbow_point(1,3),130,'b');
 scatter3(r_e_e_point(1,1),r_e_e_point(1,2),r_e_e_point(1,3),130,'r');
 
-l_e_e_point = [0.32,0.0138,0.7]; %[0.35,0.0138,0.7]
-l_elbow_point = [0.24,0.0938,0.7];
+l_e_e_point = [0.3,0.0148,0.68]; %[0.35,0.0138,0.7]
+l_elbow_point = [0.21,0.1038,0.68];
 scatter3(l_elbow_point(1,1),l_elbow_point(1,2),l_elbow_point(1,3),130,'b');
 scatter3(l_e_e_point(1,1),l_e_e_point(1,2),l_e_e_point(1,3),130,'r');
 
