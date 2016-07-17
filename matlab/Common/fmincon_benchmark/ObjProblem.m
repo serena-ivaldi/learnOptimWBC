@@ -67,6 +67,8 @@ classdef ObjProblem < handle
                 disp('i am in computFit')
                 [output]=obj.run(input);
                 fitvalue =  - obj.fitness(obj,output); %minus because we are maximizing and fmincon only minimize
+                % cancel all the information relative to the current iteration (control action)
+                feval(obj.clean_function,obj);
                 if isnan(fitvalue)
                     disp('Fitness is equal to NaN.') %i can put a breakpoint here to understand how in heaven it's possible that i sometimes get effort = NaN
                     fitvalue = 1;
@@ -74,6 +76,7 @@ classdef ObjProblem < handle
             catch err
                 disp('i am in computFit error side')
                 fitvalue = 1; %penalty if the computation of the fitness failed
+                feval(obj.clean_function,obj,'fake_input');
             end
         end
         
@@ -106,9 +109,12 @@ classdef ObjProblem < handle
                 disp('i am in computConstrViol fitness computation')
                 [output]=obj.run(input);
                 fitvalue = obj.fitness(obj,output); 
+                % after each run i need to clean the controller
+                feval(obj.clean_function,obj);
             catch err
                 disp('i am in computConstrViol error side fitness computation ')
                 fitvalue = 1;
+                feval(obj.clean_function,obj,'fake_input');
             end 
             c_index = -1; %i'm just considering one candidate (cf. FixPenalty class)
             obj.penalty_handling.ComputeConstraintsViolation(c_index);
@@ -123,7 +129,6 @@ classdef ObjProblem < handle
             end
             obj.c = c;
             obj.ceq = ceq;
-            fitvalue = 1;
         end
         
         % Do the optimization (only with fmincon for now )

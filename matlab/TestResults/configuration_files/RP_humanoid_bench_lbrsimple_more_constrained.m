@@ -212,9 +212,9 @@ switch CONTROLLERTYPE
         cmaes_value_range = [-14 , 14];  % boudn that define the search space
         %cmaes_value_range{1} = [-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-0.15,-0.15,-0.15 ];  % lower bound that define the search space
         %cmaes_value_range{2} = [14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,0.15,0.15,0.15];  % upper bound that define the search space
-        learn_approach = 'CMAES'; %CMAES (1+1)CMAES    
+        learn_approach = 'fmincon'; %CMAES (1+1)CMAES    
         %--- Parameter for constraints method
-        method_to_use = 'adaptive';  % adaptive , vanilla , empty
+        method_to_use = 'fmincon';  % adaptive , vanilla , empty
         epsilon = 0.001*ones(1,length(constraints_functions)); %vector with a number of value related to the number of constraints (used only with Aaptive constraints)
         %% FITNESS PARAMETERS
         

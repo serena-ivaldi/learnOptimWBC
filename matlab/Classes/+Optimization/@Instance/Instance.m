@@ -96,7 +96,7 @@ classdef  Instance
                 
                 performance = feval(obj.fitness,obj,output);
                 %toc
-
+                
                 %% DO NOT CHANGE THIS PART!
                 if(obj.constraints)
                    c_index = -1; %i'm just considering one candidate (cf. FixPenalty class)
@@ -124,6 +124,8 @@ classdef  Instance
                 if(isempty(ceq))  
                     ceq = 0;
                 end
+                % cancel all the information relative to the current iteration (control action)
+                feval(obj.clean_function,obj);
             catch err
                 disp('intergration error in  ComputeConstraintViolation and perfomance')
                 performance = -1; %penalty if the computation of the fitness failed
@@ -146,6 +148,8 @@ classdef  Instance
                 if(isempty(ceq))  
                     ceq = 0;
                 end
+                % cancel all the information relative to the current iteration (control action)
+                feval(obj.clean_function,obj);
             end 
            
        end

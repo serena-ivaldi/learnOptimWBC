@@ -190,6 +190,7 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
         [mean_performances,bestAction] = inst.minimize(start_action,niter,threshold);
         % execution time
         m4 = toc;
+        m8 = inst;
     else
         inst =  Optimization.Instance(constr,learn_approach,run_function,fitness,clean_function,input);
         tic
