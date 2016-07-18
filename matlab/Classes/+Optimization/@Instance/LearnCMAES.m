@@ -77,7 +77,7 @@ fnForwardModel = @(obj_,actionLearn_,curr_candidate_,isMean_)TransAction(obj_,ac
 policies(policyId,:) = mean(1, :);
 costs(policyId) = -mean_performances(1);
 policyId = policyId + 1;
-G_data2save.performance(1,1) = data2save.performance;
+G_data2save.performance_no_penalties(1,1) = data2save.performance;
 
 fprintf('Mean %d: %e %d\n', 1 , mean_performances(1), succeeded(1));
 for k = 1:(nIterations - 1)
@@ -141,7 +141,7 @@ for k = 1:(nIterations - 1)
     policies(policyId,:) = mean(k + 1, :);
     costs(policyId) = -mean_performances(k + 1);
     policyId = policyId + 1;
-    G_data2save.performance(k + 1,1) = data2save.performance;
+    G_data2save.performance_no_penalties(k + 1,1) = data2save.performance;
     
     bestAction.hist(k).performance = mean_performances(k + 1);
     bestAction.hist(k).listperformance = performances;
@@ -176,10 +176,14 @@ policies = policies(1:policyId-1,:);
 costs = costs(1:policyId-1);
 succeeded = succeeded(1:policyId-1);
 
-
 BestActionPerEachGen.policy = BestActionPerEachGenPolicy;
 BestActionPerEachGen.fitness = BestActionPerEachGenFitness;
+
+% save everything inside data2save
 G_data2save.C = C;
+G_data2save.BestActionPerEachGen = BestActionPerEachGen;
+G_data2save.policies = policies;
+G_data2save.performance = -costs;
 
 %bestAction.parameters = mean(end, :);
 %bestAction.performance = fnForwardModel(bestAction.parameters);

@@ -40,6 +40,10 @@ classdef  FixPenalty < Optimization.AbstractPenalty
            end     
        end
        % to call in ComputeConstraintsViolation and EvaluateCmaes
+<<<<<<< HEAD
+       function ComputePenalties(obj,c_index)  % i removed the 1000 penalty because it does not change the behaviour of the algorithm and induce many error
+          obj.fitness_penalties(c_index) = sum(obj.penalties(c_index,:).^2); %+ 1000*ones(size(obj.penalties(c_index,:))),2);
+=======
        function ComputePenalties(obj,c_index)
           value = sum(obj.penalties(c_index,:).^2 ,2);
           if(value>0)
@@ -47,6 +51,7 @@ classdef  FixPenalty < Optimization.AbstractPenalty
           else
              obj.fitness_penalties(c_index) =value;
           end
+>>>>>>> refs/remotes/origin/master
        end
        % To call in EvaluateCmaes
        % in this function i perform further elaborations with the

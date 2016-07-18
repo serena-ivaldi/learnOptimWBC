@@ -2,6 +2,13 @@ clear variables
 close all
 clc
 
+
+% IMPORTANT!!! in this executable the optimization method that we are going to use is defined in the
+% main in the configuration files while in CMAESParallelBenchmark.m the
+% optimization method is in the CMAESParallelBenchmark.m itself
+
+%parpool
+
 tic
 
 % this 2 line are necessatry if i want to catch warning message from ode
@@ -9,7 +16,7 @@ warning on verbose
 warning('error', 'MATLAB:ode15s:IntegrationTolNotMet');
 warning('error', 'MATLAB:illConditionedMatrix')
 
-%parpool
+
 
 % Parameters 
 n_of_experiment = 7;      % number that we use to distinguish between the same static parameters settings but with different runtime parameters

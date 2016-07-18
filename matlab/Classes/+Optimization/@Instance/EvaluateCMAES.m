@@ -54,9 +54,13 @@ function [performance, succeeded, data2save] = EvaluateCMAES(obj,action,cur_cand
          % cancel all the information relative to the current iteration (control action)
          feval(obj.clean_function,obj,'fake_input');
          succeeded = 0;
+         %% TODO the perfomance penalty related to integration error has to 
+         %% be tuned in relationship of the computation strategy adopted for the fitness 
+         %% (is fitness is not between zero and 1 because of penalty integration error penalty has to be adjusted as well)
          performance = -1;
          % here im going to save the average perfomance without correction
          data2save.performance = performance;
+         disp('error state during the integration in EvaluateCmaes');
          %rethrow(err);
    end
 
