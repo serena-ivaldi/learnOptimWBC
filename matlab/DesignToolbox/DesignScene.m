@@ -8,17 +8,22 @@ clc
 
 % in this variable we have to specify the name of the scenario:
 % bot_scenario# where # is incremental
-name_scenario = 'iCub_1';
+name_scenario = 'iCub_3';
 % with this variable i decide when i want to save the designed scenario
-save_now = true;
+save_now = false;
 
 
 %% plot scene
 % ICUB initialization 
-list_of_kin_chain = {'trunk','left_arm','right_arm'};
+list_of_kin_chain = {'trunk','left_arm','right_arm','l_sole','r_sole'};
+joints_initial_values{1,1} = [-10.0  0.0  0.0];
+joints_initial_values{1,2} = [-20.0  30.0  0.0  45.0  0.0 0.0 0.0];
+joints_initial_values{1,3} = [-20.0  30.0  0.0  45.0  0.0 0.0 0.0];
+joints_initial_values{1,4} = [25.5   0.1   0.0  -18.5  -5.5  -0.1]; %25.5   0.1   0.0  -18.5  -5.5  -0.1
+joints_initial_values{1,5} = [25.5   0.1   0.0  -18.5  -5.5  -0.1];
 feet_on_ground = [1 1];
-plot_bot = iCub('model_arms_torso_free');
-qjInit = plot_bot.InitializeState(list_of_kin_chain, feet_on_ground);
+plot_bot = iCub('model32dof');
+qjInit = plot_bot.InitializeState(list_of_kin_chain, feet_on_ground,joints_initial_values);
 dqjInit     = zeros(plot_bot.ndof,1);
 % icub starting velocity floating base
 dx_bInit    = zeros(3,1);
@@ -30,6 +35,11 @@ root_reference_link ='l_sole';
 plot_bot.SetWorldFrameiCub(qjInit,dqjInit,dx_bInit,omega_bInit,root_reference_link);
 
 [~,T_b,~,~] = plot_bot.GetState();
+Xcom = T_b(1); Ycom = T_b(2);
+%%%
+%   TODO : compute CoM
+%%%
+
 
 chiInit = [T_b; qjInit; plot_bot.dx_b; plot_bot.omega_W; dqjInit]';
 
@@ -39,6 +49,8 @@ root_reference_link ='l_sole';
 plot_bot.SetWorldFrameiCub(qjInit,dqjInit,dx_bInit,omega_bInit,root_reference_link);
 
 [~,T_b,~,~] = plot_bot.GetState();
+
+suppConvHull = plot_bot.computeSupPoly(feet_on_ground,qjInit);
 % ROBOTICS TOOLBOX INITIALIZATION
 % Robot
 % [plot_bot] =  MdlLBR4pSimple();
@@ -50,21 +62,8 @@ hold on;axis equal;
 %% modify from this point
 global G_OB;
 
-% plot sphere
-% r = 0.15;
-% x0 = -0.20; y0 = -0.286; z0 = 0.5;
-% [x,y,z] = sphere(50);
-% 
-% x = x*r + x0;
-% y = y*r + y0;
-% z = z*r + z0;
-
-%lightGrey = 0.8*[1 1 1]; % It looks better if the lines are lighter
-%surface(x,y,z,'FaceColor', 'none','EdgeColor',lightGrey)
-
-
 %%%;;
-depth = 0.21;
+depth = 0.25;
 width = 0.22;
 center = -0.0681;
 thickness = 0.01;
@@ -104,15 +103,10 @@ xyzpatch.faces   = [ 1 2 3 4;
 
 lnkpatch = patch('vertices',xyzpatch.vertices,'faces',xyzpatch.faces,'FaceColor','red'); %'FaceAlpha',0.2,
 
-r_e_e_point = [0.3,-0.16,0.68]; %[0.35,-0.15,0.7]
-r_elbow_point = [0.21,-0.24,0.68];
+r_e_e_point = [0.35,-0.15,0.7];
+r_elbow_point = [0.24,-0.23,0.7];
 scatter3(r_elbow_point(1,1),r_elbow_point(1,2),r_elbow_point(1,3),130,'b');
 scatter3(r_e_e_point(1,1),r_e_e_point(1,2),r_e_e_point(1,3),130,'r');
-
-l_e_e_point = [0.3,0.0148,0.68]; %[0.35,0.0138,0.7]
-l_elbow_point = [0.21,0.1038,0.68];
-scatter3(l_elbow_point(1,1),l_elbow_point(1,2),l_elbow_point(1,3),130,'b');
-scatter3(l_e_e_point(1,1),l_e_e_point(1,2),l_e_e_point(1,3),130,'r');
 
 % wrist_point = [-0.174,-0.317,0.480];
 % e_e_point = [-0.022,-0.722,0.709];
@@ -129,58 +123,6 @@ ob1 = Obstacle(rapresentation,'wall',0.002);
 G_OB = [ob1]; % G_OB has to be a row vector of obstacles
 
 
-% plot_subchain1 = [7];
-% plot_target_link{1} = plot_subchain1;
-% % reference parameters
-% traj_type = {'cartesian'};
-% control_type = {'x'};
-% type_of_traj = {'func'};
-% geometric_path = {'circular'};
-% time_law = {'linear'};
-% %parameters first chains
-% geom_parameters{1,1} = [0.3 pi/2 pi/2 0 0.30 -0.75 0.5]; % regulation
-% dim_of_task{1,1}={[1;1;1]}; 
-% plot_time_struct.ti = 0;
-% plot_time_struct.tf = 10;
-% plot_time_struct.step = 0.1;
-% plot_dim_of_task{1,1}={[1;1;1]};
-% 
-% %% reference
-% % if type_of_task = sampled i have to specify the Time to reach the
-% % end of the trajectories that is equal to the simulation time
-% plot_reference = References(plot_target_link,traj_type,control_type,geometric_path,geom_parameters,time_law,plot_time_struct,plot_dim_of_task,type_of_traj);
-% plot_reference.BuildTrajs();
-% 
-% 
-% p_tot=[];
-% for t=plot_time_struct.ti:plot_time_struct.step:plot_time_struct.tf
-%  
-% 	p_cur=plot_reference.GetTraj(1,1,t);
-% 	p_tot = [p_tot,p_cur];
-% 
-% end
-%   plot3(p_tot(1,1:end),p_tot(2,1:end),p_tot(3,1:end));
-
-
-
-% hold on;axis equal;
-% [X,Y,Z]=meshgrid(-0.05:0.001:0.3,-0.5,0.45:0.001:1.0);
-% %Y = -0.4*ones(1,size(X,1));
-% for i=1:size(X,2) 
-%     scatter3(X(:,:,i),Y(:,:,i),Z(:,:,i))
-% end
-% wrist_point = [-0.309 -0.469 0.581];
-% e_e_point = [0,-0.63,0.70];
-% %intermediate_e_e_point = [ -0.3,-0.2,0.7];
-% scatter3(wrist_point(1,1),wrist_point(1,2),wrist_point(1,3),130,'b');
-% scatter3(e_e_point(1,1),e_e_point(1,2),e_e_point(1,3),130,'b');
-% %scatter3(intermediate_e_e_point(1,1),intermediate_e_e_point(1,2),intermediate_e_e_point(1,3),130,'b');
-% % global obstacle
-% rapresentation.X = X;
-% rapresentation.Y = Y;
-% rapresentation.Z = Z;
-% ob1 = Obstacle(rapresentation,'wall',0.002);
-% G_OB = [ob1];
 
 %%%EOF
 
@@ -191,6 +133,8 @@ G_OB = [ob1]; % G_OB has to be a row vector of obstacles
 % ICUB PLOT
 params.sim_step = 0.01;
 plot_bot.plot(chiInit,params);
+suppConvHull.plotConvHull(Xcom,Ycom);
+
 
 %% DO NOT CHANGE THIS PART!
 

@@ -4,7 +4,11 @@ clc
 
 %% initialize all the data
 optim = false;
+<<<<<<< HEAD
+configuration_file_name = 'RP_humanoid_test_iCub_3';
+=======
 configuration_file_name = 'RP_humanoid_bench_lbrsimple';
+>>>>>>> 44ac99c5fe78fdcd253663b52e50ae9e2e258614
 [bot1,name_scenario,time_struct,time_sym_struct,simulator_type,reference,alphas,controller,constr,learn_approach,inst,~,~,~,~,~,input,rawTextFromStorage,name_dat]=Init(configuration_file_name,optim);
 %% Simulation
 if(strcmp(simulator_type{1},'rbt'))
@@ -17,7 +21,7 @@ elseif (strcmp(simulator_type{1},'icub_matlab'))
     toc
 end
 %% Evaluate fitness
-evaluation = true;
+evaluation = false;
 if (evaluation)
     output{1} = t;
     output{2} = q;
@@ -85,12 +89,14 @@ end
 if(~video && ~save_fig)
     zoom =  5.0698;
     set(gca,'CameraViewAngle',zoom);
-    camera_position = [14.3762    9.7004   15.0093];
+    camera_position = [14.3762    9.7004   15.0093]; %[0    0   5]
     campos(camera_position)
     if ~(isa(cur_bot,'DummyRvc_iCub'))
         bot1.plot(q{1},'fps',fps);
     else
         bot1.plot(q,input{2});
+        %fc = controller.visual_param.fc;
+        %bot1.plot(q,input{2},'slowmode',fc);
     end
 elseif(video)
     %at the end of the video simulation after chosing a good camera pos and

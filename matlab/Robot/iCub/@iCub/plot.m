@@ -2,12 +2,22 @@ function plot(obj,chi,param, varargin)
 
 
 param.movie = false;
+param.slowmode = false;
 param.moviepath = [];
 ndof  = obj.ndof;
+% i check if any option are set for the current plot
 if ~(isempty(varargin))
     if strcmp(varargin(1),'movie')
         param.movie = true;
         param.moviepath = varargin(2);
+    end
+    if strcmp(varargin(1),'slowmode')
+        param.slowmode = true;
+    end
+    if length(varargin) == 2
+        param.fc = varargin(2);
+    else
+        param.fc = [];
     end
 end
 
@@ -68,7 +78,7 @@ end
 
 
 
-function visualizeForwardDynamics(obj,q,params)
+function visualizeForwardDynamics(obj,chi,params)
 %% visualize_forwardDyn
 %   Visualize the simulation results obtained from integration
 %   of the forward dynamics of the iCub.
@@ -81,9 +91,9 @@ function visualizeForwardDynamics(obj,q,params)
 %   related to the simulation environment, robot, controller etc.
 %
 %% Setup visualization
-n       = size(q,1);   % number of instances of the simulation results
-qb      = q(:,1:7);    % first 3 elements provide the position and next 4 elements provide the orientation of the base
-qj      = q(:,8:8 + obj.ndof - 1 );   % joint positions
+n       = size(chi,1);   % number of instances of the simulation results
+qb      = chi(:,1:7);    % first 3 elements provide the position and next 4 elements provide the orientation of the base
+qj      = chi(:,8:8 + obj.ndof - 1 );   % joint positions
 
 vis_speed = 1;         % this variable is set to change the visualization speed,
 % to make its speed close to the real time in case
@@ -122,7 +132,7 @@ xaxis = 'xdata';
 yaxis = 'ydata';
 zaxis = 'zdata';
 
-kin = zeros(size(q,1),7,n_joint);
+kin = zeros(size(chi,1),7,n_joint);
 
 for jj=1:n_joint
     for ii=1:n % at each instance
@@ -487,7 +497,7 @@ while ii<n+1   % the visualization instance
         vis_speed=vis_speed+1;
     end
     
-    ii=ii+vis_speed;
+    
     
     % add a frame to the movie
     if params.movie
@@ -496,6 +506,32 @@ while ii<n+1   % the visualization instance
         saveas(gcf, path{1});
         movieframenum = movieframenum + 1;
     end
+    
+    %slow mode
+    %you need to click the figure to get the next frame
+    if params.slowmode
+        convHull = obj.computeSupPoly([1 1],chi(ii-1,:)');
+        if ii == 2
+            figCvHull = figure;
+        end
+
+        CoP(1)      = -params.fc{1}(5,ii-1)/params.fc{1}(3,ii-1);
+        CoP(2)      =  params.fc{1}(4,ii-1)/params.fc{1}(3,ii-1);
+        
+        if  params.numContacts == 2
+            
+            CoP(3)      = -params.fc{1}(11,ii-1)/params.fc{1}(9,ii-1);
+            CoP(4)      =  params.fc{1}(10,ii-1)/params.fc{1}(9,ii-1);
+            
+        end
+        
+        convHull.plotConvHull(figCvHull,CoP(1),CoP(2));
+        convHull.plotConvHull(figCvHull,CoP(3),CoP(4));
+        waitforbuttonpress
+    end
+    
+    
+    ii=ii+vis_speed;
 end
 
 end
