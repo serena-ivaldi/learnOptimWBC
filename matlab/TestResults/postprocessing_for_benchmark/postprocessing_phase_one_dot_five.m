@@ -20,20 +20,17 @@ function postprocessing_phase_one_dot_five()
 
     %% global variables
     tresh = 2.5;
-    number_of_experiments = 20;
-     % this value has to be equal to the number of repetition of the
-     % experiment that we used for the stochasitc methods
-    dimension_padding_for_fmincon = 20; 
+    number_of_experiments = 40;
     % one for each entry of the newsubsubfolder variable
-    number_of_generations_of_other_methods = [33 33];
-    number_of_function_evaluation = 400;
+    number_of_generations_of_other_methods = [167 167 250 136 150 167];
+    number_of_function_evaluation = 1500;
     %%  Load Path
     % parameter
     newfolder = 'benckmark';
     % name fo the method
-    newsubfolder = {'(1+1)CMAES-vanilla'};
+    newsubfolder = {'fmincon-fmincon'};
     % name of the experiment
-    newsubsubfolder = {'RP_humanoid_bench_lbrsimple','RP_humanoid_bench_lbrsimple_more_constrained'};
+    newsubsubfolder = {'f240','f241','g06','g07','g09','HB'}; % 'f240','f241','g06','g07','g09','HB' 'RP_humanoid_bench_lbrsimple','RP_humanoid_bench_lbrsimple_more_constrained'
     % provisory
     allpath=which('FindData.m');
     newglobal_path=fileparts(allpath);
@@ -47,17 +44,6 @@ function postprocessing_phase_one_dot_five()
                 % the two variable that we have to update are m3(steady
                 % state solution) and m5(all the fitness)
 
-                %% updating m3
-                if(strcmp(newsubfolder,'fmincon-fmincon'))
-                    % i have to compute this quantty here for fmincon 
-                    % because i do not run on it the phase_one
-                    % postprocessing
-                    m3 = IndetifySteadyState(m5{1},tresh);
-                    m3 = round(m3/coeffiecient);
-                else
-                    m3 = round(m3/coeffiecient);
-                end
-                
                 
                 %% updating m5
                 
@@ -66,6 +52,9 @@ function postprocessing_phase_one_dot_five()
                 % we need to copy the last value of the fitness in order to
                 % have something that is comparable with the other methods
                 if(strcmp(newsubfolder,'fmincon-fmincon'))
+                    %% we need to change the sign of the fitness on ly for fmincon because the other method (cmaes like) find a maximum
+                    m5{1} = -m5{1};
+                    m7 = -m7;
                     last_fitness = m5{1}(end);
                     sp = length(m5{1});
                     if(length(m5{1})<number_of_function_evaluation)
@@ -76,12 +65,24 @@ function postprocessing_phase_one_dot_five()
                 end
                 
                 
+                 %% updating m3
+                if(strcmp(newsubfolder,'fmincon-fmincon'))
+                    % i have to compute this quantty here for fmincon 
+                    % because i do not run on it the phase_one
+                    % postprocessing
+                    m3 = IndetifySteadyState(m5{1},tresh);
+                    m3 = round(m3/coeffiecient);
+                else
+                    m3 = round(m3/coeffiecient);
+                end
+                
+                %% downsampling m5 in order to have a comparable fitness
                 app_vector= [];
-                app_cell_array=cell(number_of_experiments,1);
+                app_cell_array=cell(length(m5),1);
                 
                 % because i want to keep the best value i will downsample
-                % the fitness vector from the end
-                for k = 1:number_of_experiments
+                % the fitness vector starting from the end
+                for k = 1:length(m5)
                     iter = 1;
                     for kk = number_of_function_evaluation : -coeffiecient : 1
                         if(iter <= number_of_generations_of_other_methods(jjj))
@@ -100,15 +101,17 @@ function postprocessing_phase_one_dot_five()
                 % the result
                 fitness_matrix = m5_to_matrix(m5);
                 
-                %% only for m5 i need to do the padding of the metrics to be compliant with 
+                %% only for fmincon i need to do the padding of the metrics to be compliant with 
                 %% the dimnesion of the other method. i have only one repetition for fmincon-fmincon 
                 %% because it is a deterministic method
                 if(strcmp(newsubfolder,'fmincon-fmincon'))
-                    m1 = m1*ones(dimension_padding_for_fmincon,1);
-                    m2 = m2*ones(dimension_padding_for_fmincon,1);
-                    m3 = m3*ones(dimension_padding_for_fmincon,1);
-                    m4 = m4*ones(dimension_padding_for_fmincon,1);
-                    m7 = m7*ones(dimension_padding_for_fmincon,1);
+                    if(~isempty(m1))
+                        m1 = m1*ones(number_of_experiments,1);
+                    end
+                    m2 = m2*ones(number_of_experiments,1);
+                    m3 = m3*ones(number_of_experiments,1);
+                    m4 = m4*ones(number_of_experiments,1);
+                    m7 = m7*ones(number_of_experiments,1);
                 end
                 
 

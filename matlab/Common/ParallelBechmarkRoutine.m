@@ -29,7 +29,7 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
         if(strcmp(function_2_test,'g06'))
             search_space_dimension = 2;
             function_2_test_4_comparison = {'g06Test'};
-            epsilon = [0.001, 0.001]; % for adaptive
+            epsilon = [0.01, 0.01]; % for adaptive
             constraints_functions = {'g06Constr1','g06Constr2'};
             constraints_for_test = 'g06Constr';
             constraints_type = [1 1];
@@ -43,7 +43,7 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
         elseif(strcmp(function_2_test,'tr2'))
             search_space_dimension = 2;
             function_2_test_4_comparison = {'tr2Test'};
-            epsilon = [0.001]; % for adaptive
+            epsilon = [0.01]; % for adaptive
             constraints_functions = {'tr2Constr1'};
             constraints_for_test = 'tr2Constr';
             constraints_type = [1];
@@ -57,7 +57,7 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
         elseif(strcmp(function_2_test,'g07'))
             search_space_dimension = 10;
             function_2_test_4_comparison = {'g07Test'};
-            epsilon = [0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001]; % for adaptive
+            epsilon = [0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01]; % for adaptive
             constraints_functions = {'g07Constr1','g07Constr2','g07Constr3','g07Constr4','g07Constr5','g07Constr6','g07Constr7','g07Constr8'};
             constraints_for_test = 'g07Constr';
             constraints_type = [1 1 1 1 1 1 1 1];
@@ -71,7 +71,7 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
         elseif(strcmp(function_2_test,'g09'))
             search_space_dimension = 7;
             function_2_test_4_comparison = {'g09Test'};
-            epsilon = [0.001 0.001 0.001 0.001]; % for adaptive
+            epsilon = [0.01 0.01 0.01 0.01]; % for adaptive
             constraints_functions = {'g09Constr1','g09Constr2','g09Constr3','g09Constr4'};
             constraints_for_test = 'g09Constr';
             constraints_type = [1 1 1 1];
@@ -85,7 +85,7 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
         elseif(strcmp(function_2_test,'g10')) % hard to find a feasible starting point
             search_space_dimension = 8;
             function_2_test_4_comparison = {'g10Test'};
-            epsilon = [0.001 0.001 0.001 0.001 0.001 0.001]; % for adaptive
+            epsilon = [0.01 0.01 0.01 0.01 0.01 0.01]; % for adaptive
             constraints_functions = {'g10Constr1','g10Constr2','g10Constr3','g10Constr4','g10Constr5','g10Constr6'};
             constraints_for_test = 'g10Constr';
             constraints_type = [1 1 1 1 1 1];
@@ -99,7 +99,7 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
         elseif(strcmp(function_2_test,'f240'))
             search_space_dimension = 5;
             function_2_test_4_comparison = {'f240Test'};
-            epsilon = [0.001]; % for adaptive
+            epsilon = [0.01]; % for adaptive
             constraints_functions = {'f240Constr1'};
             constraints_for_test = 'f240Constr';
             constraints_type = [1];
@@ -113,7 +113,7 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
         elseif(strcmp(function_2_test,'f241'))
             search_space_dimension = 5;
             function_2_test_4_comparison = {'f241Test'};
-            epsilon = [0.001]; % for adaptive
+            epsilon = [0.01]; % for adaptive
             constraints_functions = {'f240Constr1'};
             constraints_for_test = 'f240Constr';
             constraints_type = [1];
@@ -127,7 +127,7 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
         elseif(strcmp(function_2_test,'HB'))
             search_space_dimension = 5;
             function_2_test_4_comparison = {'HBTest'};
-            epsilon = [0.001 0.001 0.001 0.001 0.001 0.001]; % for adaptive
+            epsilon = [0.01 0.01 0.01 0.01 0.01 0.01]; % for adaptive
             constraints_functions = {'HBConstr1','HBConstr2','HBConstr3','HBConstr4','HBConstr5','HBConstr6'};
             constraints_for_test = 'HBConstr';
             constraints_type = [1 1 1 1 1 1];
