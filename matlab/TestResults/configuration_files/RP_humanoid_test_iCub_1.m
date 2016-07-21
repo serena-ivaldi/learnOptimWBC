@@ -208,14 +208,8 @@ switch CONTROLLERTYPE
         %numeric_theta =[0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
         %numeric_theta =[2.3218    2.5695    6.8006    4.6558    5.7475    8.7383    3.5058    5.2817    6.9910    6.7590    4.5235    6.3875    7.3247    6.7258 8.5637];
         a = 0; b = 0; c = 14;
-<<<<<<< HEAD
-        %numeric_theta = [a a a a a b b b b b c c c c c d d d d d];
-        numeric_theta = [3.20305113572125 10.8877163581950 5.67160605557737 13.2847739134155 13.5650592137061 0.784134976492228 6.93632629872815 -12.5393467704411 -1.27347378019226 -10.1810411492540 -2.20867630883808 5.71190130701425 3.84648716268273 5.41392782619462 -0.989102829864618];
-        
-=======
         numeric_theta = [0 0 0 0 0 0 0 0 0 0 14 14 14 14 14];
         %numeric_theta = [1.34808936568616 7.65801020911318 11.4142276222402 11.0490983940875 5.40014056365278 3.15896271495000 2.49526509728241 3.38786911220609 3.59148669099237 -3.99404815876146 0.150175087891493 3.67130705179767 4.44576652255605 5.52547896983619 -5.09694541976550];
->>>>>>> 44ac99c5fe78fdcd253663b52e50ae9e2e258614
         
         %constant alpha
         value1 = 0*ones(chains.GetNumTasks(1));
@@ -336,11 +330,7 @@ switch CONTROLLERTYPE
         cmaes_value_range = [-14 , 14];  % boudn that define the search space
         %cmaes_value_range{1} = [-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-0.15,-0.15,-0.15 ];  % lower bound that define the search space
         %cmaes_value_range{2} = [14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,0.15,0.15,0.15];  % upper bound that define the search space
-<<<<<<< HEAD
-        learn_approach = 'CMAES'; %CMAES (1+1)CMAES
-=======
         learn_approach = '(1+1)CMAES'; %CMAES (1+1)CMAES    
->>>>>>> 44ac99c5fe78fdcd253663b52e50ae9e2e258614
         %--- Parameter for constraints method
         method_to_use = 'vanilla';  % adaptive , vanilla , empty
         epsilon = 0.001*ones(1,length(constraints_functions)); %vector with a number of value related to the number of constraints (used only with Aaptive constraints)

@@ -4,7 +4,7 @@
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
-time_struct.tf = 5;
+time_struct.tf = 3;
 time_struct.step = 0.001;
 
 %% TASK PARAMETERS
@@ -26,7 +26,7 @@ CONTROLLERTYPE ='UF';   % GHC or UF
 %%
 
 %SUBCHAIN PARAMETERS
-subchain1 =  {'r_hand','r_elbow_1','l_hand','l_elbow_1','none'};
+subchain1 =  {'none'};
 target_link{1} = subchain1;
 
 
@@ -48,30 +48,14 @@ deg = pi/180;
 % %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
 % dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
 
-traj_type = {'cartesian','cartesian','cartesian','cartesian','joint'};
-control_type = {'x','x','x','x','none'};
-type_of_traj = {'sampled','sampled','sampled','sampled','sampled'};
-geometric_path = {'fixed','fixed','fixed','fixed','fixed'};
-time_law = {'none','none','none','none','none'};
+traj_type = {'joint'};
+control_type = {'none'};
+type_of_traj = {'sampled'};
+geometric_path = {'fixed'};
+time_law = {'none'};
 %parameters first chains
-geom_parameters{1,1} = [0.3,-0.17,0.68];    %r_e_e_point
-geom_parameters{1,2} = [0.21,-0.25,0.68];	%r_elbow_point
-geom_parameters{1,3} = [0.3,0.0248,0.68];   %l_e_e_point
-geom_parameters{1,4} = [0.21,0.1138,0.68];   %l_elbow_point
-geom_parameters{1,5} = zeros(1,32);
-dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1];
-dim_of_task{1,3}= [1;1;1]; dim_of_task{1,4}= [1;1;1];
-dim_of_task{1,5}= ones(1,32);
-
-% traj_type = {'cartesian'};
-% control_type = {'rpy'};
-% type_of_traj = {'func'};
-% geometric_path = {'fixed'};
-% time_law = {'none'};
-% %parameters first chains
-% geom_parameters{1,1} = [pi/2 0 -pi/2];
-% %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
-% dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
+geom_parameters{1,1} = zeros(1,32);
+dim_of_task{1,1} = ones(1,32);
 
 % secondary trajectory
 traj_type_sec = {'none','none','none','none','none'};
@@ -172,10 +156,10 @@ elseif strcmp(simulator_type{1},'icub_matlab')
     end
     params.tStart   = time_sym_struct.ti;
     params.tEnd     = time_sym_struct.tf;
-    params.sim_step = 0.01;
-    params.demo_movements = 0 ;
-    params.wait     = waitbar(0,'State integration in progress...');
-    params.maxtime = 100;
+    params.sim_step = time_struct.step;
+    params.demo_movements = 0;
+    %params.wait     = waitbar(0,'State integration in progress...');
+    params.maxtime = 1000;
     params.torque_saturation = 100000;
     
 end
@@ -214,35 +198,13 @@ switch CONTROLLERTYPE
         value_range = [0 , 12];
         precomp_sample = false;
         % value of theta that we have to change when we want to execute the result
-        % from the optimization step
-        %numeric_theta = [0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
-        %numeric_theta =[0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
-        %numeric_theta =[2.3218    2.5695    6.8006    4.6558    5.7475    8.7383    3.5058    5.2817    6.9910    6.7590    4.5235    6.3875    7.3247    6.7258 8.5637];
-        a = 0; b = 0; c = 0; d = 0; e = 14;
-        numeric_theta = [a a a a a b b b b b c c c c c d d d d d e e e e e];
-        %numeric_theta = [2.57544496747598 7.01519063016628 9.33466044394969 10.1544321858847 13.1254460308235 2.99937245873210 0.663798653803501 2.31146286139437 6.31668373767193 8.15654233633997 -1.96317454733317 14 0.896047278859740 3.02636865632732 0.318892795068443 -2.08120585139028 7.77742246609418 2.42184730905170 1.07732226822533 4.13677097043036 1.00482399484291 3.53893999351795 6.23352188066088 1.01100054091959 14];
-
-
-        % from sere 1
-        %numeric_theta = [5.819383 4.412794 5.286902 7.786384 7.599614 3.512520 5.989917 9.410994 7.444834 7.472545 4.532512 5.614148 7.970080 4.498142 6.194601 6.925731 4.815911 5.490313 5.294776 6.011380 ]
-        
-        %from 10 generation of CMAES: collision with end-eff and table
-        %numeric_theta = [1.351681 10.784147 9.724284 6.550806 7.740233 5.928500 8.123806 7.776163 6.548935 5.474038 7.455956 4.011111 6.704292 1.089315 3.712038 6.041540 5.098971 5.054418 6.312087 6.223340 ];
-        
-        % this is a good one (obtained by 80 generations of CMAES)
-        %numeric_theta = [2.885347 7.054374 6.510485 4.220996 3.779241 7.292772 6.753379 4.039816 3.503077 7.105706 7.242047 5.176997 6.656641 7.282674 6.310105 2.320801 6.164860 5.949270 5.958774 3.349248];
-        
-        %numeric_theta = [2.718340 0.238570 4.959242 5.150985 10.810089 5.561797 6.436029 3.089579 7.488959 5.577574 5.300494 9.360753 5.395630 3.646393 5.427430 5.963953 10.538157 8.951330 7.672437 2.743474];
-        %numeric_theta = [3.493783 6.211959 7.883578 11.988846 7.900086 9.468388 6.525209 11.867391 7.355206 8.158990 0.000000 0.054878 11.131856 8.063698 1.871041 9.107188 3.646651 8.656589 11.419753 4.346246 ];
-        
-        %this is the task without the constraints of the table
-        %numeric_theta =[12 12 12 12 12 12 12 12 12 12];
+        a =  0;
+        numeric_theta = [a a a a a ];
         
         %constant alpha
-        value1 = 0*ones(chains.GetNumTasks(1));
+        value1 = zeros(chains.GetNumTasks(1));
         values{1} = value1;
         value_range_for_optimization_routine = [-0.5 , 1.5]; % this is a trick that im using to provide bound to the optimization procedure for parametric reference
-        
         
         % HandTunedAlpha
         starting_value = [0 1 0] ;
@@ -258,7 +220,7 @@ switch CONTROLLERTYPE
         % the metric change between regularized and not regularized because in the
         % regularized case i have to do N^(-1)
         % not regularized case i have N^(-1/2)
-        metric = {'M^(1)','M^(1)','M^(1)','M^(1)','M^(1)','M^(1)','M^(1)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);
+        metric = {'M'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);
         kd = [110,110,110,110,110,110,110];
         kp = [70,70,70,70,70,70,70]; % row vector one for each chain
         for i= 1:chains.GetNumChains()
@@ -326,7 +288,7 @@ switch CONTROLLERTYPE
         activate_constraints_handling = true;
         %% INSTANCE PARAMETER
         run_function = @RobotExperiment;
-        fitness = @fitnessHumanoidsIcub2arms;
+        fitness = @fitnessHumanoidsIcubSquat;
         clean_function = @RobotExperimentCleanData;
         
         if strcmp(simulator_type{1},'rbt')

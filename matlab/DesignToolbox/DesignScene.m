@@ -50,7 +50,7 @@ plot_bot.SetWorldFrameiCub(qjInit,dqjInit,dx_bInit,omega_bInit,root_reference_li
 
 [~,T_b,~,~] = plot_bot.GetState();
 
-suppConvHull = plot_bot.computeSupPoly(feet_on_ground,qjInit);
+%suppConvHull = plot_bot.computeSupPoly(feet_on_ground,qjInit);
 % ROBOTICS TOOLBOX INITIALIZATION
 % Robot
 % [plot_bot] =  MdlLBR4pSimple();
@@ -105,8 +105,8 @@ lnkpatch = patch('vertices',xyzpatch.vertices,'faces',xyzpatch.faces,'FaceColor'
 
 r_e_e_point = [0.35,-0.15,0.7];
 r_elbow_point = [0.24,-0.23,0.7];
-scatter3(r_elbow_point(1,1),r_elbow_point(1,2),r_elbow_point(1,3),130,'b');
-scatter3(r_e_e_point(1,1),r_e_e_point(1,2),r_e_e_point(1,3),130,'r');
+scatter3(r_elbow_point(1,1),r_elbow_point(1,2),r_elbow_point(1,3),130,'b','LineWidth',3);
+scatter3(r_e_e_point(1,1),r_e_e_point(1,2),r_e_e_point(1,3),130,'r','LineWidth',3);
 
 % wrist_point = [-0.174,-0.317,0.480];
 % e_e_point = [-0.022,-0.722,0.709];
@@ -133,7 +133,7 @@ G_OB = [ob1]; % G_OB has to be a row vector of obstacles
 % ICUB PLOT
 params.sim_step = 0.01;
 plot_bot.plot(chiInit,params);
-suppConvHull.plotConvHull(Xcom,Ycom);
+%suppConvHull.plotConvHull(Xcom,Ycom);
 
 
 %% DO NOT CHANGE THIS PART!

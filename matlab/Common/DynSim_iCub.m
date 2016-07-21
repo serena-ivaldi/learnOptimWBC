@@ -28,12 +28,7 @@ try
     [t,chi,visual_param] = ode15s(forwardDynFunc,params.tStart:params.sim_step:params.tEnd,params.chiInit,options);
     q = chi(:,1:7+WS.ndof);
     qd = chi(:,8+WS.ndof:end);
-<<<<<<< HEAD
-    
-    delete(params.wait)
-=======
-    %delete(params.wait)
->>>>>>> 44ac99c5fe78fdcd253663b52e50ae9e2e258614
+
 catch err
     disp('integration error');
     rethrow(err);

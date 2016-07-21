@@ -1,84 +1,88 @@
-function plot(obj,chi,param, varargin)
+function plotWActivation(obj,chi,params, alphas,names_of_subplot,grouping,colors,legends, varargin)
 
 
-param.movie = false;
-param.slowmode = false;
-param.moviepath = [];
+params.movie = false;
+params.slowmode = false;
+params.moviepath = [];
 ndof  = obj.ndof;
 % i check if any option are set for the current plot
 if ~(isempty(varargin))
     if strcmp(varargin(1),'movie')
-        param.movie = true;
-        param.moviepath = varargin(2);
+        params.movie = true;
+        params.moviepath = varargin(2);
     end
     if strcmp(varargin(1),'slowmode')
-        param.slowmode = true;
+        params.slowmode = true;
     end
     if length(varargin) == 2
-        param.fc = varargin(2);
+        params.fc = varargin(2);
     else
-        param.fc = [];
+        params.fc = [];
     end
 end
 
 
-for ii=1:1 %for now we have just one view
-    
-    %         param.plot_main(ii) = subplot('Position', plot_pos(ii,:));
-    %         param.plot_objs{ii} = plot3(0,0,0,'.');
-    %         axis([-1 1 -1 1 -1 1]);
-    %         axis equal
-    %         hold on
-    
-    param.plot_objs{ii} = plot3(0,0,0,'.');
-    axis([-1.2 1.2 -1 1 0 1.2]);
-    %axis equal
+
+
+%configuration of the subplots
+wd = length(names_of_subplot); lght = 5;
+scene = gca; %copy the current fig into the subplot
+axes(wd+1) = subplot(lght,wd,(wd+1:15),scene); %copy the current fig into the subplot
+for i = 1:wd
+    axes(i) = subplot(lght,wd,i);
+end
+
+
+for i = 1:wd
+    subplot(axes(i))
     hold on
-    
-               if param.feet_on_ground(2) == 0 || sum(param.feet_on_ground) == 2
-    
-                  patch([-0.45 -0.45 0.45 0.45],[-0.53 0.37 0.37 -0.53],[0 0 0 0],[0.6 0.6 0.8]);
-    
-                else
-    
-                  patch([-0.45 -0.45 0.45 0.45],[-0.37 0.53 0.53 -0.37],[0 0 0 0],[0.6 0.6 0.8]);
-    
-                end
-    
-    %campos([5.1705   -8.3894    6.4718])%([10.3675    4.9702    4.4582]);
-    %set(gca,'CameraViewAngle',7.8687);
-    set(gca,'Color',[0.8 0.8 0.8]);
-    set(gca,'XColor',[0.8 0.8 0.8]);
-    set(gca,'YColor',[0.8 0.8 0.8]);
-    set(gca,'ZColor',[0.8 0.8 0.8]);
-    set(gca,'ydir','reverse')
-    set(gca,'xdir','reverse')
-    %set(gca, 'drawmode', 'fast');
-    set(gcf, 'Position', get(0, 'Screensize'));
-    rotate3d(gca,'on');
-
-    
-        %figure(figure_main);
-    
-    
-    
-    %axes(param.plot_main(1))
-    %axis tight
-    % CoM trajectory
-    x_b   = chi(:,1:3);
-    qt_b  = chi(:,4:7);
-    qj    = chi(:,8:8 + obj.ndof - 1);
-    
-    visualizeForwardDynamics(obj,[x_b,qt_b,qj],param)
-    
-    
+    title(names_of_subplot(i))
+    xlabel('Time')
+    ylabel('Weight')
+    %axis equal
+    axis([0 params.tEnd 0 1]);
+    hold off
 end
 
+subplot(axes(end))
+hold on
+axis off
+
+params.plot_objs{1} = plot3(0,0,0,'.');
+%axis([-1.2 1.2 -1 1 0 1.2]);
+%axis equal
+
+
+if params.feet_on_ground(2) == 0 || sum(params.feet_on_ground) == 2    
+    patch([-0.45 -0.45 0.45 0.45],[-0.53 0.37 0.37 -0.53],[0 0 0 0],[0.6 0.6 0.8]);    
+else    
+    patch([-0.45 -0.45 0.45 0.45],[-0.37 0.53 0.53 -0.37],[0 0 0 0],[0.6 0.6 0.8]);    
 end
 
+%campos([5.1705   -8.3894    6.4718])%([10.3675    4.9702    4.4582]);
+%set(gca,'CameraViewAngle',7.8687);
+set(gca,'Color',[0.8 0.8 0.8]);
+set(gca,'XColor',[0.8 0.8 0.8]);
+set(gca,'YColor',[0.8 0.8 0.8]);
+set(gca,'ZColor',[0.8 0.8 0.8]);
+set(gca,'ydir','reverse')
+set(gca,'xdir','reverse')
+%set(gca, 'drawmode', 'fast');
+set(gcf, 'Position', get(0, 'Screensize'));
+rotate3d(gca,'on');
+hold off
 
+% CoM trajectory
+% x_b   = chi(:,1:3);
+% qt_b  = chi(:,4:7);
+% qj    = chi(:,8:8 + obj.ndof - 1);
 
-function visualizeForwardDynamics(obj,chi,params)
+% visualizeForwardDynamics(obj,[x_b,qt_b,qj],params,alphas,names_of_subplot,grouping,legends,axes)
+% end
+% 
+% 
+% 
+% function visualizeForwardDynamics(obj,chi,params,alphas,names_of_subplot,grouping,legends,axes)
 %% visualize_forwardDyn
 %   Visualize the simulation results obtained from integration
 %   of the forward dynamics of the iCub.
@@ -98,7 +102,7 @@ qj      = chi(:,8:8 + obj.ndof - 1 );   % joint positions
 vis_speed = 1;         % this variable is set to change the visualization speed,
 % to make its speed close to the real time in case
 % the simulation time step is changed.
-alpha = 0.3; %patches transparency 
+alpha = 0.3; %patches transparency
 
 n_joint = length(obj.jointList); % number of points to be plotted (virtual joints)
 n_lin = length(obj.linkList); % number of lines to be plotted (virtual links)
@@ -167,7 +171,8 @@ drawnow
 %axes(params.plot_main(1));
 
 %% INITIAL PLOTS
-
+subplot(axes(end))
+hold on
 % allocate memory
 x        = zeros(1,n_joint);
 y        = zeros(1,n_joint);
@@ -226,21 +231,6 @@ lnkpatch          = zeros(1,n_joint);
 xyzpatch.vertices = zeros(8,3);
 xyzpatch.faces    = zeros(6,4);
 
-% constant multipliers related to the sizes of the patches around the links to form the robot figure
-% mult_patch = [0.07 , 0.03;
-%               0.04 , 0.02;
-%               0.03 , 0.02;
-%               0.025, 0.02;
-%               0.04 , 0.02;
-%               0.03 , 0.02;
-%               0.025, 0.02;
-%               0.03 , 0.02;
-%               0.025, 0.02;
-%               0.02 , 0.02;
-%               0.03 , 0.02;
-%               0.025, 0.02;
-%               0.02 , 0.02];
-
 %TO DO adapt approx. the size of the boxes to iCub dimension
 mult_patch = ones(n_lin,2);
 mult_patch(:,1) = mult_patch(:,1)*0.03;
@@ -289,7 +279,7 @@ end
 % plot the lines depicting the links
 for jj=1:n_lin
     
-    lin(jj) = line(xaxis,xyzpairs(jj,1:2),yaxis,xyzpairs(jj,3:4),zaxis,xyzpairs(jj,5:6),'erasemode','normal','linewidth',2,'color','blue');
+    lin(jj) = line(xaxis,xyzpairs(jj,1:2),yaxis,xyzpairs(jj,3:4),zaxis,xyzpairs(jj,5:6),'erasemode','normal','linewidth',2,'color','b');% [0 191 255]./255);
     
     % for the patches (to determine the orientation of the patch to be applied to the links)
     vectlnk  = [xyzpairs(jj,2)-xyzpairs(jj,1),xyzpairs(jj,4)-xyzpairs(jj,3),xyzpairs(jj,6)-xyzpairs(jj,5)];
@@ -378,11 +368,42 @@ lnkpatch(jj)      = patch('vertices',xyzpatch.vertices,'faces',xyzpatch.faces,'F
 
 % store axes objects' handles to a vector
 params.plot_objs{1} = [lnkpatch';lin';x_b0'];
+hold off
+
+%% init plots activation functions
+for kk = 1:wd
+    subplot(axes(kk))
+    hold on
+    for idx = 1:length(grouping{kk})
+        alphas{1,grouping{kk}(1,idx)}.Plot;
+    end
+    handle = get(axes(kk), 'Children');
+    for idx = 1:length(handle)
+        handle(idx).LineWidth = 2;
+        if ~strcmp(colors{1,kk}(1,idx), 'default')
+            color = colors{1,kk}{1,idx};
+            handle(idx).Color = color;
+        end        
+    end
+    if ~(strcmp(legends{1,kk},'none'))
+        leg = legend(legends{1,kk});
+        set(leg,'Location','southeast');
+    end
+    t = 1/n*params.tEnd;
+    tline(kk) = line([t t],[0 1],'LineWidth',2,'Color','k');
+    hold off
+end
+
 %% UPDATING THE PLOTS
 ii=2;
 movieframenum = 1;
 
+fig = gcf;
+fig.PaperPositionMode = 'auto'; %usefull for the movie option
+
 while ii<n+1   % the visualization instance
+    subplot(axes(end))
+    hold on
     
     tic;      % visualizer step timer start (to setting the visualizer speed)
     
@@ -497,10 +518,19 @@ while ii<n+1   % the visualization instance
         
         vis_speed=vis_speed+1;
     end
+    hold off    
     
+    %% Update the activation function plots
+    for kk = 1:wd
+        subplot(axes(kk))
+        hold on
+        t = ii/n*params.tEnd;
+        tline(kk).delete
+        tline(kk) = line([t t],[0 1],'LineWidth',2,'Color','k'); %line to display the time on the activation plots
+        hold off
+    end
     
-    
-    % add a frame to the movie
+    %% Add a frame to the movie
     if params.movie
         % write the frame to the movie folder
         path = fullfile(params.moviepath, sprintf('%04d.png', movieframenum));
@@ -508,14 +538,14 @@ while ii<n+1   % the visualization instance
         movieframenum = movieframenum + 1;
     end
     
-    %slow mode
+    %% Slow mode
     %you need to click the figure to get the next frame
     if params.slowmode
         convHull = obj.computeSupPoly(params.feet_on_ground,chi(ii-1,:)');
         if ii == 2
             figCvHull = figure;
         end
-
+        
         CoP(1)      = -params.fc{1}(5,ii-1)/params.fc{1}(3,ii-1);
         CoP(2)      =  params.fc{1}(4,ii-1)/params.fc{1}(3,ii-1);
         
@@ -543,10 +573,3 @@ while ii<n+1   % the visualization instance
 end
 
 end
-
-
-
-
-
-
-

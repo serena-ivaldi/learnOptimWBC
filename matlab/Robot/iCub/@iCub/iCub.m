@@ -127,9 +127,7 @@ classdef iCub < handle
         %Compute the support polygone wrt feet_on_ground
             if     feet_on_ground(1) == 1 && feet_on_ground(2) == 1
                 %if both feet on the ground the ref frame is l_sole
-                %l_foot                
-%                 l_sole   = wbm_forwardKinematics(obj.R_b,obj.x_b,qj,'l_sole');
-%                 [pos_lfoot,~]    = frame2posrot(l_sole);
+                %l_foot
                 [pos_lfoot,~]    = obj.offlineFkine(chi,'r_sole');
                 X__lfoot = pos_lfoot(1);    Y_lfoot = pos_lfoot(2);
                 X(1,1) = X__lfoot + 0.12;      Y(1,1) = Y_lfoot + 0.025;
@@ -137,8 +135,6 @@ classdef iCub < handle
                 X(1,3) = X__lfoot - 0.06;     Y(1,3) = Y_lfoot - 0.025;
                 X(1,4) = X__lfoot - 0.06;     Y(1,4) = Y_lfoot + 0.025;
                 %r_foot
-%                 r_sole   = wbm_forwardKinematics(obj.R_b,obj.x_b,qj,'r_sole');
-%                 [pos_rfoot,~]    = frame2posrot(r_sole);
                 [pos_rfoot,~]    = obj.offlineFkine(chi,'l_sole');
                 X__rfoot = pos_rfoot(1);    Y_rfoot = pos_rfoot(2);
                 X(1,5) = X__rfoot + 0.12;     Y(1,5) = Y_rfoot + 0.025;
@@ -155,12 +151,6 @@ classdef iCub < handle
                 X(1,4) = -0.06;     Y(1,4) = 0.025;
             end
             suppConvHull = ConvexHull(X,Y);
-%            dist = suppConvHull.computeDistance(Xq,Yq);
-%             Xq = 0; Yq = 0;
-%             figConvHull = suppConvHull.plotConvHull(Xq,Yq);
-            %%%
-            %  TO DO
-            %%%
         end
         
         

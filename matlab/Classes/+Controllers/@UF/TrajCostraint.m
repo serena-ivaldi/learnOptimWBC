@@ -12,7 +12,11 @@ function [b,A] = TrajCostraint(obj,ind_subchain,ind_task,t,J_old,Jd_old,x,xd,rpy
          if ~(isa(obj.subchains.sub_chains{1},'DummyRvc_iCub')) 
             A=eye(obj.GetActiveBot.n);
          else
-             A=eye(obj.subchains.whole_system.ndof);
+             if (obj.GetWholeSystem.active_floating_base)
+                A=[zeros(32,6), eye(obj.subchains.whole_system.ndof)];
+             else
+                A=eye(obj.subchains.whole_system.ndof); 
+             end
          end
          [x_des,xd_des,xdd_des] = obj.references.GetTraj(ind_subchain,ind_task,t);
          b = PD(q,x_des,obj.Param{ind_subchain,ind_task}.Kp,qd,xd_des,obj.Param{ind_subchain,ind_task}.Kd,xdd_des);
