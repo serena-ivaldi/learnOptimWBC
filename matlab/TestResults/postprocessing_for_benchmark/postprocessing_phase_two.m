@@ -1,5 +1,7 @@
-% all the metric that has singular value are going to be organized in
-% column
+% in this function you have to processe experiments with the same number of
+% repetitions. when i say repetition i mean the number of time that the
+% same experiment is repeated
+
 
 clear all 
 close all
@@ -8,11 +10,11 @@ clc
 % parameter
 folder = 'benckmark';
 % name fo the method
-last_subfolder = {'(1+1)CMAES-vanilla','CMAES-vanilla'};
+last_subfolder = {'fmincon-fmincon'};
 % flag to say if it is or not a robotic experiment or a function benchmark
-robotic_flag_per_experiment = [1 1];
+robotic_flag_per_experiment = [0 0 0 0 0 0];
 % name of the experiment
-last_subsubfolder = {'RP_humanoid_bench_lbrsimple','RP_humanoid_bench_lbrsimple_more_constrained'};
+last_subsubfolder = {'g06','g07','g09','f240','f241','HB'};%RP_humanoid_bench_lbrsimple','RP_humanoid_bench_lbrsimple_more_constrained' g06','g07','g09','f240','f241','HB'};
 % provisory
 allpath=which('FindData.m');
 global_path=fileparts(allpath);
