@@ -169,9 +169,8 @@ elseif strcmp(simulator_type{1},'icub_matlab')
     end
     params.tStart   = time_sym_struct.ti;
     params.tEnd     = time_sym_struct.tf;
-    params.sim_step = 0.01;
-    params.demo_movements = 0 ;
-    params.wait     = waitbar(0,'State integration in progress...');
+    params.sim_step =  0.01;%time_struct.step;
+    params.demo_movements = 0;
     params.maxtime = 100;
     params.torque_saturation = 100000;
     

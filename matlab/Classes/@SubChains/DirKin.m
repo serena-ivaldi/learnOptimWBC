@@ -25,7 +25,7 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
                 rpy = [];
             end
             %try
-            if(obj.floating_base)
+            if(obj.whole_system.active_floating_base)
                 J = cur_bot.jacob0(q','rpy');
                 full_qd = [obj.whole_system.dx_b;obj.whole_system.omega_W;qd'];
                 v=J*full_qd;

@@ -29,6 +29,7 @@ try
     q = chi(:,1:7+WS.ndof);
     qd = chi(:,8+WS.ndof:end);
     %delete(params.wait)
+
 catch err
     disp('integration error');
     rethrow(err);

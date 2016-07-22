@@ -66,10 +66,12 @@ classdef ConvexHull
             figure(figHandle);
             hold on
             plot(obj.X,obj.Y,'b*');
+            fill(obj.X(obj.K),obj.Y(obj.K),'g','FaceAlpha',0.1);
             [Xc, Yc] = obj.getCenter;
             plot(Xc,Yc,'+');
             plot(Xq,Yq,'ro');
             hold off
+            
         end
         
     end

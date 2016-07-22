@@ -143,7 +143,11 @@ classdef  UF < Controllers.AbstractController
               M = obj.subchains.GetM(q);
               % i include the external forces inside F
               F = obj.subchains.GetF(q,qd,Fc,Jc_t);
-              [M,F] = obj.subchains.RemoveFloatingBase(M,F,7);
+              if (obj.GetWholeSystem.active_floating_base)
+                  [M,F] = obj.subchains.RemoveFirst6(M,F,7);
+              else
+                  [M,F] = obj.subchains.RemoveFloatingBase(M,F,7);
+              end
               q = q';
               qd = qd';
           end

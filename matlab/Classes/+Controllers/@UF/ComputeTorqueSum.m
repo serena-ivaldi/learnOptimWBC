@@ -7,7 +7,7 @@ function [tau,J,x,xd,rpy,rpyd] = ComputeTorqueSum(obj,ind_subchain,ind_task,M,F,
        %% primary controller
        [b,A] = TrajCostraint(obj,ind_subchain,ind_task,t,J,Jd,x,xd,rpy,rpyd,q',qd',Fc);
        M_inv =[];
-       if(obj.subchains.floating_base)
+       if(obj.GetWholeSystem.active_floating_base)
            M_inv = M'/(M*M');
            AM_inv = A*M_inv;
        else
