@@ -27,7 +27,7 @@ end
 %configuration of the subplots
 wd = length(names_of_subplot); lght = 5;
 scene = gca; %copy the current fig into the subplot
-axes(wd+1) = subplot(lght,wd,(wd+1:15),scene); %copy the current fig into the subplot
+axes(wd+1) = subplot(lght,wd,(wd+1:wd*lght),scene); %copy the current fig into the subplot
 for i = 1:wd
     axes(i) = subplot(lght,wd,i);
 end

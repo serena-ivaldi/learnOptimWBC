@@ -5,7 +5,7 @@ clc
 %% initialize all the data
 optim = false;
 
-configuration_file_name = 'RP_humanoid_test_iCub_2';
+configuration_file_name = 'RP_humanoid_test_iCub_4';
 
 [bot1,name_scenario,time_struct,time_sym_struct,simulator_type,reference,alphas,controller,constr,learn_approach,inst,~,~,~,~,~,input,rawTextFromStorage,name_dat]=Init(configuration_file_name,optim);
 %% Simulation
@@ -42,7 +42,7 @@ if save_result_single_exec
 end
 %% Display
 fps = 100;
-video = true;
+video = false;
 step_save_fig = 20;
 save_fig = false;
 ee_trajectory = true;
@@ -103,14 +103,14 @@ if(~video && ~save_fig)
         bot1.plot(q{1},'fps',fps);
     else
         %standard plot
-        %bot1.plot(q,input{2});
+        bot1.plot(q,input{2});
         
         %plot with display of the activation function
-        names_of_subplot = {'Right arm tasks','Posture task','Left arm tasks'};
-        grouping = {[1, 2], [5], [3, 4]};
-        colors = {{'r', 'c'}, {'default'}, {'r', 'c'}}; %'default' if no chnage in the color
-        legends = {{'elbow','hand'}, {'none'} ,{'elbow','hand'}}; %'none' if you dont want any legend
-        bot1.plotWActivation(q,input{2},alphas,names_of_subplot,grouping,colors,legends);
+        %names_of_subplot = {'Right arm tasks','Posture task','Left arm tasks'};
+        %grouping = {[1, 2], [5], [3, 4]};
+        %colors = {{'r', 'c'}, {'default'}, {'r', 'c'}}; %'default' if no chnage in the color
+        %legends = {{'elbow','hand'}, {'none'} ,{'elbow','hand'}}; %'none' if you dont want any legend
+        %bot1.plotWActivation(q,input{2},alphas,names_of_subplot,grouping,colors,legends);
         
         %slowmode plot with CoP visualisation
         %fc = controller.visual_param.fc;

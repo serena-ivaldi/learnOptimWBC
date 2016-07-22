@@ -35,15 +35,12 @@ for ii=1:1 %for now we have just one view
     %axis equal
     hold on
     
-               if param.feet_on_ground(2) == 0 || sum(param.feet_on_ground) == 2
-    
-                  patch([-0.45 -0.45 0.45 0.45],[-0.53 0.37 0.37 -0.53],[0 0 0 0],[0.6 0.6 0.8]);
-    
-                else
-    
-                  patch([-0.45 -0.45 0.45 0.45],[-0.37 0.53 0.53 -0.37],[0 0 0 0],[0.6 0.6 0.8]);
-    
-                end
+    %if param.feet_on_ground(2) == 0 || sum(param.feet_on_ground) == 2
+    % ground patch
+    patch([-0.45 -0.45 0.45 0.45],[-0.53 0.37 0.37 -0.53],[0 0 0 0],[0.6 0.6 0.8]);
+    %else
+    %    patch([-0.45 -0.45 0.45 0.45],[-0.37 0.53 0.53 -0.37],[0 0 0 0],[0.6 0.6 0.8]);
+    %end
     
     %campos([5.1705   -8.3894    6.4718])%([10.3675    4.9702    4.4582]);
     %set(gca,'CameraViewAngle',7.8687);
