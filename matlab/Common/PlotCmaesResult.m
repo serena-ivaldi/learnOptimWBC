@@ -1,4 +1,4 @@
-function [t_, q, qd]=PlotCmaesResult(complete_path,input,name_scenario,time_struct,bestAction,bot1,learn_approach)
+function [t_, q, qd]=PlotCmaesResult(complete_path,input,name_scenario,time_struct,bestAction,bot1,learn_approach,varargin)
 % conversion from rad to deg
 RAD = 180/pi;
 % for torque
@@ -39,7 +39,19 @@ if(strcmp(simulator,'rbt'))
         pd = [pd ; pd_cur'];  
     end
 elseif (strcmp(simulator,'icub_matlab'))
+    % due to some change in the code i have to set the floating base
+    % properties
+    input{2}.active_floating_base = false;
+    input{2}.numContacts = sum(input{2}.feet_on_ground,2);
+    input{2}.contactLinkNames={'l_sole','r_sole'};
+    % for some reason the icub robot does not work if  i save it in a file 
+    % so i have to create it again
+    bot2 = iCub(bot1.model_name);
     controller = input{4}; % structure that contains every information about the specific instance of the problem
+    controller.visual_param.fc = [];
+    % here i subistitute the icub with the new one
+    bot1 = bot2;
+    controller.subchains.whole_system = bot2;
     time_sym_struct = input{3};
     % update of the parameters of activation functions and some reference
     % (if they are optimized)

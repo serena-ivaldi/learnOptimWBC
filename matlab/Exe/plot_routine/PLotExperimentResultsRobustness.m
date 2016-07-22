@@ -2,184 +2,99 @@
 % to compare methods and to establish if the activation policies have to many
 % basis functions(overfitting).
 % TODO add time plot
-function PlotGraphMultipleExperiment
+function PLotExperimentResultsRobustness
    
-   close all 
-   clear variable 
-   clc
-   
-   
-   % if i give more than one result folder i will merge the result all
-   % togheter
-   list_of_folder = {'6_Jaco1.3_scene1.1'};
-   list_of_subfolder1 = [5 20 21 38 47 50 74 90 97];  % here i specify the folder that i want to take into account for the plot (in this way i remove all the failures)
-   list_of_subfolder2 = [];
-   list_of_subfolder = {list_of_subfolder1,list_of_subfolder2};
-   % name of the method that will be displayed in the legenda of graph
-   name_of_methods = {'RUF + CMA-ES','GHC + CMA-ES'};
-   color_list={'b','r','m','g','c','k'};
-   % interpolation step for the tau if we use a small step wi will badly
-   % capture the value of the applied torque
-   interpolation_step = 0.01;
-   % SET OF FLAGS TO SWITCH ON AND OFF DIFFERENT FEATURE OF THE METHOD
-   variance_flag = true; % to select if i want the variance or not on the fitness graph
-   transparent_flag = 1; % make transparent variance in fitness (0 or 1)
-   alpha_flag =true;     % plot mena and variance for the alpha 
-   position_joint_torque_flag = true;
-   tresh_for_count_success_experiment = [-50,-50]; % one for each batch
-   
-   
-   % with this list i decide wich data mat im going to plot for experiment1
-%    list_of_data_to_plot = [1,2];
-%    style = {'-k','-.r','--b'};
-%    experiment1 = false;
-   
-   % i plot x and y position of end effector of specific experiments
-   % and i merge all the plot 
-%    list_of_folder_xy = {'_of_115_LBR4p11.0_scene9_UF_mulitple_task_stability_Null_space_projectors','_of_116_LBR4p8.0_scene9_GHC_test_wall_and_two_attractive_point'};
-%    experiment_index = [18,1];
-%    name_of_methods_xy = {'RUF + CMA-ES','GHC'};
-%    style_xy = {'-k','-r','--b'};
-%    xy_from_data = false;
-   
-%    if(experiment1)
-%       PlotExpOne(list_of_data_to_plot,style);
-%    elseif(xy_from_data)
-%       
-%       %PlotPositionXYfromDat(list_of_folder_xy,experiment_index,name_of_methods_xy,style_xy,interpolation_step);
-%        PlotPositionXYZfromDat(list_of_folder_xy,experiment_index,name_of_methods_xy,style_xy,interpolation_step);
-%    else
-for i=1:size(list_of_folder,2)
-   % here i take only the first because i make the hypotesis that the
-   % data necessary here for each series of experiment are all similar
-   % to the first of each series
-   cur_folder_path = BuildMatFilePath(list_of_folder{i},1);
-   [number_of_iteration,controller,time_struct,cur_qi,cur_qdi,cur_fixed_step,cur_scene,bot] = GetAdditionalData(cur_folder_path);
-   
-   if(isempty(list_of_subfolder{1,i})) 
-      list_of_subfolder{1,i} = 1:number_of_iteration;
-   end
-   controller_first_iteration{i}= controller;
-   list_time_struct{i}= time_struct;
-   %TODO generalize to multiple experiment
-   qi = cur_qi;
-   qdi = cur_qdi;
-   %----
-   fixed_step(i) = cur_fixed_step;
-   all_scene{i} = cur_scene;
-   all_bot{i} = bot;
-end
-
- all_cur_fitness = [];
- all_cur_alpha   = [];
-
-% here i collect fitness, activation function and controllers for each experiment specified in list_of_folder
-for i=1:size(list_of_folder,2)
-
-   for j=1:size(list_of_subfolder{1,i},2)
-      cur_folder_path = BuildMatFilePath(list_of_folder{i},list_of_subfolder{1,i}(1,j));
-      [cur_fitness,cur_alpha,cur_time,cur_control] = GetFitnessAlphaTimeControl(cur_folder_path);
-      all_cur_fitness = [all_cur_fitness, cur_fitness];
-      all_cur_alpha  =  [all_cur_alpha cur_alpha];
-      all_exec_cur_time(1,j) = cur_time;
-      all_controller{i,j} = cur_control;
-   end
-
-   all_fitness{i} = all_cur_fitness;
-   all_alpha{i} = all_cur_alpha;
-   all_exec_time{i} = all_exec_cur_time;
-   all_cur_fitness = [];
-   all_cur_alpha   = [];
-   all_exec_cur_time = [];
-
-end
-
-%ComputeMeanVarianceTime(all_exec_time);
-%CountSuccessRate(all_fitness,tresh_for_count_success_experiment);
-
-PlotFitness(all_fitness,variance_flag,name_of_methods,color_list,transparent_flag);
-
-if(alpha_flag)
-   PlotAlpha(all_alpha,controller_first_iteration,list_time_struct);
-end
-
-
-if(position_joint_torque_flag)
-
-   [all_q,all_tau,all_ee,all_elbow]=ComputeTorqueAndCartesianJointPos(all_controller,list_time_struct,qi,qdi,fixed_step,interpolation_step);
-
-   PlotJoints(all_q,list_time_struct);
-   PlotTorque(all_tau,list_time_struct,interpolation_step);
-   PlotTrajectory(all_ee,all_scene,list_time_struct,qi,all_bot);
-   PlotTrajectory(all_elbow,all_scene,list_time_struct,qi,all_bot);
-end
-
-end
-
-% end
-
-
-% this function give back the path to .mat file of the current experiment 
-function result=BuildMatFilePath(folder_name,experiment_index)
-
-   allpath=which('FindData.m');
-   path=fileparts(allpath);
-   result = strcat(path,'/results/',folder_name,'/',num2str(experiment_index),'_of_',folder_name,'/data.mat');
-
-end
-
-% eith this function i collect all the data that are necessary for the
-% subsequent method. the hypothesis is that the firsrt experiment share the
-% same data with the others 
-function [n_of_iter, control ,t_struct,qinit,qdinit,cur_fixed_step,scene,bot] = GetAdditionalData(cur_mat_path)
-
-   load(cur_mat_path);
+    close all 
+    clear variable 
+    clc
+    % if i give more than one result folder i will merge the result all
+    % togheter
+    list_of_folder = {'1_iCub_1.0'};
+    list_of_subfolder1 = [1 2 3];% 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20];  % here i specify the folder that i want to take into account for the plot (in this way i remove all the failures)
+    list_of_subfolder2 = [];
+    list_of_subfolder = {list_of_subfolder1,list_of_subfolder2};
+    % name of the method that will be displayed in the legenda of graph
+    name_of_the_experiment = {'test1'};
+    color_list={'b','r','m','g','c','k'};
+    % interpolation step for the tau if we use a small step wi will badly
+    % capture the value of the applied torque
+    interpolation_step = 0.001; 
+    % SET OF FLAGS TO SWITCH ON AND OFF DIFFERENT FEATURE OF THE METHOD
+    variance_flag = true; % to select if i want the variance or not on the fitness graph
+    transparent_flag = 1; % make transparent variance in fitness (0 or 1)
+    fitness_flag = false;
+    alpha_flag =false;     % plot mean and variance for the alpha 
+    joint_and_torques_flag = true;
+    % init 
+    all_cur_fitness = [];
+    all_cur_alpha   = [];
+    for i=1:size(list_of_folder,2)
+        for j = 1:length(list_of_subfolder{i})
+           % i construct the the path to the current folder
+           allpath=which('FindData.m');
+           path=fileparts(allpath);
+           complete_path = strcat(path,'/results/',list_of_folder{i},'/',num2str(j),'_of_',list_of_folder{i});
+           data_path = strcat(path,'/results/',list_of_folder{i},'/',num2str(j),'_of_',list_of_folder{i},'/data.mat');
+           % here i load the variable that i need for the experiments
+           load(data_path,'inst','mean_perfomances','time_sym_struct','input','controller','bot1','learn_approach','bestAction','exec_time');        
+           % only for icub i have to change the step size due to a bug in
+           % the initialization 
+           if strcmp(input{1, 1},'icub_matlab')
+               %  TODO once the data are bug free i can remove this if
+                time_sym_struct.step = input{1, 2}.sim_step;
+           end
+           [alpha,fitness,torque,cartesian_position,joint_position]=ExperimentPlotRoutine(complete_path,input,time_sym_struct,bestAction,bot1,learn_approach,interpolation_step);
+           all_cur_fitness = [all_cur_fitness, fitness'];
+           all_cur_alpha{1,j}  =  alpha;
+           all_q{i,j} = joint_position;
+           all_tau{i,j} = torque;
+           
+           all_cartesian_position{i,j} = cartesian_position;
+        end
+        
+        time_struct{i} = time_sym_struct;
+        all_fitness{i} = all_cur_fitness;
+        all_alpha{i} = all_cur_alpha;
+        
+        % clean the variables
+        all_cur_fitness = [];
+        all_cur_alpha   = [];
+        all_cur_q = [];
+        all_cur_tau = [];
+    end
     
-   n_of_iter = number_of_iteration;
-   t_struct = time_sym_struct;
-   control = controller;
-   qinit  = qi;
-   qdinit = qdi;
-   cur_fixed_step = fixed_step;
-   scene = name_scenario;
-   bot = bot1;
+    
+    if(fitness_flag)
+       PlotFitness(all_fitness,variance_flag,name_of_the_experiment,color_list,transparent_flag);
+    end
+    
+    if(alpha_flag)
+       PlotAlpha(all_alpha,time_struct);
+    end
+    
+    
+    if(joint_and_torques_flag)
+       %PlotJoints(all_q,time_struct);
+       %PlotTorque(all_tau,time_struct,interpolation_step);
+       for ijk = 1:length(all_cartesian_position{1,1})
+           % if i have more than one cartesian position to plot i have to
+           % collct all of them in a unique cell vector 
+           for ikk =1:size(all_cartesian_position,1)
+               for jkk=1:size(all_cartesian_position,2)
+                    cart_pos_{ikk,jkk} = all_cartesian_position{ikk,jkk}{ijk};
+               end
+           end
+            PlotTrajectory(cart_pos_,time_struct);
+       end
+    end
 end
 
-% with this function i collect best fitness value for each generation and 
-% the best alpha combination fo the current experiment
-% and the time execution of the experiment
-function [cur_fitness,cur_alpha,cur_time,cur_controller]=GetFitnessAlphaTimeControl(cur_mat_path)
-
-   load(cur_mat_path);
-   
-   for i = 1:size(bestAction.hist,2)
-      cur_fitness(i,1) = bestAction.hist(1, i).performance;
-   end
-   
-   cur_time = exec_time;
-   cur_alpha = bestAction.parameters';
-   % update controller with the current best action
-   controller.UpdateParameters(cur_alpha);
-   % i have to clean this variable because in fdyn he expect that it is
-   % empty
-   controller.current_time = [];
-   % i have to provide the controller with this new field that i add after
-   % taking data
-   if(isempty( controller.torques_time))
-      controller.torques_time = cell(controller.subchains.GetNumChains());
-      for i = 1 :controller.subchains.GetNumChains()
-         controller.torques_time{i} = [];
-      end
-   end
-   cur_controller = controller;
-
-end
 
 
 
 % with this function i plot the fitness for each exeperiment and if i
 % define more folder i merge the result in one graph
-function PlotFitness(all_fitness,variance_flag,name_of_methods,color_list,transparent_flag)
+function PlotFitness(all_fitness,variance_flag,name_of_the_experiment,color_list,transparent_flag)
    hold on;
    handle_legend = [];
    for i = 1:size(all_fitness,2)
@@ -212,7 +127,7 @@ function PlotFitness(all_fitness,variance_flag,name_of_methods,color_list,transp
          handle_legend = [handle_legend,h.mainLine];
          xlabel('generations','FontSize',16);
          ylabel('fitness','FontSize',16);
-         h_legend = legend(handle_legend,name_of_methods);
+         h_legend = legend(handle_legend,name_of_the_experiment);
          set(h_legend,'FontSize',15);
          
       else
@@ -224,7 +139,7 @@ function PlotFitness(all_fitness,variance_flag,name_of_methods,color_list,transp
          plot(generation',fit_mean,'r-o','Color',color_list{i},'markerfacecolor',color_list{i})
          xlabel('generations','FontSize',16);
          ylabel('fitness','FontSize',16);
-         h_legend = legend(name_of_methods);
+         h_legend = legend(name_of_the_experiment);
          set(h_legend,'FontSize',15);
          
       end
@@ -242,25 +157,21 @@ function PlotFitness(all_fitness,variance_flag,name_of_methods,color_list,transp
 end
 
 % plot mean and std deviation for each alpha having a bunch of experiment
-function PlotAlpha(all_alpha,controller,time_struct)
-
-   for k = 1:size(all_alpha,2)
-      
+function PlotAlpha(all_alpha,time_struct)
+   % one for each folder
+   for k = 1:size(all_alpha,1)
       time = time_struct{k}.ti:time_struct{k}.step:time_struct{k}.tf;
       cur_alpha_mean_time = zeros(size(time,1),1);
       cur_alpha_var_time  = zeros(size(time,1),1);
-      
-      for kk = 1:size(all_alpha{k},2)
-         % build numeric theta for best action 
-         controller{k}.UpdateParameters(all_alpha{k}(:,kk))
-
-         % plot alpha 
-         for ii = 1:size(controller{k}.alpha,1)
-             for jj = 1:size(controller{k}.alpha,2)
+      % all the repetition of the same experiment
+      for kk = 1:size(all_alpha{k,1},2)
+         % compute alpha 
+         for ii = 1:size(all_alpha{k,1}{1,kk},1)
+             for jj = 1:size(all_alpha{k,1}{1,kk},2)
 
                  i=1;
                  for t = time
-                     vec_values(i,jj*ii) = controller{k}.alpha{ii,jj}.GetValue(t); 
+                     vec_values(i,jj*ii) = all_alpha{k,1}{1,kk}{ii,jj}.GetValue(t); 
                      i=i+1;
                  end
 
@@ -277,8 +188,8 @@ function PlotAlpha(all_alpha,controller,time_struct)
    for k=1:size(alphas_time,1)
       time = time_struct{k}.ti:time_struct{k}.step:time_struct{k}.tf;
       % compute mean and average and plot it
-      for ii = 1:size(controller{k}.alpha,1)
-          for jj = 1:size(controller{k}.alpha,2)
+      for ii = 1:size(all_alpha{k,1},1)
+          for jj = 1:size(all_alpha{k,1},2)
 
               cur_alpha_time = [];
               
@@ -313,58 +224,6 @@ function PlotAlpha(all_alpha,controller,time_struct)
       end
       cur_alpha_mean_time = [];
       cur_alpha_var_time  = [];
-   end
-
-   
-   
-   
-   
-
-end
-
-% i need to compute directly the mean for each variable to avoid 
-function [all_q,all_tau,all_ee,all_elbow]=ComputeTorqueAndCartesianJointPos(all_controller,time_sym_struct,qi,qdi,fixed_step,interp_step)
-   
-   RAD = 180/pi;
-
-   for i=1:size(all_controller,1) 
-      for j = 1:size(all_controller,2)
-            if(isobject(all_controller{i,j}))
-                  [t, q, qd] = DynSim(time_sym_struct{i},all_controller{i,j},qi(i,:),qdi(i,:),fixed_step(i));
-                  all_q{i,j} = q{1}'*RAD;
-                  % all_tau is a cell{i,j} of cell{i}
-                  all_tau{i,j} = InterpTorque(all_controller{i,j},time_sym_struct{i},interp_step);
-                  %all_tau{i,j} = all_controller{i,j}.torques{1};
-                  [ee,elbow]=ComputePositions(q{1},t,all_controller{i,j});
-                  all_ee{i,j} = ee;
-                  all_elbow{i,j} = elbow;   
-            end
-      end
-   end
-
-
-end
-
-function [q,tau,ee,elbow]=ComputeTorqueAndCartesianJointPosSingleControllerUknownSolution(controller,time_sym_struct,qi,qdi,fixed_step,torque_interp_step)
-
-   if(isobject(controller))
-         [t, q, qd] = DynSim(time_sym_struct,controller,qi,qdi,fixed_step);
-         tau = InterpTorque(controller,time_sym_struct,torque_interp_step);
-         [ee,elbow]=ComputePositions(q{1},t,controller);
-   end
-
-end
-
-
-function [q,tau,ee,elbow]=ComputeTorqueAndCartesianJointPosSingleControllerKnownSolution(controller,q,t,time_sym_struct,torque_interp_step)
-
-   
-   if(isobject(controller))
-         
-         % all_tau is a cell{i,j} of cell{i}
-         tau = InterpTorque(controller,time_sym_struct,torque_interp_step);
-         [ee,elbow]=ComputePositions(q,t,controller);
-        
    end
    
 end
@@ -411,9 +270,9 @@ function PlotJoints(all_q,list_time_struct)
       %time = 1:size(result_avg,1);
       
       % plot each q
-      for h=1:size(result_avg,2)
+      for h=1:size(result_avg,1)
          figure
-         hh = shadedErrorBar(time,result_avg(:,h),result_std(:,h),{'Color','r','LineWidth',3});
+         hh = shadedErrorBar(time,result_avg(h,:),result_std(h,:),{'Color','r','LineWidth',3});
          xlabel('t','FontSize',16);
          ylabel(strcat('q_{',num2str(h),'}'),'FontSize',16);
          names_legend = { 'mean','std deviation'};
@@ -456,8 +315,45 @@ end
 
 end
 
-function PlotTrajectory(all_position,scenes,list_time_struct,qi,bot)
+% function PlotTrajectory(all_position,scenes,list_time_struct,qi,bot)
+% 
+%     for i = 1:size(all_position,1)
+%          time = list_time_struct{i}.ti:list_time_struct{i}.step:list_time_struct{i}.tf;
+%          result_avg = zeros(size(all_position{i,1},2),size(all_position{i,1},1));
+%          result_std = zeros(size(all_position{i,1},2),size(all_position{i,1},1));
+%          for k = 1:size(all_position{i,1},2)
+%             cur_sample = [];
+%             for j = 1:size(all_position,2)
+% 
+%                cur_sample = [cur_sample ,all_position{i,j}(:,k)];
+% 
+%             end
+%             result_avg(k,:) = mean(cur_sample,2)';
+%             result_std(k,:) = std(cur_sample,0,2)';
+% 
+%          end
+%          
+%          figure
+%          bot{i}.plot(qi{1,1})
+%          % plot avg final trajectory
+%          text = LoadScenario(scenes{i});
+%          eval(text);
+%          plot3(result_avg(:,1),result_avg(:,2),result_avg(:,3),'Color','r','LineWidth',2);
+% 
+%          label={'x','y','z'};
+% 
+%          for ii =1:size(result_avg,2)
+%              figure
+%              shadedErrorBar(time,result_avg(:,ii),result_std(:,ii),{'Color','k','LineWidth',3});  
+%               xlabel('t','FontSize',16);
+%               ylabel(label{ii},'FontSize',16);
+%          end
+%     end
+% end
 
+
+
+function PlotTrajectory(all_position,list_time_struct)
     for i = 1:size(all_position,1)
          time = list_time_struct{i}.ti:list_time_struct{i}.step:list_time_struct{i}.tf;
          result_avg = zeros(size(all_position{i,1},2),size(all_position{i,1},1));
@@ -473,24 +369,16 @@ function PlotTrajectory(all_position,scenes,list_time_struct,qi,bot)
             result_std(k,:) = std(cur_sample,0,2)';
 
          end
-         
-         figure
-         bot{i}.plot(qi{1,1})
-         % plot avg final trajectory
-         text = LoadScenario(scenes{i});
-         eval(text);
-         plot3(result_avg(:,1),result_avg(:,2),result_avg(:,3),'Color','r','LineWidth',2);
 
-         label={'x','y','z'};
-
-         for ii =1:size(result_avg,2)
+         for ii =1:size(result_avg,1)
              figure
-             shadedErrorBar(time,result_avg(:,ii),result_std(:,ii),{'Color','k','LineWidth',3});  
+             shadedErrorBar(time,result_avg(ii,:),result_std(ii,:),{'Color','k','LineWidth',3});  
               xlabel('t','FontSize',16);
-              ylabel(label{ii},'FontSize',16);
+              %ylabel(label{ii},'FontSize',16);
          end
     end
 end
+
 
 function PlotExpOne(list_of_data_to_plot,style)
       

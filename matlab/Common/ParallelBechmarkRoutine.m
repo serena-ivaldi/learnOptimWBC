@@ -186,17 +186,17 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
 
     if(strcmp(learn_approach,'fmincon'))
         inst = ObjProblem(search_space_dimension,cmaes_value_range,constr,learn_approach,run_function,fitness,clean_function,input);
-        tic
+        starting_time = tic;
         [mean_performances,bestAction] = inst.minimize(start_action,niter,threshold);
         % execution time
-        m4 = toc;
+        m4 = toc(starting_time);
         m8 = inst;
     else
         inst =  Optimization.Instance(constr,learn_approach,run_function,fitness,clean_function,input);
-        tic
+        starting_time = tic;
         [mean_performances, bestAction,~,~,~,~,G_data2save] = inst.CMAES(search_space_dimension,start_action,niter,explorationRate,cmaes_value_range); 
         % execution time
-        m4 = toc;
+        m4 = toc(starting_time);
         % many data on the experiment
         inst.data2save = G_data2save;
         m8 = inst;
