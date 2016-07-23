@@ -23,7 +23,7 @@ function PLotExperimentResultsRobustness
     variance_flag = true; % to select if i want the variance or not on the fitness graph
     transparent_flag = 1; % make transparent variance in fitness (0 or 1)
     fitness_flag = false;
-    alpha_flag =false;     % plot mean and variance for the alpha 
+    alpha_flag =true;     % plot mean and variance for the alpha 
     joint_and_torques_flag = true;
     % init 
     all_cur_fitness = [];
@@ -74,8 +74,8 @@ function PLotExperimentResultsRobustness
     
     
     if(joint_and_torques_flag)
-       %PlotJoints(all_q,time_struct);
-       %PlotTorque(all_tau,time_struct,interpolation_step);
+       PlotJoints(all_q,time_struct);
+       PlotTorque(all_tau,time_struct,interpolation_step);
        for ijk = 1:length(all_cartesian_position{1,1})
            % if i have more than one cartesian position to plot i have to
            % collct all of them in a unique cell vector 
