@@ -1,4 +1,9 @@
-function fit  = fitnessHumanoidsIcub4(obj,output) 
+function fit  = fitnessHumanoidsIcub4(obj,output)
+% fitness function of the two arms + manipulation experience on the iCub :
+% reaching two goals behind a wall, one with each hands, before a fixed
+% time Tswitch after which the goals positions behind the wall change and a
+% fixed distance constraints activate. All that done with minimal torques
+%and under the usual constraints : joints limits, torques limits and colision detection.
     
     t = output{1};
     q = output{2};

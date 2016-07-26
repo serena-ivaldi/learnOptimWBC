@@ -1,5 +1,43 @@
 function plotWActivation(obj,chi,params, alphas,names_of_subplot,grouping,colors,legends, varargin)
-
+%% plotWActivation
+% Create a subplot figure where the successive positions of the iCub
+% according to the matrix chi will be displayed along with the evolutiion
+% of the activation function function of the choosen tasks
+%   Arguments :
+%       chi   - matrix of the base + joints positions on one dimension and
+%               the time steps on the other dimension
+%      params - Structure of all needed parameters
+%      alphas - The activation functions
+% names_of_subplot - Cell of strings of the titles of the activation functions 
+%               subplots you want to create. By the lenght of this cell you
+%               determine the number of subplots created
+%    grouping - Cell of vector of the numbers of the alphas you want
+%               to plot in the order the want to plot and group them
+%      colors - Cell of strings of the Color option you want to use for
+%               each line (each alpha). Use 'default' if do not you want to
+%               specify a color for a line
+%     legends - Cell of strings of the names you want to use as legend in
+%               each subplot of activation functions. Use 'none' if you do
+%               not want any legend for a line
+%     'movie' - Option allowing to save each figure in order to make a
+%               video
+%  'slowmode' - Activate the slowmode where you have to click on the figure
+%               in order to display the next time step
+%          fc - If in slowmode you also passe the contact forces vector fc
+%               it will also diplay on an other figure the support convex
+%               hull and the center of pressures
+%
+% Example of use 
+%       names_of_subplot = {'Right arm tasks','Posture task','Left arm tasks'};
+%       grouping = {[1, 2], [5], [3, 4]};
+%       colors = {{'r', 'b'}, {'default'}, {'r', 'b'}};
+%       legends = {{'elbow','hand'}, {'none'} ,{'elbow','hand'}};
+%       icub.plotWActivation(q,input{2},alphas,names_of_subplot,grouping,colors,legends);
+%
+%       This will plot the iCub along with 3 activation functions plot
+%       where the 1st and 2nd alphas are plot in red and blue legended as
+%       'elbow' & 'hand' in the first subplot then 5th alpha alone with no
+%       color specification nor legend and then the 3rd and 4th alphas together
 
 params.movie = false;
 params.slowmode = false;

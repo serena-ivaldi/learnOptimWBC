@@ -4,7 +4,6 @@ clc
 
 %% initialize all the data
 optim = false;
-configuration_file_name = 'RP_humanoid_test_iCub_1';
 
 configuration_file_name = 'RP_humanoid_test_iCub_4';
 
@@ -76,10 +75,10 @@ if(ee_trajectory || elbow_traj)
             izy = izy + 1;
         end
     else
-        tags = {'r_wrist_1','r_elbow_1','l_wrist_1','l_elbow_1'};
-        names = {'right hand','right elbow','left hand','left elbow'};
-        colors = {'r','c','r','c'};
-        style = {'-','-',':',':'};
+        tags = {'r_wrist_1','r_elbow_1','l_wrist_1','l_elbow_1'}; %names of the joints whose trajectory are ploted
+        names = {'right hand','right elbow','left hand','left elbow'}; %names to display in the legend
+        colors = {'r','c','r','c'}; %colors of the trajectories
+        style = {'-','-',':',':'}; %style of the trajectories
         output = ComputePositionsIcub(q,t,controller,tags);
         handle_vector = [];
         for izy = 1:length(tags)
@@ -96,16 +95,16 @@ end
 
 
 if(~video && ~save_fig)
-    zoom =  4.5;% 5.0698;
+    zoom =  4.5;
     set(gca,'CameraViewAngle',zoom);
-    camera_position = [14.3762    9.7004   15.0093]; %[0    0   5]
+    camera_position = [7.9387   -2.8753    8.3434];
     campos(camera_position)
     if ~(isa(cur_bot,'DummyRvc_iCub'))
         bot1.plot(q{1},'fps',fps);
     else
         bot1.plot(q,input{2});
         
-        %plot with display of the activation function
+        %plot with the activation function
         %names_of_subplot = {'Right arm tasks','Posture task','Left arm tasks'};
         %grouping = {[1, 2], [5], [3, 4]};
         %colors = {{'r', 'c'}, {'default'}, {'r', 'c'}}; %'default' if no chnage in the color
@@ -124,9 +123,9 @@ elseif(video)
     allpath = which('FindData.m');
     path = fileparts(allpath);
     path = strcat(path,'/video');
-    zoom =  4.5;% 5.0698;
+    zoom =  4.5;
     set(gca,'CameraViewAngle',zoom);
-    camera_position = [7.9387   -2.8753    8.3434];%[9.4683   -3.3846    6.2414];% [14.3762    9.7004   15.0093]; %[0    0   5]
+    camera_position = [7.9387   -2.8753    8.3434];
     campos(camera_position)
     if ~(isa(cur_bot,'DummyRvc_iCub'))
         bot1.plot(q{1},'movie',path);
@@ -134,7 +133,7 @@ elseif(video)
         %standard plot
         %bot1.plot(q,input{2},'movie',path);
         
-        %plot with display of the activation function
+        %plot with the activation function
         names_of_subplot = {'Right arm tasks','Posture task','Left arm tasks'};
         grouping = {[1, 2], [5], [3, 4]};
         colors = {{'r', 'c'}, {'default'}, {'r', 'c'}}; %'default' if no chnage in the color

@@ -43,12 +43,12 @@ xyzpatch.faces   = [ 1 2 3 4;
     2 6 5 1;
     3 7 8 4];
 
-lnkpatch = patch('vertices',xyzpatch.vertices,'faces',xyzpatch.faces,'FaceColor','red'); %'FaceAlpha',0.2,
+lnkpatch_wall = patch('vertices',xyzpatch.vertices,'faces',xyzpatch.faces,'FaceColor',[255, 165, 0]./255,'FaceAlpha',0.8);
 
 r_e_e_point = [0.35,-0.15,0.7];
 r_elbow_point = [0.24,-0.23,0.7];
-scatter3(r_elbow_point(1,1),r_elbow_point(1,2),r_elbow_point(1,3),130,'b');
-scatter3(r_e_e_point(1,1),r_e_e_point(1,2),r_e_e_point(1,3),130,'r');
+scatter3(r_elbow_point(1,1),r_elbow_point(1,2),r_elbow_point(1,3),130,'c','LineWidth',3);
+scatter3(r_e_e_point(1,1),r_e_e_point(1,2),r_e_e_point(1,3),130,'r','LineWidth',3);
 
 % wrist_point = [-0.174,-0.317,0.480];
 % e_e_point = [-0.022,-0.722,0.709];

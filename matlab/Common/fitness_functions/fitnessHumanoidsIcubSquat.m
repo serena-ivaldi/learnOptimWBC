@@ -1,4 +1,6 @@
-function fit  = fitnessHumanoidsIcubSquat(obj,output) 
+function fit  = fitnessHumanoidsIcubSquat(obj,output)
+% fitness function of the squating experience
+% Work In Progress
     
     t = output{1};
     q = output{2};

@@ -237,9 +237,11 @@ else
     
     fc              = (JcMinv*Jc_t)\(JcMinv*h -JcMinvS*tau -dJcNu -K_corr_vel.*Jc*Nu -K_corr_pos.*pos_feet_delta);
     
-    %tauContact = Jc_t*fc;
-    %tauContact(7:end) = 0;
-    dNu     = M\(Jc_t*fc + [zeros(6,1); tau]-h);
+    tauContact = Jc_t*fc;
+    tauContact1 = M\(Jc_t*fc);
+%     tauContact(7:end) = 0;
+%     tauContact2 = M\(tauContact);
+    dNu     = M\(tauContact + [zeros(6,1); tau]-h);
 end
 
 dchi    = [dx;dNu];

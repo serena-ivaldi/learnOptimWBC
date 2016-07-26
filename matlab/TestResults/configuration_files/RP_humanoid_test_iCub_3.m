@@ -8,17 +8,7 @@ time_struct.tf = 3;
 time_struct.step = 0.001;
 
 %% TASK PARAMETERS
-%name_dat = 'sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE';
-%name_dat = 'sere/LBR4p9.0_scene5_GHC_table_and_an_one_attractive_point_and_posture_task_SERE';
-%name_dat = 'LBR4p8.0_scene9_GHC_test_wall_and_two_attractive_point';
-%name_dat = 'LBR4p11.0_scene9_UF_mulitple_task_stability_Null_space_projectors';
-%name_dat = 'LBR4p10.0_scene10_UF_lemniscate';
-%name_dat = 'LBR4p12.0_scene0_UF_test_elastic_reference';
-%name_dat = 'Jaco1.3_scene1.1';
-%name_dat = 'LBR4p2.2_scene2_generalization';
-%name_dat = 'lwrsimple1.0_scene_test_obs';
 name_dat = 'iCub_1.0';
-%name_dat = 'humanoid_bench_generator_lbrsimple_1.0';
 %path=LoadParameters(name_dat);
 %load(path);
 %% TYPE OF CONTROLLER
@@ -38,16 +28,6 @@ chains = SubChains(target_link,robots,bot1);
 %%  REFERENCE PARAMETERS
 deg = pi/180;
 % primary trajectory
-% traj_type = {'impedance'};
-% control_type = {'x'};
-% type_of_traj = {'func'};
-% geometric_path = {'fixed'};
-% time_law = {'none'};
-% %parameters first chains
-% geom_parameters{1,1} = [0.30 -0.71 0.5];
-% %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
-% dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
-
 traj_type = {'joint'};
 control_type = {'none'};
 type_of_traj = {'sampled'};
@@ -99,7 +79,7 @@ switch CONTROLLERTYPE
 end
 
 %% SCENARIO
-name_scenario = 'iCub_3';%'lbr_scenario_2_gen' lbr_scenario2; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
+name_scenario = 'iCub_3';
 
 %% RBT SIMULATOR PARAMETERS
 time_sym_struct = time_struct;
@@ -128,7 +108,6 @@ elseif strcmp(simulator_type{1},'icub_matlab')
     joints_initial_values{1,3} = [0 0 0 0 0 0 0];%[-20.0  30.0  0.0  45.0  0.0 0.0 0.0];
     joints_initial_values{1,4} = [0 0 0 0 0 0];%[25.5   0.1   0.0  -18.5  -5.5  -0.1];
     joints_initial_values{1,5} = [0 0 0 0 0 0];%[25.5   0.1   0.0  -18.5  -5.5  -0.1];
-    %'l_hip_pitch','l_hip_roll','l_hip_yaw','l_knee', l_ankle_pitch','l_ankle_roll'
     
     params.feet_on_ground =  [1,1];
     params.numContacts = sum(params.feet_on_ground,2);
@@ -199,7 +178,7 @@ switch CONTROLLERTYPE
         precomp_sample = false;
         % value of theta that we have to change when we want to execute the result
         a =  0;
-        numeric_theta = [a a a a a ];
+        numeric_theta = [a a a a a];
         
         %constant alpha
         value1 = zeros(chains.GetNumTasks(1));
@@ -221,8 +200,8 @@ switch CONTROLLERTYPE
         % regularized case i have to do N^(-1)
         % not regularized case i have N^(-1/2)
         metric = {'M'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);
-        kd = [110,110,110,110,110,110,110];
-        kp = [70,70,70,70,70,70,70]; % row vector one for each chain
+        kd = 100*[110,110,110,110,110,110,110];
+        kp = 100*[70,70,70,70,70,70,70]; % row vector one for each chain
         for i= 1:chains.GetNumChains()
             for par = 1:chains.GetNumTasks(i)
                 if(strcmp(traj_type{i},'impedance'))
@@ -318,8 +297,6 @@ switch CONTROLLERTYPE
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
         niter = 100;  %number of generations
         cmaes_value_range = [-14 , 14];  % boudn that define the search space
-        %cmaes_value_range{1} = [-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-0.15,-0.15,-0.15 ];  % lower bound that define the search space
-        %cmaes_value_range{2} = [14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,0.15,0.15,0.15];  % upper bound that define the search space
         learn_approach = '(1+1)CMAES'; %CMAES (1+1)CMAES
         %--- Parameter for constraints method
         method_to_use = 'vanilla';  % adaptive , vanilla , empty

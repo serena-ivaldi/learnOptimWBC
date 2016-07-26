@@ -1,5 +1,8 @@
 function fit  = fitnessHumanoidsIcub2arms(obj,output) 
-    
+% fitness function of the two arms experience on the iCub : reaching two
+% goals behind a wall, one with each hands, with minimal torques. Under
+% joints limits, torques limits and colision detection as constraints.
+
     t = output{1};
     q = output{2};
     
@@ -54,7 +57,7 @@ function fit  = fitnessHumanoidsIcub2arms(obj,output)
         % subchain in the first chain.
         %%
         attr_pos_r = contr.references.GetTraj(1,1,t(i)); 
-        attr_pos_l = contr.references.GetTraj(1,2,t(i)); 
+        attr_pos_l = contr.references.GetTraj(1,3,t(i)); 
         traj_err = traj_err + norm((ee_r - attr_pos_r),L) + norm((ee_l - attr_pos_l),L);
     end 
     % max effort

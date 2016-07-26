@@ -54,8 +54,8 @@ type_of_traj = {'sampled','sampled','sampled'};
 geometric_path = {'fixed','fixed','fixed'};
 time_law = {'none','none','none'};
 %parameters first chains
-geom_parameters{1,1} = [0.35,-0.15,0.7]; %[0.38,-0.1,0.7];
-geom_parameters{1,2} = [0.24,-0.23,0.7]; %[0.24,-0.23,0.7];
+geom_parameters{1,1} = [0.35,-0.15,0.7]; %hand
+geom_parameters{1,2} = [0.24,-0.23,0.7]; %elbow
 geom_parameters{1,3} = [0;0.785398163397448;0;0;-0.349065850398866;0.523598775598299;0;0;0.785398163397448;0;0;0;0.523598775598299;0;0;0;0]';
 dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.ndof,1);
 
@@ -111,7 +111,7 @@ switch CONTROLLERTYPE
 end
 
 %% SCENARIO
-name_scenario = 'iCub_1';%'lbr_scenario_2_gen' lbr_scenario2; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
+name_scenario = 'iCub_1';
 
 %% RBT SIMULATOR PARAMETERS
 time_sym_struct = time_struct;

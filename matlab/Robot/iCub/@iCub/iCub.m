@@ -235,7 +235,8 @@ classdef iCub < handle
             qjInit      = qjInit.*(pi/180);
         end
         
-        
+        % Same as the method fkine but can be call at anytime. By tag you
+        % specify through a string the name of the joint you want
         function  [x,R] = offlineFkine(rob,chi,tag)
             x_base  = chi(1:3,:);  %TODO floating base flag required (parameter of the simulator)
             qt_b = chi(4:7,:);  %TODO floating base flag required (parameter of the simulator)
@@ -246,6 +247,8 @@ classdef iCub < handle
             [x,R]    = frame2posrot(fkine);
         end
         
+        % Same as the method jacob0 but can be call at anytime. By tag you
+        % specify through a string the name of the joint you want
         function  jacob0 = offlineJacob0(rob,chi,tag)
             x_base  = chi(1:3,:);  %TODO floating base flag required (parameter of the simulator)
             qt_b = chi(4:7,:);  %TODO floating base flag required (parameter of the simulator)
@@ -258,7 +261,6 @@ classdef iCub < handle
         % Used in AllRUntimeParameters
         function vector = createConstraintsVector(obj)
             vector = [];
-            %deg = (pi/180);
             for i = 1:obj.ndof
                 vector = [vector, obj.UBjointLimit(i), obj.LBjointLimit(i)];
             end

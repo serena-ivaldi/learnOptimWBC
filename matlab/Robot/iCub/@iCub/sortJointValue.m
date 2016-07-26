@@ -1,7 +1,8 @@
-% Sort the joints values valueVector of the joints named in string_search
-% to match the same order in the joint position vector qj as the
-% order in the urdf file
 function qjout = sortJointValue(obj,string_search,qj,valueVector)
+%% sortJointValue
+% Sort the joints values valueVector of the joints listed in the cell of
+% strings string_search to match the same order in the joint position
+% vector qj as the order in the urdf file
 
 qjout = qj;
 for i = 1:length(string_search)
