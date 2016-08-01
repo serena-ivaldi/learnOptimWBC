@@ -73,7 +73,7 @@ end
  all_cur_fitness = [];
  all_cur_alpha   = [];
 
-% here i collect fitness, acitvation function and controllers for each experiment specified in list_of_folder
+% here i collect fitness, activation function and controllers for each experiment specified in list_of_folder
 for i=1:size(list_of_folder,2)
 
    for j=1:size(list_of_subfolder{1,i},2)

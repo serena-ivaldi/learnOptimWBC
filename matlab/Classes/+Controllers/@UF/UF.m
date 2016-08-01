@@ -18,6 +18,7 @@ classdef  UF < Controllers.AbstractController
       torques          %  resulting torque (cell array of matrix)
       torques_time     % all the time istant when i aply a torque.
       display_opt      % display settings display_opt.step display_opt.trajtrack
+      visual_param     % temporary
    end
 
 
@@ -67,7 +68,7 @@ classdef  UF < Controllers.AbstractController
 %             obj.display_opt.step =disp_opt.step;
 %             obj.display_opt.trajtrack = disp_opt.trajtrack;   
 %          end
-         
+         obj.visual_param.fc = []; % temporary
        end    
       % i do  not need cell object because the time is unique
       function SaveTime(obj,ind_subchain,time)
@@ -142,7 +143,11 @@ classdef  UF < Controllers.AbstractController
               M = obj.subchains.GetM(q);
               % i include the external forces inside F
               F = obj.subchains.GetF(q,qd,Fc,Jc_t);
-              [M,F] = obj.subchains.RemoveFloatingBase(M,F,7);
+              if (obj.GetWholeSystem.active_floating_base)
+                  [M,F] = obj.subchains.RemoveFirst6(M,F,7);
+              else
+                  [M,F] = obj.subchains.RemoveFloatingBase(M,F,7);
+              end
               q = q';
               qd = qd';
           end

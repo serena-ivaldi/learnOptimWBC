@@ -1,4 +1,7 @@
 function fit  = fitnessHumanoidsIcub(obj,output) 
+% fitness function of the one arm experience on the iCub : reaching a goal
+% behind a wall with minimal torques. Under joints limits, torques limits
+% and colision detection as constraints.
     
     t = output{1};
     q = output{2};

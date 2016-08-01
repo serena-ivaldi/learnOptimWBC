@@ -129,6 +129,13 @@ classdef  SubChains < handle
            M = M(start:end,start:end);
            F = F(start:end,:);        
        end
+       
+       function [M,F,Jc_t] = RemoveFirst6(obj,M,F,start) 
+           % here i make the hypotesis that the floating base part is in
+           % the upper part of the dynamic matrices
+           M = M(start:end,:);
+           F = F(start:end,:);        
+       end
       
     end
       

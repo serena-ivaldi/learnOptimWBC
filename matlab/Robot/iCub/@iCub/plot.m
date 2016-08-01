@@ -1,94 +1,81 @@
-function plot(obj,chi,param, varargin)
+function plot(obj,chi,params, varargin)
+%% plot
+% Plot on the current figure (which is supposed to be the scene) the
+%   successive positions of the iCub according to the matrix chi
+%   Arguments :
+%       chi   - matrix of the base + joints positions on one dimension and
+%               the time steps on the other dimension
+%      params - Structure of all needed parameters
+%     'movie' - Option allowing to save each figure as images in order to
+%               make a video
+%        path - If in movie mode it is the path where to save the images
+%  'slowmode' - Activate the slowmode where you have to click on the figure
+%               in order to display the next time step
+%          fc - If in slowmode you also passe the contact forces vector fc
+%               it will also diplay on an other figure the support convex
+%               hull and the center of pressures
 
-
-param.movie = false;
-param.moviepath = [];
+params.movie = false;
+params.slowmode = false;
+params.moviepath = [];
 ndof  = obj.ndof;
+
+% i check if any option are set for the current plot
 if ~(isempty(varargin))
     if strcmp(varargin(1),'movie')
-        param.movie = true;
-        param.moviepath = varargin(2);
+        params.movie = true;
+        params.moviepath = varargin(2);
+    end
+    if strcmp(varargin(1),'slowmode')
+        params.slowmode = true;
+    end
+    if length(varargin) == 2
+        params.fc = varargin(2);
+    else
+        params.fc = [];
     end
 end
 
 
-for ii=1:1 %for now we have just one view
-    
-    %         param.plot_main(ii) = subplot('Position', plot_pos(ii,:));
-    %         param.plot_objs{ii} = plot3(0,0,0,'.');
-    %         axis([-1 1 -1 1 -1 1]);
-    %         axis equal
-    %         hold on
-    
-    param.plot_objs{ii} = plot3(0,0,0,'.');
-    axis([-1 1 -1 1 0 1]);
-    axis equal
-    hold on
-    
-    %            if param.feet_on_ground(2) == 0 || sum(param.feet_on_ground) == 2
-    %
-    %               patch([-0.45 -0.45 0.45 0.45],[-0.53 0.37 0.37 -0.53],[0 0 0 0],[0.6 0.6 0.8]);
-    %
-    %             else
-    %
-    %               patch([-0.45 -0.45 0.45 0.45],[-0.37 0.53 0.53 -0.37],[0 0 0 0],[0.6 0.6 0.8]);
-    %
-    %             end
-    
-    campos([10.3675    4.9702    4.4582]);
-    set(gca,'CameraViewAngle',7.8687);
-    set(gca,'Color',[0.8 0.8 0.8]);
-    set(gca,'XColor',[0.8 0.8 0.8]);
-    set(gca,'YColor',[0.8 0.8 0.8]);
-    set(gca,'ZColor',[0.8 0.8 0.8]);
-    set(gca,'ydir','reverse')
-    set(gca,'xdir','reverse')
-    set(gca, 'drawmode', 'fast');
-    set(gcf, 'Position', get(0, 'Screensize'));
-    param.draw_init = 1;
-    rotate3d(gca,'on');
-    
-    %     figure(figure_main);
-    
-    
-    
-    %axes(param.plot_main(1))
-    %axis tight
-    % CoM trajectory
-    x_b   = chi(:,1:3);
-    qt_b  = chi(:,4:7);
-    qj    = chi(:,8:8 + obj.ndof - 1);
-    
-    visualizeForwardDynamics(obj,[x_b,qt_b,qj],param)
-    
-    
-end
+params.plot_objs{ii} = plot3(0,0,0,'.');
+axis([-1.2 1.2 -1 1 0 1.2]);
+%axis equal
+hold on
 
-end
+patch([-0.45 -0.45 0.45 0.45],[-0.53 0.37 0.37 -0.53],[0 0 0 0],[0.6 0.6 0.8]);
 
+%campos([5.1705   -8.3894    6.4718])%([10.3675    4.9702    4.4582]);
+%set(gca,'CameraViewAngle',7.8687);
+set(gca,'Color',[0.8 0.8 0.8]);
+set(gca,'XColor',[0.8 0.8 0.8]);
+set(gca,'YColor',[0.8 0.8 0.8]);
+set(gca,'ZColor',[0.8 0.8 0.8]);
+set(gca,'ydir','reverse')
+set(gca,'xdir','reverse')
+%set(gca, 'drawmode', 'fast');
+set(gcf, 'Position', get(0, 'Screensize'));
+rotate3d(gca,'on');
 
+% CoM trajectory
+% x_b   = chi(:,1:3);
+% qt_b  = chi(:,4:7);
+% qj    = chi(:,8:8 + obj.ndof - 1);
 
-function visualizeForwardDynamics(obj,q,params)
-%% visualize_forwardDyn
-%   Visualize the simulation results obtained from integration
-%   of the forward dynamics of the iCub.
-%
-%   visualize_forwardDyn(XOUT,PARAMETERS) visualizes the motion
-%   of the robot. XOUT is the output vector of the integration carried
-%   out in the forward dynamics part, containing the position and the
-%   orientation of the base and the joint positions along a time span.
-%   PARAMETERS is the struct variable which contains constant parameters
-%   related to the simulation environment, robot, controller etc.
-%
+%visualizeForwardDynamics(obj,[x_b,qt_b,qj],params)
+
+%end
+
+%function visualizeForwardDynamics(obj,chi,params)
+
 %% Setup visualization
-n       = size(q,1);   % number of instances of the simulation results
-qb      = q(:,1:7);    % first 3 elements provide the position and next 4 elements provide the orientation of the base
-qj      = q(:,8:8 + obj.ndof - 1 );   % joint positions
+n       = size(chi,1);   % number of instances of the simulation results
+qb      = chi(:,1:7);    % first 3 elements provide the position and next 4 elements provide the orientation of the base
+qj      = chi(:,8:8 + obj.ndof - 1 );   % joint positions
 
 vis_speed = 1;         % this variable is set to change the visualization speed,
 % to make its speed close to the real time in case
 % the simulation time step is changed.
-
+alpha = 0.3; %patches transparency 
 
 n_joint = length(obj.jointList); % number of points to be plotted (virtual joints)
 n_lin = length(obj.linkList); % number of lines to be plotted (virtual links)
@@ -98,7 +85,6 @@ n_lin = length(obj.linkList); % number of lines to be plotted (virtual links)
 % information stored in the joints structure (we keep also the info if the
 % joint is revolute = 1, prismatic joint = 2; fixed = 3 and 0 is equal no connection);
 A = zeros(n_joint,n_joint);
-
 for i = 1:n_joint
     search_string = obj.linkList{i};
     for j = 1:length(obj.jointList)
@@ -122,14 +108,12 @@ xaxis = 'xdata';
 yaxis = 'ydata';
 zaxis = 'zdata';
 
-kin = zeros(size(q,1),7,n_joint);
+kin = zeros(size(chi,1),7,n_joint);
 
 for jj=1:n_joint
-    for ii=1:n % at each instance
-        
+    for ii=1:n % at each instance        
         % convert base state to rotation
-        [x_b,R_b]    = frame2posrot(squeeze(qb(ii,:)'));
-        
+        [x_b,R_b]    = frame2posrot(squeeze(qb(ii,:)'));        
         %wbm_setWorldFrame(R_b,x_b,[0,0,-9.81]'); %is this needed ??????
         kin(ii,:,jj)   = (wbm_forwardKinematics(R_b,x_b,qj(ii,:)',obj.linkList{jj}))';  % forward kinematics for the list of joints/links
     end
@@ -137,25 +121,7 @@ end
 
 kin(:,:,1) = qb; % use base data instead of fwdKin rootlink
 
-% clear and reset the plots
-% axes(params.plot_main(ii));
-% cla;
-% axis off;
-
-%     if params.feet_on_ground(2) == 0 || sum(params.feet_on_ground) == 2
-%
-%     patch([-0.45 -0.45 0.45 0.45],[-0.53 0.37 0.37 -0.53],[0 0 0 0],[201 220 222]./255);
-%
-%     else
-%
-%     patch([-0.45 -0.45 0.45 0.45],[-0.37 0.53 0.53 -0.37],[0 0 0 0],[201 220 222]./255);
-%
-%     end
-
 drawnow
-
-%axes(params.plot_main(1));
-
 %% INITIAL PLOTS
 
 % allocate memory
@@ -216,22 +182,7 @@ lnkpatch          = zeros(1,n_joint);
 xyzpatch.vertices = zeros(8,3);
 xyzpatch.faces    = zeros(6,4);
 
-% constant multipliers related to the sizes of the patches around the links to form the robot figure
-% mult_patch = [0.07 , 0.03;
-%               0.04 , 0.02;
-%               0.03 , 0.02;
-%               0.025, 0.02;
-%               0.04 , 0.02;
-%               0.03 , 0.02;
-%               0.025, 0.02;
-%               0.03 , 0.02;
-%               0.025, 0.02;
-%               0.02 , 0.02;
-%               0.03 , 0.02;
-%               0.025, 0.02;
-%               0.02 , 0.02];
-
-%TO DO adapt approx. the size of the boxes to iCub dimension
+%TO DO adapt approximate correclyt the size of the boxes to iCub dimension
 mult_patch = ones(n_lin,2);
 mult_patch(:,1) = mult_patch(:,1)*0.03;
 mult_patch(:,2) = mult_patch(:,2)*0.03;
@@ -311,8 +262,7 @@ for jj=1:n_lin
         2 6 5 1;
         3 7 8 4];
     
-    lnkpatch(jj) = patch('vertices',xyzpatch.vertices,'faces',xyzpatch.faces,'FaceAlpha',0.2);
-    
+    lnkpatch(jj) = patch('vertices',xyzpatch.vertices,'faces',xyzpatch.faces,'FaceAlpha',alpha);
 end
 
 % right foot patch
@@ -338,7 +288,7 @@ xyzpatch.vertices = [xyzpairs(r_foot_index,2)+qq1(1)      , xyzpairs(r_foot_inde
     xyzpairs(r_foot_index,2)+qq4(1)+0.03 , xyzpairs(r_foot_index,4)+qq4(2) , xyzpairs(r_foot_index,6)+qq4(3)];
 
 
-lnkpatch(jj)      = patch('vertices',xyzpatch.vertices,'faces',xyzpatch.faces,'FaceAlpha',0.2);
+lnkpatch(jj)      = patch('vertices',xyzpatch.vertices,'faces',xyzpatch.faces,'FaceAlpha',alpha);
 
 % left foot patch
 jj=n_lin+2;
@@ -361,7 +311,7 @@ xyzpatch.vertices = [xyzpairs(l_foot_index,2)+qq1(1)      , xyzpairs(l_foot_inde
     xyzpairs(l_foot_index,2)+qq3(1)+0.03 , xyzpairs(l_foot_index,4)+qq3(2) , xyzpairs(l_foot_index,6)+qq3(3);
     xyzpairs(l_foot_index,2)+qq4(1)+0.03 , xyzpairs(l_foot_index,4)+qq4(2) , xyzpairs(l_foot_index,6)+qq4(3)];
 
-lnkpatch(jj)      = patch('vertices',xyzpatch.vertices,'faces',xyzpatch.faces,'FaceAlpha',0.2);
+lnkpatch(jj)      = patch('vertices',xyzpatch.vertices,'faces',xyzpatch.faces,'FaceAlpha',alpha);
 
 
 
@@ -486,16 +436,49 @@ while ii<n+1   % the visualization instance
         
         vis_speed=vis_speed+1;
     end
-    
-    ii=ii+vis_speed;
-    
-    % add a frame to the movie
+
     if params.movie
+        % add a frame to the movie
         % write the frame to the movie folder
         path = fullfile(params.moviepath, sprintf('%04d.png', movieframenum));
         saveas(gcf, path{1});
         movieframenum = movieframenum + 1;
     end
+    
+    %slow mode
+    %you need to click the figure to get the next frame
+    if params.slowmode
+        if ~(isempty(params.fc))
+            convHull = obj.computeSupPoly(params.feet_on_ground,chi(ii-1,:)');
+            if ii == 2
+                figCvHull = figure;
+            end
+
+            CoP(1)      = -params.fc{1}(5,ii-1)/params.fc{1}(3,ii-1);
+            CoP(2)      =  params.fc{1}(4,ii-1)/params.fc{1}(3,ii-1);
+
+            if  params.numContacts == 2
+
+                CoP(3)      = -params.fc{1}(11,ii-1)/params.fc{1}(9,ii-1);
+                CoP(4)      =  params.fc{1}(10,ii-1)/params.fc{1}(9,ii-1);
+
+                q_cur = chi(ii-1,:);
+                [trans, rot] = obj.offlineFkine(q_cur','r_sole');
+                temp = [CoP(3), CoP(4), 0]' + trans;
+                temp = rot*temp;
+                CoP(3) = temp(1);
+                CoP(4) = temp(2);
+
+            end
+
+            convHull.plotConvHull(figCvHull,CoP(1),CoP(2));
+            convHull.plotConvHull(figCvHull,CoP(3),CoP(4));
+        end
+        waitforbuttonpress
+    end
+    
+    
+    ii=ii+vis_speed;
 end
 
 end

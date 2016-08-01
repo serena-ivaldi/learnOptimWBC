@@ -41,7 +41,7 @@ classdef  Instance
             [output]=feval(obj.run_function,obj,parameters);
        end
        
-       function [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, data2save]=CMAES(obj,num_of_param,start_action,niter,explorationRate,cmaes_value_range)
+       function [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, G_data2save]=CMAES(obj,num_of_param,start_action,niter,explorationRate,cmaes_value_range)
           %Parameter space
           NumParam = num_of_param;
           % start_value for action
@@ -55,23 +55,19 @@ classdef  Instance
           else
              error('something wrong with cmaes_value_range')
           end
-
-
           %CMA-ES settings
           settings.nIterations = niter;     
           settings.explorationRate = explorationRate; %[0, 1]
           settings.fnForwardModel = @(obj_,a_,curr_candidate_,ismean_)EvaluateCMAES(obj_,a_,curr_candidate_,ismean_);
           settings.plotState = 1;         %{0,1} plot offsprings yes no
-
           %search optimal parameters 
           if(strcmp(obj.learn_procedure,'CMAES'))
-            [mean_performances, bestAction, BestActionPerEachGen, policies,costs, succeeded, data2save] = obj.LearnCMAES(settings);
+            [mean_performances, bestAction, BestActionPerEachGen, policies,costs, succeeded,G_data2save] = obj.LearnCMAES(settings);
           elseif(strcmp(obj.learn_procedure,'(1+1)CMAES'))
-            [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, data2save] = obj.Learn1plus1CMAES(settings);
+            [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded,G_data2save] = obj.Learn1plus1CMAES(settings);
           elseif(strcmp(obj.learn_procedure,'CEM'))
-            [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = obj.CEM(settings);
-          end
-
+            [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = obj.CEM(settings);
+          end   
           figure;
           plot(mean_performances);      
        end
@@ -82,9 +78,9 @@ classdef  Instance
        
        % to have a common interface with Objproblem im introducing a
        % function to evaluate constraints at some point
-       function [c, ceq] = computeConstr(obj,input)
+       function [c, ceq,performance] = computeConstr(obj,input)
             try
-               [c, ceq] = obj.computConstrViol(input);
+               [c, ceq,performance] = obj.computConstrViol(input);
             catch err
                 disp('computeConstr failed');
             end
@@ -92,16 +88,27 @@ classdef  Instance
        
        % inner function to have a common interface with Objproblem im introducing a
        % function to evaluate constraints at some point
-       function [c, ceq] = computConstrViol(obj,input)                    
+       function [c, ceq,performance] = computConstrViol(obj,input)                    
             % each time i have to compute this 
             try
                 disp('i am in computConstrViol fitness computation')
                 [output]=obj.run(input);
-                obj.fitness(obj,output); %minus because we are maximizing and fmincon only minimize
-                c_index = -1; %i'm just considering one candidate (cf. FixPenalty class)
-                obj.penalty_handling.ComputeConstraintsViolation(c_index);
-                c = [];
-                ceq = [];
+                
+                performance = feval(obj.fitness,obj,output);
+                %toc
+                
+                %% DO NOT CHANGE THIS PART!
+                if(obj.constraints)
+                   c_index = -1; %i'm just considering one candidate (cf. FixPenalty class)
+                   obj.penalty_handling.ComputeConstraintsViolation(c_index);
+                   c = [];
+                   ceq = [];
+                   if(strcmp(obj.learn_procedure ,'CMAES'))
+                      % perfomance with correction
+                      performance = performance - obj.penalty_handling.fitness_penalties(1);
+                   end
+                end
+                
                 for i=1:length(obj.penalty_handling.constraints_type)
                     if  obj.penalty_handling.constraints_type(i)
                         c = [c; obj.penalty_handling.penalties(1,i)];
@@ -115,11 +122,13 @@ classdef  Instance
                     c = 0;
                 end
                 if(isempty(ceq))  
-                    c = 0;
+                    ceq = 0;
                 end
+                % cancel all the information relative to the current iteration (control action)
+                feval(obj.clean_function,obj);
             catch err
-                disp('i am in computConstrViol error side fitness computation ')
-                fitvalue = 1; %penalty if the computation of the fitness failed
+                disp('intergration error in  ComputeConstraintViolation and perfomance')
+                performance = -1; %penalty if the computation of the fitness failed
                 c_index = -1; %i'm just considering one candidate (cf. FixPenalty class)
                 obj.penalty_handling.ComputeConstraintsViolation(c_index);
                 c = [];
@@ -139,6 +148,8 @@ classdef  Instance
                 if(isempty(ceq))  
                     ceq = 0;
                 end
+                % cancel all the information relative to the current iteration (control action)
+                feval(obj.clean_function,obj);
             end 
            
        end
