@@ -105,7 +105,7 @@ classdef MultChainTree < IMultChainTree
                 J_0 = blkdiag(eye(3,3), B_inv) * J_0;
             elseif opt.eul
                 wf_H_rlnk = mwbm.fkine(obj, q_j, obj.mlink_name);
-                B_inv = WBM.utilities.tform2angRateTF(wf_H_rlnk, 'ZYX'); % use the ZYZ euler-angles
+                B_inv = WBM.utilities.tform2angRateTF(wf_H_rlnk, 'ZYZ'); % use the ZYZ euler-angles
 
                 J_0 = blkdiag(eye(3,3), B_inv) * J_0;
             end
