@@ -1,10 +1,13 @@
 
 %%%;;
 
+% It's the same as the 2 arms experience but with different goal values to
+% be compliante with the new urdf's joints limits.
+
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
-time_struct.tf = 20;
+time_struct.tf = 30;
 time_struct.step = 0.001;
 
 %% TASK PARAMETERS
@@ -35,11 +38,11 @@ type_of_traj = {'sampled','sampled','sampled','sampled','sampled'};
 geometric_path = {'fixed','fixed','fixed','fixed','fixed'};
 time_law = {'none','none','none','none','none'};
 %parameters first chains
-geom_parameters{1,1} = [0.3,-0.17,0.68];    %r_e_e_point
-geom_parameters{1,2} = [0.21,-0.25,0.68];	%r_elbow_point
-geom_parameters{1,3} = [0.3,0.0248,0.68];   %l_e_e_point
-geom_parameters{1,4} = [0.21,0.1138,0.68];   %l_elbow_point
-geom_parameters{1,5} = [0 0.366519142918809 0 0 -0.191986217719376 0.523598775598299 0 -0.174532925199433 0.366519142918809 0 0 -0.191986217719376 0.523598775598299 0 -0.174532925199433 0 0];
+geom_parameters{1,1} = [0.2775, -0.2023, 0.7268];    %r_e_e_point
+geom_parameters{1,2} = [0.1540, -0.2600, 0.7050];	%r_elbow_point
+geom_parameters{1,3} = [0.2775, 0.0661, 0.7268];   %l_e_e_point
+geom_parameters{1,4} = [0.1540, 0.1238, 0.7050];   %l_elbow_point
+geom_parameters{1,5} = [0.2 0.366519142918809 0 0 -0.191986217719376 0.523598775598299 0 -0.174532925199433 0.366519142918809 0 0 -0.191986217719376 0.523598775598299 0 -0.174532925199433 0 0];
 dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1];
 dim_of_task{1,3}= [1;1;1]; dim_of_task{1,4}= [1;1;1];
 dim_of_task{1,5}= ones(bot1.ndof,1);
@@ -64,7 +67,8 @@ dim_of_task_sec{1,3}=[1;1;1];
 dim_of_task_sec{1,4}=[1;1;1];
 dim_of_task_sec{1,5}=[1;1;1];
 dim_of_task_sec{1,6}=[1;1;1];
-dim_of_task_sec{1,7}= ones(bot1.ndof,1);
+dim_of_task_sec{1,7}= zeros(bot1.ndof,1);%ones(bot1.ndof,1);
+dim_of_task_sec{1,7}(1) = 1;
 
 switch CONTROLLERTYPE
     case 'UF'
@@ -86,7 +90,7 @@ switch CONTROLLERTYPE
 end
 
 %% SCENARIO
-name_scenario = 'iCub_2';
+name_scenario = 'iCub_newlimits';
 
 %% RBT SIMULATOR PARAMETERS
 time_sym_struct = time_struct;
@@ -116,7 +120,7 @@ elseif strcmp(simulator_type{1},'icub_matlab')
     
     params.feet_on_ground =  [1,1];
     params.numContacts = sum(params.feet_on_ground,2);
-    if       params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 1 
+    if       params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 1
         % contact constraints for 2 feet on ground
         params.contactLinkNames      = {'l_sole','r_sole'};     
     elseif   params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 0
@@ -182,14 +186,12 @@ switch CONTROLLERTYPE
         precomp_sample = false;
         % value of theta that we have to change when we want to execute the result
         % from the optimization step
-        a = 13; b = 2; c =  13; d = 2; e = 1;
+        a = 0; b = 0; c = 0; d = 0; e = 14;
         numeric_theta = [a a a a a b b b b b c c c c c d d d d d e e e e e];
-        %numeric_theta = [1.11087134108495 12.5305550089167 5.08866531318563 11.3506839783115 7.04742423600904 -8.78460218382942 12.4265180024550 -0.580054564040172 10.0938379456489 7.78471864294504 1.03847938458557 7.90094326509892 14 12.9866271074009 14 -1.59448676869201 4.91875693109553 1.16310380170680 13.1120720350808 5.32930377216845 -0.238565482650715 8.67768415160355 3.71249236039120 3.37630888571424 3.01213978936084];
+        numeric_theta = [2.85857174917484 8.10845722641265 11.9164538789775 6.88964932906433 1.00586679173844 14 3.97364139271971 10.1587852487301 4.86004474669789 1.48587072203479 -0.897603450829302 10.2012131624257 8.15317541155156 9.80472064884352 3.96236648702444 10.9279819989127 10.8965816649393 10.0862872111360 11.8699755520697 11.3638299080751 12.7108221106618 1.30581600540302 2.88730446118188 1.36416672557531 -0.100331332565002];
         
-        %8 of 2
-        %[1.11087134108495 12.5305550089167 5.08866531318563 11.3506839783115 7.04742423600904 -8.78460218382942 12.4265180024550 -0.580054564040172 10.0938379456489 7.78471864294504 1.03847938458557 7.90094326509892 14 12.9866271074009 14 -1.59448676869201 4.91875693109553 1.16310380170680 13.1120720350808 5.32930377216845 -0.238565482650715 8.67768415160355 3.71249236039120 3.37630888571424 3.01213978936084];
-        %6 of 2
-        %[2.82386809016486 10.9157439707135 4.21941898170313 5.54633581174154 4.29176884783552 2.66470988741195 2.26509703062656 0.898475739722363 -4.36959112663677 1.84307995004280 1.67900016759073 7.63305865792555 5.29791043503921 5.86793260072585 11.0291811421804 -3.42443975092811 -11.5699037983794 6.06375247371970 -5.37201482801143 -0.702411094138079 -2.24991280354053 12.5818040065126 0.413555586912378 3.90689832275126 -0.202624809487876];
+        %4 of 40
+        %[2.85857174917484 8.10845722641265 11.9164538789775 6.88964932906433 1.00586679173844 14 3.97364139271971 10.1587852487301 4.86004474669789 1.48587072203479 -0.897603450829302 10.2012131624257 8.15317541155156 9.80472064884352 3.96236648702444 10.9279819989127 10.8965816649393 10.0862872111360 11.8699755520697 11.3638299080751 12.7108221106618 1.30581600540302 2.88730446118188 1.36416672557531 -0.100331332565002]
         
         %constant alpha
         value1 = 0*ones(chains.GetNumTasks(1));
@@ -234,8 +236,8 @@ switch CONTROLLERTYPE
             end
         end
         % secondary task gains
-        kd = [90,90,90,110,110,110,110];
-        kp = [40,40,40,70,70,70,70]; % row vector one for each chain
+        kd = [90,90,90,90,110,110,110];
+        kp = [40,40,40,40,70,70,70]; % row vector one for each chain
         for i= 1:chains.GetNumChains()
             for par = 1:chains.GetNumTasks(i)
                 if(strcmp(traj_type_sec{i},'impedance'))
@@ -269,7 +271,7 @@ switch CONTROLLERTYPE
             constraints_functions{k} = 'LinInequality';
             constraints_functions{k+1} = 'LinInequality2';
         end
-        distConstraints_values = [0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03]; % distances for the collissions constraints
+        distConstraints_values = [0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03 ,0.03]; % distances for the collissions constraints
         for k = 1:length(distConstraints_values)
             constraints_functions{end+1} = 'DistanceObs';
         end
@@ -279,7 +281,7 @@ switch CONTROLLERTYPE
         activate_constraints_handling = true;
         %% INSTANCE PARAMETER
         run_function = @RobotExperiment;
-        fitness = @fitnessHumanoidsIcub2arms;
+        fitness = @fitness_iCub_newlimits;
         clean_function = @RobotExperimentCleanData;
         
         if strcmp(simulator_type{1},'rbt')
@@ -307,7 +309,7 @@ switch CONTROLLERTYPE
         a = 5; b = 5; c = 5; d = 5; e = 6;
         user_defined_start_action = [a a a a a b b b b b c c c c c d d d d d e e e e e];
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-        niter = 100;  %number of generations
+        niter = 400;  %number of generations
         cmaes_value_range = [-14 , 14];  % boudn that define the search space
         %cmaes_value_range{1} = [-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-14,-0.15,-0.15,-0.15 ];  % lower bound that define the search space
         %cmaes_value_range{2} = [14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,0.15,0.15,0.15];  % upper bound that define the search space

@@ -8,17 +8,7 @@ time_struct.tf = 20;
 time_struct.step = 0.001;
 
 %% TASK PARAMETERS
-%name_dat = 'sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE';
-%name_dat = 'sere/LBR4p9.0_scene5_GHC_table_and_an_one_attractive_point_and_posture_task_SERE';
-%name_dat = 'LBR4p8.0_scene9_GHC_test_wall_and_two_attractive_point';
-%name_dat = 'LBR4p11.0_scene9_UF_mulitple_task_stability_Null_space_projectors';
-%name_dat = 'LBR4p10.0_scene10_UF_lemniscate';
-%name_dat = 'LBR4p12.0_scene0_UF_test_elastic_reference';
-%name_dat = 'Jaco1.3_scene1.1';
-%name_dat = 'LBR4p2.2_scene2_generalization';
-%name_dat = 'lwrsimple1.0_scene_test_obs';
 name_dat = 'iCub_1.0';
-%name_dat = 'humanoid_bench_generator_lbrsimple_1.0';
 %path=LoadParameters(name_dat);
 %load(path);
 %% TYPE OF CONTROLLER
@@ -38,16 +28,6 @@ chains = SubChains(target_link,robots,bot1);
 %%  REFERENCE PARAMETERS
 deg = pi/180;
 % primary trajectory
-% traj_type = {'impedance'};
-% control_type = {'x'};
-% type_of_traj = {'func'};
-% geometric_path = {'fixed'};
-% time_law = {'none'};
-% %parameters first chains
-% geom_parameters{1,1} = [0.30 -0.71 0.5];
-% %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
-% dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
-
 traj_type = {'cartesian','cartesian','joint'};
 control_type = {'x','x','none'};
 type_of_traj = {'sampled','sampled','sampled'};
@@ -58,16 +38,6 @@ geom_parameters{1,1} = [0.35,-0.15,0.7]; %hand
 geom_parameters{1,2} = [0.24,-0.23,0.7]; %elbow
 geom_parameters{1,3} = [0;0.785398163397448;0;0;-0.349065850398866;0.523598775598299;0;0;0.785398163397448;0;0;0;0.523598775598299;0;0;0;0]';
 dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.ndof,1);
-
-% traj_type = {'cartesian'};
-% control_type = {'rpy'};
-% type_of_traj = {'func'};
-% geometric_path = {'fixed'};
-% time_law = {'none'};
-% %parameters first chains
-% geom_parameters{1,1} = [pi/2 0 -pi/2];
-% %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
-% dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
 
 % secondary trajectory
 traj_type_sec = {'none','none','none'};
@@ -136,8 +106,8 @@ elseif strcmp(simulator_type{1},'icub_matlab')
     qdi{1} = [];
     list_of_kin_chain = {'trunk','left_arm','right_arm'};
     joints_initial_values{1,1} = [0.0  0.0  0.0];
-    joints_initial_values{1,2} = [-20.0  30.0  0.0  45.0  0.0 0.0 0.0];
-    joints_initial_values{1,3} = [0.0  30.0  0.0  45.0  0.0 0.0 0.0];
+    joints_initial_values{1,2} = [-11.0  30.0  0.0  21.0  0.0 -10.0 0.0];
+    joints_initial_values{1,3} = [-11.0  30.0  0.0  21.0  0.0 -10.0 0.0];
     
     params.feet_on_ground =  [1,1];
     params.numContacts = sum(params.feet_on_ground,2);
@@ -161,9 +131,9 @@ elseif strcmp(simulator_type{1},'icub_matlab')
     params.root_reference_link ='l_sole';
     params.tStart   = time_sym_struct.ti;
     params.tEnd     = time_sym_struct.tf;
-    params.sim_step = 0.01;
+    params.sim_step = 0.01;%time_struct.step; %0.01
     params.demo_movements = 0 ;
-    params.wait     = waitbar(0,'State integration in progress...');
+    %params.wait     = waitbar(0,'State integration in progress...');
     params.maxtime = 100;
     params.torque_saturation = 100000;
     
@@ -204,16 +174,9 @@ switch CONTROLLERTYPE
         precomp_sample = false;
         % value of theta that we have to change when we want to execute the result
         % from the optimization step
-        %numeric_theta = [0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
-        %numeric_theta =[0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
-        %numeric_theta =[2.3218    2.5695    6.8006    4.6558    5.7475    8.7383    3.5058    5.2817    6.9910    6.7590    4.5235    6.3875    7.3247    6.7258 8.5637];
         a = 0; b = 0; c = 14;
         %numeric_theta = [a a a a a b b b b b c c c c c d d d d d];
-        numeric_theta = [3.20305113572125 10.8877163581950 5.67160605557737 13.2847739134155 13.5650592137061 0.784134976492228 6.93632629872815 -12.5393467704411 -1.27347378019226 -10.1810411492540 -2.20867630883808 5.71190130701425 3.84648716268273 5.41392782619462 -0.989102829864618];
-        %numeric_theta = [0 0 0 0 0 0 0 0 0 0 14 14 14 14 14];
-        numeric_theta = [0 0 0 0 0 0 0 0 0 0 14 14 14 14 14];
-        %numeric_theta = [1.34808936568616 7.65801020911318 11.4142276222402 11.0490983940875 5.40014056365278 3.15896271495000 2.49526509728241 3.38786911220609 3.59148669099237 -3.99404815876146 0.150175087891493 3.67130705179767 4.44576652255605 5.52547896983619 -5.09694541976550];
-
+        numeric_theta = [3.56119092691254 5.16185533424120 4.98121985186302 6.42803070796065 2.99894711842401 2.12932303996888 -2.30840869131970 2.92524047320533 2.70906117468721 13.3592591798520 -8.91877956531469 4.94832173983719 2.35515571884856 5.48036154934000 -12.0041199556419];
         
         %constant alpha
         value1 = 0*ones(chains.GetNumTasks(1));
