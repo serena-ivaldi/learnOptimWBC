@@ -40,7 +40,7 @@ classdef iCub < handle
                 %obj.dim_of_kin_chain  = {3,5,5,6,6};
                 %obj.sum_ind = {0,3,8,13,19,25};
                 obj.ndof = 25; % degrees of freedom without floating base
-            elseif(strcmp(model,'model_arms_torso_free')||strcmp(model,'model32dof'))
+            else
                 obj.model_name = model;
                 obj.active_floating_base = false;
                 %obj.list_of_kin_chain =list_of_kin_chain; % {'com','left_arm','right_arm'}; %string matching URDF name of the link (frame)
