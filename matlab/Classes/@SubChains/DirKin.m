@@ -41,14 +41,14 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
             %end
             % compute J_dot from the the current subchain
             J_dot = cur_bot.jacob_dot(q',qd');
-        elseif isa(cur_bot, 'WBM.Interfaces.MultChainTree')
+        elseif isa(cur_bot, 'WBM.Interfaces.MultChainTreeICub')
             q_t = q.';
             dq_t = qd.';
             lnk_name = obj.target_link{ind_subchain}{ind_subchain, ind_task};
 
             if ~strcmp(lnk_name, 'none')
                 % update the link name of MultChainTree-object ...
-                cur_bot.link = lnk_name;
+                cur_bot.ctrl_link = lnk_name;
 
                 % compute the pose (ZYX-position) of the current sub-chain ...
                 fk_tform = cur_bot.fkine(q_t);
@@ -61,8 +61,8 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
 
             J = cur_bot.jacob0(q_t, 'rpy');
             if (obj.whole_system.active_floating_base)
-                v_all = vertcat(obj.whole_system.dx_b, obj.whole_system.omega_W, dq_t);
-                dv    = J*v_all;
+                v_full = vertcat(obj.whole_system.dx_b, obj.whole_system.omega_W, dq_t);
+                dv     = J*v_full;
 
                 xd   = dv(1:3,1);
                 rpyd = dv(4:6,1);

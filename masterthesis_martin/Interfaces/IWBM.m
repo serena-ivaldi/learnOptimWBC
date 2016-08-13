@@ -21,7 +21,7 @@ classdef (Abstract) IWBM < handle
     % alpha       kinematic: link twists (1xN)
 
     methods(Abstract)
-        initRobot(robot_wbm)
+        initRobot(obj, robot_wbm)
 
         initRobotFcn(obj, fhInitRobotWBM, wf2fixLnk)
 
@@ -31,58 +31,60 @@ classdef (Abstract) IWBM < handle
 
         [vqT_b, q_j, v_b, dq_j] = getState(obj)
 
-        stFltb = getFltgBase(obj)
+        stFltb = getFloatingBaseState(obj)
 
-        I_acc = Iqdd(obj, q_j, dq_j, tau, stFltb) % ?? inertial forces? (tau = generalized bias forces?)
+        % I_acc = Iqdd(obj, q_j, dq_j, tau, stFltb) % ?? inertial forces? (tau = generalized bias forces?)
 
-        ddq_j = acceleration(obj, q_j, dq_j, tau, stFltb) % joint acceleration
+        ddq_j = jointAccelerations(obj, q_j, dq_j, tau, stFltb)
 
         tau_c = coriolisForces(obj, q_j, dq_j, stFltb)
 
         tau_fr = frictionForces(obj, dq_j)
 
-        C_qv = genBiasForces(obj, q_j, dq_j, stFltb)
+        C_qv = generalizedBiasForces(obj, q_j, dq_j, stFltb)
+
+        tau_gen = generalizedForces(obj, q_j, dq_j, f_c, Jc_t, stFltb)
 
         tau_g = gravityForces(obj, q_j, stFltb)
 
-        tau_gen = invDyn(obj, q_j, dq_j, ddq_j, lnk_name, stFltb)
+        tau_ctrl = inverseDyn(obj, lnk_name, q_j, dq_j, ddq_j, stFltb)
 
-        [t, stmChi] = forwardDyn(obj, fhCtrlTrqs, tspan, stvChi_0, ode_opt)
+        [t, stmChi] = forwardDyn(obj, tspan, fhCtrlTrqs, stvChi_0, ode_opt)
 
-        visForwardDyn(obj, x_out, sim_tstep, vis_ctrl)
+        visualizeForwardDyn(obj, x_out, sim_tstep, vis_ctrl)
 
-        w_H_rlnk = forwardKin(obj, q_j, link_name, stFltb)
+        w_H_rlnk = forwardKin(obj, lnk_name, q_j, stFltb)
 
-        wf_H_rlnk = T0_n(obj, q_j, lnk_name, stFltb) % ?? computes the forward kinematics for the end-effector?
+        % wf_H_rlnk = T0_n(obj, lnk_name, q_j, stFltb) % ?? computes the forward kinematics for the end-effector? do we need it?
 
-        wf_H_rlnk = linkFrame(obj, joint_idx, q_j) % link transformation matrix
-        %lnk_tform = linkFrame(obj, joint_idx, q_j) % link transformation matrix
+        wf_H_rlnk = linkFrame(obj, jnt_idx, q_j, stFltb) % link transformation matrix
+        % lnk_tform = linkFrame(obj, jnt_idx, q_j) % link transformation matrix
+
+        wf_H_tp = toolFrame(obj, t_idx, q_j, stFltb) % tool-tip transformation matrix
 
         M = inertia(obj, q_j, stFltb)
 
-        M_c = cartesianInertia(obj, q_j, stFltb) % ?? useful for the iCub?
+        % M_x = cartesianInertia(obj, q_j, stFltb) % ?? useful for the iCub?
 
         h_c = centroidalMomentum(obj, q_j, dq_j, stFltb)
 
         [M, C_qv, h_c] = wholeBodyDyn(obj, q_j, dq_j, stFltb)
 
-        J = jacobian(obj, q_j, lnk_name, stFltb) % jacobian in the wolrd frame.
+        J = jacobian(obj, lnk_name, q_j, stFltb)
 
-        dJ = jacobianDot(obj, q_j, dq_j, lnk_name, stFltb)
+        dJ = jacobianDot(obj, lnk_name, q_j, dq_j, stFltb)
 
-        J_tp = jacobianTool(obj, q_j, stFltb) % jacobian in the tool frame.
+        J_tp = jacobianTool(obj, t_idx, q_j, stFltb) % Jacobian matrix in tool frame (end-effector frame)
 
         payload(obj, pt_mass, pos, link_names)
 
-        tau_pl = payloadForces(obj, ,stFltb)
+        % tau_pl = payloadForces(obj, q_j, dq_j, stFltb)
 
-        paycap() % ??
+        % paycap() % ??
 
-        gravjac() % ??
+        % gravjac() % ??
 
         resv = islimit(obj, q_j)
-
-        qjout = sortJointValue(obj, string_search, q_j, valueVector) % ??
 
         dispParams(obj, prec)
 
