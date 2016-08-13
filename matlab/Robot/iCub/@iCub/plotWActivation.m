@@ -63,20 +63,20 @@ end
 
 
 %configuration of the subplots
-wd = length(names_of_subplot); lght = 5;
+wd = length(names_of_subplot); lght = 9;
 scene = gca; %copy the current fig into the subplot
-axes(wd+1) = subplot(lght,wd,(wd+1:wd*lght),scene); %copy the current fig into the subplot
+axes(wd+1) = subplot(lght,wd,(2*wd+1:wd*lght),scene); %copy the current fig into the subplot
 for i = 1:wd
-    axes(i) = subplot(lght,wd,i);
+    axes(i) = subplot(lght,wd,[i, i+wd]);
 end
 
 
 for i = 1:wd
     subplot(axes(i))
     hold on
-    title(names_of_subplot(i))
-    xlabel('Time')
-    ylabel('Weight')
+    title(names_of_subplot(i),'FontSize',16)
+    xlabel('Time','FontSize',14)
+    ylabel('Weight','FontSize',14)
     %axis equal
     axis([0 params.tEnd 0 1]);
     hold off
@@ -425,6 +425,7 @@ for kk = 1:wd
     end
     if ~(strcmp(legends{1,kk},'none'))
         leg = legend(legends{1,kk});
+        leg.FontSize = 15;
         set(leg,'Location','southeast');
     end
     t = 1/n*params.tEnd;
