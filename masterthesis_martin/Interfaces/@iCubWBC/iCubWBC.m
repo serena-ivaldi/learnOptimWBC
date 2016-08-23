@@ -16,20 +16,22 @@ classdef iCubWBC < WBM.Interfaces.iCubWBM
         function obj = iCubWBC(robot_model, robot_config, wf2fixLnk)
             % call the constructor of the superclass ...
             obj = obj@WBM.Interfaces.iCubWBM(robot_model, robot_config, wf2fixLnk);
-            [~,obj.model_name,~] = fileparts(robot_model.urdf_link_name);
+            [strPath, obj.model_name, ext] = fileparts(robot_model.urdf_link_name);
 
             if strcmp(obj.model_name, 'icubGazeboSim')
                 obj.active_floating_base = true;
                 %obj.ndof = 25; % degrees of freedom without floating base
 
-            elseif ( strcmp(obj.model_name, 'model_arms_torso_free') || strcmp(obj.model_name, 'model32dof') )
+            elseif strcmp(ext, '.urdf')
                 obj.active_floating_base = false;
 
-                %model   = strcat(obj.model_name, '.urdf');
-                %strPath = which(model);
-                strPath = which(robot_model.urdf_link_name);
+                if isempty(strPath)
+                    urdf_file = which(robot_model.urdf_link_name);
+                else
+                    urdf_file = robot_model.urdf_link_name;
+                end
 
-                scheme = xml2struct(strPath);
+                scheme = xml2struct(urdf_file);
                 obj.UBjointLimit = [];
                 obj.LBjointLimit = [];
                 obj.effortLimit  = [];
@@ -56,7 +58,7 @@ classdef iCubWBC < WBM.Interfaces.iCubWBM
                 end
                 obj.ndof = length(obj.revoluteJointList);
             else
-                error('WBM::Interfaces::iCubWBC: Unknown URDF-model!');
+                error('WBM::Interfaces::iCubWBC: Unknown robot model!');
             end
         end
 
@@ -136,7 +138,7 @@ classdef iCubWBC < WBM.Interfaces.iCubWBM
                 end
             end
 
-            if ~isempty( find(SubStrFind('trunk', list_of_kin_chain), 1)) )
+            if ~isempty( find(SubStrFind('trunk', list_of_kin_chain), 1) )
                 if ~isempty(varargin)
                     torsoInit = joints_initial_values{1,find(SubStrFind('trunk', list_of_kin_chain), 1)};
                 else

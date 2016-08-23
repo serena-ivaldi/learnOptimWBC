@@ -33,11 +33,11 @@ classdef (Abstract) IMultChainTree < handle
 
         [t, stmChi] = fdyn(obj, fhCtrlTrqs, tspan, stvChi_0, ode_opt)
 
-        w_H_rlnk = fkine(obj, q_j)
+        wf_H_lnk = fkine(obj, q_j)
 
-        w_H_rlnk = A(obj, jnt_idx, q_j) % link transformation matrix (useful for the iCub?)
+        wf_H_lnk = A(obj, jnt_idx, q_j)
 
-        % wf_H_rlnk = T0_n(obj, q_j, lnk_name) % ?? computes the forward kinematics for the end-effector? Do we need it?
+        % wf_H_lnk = T0_n(obj, q_j, lnk_name) % ?? computes the forward kinematics for the end-effector? Do we need it?
 
         dJ = jacob_dot(obj, q_j, dq_j)
 
@@ -47,15 +47,7 @@ classdef (Abstract) IMultChainTree < handle
 
         M = inertia(obj, q_j)
 
-        % M_x = cinertia(obj, q_j) % ?? cartesian inertia, useful for the iCub?
-
-        % function payload(obj, pt_mass, pos, link_names)
-
-        % function gravjac() % ??
-
-        % function paycap() % ??
-
-        % function tau_pl = pay(obj, q_j, dq_j)
+        % function gravjac()
 
         resv = islimit(obj, q_j)
 

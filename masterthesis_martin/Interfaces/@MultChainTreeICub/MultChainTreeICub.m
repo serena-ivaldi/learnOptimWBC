@@ -1,13 +1,13 @@
-classdef MultChainTreeICub < MultChainTree
+classdef MultChainTreeICub < WBM.Interfaces.MultChainTree
     properties(Dependent)
-        tag         % string that represent the kinematic link that i want to control
+        tag     % string that represent the kinematic link that i want to control
     end
 
     properties
-        icub        % pointer to the icub structure (to reproduce the same structure of )
-        link        % dummy parameter to be compliant with the subchain class
-        %name        % dummy parameter to be compliant with the subchain class
-        model3d     % dummy parameter to be compliant with the subchain class % ???
+        icub    % pointer to the icub structure (to reproduce the same structure of )
+        link    % dummy parameter to be compliant with the subchain class
+        %name    % dummy parameter to be compliant with the subchain class
+        model3d % dummy parameter to be compliant with the subchain class % ???
     end
 
     methods

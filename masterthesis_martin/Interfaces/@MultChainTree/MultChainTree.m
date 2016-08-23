@@ -7,12 +7,12 @@ classdef MultChainTree < WBM.Interfaces.IMultChainTree
         wbm_params@WBM.wbmBaseRobotParams
         %model3d
         plotopt3d@WBM.absSimConfig
-        ctrl_link@char % current kinematic link of the robot that is controlled by the system.
-        gravity@double vector  % gravity vector (direction of the gravity)
-        base@double    matrix  % base transform of the robot (pose of the robot)
-        tool@double    matrix  % tool transform (from the end-effector to the tool-tip)
-        qlim@double    matrix  % joint limits, [qmin qmax] (Nx2)
-        n@uint16       scalar  % number of joints (equivalent to number of DoFs)
+        ctrl_link@char        % current kinematic link of the robot that is controlled by the system.
+        gravity@double vector % gravity vector (direction of the gravity)
+        base@double    matrix % base transform of the robot (pose of the robot)
+        tool@double    matrix % tool transform (from the end-effector to the tool-tip)
+        qlim@double    matrix % joint limits, [qmin qmax] (Nx2)
+        n@uint16       scalar % number of joints (equivalent to number of DoFs)
 
         %interface % interface to a real robot platform
     end
@@ -50,39 +50,39 @@ classdef MultChainTree < WBM.Interfaces.IMultChainTree
         end
 
         function ddq_j = accel(obj, q_j, dq_j, tau)
-            ddq_j = mwbm.jointAccelerations(obj, q_j, dq_j, tau);
+            ddq_j = obj.mwbm.jointAccelerations(q_j, dq_j, tau);
         end
 
         function tau_c = corolis(obj, q_j, dq_j)
-            tau_c = mwbm.coriolisForces(obj, q_j, dq_j);
+            tau_c = obj.mwbm.coriolisForces(q_j, dq_j);
         end
 
         function tau_fr = friction(obj, dq_j)
-            tau_fr = mwbm.frictionForces(obj, dq_j);
+            tau_fr = obj.mwbm.frictionForces(dq_j);
         end
 
         function tau_g = gravload(obj, q_j)
-            tau_g = mwbm.gravityForces(obj, q_j);
+            tau_g = obj.mwbm.gravityForces(q_j);
         end
 
         function tau_ctrl = invdyn(obj, q_j, dq_j, ddq_j)
-            tau_ctrl = mwbm.inverseDyn(obj, obj.mctrl_link, q_j, dq_j, ddq_j);
+            tau_ctrl = obj.mwbm.inverseDyn(q_j, dq_j, ddq_j);
         end
 
         function [t, stmChi] = fdyn(obj, fhCtrlTrqs, tspan, stvChi_0, ode_opt)
-            [t, stmChi] = mwbm.forwardDyn(obj, fhCtrlTrqs, tspan, stvChi_0, ode_opt);
+            [t, stmChi] = obj.mwbm.forwardDyn(fhCtrlTrqs, tspan, stvChi_0, ode_opt);
         end
 
-        function w_H_rlnk = fkine(obj, q_j)
-            w_H_rlnk = mwbm.forwardKin(obj, obj.mctrl_link, q_j);
+        function wf_H_lnk = fkine(obj, q_j)
+            wf_H_lnk = obj.mwbm.forwardKin(obj.mctrl_link, q_j);
         end
 
-        function w_H_rlnk = A(obj, jnt_idx, q_j) % link transformation matrix (useful for the iCub?)
-            w_H_rlnk = mwbm.linkFrame(obj, jnt_idx, q_j);
+        function wf_H_lnk = A(obj, jnt_idx, q_j)
+            wf_H_lnk = obj.mwbm.linkFrame(jnt_idx, q_j);
         end
 
         function dJ = jacob_dot(obj, q_j, dq_j)
-            dJ = mwbm.jacobianDot(obj, q_j, obj.mctrl_link, dq_j);
+            dJ = obj.mwbm.jacobianDot(q_j, obj.mctrl_link, dq_j);
         end
 
         function J_0 = jacob0(obj, q_j, varargin)
@@ -92,16 +92,16 @@ classdef MultChainTree < WBM.Interfaces.IMultChainTree
             opt.rot   = false;
             opt = tb_optparse(opt, varargin);
 
-            J_0 = mwbm.jacobian(obj, q_j, obj.mctrl_link);
+            J_0 = obj.mwbm.jacobian(q_j, obj.mctrl_link);
 
             if opt.rpy % why do we make there a block-diagonale?
-                wf_H_rlnk = mwbm.forwardKin(obj, obj.mctrl_link, q_j);
-                B_inv = WBM.utilities.tform2angRateTF(wf_H_rlnk, 'ZYX'); % use the RPY (ZYX) euler-angles
+                wf_H_lnk = obj.mwbm.forwardKin(obj.mctrl_link, q_j);
+                B_inv = WBM.utilities.tform2angRateTF(wf_H_lnk, 'ZYX'); % use the RPY (ZYX) euler-angles
 
                 J_0 = blkdiag(eye(3,3), B_inv) * J_0;
             elseif opt.eul
-                wf_H_rlnk = mwbm.forwardKin(obj, obj.mctrl_link, q_j);
-                B_inv = WBM.utilities.tform2angRateTF(wf_H_rlnk, 'ZYZ'); % use the ZYZ euler-angles
+                wf_H_lnk = obj.mwbm.forwardKin(obj.mctrl_link, q_j);
+                B_inv = WBM.utilities.tform2angRateTF(wf_H_lnk, 'ZYZ'); % use the ZYZ euler-angles
 
                 J_0 = blkdiag(eye(3,3), B_inv) * J_0;
             end
@@ -118,35 +118,19 @@ classdef MultChainTree < WBM.Interfaces.IMultChainTree
         % end
 
         function M = inertia(obj, q_j)
-            M = mwbm.inertia(obj, q_j);
+            M = obj.mwbm.massMatrix(q_j);
         end
 
-        % function cinertia() % ??
+        % function gravjac()
 
-        % end
-
-        % function payload(obj, pt_mass, pos, link_names)
-        %     mwbm.payload(obj, pt_mass, pos, link_names);
-        % end
-
-        % function gravjac() % ??
-
-        % end
-
-        % function paycap() % ??
-
-        % end
-
-        % function tau_pl = pay(obj, q_j, dq_j)
-        %     tau_pl = mwbm.payloadForces(obj, q_j, dq_j);
         % end
 
         function resv = islimit(obj, q_j)
-            resv = mwbm.islimit(obj, q_j);
+            resv = obj.mwbm.islimit(q_j);
         end
 
         function plot3d(obj, x_out, sim_tstep, vis_ctrl)
-            mwbm.visualizeFDyn(obj, x_out, sim_tstep, vis_ctrl);
+            obj.mwbm.visualizeFDyn(x_out, sim_tstep, vis_ctrl);
         end
 
         function set.name(obj, robot_name)
@@ -224,9 +208,9 @@ classdef MultChainTree < WBM.Interfaces.IMultChainTree
             tform = obj.mwbm.tool_tform;
         end
 
-        function jl = get.qlim(obj)
-            jl = obj.mwbm.jlimits;
-            jl = horzcat(jl.lwr, jl.upr);
+        function jlmts = get.qlim(obj)
+            jl    = obj.mwbm.jlimits;
+            jlmts = horzcat(jl.lwr, jl.upr);
         end
 
         function ndof = get.n(obj)

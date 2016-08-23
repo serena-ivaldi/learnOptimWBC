@@ -8,17 +8,11 @@ classdef (Abstract) IWBM < handle
         sim_config@WBM.absSimConfig
         base_tform@double matrix
         tool_tform@double matrix
+        foot_conf@struct
         gravity@double    vector
         jlimits@struct
         ndof@uint16       scalar
     end
-
-    % are they useful for the iCub?
-    % offset     kinematic joint coordinate offsets (Nx1)
-    % theta       kinematic: joint angles (1xN)
-    % d           kinematic: link offsets (1xN)
-    % a           kinematic: link lengths (1xN)
-    % alpha       kinematic: link twists (1xN)
 
     methods(Abstract)
         initRobot(obj, robot_wbm)
@@ -33,9 +27,9 @@ classdef (Abstract) IWBM < handle
 
         stFltb = getFloatingBaseState(obj)
 
-        % I_acc = Iqdd(obj, q_j, dq_j, tau, stFltb) % ?? inertial forces? (tau = generalized bias forces?)
-
         ddq_j = jointAccelerations(obj, q_j, dq_j, tau, stFltb)
+
+        ddq_j = jointAccelerationsExt(obj, q_j, dq_j, tau, stFltb)
 
         tau_c = coriolisForces(obj, q_j, dq_j, stFltb)
 
@@ -47,24 +41,21 @@ classdef (Abstract) IWBM < handle
 
         tau_g = gravityForces(obj, q_j, stFltb)
 
-        tau_ctrl = inverseDyn(obj, lnk_name, q_j, dq_j, ddq_j, stFltb)
+        tau_ctrl = inverseDyn(obj, q_j, dq_j, ddq_j, stFltb)
 
-        [t, stmChi] = forwardDyn(obj, tspan, fhCtrlTrqs, stvChi_0, ode_opt)
+        [t, stmChi] = forwardDyn(obj, tspan, fhTrqControl, stvChi_0, ode_opt, foot_conf)
 
         visualizeForwardDyn(obj, x_out, sim_tstep, vis_ctrl)
 
-        w_H_rlnk = forwardKin(obj, lnk_name, q_j, stFltb)
+        wf_H_lnk = forwardKin(obj, lnk_name, q_j, stFltb)
 
-        % wf_H_rlnk = T0_n(obj, lnk_name, q_j, stFltb) % ?? computes the forward kinematics for the end-effector? do we need it?
+        % wf_H_lnk = T0_n(obj, lnk_name, q_j, stFltb) % ?? computes the forward kinematics for the end-effector? do we need it?
 
-        wf_H_rlnk = linkFrame(obj, jnt_idx, q_j, stFltb) % link transformation matrix
-        % lnk_tform = linkFrame(obj, jnt_idx, q_j) % link transformation matrix
+        wf_H_lnk = linkFrame(obj, jnt_idx, q_j, stFltb) % link transformation matrix
 
-        wf_H_tp = toolFrame(obj, t_idx, q_j, stFltb) % tool-tip transformation matrix
+        wf_H_tt = toolFrame(obj, t_idx, q_j, stFltb) % tool-tip transformation matrix
 
-        M = inertia(obj, q_j, stFltb)
-
-        % M_x = cartesianInertia(obj, q_j, stFltb) % ?? useful for the iCub?
+        M = massMatrix(obj, q_j, stFltb)
 
         h_c = centroidalMomentum(obj, q_j, dq_j, stFltb)
 
@@ -74,23 +65,17 @@ classdef (Abstract) IWBM < handle
 
         dJ = jacobianDot(obj, lnk_name, q_j, dq_j, stFltb)
 
-        J_tp = jacobianTool(obj, t_idx, q_j, stFltb) % Jacobian matrix in tool frame (end-effector frame)
+        J_tt = jacobianTool(obj, t_idx, q_j, stFltb) % Jacobian matrix in tool-frame
 
         payload(obj, pt_mass, pos, link_names)
 
         % tau_pl = payloadForces(obj, q_j, dq_j, stFltb)
 
-        % paycap() % ??
-
-        % gravjac() % ??
+        % gravjac()
 
         resv = islimit(obj, q_j)
 
         dispParams(obj, prec)
-
-        % set.offset(obj, v) % useful for the iCub?
-
-        % v = get.offset(obj)
 
     end
 end

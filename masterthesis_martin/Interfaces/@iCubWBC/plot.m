@@ -37,7 +37,7 @@ if ~(isempty(varargin))
 end
 
 
-params.plot_objs{ii} = plot3(0,0,0,'.');
+params.plot_objs{1} = plot3(0,0,0,'.');
 axis([-1.2 1.2 -1 1 0 1.2]);
 %axis equal
 hold on
