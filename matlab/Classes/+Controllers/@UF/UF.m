@@ -1,17 +1,17 @@
 classdef  UF < Controllers.AbstractController
-    
+
    properties
-      subchains        % object that contains the subchain of the robot and the J dot for each subchain  (maybe i can leave it) 
-      references       % object that contains the reference trajectory for each primary tasks 
+      subchains        % object that contains the subchain of the robot and the J dot for each subchain  (maybe i can leave it)
+      references       % object that contains the reference trajectory for each primary tasks
       Secondary_refs   % object that contains the reference trajecotry for secondary tasks when specified
       alpha            % cell array of weight function
       repellers        % object of repellers
-      metric           % vector of matlab command     for example M_inv^2, M_inv,eye(lenght(q)) 
+      metric           % vector of matlab command     for example M_inv^2, M_inv,eye(lenght(q))
       current_chain    % index that define the current robot that i want to move
-      %ground_truth    % if true for computing the position and velocity of the end effector i will use the non perturbed model 
-      Param            % cell array of matrix that are contains to kind of object Param{i,j}.Kp, Param{i,j}.Kd  and Param{i,j}.M, obj.Param{i,j}.D, obj.Param{i,j}.P 
-      Param_secondary  % cell array of matrix that are contains to kind of object Param{i,j}.Kp, Param{i,j}.Kd  and Param{i,j}.M, obj.Param{i,j}.D, obj.Param{i,j}.P 
-      combine_rule     % projector or sum 
+      %ground_truth    % if true for computing the position and velocity of the end effector i will use the non perturbed model
+      Param            % cell array of matrix that are contains to kind of object Param{i,j}.Kp, Param{i,j}.Kd  and Param{i,j}.M, obj.Param{i,j}.D, obj.Param{i,j}.P
+      Param_secondary  % cell array of matrix that are contains to kind of object Param{i,j}.Kp, Param{i,j}.Kd  and Param{i,j}.M, obj.Param{i,j}.D, obj.Param{i,j}.P
+      combine_rule     % projector or sum
       regularizer      % this term transform the UF in a regularized UF if it is different from zero. it is a cell array of vector each vector has as many entry as the number of task for the current chain vector
       torque_func      % in this vector i put the handle to the function that i want to use: ComputeRegularizedTorqueSum(...) ComputeTorqueSum(...)
       current_time     % current time to force stop for long iteration
@@ -23,7 +23,7 @@ classdef  UF < Controllers.AbstractController
 
 
    methods
-      
+
        function obj = UF(sub_chains,references,Secondary_refs,alpha,repellers,metric,Param,Param_secondary,combine_rule,regularization,varargin)
          obj.subchains = sub_chains;
          obj.references = references;
@@ -47,7 +47,7 @@ classdef  UF < Controllers.AbstractController
              end
              obj.regularizer{i}=app_vector;
          end
-         
+
          % initialize torque and torque time
 %          obj.torques = cell(obj.subchains.GetNumChains());
 %          for i = 1:obj.subchains.GetNumChains()
@@ -58,7 +58,7 @@ classdef  UF < Controllers.AbstractController
 %             obj.torques_time{i} = [];
 %          end
          obj.current_time = [];
-         % default settings for smoothing and trajectory tracking display (desidered position) 
+         % default settings for smoothing and trajectory tracking display (desidered position)
          obj.display_opt.fixed_step = false;
          obj.display_opt.step = 0.00000001;
          obj.display_opt.trajtrack = false;
@@ -66,80 +66,81 @@ classdef  UF < Controllers.AbstractController
 %          if (nargin > 7)
 %             disp_opt = varargin{1};
 %             obj.display_opt.step =disp_opt.step;
-%             obj.display_opt.trajtrack = disp_opt.trajtrack;   
+%             obj.display_opt.trajtrack = disp_opt.trajtrack;
 %          end
          obj.visual_param.fc = []; % temporary
-       end    
+       end
       % i do  not need cell object because the time is unique
       function SaveTime(obj,ind_subchain,time)
          obj.torques_time = [obj.torques_time,time];
       end
-       
+
       % i do not need cell object because the simulated model is a unique
       % big system of differential equations
       function SaveTau(obj,ind_subchain,tau)
-         obj.torques = [obj.torques,tau];   
+         obj.torques = [obj.torques,tau];
       end
-      
+
       function CleanTau(obj)
           for i = 1 :obj.subchains.GetNumChains()
             obj.torques = [];
           end
       end
-      
+
       function CleanTime(obj)
          for i = 1 :obj.subchains.GetNumChains()
             obj.torques_time = [];
          end
       end
       %% TODO
-      % this management of multiple chain has to be changed in favor of a 
+      % this management of multiple chain has to be changed in favor of a
       % a unique system to refer to to compute the dynamics component of
       % the robot
       function SetCurRobotIndex(obj,index_chain)
           obj.current_chain = index_chain;
       end
-      
+
       function i = GetCurRobotIndex(obj)
           i = obj.current_chain;
       end
-      
+
       function bot = GetActiveBot(obj)
           bot = obj.subchains.GetCurRobot(obj.current_chain);
       end
-      
+
       function bot = GetActiveBotVis(obj)
           bot = obj.subchains.GetCurRobotVis(obj.current_chain);
       end
       %% end
-      
+
       function WS = GetWholeSystem(obj)
           WS = obj.subchains.whole_system;
       end
-      
+
       % get pointer to the complete dynamic object
-      
+
       function  final_tau  = Policy(obj,t,q,qd,Fc,Jc_t)
-          
+
           %DEBUG
           %t
           %q
           %qd
           %---
-          
-         
+
+
           % the dynamic computation between controller and simulator has
           % to be different
-          %% provisory structure 
-          if ~(isa(obj.subchains.sub_chains{1},'DummyRvc_iCub')) 
-              % active robot 
+          %% provisory structure
+          subchain = obj.subchains.sub_chains{1};
+          if ( ~isa(subchain, 'DummyRvc_iCub') && ~isa(subchain,'WBM.Interfaces.IMultChainTree') )
+              % active robot
               cur_bot = obj.GetActiveBot;
               % current chain index
               %i = obj.GetCurRobotIndex;
               DOF = cur_bot.n; % is used in the projector
               M = cur_bot.inertia(q);
               F = cur_bot.coriolis(q,qd)*qd' + cur_bot.gravload(q)' - Jc_t*Fc;
-          else      
+          else
               M = obj.subchains.GetM(q);
               % i include the external forces inside F
               F = obj.subchains.GetF(q,qd,Fc,Jc_t);
@@ -151,8 +152,8 @@ classdef  UF < Controllers.AbstractController
               q = q';
               qd = qd';
           end
-          % controller 
-          if(strcmp(obj.combine_rule,'sum')) 
+          % controller
+          if(strcmp(obj.combine_rule,'sum'))
              count = 1;
              for i = 1:obj.subchains.GetNumChains();
                  for j = 1:obj.subchains.GetNumTasks(i)
@@ -161,13 +162,13 @@ classdef  UF < Controllers.AbstractController
                      count = count + 1;
                  end
              end
-             
+
              final_tau = sum(app_tau,2);
-             final_tau = final_tau + F; 
-             obj.SaveTau(i,final_tau); 
+             final_tau = final_tau + F;
+             obj.SaveTau(i,final_tau);
              obj.SaveTime(i,t);
-             
-           elseif(strcmp(obj.combine_rule,'projector'))   
+
+           elseif(strcmp(obj.combine_rule,'projector'))
              count = 1;
              for i = 1:obj.subchains.GetNumChains();
                  for j = 1:obj.subchains.GetNumTasks(i)
@@ -176,33 +177,33 @@ classdef  UF < Controllers.AbstractController
                      count = count + 1;
                  end
              end
-             
+
              final_tau = sum(app_tau,2);
-             % compute the projector in the null space of repulsor (number of repulsor) 
+             % compute the projector in the null space of repulsor (number of repulsor)
              for j = 1:obj.repellers.GetNumTasks(i)
-               obj.repellers.SetJacob(cur_bot,q,qd,i,j)  
-             end                                
+               obj.repellers.SetJacob(cur_bot,q,qd,i,j)
+             end
              N = obj.repellers.ComputeProjector(i,DOF,obj.subchains.GetNumTasks(i),obj.alpha,t);
              final_tau = ((M*N)/M)*(final_tau + F);
-            
-             obj.SaveTau(i,final_tau) 
-             obj.SaveTime(i,t);  
-           end   
+
+             obj.SaveTau(i,final_tau)
+             obj.SaveTime(i,t);
+           end
       end
-      
+
       %% all the function from this point DO NOT SUPPORT multichain structure (this part work only with RBF)
       % in this function i update the value of the alpha function giving
       % new set of parameters
-      
+
       % the implicit rule with repellers is that first i update the rbf
       % functions for the task and after i update the alpha function
-      % for repellers 
+      % for repellers
       % and then i update the parameter that govern the reference
       function UpdateParameters(obj,parameters)
-       %disp('im in update parameters')   
-         for i=1:size(obj.alpha,1) 
+       %disp('im in update parameters')
+         for i=1:size(obj.alpha,1)
              index = 1;
-             for j=1:size(obj.alpha,2)  
+             for j=1:size(obj.alpha,2)
                  n_param = obj.alpha{i,j}.GetParamNum();
                  app_param = parameters(index:index+n_param - 1);
                  obj.alpha{i,j}.ComputeNumValue(app_param')
@@ -210,8 +211,8 @@ classdef  UF < Controllers.AbstractController
              end
          end
          % update parameters of the references (if there are some)
-         for i=1:size(obj.references.parameter_dim,1) 
-             for j=1:size(obj.references.parameter_dim,2)  
+         for i=1:size(obj.references.parameter_dim,1)
+             for j=1:size(obj.references.parameter_dim,2)
                  n_param = obj.references.parameter_dim{i,j};
                  app_param = parameters(index:index+n_param - 1);
                  if(n_param>0)
@@ -221,26 +222,26 @@ classdef  UF < Controllers.AbstractController
                      obj.references.cur_param_set{i,j} = app_param;
                  end
              end
-         end         
+         end
       end
-      
-       
+
+
       function n_param=GetTotalParamNum(obj)
-          
+
           n_param = 0;
-          for i=1:1:size(obj.alpha,1) 
-             for j=1:size(obj.alpha,2) 
+          for i=1:1:size(obj.alpha,1)
+             for j=1:size(obj.alpha,2)
                  n_param = n_param + obj.alpha{i,j}.GetParamNum();
              end
           end
-          for i=1:1:size(obj.references.parameter_dim,1) 
+          for i=1:1:size(obj.references.parameter_dim,1)
              n_param = n_param + obj.references.GetNumParam(i);
           end
       end
-      
-      
+
+
    end
-    
+
 end
 
 

@@ -25,7 +25,7 @@ function [t, q, qd] = DynSim_iCub(controller,params)
 
 
     try
-        [t,chi,visual_param] = ode15s(forwardDynFunc,params.tStart:params.sim_step:params.tEnd,params.chiInit,options);
+        [t,chi,~] = ode15s(forwardDynFunc,params.tStart:params.sim_step:params.tEnd,params.chiInit,options);
         q = chi(:,1:7+WS.ndof);
         qd = chi(:,8+WS.ndof:end);
         %delete(params.wait)
@@ -138,9 +138,14 @@ function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
     if (icub.active_floating_base == 0) %if the base is fixed, it's velocity is forced at zero
         dx_b = zeros(3,1);
         omega_w = zeros(3,1);
-        icub.SetFloatingBaseState(x_b,qt_b,dx_b,omega_w);
+
+        if ~isa(icub, 'WBM.Interfaces.IWBM')
+            icub.SetFloatingBaseState(x_b,qt_b,dx_b,omega_w);
+        end
     else
-        icub.SetFloatingBaseState(x_b,qt_b,dx_b,omega_w);
+        if ~isa(icub, 'WBM.Interfaces.IWBM')
+            icub.SetFloatingBaseState(x_b,qt_b,dx_b,omega_w);
+        end
         %% Feet correction to avoid numerical integration errors
         % feet correction gain
         K_corr_pos  = 2.5;
@@ -193,7 +198,7 @@ function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
 
     % CoM trajectory generator
     %desired_x_dx_ddx_CoM = generTraj_SoT(xCoMDes,t,trajectory);
-    
+
     % controller
     %tau = stackOfTaskController(param, constraints, feet, gains, Nu, M, h, H, Jc, dJcNu, xCoM, J_CoM, desired_x_dx_ddx_CoM);
     % evaluate the torque function if one is given
@@ -238,7 +243,7 @@ function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
         fc              = (JcMinv*Jc_t)\(JcMinv*h -JcMinvS*tau -dJcNu -K_corr_vel.*Jc*Nu -K_corr_pos.*pos_feet_delta);
 
         tauContact = Jc_t*fc;
-        tauContact1 = M\(Jc_t*fc);
+        %tauContact1 = M\(Jc_t*fc);
         %     tauContact(7:end) = 0;
         %     tauContact2 = M\(tauContact);
         dNu     = M\(tauContact + [zeros(6,1); tau]-h);

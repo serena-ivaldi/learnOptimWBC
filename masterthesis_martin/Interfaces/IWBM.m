@@ -1,8 +1,8 @@
 classdef (Abstract) IWBM < handle
     properties(Abstract, Dependent)
         % public properties for fast get/set methods:
-        model_name@char
         robot_name@char
+        robot_model@char
         robot_manuf@char
         robot_params@WBM.wbmBaseRobotParams
         sim_config@WBM.absSimConfig
@@ -19,9 +19,7 @@ classdef (Abstract) IWBM < handle
 
         initRobotFcn(obj, fhInitRobotWBM, wf2fixLnk)
 
-        initBaseRobotParams(obj, base_params)
-
-        delete(obj)
+        initBaseRobotParams(obj, robot_params)
 
         [vqT_b, q_j, v_b, dq_j] = getState(obj)
 
@@ -41,7 +39,9 @@ classdef (Abstract) IWBM < handle
 
         tau_g = gravityForces(obj, q_j, stFltb)
 
-        tau_ctrl = inverseDyn(obj, q_j, dq_j, ddq_j, stFltb)
+        tau_ctrl = inverseDyn(obj, q_j, dq_j, ddq_j, dv_b, stFltb)
+
+        tau_ctrl = inverseHybridDyn(obj, q_j, dq_j, ddq_j, stFltb)
 
         [t, stmChi] = forwardDyn(obj, tspan, fhTrqControl, stvChi_0, ode_opt, foot_conf)
 
@@ -49,9 +49,7 @@ classdef (Abstract) IWBM < handle
 
         wf_H_lnk = forwardKin(obj, lnk_name, q_j, stFltb)
 
-        % wf_H_lnk = T0_n(obj, lnk_name, q_j, stFltb) % ?? computes the forward kinematics for the end-effector? do we need it?
-
-        wf_H_lnk = linkFrame(obj, jnt_idx, q_j, stFltb) % link transformation matrix
+        wf_H_lnk = linkFrame(obj, lnk_name, q_j, stFltb) % link transformation matrix
 
         wf_H_tt = toolFrame(obj, t_idx, q_j, stFltb) % tool-tip transformation matrix
 
@@ -70,8 +68,6 @@ classdef (Abstract) IWBM < handle
         payload(obj, pt_mass, pos, link_names)
 
         % tau_pl = payloadForces(obj, q_j, dq_j, stFltb)
-
-        % gravjac()
 
         resv = islimit(obj, q_j)
 

@@ -41,7 +41,8 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
             %end
             % compute J_dot from the the current subchain
             J_dot = cur_bot.jacob_dot(q',qd');
-        elseif isa(cur_bot, 'WBM.Interfaces.MultChainTree') % or if 'cur_bot' is a class that is derived from 'MultChainTree' ...
+        elseif isa(cur_bot, 'WBM.Interfaces.IMultChainTree')
+            % 'cur_bot' is a derived class of the 'IMultChainTree' interface:
             q_t = q.';
             dq_t = qd.';
             lnk_name = obj.target_link{ind_subchain}{ind_subchain, ind_task};

@@ -9,7 +9,8 @@ function [b,A] = TrajCostraint(obj,ind_subchain,ind_task,t,J_old,Jd_old,x,xd,rpy
          % in this part of the code i dont need to use reshape jacobian
          % because i will use for use the complete jacobian for control in joint
          % space
-         if ~(isa(obj.subchains.sub_chains{1},'DummyRvc_iCub')) 
+         subchain = obj.subchains.sub_chains{1};
+         if ( ~isa(subchain, 'DummyRvc_iCub') && ~isa(subchain, 'WBM.Interfaces.IMultChainTree') ) 
             A=eye(obj.GetActiveBot.n);
          else
              if (obj.GetWholeSystem.active_floating_base)

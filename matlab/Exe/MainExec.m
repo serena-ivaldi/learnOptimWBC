@@ -5,7 +5,13 @@ clc
 %% initialize all the data
 optim = false;
 
-configuration_file_name = 'RP_humanoid_test_iCub_4';
+% configuration file using the "improvised" interface:
+%configuration_file_name = 'RP_humanoid_test_iCub_4';
+
+% configuration file using the WBM-Toolbox:
+configuration_file_name = 'RP_humanoid_test_iCub_5';
+%configuration_file_name = 'RP_humanoid_test_iCub_6';
+%configuration_file_name = 'RP_humanoid_test_iCub_7';
 
 [bot1,name_scenario,time_struct,time_sym_struct,simulator_type,reference,alphas,controller,constr,learn_approach,inst,~,~,~,~,~,input,rawTextFromStorage,name_dat]=Init(configuration_file_name,optim);
 %% Simulation
@@ -55,8 +61,8 @@ if(ee_trajectory || elbow_traj)
     %figure;
     hold on;
     %text = LoadScenario(name_scenario);
-    %eval(text);    
-    if ~(isa(cur_bot,'DummyRvc_iCub'))
+    %eval(text);
+    if ( ~isa(cur_bot, 'DummyRvc_iCub') && ~isa(cur_bot, 'WBM.Interfaces.IMultChainTree') )
         [ee,elbow] = ComputePositions(q{1},t,controller);
         ee = ee';
         elbow = elbow';
@@ -83,11 +89,11 @@ if(ee_trajectory || elbow_traj)
         handle_vector = [];
         for izy = 1:length(tags)
             name_of_trace{1,izy} = names{izy};
-            vect = output(:,(1 + (izy-1)*size(t,1)):(izy*size(t,1)))'; 
+            vect = output(:,(1 + (izy-1)*size(t,1)):(izy*size(t,1)))';
             newhandle = plot3(vect(:,1)',vect(:,2)',vect(:,3)','Color',colors{izy},'LineWidth',2,'LineStyle',style{izy});
             handle_vector = [handle_vector, newhandle];
         end
-    end    
+    end
     hold on;
     hL = legend(handle_vector,name_of_trace,'Location','southeast');
     set(hL,'FontSize',15);
@@ -99,18 +105,18 @@ if(~video && ~save_fig)
     set(gca,'CameraViewAngle',zoom);
     camera_position = [7.9387   -2.8753    8.3434];
     campos(camera_position)
-    if ~(isa(cur_bot,'DummyRvc_iCub'))
+    if ( ~isa(cur_bot, 'DummyRvc_iCub') && ~isa(cur_bot, 'WBM.Interfaces.IMultChainTree') )
         bot1.plot(q{1},'fps',fps);
     else
         bot1.plot(q,input{2});
-        
+
         %plot with the activation function
         %names_of_subplot = {'Right arm tasks','Posture task','Left arm tasks'};
         %grouping = {[1, 2], [5], [3, 4]};
         %colors = {{'r', 'c'}, {'default'}, {'r', 'c'}}; %'default' if no chnage in the color
         %legends = {{'elbow','hand'}, {'none'} ,{'elbow','hand'}}; %'none' if you dont want any legend
         %bot1.plotWActivation(q,input{2},alphas,names_of_subplot,grouping,colors,legends);
-        
+
         %slowmode plot with CoP visualisation
         %fc = controller.visual_param.fc;
         %bot1.plot(q,input{2},'slowmode',fc);
@@ -132,7 +138,7 @@ elseif(video)
     else
         %standard plot
         %bot1.plot(q,input{2},'movie',path);
-        
+
         %plot with the activation function
         names_of_subplot = {'Right arm tasks','Posture task','Left arm tasks'};
         grouping = {[1, 2], [5], [3, 4]};

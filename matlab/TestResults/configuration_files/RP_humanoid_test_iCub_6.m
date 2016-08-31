@@ -1,7 +1,7 @@
 
 %%%;;
 
-% This configuration is the same as configuration #4, but uses the WBM-Toolbox instead.
+% This configuration is the same as configuration #2, but uses the WBM-Toolbox instead.
 % Note: This configuration file works only if the WBM-Toolbox is installed on the system.
 import WBM.*
 import WBM.utilities.*
@@ -22,8 +22,9 @@ CONTROLLERTYPE ='UF';   % GHC or UF
 %%
 
 %SUBCHAIN PARAMETERS
-subchain1 =  {'r_hand','r_elbow_1','l_hand','l_elbow_1','none','r_hand','l_hand'};
+subchain1 =  {'r_hand','r_elbow_1','l_hand','l_elbow_1','none'};
 target_link{1} = subchain1;
+
 
 %% Robot
 wf2fixLnk   = true; % set the world frame to a fixed link
@@ -39,30 +40,28 @@ chains = SubChains(target_link,robots,bot1);
 %%  REFERENCE PARAMETERS
 deg = pi/180;
 % primary trajectory
-traj_type = {'cartesian','cartesian','cartesian','cartesian','joint','cartesian','cartesian'};
-control_type = {'x','x','x','x','none','x','x'};
-type_of_traj = {'sampled','sampled','sampled','sampled','sampled','sampled','sampled'};
-geometric_path = {'fixed','fixed','fixed','fixed','fixed','fixed','fixed'};
-time_law = {'none','none','none','none','none','none','none'};
+
+traj_type = {'cartesian','cartesian','cartesian','cartesian','joint'};
+control_type = {'x','x','x','x','none'};
+type_of_traj = {'sampled','sampled','sampled','sampled','sampled'};
+geometric_path = {'fixed','fixed','fixed','fixed','fixed'};
+time_law = {'none','none','none','none','none'};
 %parameters first chains
 geom_parameters{1,1} = [0.3,-0.17,0.68];    %r_e_e_point
-geom_parameters{1,2} = [0.18,-0.23,0.68];   %[0.21,-0.25,0.68];	%r_elbow_point
+geom_parameters{1,2} = [0.21,-0.25,0.68];	%r_elbow_point
 geom_parameters{1,3} = [0.3,0.0248,0.68];   %l_e_e_point
-geom_parameters{1,4} = [0.18,0.1038,0.68];  %[0.21,0.1138,0.68];   %l_elbow_point
-geom_parameters{1,5} = [0 0.785398163397448 0 0 0 0.523598775598299 0 0 0.785398163397448 0 0 0 0.523598775598299 0 0 0 0];
-geom_parameters{1,6} = [0.28,-0.16,0.7463];   %r_end_pt  [0.2512,-0.16,0.76] [0.28,0.0148,0.7463];
-geom_parameters{1,7} = [0.28,0.0148,0.7463];	%l_end_pt [0.21,0.0148,0.77]
+geom_parameters{1,4} = [0.21,0.1138,0.68];   %l_elbow_point
+geom_parameters{1,5} = [0 0.366519142918809 0 0 -0.191986217719376 0.523598775598299 0 -0.174532925199433 0.366519142918809 0 0 -0.191986217719376 0.523598775598299 0 -0.174532925199433 0 0];
 dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1];
 dim_of_task{1,3}= [1;1;1]; dim_of_task{1,4}= [1;1;1];
 dim_of_task{1,5}= ones(bot1.ndof,1);
-dim_of_task{1,6}= [1;1;1]; dim_of_task{1,7}= [1;1;1];
 
 % secondary trajectory
-traj_type_sec = {'none','none','none','none','none','none','none'};
-control_type_sec = {'rpy','rpy','rpy','rpy','rpy','rpy','rpy'};
-type_of_traj_sec = {'func','func','func','func','func','func','func'};
-geometric_path_sec = {'fixed','fixed','fixed','fixed','fixed','fixed','fixed'};
-time_law_sec = {'linear','linear','linear','linear','linear','linear','linear'};
+traj_type_sec = {'none','none','none','none','none'};
+control_type_sec = {'rpy','rpy','rpy','rpy','rpy'};
+type_of_traj_sec = {'func','func','func','func','func'};
+geometric_path_sec = {'fixed','fixed','fixed','fixed','fixed'};
+time_law_sec = {'linear','linear','linear','linear','linear'};
 %parameters first chains
 geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
 geom_parameters_sec{1,2} = [-0.309 -0.469 0.581];
@@ -99,7 +98,7 @@ switch CONTROLLERTYPE
 end
 
 %% SCENARIO
-name_scenario = 'iCub_4';
+name_scenario = 'iCub_2';
 
 %% RBT SIMULATOR PARAMETERS
 time_sym_struct = time_struct;
@@ -124,8 +123,8 @@ elseif strcmp(simulator_type{1},'icub_matlab')
     qdi{1} = [];
     list_of_kin_chain = {'trunk','left_arm','right_arm'};
     joints_initial_values{1,1} = [0.0  0.0  0.0];
-    joints_initial_values{1,2} = [0.0  30.0  0.0  45.0  0.0 0.0 0.0];
-    joints_initial_values{1,3} = [0.0  30.0  0.0  45.0  0.0 0.0 0.0];
+    joints_initial_values{1,2} = [-11.0  30.0  0.0  21.0  0.0 -10.0 0.0];
+    joints_initial_values{1,3} = [-11.0  30.0  0.0  21.0  0.0 -10.0 0.0];
 
     params.feet_on_ground =  [1,1];
     params.numContacts = sum(params.feet_on_ground,2);
@@ -141,8 +140,6 @@ elseif strcmp(simulator_type{1},'icub_matlab')
     end
     params.active_floating_base = false;
     params.qjInit      = bot1.InitializeState(list_of_kin_chain, params.feet_on_ground, joints_initial_values);
-    %params.qjInit      = [0.0606953245641302 1.41994832618389 -6.74178292930099e-08 -1.14179614686264e-07 -0.984861184692183 0.761783299026996 0.849107718577681 1.82446511832070e-07 1.23867031369701 -3.00036385696852e-08 6.49994328883225e-08 -1.14151145574591 0.575459848754039 0.945960370485754 -6.03357679751874e-08 0.324676495831434 -0.0358523080153591]';
-
     params.dqjInit     = zeros(bot1.ndof,1);
     % icub starting velocity floating base
     params.dx_bInit    = zeros(3,1);
@@ -197,11 +194,8 @@ switch CONTROLLERTYPE
         precomp_sample = false;
         % value of theta that we have to change when we want to execute the result
         % from the optimization step
-        %numeric_theta = [0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
-        %numeric_theta =[0.068017 9.937933 10.629743 8.625690 4.620175 10.724682 6.943026 1.836172 6.005996 6.404127 1.499565 5.320011 5.059803 8.438304 2.319497 8.590403 9.120348 2.400932 9.071976 6.264097 ];
-        %numeric_theta =[2.3218    2.5695    6.8006    4.6558    5.7475    8.7383    3.5058    5.2817    6.9910    6.7590    4.5235    6.3875    7.3247    6.7258 8.5637];
-        a = 14; b = 5; c = 14; d = 5; e = 1; f=0; g=0;
-        numeric_theta = [a a a a a b b b b b c c c c c d d d d d e e e e e f f f f f g g g g g];
+        a = 13; b = 2; c =  13; d = 2; e = 1;
+        numeric_theta = [a a a a a b b b b b c c c c c d d d d d e e e e e];
         %numeric_theta = [1.11087134108495 12.5305550089167 5.08866531318563 11.3506839783115 7.04742423600904 -8.78460218382942 12.4265180024550 -0.580054564040172 10.0938379456489 7.78471864294504 1.03847938458557 7.90094326509892 14 12.9866271074009 14 -1.59448676869201 4.91875693109553 1.16310380170680 13.1120720350808 5.32930377216845 -0.238565482650715 8.67768415160355 3.71249236039120 3.37630888571424 3.01213978936084];
 
         %8 of 2
@@ -230,8 +224,8 @@ switch CONTROLLERTYPE
         % regularized case i have to do N^(-1)
         % not regularized case i have N^(-1/2)
         metric = {'M^(1)','M^(1)','M^(1)','M^(1)','M^(1)','M^(1)','M^(1)'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);
-        kd = [80,80,80,80,80,80,80];
-        kp = [30,30,30,30,30,30,30]; % row vector one for each chain
+        kd = [110,110,110,110,110,110,110];
+        kp = [70,70,70,70,70,70,70]; % row vector one for each chain
         for i= 1:chains.GetNumChains()
             for par = 1:chains.GetNumTasks(i)
                 if(strcmp(traj_type{i},'impedance'))
@@ -291,17 +285,13 @@ switch CONTROLLERTYPE
         for k = 1:length(distConstraints_values)
             constraints_functions{end+1} = 'DistanceObs';
         end
-        distConstraints_values = [0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03]; % distances for the collissions constraints
-        constraints_functions{end+1} = 'FixedDistanceEquality';
-        fixDistance = 0.1748; %%%TO CHECK
-        constraints_values = [constraints_values, distConstraints_values, fixDistance];   % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
+        constraints_values = [constraints_values, distConstraints_values];   % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
         constraints_type = ones(1,length(constraints_values)); % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
-        constraints_type(end) = 0; %beacause the last constraint is an equality
 
         activate_constraints_handling = true;
         %% INSTANCE PARAMETER
         run_function = @RobotExperiment;
-        fitness = @fitnessHumanoidsIcub4;
+        fitness = @fitnessHumanoidsIcub2arms;
         clean_function = @RobotExperimentCleanData;
 
         if strcmp(simulator_type{1},'rbt')
@@ -320,7 +310,7 @@ switch CONTROLLERTYPE
             input{2} = params;
             input{3} = time_sym_struct;
             input{4} = [];                 % here i have to insert the controller i will do that in init()
-            input{5} = fixDistance;
+
         end
         %% CMAES PARAMETER
         %--- Starting value of parameters
