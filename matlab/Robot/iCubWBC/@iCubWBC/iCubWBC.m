@@ -70,7 +70,7 @@ classdef iCubWBC < WBM.Interfaces.iCubWBM
             %% Updating the robot position
             obj.mwbm_icub.setState(qjInit, dqjInit, vertcat(dx_bInit, omega_WInit));
             % fixing the world reference frame w.r.t. the foot on ground position
-            [x_b0, R_b0] = obj.mwbm_icub.getWorldFrameFromFixedLink(reference_link);
+            [x_b0, R_b0] = obj.mwbm_icub.getWorldFrameFromFixLnk(reference_link);
             % define world frame
             obj.mwbm_icub.setWorldFrame(R_b0, x_b0);
 
