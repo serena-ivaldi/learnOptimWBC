@@ -1,4 +1,4 @@
-
+% Configuration file of the first floating base experiment
 %%%;;
 
 %% GENERAL PARAMETERS

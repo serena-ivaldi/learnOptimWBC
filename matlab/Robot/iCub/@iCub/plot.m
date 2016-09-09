@@ -427,14 +427,18 @@ while ii<n+1   % the visualization instance
     drawnow;
     
     % to update the visualizer speed to keep it close to real simulation time
-    time_dif = vis_speed*params.sim_step-toc();
-    
-    if time_dif>0
-        
-        pause(time_dif);
+    if ~(params.slowmode)
+        time_dif = vis_speed*params.sim_step-toc();
+
+        if time_dif>0
+
+            pause(time_dif);
+        else
+
+            vis_speed=vis_speed+1;
+        end
     else
-        
-        vis_speed=vis_speed+1;
+        vis_speed = 10;
     end
 
     if params.movie
@@ -452,13 +456,14 @@ while ii<n+1   % the visualization instance
             convHull = obj.computeSupPoly(params.feet_on_ground,chi(ii-1,:)');
             if ii == 2
                 figCvHull = figure;
+                title('Support Polygon','FontSize',16)
+                axis equal
             end
 
             CoP(1)      = -params.fc{1}(5,ii-1)/params.fc{1}(3,ii-1);
             CoP(2)      =  params.fc{1}(4,ii-1)/params.fc{1}(3,ii-1);
 
             if  params.numContacts == 2
-
                 CoP(3)      = -params.fc{1}(11,ii-1)/params.fc{1}(9,ii-1);
                 CoP(4)      =  params.fc{1}(10,ii-1)/params.fc{1}(9,ii-1);
 
@@ -468,18 +473,31 @@ while ii<n+1   % the visualization instance
                 temp = rot*temp;
                 CoP(3) = temp(1);
                 CoP(4) = temp(2);
-
             end
-
-            convHull.plotConvHull(figCvHull,CoP(1),CoP(2));
-            convHull.plotConvHull(figCvHull,CoP(3),CoP(4));
+            
+%             convHull.plotConvHull(figCvHull,CoP(1),CoP(2));
+%             convHull.plotConvHull(figCvHull,CoP(3),CoP(4));
+            convHull.plotConvHull(figCvHull,qb(ii,1),qb(ii,2)); %plot the projection of the floating base)
         end
         waitforbuttonpress
     end
     
-    
     ii=ii+vis_speed;
+    
+    %clear the convex hull figure in order to display the next frame on a
+    %clean figure
+    if params.slowmode
+        if (ii < n +1) %avoid deleting the last frame
+            figure(figCvHull);
+            hold on
+            cla
+            title('Support Polygon','FontSize',16)
+            axis equal
+            hold off            
+        end
+    end
 end
+
 
 end
 

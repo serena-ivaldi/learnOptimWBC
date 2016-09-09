@@ -57,7 +57,7 @@ classdef ConvexHull
         function  plotConvHull(obj,figHandle,Xq,Yq)
         % Plot the shape of the support polygon, the characteristic points
         % of the support(s) and the position of the query point (CoM, CoP,
-        % ZMP, ...)
+        % ZMP, ...) if there is a query point otherwise put []
             %Error checking
             %assert(all(size(Xq(:)) == [1 1]),'Input arguments: Xq should be a singelton');
             %assert(all(size(Yq(:)) == [1 1]),'Input arguments: Yq should be a singelton');
@@ -66,10 +66,12 @@ classdef ConvexHull
             figure(figHandle);
             hold on
             plot(obj.X,obj.Y,'b*');
-            fill(obj.X(obj.K),obj.Y(obj.K),'g','FaceAlpha',0.1);
+            fill(obj.X(obj.K),obj.Y(obj.K),'g','FaceAlpha',0.1); %the hull
             [Xc, Yc] = obj.getCenter;
             plot(Xc,Yc,'+');
-            plot(Xq,Yq,'ro');
+            if ~(isempty(Xq))
+                plot(Xq,Yq,'ro');
+            end
             hold off
             
         end

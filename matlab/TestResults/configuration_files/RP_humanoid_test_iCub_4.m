@@ -1,4 +1,5 @@
-
+% Configuration file of the bimanual reaching task with new settings due to
+% a change in the joints' limits
 %%%;;
 
 %% GENERAL PARAMETERS
