@@ -1,4 +1,4 @@
-
+% Configuration file of the one arm reaching task for Humanoids 2016 paper
 %%%;;
 
 %% GENERAL PARAMETERS
