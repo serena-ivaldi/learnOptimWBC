@@ -99,7 +99,8 @@ for k = 1:(nIterations - 1)
     [performances_new succeeded(k)] = fnForwardModel(obj,offsprings,1, 1); % compute fitness    
     %% added part to manage constraints
     if(obj.constraints)      
-        constraints = obj.penalty_handling.penalties(1,:)>0; % vector of index of the violated constrained
+        %% TODO check if it is working 
+        constraints = obj.penalty_handling.feasibility_vec(1,:)==0; % vector of index of the violated constrained
         violated_constrained = find(constraints);
     end 
     %%  update   

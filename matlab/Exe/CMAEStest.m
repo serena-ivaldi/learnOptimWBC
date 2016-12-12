@@ -7,11 +7,11 @@ close all
 clc
 
 %% DATA 1
-robotics_experiment = [1]; % series of value that say if the current experiment is a robotics experiments or not
+robotics_experiment = [0]; % series of value that say if the current experiment is a robotics experiments or not 1 or 0
 niter_tot = 35;  %number of functions evaluations
-function_2_test ={'robotic_experiments'};%'robotic_experiments','g06','g07','g09','f240','f241','HB'};
-learn_approach = 'CMAES'; %CMAES (1+1)CMAES  CEM,fmincon    with (1+1)CMAES i have to use vanilla constraints management  (temporary)
-method_to_use = 'vanilla';  % adaptive , vanilla ,empty,fmincon
+function_2_test ={'g06'};%'robotic_experiments','g06','g07','g09','f240','f241','HB'};
+learn_approach = 'BO(1+1)CMAES'; %CMAES (1+1)CMAES  CEM BO(1+1)CMAES fmincon     with (1+1)CMAES and BO(1+1)CMAES i have to use nopenalty
+method_to_use = 'nopenalty';  % adaptive , vanilla ,empty,fmincon, nopenalty
 
 repetition_of_the_experiment = 20; % at least 2
 threshold = 2.5; % value to identify the beginning of steady state
@@ -191,9 +191,13 @@ for jj=1:number_of_function_2_test
         niter = round(niter_tot/lambda);
     elseif(strcmp(learn_approach,'fmincon'))
         niter = niter_tot;
+    elseif(strcmp(learn_approach,'BO(1+1)CMAES'))
+        niter = niter_tot;
     end
     
-    if(strcmp(method_to_use,'vanilla'))
+    if(strcmp(method_to_use,'nopenalty')) % for 1+1CMAES and BO
+       constr =Optimization.NoPenalty(search_space_dimension,constraints_functions,constraints_type,constraints_values);
+    elseif(strcmp(method_to_use,'vanilla'))
         constr =Optimization.FixPenalty(search_space_dimension,constraints_functions,constraints_type,constraints_values);
     elseif(strcmp(method_to_use,'adaptive'))
         constr = Optimization.AdaptivePenalty(epsilon,niter,search_space_dimension,constraints_functions,constraints_type,constraints_values);

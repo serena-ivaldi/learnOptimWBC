@@ -1,4 +1,4 @@
-function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = BO1plus1CMAES(settings)
+function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = BO1plus1CMAES(obj,settings)
 
     %% Initialization
 
@@ -20,13 +20,16 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
     n_constraints = obj.penalty_handling.n_constraint;
 
     fnForwardModel = @(obj_,actionLearn_,curr_candidate_,isMean_)TransAction(obj_,actionLearn_,curr_candidate_,isMean_, settings);
+                  
+    BO = Optimization.BayesOpt(minAction, maxAction, n, n_constraints);
     
-    BO = BayesianOptimization(fnForwardModel, minAction, maxAction, n, n_constraints);
-    
-    costs(1) = - performances(1);
+    %% TODO for metrics i need to introduce the same structure fo the other method
+    %costs(1) = - performances(1);
 
     %% initilization
-    [init_x,init_y]=InitialSample(obj,fnForwardModel,lb,ub,number_init_points)
+    %% TODO put number_init_points in the initial value for this method
+    number_init_points = 10;
+    [init_x,init_y]=InitialSample(obj,fnForwardModel,minAction,maxAction,number_init_points);
     BO.Init(init_x,init_y)
     
     
@@ -42,10 +45,12 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
        % compute the model 
        disp('evaluate offsprings')
        [performances_new succeeded(k)] = fnForwardModel(obj,x_candidate,1, 1); % compute fitness 
-       y = obj.penalty_handling.constraints_violations;
+       y = obj.penalty_handling.penalties;
+       y(end + 1)= obj.penalty_handling.feasibility;
        y(end + 1) = performances;
        
        % update the gaussian process
+       BO.Update(x_candidate, y)
        
        % Keep track of information about iteration 
 %        self.i += 1
@@ -71,14 +76,15 @@ function [init_x,init_y]=InitialSample(obj,fnForwardModel,lb,ub,number_init_poin
     %% TODO check on it
     % Generate random points (l is a matrix each row is a radom point)
     %r = a + (b-a).*rand(100,1);
-    init_x = repmat(lb,number_init_points,1) + repmat(ub-lb,number_init_points,1).*rand(number_init_points,lb.length());
+    init_x = repmat(lb,number_init_points,1) + repmat(ub-lb,number_init_points,1).*rand(number_init_points,length(lb));
     % Evaluate target function at all initialization
     % points (random + explore)
     for i=1:number_init_points
         % questa cosa va modificata perche la assegnazione va fatta dentro la funzione
        disp('evaluate offsprings')
-       [performances succeeded(k)] = fnForwardModel(obj,init_x(i,:),1, 1); % compute fitness  
-       y = obj.penalty_handling.constraints_violations;
+       [performances] = fnForwardModel(obj,init_x(i,:),1, 1); % compute fitness  
+       y = obj.penalty_handling.penalties;
+       y(end + 1) = obj.penalty_handling.feasibility;
        y(end + 1) = performances;
        init_y(i,:) = y;
         if self.verbose

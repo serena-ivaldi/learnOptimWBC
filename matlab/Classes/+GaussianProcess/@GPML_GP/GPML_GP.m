@@ -1,4 +1,4 @@
-classdef GPML_GP < AbstractGP
+classdef GPML_GP < GaussianProcess.AbstractGP
     
    properties
       X
@@ -40,7 +40,7 @@ classdef GPML_GP < AbstractGP
        end
        
        function Update(obj,x_n,y_n) 
-           obj.X(end + 1) = x_n;
+           obj.X(end + 1,:) = x_n;
            obj.Y(end + 1) = y_n;
        end
        
