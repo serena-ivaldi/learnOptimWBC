@@ -9,11 +9,12 @@ classdef GPML_GP < GaussianProcess.AbstractGP
       mean
       hyp0
       hyp
+      Ncg
    end
        
     
    methods
-       % TODO for now I setup everything inside the constructor then I will
+       %% TODO for now I setup everything inside the constructor then I will
        % do it in a flexible way
        function obj = GPML_GP()
            obj.likelihood = 'likGauss';
@@ -26,12 +27,17 @@ classdef GPML_GP < GaussianProcess.AbstractGP
            obj.hyp0.cov  = log([ell;sf]);
            obj.mean = {@meanZero};
            obj.hyp0.mean = [];
-           
+           obj.Ncg = 50;
        end
        
        function Init(obj,X_i,Y_i)
            obj.X = X_i;
            obj.Y = Y_i;
+           if obj.Ncg == 0
+             obj.hyp = obj.hyp0;
+           else
+             obj.hyp = minimize(obj.hyp0,'gp', -obj.Ncg, obj.inference, obj.mean, obj.cov, obj.likelihood, obj.X, obj.Y); % opt hypers
+           end
        end
        
        %% TODO understand if it is usefull
@@ -42,18 +48,15 @@ classdef GPML_GP < GaussianProcess.AbstractGP
        function Update(obj,x_n,y_n) 
            obj.X(end + 1,:) = x_n;
            obj.Y(end + 1) = y_n;
+           if obj.Ncg == 0
+             obj.hyp = obj.hyp0;
+           else
+             obj.hyp = minimize(obj.hyp,'gp', -obj.Ncg, obj.inference, obj.mean, obj.cov, obj.likelihood, obj.X, obj.Y); % opt hypers
+           end
        end
        
        function [ymu,ys2] = Predict(obj,x_t)
-          
-           Ncg = 50;
-           if Ncg == 0
-             obj.hyp = obj.hyp0;
-           else
-             obj.hyp = minimize(obj.hyp0,'gp', -Ncg, obj.inference, obj.mean, obj.cov, obj.likelihood, obj.X, obj.Y); % opt hypers
-           end
-           [ymu, ys2, fmu, fs2 ] = gp(obj.hyp, obj.inference, obj.mean, obj.cov, obj.likelihood, obj.X, obj.Y, x_t);
-           
+           [ymu, ys2, fmu, fs2 ] = gp(obj.hyp, obj.inference, obj.mean, obj.cov, obj.likelihood, obj.X, obj.Y, x_t); 
        end
        
    end

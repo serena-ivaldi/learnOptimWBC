@@ -14,6 +14,7 @@ classdef BayesOpt < handle
         eps 
         verbose
         y_max 
+        pd    %  i need it for the surrogate computation.
     end
     
     methods
@@ -41,7 +42,10 @@ classdef BayesOpt < handle
 
             %% TODO define surrogate functions
             % Surrogate placeholder
-            self.surrogate = @(self,x)Surrogate(self, x, kind, kappa, xi);
+            kind = 'poi';
+            kappa =0.1;
+            xi = 0.1;
+            self.surrogate = @(self_,x_)Surrogate(self_, x_, kind, kappa, xi);
 
             % PrintLog object
             %self.plog = PrintLog(self.keys)
@@ -50,6 +54,13 @@ classdef BayesOpt < handle
             self.eps = 0.1;
             % Verbose
             self.verbose = true;
+            
+            % we need to initialize y_max in the case that during the
+            % initialization no y_max is found ( i put a generic small value it should be adaptive though)
+            self.y_max = -100000;
+            
+            self.pd =  makedist('Normal');
+            
         end
         
         function Init(self, x_init,y_init)
@@ -58,16 +69,17 @@ classdef BayesOpt < handle
         %  combination of points passed by the user, and randomly sampled ones.
         % 
         %  param init_points: Number of random points to probe.
-        %% TODO check it
-            for i = 1:size(self.gp_s,1)
-                self.gp_s{i}.init(x_init,y_init(:,i));
-                if(i==size(self.gp_s,1))
-                    %% TODO i have to update y_max only if the the point is feasible
-                    index = (y_init(:,i-1)==1);
-                    self.y_max = max(y_init(index,i));
-                end
+            %% TODO check it
+            for i = 1:length(self.gp_s)
+                self.gp_s{i}.Init(x_init,y_init(:,i));
             end   
-          
+            
+            %% TODO i have to update y_max only if the the point is feasible
+            index = (y_init(:,end-1)==1);
+            y_candidate = max(y_init(index,i));     
+            if(~isempty(y_candidate))
+                self.y_max = y_candidate;
+            end
         end
 
     %    function initialize(self, points_dict):
@@ -129,23 +141,23 @@ classdef BayesOpt < handle
             %%% TODO rand in bound (round is beetween 0 and 1)
             % i solve the optimization many time s to be sure that the optimal
             % solution is not local (i could remove this )
-            x_0 = rand([100,self.dim]);
+            x_0 = rand([3,self.dim]);
 
             %%% TODO specify the structure of self.surrogate
             for i = 1: length(x_0)
                 % Find the minimum of minus the acquisition function
-               fun = self.surrogate;
-               [x,fval] = fmincon(fun,x_0(i,:),[],[],[],[],self.bounds(1,:),self.bounds(2,:));
-
-
-                % Store it if better than previous minimum(maximum).
-                if (-res.fun >= max_acq)
+               fun = @(x_)self.surrogate(self,x_);
+               options = optimoptions('fmincon','Algorithm','interior-point','Display','none');
+               %% TODO Check if the surrogate function have the right sign (i want to maximize but im using a minimization)
+               [x,fval] = fmincon(fun,x_0(i,:),[],[],[],[],self.bounds(1,:),self.bounds(2,:),[],options);
+               % Store it if better than previous minimum(maximum).
+                if (-fval >= max_acq)
                     x_max = x;
-                    max_acq = fval;
+                    max_acq = -fval;
                 end
 
             end
-            %%% TODO extend clip to different bound per each dimension
+            %% TODO extend clip to different bound per each dimension
             % Clip output to make sure it lies within the bounds. Due to floating
             % point technicalities this is not always the case.
             clip(x_max, self.bounds(1, :), self.bounds(2, :))
@@ -155,7 +167,8 @@ classdef BayesOpt < handle
             
             
             for i=1:  length(self.gp_s)
-                self.gp_s{i}.update(new_x,new_y(i));
+                i
+                self.gp_s{i}.Update(new_x,new_y(i));
             end
             %% TODO check for unique rows in the gp
             % Find unique rows of X to avoid GP from breaking

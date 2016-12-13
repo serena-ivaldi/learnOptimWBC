@@ -100,7 +100,8 @@ for k = 1:(nIterations - 1)
     %% added part to manage constraints
     if(obj.constraints)      
         %% TODO check if it is working 
-        constraints = obj.penalty_handling.feasibility_vec(1,:)==0; % vector of index of the violated constrained
+        %% TODO check constraints violations for equality constraints
+        constraints = obj.penalty_handling.feasibility_vec(1,:)==-1; % vector of index of the violated constrained
         violated_constrained = find(constraints);
     end 
     %%  update   

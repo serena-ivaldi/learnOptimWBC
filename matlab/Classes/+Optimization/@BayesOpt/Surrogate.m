@@ -1,6 +1,6 @@
 function ret = Surrogate(self, x, kind, kappa, xi)
         if strcmp(kind,'ucb')
-            ret = ucb(self,x, gp, clf, kappa, risk, base);
+            ret = ucb(self,x, kappa);
         end
         if strcmp(kind,'ei')
             ret = ei(self,x, xi);
@@ -12,28 +12,27 @@ end
 
 
 function ret = ucb(obj,x, kappa)
-        [mean, var] = obj.gp_s{end}.predict(x);
+        [mean, var] = obj.gp_s{end}.Predict(x);
         % i have to add a dimension to mean and variance because summation between 
         % array and ndarray is not fun python
-        ret = sqrt(var)  + mean;
+        ret = kappa*sqrt(var)  + mean;
 end
 
 function ret = ei(obj,x, xi)
-        [mean, var] = obj.gp_s{end}.predict(x);
+        [mean, var] = obj.gp_s{end}.Predict(x);
 
         % Avoid points with zero variance
         var = max(var, 1e-9 + 0 * var);
-
-        z = (mean - self.y_max - xi)/sqrt(var);
-        ret = (mean - self.y_max - xi) * norm.cdf(z) + sqrt(var) * norm.pdf(z);
+        z = (mean - obj.y_max - xi)/sqrt(var);
+        ret = (mean - obj.y_max - xi) * cdf(obj.pd,z) + sqrt(var) * pdf(obj.pd,z);
 end
 
 function ret = poi(obj,x, xi)
-    [mean, var] = obj.gp_s{end}.predict(x);
+    [mean, var] = obj.gp_s{end}.Predict(x);
     % Avoid points with zero variance
     var = max(var, 1e-9 + 0 * var);
 
-    z = (mean - self.y_max - xi)/np.sqrt(var);
-    ret = norm.cdf(z);
+    z = (mean - obj.y_max - xi)/sqrt(var);
+    ret = cdf(obj.pd,z);
 end
     

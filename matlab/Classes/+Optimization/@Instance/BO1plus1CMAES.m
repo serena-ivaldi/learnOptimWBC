@@ -31,25 +31,23 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
     number_init_points = 10;
     [init_x,init_y]=InitialSample(obj,fnForwardModel,minAction,maxAction,number_init_points);
     BO.Init(init_x,init_y)
-    
-    
-    
+  
     
     %% optimization loop
     
    for ii = 1:nIterations
        
        % select the new point
+       disp('optimization surrogate');
        x_candidate = BO.AcqMax();
-       
        % compute the model 
        disp('evaluate offsprings')
-       [performances_new succeeded(k)] = fnForwardModel(obj,x_candidate,1, 1); % compute fitness 
+       [performances_new succeeded(ii)] = fnForwardModel(obj,x_candidate,1, 1); % compute fitness 
        y = obj.penalty_handling.penalties;
        y(end + 1)= obj.penalty_handling.feasibility;
-       y(end + 1) = performances;
-       
+       y(end + 1) = performances_new;
        % update the gaussian process
+       disp('update');
        BO.Update(x_candidate, y)
        
        % Keep track of information about iteration 
@@ -81,15 +79,14 @@ function [init_x,init_y]=InitialSample(obj,fnForwardModel,lb,ub,number_init_poin
     % points (random + explore)
     for i=1:number_init_points
         % questa cosa va modificata perche la assegnazione va fatta dentro la funzione
-       disp('evaluate offsprings')
        [performances] = fnForwardModel(obj,init_x(i,:),1, 1); % compute fitness  
-       y = obj.penalty_handling.penalties;
+       y = obj.penalty_handling.penalties';
        y(end + 1) = obj.penalty_handling.feasibility;
        y(end + 1) = performances;
        init_y(i,:) = y;
-        if self.verbose
+        %if self.verbose
             %self.plog.print_step(x, y_init[-1])
-        end
+        %end
     end
 end
 
