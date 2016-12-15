@@ -9,12 +9,15 @@ classdef BayesOpt < handle
         surrogate
         bounds
         dim
-        gp_s           % [GP_constraints, GP_satisfaction(1 or 0), GP_fitness]
+        n_of_constraints
+        gp_s              % [GP_constraints, GP_satisfaction(1 or 0), GP_fitness]
         initialized
         eps 
         verbose
         y_max 
+        x_max
         pd    %  i need it for the surrogate computation.
+        radius
     end
     
     methods
@@ -26,6 +29,7 @@ classdef BayesOpt < handle
 
             % Find number of parameters
             self.dim = dim;
+            self.n_of_constraints = n_of_constraints;
 
             % Create an array with parameters bounds
             self.bounds(1,:) = lb;
@@ -42,7 +46,7 @@ classdef BayesOpt < handle
 
             %% TODO define surrogate functions
             % Surrogate placeholder
-            kind = 'poi';
+            kind = 'eci';
             kappa =0.1;
             xi = 0.1;
             self.surrogate = @(self_,x_)Surrogate(self_, x_, kind, kappa, xi);
@@ -58,8 +62,11 @@ classdef BayesOpt < handle
             % we need to initialize y_max in the case that during the
             % initialization no y_max is found ( i put a generic small value it should be adaptive though)
             self.y_max = -100000;
+            self.x_max = [];
             
             self.pd =  makedist('Normal');
+            %% TODO add radius as parameter of the method
+            self.radius = 1.5;
             
         end
         
@@ -76,9 +83,10 @@ classdef BayesOpt < handle
             
             %% TODO i have to update y_max only if the the point is feasible
             index = (y_init(:,end-1)==1);
-            y_candidate = max(y_init(index,i));     
+            [y_candidate, ind_max] = max(y_init(index,i));     
             if(~isempty(y_candidate))
                 self.y_max = y_candidate;
+                self.x_max = x_init(ind_max,:);
             end
         end
 
@@ -116,19 +124,6 @@ classdef BayesOpt < handle
         % 
         %     Parameters
         %     ----------
-        %     :param ac:
-        %         The acquisition function object that return its point-wise value.
-        % 
-        %     :param gp:
-        %         A gaussian process fitted to the relevant data.
-        % 
-        %     :param y_max:
-        %         The current maximum known value of the target function.
-        % 
-        %     :param bounds:
-        %         The variables bounds to limit the search of the acq max.
-        % 
-        % 
         %     Returns
         %     -------
         %     :return: x_max, The arg max of the acquisition function.
@@ -138,13 +133,20 @@ classdef BayesOpt < handle
             x_max = self.bounds(1,:);  
             max_acq = -inf;
 
-            %%% TODO rand in bound (round is beetween 0 and 1)
+            %% TODO rand in bound (round is beetween 0 and 1)
             % i solve the optimization many time s to be sure that the optimal
             % solution is not local (i could remove this )
-            x_0 = rand([3,self.dim]);
-
-            %%% TODO specify the structure of self.surrogate
-            for i = 1: length(x_0)
+            n_starting_point = 5;
+            
+            extended_lb = repmat(self.bounds(1,:),n_starting_point,1);
+            extended_up = repmat(self.bounds(2,:),n_starting_point,1);
+            % [a,b] -------> (b-a).*rand(n,1) + a;
+            x_0 = (extended_up - extended_lb).*rand([n_starting_point,self.dim]) + extended_lb;
+      
+         
+            
+            %% TODO specify the structure of self.surrogate
+            for i = 1:size(x_0,1)
                 % Find the minimum of minus the acquisition function
                fun = @(x_)self.surrogate(self,x_);
                options = optimoptions('fmincon','Algorithm','interior-point','Display','none');
@@ -165,113 +167,35 @@ classdef BayesOpt < handle
         % here new y is a vector with the all the values [constraints violations,satisfy or not the constraints,fitness]
         function Update(self,new_x, new_y)
             
-            
-            for i=1:  length(self.gp_s)
-                i
-                self.gp_s{i}.Update(new_x,new_y(i));
-            end
-            %% TODO check for unique rows in the gp
             % Find unique rows of X to avoid GP from breaking
-            %% TODO add update of for y_max;
-            if(new_y(end-1)==1)
-                if(new_y(end)>self.y_max) 
-                    self.y_max = new_y(end);
+            X = self.gp_s{1}.X;
+            
+            mat_x_new = repmat(new_x,size(X,1),1);
+            mat_diff = X - mat_x_new;
+            mat_difftwo = mat_diff .* mat_diff;
+            mat_dist = sum(mat_difftwo,2);
+            mat_dist = sqrt(mat_dist);
+            index = mat_dist>self.radius;
+            uniqueness = prod(index);
+            
+            if(uniqueness)
+                for i=1:length(self.gp_s)     
+                    self.gp_s{i}.Update(new_x,new_y(i));
+                end
+
+                %% TODO add update of for y_max;
+                if(new_y(end-1)==1)
+                    if(new_y(end)>self.y_max) 
+                        self.y_max = new_y(end);
+                        self.x_max = new_x;
+                    end
                 end
             end
 
         end
         
         
-%         function maximize(self,
-%                      init_points=5,
-%                      n_iter=25,
-%                      acq='ei',
-%                      kappa=2.576,
-%                      xi=0.0,
-%                      risk = 0.0,
-%                      **gp_params)
-% 
-%             %Main optimization method.
-% 
-%     %         Parameters
-%     %         ----------
-%     %         :param init_points:
-%     %             Number of randomly chosen points to sample the
-%     %             target function before fitting the gp.
-%     % 
-%     %         :param n_iter:
-%     %             Total number of times the process is to repeated. Note that
-%     %             currently this methods does not have stopping criteria (due to a
-%     %             number of reasons), therefore the total number of points to be
-%     %             sampled must be specified.
-%     % 
-%     %         :param acq:
-%     %             Acquisition function to be used, defaults to Expected Improvement.
-%     % 
-%     %         :param gp_params:
-%     %             Parameters to be passed to the Scikit-learn Gaussian Process object
-%     % 
-%     %         Returns
-%     %         -------
-%     %         :return: Nothing
-% 
-%             % Reset timer
-%             self.plog.reset_timer()
-% 
-%             % Set acquisition function
-%             self.util = 
-% 
-%             % Print new header
-%             if self.verbose
-%                 self.plog.print_header(initialization=False)
-%             end
-%             % Iterative process of searching for the maximum. At each round the
-%             % most recent x and y values probed are added to the X and Y arrays
-%             % used to train the Gaussian Process. Next the maximum known value
-%             % of the target function is found and passed to the acq_max function.
-%             % The arg_max of the acquisition function is found and this will be
-%             % the next probed value of the target function in the next round.
-%             for i in range(n_iter)
-%                 % Test if x_max is repeated, if it is, draw another one at random
-%                 % If it is repeated, print a warning
-%                 pwarning = False
-%                 if np.any((self.X - x_max).sum(axis=1) == 0):
-% 
-%                     % estraggo un punto? si
-%                     x_max = np.random.uniform(self.bounds[:, 0],
-%                                               self.bounds[:, 1],
-%                                               size=self.bounds.shape[0])
-% 
-%                     pwarning = True
-%                 end
-%                 self.Update(x_max)
-% 
-%                 % Update maximum value to search for next probe point.
-%                 % check the last point
-%                 % TODO rewrite the way which the y_max is updated taking into account the 
-%                 % case that we are not in the admissibile region
-%                 %if self.Y[-1] > y_max:
-%                 %    y_max = self.Y[-1]
-% 
-% 
-% 
-%                 % TODO put the x_plot and out_plot in the constructor
-%                 % TODO use another flag for the visualization 
-%                 if self.verbose
-%                     variate_one = np.linspace(0, 4, 100)
-%                     variate_two = np.linspace(0, 4, 100)
-%                     xv, yv = np.meshgrid(variate_one, variate_two) 
-%                     %list of matrix
-%                     x_plot = [xv, yv]
-%                     out_plot = self.f(xv,yv)
-%                     self.plot_gp(x_plot , out_plot , True, i)
-%                 end
-%   
-%                 
-%             end
-% 
-%         end
-%         %GRAPHIC FUNCTION
+         %GRAPHIC FUNCTION
 % 
 %         function [mu,sig] = posterior(self,x,multivariate)
 %             %xmin, xmax = -2, 10

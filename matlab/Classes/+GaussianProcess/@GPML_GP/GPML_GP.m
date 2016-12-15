@@ -22,8 +22,7 @@ classdef GPML_GP < GaussianProcess.AbstractGP
            obj.hyp0.lik  = log(sn);
            obj.inference = 'infGaussLik';
            obj.cov = {@covSEiso}; 
-           sf = 1; 
-           ell = 0.4;                            
+           ell = 1/4; sf = 1;                       
            obj.hyp0.cov  = log([ell;sf]);
            obj.mean = {@meanZero};
            obj.hyp0.mean = [];

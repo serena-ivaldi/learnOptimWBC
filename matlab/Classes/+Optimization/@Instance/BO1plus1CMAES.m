@@ -1,9 +1,7 @@
 function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = BO1plus1CMAES(obj,settings)
 
     %% Initialization
-
     nIterations = settings.nIterations;
-    explorationRate = settings.explorationRate;
 
     if isfield(settings, 'activeIndices')
         action = settings.action(settings.activeIndices);
@@ -24,8 +22,13 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
     BO = Optimization.BayesOpt(minAction, maxAction, n, n_constraints);
     
     %% TODO for metrics i need to introduce the same structure fo the other method
-    %costs(1) = - performances(1);
-
+    mean_performances = zeros(1,nIterations);  % row vector
+    costs = zeros(1,nIterations);      
+    succeeded = zeros(1,nIterations);
+    %% TODO properly use G_data2save and policies
+    G_data2save = [];
+    policies = [];
+    BestActionPerEachGen = ones(nIterations,n);
     %% initilization
     %% TODO put number_init_points in the initial value for this method
     number_init_points = 10;
@@ -58,8 +61,23 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
 %                                                   self.X[self.Y.argmax()]))
 %                            }
 %        self.res['all']['values'].append(self.Y[-1])
-%        self.res['all']['params'].append(dict(zip(self.keys, self.X[-1])))       
+%        self.res['all']['params'].append(dict(zip(self.keys, self.X[-1]))) 
+       mean_perfomances(ii) = BO.y_max;
+       if(~isempty(BO.x_max))
+            BestActionPerEachGen(ii,:) = BO.x_max;
+       end
    end 
+   if(~isempty(BO.x_max))
+       bestAction.parameters  = BO.x_max;
+   else
+       bestAction.parameters = ones(1,n);
+   end
+          
+   bestAction.performance = BO.y_max;
+  
+  
+   
+   
 end
 
 % with this function we generate the set of points to initiliaze the search

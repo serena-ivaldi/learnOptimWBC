@@ -79,13 +79,19 @@ if textin
 end
 
 % Find indices of x values between xmin and xmax:
+% if the index is one it means that a violations took place so i need to
+% clip that dimension
 if inclusive
-    n = x>=xmin & x <=xmax;
+    lo_ind = x <= xmin; 
+    up_ind = x >= xmax;
 else
-    n = x>xmin  & x<xmax; 
+    lo_ind = x < xmin;  
+    up_ind = x > xmax; 
 end
 
-xclp = x(n);
+x(lo_ind) = xmin(lo_ind);
+x(up_ind) = xmax(up_ind);
+xclp = x;
 for k = arginvals
     if length(varargin{k})~=length(x)
         fprintf('Length of x does not match length of other input array(s).\n')
@@ -94,4 +100,4 @@ for k = arginvals
         varargout{k} = varargin{k}(n); 
 end
 
-varargout{k+1} = find(n); % returns indices
+varargout{k+1} = [lo_ind;up_ind]; % returns indices
