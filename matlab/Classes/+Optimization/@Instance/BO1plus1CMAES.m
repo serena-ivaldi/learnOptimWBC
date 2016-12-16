@@ -13,7 +13,7 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
         maxAction = settings.maxAction;
     end
 
-    n = size(action,2);
+    n = size(minAction,2);
 
     n_constraints = obj.penalty_handling.n_constraint;
 
@@ -31,7 +31,7 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
     BestActionPerEachGen = ones(nIterations,n);
     %% initilization
     %% TODO put number_init_points in the initial value for this method
-    number_init_points = 10;
+    number_init_points = 100;
     [init_x,init_y]=InitialSample(obj,fnForwardModel,minAction,maxAction,number_init_points);
     BO.Init(init_x,init_y)
   

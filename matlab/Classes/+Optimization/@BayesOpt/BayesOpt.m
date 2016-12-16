@@ -46,9 +46,9 @@ classdef BayesOpt < handle
 
             %% TODO define surrogate functions
             % Surrogate placeholder
-            kind = 'eci';
+            kind = 'ucb';
             kappa =0.1;
-            xi = 0.1;
+            xi = 0.01;
             self.surrogate = @(self_,x_)Surrogate(self_, x_, kind, kappa, xi);
 
             % PrintLog object
@@ -66,7 +66,7 @@ classdef BayesOpt < handle
             
             self.pd =  makedist('Normal');
             %% TODO add radius as parameter of the method
-            self.radius = 1.5;
+            self.radius = 0.5;
             
         end
         
@@ -169,7 +169,6 @@ classdef BayesOpt < handle
             
             % Find unique rows of X to avoid GP from breaking
             X = self.gp_s{1}.X;
-            
             mat_x_new = repmat(new_x,size(X,1),1);
             mat_diff = X - mat_x_new;
             mat_difftwo = mat_diff .* mat_diff;
@@ -177,7 +176,8 @@ classdef BayesOpt < handle
             mat_dist = sqrt(mat_dist);
             index = mat_dist>self.radius;
             uniqueness = prod(index);
-            
+            %% TODO i have to change this part in a way at least the value pf ymax and xmax are updated 
+            %% on the other side i need to assure that new point are added (adding a little bit of noise for example)
             if(uniqueness)
                 for i=1:length(self.gp_s)     
                     self.gp_s{i}.Update(new_x,new_y(i));

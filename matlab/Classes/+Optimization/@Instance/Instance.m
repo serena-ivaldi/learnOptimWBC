@@ -90,6 +90,7 @@ classdef  Instance
        
        % inner function to have a common interface with Objproblem im introducing a
        % function to evaluate constraints at some point
+       %% TODO check it
        function [c, ceq,performance] = computConstrViol(obj,input)                    
             % each time i have to compute this 
             try

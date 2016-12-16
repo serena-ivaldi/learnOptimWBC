@@ -8,8 +8,8 @@ clc
 
 %% DATA 1
 robotics_experiment = [0]; % series of value that say if the current experiment is a robotics experiments or not 1 or 0
-niter_tot = 40;  %number of functions evaluations
-function_2_test ={'g06'};%'robotic_experiments','g06','g07','g09','f240','f241','HB'};
+niter_tot = 100;  %number of functions evaluations
+function_2_test ={'rosenbrock'};%'robotic_experiments','g06','g07','g09','f240','f241','HB'};
 learn_approach = 'BO(1+1)CMAES'; %CMAES (1+1)CMAES  CEM BO(1+1)CMAES fmincon     with (1+1)CMAES and BO(1+1)CMAES i have to use nopenalty
 method_to_use = 'nopenalty';  % adaptive , vanilla ,empty,fmincon, nopenalty
 
@@ -165,6 +165,20 @@ for jj=1:number_of_function_2_test
             user_defined_start_action = [90,35,36,36,36];
             benchmark_x = [78,33,29.9952560256816,45,36.7758129057882];
             benchmark_fval = -3.066553867178332e+04;
+        elseif(strcmp(function_2_test{jj},'rosenbrock'))
+            search_space_dimension = 2;
+            function_2_test_4_comparison = {''};
+            epsilon = [1 1 1 1 1 1]; % for adaptive
+            constraints_functions = {};
+            constraints_for_test = [];
+            constraints_type = [];
+            constraints_values =[];
+            n_constraints = 0;
+            cmaes_value_range{1} = [ -1.5 , -0.5];  % lower bound that define the search space
+            cmaes_value_range{2} = [ 2.0, 3.0];  % upper bound that define the search space
+            user_defined_start_action = [];
+            benchmark_x = [1,1];
+            benchmark_fval = 0;
         end
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
         run_function = @EmptyPreprocessing;

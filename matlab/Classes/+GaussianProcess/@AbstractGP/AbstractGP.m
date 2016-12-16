@@ -1,4 +1,4 @@
-classdef (Abstract) AbstractGP < handle
+classdef AbstractGP < handle
     
    properties(Abstract)
       X
@@ -11,6 +11,12 @@ classdef (Abstract) AbstractGP < handle
       Train(x_i,y_i);
       Update(x_n,y_n);
       y_t = Predict(x_t);
+   end
+   
+   methods
+       function plot2D(obj,bounds)
+       end
+       
    end
     
 end
