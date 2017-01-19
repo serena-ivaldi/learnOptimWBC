@@ -18,8 +18,9 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
     n_constraints = obj.penalty_handling.n_constraint;
 
     fnForwardModel = @(obj_,actionLearn_,curr_candidate_,isMean_)TransAction(obj_,actionLearn_,curr_candidate_,isMean_, settings);
-                  
-    BO = Optimization.BayesOpt(minAction, maxAction, n, n_constraints);
+    
+    %% TODO pass from outside the GP_lib parameter to specify which gaussian process library i wanna use
+    BO = Optimization.BayesOpt(minAction, maxAction, n,n_constraints,'GP_stuff');
     
     %% TODO for metrics i need to introduce the same structure fo the other method
     mean_performances = zeros(1,nIterations);  % row vector
@@ -66,6 +67,9 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
        if(~isempty(BO.x_max))
             BestActionPerEachGen(ii,:) = BO.x_max;
        end
+       %% TODEBUG
+       BO.Plot();
+       pause
    end 
    if(~isempty(BO.x_max))
        bestAction.parameters  = BO.x_max;

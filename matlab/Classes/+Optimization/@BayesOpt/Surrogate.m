@@ -53,7 +53,7 @@ function ret = eci(obj,x, xi)
         ret2 = 1;
         for i=1:obj.n_of_constraints
             [mean, var] = obj.gp_s{i}.Predict(x);
-            % TODEBUG
+            %% TODEBUG
             probability = (normcdf(0,mean,sqrt(var)));
             ret2 = ret2*(normcdf(0,mean,sqrt(var)));
         end

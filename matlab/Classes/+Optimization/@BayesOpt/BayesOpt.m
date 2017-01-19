@@ -18,10 +18,15 @@ classdef BayesOpt < handle
         x_max
         pd    %  i need it for the surrogate computation.
         radius
+        % for visualization 
+        X_vis
+        Y_vis
+        xl_vis
+        Z_vis
     end
     
     methods
-        function self = BayesOpt(lb, ub, dim, n_of_constraints, varargin)
+        function self = BayesOpt(lb, ub, dim, n_of_constraints,GP_lib,varargin)
 
             %   param f: Function to be maximized.
             %   param verbose: Whether or not to print progress.
@@ -41,14 +46,18 @@ classdef BayesOpt < handle
             % here i set up n_constraints + 1 GP fitness + 1 GP point
             % feasible or not (1 or 0)
             for i = 1:n_of_constraints + 2;
-                self.gp_s{i} = GaussianProcess.GPML_GP();
+                if(strcmp(GP_lib,'GPML'))
+                    self.gp_s{i} = GaussianProcess.GPML_GP();
+                elseif(strcmp(GP_lib,'GP_stuff'))
+                    self.gp_s{i} = GaussianProcess.GPstuff_GP();
+                end
             end
 
             %% TODO define surrogate functions
             % Surrogate placeholder
-            kind = 'ucb';
+            kind = 'ei';
             kappa =0.1;
-            xi = 0.01;
+            xi = 0;
             self.surrogate = @(self_,x_)Surrogate(self_, x_, kind, kappa, xi);
 
             % PrintLog object
@@ -66,7 +75,18 @@ classdef BayesOpt < handle
             
             self.pd =  makedist('Normal');
             %% TODO add radius as parameter of the method
-            self.radius = 0.5;
+            self.radius = 0;
+            
+            % for visualization
+            if(dim <= 2)
+                [self.X_vis,self.Y_vis] = meshgrid(linspace(lb(1),ub(1),100),linspace(lb(2),ub(2),100));
+                self.xl_vis = [self.X_vis(:) self.Y_vis(:)];
+                %% TODO pass the name of the function that we want to optimize from the outside 
+                name_real_function = 'to_test_withBOGP_stuff';
+                fx = str2func(name_real_function);
+                self.Z_vis = reshape(fx([],self.xl_vis),100,100);
+            end
+            
             
         end
         
@@ -149,7 +169,7 @@ classdef BayesOpt < handle
             for i = 1:size(x_0,1)
                 % Find the minimum of minus the acquisition function
                fun = @(x_)self.surrogate(self,x_);
-               options = optimoptions('fmincon','Algorithm','interior-point','Display','none');
+               options = optimoptions('fmincon','Algorithm','interior-point','Display','none','TolFun',1e-9,'TolX',1e-6);
                %% TODO Check if the surrogate function have the right sign (i want to maximize but im using a minimization)
                [x,fval] = fmincon(fun,x_0(i,:),[],[],[],[],self.bounds(1,:),self.bounds(2,:),[],options);
                % Store it if better than previous minimum(maximum).
@@ -196,175 +216,48 @@ classdef BayesOpt < handle
         
         
          %GRAPHIC FUNCTION
-% 
-%         function [mu,sig] = posterior(self,x,multivariate)
-%             %xmin, xmax = -2, 10
-%             %self.gp.fit(self.X, self.Y)
-%             if (~multivariate) 
-%                 x_ = np.atleast_2d(x).T
-%                 mu, sigma2 = self.gp.predict(x_, eval_MSE=True)
-%             else
-%                 % unroll the meshgrid matrix
-%                 xv_c = np.atleast_2d(x[0].ravel('F')).T
-%                 yv_c = np.atleast_2d(x[1].ravel('F')).T 
-%                 x_ = np.hstack((xv_c,yv_c))
-%                 mu, sigma2 = self.gp.predict(x_, eval_MSE=True)
-%                 dims = x[0].shape
-%                 mu = np.reshape(mu, dims).T % C-like index orderingd
-%             end
-%             sig = np.sqrt(sigma2)
-%         end
-% 
+
+ 
 %         %works only for function defined in R or R^(2) functions
 %         %x and y are the value of the real function
 % 
-%         function plot_gp(self , x , out , multivariate, iterationID)
-% 
-%             if not multivariate
-%                 fig = plt.figure(figsize=(16, 10))
-%                 fig.suptitle('Gaussian Process and Utility Function After {} Steps'.format(len(self.X)), fontdict={'size':30})
-% 
-%                 gs = gridspec.GridSpec(2, 1, height_ratios=[3, 1]) 
-%                 axis = plt.subplot(gs[0])
-%                 acq = plt.subplot(gs[1])
-% 
-%                 mu, sigma = self.posterior(x)
-%                 axis.plot(x, out, linewidth=3, label='Target')
-%                 axis.plot(self.X.flatten(), self.Y, 'D', markersize=8, label=u'Observations', color='r')
-%                % axis.plot(x, mu, '--', color='k', label='Prediction')
-% 
-%                 axis.fill(np.concatenate([x, x[::-1]]), 
-%                           np.concatenate([mu - 1.9600 * sigma, (mu + 1.9600 * sigma)[::-1]]),
-%                     alpha=.6, fc='c', ec='None', label='95% confidence interval')
-% 
-%                 axis.set_xlim((x[0], x[x.shape[0] - 1]))
-%                 axis.set_ylim((None, None))
-%                 axis.set_ylabel('f(x)', fontdict={'size':20})
-%                 axis.set_xlabel('x', fontdict={'size':20})
-% 
-%                 utility = self.util.utility(x.reshape((-1, 1)), self.gp, 0)
-%                 acq.plot(x, utility, label='Utility Function', color='purple')
-%                 acq.plot(x[np.argmax(utility)], np.max(utility), '*', markersize=15, 
-%                          label=u'Next Best Guess', markerfacecolor='gold', markeredgecolor='k', markeredgewidth=1)
-%                 acq.set_xlim((x[0], x[x.shape[0] - 1]))
-%                 acq.set_ylim((0, np.max(utility) + 0.5))
-%                 acq.set_ylabel('Utility', fontdict={'size':20})
-%                 acq.set_xlabel('x', fontdict={'size':20})
-% 
-%                 axis.legend(loc=2, bbox_to_anchor=(1.01, 1), borderaxespad=0.)
-%                 acq.legend(loc=2, bbox_to_anchor=(1.01, 1), borderaxespad=0.)   
-%             else
-%                 fig = plt.figure(figsize=(10, 10))
-%                 fig.suptitle('Gaussian Process and Utility Function After {} Steps'.format(len(self.X)), fontdict={'size':30})
-%                 gs = gridspec.GridSpec(4, 1) 
-%                 real = plt.subplot(gs[0])
-%                 surr_plot = plt.subplot(gs[1])
-%                 acq = plt.subplot(gs[2]) 
-%                 var_plot = plt.subplot(gs[3])
-% 
-%                 % real heat map
-%                 heatmap = real.pcolor(x[0],x[1],out, cmap='seismic')
-%                 plt.colorbar(heatmap)
-%                 %compute posterior            
-%                 mu, sigma = self.posterior(x,multivariate)
-% 
-%                 index_starting_point = len(self.init_points) - 1;
-%                 X_new = self.X[(index_starting_point + 1):];
-%                 Y_ = self.clf.predict(X_new);
-%                 color_iter = it.cycle(['r', 'g', 'b', 'c', 'm'])
-% 
-%                 %%% Plot the surrogate function
-% 
-%                 % plot differently the point belonging to the starting set 
-%                 % and the one acquired during the exploration
-%                 surr_plot.plot(self.X[0:index_starting_point,0].flatten(),self.X[0:index_starting_point,1].flatten(),'D', markersize=8, label=u'Observations', color='r')
-%                 surr_plot.plot(self.X[(index_starting_point + 1):,0].flatten(),self.X[(index_starting_point + 1):,1].flatten(),'D', markersize=8, label=u'Observations', color='g')
-%                 heatmap = surr_plot.pcolor(x[0],x[1],mu,cmap='seismic') 
-%                 plt.colorbar(heatmap)
-%                 for i, (mean, covar, color) in enumerate(zip(self.clf.means_, self.clf.covariances_, color_iter))
-%                         v, w = linalg.eigh(covar)
-%                         u = w[0] / linalg.norm(w[0])
-%                         % as the DP will not use every component it has access to
-%                         % unless it needs it, we shouldn't plot the redundant
-%                         % components.
-%                         if  (~np.any(Y_ == i))
-%                             continue
-%                         end
-%                         surr_plot.autoscale(enable=False)
-%                         surr_plot.scatter(X_new[Y_ == i, 0], X_new[Y_ == i, 1], 8, color=color, marker='o')
-%                         % Plot an ellipse to show the Gaussian component
-%                         angle = np.arctan(u[1] / u[0])
-%                         angle = 180 * angle / np.pi  % convert to degrees
-%                         ell = mtlpltpatches.Ellipse(mean, v[0], v[1], 180 + angle, color=color)
-%                         ell.set_clip_box(surr_plot.bbox)
-%                         ell.set_alpha(0.5)
-%                         surr_plot.add_artist(ell)      
-% 
-%                 end
-% 
-%                 %axis.set_xlim((x[0], x[x.shape[0] - 1]))
-%                 %axis.set_ylim((None, None))
-% 
-%                 % Plot the constraints
-%     %            xRow = np.atleast_2d(x[0].ravel('F')).T
-%     %            yRow = np.atleast_2d(x[1].ravel('F')).T
-%     %            xy   = np.hstack((xRow, yRow))
-%     %            dims = x[0].shape            
-%     %            admits  = []
-%     %            for row in xy:
-%     %                admits.append(admissibility(row, self.constraints, self.constraints_type, self.keys,self.eps))
-%     %            for xIter, yIter, admitsIter in zip( np.nditer(xRow),  np.nditer(yRow), admits):
-%     %                if admitsIter == 1:
-%     %                    acq.plot(xIter, yIter, '*', markersize=10, 
-%     %                     label=u'Next Best Guess', markerfacecolor='green', markeredgecolor='k', 
-%     %                     markeredgewidth=1, alpha=0.05)
-%     %                    surr_plot.plot(xIter, yIter, '*', markersize=10, 
-%     %                     label=u'Next Best Guess', markerfacecolor='green', markeredgecolor='k', 
-%     %                     markeredgewidth=1, alpha=0.05)
-% 
-%                 %%% Plot the acquisition function
-%                 xv_c = np.atleast_2d(x[0].ravel('F')).T
-%                 yv_c = np.atleast_2d(x[1].ravel('F')).T 
-%                 x_ = np.hstack((xv_c,yv_c))
-%                 utility = self.util.utility(x_, self.gp, self.clf, 0)
-%                 dims = x[0].shape
-%                 new_utility = np.reshape(utility, dims).T % C-like index orderingd
-%                 heatmap = acq.pcolor(x[0],x[1], new_utility,cmap='seismic')
-%                 plt.colorbar(heatmap)
-%                 acq.plot(xv_c[np.argmax(utility)], yv_c[np.argmax(utility)], '*', markersize=15, 
-%                          label=u'Next Best Guess', markerfacecolor='gold', markeredgecolor='k', markeredgewidth=1)
-% 
-% 
-% 
-%                 % Plot the clusters
-%                 for i, (mean, covar, color) in enumerate(zip(self.clf.means_, self.clf.covariances_, color_iter))
-%                         v, w = linalg.eigh(covar)
-%                         u = w[0] / linalg.norm(w[0])
-%                         % as the DP will not use every component it has access to
-%                         % unless it needs it, we shouldn't plot the redundant
-%                         % components.
-%                         if not np.any(Y_ == i):
-%                             continue
-%                         end
-%                         acq.autoscale(enable=False)
-%                         acq.scatter(X_new[Y_ == i, 0], X_new[Y_ == i, 1], 8, color=color, marker='o')
-%                         % Plot an ellipse to show the Gaussian component
-%                         angle = np.arctan(u[1] / u[0])
-%                         angle = 180 * angle / np.pi  % convert to degrees
-%                         ell = mtlpltpatches.Ellipse(mean, v[0], v[1], 180 + angle, color=color)
-%                         ell.set_clip_box(acq.bbox)
-%                         ell.set_alpha(0.5)
-%                         acq.add_artist(ell)
-% 
-%                 end
-%                 new_sigma = np.reshape(sigma, dims).T % C-like index orderingd
-%                 heatmap = var_plot.pcolor(x[0],x[1], new_sigma,cmap='seismic')
-% 
-% 
-%                 pylab.savefig(str(iterationID) + ".jpg", bbox_inches='tight')
-%                 plt.close("all")
-%             end
-%         end
+         function Plot(self)
+             % compute current mean and variance for the objective
+             % function;
+             [ymu,ys2]=self.gp_s{end}.Predict(self.xl_vis);
+             % compute the value for the surrogate function;
+             fun = @(x_)self.surrogate(self,x_);
+             sur = fun(xl);
+             clf
+             % Plot the objective function
+             subplot(2,2,1),hold on, title('Objective, query points')
+             box on
+             pcolor(self.X_vis,self.Y_vis,self.Z_vis),shading flat
+             clim = caxis;
+             l1=plot(self.X(1:end-1,1),self.X(1:end-1,2), 'rx', 'MarkerSize', 10);
+             %plot(x(end,1),x(end,2), 'ro', 'MarkerSize', 10)
+             %l2=plot(xnews(:,1),xnews(:,2), 'ro', 'MarkerSize', 10);
+             l3=plot(self.X(end,1),self.X(end,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
+             legend([l1,l3], {'function evaluation points','local modes of acquisition function','The next query point'})
+             % Plot the posterior mean of the GP model for the objective function
+             subplot(2,2,2),hold on, title(sprintf('GP prediction, mean, iter: %d',i1))
+             box on
+             pcolor(self.X_vis,self.Y_vis,reshape(ymu,100,100)),shading flat
+             caxis(clim)
+             % Plot the posterior variance of GP model
+             subplot(2,2,4),hold on, title('GP prediction, variance')
+             box on
+             pcolor(self.X_vis,self.Y_vis,reshape(ys2,100,100)),shading flat
+             %l2=plot(xnews(:,1),xnews(:,2), 'ro', 'MarkerSize', 10);
+             l3=plot(self.X(end,1),self.X(end,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
+             % Plot the expected improvement 
+             subplot(2,2,3), hold on, title(sprintf('Expected improvement %.2e', min(EIs)))
+             box on
+             pcolor(self.X_vis,self.Y_vis,reshape(sur,100,100)),shading flat
+             %plot(xnews(:,1),xnews(:,2), 'ro', 'MarkerSize', 10);
+             plot(self.X(end,1),self.X(end,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
+         end
+
     end
 end
               
