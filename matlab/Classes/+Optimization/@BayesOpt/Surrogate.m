@@ -15,7 +15,7 @@ function ret = Surrogate(self, x, kind, kappa, xi)
         end
 end
 
-
+%% TODO extend the oter surrogate to manage a vectorial input
 function ret = ucb(obj,x, kappa)
         [mean, var] = obj.gp_s{end}.Predict(x);
         % i have to add a dimension to mean and variance because summation between 
@@ -25,11 +25,12 @@ end
 
 function ret = ei(obj,x, xi)
         [mean, var] = obj.gp_s{end}.Predict(x);
-
+        y_max = obj.y_max*ones(size(mean));
+        XI = xi*ones(size(mean));
         % Avoid points with zero variance
         var = max(var, 1e-9 + 0 * var);
-        z = (mean - obj.y_max - xi)/sqrt(var);
-        ret = (mean - obj.y_max - xi) * cdf(obj.pd,z) + sqrt(var) * pdf(obj.pd,z);
+        z = (mean - y_max - XI)./sqrt(var);
+        ret = (mean - y_max - XI) .* cdf(obj.pd,z) + sqrt(var) .* pdf(obj.pd,z);
 end
 
 function ret = poi(obj,x, xi)

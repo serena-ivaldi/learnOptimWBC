@@ -32,7 +32,7 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
     BestActionPerEachGen = ones(nIterations,n);
     %% initilization
     %% TODO put number_init_points in the initial value for this method
-    number_init_points = 100;
+    number_init_points = 5;
     [init_x,init_y]=InitialSample(obj,fnForwardModel,minAction,maxAction,number_init_points);
     BO.Init(init_x,init_y)
   
@@ -50,6 +50,8 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
        y = obj.penalty_handling.penalties;
        y(end + 1)= obj.penalty_handling.feasibility;
        y(end + 1) = performances_new;
+       %% TODEBUG
+       BO.Plot(x_candidate);
        % update the gaussian process
        disp('update');
        BO.Update(x_candidate, y)
@@ -68,7 +70,6 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
             BestActionPerEachGen(ii,:) = BO.x_max;
        end
        %% TODEBUG
-       BO.Plot();
        pause
    end 
    if(~isempty(BO.x_max))
@@ -97,6 +98,9 @@ function [init_x,init_y]=InitialSample(obj,fnForwardModel,lb,ub,number_init_poin
     % Generate random points (l is a matrix each row is a radom point)
     %r = a + (b-a).*rand(100,1);
     init_x = repmat(lb,number_init_points,1) + repmat(ub-lb,number_init_points,1).*rand(number_init_points,length(lb));
+    
+    %% TODEBUG provisory change (ho sovrascritto init_x )for confrontation with demobayesopt.m
+    init_x =[-4 -4;-4 4;4 -4;4 4;0 0];
     % Evaluate target function at all initialization
     % points (random + explore)
     for i=1:number_init_points

@@ -18,6 +18,7 @@ classdef BayesOpt < handle
         x_max
         pd    %  i need it for the surrogate computation.
         radius
+        options_opt
         % for visualization 
         X_vis
         Y_vis
@@ -86,7 +87,9 @@ classdef BayesOpt < handle
                 fx = str2func(name_real_function);
                 self.Z_vis = reshape(fx([],self.xl_vis),100,100);
             end
-            
+            % optimization ooptions for the surrogate function 
+            %self.options_opt = optimoptions('fmincon','Algorithm','interior-point','Display','none','TolFun',1e-9,'TolX',1e-6);
+            self.options_opt = optimoptions('fmincon','GradObj','off','Algorithm','trust-region-reflective','TolFun',1e-9,'TolX',1e-6);
             
         end
         
@@ -155,23 +158,24 @@ classdef BayesOpt < handle
 
             %% TODO rand in bound (round is beetween 0 and 1)
             % i solve the optimization many time s to be sure that the optimal
-            % solution is not local (i could remove this )
-            n_starting_point = 5;
+            % solution is not local (i cannot remove this or i have to
+            % change the optimzation method with a global approach)
+            % if the surrogate has multiple optimal solutions this
+            % procedure is necessary
+            n_starting_point = 20;
             
             extended_lb = repmat(self.bounds(1,:),n_starting_point,1);
             extended_up = repmat(self.bounds(2,:),n_starting_point,1);
             % [a,b] -------> (b-a).*rand(n,1) + a;
             x_0 = (extended_up - extended_lb).*rand([n_starting_point,self.dim]) + extended_lb;
-      
-         
+            
             
             %% TODO specify the structure of self.surrogate
             for i = 1:size(x_0,1)
                 % Find the minimum of minus the acquisition function
                fun = @(x_)self.surrogate(self,x_);
-               options = optimoptions('fmincon','Algorithm','interior-point','Display','none','TolFun',1e-9,'TolX',1e-6);
                %% TODO Check if the surrogate function have the right sign (i want to maximize but im using a minimization)
-               [x,fval] = fmincon(fun,x_0(i,:),[],[],[],[],self.bounds(1,:),self.bounds(2,:),[],options);
+               [x,fval] = fmincon(fun,x_0(i,:),[],[],[],[],self.bounds(1,:),self.bounds(2,:),[],self.options_opt);
                % Store it if better than previous minimum(maximum).
                 if (-fval >= max_acq)
                     x_max = x;
@@ -221,41 +225,45 @@ classdef BayesOpt < handle
 %         %works only for function defined in R or R^(2) functions
 %         %x and y are the value of the real function
 % 
-         function Plot(self)
+         function Plot(self,x_candidate)
              % compute current mean and variance for the objective
              % function;
              [ymu,ys2]=self.gp_s{end}.Predict(self.xl_vis);
              % compute the value for the surrogate function;
              fun = @(x_)self.surrogate(self,x_);
-             sur = fun(xl);
+             sur = fun(self.xl_vis);
              clf
+             
              % Plot the objective function
              subplot(2,2,1),hold on, title('Objective, query points')
              box on
              pcolor(self.X_vis,self.Y_vis,self.Z_vis),shading flat
              clim = caxis;
-             l1=plot(self.X(1:end-1,1),self.X(1:end-1,2), 'rx', 'MarkerSize', 10);
+             l1=plot(self.gp_s{end}.X(1:end-1,1),self.gp_s{end}.X(1:end-1,2), 'rx', 'MarkerSize', 10);
              %plot(x(end,1),x(end,2), 'ro', 'MarkerSize', 10)
              %l2=plot(xnews(:,1),xnews(:,2), 'ro', 'MarkerSize', 10);
-             l3=plot(self.X(end,1),self.X(end,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
-             legend([l1,l3], {'function evaluation points','local modes of acquisition function','The next query point'})
+             l3=plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
+             legend([l1,l3], {'function evaluation points','The next query point'})
+             
              % Plot the posterior mean of the GP model for the objective function
-             subplot(2,2,2),hold on, title(sprintf('GP prediction, mean, iter: %d',i1))
+             subplot(2,2,2),hold on, title(sprintf('GP prediction, mean,'))
              box on
              pcolor(self.X_vis,self.Y_vis,reshape(ymu,100,100)),shading flat
              caxis(clim)
+             
              % Plot the posterior variance of GP model
              subplot(2,2,4),hold on, title('GP prediction, variance')
              box on
              pcolor(self.X_vis,self.Y_vis,reshape(ys2,100,100)),shading flat
              %l2=plot(xnews(:,1),xnews(:,2), 'ro', 'MarkerSize', 10);
-             l3=plot(self.X(end,1),self.X(end,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
+             l3=plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
+             
              % Plot the expected improvement 
-             subplot(2,2,3), hold on, title(sprintf('Expected improvement %.2e', min(EIs)))
+             subplot(2,2,3), hold on, title(sprintf('Expected improvement %.2e', max(sur)))
              box on
              pcolor(self.X_vis,self.Y_vis,reshape(sur,100,100)),shading flat
              %plot(xnews(:,1),xnews(:,2), 'ro', 'MarkerSize', 10);
-             plot(self.X(end,1),self.X(end,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
+             plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
          end
 
     end
