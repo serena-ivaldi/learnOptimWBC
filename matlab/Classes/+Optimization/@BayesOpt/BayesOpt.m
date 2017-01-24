@@ -24,6 +24,7 @@ classdef BayesOpt < handle
         Y_vis
         xl_vis
         Z_vis
+        z_constr
     end
     
     methods
@@ -86,6 +87,17 @@ classdef BayesOpt < handle
                 name_real_function = 'to_test_withBOGP_stuff';
                 fx = str2func(name_real_function);
                 self.Z_vis = reshape(fx([],self.xl_vis),100,100);
+                %% TODO pass the name of the function that we want to optimize from the outside 
+                % precompute the constraints
+                constr_function = {'stuffGPConstr1','stuffGPConstr1_1','stuffGPConstr2','stuffGPConstr2_1'};
+                for ii = 1:n_of_constraints
+                    cur_f = str2func(constr_function{ii});
+                    val = cur_f(self.xl_vis,[]);
+                    % I change the value for constraints (violation = nan, not violation = 1) 
+                    val(val > 0) = nan;
+                    val(~isnan(val))=1;
+                    self.z_constr{ii} = reshape(val,100,100);
+                end
             end
             % optimization ooptions for the surrogate function 
             %self.options_opt = optimoptions('fmincon','Algorithm','interior-point','Display','none','TolFun',1e-9,'TolX',1e-6);
@@ -234,36 +246,90 @@ classdef BayesOpt < handle
              sur = fun(self.xl_vis);
              clf
              
+             
+             % compute how many subploat
+             img_col  = 4; % i set 4 col to have enough space for the fitness function visualization 
+             img_rows = 1 + ceil((self.n_of_constraints*2)/img_col);  % i have 4 column i have to add rows depending on the number of the constraints (reconstructed plus original)
+             
+             
              % Plot the objective function
-             subplot(2,2,1),hold on, title('Objective, query points')
+             subplot(img_rows,img_col,1),hold on, title('Objective, query points')
              box on
              pcolor(self.X_vis,self.Y_vis,self.Z_vis),shading flat
              clim = caxis;
-             l1=plot(self.gp_s{end}.X(1:end-1,1),self.gp_s{end}.X(1:end-1,2), 'rx', 'MarkerSize', 10);
+             l1=plot(self.gp_s{end}.X(1:end,1),self.gp_s{end}.X(1:end,2), 'rx', 'MarkerSize', 10);
              %plot(x(end,1),x(end,2), 'ro', 'MarkerSize', 10)
              %l2=plot(xnews(:,1),xnews(:,2), 'ro', 'MarkerSize', 10);
              l3=plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
              legend([l1,l3], {'function evaluation points','The next query point'})
-             
+ 
              % Plot the posterior mean of the GP model for the objective function
-             subplot(2,2,2),hold on, title(sprintf('GP prediction, mean,'))
+             subplot(img_rows,img_col,2),hold on, title(sprintf('GP prediction, mean,'))
              box on
              pcolor(self.X_vis,self.Y_vis,reshape(ymu,100,100)),shading flat
              caxis(clim)
              
              % Plot the posterior variance of GP model
-             subplot(2,2,4),hold on, title('GP prediction, variance')
+             subplot(img_rows,img_col,3),hold on, title('GP prediction, variance')
              box on
              pcolor(self.X_vis,self.Y_vis,reshape(ys2,100,100)),shading flat
              %l2=plot(xnews(:,1),xnews(:,2), 'ro', 'MarkerSize', 10);
              l3=plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
              
              % Plot the expected improvement 
-             subplot(2,2,3), hold on, title(sprintf('Expected improvement %.2e', max(sur)))
+             subplot(img_rows,img_col,4), hold on, title(sprintf('Expected improvement %.2e', max(sur)))
              box on
              pcolor(self.X_vis,self.Y_vis,reshape(sur,100,100)),shading flat
              %plot(xnews(:,1),xnews(:,2), 'ro', 'MarkerSize', 10);
              plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
+             
+             % this is an index that i sue to control the position of the
+             % subplot for the constraints
+             subplot_position = 5;
+             
+             % i dislplay for each constraints its real value and its
+             % reconstructed ones
+             for counter = 1:self.n_of_constraints
+                % real constraints 
+                subplot(img_rows,img_col,subplot_position), hold on, title(sprintf('original constraints %.2e', counter))
+                pcolor(self.X_vis,self.Y_vis,self.z_constr{counter}),shading flat    
+                %plot(xc1(1:end-1,1),xc1(1:end-1,2), 'rx', 'MarkerSize', 10);
+                plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10);
+                %plot(xc1(end,1),xc1(end,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
+                
+                subplot_position = subplot_position + 1;
+                % reconstructed constraints
+                subplot(img_rows,img_col,subplot_position), hold on, title(sprintf('reconstructed constraints %.2e', counter))
+                [cur_ymu,ys2]=self.gp_s{counter}.Predict(self.xl_vis);
+                % i want to show the value wehre the constraints is
+                % satisfacted
+                cur_ymu(cur_ymu > 0) = nan;
+                cur_ymu(~isnan(cur_ymu))=1;
+                pcolor(self.X_vis,self.Y_vis,reshape(cur_ymu,100,100)),shading flat
+                plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10)
+                
+                subplot_position = subplot_position + 1;
+             end
+             
+             
+%              counter = 1;
+%              for j = 3:img_col
+%                 ind = index(cur_row,j);
+%                 subplot(img_rows,img_col,ind), hold on, title(sprintf('reconstructed constraints %.2e', counter))
+%                 [cur_ymu,ys2]=self.gp_s{counter}.Predict(self.xl_vis);
+%                 % i want to show the value wehre the constraints is
+%                 % satisfacted
+%                 cur_ymu(cur_ymu > 0) = nan;
+%                 cur_ymu(~isnan(cur_ymu))=1;
+%                 pcolor(self.X_vis,self.Y_vis,reshape(cur_ymu,100,100)),shading flat
+%                 plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10)
+%                 %plot(xc1(end,1),xc1(end,2), 'ro', 'MarkerSize', 10, 'linewidth', 3)
+%                 %plot(xc1(1:end-1,1),xc1(1:end-1,2), 'rx'), 
+%                 counter = counter + 1;
+%              end    
+             
+             
+             
          end
 
     end

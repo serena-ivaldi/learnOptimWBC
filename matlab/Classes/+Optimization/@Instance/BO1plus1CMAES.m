@@ -100,7 +100,7 @@ function [init_x,init_y]=InitialSample(obj,fnForwardModel,lb,ub,number_init_poin
     init_x = repmat(lb,number_init_points,1) + repmat(ub-lb,number_init_points,1).*rand(number_init_points,length(lb));
     
     %% TODEBUG provisory change (ho sovrascritto init_x )for confrontation with demobayesopt.m
-    init_x =[-4 -4;-4 4;4 -4;4 4;0 0];
+    init_x = [ 1 1;9 1;1 9;9 9;5 5];
     % Evaluate target function at all initialization
     % points (random + explore)
     for i=1:number_init_points

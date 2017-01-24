@@ -1,0 +1,258 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="http://www.petercorke.com/RVC/common/toolboxhelp.css">
+    <title>M-File Help: AstarMOO</title>
+  </head>
+  <body>
+  <table border="0" cellspacing="0" width="100%">
+    <tr class="subheader">
+      <td class="headertitle">M-File Help: AstarMOO</td>
+      <td class="subheader-left"><a href="matlab:open AstarMOO">View code for AstarMOO</a></td>
+    </tr>
+  </table>
+<h1>AstarMOO</h1><p><span class="helptopic">A*-MOO navigation class</span></p><p>
+A concrete subclass of the Navigation class that implements the A*
+navigation algorithm for multiobjective optimization (MOO) - i.e.
+optimizes over several objectives/criteria.
+
+</p>
+<p>
+Methods:
+
+</p>
+<table class="list">
+  <tr><td style="white-space: nowrap;" class="col1"> plan</td> <td>Compute the cost map given a goal and map</td></tr>
+  <tr><td style="white-space: nowrap;" class="col1"> path</td> <td>Compute a path to the goal</td></tr>
+  <tr><td style="white-space: nowrap;" class="col1"> visualize</td> <td>Display the obstacle map (deprecated)</td></tr>
+  <tr><td style="white-space: nowrap;" class="col1"> plot</td> <td>Display the obstacle map</td></tr>
+  <tr><td style="white-space: nowrap;" class="col1"> costmap_modify</td> <td>Modify the costmap</td></tr>
+  <tr><td style="white-space: nowrap;" class="col1"> costmap_get</td> <td>Return the current costmap</td></tr>
+  <tr><td style="white-space: nowrap;" class="col1"> costmap_set</td> <td>Set the current costmap</td></tr>
+  <tr><td style="white-space: nowrap;" class="col1"> distancemap_get</td> <td>Set the current distance map</td></tr>
+  <tr><td style="white-space: nowrap;" class="col1"> heuristic_get</td> <td>Get the current heuristic map</td></tr>
+  <tr><td style="white-space: nowrap;" class="col1"> display</td> <td>Print the parameters in human readable form</td></tr>
+  <tr><td style="white-space: nowrap;" class="col1"> char</td> <td>Convert to string</td></tr>
+</table>
+<p>
+Properties:
+TBD
+
+</p>
+<h2>Example</h2>
+<pre style="width: 90%%;" class="examples">
+load&nbsp;map1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%&nbsp;load&nbsp;map
+goal&nbsp;=&nbsp;[50;30];
+start&nbsp;=&nbsp;[20;10];
+as&nbsp;=&nbsp;AstarMOO(map);&nbsp;&nbsp;&nbsp;&nbsp;%&nbsp;create&nbsp;Navigation&nbsp;object
+as.plan(goal,2);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%&nbsp;setup&nbsp;costmap&nbsp;for&nbsp;specified&nbsp;goal
+as.path(start);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%&nbsp;plan&nbsp;solution&nbsp;path&nbsp;star-goal,&nbsp;animate
+P&nbsp;=&nbsp;as.path(start);&nbsp;&nbsp;&nbsp;&nbsp;%&nbsp;plan&nbsp;solution&nbsp;path&nbsp;star-goal,&nbsp;return&nbsp;path
+</pre>
+<p>
+Example 2:
+
+</p>
+<pre style="width: 90%%;" class="examples">
+goal&nbsp;=&nbsp;[100;100];
+start&nbsp;=&nbsp;[1;1];
+as&nbsp;=&nbsp;AstarMOO(0);&nbsp;&nbsp;&nbsp;%&nbsp;create&nbsp;Navigation&nbsp;object&nbsp;with&nbsp;random&nbsp;occupancy&nbsp;grid
+as.addCost(1,L);&nbsp;&nbsp;&nbsp;&nbsp;%&nbsp;add&nbsp;1st&nbsp;add'l&nbsp;cost&nbsp;layer&nbsp;L
+as.plan(goal,3);&nbsp;&nbsp;&nbsp;&nbsp;%&nbsp;setup&nbsp;costmap&nbsp;for&nbsp;specified&nbsp;goal
+as.path(start);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%&nbsp;plan&nbsp;solution&nbsp;path&nbsp;start-goal,&nbsp;animate
+P&nbsp;=&nbsp;as.path(start);&nbsp;&nbsp;&nbsp;&nbsp;%&nbsp;plan&nbsp;solution&nbsp;path&nbsp;start-goal,&nbsp;return&nbsp;path
+</pre>
+<h2>Notes</h2>
+<ul>
+  <li>Obstacles are represented by Inf in the costmap.</li>
+</ul>
+<h2>References</h2>
+<ul>
+  <li>A Pareto Optimal D* Search Algorithm for Multiobjective Path Planning, A. Lavin.</li>
+  <li>A Pareto Front-Based Multiobjective Path Planning Algorithm, A. Lavin.</li>
+  <li>Robotics, Vision & Control, Sec 5.2.2, Peter Corke, Springer, 2011.</li>
+</ul>
+<h2>Author</h2>
+<p>
+Alexander Lavin
+
+</p>
+<h2>See also</h2>
+<p>
+<a href="Navigation.html">Navigation</a>, <a href="Astar.html">Astar</a>, <a href="AstarPO.html">AstarPO</a></p>
+<hr>
+<a name="AstarMOO"><h1>AstarMOO.AstarMOO</h1></a>
+<p><span class="helptopic">A*-MOO constructor</span></p><p>
+<strong>as</strong> = <span style="color:red">AstarMOO</span>(<strong>map</strong>, <strong>options</strong>) is a A* navigation object, and <strong>map</strong> is an
+occupancy grid, a representation of a planar world as a
+matrix whose elements are 0 (free space) or 1 (occupied).
+The occupancy grid is coverted to a costmap with a unit cost
+for traversing a cell.
+
+</p>
+<h2>Options</h2>
+<table class="list">
+  <tr><td style="white-space: nowrap;" class="col1">'goal', G</td> <td>Specify the goal point (2x1)</td></tr>
+  <tr><td style="white-space: nowrap;" class="col1">'metric', M</td> <td>Specify the distance metric as 'euclidean' (default)
+or 'cityblock'.</td></tr>
+  <tr><td style="white-space: nowrap;" class="col1">'inflate', K</td> <td>Inflate all obstacles by K cells.</td></tr>
+  <tr><td style="white-space: nowrap;" class="col1"> 'quiet'</td> <td>Don't display the progress spinner</td></tr>
+</table>
+<p>
+Other options are supported by the Navigation superclass.
+
+</p>
+<h2>Notes</h2>
+<ul>
+  <li>If MAP == 0 a random map is created.</li>
+</ul>
+<h2>See also</h2>
+<p>
+<a href="Navigation.Navigation.html">Navigation.Navigation</a></p>
+<hr>
+<a name="addCost"><h1>AstarMOO.addCost</h1></a>
+<p><span class="helptopic">Add an additional cost layer</span></p><p>
+AS.<span style="color:red">addCost</span>(<strong>layer</strong>, <strong>values</strong>) adds the matrix specified by values as a
+cost layer.  The layer number is given by <strong>layer</strong>, and <strong>values</strong> has the same
+size as the original occupancy grid.
+
+</p>
+<hr>
+<a name="char"><h1>AstarMOO.char</h1></a>
+<p><span class="helptopic">Convert navigation object to string</span></p><p>
+AS.<span style="color:red">char</span>() is a string representing the state of the Astar
+object in human-readable form.
+
+</p>
+<h2>See also</h2>
+<p>
+<a href="AstarMOO.display.html">AstarMOO.display</a>, <a href="Navigation.char.html">Navigation.char</a></p>
+<hr>
+<a name="cost_get"><h1>AstarMOO.cost_get</h1></a>
+<p><span class="helptopic">Get the specified cost layer</span></p><hr>
+<a name="costmap_get"><h1>AstarMOO.costmap_get</h1></a>
+<p><span class="helptopic">Get the current costmap</span></p><p>
+<strong>C</strong> = AS.<span style="color:red">costmap_get</span>() is the current costmap.  The cost map is the same size
+as the occupancy grid and the value of each element represents the cost
+of traversing the cell.  It is autogenerated by the class constructor from
+the occupancy grid such that:
+
+</p>
+<ul>
+  <li>free cell (occupancy 0) has a cost of 1</li>
+  <li>occupied cell (occupancy >0) has a cost of Inf</li>
+</ul>
+<h2>See also</h2>
+<p>
+<a href="Astar.costmap_set.html">Astar.costmap_set</a>, <a href="Astar.costmap_modify.html">Astar.costmap_modify</a></p>
+<hr>
+<a name="costmap_modify"><h1>AstarMOO.costmap_modify</h1></a>
+<p><span class="helptopic">Modify cost map</span></p><p>
+AS.<span style="color:red">costmap_modify</span>(<strong>p</strong>, <strong>new</strong>) modifies the cost map at <strong>p</strong>=[X,Y] to
+have the value <strong>new</strong>.  If <strong>p</strong> (2xM) and <strong>new</strong> (1xM) then the cost of
+the points defined by the columns of <strong>p</strong> are set to the corresponding
+elements of <strong>new</strong>.
+
+</p>
+<h2>Notes</h2>
+<ul>
+  <li>After one or more point costs have been updated the path
+should be replanned by calling AS.plan().</li>
+</ul>
+<h2>See also</h2>
+<p>
+<a href="AstarMOO.costmap_set.html">AstarMOO.costmap_set</a>, <a href="AstarMOO.costmap_get.html">AstarMOO.costmap_get</a></p>
+<hr>
+<a name="costmap_set"><h1>AstarMOO.costmap_set</h1></a>
+<p><span class="helptopic">Set the current costmap</span></p><p>
+AS.<span style="color:red">costmap_set</span>(<strong>C</strong>) sets the current costmap.  The cost map is the same size
+as the occupancy grid and the value of each element represents the cost
+of traversing the cell.  A high value indicates that the cell is more costly
+(difficult) to traverese.  A value of Inf indicates an obstacle.
+
+</p>
+<h2>Notes</h2>
+<ul>
+  <li>After the cost map is changed the path should be replanned by
+calling AS.plan().</li>
+</ul>
+<h2>See also</h2>
+<p>
+<a href="Astar.costmap_get.html">Astar.costmap_get</a>, <a href="Astar.costmap_modify.html">Astar.costmap_modify</a></p>
+<hr>
+<a name="heuristic_get"><h1>AstarMOO.heuristic_get</h1></a>
+<p><span class="helptopic">Get the current heuristic map</span></p><p>
+<strong>C</strong> = AS.<span style="color:red">heuristic_get</span>() is the current heuristic map.  This map is the same size
+as the occupancy grid and the value of each element is the shortest distance
+from the corresponding point in the map to the current goal.  It is computed
+by Astar.plan.
+
+</p>
+<h2>See also</h2>
+<p>
+<a href="Astar.plan.html">Astar.plan</a></p>
+<hr>
+<a name="next"><h1>AstarMOO.next</h1></a>
+<p><span class="helptopic">from goal to start</span></p><p>
+Return [col;row] of previous step
+
+</p>
+<hr>
+<a name="path"><h1>AstarMOO.path</h1></a>
+<p><span class="helptopic">Find a path between two points</span></p><p>
+AS.<span style="color:red">path</span>(<strong>start</strong>) finds and displays a <span style="color:red">path</span> from <strong>start</strong> to GOAL
+which is overlaid on the occupancy grid.
+
+</p>
+<p>
+<strong>p</strong> = AS.<span style="color:red">path</span>(<strong>start</strong>) returns the <span style="color:red">path</span> (2xM) from <strong>start</strong> to GOAL.
+
+</p>
+<hr>
+<a name="plan"><h1>AstarMOO.plan</h1></a>
+<p><span class="helptopic">Prep the grid for planning.</span></p><p>
+AS.<span style="color:red">plan</span>() updates AS with a costmap of distance to the
+goal from every non-obstacle point in the map.  The goal is
+as specified to the constructor.
+
+</p>
+<p>
+Inputs:
+
+</p>
+<p>
+goal: goal state coordinates
+N: number of optimization objectives; standard A* is 2
+(i.e. distance and heuristic)
+
+</p>
+<hr>
+<a name="plot"><h1>AstarMOO.plot</h1></a>
+<p><span class="helptopic">Visualize navigation environment</span></p><p>
+AS.<span style="color:red">plot</span>() displays the occupancy grid and the goal distance
+in a new figure.  The goal distance is shown by intensity which
+increases with distance from the goal.  Obstacles are overlaid
+and shown in red.
+
+</p>
+<p>
+AS.<span style="color:red">plot</span>(<strong>p</strong>) as above but also overlays a path given by the set
+of points <strong>p</strong> (Mx2).
+
+</p>
+<h2>See also</h2>
+<p>
+<a href="Navigation.plot.html">Navigation.plot</a></p>
+<hr>
+<a name="reset"><h1>AstarMOO.reset</h1></a>
+<p><span class="helptopic">Reset the planner</span></p><p>
+AS.<span style="color:red">reset</span>() resets the A* planner.  The next instantiation
+of AS.plan() will perform a global replan.
+
+</p>
+<hr>
+
+<table border="0" width="100%" cellpadding="0" cellspacing="0">
+  <tr class="subheader" valign="top"><td>&nbsp;</td></tr></table>
+<p class="copy">&copy; 1990-2014 Peter Corke.</p>
+</body></html>

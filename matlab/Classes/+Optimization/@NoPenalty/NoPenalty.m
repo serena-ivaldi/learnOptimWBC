@@ -3,7 +3,7 @@
 
 
 % the idea is that we check the consraints inside the fitness function and
-% than we update the information inside the object smetimes direcrtly 
+% than we update the information inside the object sometimes directly 
 
 
 classdef  NoPenalty < Optimization.AbstractPenalty
