@@ -89,19 +89,21 @@ classdef BayesOpt < handle
                 self.Z_vis = reshape(fx([],self.xl_vis),100,100);
                 %% TODO pass the name of the function that we want to optimize from the outside 
                 % precompute the constraints
-                constr_function = {'stuffGPConstr1','stuffGPConstr1_1','stuffGPConstr2','stuffGPConstr2_1'};
+                constr_function = {'stuffGPConstr1_0','stuffGPConstr1_1','stuffGPConstr2_0','stuffGPConstr2_1'};
+                %const = [0 0.8 ; -10 0.1];
                 for ii = 1:n_of_constraints
                     cur_f = str2func(constr_function{ii});
                     val = cur_f(self.xl_vis,[]);
                     % I change the value for constraints (violation = nan, not violation = 1) 
                     val(val > 0) = nan;
+                    %val(val<const(ii,1) | val>const(ii,2)) = nan;
                     val(~isnan(val))=1;
                     self.z_constr{ii} = reshape(val,100,100);
                 end
             end
             % optimization ooptions for the surrogate function 
             %self.options_opt = optimoptions('fmincon','Algorithm','interior-point','Display','none','TolFun',1e-9,'TolX',1e-6);
-            self.options_opt = optimoptions('fmincon','GradObj','off','Algorithm','trust-region-reflective','TolFun',1e-9,'TolX',1e-6);
+            self.options_opt = optimoptions('fmincon','GradObj','off','Algorithm','interior-point','TolFun',1e-9,'TolX',1e-6);
             
         end
         
@@ -116,8 +118,10 @@ classdef BayesOpt < handle
                 self.gp_s{i}.Init(x_init,y_init(:,i));
             end   
             
-            %% TODO i have to update y_max only if the the point is feasible
-            index = (y_init(:,end-1)==1);
+            %% TODEBUG im cheching if i have to use the best y regardless or i 
+            %% i have to check for the best y max that satisfy the constraints
+            %index = (y_init(:,end-1)==1);
+            index = ones(size(y_init));
             [y_candidate, ind_max] = max(y_init(index,i));     
             if(~isempty(y_candidate))
                 self.y_max = y_candidate;
@@ -219,13 +223,14 @@ classdef BayesOpt < handle
                     self.gp_s{i}.Update(new_x,new_y(i));
                 end
 
-                %% TODO add update of for y_max;
-                if(new_y(end-1)==1)
+                %% TODEBUG checking if updating the ymax without checking feasibility is better than update the same 
+                %% taking into account only the ymax feasible
+                %if(new_y(end-1)==1)
                     if(new_y(end)>self.y_max) 
                         self.y_max = new_y(end);
                         self.x_max = new_x;
                     end
-                end
+                %end
             end
 
         end
@@ -264,20 +269,20 @@ classdef BayesOpt < handle
              legend([l1,l3], {'function evaluation points','The next query point'})
  
              % Plot the posterior mean of the GP model for the objective function
-             subplot(img_rows,img_col,2),hold on, title(sprintf('GP prediction, mean,'))
+             subplot(img_rows,img_col,3),hold on, title(sprintf('GP prediction, mean,'))
              box on
              pcolor(self.X_vis,self.Y_vis,reshape(ymu,100,100)),shading flat
              caxis(clim)
              
              % Plot the posterior variance of GP model
-             subplot(img_rows,img_col,3),hold on, title('GP prediction, variance')
+             subplot(img_rows,img_col,4),hold on, title('GP prediction, variance')
              box on
              pcolor(self.X_vis,self.Y_vis,reshape(ys2,100,100)),shading flat
              %l2=plot(xnews(:,1),xnews(:,2), 'ro', 'MarkerSize', 10);
              l3=plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
              
              % Plot the expected improvement 
-             subplot(img_rows,img_col,4), hold on, title(sprintf('Expected improvement %.2e', max(sur)))
+             subplot(img_rows,img_col,2), hold on, title(sprintf('Expected improvement %.2e', max(sur)))
              box on
              pcolor(self.X_vis,self.Y_vis,reshape(sur,100,100)),shading flat
              %plot(xnews(:,1),xnews(:,2), 'ro', 'MarkerSize', 10);
@@ -286,7 +291,7 @@ classdef BayesOpt < handle
              % this is an index that i sue to control the position of the
              % subplot for the constraints
              subplot_position = 5;
-             
+             %const = [0 0.8 ; -10 0.1];
              % i dislplay for each constraints its real value and its
              % reconstructed ones
              for counter = 1:self.n_of_constraints
@@ -304,6 +309,7 @@ classdef BayesOpt < handle
                 % i want to show the value wehre the constraints is
                 % satisfacted
                 cur_ymu(cur_ymu > 0) = nan;
+                %cur_ymu(cur_ymu<const(counter,1) | cur_ymu>const(counter,2)) = nan;
                 cur_ymu(~isnan(cur_ymu))=1;
                 pcolor(self.X_vis,self.Y_vis,reshape(cur_ymu,100,100)),shading flat
                 plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10)
