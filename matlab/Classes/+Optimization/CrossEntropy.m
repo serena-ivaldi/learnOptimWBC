@@ -1,7 +1,13 @@
-% TO DO:
+%% TO DO:
 % - add function for initializing the particle by covering all the space
 %   possible
 % - clean membership_weights at the end of each iteration
+
+%% things already done so far:
+% this class implment a mixture of gaussian Cross entropy method
+% the single particle is rapresented as a 1+1 cmaes but they are used just
+% as container of mean and the variance for each gaussian in the mixture
+
 
 
 classdef CrossEntropy < handle
@@ -41,7 +47,7 @@ classdef CrossEntropy < handle
          % actual particle used that rapresents the single gaussian of the
          % mixture
          for i=1:obj.lambda
-         obj.particles{i} = Optimization.Particle(size_action,maxAction,minAction,instance.penalty_handling.n_constraint,nIterations,explorationRate);
+         obj.particles{i} = Optimization.ParticleExperimental(size_action,maxAction,minAction,instance.penalty_handling.n_constraint,nIterations,explorationRate);
          end
          %% i have to initialize the mean of each particle in some way
          % particle mean update
