@@ -70,7 +70,25 @@ classdef GPstuff_GP < GaussianProcess.AbstractGP
        end
        
        function [ymu,ys2] = Predict(obj,x_t)
-           [ymu, ys2] = gp_pred(obj.gp, obj.X, obj.Y, x_t);
+           % too slow
+           %[ymu, ys2] = gp_pred(obj.gp, obj.X, obj.Y, x_t);
+           % faster method working only with gaussian exact 
+           [K, C] = gp_trcov(obj.gp,obj.X);
+           invC = inv(C);
+           a = C\obj.Y;
+           Knx = gp_cov(obj.gp,x_t,obj.X);
+           Kn = gp_trvar(obj.gp,x_t);
+           % mean
+           ymu = Knx*a; ymu=ymu(1:size(x_t,1));
+           invCKnxt = invC*Knx';
+           % variance
+           ys2 = Kn - sum(Knx.*invCKnxt',2); 
+           % i need to check for negative variance because it could happens
+           % and the previous approach is less robust to numerical error
+           if(ys2<0)
+                disp('negative variance')
+                [ymu, ys2] = gp_pred(obj.gp, obj.X, obj.Y, x_t);
+           end
        end
        
        

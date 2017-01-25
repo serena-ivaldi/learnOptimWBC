@@ -57,7 +57,7 @@ classdef BayesOpt < handle
 
             %% TODO define surrogate functions
             % Surrogate placeholder
-            kind = 'ei';
+            kind = 'ecv';
             kappa =0.1;
             xi = 0;
             self.surrogate = @(self_,x_)Surrogate(self_, x_, kind, kappa, xi);
@@ -89,7 +89,7 @@ classdef BayesOpt < handle
                 self.Z_vis = reshape(fx([],self.xl_vis),100,100);
                 %% TODO pass the name of the function that we want to optimize from the outside 
                 % precompute the constraints
-                constr_function = {'stuffGPConstr1_0','stuffGPConstr1_1','stuffGPConstr2_0','stuffGPConstr2_1'};
+                constr_function = {'stuffGPConstr1_0','stuffGPConstr1_1','stuffGPConstr2_1'};
                 %const = [0 0.8 ; -10 0.1];
                 for ii = 1:n_of_constraints
                     cur_f = str2func(constr_function{ii});
