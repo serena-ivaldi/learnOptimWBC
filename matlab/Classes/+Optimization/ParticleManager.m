@@ -10,7 +10,7 @@ classdef ParticleManager < handle
       minAction;
       nIterations;
       explorationRate;
-      steptogo;
+      %steptogo; it could be useless
     end
     
     methods
@@ -27,7 +27,19 @@ classdef ParticleManager < handle
            obj.explorationRate = explorationRate;      
         end
         
+        function [candidate,z] = Sample(obj,particle_index)
+           z =  mvnrnd(zeros(1, n), eye(n));
+           candidate = obj.particles{particle_index}.GetMean() + obj.particles{particle_index}.GetSigma() *(obj.particles{particle_index}.GetCholCov() * z')'; 
+           % saturation
+           candidate(1, candidate(1,:) > obj.maxAction) = obj.maxAction(candidate(1,:) > obj.maxAction);
+           candidate(1, candidate(1,:) < obj.minAction) = obj.minAction(candidate(1,:) < obj.minAction);
+        end
         
+        % after dampling we need to compute the new fitness and the
+        % constraints violations
+        function UpdateParticle(obj,particle_index,candidate,constraints_active,constraints,k,z,performances_new)
+            obj.particles{particle_index}.Evolve(constraints_active,constraints,k,z,candidate,performances_new)
+        end
         
         function AddParticle(obj)
             % starting from the beggining of the particles vec fill the
@@ -48,14 +60,23 @@ classdef ParticleManager < handle
         
         % remove redudant particles that are heading to the same local maxima / minima 
         function PruneParticles(obj)
-        end
-        
-        function UpdateParticle(obj,index)
+            %% do some checking on the trajectory of the particle (or the current mean and covariance)
+            obj.DeleteParticle(to_delete);
         end
         
         % return index of active particles and information about the status
         % of each of them (ex: current max)
-        function GetParticleInfo()
+        function info = GetParticleInfo(obj)          
+            for i=1:length(obj.particles)
+                if(~isempty(obj.particles{i}))
+                    cur_info.ind = i;
+                    cur_info.y_max = obj.particles{i}.GetBestPerfomance();
+                    cur_info.mean  = obj.particles{i}.GetMean();
+                    cur_info.C     = obj.particles{i}.GetCov();
+                    info(end + 1) = cur_info;
+                end
+            end
+            
         end
         
         

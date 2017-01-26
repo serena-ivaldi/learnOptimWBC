@@ -14,13 +14,14 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
     end
 
     n = size(minAction,2);
-
+    lambda = round(4 + 3 * log(n));
     n_constraints = obj.penalty_handling.n_constraint;
 
     fnForwardModel = @(obj_,actionLearn_,curr_candidate_,isMean_)TransAction(obj_,actionLearn_,curr_candidate_,isMean_, settings);
     
     %% TODO pass from outside the GP_lib parameter to specify which gaussian process library i wanna use
     BO = Optimization.BayesOpt(minAction, maxAction, n,n_constraints,'GP_stuff');
+    PM = Optimization.ParticleManager(lambda,size_action,n_constraints,maxAction,minAction,nIterations,settings.explorationRate);
     
     %% TODO for metrics i need to introduce the same structure fo the other method
     mean_performances = zeros(1,nIterations);  % row vector
@@ -41,18 +42,38 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
     
    for ii = 1:nIterations
        
+       %% action selector (simulated annealing?)
+       
+      
+       %% exploration (global action)
        % select the new point
        disp('optimization surrogate');
        x_candidate = BO.AcqMax();
        % compute the model 
+       
+       %% exploitation (local action)
+       
+            %% particle selector (simulated annealing?)
+            % sample from that particle
+       
+       %% execution 
+       
        disp('evaluate offsprings')
        [performances_new succeeded(ii)] = fnForwardModel(obj,x_candidate,1, 1); % compute fitness 
        y = obj.penalty_handling.penalties;
        y(end + 1)= obj.penalty_handling.feasibility;
        y(end + 1) = performances_new;
-       %% TODEBUG
+       
+       %% add a new particle (if im exploring and the point satisfy all the constraints)
+       
+       %% update particle (if im exploiting)
+       
+       % evolve selected particle
+       % prune colliding particles
+       %% plot(TODEBUG)
+       
        BO.Plot(x_candidate);
-       % update the gaussian process
+       %% update gaussian process
        disp('update');
        BO.Update(x_candidate, y)
        
