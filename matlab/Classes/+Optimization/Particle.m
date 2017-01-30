@@ -34,11 +34,12 @@ classdef Particle < handle
       X_mesh;
       Y_mesh;
       current_index; % this index tell us where we are inside the current 
+      status;        % active, candidate attained, merged
    end
             
    methods
       
-      function obj = Particle(size_action,maxAction,minAction,n_constraints,nIterations,explorationRate)
+      function obj = Particle(size_action,maxAction,minAction,n_constraints,nIterations,explorationRate,start_candidate,start_perfomance)
          %obj.maxAction = maxAction;
          %obj.minAction = minAction;
          obj.n = size_action;
@@ -49,6 +50,10 @@ classdef Particle < handle
          obj.V     = cell(nIterations,1);                                                  % V vector
          obj.performances = zeros(nIterations,1);                                          % perfomances vector
          obj.s = zeros(nIterations,obj.n);                                                 % s vector
+         % initiliaze mean 
+         obj.mean(1, :) = start_candidate;
+         %initialize perfomance 
+         obj.performances(1) = start_perfomance;
          % initialize sigma
          obj.sigma(1) = explorationRate;                        
          obj.C{1} = diag((maxAction - minAction)/2);
@@ -70,6 +75,7 @@ classdef Particle < handle
          y_mesh = minAction(2):.1:maxAction(2); %// y axis
          [obj.X_mesh,obj.Y_mesh] = meshgrid(x_mesh,y_mesh); %// all combinations of x, y
          obj.current_index = 1;
+         obj.status = 'active';
       end
    
 %       function [candidate] = Sample(obj)
@@ -79,10 +85,10 @@ classdef Particle < handle
 %          candidate(1, candidate(1,:) < obj.minAction) = obj.minAction(candidate(1,:) < obj.minAction);
 %       end
       
-      function Evolve(obj,constraints_active,constraints,z,offsprings,performances_new)
-          if(constraints_active)
-            violated_constrained = find(constraints);
-          end
+      function Evolve(obj,violated_constrained,z,offsprings,performances_new)
+          %if(constraints_active)
+          %  violated_constrained = find(constraints);
+          %end
           if(~isempty(violated_constrained)) % some constraints are violated
              obj.v = obj.V{obj.current_index};
              for j = violated_constrained
@@ -161,7 +167,7 @@ classdef Particle < handle
       end
       
       function sigma = GetSigma(obj)
-          sigma = obj.sigma{obj.current_index};
+          sigma = obj.sigma(obj.current_index);
       end
       function y = GetBestPerfomance(obj)
           y = obj.performances(obj.current_index);

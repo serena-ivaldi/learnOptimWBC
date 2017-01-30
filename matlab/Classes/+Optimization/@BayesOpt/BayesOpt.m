@@ -235,8 +235,14 @@ classdef BayesOpt < handle
 
         end
         
+        % use this function to change the surrogate function during the
+        % execution from constructor default is 'ecv'
+        % kind is a string
+        function SetSurrogate(self,kind,kappa,xi)
+            self.surrogate = @(self_,x_)Surrogate(self_, x_, kind, kappa, xi);
+        end
         
-         %GRAPHIC FUNCTION
+         %% GRAPHIC FUNCTION
 
  
 %         %works only for function defined in R or R^(2) functions
@@ -266,7 +272,7 @@ classdef BayesOpt < handle
              %plot(x(end,1),x(end,2), 'ro', 'MarkerSize', 10)
              %l2=plot(xnews(:,1),xnews(:,2), 'ro', 'MarkerSize', 10);
              l3=plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
-             legend([l1,l3], {'function evaluation points','The next query point'})
+             %legend([l1,l3], {'function evaluation points','The next query point'})
  
              % Plot the posterior mean of the GP model for the objective function
              subplot(img_rows,img_col,3),hold on, title(sprintf('GP prediction, mean,'))

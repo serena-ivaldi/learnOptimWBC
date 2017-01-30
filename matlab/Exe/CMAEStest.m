@@ -10,7 +10,7 @@ clc
 robotics_experiment = [0]; % series of value that say if the current experiment is a robotics experiments or not 1 or 0
 niter_tot = 100;  %number of functions evaluations
 function_2_test ={'to_test_withBOGP_stuff'};%'robotic_experiments','g06','g07','g09','f240','f241','HB'};
-learn_approach = 'BO(1+1)CMAES'; %CMAES (1+1)CMAES  CEM BO(1+1)CMAES fmincon     with (1+1)CMAES and BO(1+1)CMAES i have to use nopenalty
+learn_approach = 'BO(1+1)CMAES'; %CMAES (1+1)CMAES  CEM   BO  BO(1+1)CMAES fmincon     with (1+1)CMAES and BO(1+1)CMAES i have to use nopenalty
 method_to_use = 'nopenalty';  % adaptive , vanilla ,empty,fmincon, nopenalty
 
 repetition_of_the_experiment = 2; % at least 2
