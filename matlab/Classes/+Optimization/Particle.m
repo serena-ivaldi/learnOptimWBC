@@ -12,7 +12,7 @@ classdef Particle < handle
       %minAction
       % external parameters (visible from mixture of gaussian)-------------
       mean;    % mean vector 
-      C;       % covariance matrix  
+      %C;       % covariance matrix  
       % internal parameters -----------------------------------------------
       n;       % dimension of parameter space
       sigma;   % exploration rate
@@ -35,17 +35,18 @@ classdef Particle < handle
       Y_mesh;
       current_index; % this index tell us where we are inside the current 
       status;        % active, candidate attained, merged
+      clr;
    end
             
    methods
       
-      function obj = Particle(size_action,maxAction,minAction,n_constraints,nIterations,explorationRate,start_candidate,start_perfomance)
+      function obj = Particle(size_action,maxAction,minAction,n_constraints,nIterations,explorationRate,start_candidate,start_perfomance,color)
          %obj.maxAction = maxAction;
          %obj.minAction = minAction;
          obj.n = size_action;
          obj.mean = zeros(nIterations, obj.n);                                             % mean vector 
          obj.sigma = zeros(nIterations,1);                                                 % sigma vector
-         obj.C     = cell(nIterations,1);                                                  % C vector 
+         %obj.C     = cell(nIterations,1);                                                  % C vector 
          obj.A     = cell(nIterations,1);                                                  % A vector 
          obj.V     = cell(nIterations,1);                                                  % V vector
          obj.performances = zeros(nIterations,1);                                          % perfomances vector
@@ -56,8 +57,8 @@ classdef Particle < handle
          obj.performances(1) = start_perfomance;
          % initialize sigma
          obj.sigma(1) = explorationRate;                        
-         obj.C{1} = diag((maxAction - minAction)/2);
-         obj.A{1} = chol(obj.C{1});  
+         C = diag((maxAction - minAction)/2);
+         obj.A{1} = chol(C);  
          for j = 1 : n_constraints
             obj.v(j,:) = zeros(1,obj.n);    
          end
@@ -76,6 +77,7 @@ classdef Particle < handle
          [obj.X_mesh,obj.Y_mesh] = meshgrid(x_mesh,y_mesh); %// all combinations of x, y
          obj.current_index = 1;
          obj.status = 'active';
+         obj.clr = color;
       end
    
 %       function [candidate] = Sample(obj)
@@ -100,8 +102,8 @@ classdef Particle < handle
                w(index,:) = (obj.A{obj.current_index}^(-1)*obj.v(j,:)')';
                index = index + 1;
              end
-             obj.mean(obj.current_index + 1,:) = obj.mean(k,:);                                                                                                                             % no update mean
-             obj.s(obj.current_index + 1,:) = obj.s(k,:);                                                                                                                                      % no update s
+             obj.mean(obj.current_index + 1,:) = obj.mean(obj.current_index,:);                                                                                                                             % no update mean
+             obj.s(obj.current_index + 1,:) = obj.s(obj.current_index,:);                                                                                                                                      % no update s
              value = zeros(size(obj.A{1}));
              index = 1;
              for j = violated_constrained
@@ -159,7 +161,8 @@ classdef Particle < handle
          mean = obj.mean(obj.current_index,:);
       end
       function cov = GetCov(obj)
-         cov=obj.C{obj.current_index};
+         A_cur=obj.A{obj.current_index};
+         cov = A_cur'*A_cur;
       end
       
       function A = GetCholCov(obj)
@@ -173,14 +176,136 @@ classdef Particle < handle
           y = obj.performances(obj.current_index);
       end
       
-      function Plot(obj)
-        Z = mvnpdf([obj.X_mesh(:) obj.Y_mesh(:)],obj.GetMean(),obj.GetCov()); %// compute Gaussian pdf
-        Z = reshape(Z,size(obj.X_mesh)); %// put into same size as X, Y
-        contour(obj.X_mesh,obj.Y_mesh,Z), axis equal, hold on  %// contour plot; set same scale for x and y...
-        %surf(X,Y,Z) %// ... or 3D plot
+      function [mu,V_s,tlb,tup] = GetRotTraslBound(obj)
+          p = 0.95;
+          mu = obj.GetMean()';
+          Sigma = obj.GetCov();
+          [~,D,V_s]=svd(Sigma);
+          k = obj.conf2mahal(p, obj.n);
+          L = k * sqrt(abs(diag(D)));
+          tlb = -L';
+          tup = L';
+          
       end
-  
+      
+      function Plot(obj)
+          mu = obj.GetMean()';
+          Sigma = obj.GetCov();
+          if size(Sigma) ~= [2 2]
+              disp('Sigma must be a 2 by 2 matrix'); 
+          end
+          if length(mu) ~= 2, 
+              disp('mu must be a 2 by 1 vector'); 
+          end
+          p = 0.95; % probability mass enclosed insided the ellipsoid
+          point_number = 100;  % number of point
+          h = [];
+          % holding = ishold;
+          % holding = get(draw_to_these_axes,'NextPlot') ;
+          if (Sigma == zeros(2, 2))
+              z = mu;
+          else
+              % Compute the Mahalanobis radius of the ellipsoid that encloses
+              % the desired probability mass.
+              k = obj.conf2mahal(p, 2);
+              % The major and minor axes of the covariance ellipse are given by
+              % the eigenvectors of the covariance matrix.  Their lengths (for
+              % the ellipse with unit Mahalanobis radius) are given by the
+              % square roots of the corresponding eigenvalues.
+              %   if (issparse(Sigma))
+              %     [V, D] = eigs(Sigma);
+              %   else
+              %     [V, D] = eig(Sigma);
+              %   end
+              [~,D,V_s]=svd(Sigma) ;
+              % Compute the points on the surface of the ellipse.
+              t = linspace(0, 2*pi, point_number);
+              u = [cos(t); sin(t)];
+              w = (k * V_s * sqrt(D)) * u;
+              z = repmat(mu, [1 point_number]) + w;
+               
+              % Plot the major and minor axes.
+              L = k * sqrt(abs(diag(D)));
+              h = plot( [mu(1); mu(1) + L(1) * V_s(1, 1)], ...
+                   [mu(2); mu(2) + L(1) * V_s(2, 1)], 'color', obj.clr);
+              hold on;
+              h = [h; plot( [mu(1); mu(1) + L(2) * V_s(1, 2)], ...
+                       [mu(2); mu(2) + L(2) * V_s(2, 2)], 'color', obj.clr)];
+          end
+
+          h = [h; plot( z(1, :), z(2, :), 'color', obj.clr, 'LineWidth', 2)];
+          % if (~holding) hold off; end
+          % set(draw_to_these_axes,'NextPlot',holding);
+      end
+      
+      % i plot all the old mean expect the last one
+      function PlotTrace(obj)
+          for i=1:(obj.current_index - 1)
+              plot(obj.mean(i,1),obj.mean(i,2), 'rx', 'MarkerSize', 10,'color',obj.clr);
+          end
+      end
+      
    end
+   
+   methods(Static)
+       %%%%%%%%%%%%
+
+        % CONF2MAHAL - Translates a confidence interval to a Mahalanobis
+        %              distance.  Consider a multivariate Gaussian
+        %              distribution of the form
+        %
+        %   p(x) = 1/sqrt((2 * pi)^d * det(C)) * exp((-1/2) * MD(x, m, inv(C)))
+        %
+        %              where MD(x, m, P) is the Mahalanobis distance from x
+        %              to m under P:
+        %
+        %                 MD(x, m, P) = (x - m) * P * (x - m)'
+        %
+        %              A particular Mahalanobis distance k identifies an
+        %              ellipsoid centered at the mean of the distribution.
+        %              The confidence interval associated with this ellipsoid
+        %              is the probability mass enclosed by it.  Similarly,
+        %              a particular confidence interval uniquely determines
+        %              an ellipsoid with a fixed Mahalanobis distance.
+        %
+        %              If X is an d dimensional Gaussian-distributed vector,
+        %              then the Mahalanobis distance of X is distributed
+        %              according to the Chi-squared distribution with d
+        %              degrees of freedom.  Thus, the Mahalanobis distance is
+        %              determined by evaluating the inverse cumulative
+        %              distribution function of the chi squared distribution
+        %              up to the confidence value.
+        %
+        % Usage:
+        % 
+        %   m = conf2mahal(c, d);
+        %
+        % Inputs:
+        %
+        %   c    - the confidence interval
+        %   d    - the number of dimensions of the Gaussian distribution
+        %
+        % Outputs:
+        %
+        %   m    - the Mahalanobis radius of the ellipsoid enclosing the
+        %          fraction c of the distribution's probability mass
+        %
+        % See also: MAHAL2CONF
+
+        % Copyright (C) 2002 Mark A. Paskin
+       function m = conf2mahal(c, d)
+            %% TODO does not work is too big! probably i need to find the correspondent value for chi2inv of a p=0.95
+            %m = chi2inv(c, d); % matlab stats toolbox
+            % pr = 0.341*2 ; c = (1 - pr)/2 ; norminv([c 1-c],0,1)
+            
+            pr = c ; c = (1 - pr)/2 ; 
+            m = norminv([c 1-c],0,1) ;
+            m = m(2) ;
+        end
+       
+   end
+   
+   
    
       
 end

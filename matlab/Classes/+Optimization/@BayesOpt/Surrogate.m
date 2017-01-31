@@ -1,6 +1,6 @@
 %% in order to maximize with a minimization a have to put a minus in front
 %% of all the surrogates that are natively built as a maximization problem
-function ret = Surrogate(self, x, kind, kappa, xi)
+function ret = Surrogate(self, x, kind, kappa, xi,varargin)
         if strcmp(kind,'ucb')
             ret = -ucb(self,x, kappa);
         end
@@ -15,6 +15,9 @@ function ret = Surrogate(self, x, kind, kappa, xi)
         end
         if strcmp(kind,'ecv')
             ret = -ecv(self,x);
+        end
+        if strcmp(kind,'custom');
+            ret = - varargin{1}(self,x);
         end
 end
 

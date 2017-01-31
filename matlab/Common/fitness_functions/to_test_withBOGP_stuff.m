@@ -4,7 +4,7 @@
 %% i have to remove the random part from this function :)
 function fit = to_test_withBOGP_stuff(obj,output)
    % here i fix the random generator to assure reproducibility of the results
-   rng(5.0);
+   %rng(5.0);
    %% TODO extend this input check to the other fitness function if necessary
    if(~isempty(obj))
         input_vector = obj.CreateInputFromParameters(output);

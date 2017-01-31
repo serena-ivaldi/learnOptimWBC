@@ -39,6 +39,8 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
   
     
    %% optimization loop
+   %% TODO set boost as a variable of thr algorithm
+   boost = false;
    particle_iterator = 1;
    for ii = 1:nIterations
        
@@ -57,9 +59,16 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
            % compute the model
        else
            %% exploitation (local action)
+           if(boost)
+               disp('to debug');
+               [x_candidate,z] = Boost(MP,BO,particle_iterator);
+               % restore former surrogate function
+               BO.SetSurrogate('ecv');
+           else   
            %% particle selector (for now we just iterate through the particle in order)
            [x_candidate,z] = PM.Sample(particle_iterator);
            % sample from that particle
+           end
        end
        %% execution 
        disp('evaluate offsprings')
@@ -78,6 +87,8 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
             end
        else
        %% update particle (if im exploiting)
+           str = sprintf('current particle is %d.',particle_iterator);
+           disp(str);
            % evolve selected particle
            PM.UpdateParticle(particle_iterator,violated_constrained,z,x_candidate,performances_new)
            % prune colliding particles
@@ -109,8 +120,14 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
             BestActionPerEachGen(ii,:) = BO.x_max;
        end
        %% TODEBUG
-       pause
+       pause(0.05)
+       close all;
    end 
+   
+   %% plot(TODEBUG)
+   BO.Plot(x_candidate);
+   PM.Plot();
+   
    if(~isempty(BO.x_max))
        bestAction.parameters  = BO.x_max;
    else
@@ -118,8 +135,10 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
    end
           
    bestAction.performance = BO.y_max;
-  
-  
+   
+   %% TODEBUG
+   close all;
+   
    
    
 end
@@ -169,4 +188,19 @@ function [performance, succeeded, data2save ] = TransAction(obj_,actionLearn, cu
         actionFull = actionLearn;
     end
         [performance, succeeded, data2save] = settings.fnForwardModel(obj_, actionFull, curr_candidate ,isMean);
+end
+
+
+function [x_candidate,z]=Boost(MP,BO,particle_index)
+
+    [mu,V_s,tlb,tup] = MP.particles{particle_index}.GetRotTraslBound();
+    sigma = MP.particles{particle_index}.GetSigma();
+    A = MP.particles{particle_index}.GetCholCov();
+    transf = @(self_,x_)MP.RotoTrasl(self_, x_,mu,V_s);
+    custom_function = @(self_,x_,xi_)BO.eci(self_,transf(MP,x_), xi_);
+    BO.SetSurrogate('custom',custom_function);
+    x_res = BO.AcqMax(tlb,tup);
+    x_candidate = transf(MP,x_res);
+    z=( A\(x_candidate - mu)' )/sigma;
+    z = z';
 end

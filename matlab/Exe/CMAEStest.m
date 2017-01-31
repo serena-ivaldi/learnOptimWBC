@@ -194,7 +194,7 @@ for jj=1:number_of_function_2_test
             benchmark_x = [1,1];
             benchmark_fval = 0;
         end
-        explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
+        explorationRate = 0.15; %0.1; %0.5; %0.1;%[0, 1]
         run_function = @EmptyPreprocessing;
         fitness = str2func(function_2_test{jj});
         clean_function = @EmptyPostprocessing;

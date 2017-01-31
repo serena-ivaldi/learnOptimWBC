@@ -11,6 +11,8 @@ classdef ParticleManager < handle
       minAction;
       nIterations;
       explorationRate;
+      cmap;              % set of color to give to the particle
+      particle_counter   % counter that is used to assign color
     end
     
     methods
@@ -25,6 +27,8 @@ classdef ParticleManager < handle
            obj.minAction = minAction;
            obj.nIterations = nIterations;
            obj.explorationRate = explorationRate;      
+           obj.cmap = hsv(100);
+           obj.particle_counter = 0;
         end
         
         function [candidate,z] = Sample(obj,particle_index)
@@ -45,8 +49,15 @@ classdef ParticleManager < handle
             % starting from the beggining of the particles vec fill the
             % first empty space available
             for i=1:length(obj.particles)
-                if(isempty(obj.particles{i}))               
-                    obj.particles{i} = Optimization.Particle(obj.size_action,obj.maxAction,obj.minAction,obj.n_constraints,obj.nIterations,obj.explorationRate,candidate,performance);
+                if(isempty(obj.particles{i})) 
+                    
+                    % selec color 
+                    obj.particle_counter = obj.particle_counter + 10;
+                    if(obj.particle_counter > length(obj.cmap))
+                        obj.particle_counter = 1;
+                    end
+                    obj.particles{i} = Optimization.Particle(obj.size_action,obj.maxAction,obj.minAction,obj.n_constraints,obj.nIterations,...
+                                                             obj.explorationRate,candidate,performance,obj.cmap(obj.particle_counter,:));
                     obj.active_particles = obj.active_particles + 1;
                     break;
                 end
@@ -82,16 +93,42 @@ classdef ParticleManager < handle
             
         end
         
+        
+        
+        function ret = RotoTrasl(obj,x,mu,V_s)
+           ret = mu + V_s*x';
+           ret = ret';
+           % saturation 
+           ret(1, ret(1,:) > obj.maxAction) = obj.maxAction(ret(1,:) > obj.maxAction);
+           ret(1, ret(1,:) < obj.minAction) = obj.minAction(ret(1,:) < obj.minAction);
+            
+        end
+        
         % with this function i plot the current particle with their own
         % covariance
         function Plot(obj)
+            
+            % compute how many subploat
+            img_col  = 4; % i set 4 col to have enough space for the fitness function visualization 
+            img_rows = ceil((obj.lambda)/img_col);  % i have 6 column i have to add rows depending on the number of total particle
+            subplot_position = 1;
             figure
-            for i=1:length(obj.particles)
-                if(~isempty(obj.particles{i}))               
-                    obj.particles{i}.Plot();
+            for counter = 1:obj.lambda
+                if(~isempty(obj.particles{counter}))     
+                    subplot(img_rows,img_col,subplot_position), hold on, title(sprintf('particle position %.2e', counter))
+                    box on
+                    obj.particles{counter}.PlotTrace();
+                    obj.particles{counter}.Plot();
+                    subplot_position = subplot_position + 1;
+                    
+                    axis normal ;
+                    axis([obj.minAction(1,1),obj.maxAction(1,1),obj.minAction(1,2),obj.maxAction(1,2)])
                 end
-            end  
+            end
+             
         end
+        
+        
     end
     
     

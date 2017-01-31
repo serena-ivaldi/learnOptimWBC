@@ -156,7 +156,7 @@ classdef BayesOpt < handle
         %end
         
        
-        function x_max = AcqMax(self)
+        function x_max = AcqMax(self,varargin)
     
         %     A function to find the maximum of the acquisition function using
         %     the 'L-BFGS-B' method.
@@ -166,13 +166,21 @@ classdef BayesOpt < handle
         %     Returns
         %     -------
         %     :return: x_max, The arg max of the acquisition function.
-
+            
+            % this modified bound are related to the traslation
+            if length(varargin) == 2
+                lb = varargin{1};
+                up = varargin{2}; 
+            else
+                lb = self.bounds(1,:);
+                up = self.bounds(2,:);
+            end
 
             % Start with the lower bound as the argmax
-            x_max = self.bounds(1,:);  
+            x_max = lb;  
             max_acq = -inf;
 
-            %% TODO rand in bound (round is beetween 0 and 1)
+            %% TODO rand in bound (rand is beetween 0 and 1)
             % i solve the optimization many time s to be sure that the optimal
             % solution is not local (i cannot remove this or i have to
             % change the optimzation method with a global approach)
@@ -180,8 +188,8 @@ classdef BayesOpt < handle
             % procedure is necessary
             n_starting_point = 20;
             
-            extended_lb = repmat(self.bounds(1,:),n_starting_point,1);
-            extended_up = repmat(self.bounds(2,:),n_starting_point,1);
+            extended_lb = repmat(lb,n_starting_point,1);
+            extended_up = repmat(up,n_starting_point,1);
             % [a,b] -------> (b-a).*rand(n,1) + a;
             x_0 = (extended_up - extended_lb).*rand([n_starting_point,self.dim]) + extended_lb;
             
@@ -191,7 +199,7 @@ classdef BayesOpt < handle
                 % Find the minimum of minus the acquisition function
                fun = @(x_)self.surrogate(self,x_);
                %% TODO Check if the surrogate function have the right sign (i want to maximize but im using a minimization)
-               [x,fval] = fmincon(fun,x_0(i,:),[],[],[],[],self.bounds(1,:),self.bounds(2,:),[],self.options_opt);
+               [x,fval] = fmincon(fun,x_0(i,:),[],[],[],[],lb,up,[],self.options_opt);
                % Store it if better than previous minimum(maximum).
                 if (-fval >= max_acq)
                     x_max = x;
@@ -238,8 +246,11 @@ classdef BayesOpt < handle
         % use this function to change the surrogate function during the
         % execution from constructor default is 'ecv'
         % kind is a string
-        function SetSurrogate(self,kind,kappa,xi)
-            self.surrogate = @(self_,x_)Surrogate(self_, x_, kind, kappa, xi);
+        function SetSurrogate(self,kind,varargin)
+            %% TODO change this value from outside
+            kappa =0.1;
+            xi = 0;
+            self.surrogate = @(self_,x_)Surrogate(self_, x_, kind, kappa, xi,varargin);
         end
         
          %% GRAPHIC FUNCTION
@@ -260,9 +271,9 @@ classdef BayesOpt < handle
              
              % compute how many subploat
              img_col  = 4; % i set 4 col to have enough space for the fitness function visualization 
-             img_rows = 1 + ceil((self.n_of_constraints*2)/img_col);  % i have 4 column i have to add rows depending on the number of the constraints (reconstructed plus original)
+             img_rows = 1 + ceil((self.n_of_constraints*2)/img_col);  % i have 4 column i have to add rows depending on the number of the constraints (reconstructed plus original so i multiply by 2)
              
-             
+             figure
              % Plot the objective function
              subplot(img_rows,img_col,1),hold on, title('Objective, query points')
              box on
