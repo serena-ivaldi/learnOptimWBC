@@ -215,6 +215,7 @@ function [x_candidate,z]=Boost(PM,BO,particle_index)
     BO.SetSurrogate('custom',custom_function);
     x_res = BO.AcqMax(tlb,tup);
     x_candidate = transf(x_res);
-    z=( A\(x_candidate - mu')' )/sigma;
+    %z=( A\(x_candidate - mu')' )/sigma;
+    z =( A\(x_candidate - mu')' );
     z = z';
 end

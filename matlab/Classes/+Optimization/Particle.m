@@ -118,12 +118,16 @@ classdef Particle < handle
              else
                 obj.P_succ = (1-obj.c_p)*obj.P_succ; 
              end
+             % sigma = sigma * exp(1/d * (P_succ - P_target)/(1 - P_target))
              obj.sigma(obj.current_index+1) = obj.sigma(obj.current_index)*exp( (1/obj.d) * (obj.P_succ - obj.P_target) / (1-obj.P_target) );                                                                                % update sigma
              if(performances_new > obj.performances(obj.current_index)) % perfomance is better
                 obj.mean(obj.current_index + 1,:) = offsprings;                                                                                                                             % update mean
                 obj.performances(obj.current_index + 1) = performances_new;
+                % s = (1-c)s + sqrt(c*(2-c))*A*z
                 obj.s(obj.current_index + 1,:) = (1-obj.c)*obj.s(obj.current_index,:) + sqrt(obj.c*(2-obj.c))*(obj.A{obj.current_index}*z')';                                       %only if the constraints are not violated udpate exponentially fading record s
+                % w = A^(-1)*s
                 w = (obj.A{obj.current_index}^(-1)*obj.s(obj.current_index + 1,:)')'; 
+                % A = sqrt(1- c_cov_+)*A + sqrt(1 - c_cov_+)/norm(w)^2(sqrt(1 + (c_cov_+ * norm(w)^2)/(1- c_cov_+)) -1  )*s*w  --->   C = (1-c_cov_+)*C + c_cov_+*s*s^(t)
                 obj.A{obj.current_index + 1} = sqrt(1 - obj.c_cov_plus)*obj.A{obj.current_index} + ( sqrt(1-obj.c_cov_plus)/norm(w)^2 )*(sqrt(1 + (obj.c_cov_plus*norm(w)^2)/(1-obj.c_cov_plus) ) - 1 )*obj.s(obj.current_index+1,:)'*w; % update A if perfor_new > perf(k)
                 obj.V{obj.current_index + 1} = obj.V{obj.current_index};                                                                                                                                       % no update v
              else % perfomance is worse
@@ -131,9 +135,10 @@ classdef Particle < handle
                 obj.performances(obj.current_index + 1) = obj.performances(obj.current_index);                                                                                                               
                 obj.s(obj.current_index + 1,:) = obj.s(obj.current_index,:);                                                                                                                                    % no update s
                 obj.V{obj.current_index + 1} = obj.V{obj.current_index};                                                                                                                                        % no update v
-                if(obj.current_index > 5)   
-                   if(performances_new > obj.performances(obj.current_index - 5)) % perfomance is worse but better than the last fifth predecessor
-                      obj.A{obj.current_index + 1} = sqrt(1 + obj.c_cov_minus)*obj.A{ obj.current_index } + ( sqrt(1 + obj.c_cov_minus)/norm(z)^2 )*( sqrt(1 - (obj.c_cov_minus*norm(z)^2)/(1 + obj.c_cov_minus)) - 1 )*obj.A{obj.current_index}*(z'*z); % update A if perf_new>perf(k-5)
+                if(obj.current_index > 3)   
+                   if(performances_new > obj.performances(obj.current_index - 3)) % perfomance is worse but better than the last fifth predecessor
+                       % A = sqrt(1- c_cov_-)*A + sqrt(1 - c_cov_-)/norm(z)^2(sqrt(1 + (c_cov_- * norm(z)^2)/(1 + c_cov_-)) -1  )*A*z*z^(t)  --->   C = (1 + c_cov_-)*C - c_cov_-*(A*z)*(A*z)^(t)
+                       obj.A{obj.current_index + 1} = sqrt(1 + obj.c_cov_minus)*obj.A{ obj.current_index } + ( sqrt(1 + obj.c_cov_minus)/norm(z)^2 )*( sqrt(1 - (obj.c_cov_minus*norm(z)^2)/(1 + obj.c_cov_minus)) - 1 )*obj.A{obj.current_index}*(z'*z); % update A if perf_new>perf(k-5)
                    else
                       obj.A{obj.current_index + 1} = obj.A{obj.current_index};                                                                                                                                     % A no update
                    end
@@ -177,10 +182,11 @@ classdef Particle < handle
       end
       
       function [mu,V_s,tlb,tup] = GetRotTraslBound(obj)
-          p = 0.95;
+          p = 0.95; 
           mu = obj.GetMean()';
-          Sigma = obj.GetCov();
-          [~,D,V_s]=svd(Sigma);
+          C = obj.GetCov();
+          %[~,D,V_s]=svd(C);
+          [V_s, D] = eig(C);
           k = obj.conf2mahal(p, obj.n);
           L = k * sqrt(abs(diag(D)));
           tlb = -L';
@@ -189,8 +195,8 @@ classdef Particle < handle
       
       function Plot(obj)
           mu = obj.GetMean()';
-          Sigma = obj.GetCov();
-          if size(Sigma) ~= [2 2]
+          C = obj.GetCov();
+          if size(C) ~= [2 2]
               disp('Sigma must be a 2 by 2 matrix'); 
           end
           if length(mu) ~= 2, 
@@ -201,7 +207,7 @@ classdef Particle < handle
           h = [];
           % holding = ishold;
           % holding = get(draw_to_these_axes,'NextPlot') ;
-          if (Sigma == zeros(2, 2))
+          if (C == zeros(2, 2))
               z = mu;
           else
               % Compute the Mahalanobis radius of the ellipsoid that encloses
@@ -214,9 +220,15 @@ classdef Particle < handle
               %   if (issparse(Sigma))
               %     [V, D] = eigs(Sigma);
               %   else
-              %     [V, D] = eig(Sigma);
+              %     [V_s, D] = eig(Sigma);
               %   end
-              [~,D,V_s]=svd(Sigma) ;
+              %[~,D,V_s]=svd(C) ;
+              [V_s, D] = eig(C);
+              %% DEBUG
+              disp('principal directions module')
+              sqrt(abs(diag(D)))'
+              L1 = k * sqrt(abs(diag(D)));
+              L1'
               % Compute the points on the surface of the ellipse.
               t = linspace(0, 2*pi, point_number);
               u = [cos(t); sin(t)];
@@ -294,12 +306,12 @@ classdef Particle < handle
         % Copyright (C) 2002 Mark A. Paskin
        function m = conf2mahal(c, d)
             %% TODO does not work is too big! probably i need to find the correspondent value for chi2inv of a p=0.95
-            %m = chi2inv(c, d); % matlab stats toolbox
+            m = sqrt(chi2inv(c, d)); % matlab stats toolbox
             % pr = 0.341*2 ; c = (1 - pr)/2 ; norminv([c 1-c],0,1)
             
-            pr = c ; c = (1 - pr)/2 ; 
-            m = norminv([c 1-c],0,1) ;
-            m = m(2) ;
+%             pr = c ; c = (1 - pr)/2 ; 
+%             m = norminv([c 1-c],0,1) ;
+%             m = m(2) ;
         end
        
    end
