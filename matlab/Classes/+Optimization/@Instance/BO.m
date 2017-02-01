@@ -1,4 +1,4 @@
-function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = BO1plus1CMAES(obj,settings)
+function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = BO(obj,settings)
 
     %% Initialization
     nIterations = settings.nIterations;
@@ -14,14 +14,13 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
     end
 
     n = size(minAction,2);
-    lambda = round(4 + 3 * log(n));
+
     n_constraints = obj.penalty_handling.n_constraint;
 
     fnForwardModel = @(obj_,actionLearn_,curr_candidate_,isMean_)TransAction(obj_,actionLearn_,curr_candidate_,isMean_, settings);
     
     %% TODO pass from outside the GP_lib parameter to specify which gaussian process library i wanna use
     BO = Optimization.BayesOpt(minAction, maxAction, n,n_constraints,'GP_stuff');
-    PM = Optimization.ParticleManager(lambda,n,n_constraints,maxAction,minAction,nIterations,settings.explorationRate);
     
     %% TODO for metrics i need to introduce the same structure fo the other method
     mean_performances = zeros(1,nIterations);  % row vector
@@ -38,85 +37,22 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
     BO.Init(init_x,init_y)
   
     
-   %% optimization loop
-   %% TODO set all boost variables as algorithm parameters
-   boost_switch = true;      % with this variable i control if the boost is active or not 
-   boost_event_trigger = 4; % this variable determines after how many turn i activate the boost (for turn i mean number of update for the full particles stack) 
-   boost_counter = 1;        
-   particle_iterator = 1;
+    %% optimization loop
+    
    for ii = 1:nIterations
        
-       %% action selector (for now we just saturate the particles list and then we exploit)
-       if(PM.active_particles < lambda)
-           exploration = true;
-       else
-           exploration = false;
-       end
-       
-       if(exploration)
-           %% exploration (global action)
-           % select the new point
-           disp('optimization surrogate');
-           x_candidate = BO.AcqMax();
-           % compute the model
-       else
-           %% exploitation (local action)
-           if(boost_switch && (boost_counter > boost_event_trigger) )
-               disp('boost to debug');
-               [x_candidate,z] = Boost(PM,BO,particle_iterator);
-           else   
-           %% particle selector (for now we just iterate through the particle in order)
-           [x_candidate,z] = PM.Sample(particle_iterator);
-           % sample from that particle
-           end
-       end
-       %% execution 
+       % select the new point
+       disp('optimization surrogate');
+       x_candidate = BO.AcqMax();
+       % compute the model 
        disp('evaluate offsprings')
        [performances_new succeeded(ii)] = fnForwardModel(obj,x_candidate,1, 1); % compute fitness 
        y = obj.penalty_handling.penalties;
        y(end + 1)= obj.penalty_handling.feasibility;
        y(end + 1) = performances_new;
-       % constraints check
-       constraints = obj.penalty_handling.feasibility_vec(1,:)==-1; % vector of index of the violated constrained
-       violated_constrained = find(constraints);
-       
-       if(exploration)
-            %% add a new particle (if im exploring and the point satisfy all the constraints)
-            if(isempty(violated_constrained))
-                PM.AddParticle(x_candidate,performances_new) 
-            end
-       else
-       %% update particle (if im exploiting)
-           str = sprintf('current particle is %d.',particle_iterator);
-           disp(str);
-           % evolve selected particle
-           PM.UpdateParticle(particle_iterator,violated_constrained,z,x_candidate,performances_new)
-           % prune colliding particles
-           PM.PruneParticles();  %%  TODO to code!
-           % update particle iterator 
-           particle_iterator = particle_iterator + 1;  
-           if(particle_iterator > lambda)
-               % i have complete one sweep of all the particle, restart particle iterator 
-               particle_iterator = 1;
-               if(boost_counter > boost_event_trigger)
-                   % if im here it means that i have boosted all the
-                   % particle so it time to restart the boost_counter and
-                   % restore the former surrogate
-                   % restore former surrogate function
-                   BO.SetSurrogate('ecv');
-                   %restart_boost_counter
-                   boost_counter = 1;
-               else
-                   % if im here it means that im still waiting to reach the
-                   % next boost move
-                   boost_counter = boost_counter + 1;
-               end
-           end
-       end
-       %% plot(TODEBUG)
+       %% TODEBUG
        BO.Plot(x_candidate);
-       PM.Plot();
-       %% update gaussian process (i keep updating the gaussian process during the )
+       % update the gaussian process
        disp('update');
        BO.Update(x_candidate, y)
        
@@ -134,14 +70,8 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
             BestActionPerEachGen(ii,:) = BO.x_max;
        end
        %% TODEBUG
-       pause(0.05)
-       close all;
+       pause
    end 
-   
-   %% plot(TODEBUG)
-   BO.Plot(x_candidate);
-   PM.Plot();
-   
    if(~isempty(BO.x_max))
        bestAction.parameters  = BO.x_max;
    else
@@ -149,10 +79,8 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
    end
           
    bestAction.performance = BO.y_max;
-   
-   %% TODEBUG
-   close all;
-   
+  
+  
    
    
 end
@@ -202,19 +130,4 @@ function [performance, succeeded, data2save ] = TransAction(obj_,actionLearn, cu
         actionFull = actionLearn;
     end
         [performance, succeeded, data2save] = settings.fnForwardModel(obj_, actionFull, curr_candidate ,isMean);
-end
-
-
-function [x_candidate,z]=Boost(PM,BO,particle_index)
-
-    [mu,V_s,tlb,tup] = PM.particles{particle_index}.GetRotTraslBound();
-    sigma = PM.particles{particle_index}.GetSigma();
-    A = PM.particles{particle_index}.GetCholCov();
-    transf = @(x_)PM.RotoTrasl(x_,mu,V_s);
-    custom_function = @(x_,xi_)BO.eci(transf(x_), xi_);
-    BO.SetSurrogate('custom',custom_function);
-    x_res = BO.AcqMax(tlb,tup);
-    x_candidate = transf(x_res);
-    z=( A\(x_candidate - mu')' )/sigma;
-    z = z';
 end

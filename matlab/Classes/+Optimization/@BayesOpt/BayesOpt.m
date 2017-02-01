@@ -181,6 +181,7 @@ classdef BayesOpt < handle
             max_acq = -inf;
 
             %% TODO rand in bound (rand is beetween 0 and 1)
+            %% TODO set the n_starting_point as a parameter of the algorithm
             % i solve the optimization many time s to be sure that the optimal
             % solution is not local (i cannot remove this or i have to
             % change the optimzation method with a global approach)
@@ -250,7 +251,7 @@ classdef BayesOpt < handle
             %% TODO change this value from outside
             kappa =0.1;
             xi = 0;
-            self.surrogate = @(self_,x_)Surrogate(self_, x_, kind, kappa, xi,varargin);
+            self.surrogate = @(self_,x_)Surrogate(self_, x_, kind, kappa, xi,varargin{:});
         end
         
          %% GRAPHIC FUNCTION

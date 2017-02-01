@@ -96,11 +96,18 @@ classdef ParticleManager < handle
         
         
         function ret = RotoTrasl(obj,x,mu,V_s)
-           ret = mu + V_s*x';
-           ret = ret';
+           % to allow this function to work with multiple input i had to
+           % rearrange a little bit the trasfromation 
+           % basically im doing  ----> ret = mu + R*x   with  R = V_s
+           mu = repmat(mu',size(x,1),1);
+           ret = mu + x*V_s';
            % saturation 
-           ret(1, ret(1,:) > obj.maxAction) = obj.maxAction(ret(1,:) > obj.maxAction);
-           ret(1, ret(1,:) < obj.minAction) = obj.minAction(ret(1,:) < obj.minAction);
+           minaction = repmat(obj.minAction,size(ret,1),1);
+           maxaction = repmat(obj.maxAction,size(ret,1),1);
+           %ret(1, ret(1,:) > obj.maxAction) = obj.maxAction(ret(1,:) > obj.maxAction);
+           %ret(1, ret(1,:) < obj.minAction) = obj.minAction(ret(1,:) < obj.minAction);
+           ret(ret < minaction) = minaction(ret < minaction);
+           ret(ret > maxaction) = maxaction(ret > maxaction);
             
         end
         

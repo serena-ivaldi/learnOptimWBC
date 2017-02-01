@@ -184,8 +184,7 @@ classdef Particle < handle
           k = obj.conf2mahal(p, obj.n);
           L = k * sqrt(abs(diag(D)));
           tlb = -L';
-          tup = L';
-          
+          tup = L';  
       end
       
       function Plot(obj)
