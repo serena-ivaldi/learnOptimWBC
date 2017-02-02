@@ -8,8 +8,8 @@ classdef Particle < handle
    % current_index;
    
    properties
-      %maxAction
-      %minAction
+      maxAction
+      minAction
       % external parameters (visible from mixture of gaussian)-------------
       mean;    % mean vector 
       %C;       % covariance matrix  
@@ -36,13 +36,14 @@ classdef Particle < handle
       current_index; % this index tell us where we are inside the current 
       status;        % active, candidate attained, merged
       clr;
+      turns_of_inaction %;
    end
             
    methods
       
       function obj = Particle(size_action,maxAction,minAction,n_constraints,nIterations,explorationRate,start_candidate,start_perfomance,color)
-         %obj.maxAction = maxAction;
-         %obj.minAction = minAction;
+         obj.maxAction = maxAction;
+         obj.minAction = minAction;
          obj.n = size_action;
          obj.mean = zeros(nIterations, obj.n);                                             % mean vector 
          obj.sigma = zeros(nIterations,1);                                                 % sigma vector
@@ -78,6 +79,7 @@ classdef Particle < handle
          obj.current_index = 1;
          obj.status = 'active';
          obj.clr = color;
+         obj.turns_of_inaction = 0;
       end
    
 %       function [candidate] = Sample(obj)
@@ -112,6 +114,8 @@ classdef Particle < handle
              end
              obj.A{obj.current_index + 1} = obj.A{obj.current_index} - (obj.beta)/length(violated_constrained) * value;                                                             % update A if constraint violation is true
              obj.sigma(obj.current_index + 1) = obj.sigma(obj.current_index);                                                                                                                              % no update sigma
+              % no update of mean turn of inaction + 1;
+             obj.turns_of_inaction = obj.turns_of_inaction + 1;
           else % all the constraints are satisfacted
              if(performances_new > obj.performances(obj.current_index))
                 obj.P_succ = (1-obj.c_p)*obj.P_succ + obj.c_p; 
@@ -130,6 +134,8 @@ classdef Particle < handle
                 % A = sqrt(1- c_cov_+)*A + sqrt(1 - c_cov_+)/norm(w)^2(sqrt(1 + (c_cov_+ * norm(w)^2)/(1- c_cov_+)) -1  )*s*w  --->   C = (1-c_cov_+)*C + c_cov_+*s*s^(t)
                 obj.A{obj.current_index + 1} = sqrt(1 - obj.c_cov_plus)*obj.A{obj.current_index} + ( sqrt(1-obj.c_cov_plus)/norm(w)^2 )*(sqrt(1 + (obj.c_cov_plus*norm(w)^2)/(1-obj.c_cov_plus) ) - 1 )*obj.s(obj.current_index+1,:)'*w; % update A if perfor_new > perf(k)
                 obj.V{obj.current_index + 1} = obj.V{obj.current_index};                                                                                                                                       % no update v
+                % reset turn of inaction
+                obj.turns_of_inaction = 0;
              else % perfomance is worse
                 obj.mean(obj.current_index + 1,:) = obj.mean(obj.current_index,:);                                                                                                                            % no update mean
                 obj.performances(obj.current_index + 1) = obj.performances(obj.current_index);                                                                                                               
@@ -145,6 +151,8 @@ classdef Particle < handle
                 else
                    obj.A{obj.current_index + 1} = obj.A{obj.current_index};         
                 end
+                % no update of mean turn of inaction + 1;
+                obj.turns_of_inaction = obj.turns_of_inaction + 1;
              end
              % move current_index one step forward 
              obj.current_index = obj.current_index + 1;
@@ -192,6 +200,22 @@ classdef Particle < handle
           tlb = -L';
           tup = L';  
       end
+      
+      
+       function ret = RotoTrasl(obj,x,mu,V_s)
+           % to allow this function to work with multiple input i had to
+           % rearrange a little bit the trasfromation 
+           % basically im doing  ----> ret = mu + R*x   with  R = V_s
+           mu = repmat(mu',size(x,1),1);
+           ret = mu + x*V_s';
+           % saturation 
+           minaction = repmat(obj.minAction,size(ret,1),1);
+           maxaction = repmat(obj.maxAction,size(ret,1),1);
+           %ret(1, ret(1,:) > obj.maxAction) = obj.maxAction(ret(1,:) > obj.maxAction);
+           %ret(1, ret(1,:) < obj.minAction) = obj.minAction(ret(1,:) < obj.minAction);
+           ret(ret < minaction) = minaction(ret < minaction);
+           ret(ret > maxaction) = maxaction(ret > maxaction);
+        end
       
       function Plot(obj)
           mu = obj.GetMean()';
@@ -305,7 +329,7 @@ classdef Particle < handle
 
         % Copyright (C) 2002 Mark A. Paskin
        function m = conf2mahal(c, d)
-            %% TODO does not work is too big! probably i need to find the correspondent value for chi2inv of a p=0.95
+            %% TODO 
             m = sqrt(chi2inv(c, d)); % matlab stats toolbox
             % pr = 0.341*2 ; c = (1 - pr)/2 ; norminv([c 1-c],0,1)
             

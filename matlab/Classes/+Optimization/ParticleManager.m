@@ -13,6 +13,8 @@ classdef ParticleManager < handle
       explorationRate;
       cmap;              % set of color to give to the particle
       particle_counter   % counter that is used to assign color
+      epsilon            % this number identify which is the codition for which the particle are considerer too close
+      inaction_limit     % it defines the longest tolerable series of inaction for a particle
     end
     
     methods
@@ -29,6 +31,12 @@ classdef ParticleManager < handle
            obj.explorationRate = explorationRate;      
            obj.cmap = hsv(100);
            obj.particle_counter = 0;
+           c = 0.1;
+           obj.epsilon = obj.conf2mahal(c, size_action);
+           % number of turn that the particle is allowed to not improve
+           % before deletion 
+           %% TODO define it as a parameter of the method
+           obj.inaction_limit = 10;
         end
         
         function [candidate,z] = Sample(obj,particle_index)
@@ -64,7 +72,9 @@ classdef ParticleManager < handle
             end
         end
         
-        function DeleteParticle(obj,index)
+        function DeleteParticle(obj,index,cause)
+            % change the status of particle
+            obj.particles{index}.status = cause;
             % store the particle 
             obj.old_particles{end + 1} = obj.particles{index};
             obj.particles{index} = [];
@@ -74,7 +84,36 @@ classdef ParticleManager < handle
         % remove redudant particles that are heading to the same local maxima / minima 
         % remove particle that got stuck in some minima / maxima
         function PruneParticles(obj)
-            %% do some checking on the trajectory of the particle (or the current mean and covariance)
+            %% closeness (check the distance between candidates and remove the close one)
+            for i=1:obj.lambda - 1
+                if(~isempty(obj.particles{i}))
+                    cur_particle_pos = obj.particles{i}.GetMean();
+                    for j = i+1:obj.lambda
+                        if(~isempty(obj.particles{j}))
+                            compare_particle_pos = obj.particles{j}.GetMean();
+                            dist = norm(cur_particle_pos-compare_particle_pos);
+                            if(dist<=obj.epsilon)
+                                if(obj.particles{j}.GetBestPerfomance() >= obj.particles{i}.GetBestPerfomance())
+                                    % im cancelling the current particle that im comparing with the other so i need to stop the inner for
+                                    obj.DeleteParticle(i,'closeness');
+                                    break;
+                                else
+                                    % i delete the other particle so i keep searching using the current_particle (the one specified by i index)
+                                    obj.DeleteParticle(j,'closeness');
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+            %% non-evolution (check if the particle is stagnant for too long)
+            for ii= 1:obj.lambda
+                if(~isempty(obj.particles{ii}))
+                    if(obj.particles{ii}.turns_of_inaction>obj.inaction_limit)
+                        obj.DeleteParticle(ii,'inaction');
+                    end
+                end
+            end
             %obj.DeleteParticle(to_delete);
         end
         
@@ -93,23 +132,11 @@ classdef ParticleManager < handle
             
         end
         
-        
-        
-        function ret = RotoTrasl(obj,x,mu,V_s)
-           % to allow this function to work with multiple input i had to
-           % rearrange a little bit the trasfromation 
-           % basically im doing  ----> ret = mu + R*x   with  R = V_s
-           mu = repmat(mu',size(x,1),1);
-           ret = mu + x*V_s';
-           % saturation 
-           minaction = repmat(obj.minAction,size(ret,1),1);
-           maxaction = repmat(obj.maxAction,size(ret,1),1);
-           %ret(1, ret(1,:) > obj.maxAction) = obj.maxAction(ret(1,:) > obj.maxAction);
-           %ret(1, ret(1,:) < obj.minAction) = obj.minAction(ret(1,:) < obj.minAction);
-           ret(ret < minaction) = minaction(ret < minaction);
-           ret(ret > maxaction) = maxaction(ret > maxaction);
-            
+        function [func, tlb, tub] = GetRotTraslFuncAndBound(obj,particle_index)
+            [mu,V_s,tlb,tub] = obj.particles{particle_index}.GetRotTraslBound();
+            func = @(x_)obj.particles{particle_index}.RotoTrasl(x_,mu,V_s);
         end
+        
         
         % with this function i plot the current particle with their own
         % covariance
@@ -139,5 +166,26 @@ classdef ParticleManager < handle
     end
     
     
+    methods(Static)
+        % Inputs:
+        %
+        %   c    - the confidence interval
+        %   d    - the number of dimensions of the Gaussian distribution
+        %
+        % Outputs:
+        %
+        %   m    - the Mahalanobis radius of the ellipsoid enclosing the
+        %          fraction c of the distribution's probability mass
+        %
+        function m = conf2mahal(c, d)
+                %% TODO i have got this computation from a resource online, not fully sure.
+                m = sqrt(chi2inv(c, d)); % matlab stats toolbox
+                % pr = 0.341*2 ; c = (1 - pr)/2 ; norminv([c 1-c],0,1)
+
+    %             pr = c ; c = (1 - pr)/2 ; 
+    %             m = norminv([c 1-c],0,1) ;
+    %             m = m(2) ;
+        end        
+    end
     
 end

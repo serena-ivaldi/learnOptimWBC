@@ -91,13 +91,14 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
            disp(str);
            % evolve selected particle
            PM.UpdateParticle(particle_iterator,violated_constrained,z,x_candidate,performances_new)
-           % prune colliding particles
-           PM.PruneParticles();  %%  TODO to code!
            % update particle iterator 
            particle_iterator = particle_iterator + 1;  
            if(particle_iterator > lambda)
                % i have complete one sweep of all the particle, restart particle iterator 
                particle_iterator = 1;
+               % at the end of each sweep i check if we need to prune some
+               % particle that has become redundant
+               PM.PruneParticles(); 
                if(boost_counter > boost_event_trigger)
                    % if im here it means that i have boosted all the
                    % particle so it time to restart the boost_counter and
@@ -207,15 +208,19 @@ end
 
 function [x_candidate,z]=Boost(PM,BO,particle_index)
 
-    [mu,V_s,tlb,tup] = PM.particles{particle_index}.GetRotTraslBound();
-    sigma = PM.particles{particle_index}.GetSigma();
-    A = PM.particles{particle_index}.GetCholCov();
-    transf = @(x_)PM.RotoTrasl(x_,mu,V_s);
+    %[mu,V_s,tlb,tup] = PM.particles{particle_index}.GetRotTraslBound();
+    [transf,tlb,tub] = PM.GetRotTraslFuncAndBound(particle_index);
+    %sigma = PM.particles{particle_index}.GetSigma();
+    A  = PM.particles{particle_index}.GetCholCov();
+    mu = PM.particles{particle_index}.GetMean();
+    %transf = @(x_)PM.RotoTrasl(x_,mu,V_s);
     custom_function = @(x_,xi_)BO.eci(transf(x_), xi_);
     BO.SetSurrogate('custom',custom_function);
-    x_res = BO.AcqMax(tlb,tup);
+    x_res = BO.AcqMax(tlb,tub);
     x_candidate = transf(x_res);
+    % i have removed sigma from the equation to avoid explotion in the
+    % covariance of the particle after the boost move
     %z=( A\(x_candidate - mu')' )/sigma;
-    z =( A\(x_candidate - mu')' );
+    z =( A\(x_candidate - mu)' );
     z = z';
 end
