@@ -1,47 +1,48 @@
 function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = BO1plus1CMAES(obj,settings)
 
-    %% Initialization
-    nIterations = settings.nIterations;
+   %% Initialization
+   nIterations = settings.nIterations;
 
-    if isfield(settings, 'activeIndices')
+    
+   if isfield(settings, 'activeIndices')
         action = settings.action(settings.activeIndices);
         minAction = settings.minAction(settings.activeIndices);
         maxAction = settings.maxAction(settings.activeIndices);
-    else
+   else
         action = settings.action;
         minAction = settings.minAction;
         maxAction = settings.maxAction;
-    end
+   end
 
-    n = size(minAction,2);
-    lambda = round(4 + 3 * log(n));
-    n_constraints = obj.penalty_handling.n_constraint;
+   n = size(minAction,2);
+   lambda = round(4 + 3 * log(n));
+   n_constraints = obj.penalty_handling.n_constraint;
 
-    fnForwardModel = @(obj_,actionLearn_,curr_candidate_,isMean_)TransAction(obj_,actionLearn_,curr_candidate_,isMean_, settings);
+   fnForwardModel = @(obj_,actionLearn_,curr_candidate_,isMean_)TransAction(obj_,actionLearn_,curr_candidate_,isMean_, settings);
     
-    %% TODO pass from outside the GP_lib parameter to specify which gaussian process library i wanna use
-    BO = Optimization.BayesOpt(minAction, maxAction, n,n_constraints,'GP_stuff');
-    PM = Optimization.ParticleManager(lambda,n,n_constraints,maxAction,minAction,nIterations,settings.explorationRate);
+   %% TODO pass from outside the GP_lib parameter to specify which gaussian process library i wanna use
+   BO = Optimization.BayesOpt(minAction, maxAction, n,n_constraints,'GP_stuff');
+   PM = Optimization.ParticleManager(lambda,n,n_constraints,maxAction,minAction,nIterations,settings.explorationRate);
     
-    %% TODO for metrics i need to introduce the same structure fo the other method
-    mean_performances = zeros(1,nIterations);  % row vector
-    costs = zeros(1,nIterations);      
-    succeeded = zeros(1,nIterations);
-    %% TODO properly use G_data2save and policies
-    G_data2save = [];
-    policies = [];
-    BestActionPerEachGen = ones(nIterations,n);
-    %% initilization
-    %% TODO put number_init_points in the initial value for this method
-    number_init_points = 5;
-    [init_x,init_y]=InitialSample(obj,fnForwardModel,minAction,maxAction,number_init_points);
-    BO.Init(init_x,init_y)
-  
-    
+   %% TODO for metrics i need to introduce the same structure fo the other method
+   mean_performances = zeros(1,nIterations);  % row vector
+   costs = zeros(1,nIterations);      
+   succeeded = zeros(1,nIterations);
+   %% TODO properly use G_data2save and policies
+   G_data2save = [];
+   policies = [];
+   BestActionPerEachGen = ones(nIterations,n);
+   %% initilization
+   %% TODO put number_init_points in the initial value for this method
+   number_init_points = 5;
+   [init_x,init_y]=InitialSample(obj,fnForwardModel,minAction,maxAction,number_init_points);
+   BO.Init(init_x,init_y)
+
    %% optimization loop
    %% TODO set all boost variables as algorithm parameters
    boost_switch = true;      % with this variable i control if the boost is active or not 
-   boost_event_trigger = 4; % this variable determines after how many turn i activate the boost (for turn i mean number of update for the full particles stack) 
+   prune_switch = true;  
+   boost_event_trigger = 6; % this variable determines after how many turn i activate the boost (for turn i mean number of update for the full particles stack) 
    boost_counter = 1;        
    particle_iterator = 1;
    for ii = 1:nIterations
@@ -98,7 +99,9 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
                particle_iterator = 1;
                % at the end of each sweep i check if we need to prune some
                % particle that has become redundant
-               PM.PruneParticles(); 
+               if(prune_switch)
+                    PM.PruneParticles();
+               end
                if(boost_counter > boost_event_trigger)
                    % if im here it means that i have boosted all the
                    % particle so it time to restart the boost_counter and
@@ -116,7 +119,15 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
        end
        %% plot(TODEBUG)
        BO.Plot(x_candidate);
-       PM.Plot();
+       if(~exploration)    
+           if(particle_iterator - 1 == 0)
+               PM.Plot(x_candidate,lambda,true,false);
+           else
+               PM.Plot(x_candidate,particle_iterator  - 1,true,false);
+           end
+       else
+           PM.Plot(x_candidate,[],false,false);
+       end
        %% update gaussian process (i keep updating the gaussian process during the )
        disp('update');
        BO.Update(x_candidate, y)
@@ -140,7 +151,7 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
    end 
    
    %% plot(TODEBUG)
-   BO.Plot(x_candidate);
+   BO.Plot([],[],false,false);
    PM.Plot();
    
    if(~isempty(BO.x_max))
@@ -223,4 +234,8 @@ function [x_candidate,z]=Boost(PM,BO,particle_index)
     %z=( A\(x_candidate - mu')' )/sigma;
     z =( A\(x_candidate - mu)' );
     z = z';
+    
+    %% TODEBUG
+    PM.Plot([],particle_index,false,true);
+    
 end

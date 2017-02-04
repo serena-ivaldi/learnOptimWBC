@@ -13,7 +13,7 @@ function_2_test ={'to_test_withBOGP_stuff'};%'robotic_experiments','g06','g07','
 learn_approach = 'BO(1+1)CMAES'; %CMAES (1+1)CMAES  CEM   BO  BO(1+1)CMAES fmincon     with (1+1)CMAES and BO(1+1)CMAES i have to use nopenalty
 method_to_use = 'nopenalty';  % adaptive , vanilla ,empty,fmincon, nopenalty
 
-repetition_of_the_experiment = 2; % at least 2
+repetition_of_the_experiment = 10; % at least 2
 threshold = 2.5; % value to identify the beginning of steady state
 % the threshold is express in %, means +/- 2,5% from the steady value
 
@@ -47,11 +47,7 @@ for jj=1:number_of_function_2_test
          [epsilon,search_space_dimension,explorationRate,cmaes_value_range,...
            n_constraints,constraints_functions,constraints_type,constraints_values,run_function,fitness,clean_function,input]=InitForBenchmark(function_2_test{jj},optim);
        user_defined_start_action = [0 0 0 0 0 14 14 14 14 14 0 0 0 0 0 ]; 
-       % to use for  (1+1)cmaes
-
-        
-        
-        
+       % to use for  (1+1)cmaes 
     else
         if(strcmp(function_2_test{jj},'g06'))
             search_space_dimension = 2;
@@ -194,7 +190,7 @@ for jj=1:number_of_function_2_test
             benchmark_x = [1,1];
             benchmark_fval = 0;
         end
-        explorationRate = 0.15; %0.1; %0.5; %0.1;%[0, 1]
+        explorationRate = 0.4; %0.1; %0.5; %0.1;%[0, 1]
         run_function = @EmptyPreprocessing;
         fitness = str2func(function_2_test{jj});
         clean_function = @EmptyPostprocessing;

@@ -1,5 +1,5 @@
 %% class BO
-function ret = ecv(obj,x)
+function [ret, x] = ecv(obj,x)
                 
         %% TODEBUG
 %         if(size(x,1)==1)

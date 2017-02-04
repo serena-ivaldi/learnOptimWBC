@@ -1,5 +1,5 @@
 %% class BO
-function ret = eci(obj,x, xi)       
+function [ret, x]= eci(obj,x, xi)       
         % ei computation
         [mean, var] = obj.gp_s{end}.Predict(x);
         y_max = obj.y_max*ones(size(mean));

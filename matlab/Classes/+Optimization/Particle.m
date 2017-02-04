@@ -16,6 +16,7 @@ classdef Particle < handle
       % internal parameters -----------------------------------------------
       n;       % dimension of parameter space
       sigma;   % exploration rate
+      sigma_multiplier    % multiplier that define the region of appliance of the boost move
       A;       % cholescky factor of the covariance matrix
       V;
       v;
@@ -57,7 +58,8 @@ classdef Particle < handle
          %initialize perfomance 
          obj.performances(1) = start_perfomance;
          % initialize sigma
-         obj.sigma(1) = explorationRate;                        
+         obj.sigma(1) = explorationRate;           
+         obj.sigma_multiplier = 1.5;
          C = diag((maxAction - minAction)/2);
          obj.A{1} = chol(C);  
          for j = 1 : n_constraints
@@ -196,7 +198,7 @@ classdef Particle < handle
           %[~,D,V_s]=svd(C);
           [V_s, D] = eig(C);
           k = obj.conf2mahal(p, obj.n);
-          L = k * sqrt(abs(diag(D)));
+          L = k * sqrt(abs(diag(D)))*obj.GetSigma()*obj.sigma_multiplier;
           tlb = -L';
           tup = L';  
       end
@@ -249,18 +251,18 @@ classdef Particle < handle
               %[~,D,V_s]=svd(C) ;
               [V_s, D] = eig(C);
               %% DEBUG
-              disp('principal directions module')
-              sqrt(abs(diag(D)))'
-              L1 = k * sqrt(abs(diag(D)));
-              L1'
+              %disp('principal directions module')
+              %sqrt(abs(diag(D)))'
+              %L1 = k * sqrt(abs(diag(D)));
+              %L1'
               % Compute the points on the surface of the ellipse.
               t = linspace(0, 2*pi, point_number);
               u = [cos(t); sin(t)];
-              w = (k * V_s * sqrt(D)) * u;
+              w = (k * V_s * sqrt(D)) * u*obj.GetSigma();
               z = repmat(mu, [1 point_number]) + w;
                
               % Plot the major and minor axes.
-              L = k * sqrt(abs(diag(D)));
+              L = k * sqrt(abs(diag(D))) * obj.GetSigma();
               h = plot( [mu(1); mu(1) + L(1) * V_s(1, 1)], ...
                    [mu(2); mu(2) + L(1) * V_s(2, 1)], 'color', obj.clr);
               hold on;
@@ -278,6 +280,15 @@ classdef Particle < handle
           for i=1:(obj.current_index - 1)
               plot(obj.mean(i,1),obj.mean(i,2), 'rx', 'MarkerSize', 10,'color',obj.clr);
           end
+      end
+      
+      function PlotBox(obj)
+          [mu,V_s,tlb,tub] = obj.GetRotTraslBound();
+          func = @(x_)obj.RotoTrasl(x_,mu,V_s);
+          [X_trasl,Y_trasl] = meshgrid(linspace(tlb(1),tub(1),100),linspace(tlb(2),tub(2),100)); 
+          xl_trasl = [X_trasl(:) Y_trasl(:)];
+          [x_transf] = func(xl_trasl);
+          plot(x_transf(:,1),x_transf(:,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
       end
       
    end

@@ -25,6 +25,9 @@ classdef BayesOpt < handle
         xl_vis
         Z_vis
         z_constr
+        kind
+        temporary_lb
+        temporary_ub
     end
     
     methods
@@ -57,10 +60,10 @@ classdef BayesOpt < handle
 
             %% TODO define surrogate functions
             % Surrogate placeholder
-            kind = 'ecv';
+            self.kind = 'ecv';
             kappa =0.1;
             xi = 0;
-            self.surrogate = @(self_,x_)Surrogate(self_, x_, kind, kappa, xi);
+            self.surrogate = @(self_,x_)Surrogate(self_, x_, kappa, xi);
 
             % PrintLog object
             %self.plog = PrintLog(self.keys)
@@ -170,7 +173,10 @@ classdef BayesOpt < handle
             % this modified bound are related to the traslation
             if length(varargin) == 2
                 lb = varargin{1};
-                up = varargin{2}; 
+                up = varargin{2};
+                %% for visualization only
+                self.temporary_lb = varargin{1};
+                self.temporary_ub = varargin{2};
             else
                 lb = self.bounds(1,:);
                 up = self.bounds(2,:);
@@ -251,7 +257,8 @@ classdef BayesOpt < handle
             %% TODO change this value from outside
             kappa =0.1;
             xi = 0;
-            self.surrogate = @(self_,x_)Surrogate(self_, x_, kind, kappa, xi,varargin{:});
+            self.kind = kind;
+            self.surrogate = @(self_,x_)Surrogate(self_, x_, kappa, xi,varargin{:});
         end
         
          %% GRAPHIC FUNCTION
@@ -264,12 +271,17 @@ classdef BayesOpt < handle
              % compute current mean and variance for the objective
              % function;
              [ymu,ys2]=self.gp_s{end}.Predict(self.xl_vis);
-             % compute the value for the surrogate function;
+              % compute the value for the surrogate function;
              fun = @(x_)self.surrogate(self,x_);
-             sur = fun(self.xl_vis);
-             clf
-             
-             
+             if(strcmp(self.kind,'custom'))
+                [X_trasl,Y_trasl] = meshgrid(linspace(self.temporary_lb(1),self.temporary_ub(1),100),linspace(self.temporary_lb(2),self.temporary_ub(2),100)); 
+                xl_trasl = [X_trasl(:) Y_trasl(:)];
+                [sur, x_transf] = fun(xl_trasl);
+             else    
+                [sur, x_transf] = fun(self.xl_vis);
+             end
+             %clf
+                          
              % compute how many subploat
              img_col  = 4; % i set 4 col to have enough space for the fitness function visualization 
              img_rows = 1 + ceil((self.n_of_constraints*2)/img_col);  % i have 4 column i have to add rows depending on the number of the constraints (reconstructed plus original so i multiply by 2)
@@ -300,9 +312,16 @@ classdef BayesOpt < handle
              l3=plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
              
              % Plot the expected improvement 
-             subplot(img_rows,img_col,2), hold on, title(sprintf('Expected improvement %.2e', max(sur)))
+             subplot(img_rows,img_col,2), hold on, title(sprintf('Surrogate function %.2e', max(sur)))
              box on
-             pcolor(self.X_vis,self.Y_vis,reshape(sur,100,100)),shading flat
+             if(strcmp(self.kind,'custom'))
+                 blank = zeros(size(self.X_vis));
+                 pcolor (self.X_vis,self.Y_vis,blank),shading flat
+                 pcolor(reshape(x_transf(:,1),100,100),reshape(x_transf(:,2),100,100),reshape(sur,100,100)),shading flat
+             else
+                 pcolor(self.X_vis,self.Y_vis,reshape(sur,100,100)),shading flat
+             end
+             
              %plot(xnews(:,1),xnews(:,2), 'ro', 'MarkerSize', 10);
              plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
              

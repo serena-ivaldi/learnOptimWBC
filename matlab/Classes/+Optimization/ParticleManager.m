@@ -41,7 +41,11 @@ classdef ParticleManager < handle
         
         function [candidate,z] = Sample(obj,particle_index)
            z =  mvnrnd(zeros(1, obj.size_action), eye(obj.size_action));
-           candidate = obj.particles{particle_index}.GetMean() + obj.particles{particle_index}.GetSigma() *(obj.particles{particle_index}.GetCholCov() * z')'; 
+           candidate = obj.particles{particle_index}.GetMean() + obj.particles{particle_index}.GetSigma() *(obj.particles{particle_index}.GetCholCov() * z')';
+           %% DEBUG
+           if(~isreal(candidate))
+               disp('errore x non reale');
+           end
            % saturation
            candidate(1, candidate(1,:) > obj.maxAction) = obj.maxAction(candidate(1,:) > obj.maxAction);
            candidate(1, candidate(1,:) < obj.minAction) = obj.minAction(candidate(1,:) < obj.minAction);
@@ -94,10 +98,12 @@ classdef ParticleManager < handle
                             dist = norm(cur_particle_pos-compare_particle_pos);
                             if(dist<=obj.epsilon)
                                 if(obj.particles{j}.GetBestPerfomance() >= obj.particles{i}.GetBestPerfomance())
+                                    disp('delete because is too close!')
                                     % im cancelling the current particle that im comparing with the other so i need to stop the inner for
                                     obj.DeleteParticle(i,'closeness');
                                     break;
                                 else
+                                    disp('delete because is too close!')
                                     % i delete the other particle so i keep searching using the current_particle (the one specified by i index)
                                     obj.DeleteParticle(j,'closeness');
                                 end
@@ -110,6 +116,7 @@ classdef ParticleManager < handle
             for ii= 1:obj.lambda
                 if(~isempty(obj.particles{ii}))
                     if(obj.particles{ii}.turns_of_inaction>obj.inaction_limit)
+                        disp('delete because is inactive for too long!')
                         obj.DeleteParticle(ii,'inaction');
                     end
                 end
@@ -140,8 +147,7 @@ classdef ParticleManager < handle
         
         % with this function i plot the current particle with their own
         % covariance
-        function Plot(obj)
-            
+        function Plot(obj,x_candidate,current_particle,plot_new_candidate,plot_box)
             % compute how many subploat
             img_col  = 4; % i set 4 col to have enough space for the fitness function visualization 
             img_rows = ceil((obj.lambda)/img_col);  % i have 6 column i have to add rows depending on the number of total particle
@@ -151,8 +157,22 @@ classdef ParticleManager < handle
                 if(~isempty(obj.particles{counter}))     
                     subplot(img_rows,img_col,subplot_position), hold on, title(sprintf('particle position %.2e', counter))
                     box on
+                    if(plot_box)
+                        if(~isempty(current_particle))
+                            if(counter == current_particle)
+                                obj.particles{counter}.PlotBox()
+                            end
+                        end
+                    end
                     obj.particles{counter}.PlotTrace();
                     obj.particles{counter}.Plot();
+                    if(plot_new_candidate)
+                        if(~isempty(current_particle))
+                            if(counter == current_particle)
+                                plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
+                            end
+                        end
+                    end
                     subplot_position = subplot_position + 1;
                     
                     axis normal ;
