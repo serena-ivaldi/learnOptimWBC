@@ -86,7 +86,8 @@ classdef GPstuff_GP < GaussianProcess.AbstractGP
            % i need to check for negative variance because it could happens
            % and the previous approach is less robust to numerical error
            if(ys2<0)
-                disp('negative variance')
+                %% TODEBUG
+                %disp('negative variance')
                 [ymu, ys2] = gp_pred(obj.gp, obj.X, obj.Y, x_t);
            end
        end

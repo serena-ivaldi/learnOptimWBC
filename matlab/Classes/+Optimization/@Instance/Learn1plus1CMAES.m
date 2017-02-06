@@ -67,6 +67,7 @@ Problem.f = 'FeasibleSolutionObj';
 %    mean(1, :) = new_xmin';
 % end
 [performances(1), succeeded(1), data2save] = fnForwardModel(obj,mean(1, :),1,1);
+%% paramter to collect 1
 costs(1) = - performances(1);
 
 fprintf('Mean %d: %e %d\n', 1 , performances(1), succeeded(1));

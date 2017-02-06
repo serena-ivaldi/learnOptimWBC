@@ -148,11 +148,13 @@ classdef ParticleManager < handle
         % with this function i plot the current particle with their own
         % covariance
         function Plot(obj,x_candidate,current_particle,plot_new_candidate,plot_box)
-            % compute how many subploat
+            % compute how many subplot
             img_col  = 4; % i set 4 col to have enough space for the fitness function visualization 
             img_rows = ceil((obj.lambda)/img_col);  % i have 6 column i have to add rows depending on the number of total particle
             subplot_position = 1;
-            figure
+            if(obj.active_particles>0)
+                figure
+            end
             for counter = 1:obj.lambda
                 if(~isempty(obj.particles{counter}))     
                     subplot(img_rows,img_col,subplot_position), hold on, title(sprintf('particle position %.2e', counter))

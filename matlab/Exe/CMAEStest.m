@@ -1,7 +1,7 @@
 
 function CMAEStest
 %% test main for the cmaes optimizer
-%% this file is conceived for testing one method with different test functions
+%% this file is conceived for testing one method with several function
 clear variables
 close all
 clc
@@ -9,7 +9,7 @@ clc
 %% DATA 1
 robotics_experiment = [0]; % series of value that say if the current experiment is a robotics experiments or not 1 or 0
 niter_tot = 100;  %number of functions evaluations
-function_2_test ={'to_test_withBOGP_stuff'};%'robotic_experiments','g06','g07','g09','f240','f241','HB'};
+function_2_test ={'g06'};%'robotic_experiments','g06','g07','g09','f240','f241','HB' ,'to_test_withBOGP_stuff'}
 learn_approach = 'BO(1+1)CMAES'; %CMAES (1+1)CMAES  CEM   BO  BO(1+1)CMAES fmincon     with (1+1)CMAES and BO(1+1)CMAES i have to use nopenalty
 method_to_use = 'nopenalty';  % adaptive , vanilla ,empty,fmincon, nopenalty
 
@@ -186,7 +186,7 @@ for jj=1:number_of_function_2_test
             n_constraints = 3;
             cmaes_value_range{1} = [0 0];  % lower bound that define the search space
             cmaes_value_range{2} = [ 10.0, 10.0];  % upper bound that define the search space
-            user_defined_start_action = [];
+            user_defined_start_action = [0 0];
             benchmark_x = [1,1];
             benchmark_fval = 0;
         end
@@ -219,7 +219,7 @@ for jj=1:number_of_function_2_test
         niter = niter_tot;
     end
     
-    if(strcmp(method_to_use,'nopenalty')) % for 1+1CMAES and BO
+    if(strcmp(method_to_use,'nopenalty')) % for 1+1CMAES and BO and BO(1+1)CMAES
        constr =Optimization.NoPenalty(search_space_dimension,constraints_functions,constraints_type,constraints_values);
     elseif(strcmp(method_to_use,'vanilla'))
         constr =Optimization.FixPenalty(search_space_dimension,constraints_functions,constraints_type,constraints_values);
@@ -278,7 +278,8 @@ for jj=1:number_of_function_2_test
         
         %% collect all the data from each experiments
         % perfomance
-        m5{kk,:} = mean_performances';
+        %% TODEBUG there was a transposition in mean_performances, i removed it.
+        m5{kk,:} = mean_performances;
         m3(kk) = IndetifySteadyState(m5{kk,:},threshold);
         % best results
         m6(kk,:) = bestAction.parameters;

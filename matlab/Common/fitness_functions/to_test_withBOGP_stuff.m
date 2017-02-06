@@ -5,7 +5,8 @@
 function fit = to_test_withBOGP_stuff(obj,output)
    % here i fix the random generator to assure reproducibility of the results
    %rng(5.0);
-   %% TODO extend this input check to the other fitness function if necessary
+   %% TODO extend this input check to the other fitness function if necessary (only for the fitness functions that i can visualize ----> dim 1 or 2)
+   %% for visualization purpose with BayesOpt
    if(~isempty(obj))
         input_vector = obj.CreateInputFromParameters(output);
         obj.penalty_handling.EvaluateConstraints(input_vector,1);

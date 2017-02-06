@@ -87,12 +87,12 @@ classdef BayesOpt < handle
                 [self.X_vis,self.Y_vis] = meshgrid(linspace(lb(1),ub(1),100),linspace(lb(2),ub(2),100));
                 self.xl_vis = [self.X_vis(:) self.Y_vis(:)];
                 %% TODO pass the name of the function that we want to optimize from the outside 
-                name_real_function = 'to_test_withBOGP_stuff';
+                name_real_function = 'g06'; % to_test_withBOGP_stuff
                 fx = str2func(name_real_function);
                 self.Z_vis = reshape(fx([],self.xl_vis),100,100);
                 %% TODO pass the name of the function that we want to optimize from the outside 
                 % precompute the constraints
-                constr_function = {'stuffGPConstr1_0','stuffGPConstr1_1','stuffGPConstr2_1'};
+                constr_function = {'g06Constr1','g06Constr2'};                                                            %{'stuffGPConstr1_0','stuffGPConstr1_1','stuffGPConstr2_1'};
                 %const = [0 0.8 ; -10 0.1];
                 for ii = 1:n_of_constraints
                     cur_f = str2func(constr_function{ii});
@@ -106,7 +106,7 @@ classdef BayesOpt < handle
             end
             % optimization ooptions for the surrogate function 
             %self.options_opt = optimoptions('fmincon','Algorithm','interior-point','Display','none','TolFun',1e-9,'TolX',1e-6);
-            self.options_opt = optimoptions('fmincon','GradObj','off','Algorithm','interior-point','TolFun',1e-9,'TolX',1e-6);
+            self.options_opt = optimoptions('fmincon','GradObj','off','Algorithm','interior-point','TolFun',1e-9,'TolX',1e-6,'Display','none');
             
         end
         
@@ -290,6 +290,8 @@ classdef BayesOpt < handle
              % Plot the objective function
              subplot(img_rows,img_col,1),hold on, title('Objective, query points')
              box on
+             axis normal ;
+             axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
              pcolor(self.X_vis,self.Y_vis,self.Z_vis),shading flat
              clim = caxis;
              l1=plot(self.gp_s{end}.X(1:end,1),self.gp_s{end}.X(1:end,2), 'rx', 'MarkerSize', 10);
@@ -301,12 +303,16 @@ classdef BayesOpt < handle
              % Plot the posterior mean of the GP model for the objective function
              subplot(img_rows,img_col,3),hold on, title(sprintf('GP prediction, mean,'))
              box on
+             axis normal ;
+             axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
              pcolor(self.X_vis,self.Y_vis,reshape(ymu,100,100)),shading flat
              caxis(clim)
              
              % Plot the posterior variance of GP model
              subplot(img_rows,img_col,4),hold on, title('GP prediction, variance')
              box on
+             axis normal ;
+             axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
              pcolor(self.X_vis,self.Y_vis,reshape(ys2,100,100)),shading flat
              %l2=plot(xnews(:,1),xnews(:,2), 'ro', 'MarkerSize', 10);
              l3=plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
@@ -314,6 +320,8 @@ classdef BayesOpt < handle
              % Plot the expected improvement 
              subplot(img_rows,img_col,2), hold on, title(sprintf('Surrogate function %.2e', max(sur)))
              box on
+             axis normal ;
+             axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
              if(strcmp(self.kind,'custom'))
                  blank = zeros(size(self.X_vis));
                  pcolor (self.X_vis,self.Y_vis,blank),shading flat
@@ -334,6 +342,8 @@ classdef BayesOpt < handle
              for counter = 1:self.n_of_constraints
                 % real constraints 
                 subplot(img_rows,img_col,subplot_position), hold on, title(sprintf('original constraints %.2e', counter))
+                axis normal ;
+                axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
                 pcolor(self.X_vis,self.Y_vis,self.z_constr{counter}),shading flat    
                 %plot(xc1(1:end-1,1),xc1(1:end-1,2), 'rx', 'MarkerSize', 10);
                 plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10);
@@ -342,6 +352,8 @@ classdef BayesOpt < handle
                 subplot_position = subplot_position + 1;
                 % reconstructed constraints
                 subplot(img_rows,img_col,subplot_position), hold on, title(sprintf('reconstructed constraints %.2e', counter))
+                axis normal ;
+                axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
                 [cur_ymu,ys2]=self.gp_s{counter}.Predict(self.xl_vis);
                 % i want to show the value wehre the constraints is
                 % satisfacted

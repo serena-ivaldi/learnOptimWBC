@@ -1,9 +1,11 @@
-function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = BO1plus1CMAES(obj,settings)
-
+function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = BO1plus1CMAES(obj,settings)
+    %% global flags(for the method) 
+    visualization = true;    % visualize intermediate result for debug
+    boost_switch = true;      % with this variable i control if the boost is active or not 
+    prune_switch = true;      % with this variable i activate or deactivate the prune move
+    
    %% Initialization
    nIterations = settings.nIterations;
-
-    
    if isfield(settings, 'activeIndices')
         action = settings.action(settings.activeIndices);
         minAction = settings.minAction(settings.activeIndices);
@@ -25,7 +27,7 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
    PM = Optimization.ParticleManager(lambda,n,n_constraints,maxAction,minAction,nIterations,settings.explorationRate);
     
    %% TODO for metrics i need to introduce the same structure fo the other method
-   mean_performances = zeros(1,nIterations);  % row vector
+   performances = zeros(1,nIterations);  % row vector
    costs = zeros(1,nIterations);      
    succeeded = zeros(1,nIterations);
    %% TODO properly use G_data2save and policies
@@ -37,11 +39,20 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
    number_init_points = 5;
    [init_x,init_y]=InitialSample(obj,fnForwardModel,minAction,maxAction,number_init_points);
    BO.Init(init_x,init_y)
+   % initialize the variables to track the best results
+   max_perfomance = -inf;
+   best_action = minAction;
+   
+   for jj = 1:length(init_y)
+       if(init_y(jj)>max_perfomance)
+           max_perfomance = init_y(jj);
+           best_action = init_x(jj);
+           BestActionPerEachGen(1,:) = best_action;
+       end
+   end
 
    %% optimization loop
    %% TODO set all boost variables as algorithm parameters
-   boost_switch = true;      % with this variable i control if the boost is active or not 
-   prune_switch = true;  
    boost_event_trigger = 6; % this variable determines after how many turn i activate the boost (for turn i mean number of update for the full particles stack) 
    boost_counter = 1;        
    particle_iterator = 1;
@@ -117,56 +128,78 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
                end
            end
        end
-       %% plot(TODEBUG)
-       BO.Plot(x_candidate);
-       if(~exploration)    
-           if(particle_iterator - 1 == 0)
-               PM.Plot(x_candidate,lambda,true,false);
+       %% plot
+       if(visualization)
+           BO.Plot(x_candidate);
+           if(~exploration)    
+               if(particle_iterator - 1 == 0)
+                   PM.Plot(x_candidate,lambda,true,false);
+               else
+                   PM.Plot(x_candidate,particle_iterator  - 1,true,false);
+               end
            else
-               PM.Plot(x_candidate,particle_iterator  - 1,true,false);
+               PM.Plot(x_candidate,[],false,false);
            end
-       else
-           PM.Plot(x_candidate,[],false,false);
        end
        %% update gaussian process (i keep updating the gaussian process during the )
        disp('update');
        BO.Update(x_candidate, y)
        
-       % Keep track of information about iteration 
-%        self.i += 1
-% 
-%        self.res['max'] = {'max_val': self.Y.max(),
-%                            'max_params': dict(zip(self.keys,
-%                                                   self.X[self.Y.argmax()]))
-%                            }
-%        self.res['all']['values'].append(self.Y[-1])
-%        self.res['all']['params'].append(dict(zip(self.keys, self.X[-1]))) 
-       mean_perfomances(ii) = BO.y_max;
-       if(~isempty(BO.x_max))
-            BestActionPerEachGen(ii,:) = BO.x_max;
+       %% collect data for the visualization
+       if(PM.active_particles > 0)
+           for kk = 1:PM.active_particles
+               if(PM.particles{kk}.GetBestPerfomance > max_perfomance)
+                   % collectind data for the visualization
+                   costs(ii) = -PM.particles{kk}.GetBestPerfomance();
+                   bestAction.hist(ii).performance = PM.particles{kk}.GetBestPerfomance();
+                   bestAction.hist(ii).parameters = PM.particles{kk}.GetMean();
+                   % update max
+                   max_perfomance = PM.particles{kk}.GetBestPerfomance();
+                   best_action = PM.particles{kk}.GetMean();
+                   BestActionPerEachGen(1,:) = PM.particles{kk}.GetMean();
+
+               else
+                   costs(ii) = -max_perfomance;
+                   bestAction.hist(ii).performance = max_perfomance;
+                   bestAction.hist(ii).parameters = best_action;
+                   BestActionPerEachGen(ii,:) = best_action;
+               end
+           end
+       else
+           costs(ii) = -max_perfomance;
+           bestAction.hist(ii).performance = max_perfomance;
+           bestAction.hist(ii).parameters = best_action;
+           BestActionPerEachGen(ii,:) = best_action;
        end
-       %% TODEBUG
-       pause(0.05)
-       close all;
+       
+       %% plot
+       if(visualization)
+           pause(0.05)
+           close all;
+       end
    end 
    
-   %% plot(TODEBUG)
-   BO.Plot([],[],false,false);
-   PM.Plot();
-   
-   if(~isempty(BO.x_max))
-       bestAction.parameters  = BO.x_max;
-   else
-       bestAction.parameters = ones(1,n);
+   %% plot
+   if(visualization)
+       BO.Plot(x_candidate);
+       PM.Plot([],[],false,false);
+       pause();
+       close all;
    end
-          
-   bestAction.performance = BO.y_max;
    
-   %% TODEBUG
-   close all;
-   
-   
-   
+   %% store data for visualization of the stats
+   G_data2save.Particles = {PM.old_particles,PM.particles};
+   G_data2save.A = [];
+   G_data2save.C = [];
+   G_data2save.performance = [0];
+
+   policies = [];
+
+   bestAction.parameters = bestAction.hist(end).parameters;
+   bestAction.performance = -costs(:,end);
+   bestAction.listperformance = -costs;
+   performances =  -costs;
+      
 end
 
 % with this function we generate the set of points to initiliaze the search
@@ -184,15 +217,15 @@ function [init_x,init_y]=InitialSample(obj,fnForwardModel,lb,ub,number_init_poin
     init_x = repmat(lb,number_init_points,1) + repmat(ub-lb,number_init_points,1).*rand(number_init_points,length(lb));
     
     %% TODEBUG provisory change (ho sovrascritto init_x )for confrontation with demobayesopt.m
-    init_x = [ 1 1;9 1;1 9;9 9;5 5];
+    %init_x = [ 1 1;9 1;1 9;9 9;5 5];
     % Evaluate target function at all initialization
     % points (random + explore)
     for i=1:number_init_points
         % questa cosa va modificata perche la assegnazione va fatta dentro la funzione
-       [performances] = fnForwardModel(obj,init_x(i,:),1, 1); % compute fitness  
+       [init_performances] = fnForwardModel(obj,init_x(i,:),1, 1); % compute fitness  
        y = obj.penalty_handling.penalties';
        y(end + 1) = obj.penalty_handling.feasibility;
-       y(end + 1) = performances;
+       y(end + 1) = init_performances;
        init_y(i,:) = y;
         %if self.verbose
             %self.plog.print_step(x, y_init[-1])
