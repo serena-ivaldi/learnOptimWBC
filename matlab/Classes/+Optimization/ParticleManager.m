@@ -76,6 +76,12 @@ classdef ParticleManager < handle
             end
         end
         
+        function AddParticleInPosition(obj,candidate,performance,index)
+            obj.particles{index} = Optimization.Particle(obj.size_action,obj.maxAction,obj.minAction,obj.n_constraints,obj.nIterations,...
+                                                     obj.explorationRate,candidate,performance,obj.cmap(obj.particle_counter,:));
+            obj.active_particles = legth(obj.particles);
+        end
+        
         function DeleteParticle(obj,index,cause)
             % change the status of particle
             obj.particles{index}.status = cause;

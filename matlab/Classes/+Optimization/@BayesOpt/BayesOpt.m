@@ -19,6 +19,7 @@ classdef BayesOpt < handle
         pd    %  i need it for the surrogate computation.
         radius
         options_opt
+        %current_constraints_to_optimize   % maybe im gonna remove this feature
         % for visualization 
         X_vis
         Y_vis
@@ -26,6 +27,7 @@ classdef BayesOpt < handle
         Z_vis
         z_constr
         kind
+        min_or_max
         temporary_lb
         temporary_ub
     end
@@ -48,8 +50,8 @@ classdef BayesOpt < handle
             % Initialization flag
             self.initialized = false;
 
-            % here i set up n_constraints + 1 GP fitness + 1 GP point
-            % feasible or not (1 or 0)
+            % here i set up n_constraints + 1 GP fitness + 1 GP about
+            % constraints satisfaction
             for i = 1:n_of_constraints + 2;
                 if(strcmp(GP_lib,'GPML'))
                     self.gp_s{i} = GaussianProcess.GPML_GP();
@@ -61,6 +63,7 @@ classdef BayesOpt < handle
             %% TODO define surrogate functions
             % Surrogate placeholder
             self.kind = 'ecv';
+            self.SetMinMax();
             kappa =0.1;
             xi = 0;
             self.surrogate = @(self_,x_)Surrogate(self_, x_, kappa, xi);
@@ -184,7 +187,11 @@ classdef BayesOpt < handle
 
             % Start with the lower bound as the argmax
             x_max = lb;  
-            max_acq = -inf;
+            if(strcmp(self.min_or_max,'max'))
+                max_acq = -inf;
+            else
+                max_acq = inf;
+            end
 
             %% TODO rand in bound (rand is beetween 0 and 1)
             %% TODO set the n_starting_point as a parameter of the algorithm
@@ -208,10 +215,17 @@ classdef BayesOpt < handle
                %% TODO Check if the surrogate function have the right sign (i want to maximize but im using a minimization)
                [x,fval] = fmincon(fun,x_0(i,:),[],[],[],[],lb,up,[],self.options_opt);
                % Store it if better than previous minimum(maximum).
-                if (-fval >= max_acq)
-                    x_max = x;
-                    max_acq = -fval;
-                end
+               if(strcmp(self.min_or_max,'max'))
+                   if (-fval >= max_acq)
+                        x_max = x;
+                        max_acq = -fval;
+                   end
+               else
+                   if (fval <= max_acq)
+                        x_max = x;
+                        max_acq = fval;
+                   end
+               end
 
             end
             %% TODO extend clip to different bound per each dimension
@@ -221,7 +235,6 @@ classdef BayesOpt < handle
         end
         % here new y is a vector with the all the values [constraints violations,satisfy or not the constraints,fitness]
         function Update(self,new_x, new_y)
-            
             % Find unique rows of X to avoid GP from breaking
             X = self.gp_s{1}.X;
             mat_x_new = repmat(new_x,size(X,1),1);
@@ -249,7 +262,38 @@ classdef BayesOpt < handle
             end
 
         end
-        
+        function SetMinMax(self)
+            if strcmp(self.kind,'ucb')
+               self.min_or_max = 'max';
+            end
+            if strcmp(self.kind,'ei')
+               self.min_or_max = 'max';
+            end
+            if strcmp(self.kind,'poi')
+               self.min_or_max = 'max';
+            end
+            if strcmp(self.kind,'eci')
+               self.min_or_max = 'max';
+            end
+            if strcmp(self.kind,'ecv')
+               self.min_or_max = 'max';
+            end
+    %         if strcmp(self.kind,'ec')
+    %             [ret, x] =  self.ec(x);
+    %             ret = - ret;
+    %         end
+    %         if(strcmp(self.kind,'ecm'))
+    %             % no need to invert the sign i have to minize this funcition
+    %             [ret, x] =  self.ecm(x);
+    %         end
+            if(strcmp(self.kind,'ucb_constr'))
+               self.min_or_max = 'min';
+            end
+            if strcmp(self.kind,'custom');
+               self.min_or_max = 'max';
+            end
+
+        end
         % use this function to change the surrogate function during the
         % execution from constructor default is 'ecv'
         % kind is a string
@@ -258,8 +302,44 @@ classdef BayesOpt < handle
             kappa =0.1;
             xi = 0;
             self.kind = kind;
+            self.SetMinMax();
             self.surrogate = @(self_,x_)Surrogate(self_, x_, kappa, xi,varargin{:});
         end
+        
+        
+%         function FindFreeRegion(self)
+%             current_kind = self.kind;
+%             self.SetSurrogate('ucb_constr')
+%             lb = self.bounds(1,:);
+%             up = self.bounds(2,:);
+%             for ik = 1:self.n_of_constraints
+%                 % set current costraints
+%                 self.current_constraints_to_optimize = ik; 
+%                 %if(ik == 1)
+%                 n_starting_point = 50;
+%                 extended_lb = repmat(lb,n_starting_point,1);
+%                 extended_up = repmat(up,n_starting_point,1);
+%                 % [a,b] -------> (b-a).*rand(n,1) + a;
+%                 x_0 = (extended_up - extended_lb).*rand([n_starting_point,self.dim]) + extended_lb;    
+%                 %end
+%                 % Start with the lower bound as the argmax
+%                 x_max = lb;  
+%                 max_acq = -inf;
+%                 for i = 1:size(x_0,1)
+%                     % Find the minimum of minus the acquisition function
+%                    fun = @(x_)self.surrogate(self,x_);
+%                    %% TODO Check if the surrogate function have the right sign (i want to maximize but im using a minimization)
+%                    [x,fval] = fmincon(fun,x_0(i,:),[],[],[],[],lb,up,[],self.options_opt);
+%                    % Store it if better than previous minimum(maximum).
+%                     if (-fval >= max_acq)
+%                         x_max = x;
+%                         max_acq = -fval;
+%                     end
+% 
+%                 end
+%                 
+%             end
+%         end
         
          %% GRAPHIC FUNCTION
 
@@ -306,7 +386,7 @@ classdef BayesOpt < handle
              axis normal ;
              axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
              pcolor(self.X_vis,self.Y_vis,reshape(ymu,100,100)),shading flat
-             caxis(clim)
+             %caxis(clim)
              
              % Plot the posterior variance of GP model
              subplot(img_rows,img_col,4),hold on, title('GP prediction, variance')
@@ -364,28 +444,41 @@ classdef BayesOpt < handle
                 plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10)
                 
                 subplot_position = subplot_position + 1;
-             end
-             
-             
-%              counter = 1;
-%              for j = 3:img_col
-%                 ind = index(cur_row,j);
-%                 subplot(img_rows,img_col,ind), hold on, title(sprintf('reconstructed constraints %.2e', counter))
-%                 [cur_ymu,ys2]=self.gp_s{counter}.Predict(self.xl_vis);
-%                 % i want to show the value wehre the constraints is
-%                 % satisfacted
-%                 cur_ymu(cur_ymu > 0) = nan;
-%                 cur_ymu(~isnan(cur_ymu))=1;
-%                 pcolor(self.X_vis,self.Y_vis,reshape(cur_ymu,100,100)),shading flat
-%                 plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10)
-%                 %plot(xc1(end,1),xc1(end,2), 'ro', 'MarkerSize', 10, 'linewidth', 3)
-%                 %plot(xc1(1:end-1,1),xc1(1:end-1,2), 'rx'), 
-%                 counter = counter + 1;
-%              end    
-             
-             
+             end 
              
          end
+         
+         function PlotArtificial(self)
+              %% print of artificial constraints
+             figure
+             gp_test = self.gp_s{end - 1};
+             [ymu_a,ys2_a]=self.gp_s{end - 1}.Predict(self.xl_vis);
+             subplot(1,3,2),hold on, title('artificial constraints mean')
+             box on
+             axis normal ;
+             axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
+             pcolor(self.X_vis,self.Y_vis,reshape(ymu_a,100,100)),shading flat
+             %caxis(clim)
+             
+             subplot(1,3,3),hold on, title('artificial constraints variance')
+             box on
+             axis normal ;
+             axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
+             pcolor(self.X_vis,self.Y_vis,reshape(ys2_a,100,100)),shading flat
+             %caxis(clim)
+             
+             ymu_a(ymu_a > 0) = nan;
+             ymu_a(~isnan(ymu_a))=1;
+             
+             subplot(1,3,1),hold on, title('artificial constraints free regions')
+             box on
+             axis normal ;
+             axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
+             pcolor(self.X_vis,self.Y_vis,reshape(ymu_a,100,100)),shading flat
+             %caxis(clim)
+         end
+         
+         
 
     end
 end

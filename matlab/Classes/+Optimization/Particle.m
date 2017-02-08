@@ -37,7 +37,8 @@ classdef Particle < handle
       current_index; % this index tell us where we are inside the current 
       status;        % active, candidate attained, merged
       clr;
-      turns_of_inaction %;
+      turns_of_inaction; % with turn_of_inaction i count i many turns the particle do not evolve in order to cancel it
+      constraints; % this is a swtich that i sue to deactivate or activate constraints. Constraints is TRUE from default
    end
             
    methods
@@ -82,6 +83,7 @@ classdef Particle < handle
          obj.status = 'active';
          obj.clr = color;
          obj.turns_of_inaction = 0;
+         obj.constraints = true;
       end
    
 %       function [candidate] = Sample(obj)
@@ -95,7 +97,7 @@ classdef Particle < handle
           %if(constraints_active)
           %  violated_constrained = find(constraints);
           %end
-          if(~isempty(violated_constrained)) % some constraints are violated
+          if(~isempty(violated_constrained) && constraints) % some constraints are violated
              obj.v = obj.V{obj.current_index};
              for j = violated_constrained
                obj.v(j,:) = (1-obj.c_c)*obj.V{obj.current_index}(j,:) + obj.c_c*(obj.A{obj.current_index}*z')';                                           %only if the constraints is violated udpate exponentially fading record vj 
@@ -191,6 +193,15 @@ classdef Particle < handle
           y = obj.performances(obj.current_index);
       end
       
+      function DeactivateConstraints(obj)
+          obj.constraints = false;
+      end
+      
+      function ActivateConstraints(obj)
+          obj.constraints = true;
+      end
+          
+      
       function [mu,V_s,tlb,tup] = GetRotTraslBound(obj)
           p = 0.95; 
           mu = obj.GetMean()';
@@ -218,7 +229,7 @@ classdef Particle < handle
            ret(ret < minaction) = minaction(ret < minaction);
            ret(ret > maxaction) = maxaction(ret > maxaction);
         end
-      
+      %% visualization functions
       function Plot(obj)
           mu = obj.GetMean()';
           C = obj.GetCov();
