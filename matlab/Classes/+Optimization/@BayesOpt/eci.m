@@ -1,4 +1,6 @@
 %% class BO
+% eci =  expcted constrained improvement 
+% to maximize
 function [ret, x]= eci(obj,x, xi)       
         % ei computation
         [mean, var] = obj.gp_s{end}.Predict(x);

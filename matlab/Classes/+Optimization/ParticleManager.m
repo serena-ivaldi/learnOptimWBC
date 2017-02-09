@@ -30,7 +30,7 @@ classdef ParticleManager < handle
            obj.nIterations = nIterations;
            obj.explorationRate = explorationRate;      
            obj.cmap = hsv(100);
-           obj.particle_counter = 0;
+           obj.particle_counter = 1;
            c = 0.1;
            obj.epsilon = obj.conf2mahal(c, size_action);
            % number of turn that the particle is allowed to not improve
@@ -79,7 +79,13 @@ classdef ParticleManager < handle
         function AddParticleInPosition(obj,candidate,performance,index)
             obj.particles{index} = Optimization.Particle(obj.size_action,obj.maxAction,obj.minAction,obj.n_constraints,obj.nIterations,...
                                                      obj.explorationRate,candidate,performance,obj.cmap(obj.particle_counter,:));
-            obj.active_particles = legth(obj.particles);
+            occupied_position = 0;                                     
+            for i=1:length(obj.particles);                                     
+                if(~isempty(obj.particles{i}))
+                    occupied_position = occupied_position + 1;
+                end
+            end
+            obj.active_particles = occupied_position;
         end
         
         function DeleteParticle(obj,index,cause)

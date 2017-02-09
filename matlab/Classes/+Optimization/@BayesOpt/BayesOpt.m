@@ -1,6 +1,7 @@
 % the idea here is that this class is not gonna be owner of the istance (basically the fintess function and the constraints)
 % but is gonna be a proxy to the gaussian process that model fitness and
 % constraints and to the surrogate function.
+%% TODO fix the not psotive define gramiam matrix issue
 %% this object just receive from outside the results of the simulations (fitness and constraints)
 classdef BayesOpt < handle
     
@@ -90,12 +91,12 @@ classdef BayesOpt < handle
                 [self.X_vis,self.Y_vis] = meshgrid(linspace(lb(1),ub(1),100),linspace(lb(2),ub(2),100));
                 self.xl_vis = [self.X_vis(:) self.Y_vis(:)];
                 %% TODO pass the name of the function that we want to optimize from the outside 
-                name_real_function = 'g06'; % to_test_withBOGP_stuff
+                name_real_function = 'g06'; % to_test_withBOGP_stuff g06
                 fx = str2func(name_real_function);
                 self.Z_vis = reshape(fx([],self.xl_vis),100,100);
                 %% TODO pass the name of the function that we want to optimize from the outside 
                 % precompute the constraints
-                constr_function = {'g06Constr1','g06Constr2'};                                                            %{'stuffGPConstr1_0','stuffGPConstr1_1','stuffGPConstr2_1'};
+                constr_function = {'g06Constr1','g06Constr2'};  %{'stuffGPConstr1_0','stuffGPConstr1_1','stuffGPConstr2_1'}; {'g06Constr1','g06Constr2'}
                 %const = [0 0.8 ; -10 0.1];
                 for ii = 1:n_of_constraints
                     cur_f = str2func(constr_function{ii});
@@ -286,6 +287,9 @@ classdef BayesOpt < handle
     %             % no need to invert the sign i have to minize this funcition
     %             [ret, x] =  self.ecm(x);
     %         end
+            if(strcmp(self.kind,'pcs_constr'))
+               self.min_or_max = 'max';
+            end
             if(strcmp(self.kind,'ucb_constr'))
                self.min_or_max = 'min';
             end
@@ -305,41 +309,6 @@ classdef BayesOpt < handle
             self.SetMinMax();
             self.surrogate = @(self_,x_)Surrogate(self_, x_, kappa, xi,varargin{:});
         end
-        
-        
-%         function FindFreeRegion(self)
-%             current_kind = self.kind;
-%             self.SetSurrogate('ucb_constr')
-%             lb = self.bounds(1,:);
-%             up = self.bounds(2,:);
-%             for ik = 1:self.n_of_constraints
-%                 % set current costraints
-%                 self.current_constraints_to_optimize = ik; 
-%                 %if(ik == 1)
-%                 n_starting_point = 50;
-%                 extended_lb = repmat(lb,n_starting_point,1);
-%                 extended_up = repmat(up,n_starting_point,1);
-%                 % [a,b] -------> (b-a).*rand(n,1) + a;
-%                 x_0 = (extended_up - extended_lb).*rand([n_starting_point,self.dim]) + extended_lb;    
-%                 %end
-%                 % Start with the lower bound as the argmax
-%                 x_max = lb;  
-%                 max_acq = -inf;
-%                 for i = 1:size(x_0,1)
-%                     % Find the minimum of minus the acquisition function
-%                    fun = @(x_)self.surrogate(self,x_);
-%                    %% TODO Check if the surrogate function have the right sign (i want to maximize but im using a minimization)
-%                    [x,fval] = fmincon(fun,x_0(i,:),[],[],[],[],lb,up,[],self.options_opt);
-%                    % Store it if better than previous minimum(maximum).
-%                     if (-fval >= max_acq)
-%                         x_max = x;
-%                         max_acq = -fval;
-%                     end
-% 
-%                 end
-%                 
-%             end
-%         end
         
          %% GRAPHIC FUNCTION
 
@@ -478,7 +447,34 @@ classdef BayesOpt < handle
              %caxis(clim)
          end
          
+         function PlotSurrogateByKind(self,kind,varargin)
+              %% print of artificial constraints
+             figure
+             cur_surrogate = self.surrogate;
+             SetSurrogate(self,kind,varargin(:));
+             fun = @(x_)self.surrogate(self,x_);
+             if(strcmp(kind,'custom'))
+                [X_trasl,Y_trasl] = meshgrid(linspace(self.temporary_lb(1),self.temporary_ub(1),100),linspace(self.temporary_lb(2),self.temporary_ub(2),100)); 
+                xl_trasl = [X_trasl(:) Y_trasl(:)];
+                [sur, x_transf] = fun(xl_trasl);
+             else    
+                [sur, x_transf] = fun(self.xl_vis);
+             end
+             box on
+             axis normal ;
+             axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
+             if(strcmp(kind,'custom'))
+                 blank = zeros(size(self.X_vis));
+                 pcolor (self.X_vis,self.Y_vis,blank),shading flat
+                 pcolor(reshape(x_transf(:,1),100,100),reshape(x_transf(:,2),100,100),reshape(sur,100,100)),shading flat
+             else
+                 pcolor(self.X_vis,self.Y_vis,reshape(sur,100,100)),shading flat
+             end
+             % set back the old surrogate
+             self.surrogate = cur_surrogate;
+         end
          
+    
 
     end
 end

@@ -1,7 +1,7 @@
-%% class BO
-% ecv expected constrained variance
-% to maximize
-function [ret, x] = ecv(obj,x)
+%% class BO (expected mean of constraints)
+%% it does nor work for multiple input
+%% to minimize
+function [ret, x] = ecm(obj,x)
                 
         %% TODEBUG
 %         if(size(x,1)==1)
@@ -11,20 +11,19 @@ function [ret, x] = ecv(obj,x)
 %             if(dist < tolerated_distance)
 %                 disp('wake up!')
 %             end
-%         end       
-        % ev computation
-        [mean, var] = obj.gp_s{end}.Predict(x);
-        % Avoid points with zero variance
-        var = max(var, 1e-9 + 0 * var);
+%      
         % constraints computation
-        ret2 = ones(size(mean));
+        ret = ones(1,1);
         for i=1:obj.n_of_constraints
-            [mean_, var_] = obj.gp_s{i}.Predict(x);
+            [mean, var] = obj.gp_s{i}.Predict(x);
             %% TODEBUG
             %probability = (normcdf(0,mean,sqrt(var)));
-            ret2 = ret2.*(normcdf(0,mean_,sqrt(var_)));
+            if(mean > 0)
+                mean = 0;
+            end
+             ret = ret*mean;
         end
-        ret = ret2.*var;
+        
         
         %% TODEBUG
 %         if(size(x,1)==1)

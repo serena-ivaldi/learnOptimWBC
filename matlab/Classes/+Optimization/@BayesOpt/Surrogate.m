@@ -39,6 +39,10 @@ function [ret, x] = Surrogate(self, x, kappa, xi,varargin)
             % no need to invert the sign i have to minize this funcition
             [ret, x] = self.ucb_constr(x, kappa);
         end
+        if strcmp(self.kind,'pcs_constr')
+            [ret, x] =  self.pcs_constr(x);
+            ret = - ret;
+        end
         if strcmp(self.kind,'custom');
             self.min_or_max = 'max';
             [ret, x] =  varargin{1}(x,xi);

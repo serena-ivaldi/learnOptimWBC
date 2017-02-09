@@ -1,9 +1,11 @@
+%% TODO fix the not psotive define gramiam matrix issue
+%% this object just receive from outside the results of the simulations (fitness and constraints)
 function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = BO1plus1CMAES(obj,settings)
     %% global flags(for the method) 
     visualization = true;    % visualize intermediate result for debug
-    boost_switch = true;      % with this variable i control if the boost is active or not 
-    prune_switch = true;      % with this variable i activate or deactivate the prune move
-     emergency_switch = true;
+    boost_switch = false;      % with this variable i control if the boost is active or not 
+    prune_switch =false;      % with this variable i activate or deactivate the prune move
+    emergency_switch =true;
     
     
    %% Initialization
@@ -64,6 +66,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
    emergency_iterator = 1;
    for ii = 1:nIterations  
        %% --------------------------------------------------------- Emergency Mode (im not capable of finding a free region with the normal mode)
+       %% in emergency mode i set the new surrogate inside LookForFreeRegion(BO)  
        if(emergency_counter > emergency_event_trigger && emergency_switch)
            if( emergency_iterator == 1)
                %% global_search
@@ -74,7 +77,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
            end
            %% check the candidate
            [performances_new succeeded(ii)] = fnForwardModel(obj,x_candidate,1, 1); % compute fitness 
-           emergency_perfomance = ArtificialConstraints(obj.penalty_handling.penalties); % compute emergency perfomance
+           emergency_perfomance = ArtificialConstraints(obj.penalty_handling.penalties) % compute emergency perfomance
            y = obj.penalty_handling.penalties;
            y(end + 1) = emergency_perfomance;
            y(end + 1) = performances_new;
@@ -85,37 +88,49 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                if(PM.active_particles == 0 || -emergency_perfomance > PM.particles{1}.GetBestPerfomance())
                    PM.AddParticleInPosition(x_candidate,-emergency_perfomance,1);
                    PM.particles{1}.DeactivateConstraints();
-               end
-               emergency_iterator = emergency_iterator + 1;
+               end    
            else
                % i have to pass - emergency_perfomance because the
                % particle maximize and the constraints has to be minimized
                PM.UpdateParticle(1,violated_constrained,z,x_candidate, -(emergency_perfomance) );
-               emergency_iterator = emergency_iterator + 1;
            end
-       % update the internal iterator    
+       % update the internal iterator
+       emergency_iterator = emergency_iterator + 1;
+       %% checks section
        if(emergency_iterator >= emergency_global_search_trigger)
            emergency_iterator = 1;
-       end    
-       %% if i reach the free region (- emergency perfomance > 0) i get out from the emergency mode
-       if(emergency_perfomance < 0)
-           emergency_switch = false;
-           PM.particles{1}.ActivateConstraints(); % i reuse this particle for searching an optimal on the original objective function
        end
+       %% TODEBUG temporarly commented
+       %% if i reach the free region (- emergency perfomance > 0) i get out from the emergency mode
+%        if(emergency_perfomance <= 0)
+%            emergency_switch = false;
+%            PM.particles{1}.ActivateConstraints(); % i reuse this particle for searching an optimal on the original objective function
+%            % when i get out from emergency i need to rescale the budget for
+%            % exploration by subtracting all the iteration spent for the
+%            % emergency phase in order to have keep the same %
+%        end
        %% --------------------------------------------------------- Normal Mode        
        else  
            %% action selector (for now we just saturate the particles list and then we exploit)
            if(PM.active_particles < lambda)
                exploration = true;
            else
-               exploration = false;
+           %% TODEBUG temporarly commented
+           %    exploration = false;
            end
 
            if(exploration)
                %% exploration (global action)    
                % select the new point
+               
                disp('optimization surrogate');
+               %% TODEBUG
                x_candidate = BO.AcqMax();
+%                number_init_points = 1;
+%                lb = minAction;
+%                ub = maxAction;
+%                x_candidate = repmat(lb,number_init_points,1) + repmat(ub-lb,number_init_points,1).*rand(number_init_points,length(lb));
+               %% end
                emergency_counter = emergency_counter + 1;
                % compute the model
            else
@@ -130,7 +145,6 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                    [x_candidate,z] = PM.Sample(particle_iterator);
                end
            end
-       
            %% execution 
            disp('evaluate offsprings')
            [performances_new succeeded(ii)] = fnForwardModel(obj,x_candidate,1, 1); % compute fitness 
@@ -143,7 +157,6 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
            % constraints check
            constraints = obj.penalty_handling.feasibility_vec(1,:)==-1; % vector of index of the violated constrained
            violated_constrained = find(constraints);
-
            if(exploration)
                 %% add a new particle (if im exploring and the point satisfy all the constraints)
                 if(isempty(violated_constrained))
@@ -186,6 +199,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
        if(visualization)
            BO.Plot(x_candidate);
            BO.PlotArtificial();
+           BO.PlotSurrogateByKind('pcs_constr');
            if(~exploration)    
                if(particle_iterator - 1 == 0)
                    PM.Plot(x_candidate,lambda,true,false);
@@ -198,8 +212,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
        end
        %% update gaussian process (i keep updating the gaussian process during the )
        disp('update');
-       BO.Update(x_candidate, y)
-       
+       BO.Update(x_candidate, y);
        %% collect data for the visualization
        if(PM.active_particles > 0)
            for kk = 1:PM.active_particles
@@ -237,6 +250,8 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
    %% plot
    if(visualization)
        BO.Plot(x_candidate);
+       BO.PlotArtificial();
+       BO.PlotSurrogateByKind('pcs_constr');
        PM.Plot([],[],false,false);
        pause();
        close all;
@@ -331,13 +346,24 @@ end
 
 function [x_res] = LookForFreeRegion(BO)
     current_kind = BO.kind;
-    BO.SetSurrogate('ucb_constr');
+    %% here im testing different solutions for the discovery of the constrained region
+    BO.SetSurrogate('pcs_constr');
     x_res = BO.AcqMax();
     BO.SetSurrogate(current_kind);
 end
 
 function y = ArtificialConstraints(penalties)
-    % i all the constraints that are satisfied are set to zero 
-    penalties(penalties<0) = 0;
-    y = sum(penalties);
+    % i check if there are violated constraints
+    % in that case pull at all the non violated and sum up the violation
+    % otherwise i sum all the constraints that are satisfied
+    %% i check for all the constraints that are satisfied 
+    index = penalties < 0; % in index: 0 = not satisfied      1 = satisfied
+    %% because if the product is zero means that i have violation i sum only the violation 
+    %% otherwise i sum all the satisfaction 
+    if((prod(index)))
+        y = sum(penalties);
+    else
+        penalties(index) = 0;
+        y = sum(penalties);
+    end
 end

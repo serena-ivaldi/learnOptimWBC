@@ -59,8 +59,9 @@ classdef Particle < handle
          %initialize perfomance 
          obj.performances(1) = start_perfomance;
          % initialize sigma
-         obj.sigma(1) = explorationRate;           
-         obj.sigma_multiplier = 1.5;
+         obj.sigma(1) = explorationRate;
+         %% TODO move the sigma multiplier as a parameter of the method 
+         obj.sigma_multiplier = 1.5;   
          C = diag((maxAction - minAction)/2);
          obj.A{1} = chol(C);  
          for j = 1 : n_constraints
@@ -97,7 +98,7 @@ classdef Particle < handle
           %if(constraints_active)
           %  violated_constrained = find(constraints);
           %end
-          if(~isempty(violated_constrained) && constraints) % some constraints are violated
+          if(~isempty(violated_constrained) && obj.constraints) % some constraints are violated
              obj.v = obj.V{obj.current_index};
              for j = violated_constrained
                obj.v(j,:) = (1-obj.c_c)*obj.V{obj.current_index}(j,:) + obj.c_c*(obj.A{obj.current_index}*z')';                                           %only if the constraints is violated udpate exponentially fading record vj 
