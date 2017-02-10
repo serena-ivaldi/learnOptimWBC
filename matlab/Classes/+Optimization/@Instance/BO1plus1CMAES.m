@@ -57,6 +57,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
 
    %% optimization loop
    %% TODO set all boost variables as algorithm parameters
+   exploration_budget = 0.3; % this a percentage that defines the maximum amount of turn that i can spend for exploration 
    boost_event_trigger = 6; % this variable determines after how many turn i activate the boost (for turn i mean number of update for the full particles stack) 
    boost_counter = 1;
    particle_iterator = 1;
@@ -64,10 +65,15 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
    emergency_event_trigger = 5;
    emergency_global_search_trigger = 10; % number of turn to switch from exploration with particle to exploration with 
    emergency_iterator = 1;
+   out_of_emergency = false; % with this flag i signal that im out of mergency it means that in general looking for the free region was not easy so whe we explore is better to
+                             % search around the emergency_particle;
+   turn_of_exploration = 0;
+   turn_of_emergency = 0;
+   total_iteration = nIterations;                         
    for ii = 1:nIterations  
        %% --------------------------------------------------------- Emergency Mode (im not capable of finding a free region with the normal mode)
        %% in emergency mode i set the new surrogate inside LookForFreeRegion(BO)  
-       if(emergency_counter > emergency_event_trigger && emergency_switch)
+       if( emergency_counter > emergency_event_trigger && emergency_switch )
            if( emergency_iterator == 1)
                %% global_search
                x_candidate = LookForFreeRegion(BO);
@@ -77,10 +83,13 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
            end
            %% check the candidate
            [performances_new succeeded(ii)] = fnForwardModel(obj,x_candidate,1, 1); % compute fitness 
-           emergency_perfomance = ArtificialConstraints(obj.penalty_handling.penalties) % compute emergency perfomance
+           emergency_perfomance = ArtificialConstraints(obj.penalty_handling.penalties); % compute emergency perfomance
            y = obj.penalty_handling.penalties;
            y(end + 1) = emergency_perfomance;
            y(end + 1) = performances_new;
+           % with this counter i count the number of turn that i spend for
+           % emrgency
+           turn_of_emergency = turn_of_emergency + 1;
            %% update section
            if(emergency_iterator == 1)
                % check if the global search has produced a better solution
@@ -102,30 +111,42 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
        end
        %% TODEBUG temporarly commented
        %% if i reach the free region (- emergency perfomance > 0) i get out from the emergency mode
-%        if(emergency_perfomance <= 0)
-%            emergency_switch = false;
-%            PM.particles{1}.ActivateConstraints(); % i reuse this particle for searching an optimal on the original objective function
-%            % when i get out from emergency i need to rescale the budget for
-%            % exploration by subtracting all the iteration spent for the
-%            % emergency phase in order to have keep the same %
-%        end
+       if(emergency_perfomance <= 0)
+           emergency_switch = false;
+           PM.particles{1}.ActivateConstraints(); 
+           out_of_emergency = true;
+           emergency_particle = PM.particles{1};
+           % i update the total number of iteration to update the maximum
+           % number of allowed 
+           total_iteration = total_iteration - turn_of_emergency;
+           % i reuse this particle for searching an optimal on the original objective function
+           % when i get out from emergency i need to rescale the budget for
+           % exploration by subtracting all the iteration spent for the
+           % emergency phase in order to have keep the same %
+       end
        %% --------------------------------------------------------- Normal Mode        
        else  
            %% action selector (for now we just saturate the particles list and then we exploit)
-           if(PM.active_particles < lambda)
+           if( PM.active_particles < lambda && turn_of_exploration < ceil(total_iteration * exploration_budget) )
                exploration = true;
+               % with this counter i keep track of the number of exploration turn already spent 
+               turn_of_exploration = turn_of_exploration + 1;
            else
            %% TODEBUG temporarly commented
            %    exploration = false;
            end
-
            if(exploration)
                %% exploration (global action)    
                % select the new point
                
                disp('optimization surrogate');
                %% TODEBUG
-               x_candidate = BO.AcqMax();
+               %% whe i get out from emergency i should searhc around the particle to deploy the new particle before exploration
+               if(out_of_emergency)
+                   x_candidate = BoostAfterEmergency(PM,BO,emergency_particle);
+               else
+                   x_candidate = BO.AcqMax();
+               end
 %                number_init_points = 1;
 %                lb = minAction;
 %                ub = maxAction;
@@ -343,6 +364,25 @@ function [x_candidate,z]=Boost(PM,BO,particle_index)
     
 end
 
+function [x_candidate]=BoostAfterEmergency(PM,BO,emergency_particle)
+    [mu,V_s,tlb,tub] = emergency_particle.GetRotTraslBound();
+    transf = @(x_)emergency_particle.RotoTrasl(x_,mu,V_s);
+    A  = emergency_particle.GetCholCov();
+    mu = emergency_particle.GetMean();
+    %transf = @(x_)PM.RotoTrasl(x_,mu,V_s);
+    custom_function = @(x_,xi_)BO.eci(transf(x_), xi_);
+    BO.SetSurrogate('custom',custom_function);
+    x_res = BO.AcqMax(tlb,tub);
+    x_candidate = transf(x_res);
+    % i have removed sigma from the equation to avoid explotion in the
+    % covariance of the particle after the boost move
+    %z=( A\(x_candidate - mu')' )/sigma;
+    %z =( A\(x_candidate - mu)' );
+    %z = z';
+    
+    %% TODEBUG
+    %PM.Plot([],particle_index,false,true);
+end
 
 function [x_res] = LookForFreeRegion(BO)
     current_kind = BO.kind;

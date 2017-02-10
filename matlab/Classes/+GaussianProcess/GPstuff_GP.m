@@ -70,12 +70,15 @@ classdef GPstuff_GP < GaussianProcess.AbstractGP
            end
            %% TODEBUG i try to pass a normalize Y only for optimization to see if it makes work the gp better
            % optimize hyper parameters
-           %options_opt = struct('Algorithm','interior-point','LargeScale','off','GradObj','on');
-           %obj.gp = gp_optim(obj.gp,obj.X,obj.Y,'optimf',@fmincon,'opt',options_opt);
+          
            try
-                obj.gp = gp_optim(obj.gp,obj.X,obj.Y);
-           catch(err)
-                disp('optim falied due to non positve defined gramiam matrix')
+               options_opt = struct('Algorithm','interior-point','LargeScale','off','GradObj','on');
+               obj.gp = gp_optim(obj.gp,obj.X,obj.Y,'optimf',@fmincon,'opt',options_opt);
+               %obj.gp = gp_optim(obj.gp,obj.X,obj.Y);
+           catch
+               disp('optim falied due to non positve defined gramiam matrix')
+               %% TODO introduce a function that restrict the data matrix in order to obtain a kernel matrix positive defined or maybe i can try to restart the kernel parameters
+               %% this is the way to manage the kernel matrix
            end
        end
        
