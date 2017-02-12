@@ -201,7 +201,7 @@ classdef BayesOpt < handle
             % change the optimzation method with a global approach)
             % if the surrogate has multiple optimal solutions this
             % procedure is necessary
-            n_starting_point = 20;
+            n_starting_point = 40;
             
             extended_lb = repmat(lb,n_starting_point,1);
             extended_up = repmat(up,n_starting_point,1);

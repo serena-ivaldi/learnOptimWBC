@@ -2,10 +2,11 @@
 %% this object just receive from outside the results of the simulations (fitness and constraints)
 function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = BO1plus1CMAES(obj,settings)
     %% global flags(for the method) 
-    visualization = true;    % visualize intermediate result for debug
+    visualization = true;      % visualize intermediate result for debug
     boost_switch = false;      % with this variable i control if the boost is active or not 
-    prune_switch =false;      % with this variable i activate or deactivate the prune move
-    emergency_switch =true;
+    prune_switch =false;       % with this variable i activate or deactivate the prune move
+    emergency_switch =true;    % with this i activate the emerggency behaviour when it is needed
+    zooming_switch = true;     % with this switch i control the zooming for the gaussian process itself      
     
     
    %% Initialization
@@ -79,16 +80,16 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
        if( emergency_counter > emergency_event_trigger && emergency_switch )
            if( emergency_iterator == 1)
                if( ~isempty(PM.particles{1}))
-                   if(abs(PM.particles{1}.GetMean()) <= locality_treshold )
+                   if(abs(PM.particles{1}.GetMean()) <= locality_treshold)
                        %% GP_local_search 
-                       [x_candidate]=GPLocalExploration(PM,BO,PM.particles{1},true);
+                       [x_candidate]=GPLocalExploration(PM,BO,PM.particles{1},true,zooming_switch);
                    else
                        %% GP_global_search
-                       x_candidate = LookForFreeRegion(BO);
+                       x_candidate = GPGlobalExploration(BO,true);
                    end
                else
                    %% GP_global_search
-                   x_candidate = LookForFreeRegion(BO);
+                   x_candidate = GPGlobalExploration(BO,true);
                end
            else
                %% local_search (in emergency mode i have only one particle active
@@ -148,23 +149,26 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
            %% TODEBUG temporarly commented
            %    exploration = false;
            end
-           if(exploration)
-               %% exploration (global action)    
+           %% exploration (global action)
+           if(exploration)       
                % select the new point
                disp('optimization surrogate');
                %% TODEBUG
-               %% whe i get out from emergency i should searhc around the particle to deploy the new particle before exploration
+               %% whe i get out from emergency i should search around the particle to deploy the new particle before exploration
                if(out_of_emergency && alternating_counter == 0)
-                   x_candidate = GPLocalExploration(PM,BO,emergency_particle,false);
+                   %% this is not really usefull because is done around a fixed particle not a living one
+                   %% maybe we should do something like that on moving particles
+                   x_candidate = GPLocalExploration(PM,BO,emergency_particle,false,zooming_switch);
                    % in this way in the next turn i will look for a
                    % solution using the global optimizer
                    alternating_counter = 1;
                else
-                   x_candidate = BO.AcqMax();
-                    % in this way in the next turn i will look for a
+                   x_candidate = GPGlobalExploration(BO,false);
+                   % in this way in the next turn i will look for a
                    % solution using the local optimizer
                    alternating_counter = 0;
                end
+               %% TODEBUG (has to be removed)  
 %                number_init_points = 1;
 %                lb = minAction;
 %                ub = maxAction;
@@ -172,13 +176,13 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                %% end
                emergency_counter = emergency_counter + 1;
                % compute the model
+           %% exploitation (local action)    
            else
-               %% exploitation (local action)
                % if i get into exploitation once i switch off the emergency mode
                emergency_switch = false;
                if(boost_switch && (boost_counter > boost_event_trigger) )
                    disp('boost to debug');
-                   [x_candidate,z] = Boost(PM,BO,particle_iterator);
+                   [x_candidate,z] = GPLocalExploitation(PM,BO,particle_iterator,zooming_switch);
                else   
                    %% particle selector (for now we just iterate through the particle in order)
                    [x_candidate,z] = PM.Sample(particle_iterator);
@@ -223,7 +227,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                        % particle so it time to restart the boost_counter and
                        % restore the former surrogate
                        % restore former surrogate function
-                       BO.SetSurrogate('ecv');
+                       %BO.SetSurrogate('ecv');
                        %restart_boost_counter
                        boost_counter = 1;
                    else
@@ -249,7 +253,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                PM.Plot(x_candidate,[],false,false);
            end
        end
-       %% update gaussian process (i keep updating the gaussian process during the )
+       %% update gaussian process (i keep updating the gaussian process even during the emergency phase)
        disp('update');
        BO.Update(x_candidate, y);
        %% collect data for the visualization
@@ -359,59 +363,38 @@ function [performance, succeeded, data2save ] = TransAction(obj_,actionLearn, cu
 end
 
 
-function [x_candidate,z]=Boost(PM,BO,particle_index)
-
-    %[mu,V_s,tlb,tup] = PM.particles{particle_index}.GetRotTraslBound();
-    [transf,tlb,tub] = PM.GetRotTraslFuncAndBound(particle_index);
-    %sigma = PM.particles{particle_index}.GetSigma();
-    A  = PM.particles{particle_index}.GetCholCov();
-    mu = PM.particles{particle_index}.GetMean();
-    %transf = @(x_)PM.RotoTrasl(x_,mu,V_s);
-    custom_function = @(x_,xi_)BO.eci(transf(x_), xi_);
-    BO.SetSurrogate('custom',custom_function);
-    x_res = BO.AcqMax(tlb,tub);
-    x_candidate = transf(x_res);
-    % i have removed sigma from the equation to avoid explotion in the
-    % covariance of the particle after the boost move
-    %z=( A\(x_candidate - mu')' )/sigma;
-    z =( A\(x_candidate - mu)' );
-    z = z';
-    
-    %% TODEBUG
-    PM.Plot([],particle_index,false,true);
-    
-end
-
-function [x_candidate]=GPLocalExploration(PM,BO,emergency_particle,EM_flag)
+function [x_candidate]=GPLocalExploration(PM,BO,emergency_particle,EM_flag,zooming_switch)
     [mu,V_s,tlb,tub] = emergency_particle.GetRotTraslBound();
     transf = @(x_)emergency_particle.RotoTrasl(x_,mu,V_s);
-    A  = emergency_particle.GetCholCov();
-    mu = emergency_particle.GetMean();
-    %transf = @(x_)PM.RotoTrasl(x_,mu,V_s);
-    if(EM_flag)
+    % insert zooming
+    if(zooming_switch)
+        % for the radius i get 
+        for i=1:size(BO.gp_s)
+             BO.gp_s{i}.ActivateZooming(obj,mu,max(tub))
+        end
+    end
+    if(EM_flag) 
+         % emergency mode (here when im getting closer to the free
+         %region i start to zoom using my gaussian process to be more
+         %effective to find a free point)
          custom_function = @(x_,xi_)BO.pcs_constr(transf(x_));
     else
-         custom_function = @(x_,xi_)BO.eci(transf(x_), xi_);
+         % (here because i came from an emergency mode it means that the
+         % chances that i will find a new point away from the first free
+         % point is low so i have to give a shot around the first point) 
+         custom_function = @(x_,xi_)BO.ecv(transf(x_), xi_);
     end
     BO.SetSurrogate('custom',custom_function);
     x_res = BO.AcqMax(tlb,tub);
     x_candidate = transf(x_res);
-    % i have removed sigma from the equation to avoid explotion in the
-    % covariance of the particle after the boost move
-    %z=( A\(x_candidate - mu')' )/sigma;
-    %z =( A\(x_candidate - mu)' );
-    %z = z';
-    
+    % remove zooming
+    if(zooming_switch)
+        for i=1:size(BO.gp_s)
+             BO.gp_s{i}.DeactivateZooming()
+        end
+    end
     %% TODEBUG
     PM.Plot([],1,false,true);
-end
-
-function [x_res] = LookForFreeRegion(BO)
-    current_kind = BO.kind;
-    %% here im testing different solutions for the discovery of the constrained region
-    BO.SetSurrogate('pcs_constr');
-    x_res = BO.AcqMax();
-    BO.SetSurrogate(current_kind);
 end
 
 function y = ArtificialConstraints(penalties)
@@ -429,3 +412,56 @@ function y = ArtificialConstraints(penalties)
         y = sum(penalties);
     end
 end
+
+function [x_candidate]=GPGlobalExploration(BO,EM_flag)
+if(EM_flag)
+    % emergency mode (here i do not want to explore i want to
+    % get straight to the free region as fast as possible so im gonna use
+    % directly the probability of constraints violation surrogate even if 
+    % im searching on a global scale)
+    BO.SetSurrogate('pcs_constr');
+else 
+    % ordinary mode (here i want to find the free region but 
+    % i want mainly to explore the entire bounding box so i relay on a 
+    % constraints variance surrogate)
+    BO.SetSurrogate('ecv');
+end
+x_candidate = BO.AcqMax();
+end
+
+% in this function i try to accelerate the optimization path of the
+% particle by giving an insight about where is located the local optimal in
+% the area covered by the gaussian distribution of the particle in order to
+% BOOST the search process
+function [x_candidate,z]=GPLocalExploitation(PM,BO,particle_index,zooming_switch)
+    [transf,tlb,tub] = PM.GetRotTraslFuncAndBound(particle_index);
+    A  = PM.particles{particle_index}.GetCholCov();
+    mu = PM.particles{particle_index}.GetMean();
+    % insert zooming
+    if(zooming_switch)
+        % for the radius i get 
+        for i=1:size(BO.gp_s)
+             BO.gp_s{i}.ActivateZooming(obj,mu,max(tub))
+        end
+    end
+    custom_function = @(x_,xi_)BO.eci(transf(x_), xi_);
+    BO.SetSurrogate('custom',custom_function);
+    x_res = BO.AcqMax(tlb,tub);
+    x_candidate = transf(x_res);
+    % i have removed sigma from the equation to avoid explotion in the
+    % covariance of the particle after the boost move
+    %z=( A\(x_candidate - mu')' )/sigma;
+    z =( A\(x_candidate - mu)' );
+    z = z';
+    % remove zooming
+    if(zooming_switch)
+        for i=1:size(BO.gp_s)
+             BO.gp_s{i}.DeactivateZooming()
+        end
+    end
+    %% TODEBUG
+    PM.Plot([],particle_index,false,true);
+    
+end
+
+

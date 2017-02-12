@@ -4,10 +4,13 @@ classdef GPstuff_GP < GaussianProcess.AbstractGP
       X
       Y
       Y_original
-      upper_bound  % they are bound defined on the value of y (the output)
-      lower_bound  % they are bound defined on the value of y (the output)
+      upper_bound   % they are bound defined on the value of y (the output)
+      lower_bound   % they are bound defined on the value of y (the output)
       gp
       normalization % activate normalization
+      zooming       % zooming effect
+      zoom_center   % zooming around
+      zoom_radius   % zooming radius
    end
        
     
@@ -38,9 +41,14 @@ classdef GPstuff_GP < GaussianProcess.AbstractGP
            else
                obj.Y = Y_i;
            end
-           % optimize hyper parameters
-           %% TO DEBUG  commento provvisorio
-           %obj.gp = gp_optim(obj.gp,obj.X,obj.Y);
+           try
+               % optimize hyper parameters
+               options_opt = struct('Algorithm','interior-point','LargeScale','off','GradObj','on');
+               obj.gp = gp_optim(obj.gp,obj.X,obj.Y,'optimf',@fmincon,'opt',options_opt);
+               %obj.gp = gp_optim(obj.gp,obj.X,obj.Y);
+           catch
+                disp('optim falied due to non positve defined gramiam matrix')
+           end
        end
        
        %% TODO understand if it is usefull
@@ -70,7 +78,6 @@ classdef GPstuff_GP < GaussianProcess.AbstractGP
            end
            %% TODEBUG i try to pass a normalize Y only for optimization to see if it makes work the gp better
            % optimize hyper parameters
-          
            try
                options_opt = struct('Algorithm','interior-point','LargeScale','off','GradObj','on');
                obj.gp = gp_optim(obj.gp,obj.X,obj.Y,'optimf',@fmincon,'opt',options_opt);
@@ -86,31 +93,85 @@ classdef GPstuff_GP < GaussianProcess.AbstractGP
            % too slow
            %[ymu, ys2] = gp_pred(obj.gp, obj.X, obj.Y, x_t);
            % faster method working only with gaussian exact 
-           
-           [K, C] = gp_trcov(obj.gp,obj.X);
-           %% doing this modification change the behaviour of the prediction a bit
-           %invC = inv(C);
-           invC = C \ eye(size(C,1)); 
-           %a = C\obj.Y;
-           a = invC * obj.Y;
-           %%
-           Knx = gp_cov(obj.gp,x_t,obj.X);
-           Kn = gp_trvar(obj.gp,x_t);
-           % mean
-           ymu = Knx*a; ymu=ymu(1:size(x_t,1));
-           invCKnxt = invC*Knx';
-           % variance
-           ys2 = Kn - sum(Knx.*invCKnxt',2); 
-           % i need to check for negative variance because it could happens
-           % and the previous approach is less robust to numerical error
-           % i check if the variance are correct than 
-           index = ys2 > 0;
-           if(~prod(index))
-                %% if i obtain a negative variance i want to use the GP_stuff that is slower but more robust
-                %%  TODO extract only the working part from gp_pred
-                %disp('negative variance')
-                [ymu, ys2] = gp_pred(obj.gp, obj.X, obj.Y, x_t);
+           %% zooming procedure for prediction
+           if(obj.zooming)
+               [X_zoom,Y_zoom] = obj.ReducedDataset();
+               reduced_gp = GPstuff_GP();
+               reduced_gp.Init(X_zoom,Y_zoom);
+               [K, C] = gp_trcov(reduced_gp.gp,reduced_gp.X);
+               %% doing this modification change the behaviour of the prediction a bit
+               %invC = inv(C);
+               invC = C \ eye(size(C,1)); 
+               %a = C\obj.Y;
+               a = invC * reduced_gp.Y;
+               %%
+               Knx = gp_cov(reduced_gp.gp,x_t,reduced_gp.X);
+               Kn = gp_trvar(reduced_gp.gp,x_t);
+               % mean
+               ymu = Knx*a; ymu=ymu(1:size(x_t,1));
+               invCKnxt = invC*Knx';
+               % variance
+               ys2 = Kn - sum(Knx.*invCKnxt',2); 
+               % i need to check for negative variance because it could happens
+               % and the previous approach is less robust to numerical error
+               % i check if the variance are correct than 
+               index = ys2 > 0;
+               if(~prod(index))
+                    %% if i obtain a negative variance i want to use the GP_stuff that is slower but more robust
+                    %%  TODO extract only the working part from gp_pred
+                    %disp('negative variance')
+                    [ymu, ys2] = gp_pred(reduced_gp.gp, reduced_gp.X, reduced_gp.Y, x_t);
+               end
+           %% standard prediction               
+           else  
+               [K, C] = gp_trcov(obj.gp,obj.X);
+               %% doing this modification change the behaviour of the prediction a bit
+               %invC = inv(C);
+               invC = C \ eye(size(C,1)); 
+               %a = C\obj.Y;
+               a = invC * obj.Y;
+               %%
+               Knx = gp_cov(obj.gp,x_t,obj.X);
+               Kn = gp_trvar(obj.gp,x_t);
+               % mean
+               ymu = Knx*a; ymu=ymu(1:size(x_t,1));
+               invCKnxt = invC*Knx';
+               % variance
+               ys2 = Kn - sum(Knx.*invCKnxt',2); 
+               % i need to check for negative variance because it could happens
+               % and the previous approach is less robust to numerical error
+               % i check if the variance are correct than 
+               index = ys2 > 0;
+               if(~prod(index))
+                    %% if i obtain a negative variance i want to use the GP_stuff that is slower but more robust
+                    %%  TODO extract only the working part from gp_pred
+                    %disp('negative variance')
+                    [ymu, ys2] = gp_pred(obj.gp, obj.X, obj.Y, x_t);
+               end
            end
+       end
+       
+       function ActivateZooming(obj,zoom_center,zoom_radius)
+           obj.zooming = true;       % zooming effect
+           obj.zoom_center = zoom_center; % zooming around
+           obj.zoom_radius = zoom_radius;  % zooming radius
+       end
+       
+       function DeactivateZooming(obj)
+           obj.zooming = false;       % zooming effect
+           obj.zoom_center = []; % zooming around
+           obj.zoom_radius = [];  % zooming radius
+       end
+       
+       function [X_zoom,Y_zoom] = ReducedDataset(obj)
+           len = length(obj.X_zoom);
+           extend_zoom_center = repmat(obj.zoom_center,len,1);
+           extend_zoom_radius = repmat(obj.zoom_radius,len,1);
+           dist = sqrt(sum((obj.X_zoom - extend_zoom_center).^2),2);
+           ind = dist <= extend_zoom_radius;
+           X_zoom = obj.X(ind);
+           Y_zoom = obj.Y(ind);
+           
        end
        
        function [out]=Normalize(obj,Y)
@@ -157,8 +218,10 @@ classdef GPstuff_GP < GaussianProcess.AbstractGP
            %surf(X1_t,X2_t,s2_mat');  
            contourf(X1_t,X2_t,s2_mat');
        end
-       
+            
    
    end
+   
+  
     
 end
