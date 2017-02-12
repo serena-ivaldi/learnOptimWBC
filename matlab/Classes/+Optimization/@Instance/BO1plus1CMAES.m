@@ -57,16 +57,19 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
 
    %% optimization loop
    %% TODO set all boost variables as algorithm parameters
-   exploration_budget = 0.3; % this a percentage that defines the maximum amount of turn that i can spend for exploration 
+   exploration_budget = 0.9; % this a percentage that defines the maximum amount of turn that i can spend for exploration 
    boost_event_trigger = 6; % this variable determines after how many turn i activate the boost (for turn i mean number of update for the full particles stack) 
    boost_counter = 1;
    particle_iterator = 1;
+   locality_treshold = 20;    % with this threshold i activate the baeysian optimization around the local optimal solution inside emergency mode
    emergency_counter = 1;
    emergency_event_trigger = 5;
    emergency_global_search_trigger = 10; % number of turn to switch from exploration with particle to exploration with 
    emergency_iterator = 1;
    out_of_emergency = false; % with this flag i signal that im out of mergency it means that in general looking for the free region was not easy so whe we explore is better to
                              % search around the emergency_particle;
+                         
+   alternating_counter = 0;  % this is a simple counter to alternate between a broad exploration and a small one when an emergency solution is found                          
    turn_of_exploration = 0;
    turn_of_emergency = 0;
    total_iteration = nIterations;                         
@@ -75,8 +78,18 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
        %% in emergency mode i set the new surrogate inside LookForFreeRegion(BO)  
        if( emergency_counter > emergency_event_trigger && emergency_switch )
            if( emergency_iterator == 1)
-               %% global_search
-               x_candidate = LookForFreeRegion(BO);
+               if( ~isempty(PM.particles{1}))
+                   if(abs(PM.particles{1}.GetMean()) <= locality_treshold )
+                       %% GP_local_search 
+                       [x_candidate]=GPLocalExploration(PM,BO,PM.particles{1},true);
+                   else
+                       %% GP_global_search
+                       x_candidate = LookForFreeRegion(BO);
+                   end
+               else
+                   %% GP_global_search
+                   x_candidate = LookForFreeRegion(BO);
+               end
            else
                %% local_search (in emergency mode i have only one particle active
                [x_candidate,z] = PM.Sample(1);
@@ -138,14 +151,19 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
            if(exploration)
                %% exploration (global action)    
                % select the new point
-               
                disp('optimization surrogate');
                %% TODEBUG
                %% whe i get out from emergency i should searhc around the particle to deploy the new particle before exploration
-               if(out_of_emergency)
-                   x_candidate = BoostAfterEmergency(PM,BO,emergency_particle);
+               if(out_of_emergency && alternating_counter == 0)
+                   x_candidate = GPLocalExploration(PM,BO,emergency_particle,false);
+                   % in this way in the next turn i will look for a
+                   % solution using the global optimizer
+                   alternating_counter = 1;
                else
                    x_candidate = BO.AcqMax();
+                    % in this way in the next turn i will look for a
+                   % solution using the local optimizer
+                   alternating_counter = 0;
                end
 %                number_init_points = 1;
 %                lb = minAction;
@@ -364,13 +382,17 @@ function [x_candidate,z]=Boost(PM,BO,particle_index)
     
 end
 
-function [x_candidate]=BoostAfterEmergency(PM,BO,emergency_particle)
+function [x_candidate]=GPLocalExploration(PM,BO,emergency_particle,EM_flag)
     [mu,V_s,tlb,tub] = emergency_particle.GetRotTraslBound();
     transf = @(x_)emergency_particle.RotoTrasl(x_,mu,V_s);
     A  = emergency_particle.GetCholCov();
     mu = emergency_particle.GetMean();
     %transf = @(x_)PM.RotoTrasl(x_,mu,V_s);
-    custom_function = @(x_,xi_)BO.eci(transf(x_), xi_);
+    if(EM_flag)
+         custom_function = @(x_,xi_)BO.pcs_constr(transf(x_));
+    else
+         custom_function = @(x_,xi_)BO.eci(transf(x_), xi_);
+    end
     BO.SetSurrogate('custom',custom_function);
     x_res = BO.AcqMax(tlb,tub);
     x_candidate = transf(x_res);
@@ -381,7 +403,7 @@ function [x_candidate]=BoostAfterEmergency(PM,BO,emergency_particle)
     %z = z';
     
     %% TODEBUG
-    %PM.Plot([],particle_index,false,true);
+    PM.Plot([],1,false,true);
 end
 
 function [x_res] = LookForFreeRegion(BO)
