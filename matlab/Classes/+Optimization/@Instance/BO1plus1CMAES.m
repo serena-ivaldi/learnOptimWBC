@@ -62,7 +62,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
    boost_event_trigger = 6; % this variable determines after how many turn i activate the boost (for turn i mean number of update for the full particles stack) 
    boost_counter = 1;
    particle_iterator = 1;
-   locality_treshold = 20;    % with this threshold i activate the baeysian optimization around the local optimal solution inside emergency mode
+   locality_treshold = 200;    % with this threshold i activate the baeysian optimization around the local optimal solution inside emergency mode
    emergency_counter = 1;
    emergency_event_trigger = 5;
    emergency_global_search_trigger = 10; % number of turn to switch from exploration with particle to exploration with 
@@ -80,7 +80,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
        if( emergency_counter > emergency_event_trigger && emergency_switch )
            if( emergency_iterator == 1)
                if( ~isempty(PM.particles{1}))
-                   if(abs(PM.particles{1}.GetMean()) <= locality_treshold)
+                   if(abs(PM.particles{1}.GetBestPerfomance()) <= locality_treshold)
                        %% GP_local_search 
                        [x_candidate]=GPLocalExploration(PM,BO,PM.particles{1},true,zooming_switch);
                    else
@@ -193,7 +193,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
            [performances_new succeeded(ii)] = fnForwardModel(obj,x_candidate,1, 1); % compute fitness 
            y = obj.penalty_handling.penalties;
            %% here i compute an artificial function obtained by summing all the constraints violation and clamping to zero 
-           %% all the constraints that are satisfied
+           %% all the constraints if only one constraints is not satisfied
            %y(end + 1)= obj.penalty_handling.feasibility;
            y(end + 1) = ArtificialConstraints(obj.penalty_handling.penalties);
            y(end + 1) = performances_new;
@@ -256,7 +256,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
        %% update gaussian process (i keep updating the gaussian process even during the emergency phase)
        disp('update');
        BO.Update(x_candidate, y);
-       %% collect data for the visualization
+       %% collect data for the visualization (only if i have active particles (why?) )
        if(PM.active_particles > 0)
            for kk = 1:PM.active_particles
                if(PM.particles{kk}.GetBestPerfomance > max_perfomance)
@@ -369,8 +369,8 @@ function [x_candidate]=GPLocalExploration(PM,BO,emergency_particle,EM_flag,zoomi
     % insert zooming
     if(zooming_switch)
         % for the radius i get 
-        for i=1:size(BO.gp_s)
-             BO.gp_s{i}.ActivateZooming(obj,mu,max(tub))
+        for i=1:length(BO.gp_s)
+             BO.gp_s{i}.ActivateZooming(mu,max(tub))
         end
     end
     if(EM_flag) 
@@ -414,19 +414,19 @@ function y = ArtificialConstraints(penalties)
 end
 
 function [x_candidate]=GPGlobalExploration(BO,EM_flag)
-if(EM_flag)
-    % emergency mode (here i do not want to explore i want to
-    % get straight to the free region as fast as possible so im gonna use
-    % directly the probability of constraints violation surrogate even if 
-    % im searching on a global scale)
-    BO.SetSurrogate('pcs_constr');
-else 
-    % ordinary mode (here i want to find the free region but 
-    % i want mainly to explore the entire bounding box so i relay on a 
-    % constraints variance surrogate)
-    BO.SetSurrogate('ecv');
-end
-x_candidate = BO.AcqMax();
+    if(EM_flag)
+        % emergency mode (here i do not want to explore i want to
+        % get straight to the free region as fast as possible so im gonna use
+        % directly the probability of constraints violation surrogate even if 
+        % im searching on a global scale)
+        BO.SetSurrogate('pcs_constr');
+    else 
+        % ordinary mode (here i want to find the free region but 
+        % i want mainly to explore the entire bounding box so i relay on a 
+        % constraints variance surrogate)
+        BO.SetSurrogate('ecv');
+    end
+    x_candidate = BO.AcqMax();
 end
 
 % in this function i try to accelerate the optimization path of the
