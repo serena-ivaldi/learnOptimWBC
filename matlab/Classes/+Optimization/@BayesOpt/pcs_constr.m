@@ -1,6 +1,6 @@
 %% class BO pcs = probability of constraints satisfaction
 % to maximize
-function [ret, x] = pcs_constr(obj,x)
+function [ret, x] = pcs_constr(obj,x,xi)
     siz = size(x);
     len = siz(siz~=obj.dim);
     ret = ones(len,1);

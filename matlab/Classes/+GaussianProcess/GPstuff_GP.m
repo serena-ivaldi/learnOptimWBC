@@ -10,7 +10,8 @@ classdef GPstuff_GP < GaussianProcess.AbstractGP
       normalization % activate normalization
       zooming       % zooming effect
       zoom_center   % zooming around
-      zoom_radius   % zooming radius
+      zoom_radius   % zooming radius     
+      reduced_gp    % reduced_gp for the current zooming
    end
        
     
@@ -94,34 +95,8 @@ classdef GPstuff_GP < GaussianProcess.AbstractGP
            %[ymu, ys2] = gp_pred(obj.gp, obj.X, obj.Y, x_t);
            % faster method working only with gaussian exact 
            %% zooming procedure for prediction
-           if(obj.zooming)
-               [X_zoom,Y_zoom] = obj.ReducedDataset();
-               reduced_gp = GPstuff_GP();
-               reduced_gp.Init(X_zoom,Y_zoom);
-               [K, C] = gp_trcov(reduced_gp.gp,reduced_gp.X);
-               %% doing this modification change the behaviour of the prediction a bit
-               %invC = inv(C);
-               invC = C \ eye(size(C,1)); 
-               %a = C\obj.Y;
-               a = invC * reduced_gp.Y;
-               %%
-               Knx = gp_cov(reduced_gp.gp,x_t,reduced_gp.X);
-               Kn = gp_trvar(reduced_gp.gp,x_t);
-               % mean
-               ymu = Knx*a; ymu=ymu(1:size(x_t,1));
-               invCKnxt = invC*Knx';
-               % variance
-               ys2 = Kn - sum(Knx.*invCKnxt',2); 
-               % i need to check for negative variance because it could happens
-               % and the previous approach is less robust to numerical error
-               % i check if the variance are correct than 
-               index = ys2 > 0;
-               if(~prod(index))
-                    %% if i obtain a negative variance i want to use the GP_stuff that is slower but more robust
-                    %%  TODO extract only the working part from gp_pred
-                    %disp('negative variance')
-                    [ymu, ys2] = gp_pred(reduced_gp.gp, reduced_gp.X, reduced_gp.Y, x_t);
-               end
+           if(obj.zooming)    
+               [ymu, ys2] = obj.reduced_gp.Predict(x_t);
            %% standard prediction               
            else  
                [K, C] = gp_trcov(obj.gp,obj.X);
@@ -153,25 +128,31 @@ classdef GPstuff_GP < GaussianProcess.AbstractGP
        
        function ActivateZooming(obj,zoom_center,zoom_radius)
            obj.zooming = true;       % zooming effect
+           if(iscolumn(zoom_center))
+               zoom_center = zoom_center';
+           end
            obj.zoom_center = zoom_center; % zooming around
            obj.zoom_radius = zoom_radius;  % zooming radius
+           [X_zoom,Y_zoom] = obj.ReducedDataset();
+           obj.reduced_gp = GaussianProcess.GPstuff_GP();
+           obj.reduced_gp.Init(X_zoom,Y_zoom);
        end
        
        function DeactivateZooming(obj)
-           obj.zooming = false;       % zooming effect
+           obj.zooming = false;   % zooming effect
            obj.zoom_center = []; % zooming around
            obj.zoom_radius = [];  % zooming radius
        end
        
        function [X_zoom,Y_zoom] = ReducedDataset(obj)
-           len = length(obj.X_zoom);
+           %% TODO fix this to manage the case with only one point in the dataset X
+           len = length(obj.X);
            extend_zoom_center = repmat(obj.zoom_center,len,1);
            extend_zoom_radius = repmat(obj.zoom_radius,len,1);
-           dist = sqrt(sum((obj.X_zoom - extend_zoom_center).^2),2);
+           dist = sqrt(sum((obj.X - extend_zoom_center).^2,2));
            ind = dist <= extend_zoom_radius;
-           X_zoom = obj.X(ind);
-           Y_zoom = obj.Y(ind);
-           
+           X_zoom = obj.X(ind,:);
+           Y_zoom = obj.Y(ind);      
        end
        
        function [out]=Normalize(obj,Y)

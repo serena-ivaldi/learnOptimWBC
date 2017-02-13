@@ -23,7 +23,7 @@ function [ret, x] = Surrogate(self, x, kappa, xi,varargin)
         end
         if strcmp(self.kind,'ecv')
             self.min_or_max = 'max';
-            [ret, x] =  self.ecv(x);
+            [ret, x] =  self.ecv(x,xi);
             ret = - ret;
         end
 %         if strcmp(self.kind,'ec')
@@ -40,10 +40,14 @@ function [ret, x] = Surrogate(self, x, kappa, xi,varargin)
             [ret, x] = self.ucb_constr(x, kappa);
         end
         if strcmp(self.kind,'pcs_constr')
-            [ret, x] =  self.pcs_constr(x);
+            self.min_or_max = 'max';
+            [ret, x] =  self.pcs_constr(x,xi);
             ret = - ret;
         end
         if strcmp(self.kind,'custom');
+            %% TOFIX this is not true (self.min_or_max = 'max';) all the times 
+            %% it depends on which function im gonna
+            %% combine to obtain a custom
             self.min_or_max = 'max';
             [ret, x] =  varargin{1}(x,xi);
             ret = - ret;

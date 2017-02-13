@@ -64,12 +64,12 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
    particle_iterator = 1;
    locality_treshold = 200;    % with this threshold i activate the baeysian optimization around the local optimal solution inside emergency mode
    emergency_counter = 1;
-   emergency_event_trigger = 5;
-   emergency_global_search_trigger = 10; % number of turn to switch from exploration with particle to exploration with 
+   emergency_event_trigger = 8;
+   emergency_GPGlobalLocal_search_trigger = 10; % number of turn to switch from exploration with particle to exploration with 
    emergency_iterator = 1;
    out_of_emergency = false; % with this flag i signal that im out of mergency it means that in general looking for the free region was not easy so whe we explore is better to
                              % search around the emergency_particle;
-                         
+   % fixed starting value for iterator / counter                      
    alternating_counter = 0;  % this is a simple counter to alternate between a broad exploration and a small one when an emergency solution is found                          
    turn_of_exploration = 0;
    turn_of_emergency = 0;
@@ -83,6 +83,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                    if(abs(PM.particles{1}.GetBestPerfomance()) <= locality_treshold)
                        %% GP_local_search 
                        [x_candidate]=GPLocalExploration(PM,BO,PM.particles{1},true,zooming_switch);
+                       %% TODO when i do local exlploration is better to update the particle instead oc building a new one
                    else
                        %% GP_global_search
                        x_candidate = GPGlobalExploration(BO,true);
@@ -120,12 +121,13 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
        % update the internal iterator
        emergency_iterator = emergency_iterator + 1;
        %% checks section
-       if(emergency_iterator >= emergency_global_search_trigger)
+       if(emergency_iterator >= emergency_GPGlobalLocal_search_trigger)
            emergency_iterator = 1;
        end
        %% TODEBUG temporarly commented
        %% if i reach the free region (- emergency perfomance > 0) i get out from the emergency mode
        if(emergency_perfomance <= 0)
+           % i put emergency swith to false (i have found at least one free point im happy)
            emergency_switch = false;
            PM.particles{1}.ActivateConstraints(); 
            out_of_emergency = true;
@@ -152,7 +154,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
            %% exploration (global action)
            if(exploration)       
                % select the new point
-               disp('optimization surrogate');
+               disp('exploration');
                %% TODEBUG
                %% whe i get out from emergency i should search around the particle to deploy the new particle before exploration
                if(out_of_emergency && alternating_counter == 0)
@@ -161,7 +163,8 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                    x_candidate = GPLocalExploration(PM,BO,emergency_particle,false,zooming_switch);
                    % in this way in the next turn i will look for a
                    % solution using the global optimizer
-                   alternating_counter = 1;
+                   %% TODEBUG (commented only temporarly)
+                   %%alternating_counter = 1;
                else
                    x_candidate = GPGlobalExploration(BO,false);
                    % in this way in the next turn i will look for a
@@ -377,7 +380,7 @@ function [x_candidate]=GPLocalExploration(PM,BO,emergency_particle,EM_flag,zoomi
          % emergency mode (here when im getting closer to the free
          %region i start to zoom using my gaussian process to be more
          %effective to find a free point)
-         custom_function = @(x_,xi_)BO.pcs_constr(transf(x_));
+         custom_function = @(x_,xi)BO.pcs_constr(transf(x_),xi);
     else
          % (here because i came from an emergency mode it means that the
          % chances that i will find a new point away from the first free
@@ -389,7 +392,7 @@ function [x_candidate]=GPLocalExploration(PM,BO,emergency_particle,EM_flag,zoomi
     x_candidate = transf(x_res);
     % remove zooming
     if(zooming_switch)
-        for i=1:size(BO.gp_s)
+        for i=1:length(BO.gp_s)
              BO.gp_s{i}.DeactivateZooming()
         end
     end
@@ -440,7 +443,7 @@ function [x_candidate,z]=GPLocalExploitation(PM,BO,particle_index,zooming_switch
     % insert zooming
     if(zooming_switch)
         % for the radius i get 
-        for i=1:size(BO.gp_s)
+        for i=1:length(BO.gp_s)
              BO.gp_s{i}.ActivateZooming(obj,mu,max(tub))
         end
     end
@@ -455,7 +458,7 @@ function [x_candidate,z]=GPLocalExploitation(PM,BO,particle_index,zooming_switch
     z = z';
     % remove zooming
     if(zooming_switch)
-        for i=1:size(BO.gp_s)
+        for i=1:length(BO.gp_s)
              BO.gp_s{i}.DeactivateZooming()
         end
     end

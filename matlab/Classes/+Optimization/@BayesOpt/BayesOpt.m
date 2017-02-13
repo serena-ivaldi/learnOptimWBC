@@ -372,8 +372,8 @@ classdef BayesOpt < handle
              axis normal ;
              axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
              if(strcmp(self.kind,'custom'))
-                 blank = zeros(size(self.X_vis));
-                 pcolor (self.X_vis,self.Y_vis,blank),shading flat
+                 %blank = zeros(size(self.X_vis));
+                 %pcolor (self.X_vis,self.Y_vis,blank),shading flat
                  pcolor(reshape(x_transf(:,1),100,100),reshape(x_transf(:,2),100,100),reshape(sur,100,100)),shading flat
              else
                  pcolor(self.X_vis,self.Y_vis,reshape(sur,100,100)),shading flat
@@ -464,8 +464,8 @@ classdef BayesOpt < handle
              axis normal ;
              axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
              if(strcmp(kind,'custom'))
-                 blank = zeros(size(self.X_vis));
-                 pcolor (self.X_vis,self.Y_vis,blank),shading flat
+                 %blank = zeros(size(self.X_vis));
+                 %pcolor (self.X_vis,self.Y_vis,blank),shading flat
                  pcolor(reshape(x_transf(:,1),100,100),reshape(x_transf(:,2),100,100),reshape(sur,100,100)),shading flat
              else
                  pcolor(self.X_vis,self.Y_vis,reshape(sur,100,100)),shading flat

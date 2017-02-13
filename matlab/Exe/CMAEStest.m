@@ -300,8 +300,6 @@ for jj=1:number_of_function_2_test
         close all
         
     end
-    
-    
     %% data collected at the end of each test function
     try
         m5 = cell2mat(m5);
