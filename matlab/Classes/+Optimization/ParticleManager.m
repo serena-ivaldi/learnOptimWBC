@@ -44,7 +44,7 @@ classdef ParticleManager < handle
            candidate = obj.particles{particle_index}.GetMean() + obj.particles{particle_index}.GetSigma() *(obj.particles{particle_index}.GetCholCov() * z')';
            %% DEBUG
            if(~isreal(candidate))
-               disp('errore x non reale');
+               disp('error x not real');
            end
            % saturation
            candidate(1, candidate(1,:) > obj.maxAction) = obj.maxAction(candidate(1,:) > obj.maxAction);

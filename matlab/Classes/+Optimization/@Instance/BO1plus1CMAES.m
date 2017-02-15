@@ -4,7 +4,7 @@
 %% adding a global search for optimal solution during the optimization phase that if find a better particle respect of the current best i will add it (here i use eci as surrogate)
 %% TOFIX 
 %% way that i compute the remaining busget at the disposal of the deploy phase
-
+%% side effect su emergency particle fenomeno mai osservato ?????
 
 %% for now the concept of the algortihm is that i start with many particles and then i converge to a (1+1)CMA-ES enhanced with GP
 %% 2 phase plus 1 (deploy ---> optimization and if deploy fails in the first attempts it trigger an emergency phase)
@@ -90,8 +90,8 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
    emergency_iterator = 1;
    out_of_emergency = false;        % with this flag i signal that im out of mergency it means that in general looking for the free region was not easy so whe we explore is better to
                                     % search around the emergency_particle;      
-   % deploy variables                                 
-   deploy_phase_in_progress = true; % with this flag i check if i have already deployed all the particles on the field or not (it substitutes the exploration phase)                         
+   % deploy variables 
+   deploy = true;
    alternating_counter = 0;         % this is a simple counter to alternate between a broad exploration and a small one when an emergency solution is found for deploy the particles                         
    turn_of_deploy = 0;
    total_iteration = nIterations; 
@@ -103,7 +103,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
    for ii = 1:nIterations  
        %% --------------------------------------------------------- Emergency Mode (im not capable of finding a free region with the normal mode)  
        if( emergency_counter > emergency_event_trigger && emergency_switch )
-           %% emergency actions
+           %% EMERGENCY actions
            if( emergency_iterator == 1)
                if( ~isempty(PM.particles{1}))
                    if(abs(PM.particles{1}.GetBestPerfomance()) <= locality_treshold)
@@ -150,14 +150,17 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
        if(emergency_iterator >= emergency_boost_search_trigger)
            emergency_iterator = 1;
        end
-       %% TODEBUG temporarly commented
        %% if i reach the free region (- emergency perfomance > 0) i get out from the emergency mode
        if(emergency_perfomance <= 0)
+           % i save the particle in mergency particle WITHOUT activating
+           % the constraints managements inside the particle
+           emergency_particle = PM.particles{1};
+           % for the first particle i reactivate the constraints
+           PM.particles{1}.ActivateConstraints(); 
            % i put emergency swith to false (i have found at least one free point im happy)
            emergency_switch = false;
-           PM.particles{1}.ActivateConstraints(); 
+           % i signal that im getting out of emergency
            out_of_emergency = true;
-           emergency_particle = PM.particles{1};
            % i update the total number of iteration to update the maximum
            % number of allowed 
            total_iteration = total_iteration - turn_of_emergency;
@@ -169,29 +172,30 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
        %% --------------------------------------------------------- Normal Mode        
        else  
            %% action selector (for now we just saturate the particles list and then we exploit)
-           if( PM.active_particles < lambda && turn_of_deploy < ceil(total_iteration * deploy_particle_budget) && deploy_phase_in_progress)
+           if( PM.active_particles < lambda && turn_of_deploy < ceil(total_iteration * deploy_particle_budget) && deploy)
                deploy = true;
                % with this counter i keep track of the number of deploy turn already spent 
                turn_of_deploy = turn_of_deploy + 1;
            else
-           %% TODEBUG temporarly commented
-           %    deploy = false;
+               % after this deploy is ended and i will never get back there
+               deploy = false;
            end
-           %% deploy actions (global or local action with GP)
+           %% DEPLOY actions (global or local action with GP)
            if(deploy)       
                % select the new point
                disp('deploy particles phase'); % this phase once is completed we will never do that again
-               %% TODEBUG
-               %% whe i get out from emergency i should search around the particle to deploy the new particle before exploration
-               if(out_of_emergency && alternating_counter == 0)
-                   %% it may have sense (we can enlarge the are of reasearch a bit around the emergency particle acting on the the sigma multiplier)
-                   %% maybe we should do something like that on moving particles
-                   x_candidate = GPLocalExploration(PM,BO,emergency_particle,false,zooming_switch);
-                   % in this way in the next turn i will look for a
-                   % solution using the global optimizer
-                   %% TODEBUG (commented only temporarly)
-                   %%alternating_counter = 1;
+               if(out_of_emergency && alternating_counter < 2)            
+                   if(alternating_counter == 0)
+                        %% local action by using GP aorund the emergency particle
+                        x_candidate = GPLocalExploration(PM,BO,emergency_particle,false,zooming_switch);
+                        alternating_counter = 1;
+                   elseif(alternating_counter == 1)
+                        %% local action by evolving the emergency particle 
+                        [x_candidate,z] = emergency_particle.Sample();
+                        alternating_counter = 2;
+                   end
                else
+                   %% gobal action for deploy new particle far away (Default Move)
                    x_candidate = GPGlobalExploration(BO,false,zooming_switch);
                    % in this way in the next turn i will look for a
                    % solution using the local optimizer
@@ -199,7 +203,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                end
                emergency_counter = emergency_counter + 1;
                % compute the model
-           %% optimization actions (GP boost local or global or single particle spin)    
+           %% OPTIMIZATION actions (GP boost local or global or single particle spin)    
            else
                % if i get into exploitation once i switch off the emergency mode
                disp('optimization boost');
@@ -212,26 +216,31 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                    [x_candidate,z] = PM.Sample(particle_iterator);
                end
            end
-           %% execution 
+           %% Execution 
            disp('evaluate offsprings')
            [performances_new succeeded(ii)] = fnForwardModel(obj,x_candidate,1, 1); % compute fitness 
+           emergency_perfomance = ArtificialConstraints(obj.penalty_handling.penalties); % compute emergency perfomance
            y = obj.penalty_handling.penalties;
            %% here i compute an artificial function obtained by summing all the constraints violation and clamping to zero 
            %% all the constraints if only one constraints is not satisfied
-           %y(end + 1)= obj.penalty_handling.feasibility;
-           y(end + 1) = ArtificialConstraints(obj.penalty_handling.penalties);
+           y(end + 1) = emergency_perfomance;
            y(end + 1) = performances_new;
            % constraints check
            constraints = obj.penalty_handling.feasibility_vec(1,:)==-1; % vector of index of the violated constrained
            violated_constrained = find(constraints);
            if(deploy)
-                %% add a new particle (if im deploying and the point satisfy all the constraints)
+                %% Update after running the sample during DEPLOY
                 if(isempty(violated_constrained))
                     disp('added particle')
                     PM.AddParticle(x_candidate,performances_new) 
                 end
+                %% update emergency particle (i ahve to put here alternating_counter==2 because in this way i update the particle after sampling from it)
+                if(alternating_counter == 2)
+                    emergency_particle.Evolve(violated_constrained,z,x_candidate,-(emergency_perfomance) )
+                    % check on emergency particle if it gets to small
+                end
            else
-           %% update particle (if im optimizing)
+           %% Update after running the sample during OPTIMIZATION
                str = sprintf('current particle is %d.',particle_iterator);
                disp(str);
                % evolve selected particle
@@ -274,7 +283,13 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                    PM.Plot(x_candidate,particle_iterator  - 1,true,false);
                end
            else
-               PM.Plot(x_candidate,[],false,false);
+               if(out_of_emergency)
+                   figure
+                   emergency_particle.Plot();
+                   axis normal;
+                   axis([minAction(1,1),maxAction(1,1),minAction(1,2),maxAction(1,2)])
+               end
+               PM.Plot(x_candidate,[],false,false);  
            end
        end
        %% update gaussian process (i keep updating the gaussian process even during the emergency phase)
@@ -390,6 +405,7 @@ end
 function [x_candidate]=GPLocalExploration(PM,BO,emergency_particle,EM_flag,zooming_switch)
     [mu,V_s,tlb,tub] = emergency_particle.GetRotTraslBound();
     transf = @(x_)emergency_particle.RotoTrasl(x_,mu,V_s);
+    transf_for_AcqMax = @(x_)emergency_particle.RotoTraslWithoutSaturation(x_,mu,V_s);
     % insert zooming
     if(zooming_switch)
         % for the radius i get 
@@ -413,7 +429,7 @@ function [x_candidate]=GPLocalExploration(PM,BO,emergency_particle,EM_flag,zoomi
          BO.SetSurrogate('custom',custom_function);
     end
     %% y_res used to debug
-    [x_res,y_res] = BO.AcqMax(tlb,tub);
+    [x_res,y_res] = BO.AcqMax(tlb,tub,transf_for_AcqMax);
     x_candidate = transf(x_res);
     %% TODEBUG
     PM.Plot([],1,false,true);
@@ -460,9 +476,10 @@ end
 % the area covered by the gaussian distribution of the particle in order to
 % BOOST the search process
 function [x_candidate,z]=GPLocalExploitation(PM,BO,particle_index,zooming_switch)
-    [transf,tlb,tub] = PM.GetRotTraslFuncAndBound(particle_index);
+    [mu,V_s,tlb,tub] = PM.GetRotTraslFuncAndBound(particle_index);
     A  = PM.particles{particle_index}.GetCholCov();
-    mu = PM.particles{particle_index}.GetMean();
+    transf = @(x_)emergency_particle.RotoTrasl(x_,mu,V_s);
+    transf_for_AcqMax = @(x_)emergency_particle.RotoTraslWithoutSaturation(x_,mu,V_s);
     % insert zooming
     if(zooming_switch)
         % for the radius i get 
@@ -470,7 +487,7 @@ function [x_candidate,z]=GPLocalExploitation(PM,BO,particle_index,zooming_switch
     end
     custom_function = @(x_,vararg)BO.eci(transf(x_),vararg);
     BO.SetSurrogate('custom',custom_function);
-    x_res = BO.AcqMax(tlb,tub);
+    x_res = BO.AcqMax(tlb,tub,transf_for_AcqMax);
     x_candidate = transf(x_res);
     % i have removed sigma from the equation to avoid explotion in the
     % covariance of the particle after the boost move

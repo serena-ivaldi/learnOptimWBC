@@ -164,7 +164,9 @@ classdef BayesOpt < handle
          % param new_bounds: A dictionary with the parameter name and its new
         %end
         
-       
+        %% varargin(1) 
+        %% varargin(2)
+        %% varargin(3)
         function [x_max, max_acq] = AcqMax(self,varargin)
     
         %     A function to find the maximum of the acquisition function using
@@ -177,7 +179,7 @@ classdef BayesOpt < handle
         %     :return: x_max, The arg max of the acquisition function.
             
             % this modified bound are related to the traslation
-            if length(varargin) == 2
+            if length(varargin) == 3
                 lb = varargin{1};
                 up = varargin{2};
                 %% for visualization only
@@ -205,14 +207,51 @@ classdef BayesOpt < handle
             % procedure is necessary
             n_starting_point = 40;
             
-            extended_lb = repmat(lb,n_starting_point,1);
-            extended_up = repmat(up,n_starting_point,1);
-            % [a,b] -------> (b-a).*rand(n,1) + a;
-            x_0 = (extended_up - extended_lb).*rand([n_starting_point,self.dim]) + extended_lb;
             
+            % [a,b] -------> (b-a).*rand(n,1) + a;
+            %% to do i need to add a check to verify if the bounding box of the local search is all insde the bounding box of the global functions
+            %% in that case i can skip this selection procedure
+            if (length(varargin) == 3)
+                %% for local search
+                % i need to do this to select the point that are 
+                new_n_starting_point = n_starting_point*5;
+                x_0=[];
+                extended_lb = repmat(lb,new_n_starting_point,1);
+                extended_up = repmat(up,new_n_starting_point,1);
+                minaction = repmat(self.bounds(1,:),new_n_starting_point,1);
+                %maxaction = repmat(self.bounds(2,:),new_n_starting_point,1);
+                % i keep adding point till i reach "n_starting_point" points
+                while(length(x_0)<n_starting_point)
+                    x_test = (extended_up - extended_lb).*rand([new_n_starting_point,self.dim]) + extended_lb;
+                    x_test_transf = varargin{3}(x_test);
+                    %% in this index i have all the point that satisfy minaction
+                    index_min = prod( (x_test_transf > minaction),2 );
+                    index_min = find(index_min == 1);
+                    x_test_transf = x_test_transf(index_min,:);
+                    x_test = x_test(index_min,:);
+                    maxaction = repmat(self.bounds(2,:),size(x_test,1),1);
+                    index_max = prod( (x_test_transf < maxaction),2 );
+                    index_max = find(index_max == 1);
+                    x_test = x_test(index_max,:);
+                    % add te good point to the starting point
+                    x_0 = [x_0;x_test];
+                end
+                % remove the point in excess
+%                 cur_len = length(x_0); 
+%                 if(cur_len>n_starting_point)
+%                     excess = cur_len - n_starting_point;
+%                     index = randi(cur_len,excess,1);
+%                     x_0(index,:) = [];
+%                 end
+            else
+                %% for global search
+                extended_lb = repmat(lb,n_starting_point,1);
+                extended_up = repmat(up,n_starting_point,1); 
+                x_0 = (extended_up - extended_lb).*rand([n_starting_point,self.dim]) + extended_lb;
+            end
             
             %% TODO specify the structure of self.surrogate
-            for i = 1:size(x_0,1)
+            for i = 1:n_starting_point
                 % Find the minimum of minus the acquisition function
                fun = @(x_)self.surrogate(self,x_);
                %% TODO Check if the surrogate function have the right sign (i want to maximize but im using a minimization)

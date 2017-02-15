@@ -204,7 +204,7 @@ for jj=1:number_of_function_2_test
     %     disp('problem solved');
     %% CONSTRAINTS
     % number of candidates per generation for cmaes
-    lambda = round(4 + 3 * log(search_space_dimension)); % number of candidates used in cmaes
+    lambda = 6; % number of candidates used as particles (it determines how many local maxima i want to find)
     % to compare the three methods i have to normalize the number of iterations with the
     % number of candidates per generation
     if(strcmp(learn_approach,'CMAES'))

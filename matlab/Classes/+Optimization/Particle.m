@@ -93,6 +93,19 @@ classdef Particle < handle
 %          candidate(1, candidate(1,:) > obj.maxAction) = obj.maxAction(candidate(1,:) > obj.maxAction);
 %          candidate(1, candidate(1,:) < obj.minAction) = obj.minAction(candidate(1,:) < obj.minAction);
 %       end
+
+
+      function [candidate,z] = Sample(obj)
+           z =  mvnrnd(zeros(1, obj.n), eye(obj.n));
+           candidate = obj.GetMean() + obj.GetSigma() *(obj.GetCholCov() * z')';
+           %% DEBUG
+           if(~isreal(candidate))
+               disp('errore x non reale');
+           end
+           % saturation
+           candidate(1, candidate(1,:) > obj.maxAction) = obj.maxAction(candidate(1,:) > obj.maxAction);
+           candidate(1, candidate(1,:) < obj.minAction) = obj.minAction(candidate(1,:) < obj.minAction);
+        end
       
       function Evolve(obj,violated_constrained,z,offsprings,performances_new)
           %if(constraints_active)
@@ -228,6 +241,19 @@ classdef Particle < handle
           ret(ret < minaction) = minaction(ret < minaction);
           ret(ret > maxaction) = maxaction(ret > maxaction);
       end
+      % i use this function in BayesOpt.AcqMax to generate starting point that are
+      % inside the rectangle and inside the boundary of the optimization
+      % problem
+      function ret = RotoTraslWithoutSaturation(obj,x,mu,V_s)
+           % to allow this function to work with multiple input i had to
+          % rearrange a little bit the trasfromation 
+          % basically im doing  ----> ret = mu + R*x   with  R = V_s
+          mu = repmat(mu',size(x,1),1);
+          ret = mu + x*V_s';
+          % saturation 
+         
+      end
+      
       %% visualization functions
       function Plot(obj)
           mu = obj.GetMean()';
