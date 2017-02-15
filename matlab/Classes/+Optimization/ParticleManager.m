@@ -4,7 +4,7 @@ classdef ParticleManager < handle
       particles;  
       old_particles;     % store particles that are dead for some reason 
       lambda;            % maximum number of particles allowed 
-      active_particles;
+      active_particles;  % number of active particles (a number between zero and lambda)
       size_action;  
       n_constraints; 
       maxAction;
@@ -99,6 +99,9 @@ classdef ParticleManager < handle
         
         % remove redudant particles that are heading to the same local maxima / minima 
         % remove particle that got stuck in some minima / maxima
+        %% TOADD in this move i have to add a rule that not kill particle for inaction when they are the best 
+        %% this avoid killing particle that show to be the best of the batch (there is no point to remain wiht one particle that is around some local optima)
+        %% in this way in the end i will be with one particles that is the absoulte best
         function PruneParticles(obj)
             %% closeness (check the distance between candidates and remove the close one)
             for i=1:obj.lambda - 1

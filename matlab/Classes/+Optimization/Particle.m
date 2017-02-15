@@ -146,8 +146,8 @@ classdef Particle < handle
                 obj.performances(obj.current_index + 1) = obj.performances(obj.current_index);                                                                                                               
                 obj.s(obj.current_index + 1,:) = obj.s(obj.current_index,:);                                                                                                                                    % no update s
                 obj.V{obj.current_index + 1} = obj.V{obj.current_index};                                                                                                                                        % no update v
-                if(obj.current_index > 3)   
-                   if(performances_new > obj.performances(obj.current_index - 3)) % perfomance is worse but better than the last fifth predecessor
+                if(obj.current_index > 5)   
+                   if(performances_new > obj.performances(obj.current_index - 5)) % perfomance is worse but better than the last fifth predecessor
                        % A = sqrt(1- c_cov_-)*A + sqrt(1 - c_cov_-)/norm(z)^2(sqrt(1 + (c_cov_- * norm(z)^2)/(1 + c_cov_-)) -1  )*A*z*z^(t)  --->   C = (1 + c_cov_-)*C - c_cov_-*(A*z)*(A*z)^(t)
                        obj.A{obj.current_index + 1} = sqrt(1 + obj.c_cov_minus)*obj.A{ obj.current_index } + ( sqrt(1 + obj.c_cov_minus)/norm(z)^2 )*( sqrt(1 - (obj.c_cov_minus*norm(z)^2)/(1 + obj.c_cov_minus)) - 1 )*obj.A{obj.current_index}*(z'*z); % update A if perf_new>perf(k-5)
                    else
@@ -225,8 +225,6 @@ classdef Particle < handle
           % saturation 
           minaction = repmat(obj.minAction,size(ret,1),1);
           maxaction = repmat(obj.maxAction,size(ret,1),1);
-          %ret(1, ret(1,:) > obj.maxAction) = obj.maxAction(ret(1,:) > obj.maxAction);
-          %ret(1, ret(1,:) < obj.minAction) = obj.minAction(ret(1,:) < obj.minAction);
           ret(ret < minaction) = minaction(ret < minaction);
           ret(ret > maxaction) = maxaction(ret > maxaction);
       end

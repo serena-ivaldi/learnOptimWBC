@@ -1,7 +1,7 @@
 %% class BO
 % ecv expected constrained variance (of the fitness function) 
 % to maximize
-function [ret, x] = ecv(obj,x,xi)
+function [ret, x] = ecv(obj,x)
                 
         %% TODEBUG
 %         if(size(x,1)==1)

@@ -1,6 +1,6 @@
 %% TODO extend the oter surrogate to manage a vectorial input
 %% to minimize
-function [ret, x] = ucb_constr(obj,x, kappa)
+function [ret, x] = ucb_constr(obj,x)
 
         [mean, var] = obj.gp_s{end-1}.Predict(x);
         % i have to add a dimension to mean and variance because summation between 

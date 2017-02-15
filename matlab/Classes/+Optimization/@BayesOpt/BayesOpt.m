@@ -8,6 +8,8 @@ classdef BayesOpt < handle
     
     properties
         surrogate
+        xi                % parameters used inside the surrogate function to balance exploration and exploitation
+        kappa             % parameters used inside the surrogate function to balance exploration and exploitation
         bounds
         dim
         n_of_constraints
@@ -65,10 +67,10 @@ classdef BayesOpt < handle
             % Surrogate placeholder
             self.kind = 'ecv';
             self.SetMinMax();
-            kappa =0.1;
-            xi = 0;
-            self.surrogate = @(self_,x_)Surrogate(self_, x_, kappa, xi);
-
+            self.kappa =0.1;
+            self.xi = 0;
+            self.surrogate = @(self_,x_)Surrogate(self_, x_);
+   
             % PrintLog object
             %self.plog = PrintLog(self.keys)
             %tolerance for equality constraints 
@@ -163,7 +165,7 @@ classdef BayesOpt < handle
         %end
         
        
-        function x_max = AcqMax(self,varargin)
+        function [x_max, max_acq] = AcqMax(self,varargin)
     
         %     A function to find the maximum of the acquisition function using
         %     the 'L-BFGS-B' method.
@@ -232,7 +234,7 @@ classdef BayesOpt < handle
             %% TODO extend clip to different bound per each dimension
             % Clip output to make sure it lies within the bounds. Due to floating
             % point technicalities this is not always the case.
-            clip(x_max, self.bounds(1, :), self.bounds(2, :))
+            clip(x_max, lb, up)
         end
         % here new y is a vector with the all the values [constraints violations,satisfy or not the constraints,fitness]
         function Update(self,new_x, new_y)
@@ -263,51 +265,76 @@ classdef BayesOpt < handle
             end
 
         end
-        function SetMinMax(self)
-            if strcmp(self.kind,'ucb')
-               self.min_or_max = 'max';
+        function SetMinMax(self,varargin)
+            
+            if strcmp(self.kind,'custom');
+                handle_name = func2str(varargin{1});
+                [a,b]=strtok(handle_name,'.');
+                [function_name]=strtok(b,'(');
+                function_name(1) = []; 
+            else
+                function_name = self.kind;
             end
-            if strcmp(self.kind,'ei')
+            
+            % function list name 
+            if strcmp(function_name,'ucb')
                self.min_or_max = 'max';
-            end
-            if strcmp(self.kind,'poi')
+            
+            elseif strcmp(function_name,'ei')
                self.min_or_max = 'max';
-            end
-            if strcmp(self.kind,'eci')
+            
+            elseif strcmp(function_name,'poi')
                self.min_or_max = 'max';
-            end
-            if strcmp(self.kind,'ecv')
+            
+            elseif strcmp(function_name,'eci')
                self.min_or_max = 'max';
-            end
-    %         if strcmp(self.kind,'ec')
+            
+            elseif strcmp(function_name,'ecv')
+               self.min_or_max = 'max';
+            
+    %         if strcmp(function_name,'ec')
     %             [ret, x] =  self.ec(x);
     %             ret = - ret;
     %         end
-    %         if(strcmp(self.kind,'ecm'))
+    %         if(strcmp(function_name,'ecm'))
     %             % no need to invert the sign i have to minize this funcition
     %             [ret, x] =  self.ecm(x);
     %         end
-            if(strcmp(self.kind,'pcs_constr'))
+            elseif(strcmp(function_name,'pcs_constr'))
                self.min_or_max = 'max';
-            end
-            if(strcmp(self.kind,'ucb_constr'))
+            
+            elseif(strcmp(function_name,'ucb_constr'))
                self.min_or_max = 'min';
+            
+            elseif strcmp(function_name,'mcd_constr')
+                self.min_or_max = 'max';
             end
-            if strcmp(self.kind,'custom');
-               self.min_or_max = 'max';
-            end
-
         end
         % use this function to change the surrogate function during the
         % execution from constructor default is 'ecv'
         % kind is a string
+        %% the first vararging is reservef to the function handle for the zooming
         function SetSurrogate(self,kind,varargin)
             %% TODO change this value from outside
-            kappa =0.1;
-            xi = 0;
+            self.kappa =0.1;
+            self.xi = 0;
             self.kind = kind;
-            self.SetMinMax();
-            self.surrogate = @(self_,x_)Surrogate(self_, x_, kappa, xi,varargin{:});
+            self.SetMinMax(varargin{:});
+            self.surrogate = @(self_,x_)Surrogate(self_, x_,varargin{:});
+        end
+        
+        
+        function ZoomingIn(self,mu,tub)
+             % for the radius i get 
+            for i=1:length(self.gp_s)
+                 self.gp_s{i}.ActivateZooming(mu,max(tub))
+            end
+        end
+        
+        function ZoomingOut(self)
+            for i=1:length(self.gp_s)
+                 self.gp_s{i}.DeactivateZooming();
+            end
         end
         
          %% GRAPHIC FUNCTION

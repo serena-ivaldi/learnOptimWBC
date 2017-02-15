@@ -99,30 +99,34 @@ classdef GPstuff_GP < GaussianProcess.AbstractGP
                [ymu, ys2] = obj.reduced_gp.Predict(x_t);
            %% standard prediction               
            else  
-               [K, C] = gp_trcov(obj.gp,obj.X);
-               %% doing this modification change the behaviour of the prediction a bit
-               %invC = inv(C);
-               invC = C \ eye(size(C,1)); 
-               %a = C\obj.Y;
-               a = invC * obj.Y;
-               %%
-               Knx = gp_cov(obj.gp,x_t,obj.X);
-               Kn = gp_trvar(obj.gp,x_t);
-               % mean
-               ymu = Knx*a; ymu=ymu(1:size(x_t,1));
-               invCKnxt = invC*Knx';
-               % variance
-               ys2 = Kn - sum(Knx.*invCKnxt',2); 
-               % i need to check for negative variance because it could happens
-               % and the previous approach is less robust to numerical error
-               % i check if the variance are correct than 
-               index = ys2 > 0;
-               if(~prod(index))
+                 %% TOFIX this way to compute the prediction was giving me solutions so differents from the one 
+                 %% that are computed with gp_pred() function and noy just that. The value that i found they where unreliable in the sense
+                 %% that even a region of space with a lot of point was giving me huge variance or point and it was generating huge mistake in the mean computation too.
+                 %% it is necessary to extrapolate from gp_pred only the working part and remove the rest of the function that is the real reason why this function is soo slow
+%                [K, C] = gp_trcov(obj.gp,obj.X);
+%                %% doing this modification change the behaviour of the prediction a bit
+%                %invC = inv(C);
+%                invC = C \ eye(size(C,1)); 
+%                %a = C\obj.Y;
+%                a = invC * obj.Y;
+%                %%
+%                Knx = gp_cov(obj.gp,x_t,obj.X);
+%                Kn = gp_trvar(obj.gp,x_t);
+%                % mean
+%                ymu = Knx*a; ymu=ymu(1:size(x_t,1));
+%                invCKnxt = invC*Knx';
+%                % variance
+%                ys2 = Kn - sum(Knx.*invCKnxt',2); 
+%                % i need to check for negative variance because it could happens
+%                % and the previous approach is less robust to numerical error
+%                % i check if the variance are correct than 
+%                index = ys2 > 0;
+%                if(~prod(index))
                     %% if i obtain a negative variance i want to use the GP_stuff that is slower but more robust
                     %%  TODO extract only the working part from gp_pred
                     %disp('negative variance')
                     [ymu, ys2] = gp_pred(obj.gp, obj.X, obj.Y, x_t);
-               end
+%               end
            end
        end
        
@@ -142,6 +146,7 @@ classdef GPstuff_GP < GaussianProcess.AbstractGP
            obj.zooming = false;   % zooming effect
            obj.zoom_center = []; % zooming around
            obj.zoom_radius = [];  % zooming radius
+           obj.reduced_gp  = [];
        end
        
        function [X_zoom,Y_zoom] = ReducedDataset(obj)

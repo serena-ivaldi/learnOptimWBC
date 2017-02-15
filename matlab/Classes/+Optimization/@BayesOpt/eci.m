@@ -1,11 +1,11 @@
 %% class BO
 % eci =  expcted constrained improvement 
 % to maximize
-function [ret, x]= eci(obj,x, xi)       
+function [ret, x]= eci(obj,x)       
         % ei computation
         [mean, var] = obj.gp_s{end}.Predict(x);
         y_max = obj.y_max*ones(size(mean));
-        XI = xi*ones(size(mean));
+        XI = obj.xi*ones(size(mean));
         % Avoid points with zero variance
         var = max(var, 1e-9 + 0 * var);
         z = (mean - y_max - XI)./sqrt(var);
