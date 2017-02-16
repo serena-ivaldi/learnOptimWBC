@@ -48,6 +48,10 @@ function [ret, x] = Surrogate(self, x,varargin)
             %self.min_or_max = 'max';
             [ret, x] =  self.mcd_constr(x,varargin{1});
             ret = - ret;
+        elseif strcmp(self.kind,'cucb')
+            %self.min_or_max = 'max';
+            [ret, x] =  self.mcd_constr(x);
+            ret = - ret;    
         
         elseif strcmp(self.kind,'custom');
             %% TOFIX this is not true (self.min_or_max = 'max';) all the times 

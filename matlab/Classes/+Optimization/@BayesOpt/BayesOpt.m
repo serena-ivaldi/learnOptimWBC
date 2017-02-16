@@ -347,6 +347,9 @@ classdef BayesOpt < handle
             
             elseif strcmp(function_name,'mcd_constr')
                 self.min_or_max = 'max';
+                
+            elseif strcmp(function_name,'cucb')
+               self.min_or_max = 'max';
             end
         end
         % use this function to change the surrogate function during the

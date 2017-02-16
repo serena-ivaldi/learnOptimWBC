@@ -33,7 +33,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
 
    n = size(minAction,2);
    %% this is a parameter of the problem (higher more exploration == more local minima founded) TODO move it out
-   lambda = 3; 
+   lambda = 1; 
    n_constraints = obj.penalty_handling.n_constraint;
 
    fnForwardModel = @(obj_,actionLearn_,curr_candidate_,isMean_)TransAction(obj_,actionLearn_,curr_candidate_,isMean_, settings);
@@ -78,17 +78,17 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
    %% because the depends on the number of particles still active in this way this variables became indipendent repsect of the number of particles
     % this variable control after how many turn i run a local search during the optimization phase (is done once for each particles) 
     %(for turn here i mean number of turn per particles(ex: 3 particles 3 turns per particle ---> 3*3 = 9 turns))
-   number_of_times_full_particles_sweep = 3;
+   number_of_times_full_particles_sweep = 2;
    % local boost is going to be updated with the actual number of particle
-   local_boost_event_trigger = lambda*number_of_times_full_particles_sweep;  
+   local_boost_event_trigger = number_of_times_full_particles_sweep;  
    % this variable control after how many turn i run a global search during
    % the optimization phase (here for turn i mean actual turn = one iteration of the code) 
    % this action has to be at a lower frequency than the other so 
-   delay_turn = 10;
+   delay_turn = 2;
    % even this value is subject to update during the exec of the code
    % because depends on local_boost_event_trigger that is going to be
    % updated
-   global_boost_event_trigger = local_boost_event_trigger + delay_turn; 
+   global_boost_event_trigger = local_boost_event_trigger*lambda + delay_turn; 
    % emergency parameters 
    emergency_event_trigger = 8;                % this variables trigger the emergency mode when at the beginning i fail to deploy the particles 
    locality_treshold = 200;                    % with this threshold i activate the GP optimization around the local optimal solution inside emergency mode
@@ -195,7 +195,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
            %% DEPLOY actions (global or local action with GP)
            if(deploy)       
                % select the new point
-               disp('deploy particles phase'); % this phase once is completed we will never do that again
+               disp('deploy'); % this phase once is completed we will never do that again
                if(out_of_emergency && alternating_counter < 2)            
                    if(alternating_counter == 0)
                         %% local action by using GP aorund the emergency particle
@@ -218,14 +218,14 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
            %% OPTIMIZATION actions (GP boost local or global or single particle spin)    
            else
                % if i get into exploitation once i switch off the emergency mode
-               disp('optimization boost');
+               disp('optimization');
                emergency_switch = false;
                if(local_boost_switch && (local_boost_counter > local_boost_event_trigger) )
                    disp('local boost');
                    [x_candidate,z] = GPLocalExploitation(PM,BO,particle_iterator,zooming_switch);
                elseif(global_boost_switch && (global_boost_counter > global_boost_event_trigger))
                    disp('global boost');
-                   [x_candidate,z] = GPGlobalExploitation(PM,BO,particle_iterator,zooming_switch);
+                   [x_candidate,z] = GPGlobalExploitation(BO,zooming_switch);
                else
                    %% particle selector (for now we just iterate through the particle in order)
                    [x_candidate,z] = PM.Sample(particle_iterator);
@@ -234,11 +234,11 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
            %% Execution 
            disp('evaluate offsprings')
            [performances_new succeeded(ii)] = fnForwardModel(obj,x_candidate,1, 1); % compute fitness 
-           emergency_perfomance = ArtificialConstraints(obj.penalty_handling.penalties); % compute emergency perfomance
+           constraints_violation_cost = ArtificialConstraints(obj.penalty_handling.penalties); % compute emergency perfomance
            y = obj.penalty_handling.penalties;
            %% here i compute an artificial function obtained by summing all the constraints violation and clamping to zero 
            %% all the constraints if only one constraints is not satisfied
-           y(end + 1) = emergency_perfomance;
+           y(end + 1) = constraints_violation_cost;
            y(end + 1) = performances_new;
            % constraints check
            constraints = obj.penalty_handling.feasibility_vec(1,:)==-1; % vector of index of the violated constrained
@@ -255,23 +255,29 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                     emergency_particle.Evolve(violated_constrained,z,x_candidate,-(emergency_perfomance) )
                     % check on emergency particle if it gets to small
                 end
-                %% here goes revive particle for the emergency particle
+                %% TODO here goes revive particle for the emergency particle
            else
            %% Update after running the sample during OPTIMIZATION
                str = sprintf('current particle is %d.',particle_iterator);
                disp(str);
-               % evolve selected particle
-               PM.UpdateParticle(particle_iterator,violated_constrained,z,x_candidate,performances_new)
                if(global_boost_counter <= global_boost_event_trigger)
+                   % evolve selected particle
+                   PM.UpdateParticle(particle_iterator,violated_constrained,z,x_candidate,performances_new)
                    % update particle iterator 
                    particle_iterator = particle_iterator + 1;  
+               else
+                   %% TODO introduce best perfomance in PM (and only if the current point is better than best perfomance i create i new particle)
+                   %% and change add.particle in orded to allow a flexible lambda value (i can have more particle than the number fixed at the beginning)
+                   %PM.AddParticle(x_candidate,performances_new)
                end
-               if(particle_iterator > lambda)
-                   % i have complete one sweep of all the particle, restart particle iterator 
+               
+               % if have completed one sweep of all the particles, i will restart
+               % particle iterator (this condition should protect me in case im doing a global )
+               if(particle_iterator > PM.active_particles)
                    particle_iterator = 1;
                    % at the end of each sweep i check if we need to prune some
-                   % particle that has become redundant
-                   if(prune_switch)
+                   % particle that has become redundant (i do the check to remove the particle only if i have more than one particle)
+                   if(prune_switch && PM.active_particles > 1)
                         PM.PruneParticles();
                    end
                    if(local_boost_counter > local_boost_event_trigger)
@@ -282,7 +288,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                        %BO.SetSurrogate('ecv');
                        %restart_boost_counter
                        local_boost_counter = 1;
-                   elseif(global_boost_counter <= global_boost_event_trigger)
+                   else
                        % if im here it means that im still waiting to reach the
                        % next local boost move and im not doing any global boost at the time (i do not count it) 
                        local_boost_counter = local_boost_counter + 1; 
@@ -290,17 +296,16 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                end
                % i update the global boost only when im actually spinning
                % the particles ( i do not count the local boost to advance the global one)
-               if(local_boost_counter <= local_boost_event_trigger && global_boost_counter <= global_boost_event_trigger)
-                    % the global_boost_counter_are_actual_turn
-                   global_boost_counter = global_boost_counter + 1;
-               else
-                   global_boost_counter = 1;
+               %% with the update in this point i loose the last update of the last particle (i lose one turn) but i regain one from the last particle so it should be square
+               if(local_boost_counter <= local_boost_event_trigger ) 
+                   if(global_boost_counter <= global_boost_event_trigger)
+                        % the global_boost_counter_are_actual_turn
+                       global_boost_counter = global_boost_counter + 1;
+                   else
+                       global_boost_counter = 1;
+                   end
                end
-               % update of the threshold for the local and global boost
-               % actions
-               local_boost_event_trigger = PM.active_particles *number_of_times_full_particles_sweep;
-               global_boost_event_trigger = local_boost_event_trigger + delay_turns;
-               %% revive particle goes here
+               %% TODO revive particle goes here
            end
        end    
        %% plot
@@ -508,31 +513,25 @@ end
 % the area covered by the gaussian distribution of the particle in order to
 % BOOST the search process
 function [x_candidate,z]=GPLocalExploitation(PM,BO,particle_index,zooming_switch)
-    [mu,V_s,tlb,tub] = PM.GetRotTraslFuncAndBound(particle_index);
+    [mu,V_s,tlb,tub] = PM.particles{particle_index}.GetRotTraslBound();
     A  = PM.particles{particle_index}.GetCholCov();
-    transf = @(x_)emergency_particle.RotoTrasl(x_,mu,V_s);
-    transf_for_AcqMax = @(x_)emergency_particle.RotoTraslWithoutSaturation(x_,mu,V_s);
+    transf = @(x_)PM.particles{particle_index}.RotoTrasl(x_,mu,V_s);
+    transf_for_AcqMax = @(x_)PM.particles{particle_index}.RotoTraslWithoutSaturation(x_,mu,V_s);
     % insert zooming
     if(zooming_switch)
         % for the radius i get 
         BO.ZoomingIn(mu,tub);
     end
-    custom_function = @(x_,vararg)BO.eci(transf(x_),vararg);
+    custom_function = @(x_)BO.cucb(transf(x_));
     BO.SetSurrogate('custom',custom_function);
     x_res = BO.AcqMax(tlb,tub,transf_for_AcqMax);
     x_candidate = transf(x_res);
     % i have removed sigma from the equation to avoid explotion in the
     % covariance of the particle after the boost move
     %z=( A\(x_candidate - mu')' )/sigma;
-    z =( A\(x_candidate - mu)' );
+    z =( A\(x_candidate - mu')');
     z = z';
     %% TODEBUG i removed it because is better to actively zoom in and out when i need (lazy zooming)
-%     % remove zooming
-%     if(zooming_switch)
-%         for i=1:length(BO.gp_s)
-%              BO.gp_s{i}.DeactivateZooming()
-%         end
-%     end
     %% TODEBUG
     PM.Plot([],particle_index,false,true);
     
@@ -554,5 +553,5 @@ end
 % the inaction plus the volume of the gaussian is getting to small to make
 % it move. so i basically reinflate the gaussian in the hope that if there
 % is something better around the particle im will find it
-function ReviveParticle()
+function ReviveParticle(obj)
 end
