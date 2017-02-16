@@ -12,7 +12,8 @@
 function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = BO1plus1CMAES(obj,settings)
     %% global flags(for the method) 
     visualization = true;      % visualize intermediate result for debug
-    boost_switch = true;      % with this variable i control if the boost is active or not 
+    local_boost_switch = true;      % with this variable i control if the boost is active or not 
+    global_boost_switch = true;
     prune_switch =true;       % with this variable i activate or deactivate the prune move
     emergency_switch =true;    % with this i activate the emerggency behaviour when it is needed
     zooming_switch = true;     % with this switch i control the zooming for the gaussian process itself      
@@ -31,8 +32,8 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
    end
 
    n = size(minAction,2);
-   %% TODO i have to change this and consider it a parameter of the problem (higher more exploration == more local minima founded)
-   lambda = round(4 + 3 * log(n)); 
+   %% this is a parameter of the problem (higher more exploration == more local minima founded) TODO move it out
+   lambda = 3; 
    n_constraints = obj.penalty_handling.n_constraint;
 
    fnForwardModel = @(obj_,actionLearn_,curr_candidate_,isMean_)TransAction(obj_,actionLearn_,curr_candidate_,isMean_, settings);
@@ -75,9 +76,19 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
    % optimization parameters
    %% TOFIX maybe is better to change this parameter in order to take into account the real number of turn they need to wait 
    %% because the depends on the number of particles still active in this way this variables became indipendent repsect of the number of particles
-   local_boost_event_trigger = 6;  % this variable determines after how many turn i activate the boost (for turn i mean number of update for the full particles stack) 
-   global_boost_event_trigger = 6; % this variable control after how many turn i run a global search during the optimization phase (is done once and may add new particle increasing lambda) (for turn i mean number of update for the full particles stack)
-   
+    % this variable control after how many turn i run a local search during the optimization phase (is done once for each particles) 
+    %(for turn here i mean number of turn per particles(ex: 3 particles 3 turns per particle ---> 3*3 = 9 turns))
+   number_of_times_full_particles_sweep = 3;
+   % local boost is going to be updated with the actual number of particle
+   local_boost_event_trigger = lambda*number_of_times_full_particles_sweep;  
+   % this variable control after how many turn i run a global search during
+   % the optimization phase (here for turn i mean actual turn = one iteration of the code) 
+   % this action has to be at a lower frequency than the other so 
+   delay_turn = 10;
+   % even this value is subject to update during the exec of the code
+   % because depends on local_boost_event_trigger that is going to be
+   % updated
+   global_boost_event_trigger = local_boost_event_trigger + delay_turn; 
    % emergency parameters 
    emergency_event_trigger = 8;                % this variables trigger the emergency mode when at the beginning i fail to deploy the particles 
    locality_treshold = 200;                    % with this threshold i activate the GP optimization around the local optimal solution inside emergency mode
@@ -98,6 +109,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
    
    % optimization variables
    local_boost_counter = 1;        % this is the counter that is used to activated a local GP boost exploitation for all the particles still active 
+   global_boost_counter = 1;
    particle_iterator = 1;         % this iterator is used to iterate trough the particle during the optimization phase
    
    for ii = 1:nIterations  
@@ -154,7 +166,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
        if(emergency_perfomance <= 0)
            % i save the particle in mergency particle WITHOUT activating
            % the constraints managements inside the particle
-           emergency_particle = PM.particles{1};
+           emergency_particle = PM.particles{1}.CopyParticle();
            % for the first particle i reactivate the constraints
            PM.particles{1}.ActivateConstraints(); 
            % i put emergency swith to false (i have found at least one free point im happy)
@@ -208,10 +220,13 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                % if i get into exploitation once i switch off the emergency mode
                disp('optimization boost');
                emergency_switch = false;
-               if(boost_switch && (local_boost_counter > boost_event_trigger) )
-                   disp('boost');
+               if(local_boost_switch && (local_boost_counter > local_boost_event_trigger) )
+                   disp('local boost');
                    [x_candidate,z] = GPLocalExploitation(PM,BO,particle_iterator,zooming_switch);
-               else   
+               elseif(global_boost_switch && (global_boost_counter > global_boost_event_trigger))
+                   disp('global boost');
+                   [x_candidate,z] = GPGlobalExploitation(PM,BO,particle_iterator,zooming_switch);
+               else
                    %% particle selector (for now we just iterate through the particle in order)
                    [x_candidate,z] = PM.Sample(particle_iterator);
                end
@@ -228,25 +243,29 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
            % constraints check
            constraints = obj.penalty_handling.feasibility_vec(1,:)==-1; % vector of index of the violated constrained
            violated_constrained = find(constraints);
+           %% Update for DEPLOY
            if(deploy)
-                %% Update after running the sample during DEPLOY
+                % Update after running the sample during DEPLOY
                 if(isempty(violated_constrained))
                     disp('added particle')
                     PM.AddParticle(x_candidate,performances_new) 
                 end
-                %% update emergency particle (i ahve to put here alternating_counter==2 because in this way i update the particle after sampling from it)
+                % Update emergency particle (i ahve to put here alternating_counter==2 because in this way i update the particle after sampling from it)
                 if(alternating_counter == 2)
                     emergency_particle.Evolve(violated_constrained,z,x_candidate,-(emergency_perfomance) )
                     % check on emergency particle if it gets to small
                 end
+                %% here goes revive particle for the emergency particle
            else
            %% Update after running the sample during OPTIMIZATION
                str = sprintf('current particle is %d.',particle_iterator);
                disp(str);
                % evolve selected particle
                PM.UpdateParticle(particle_iterator,violated_constrained,z,x_candidate,performances_new)
-               % update particle iterator 
-               particle_iterator = particle_iterator + 1;  
+               if(global_boost_counter <= global_boost_event_trigger)
+                   % update particle iterator 
+                   particle_iterator = particle_iterator + 1;  
+               end
                if(particle_iterator > lambda)
                    % i have complete one sweep of all the particle, restart particle iterator 
                    particle_iterator = 1;
@@ -255,7 +274,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                    if(prune_switch)
                         PM.PruneParticles();
                    end
-                   if(local_boost_counter > boost_event_trigger)
+                   if(local_boost_counter > local_boost_event_trigger)
                        % if im here it means that i have boosted all the
                        % particle so it time to restart the local_boost_counter and
                        % restore the former surrogate
@@ -263,12 +282,25 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                        %BO.SetSurrogate('ecv');
                        %restart_boost_counter
                        local_boost_counter = 1;
-                   else
+                   elseif(global_boost_counter <= global_boost_event_trigger)
                        % if im here it means that im still waiting to reach the
-                       % next boost move
-                       local_boost_counter = local_boost_counter + 1;
+                       % next local boost move and im not doing any global boost at the time (i do not count it) 
+                       local_boost_counter = local_boost_counter + 1; 
                    end
                end
+               % i update the global boost only when im actually spinning
+               % the particles ( i do not count the local boost to advance the global one)
+               if(local_boost_counter <= local_boost_event_trigger && global_boost_counter <= global_boost_event_trigger)
+                    % the global_boost_counter_are_actual_turn
+                   global_boost_counter = global_boost_counter + 1;
+               else
+                   global_boost_counter = 1;
+               end
+               % update of the threshold for the local and global boost
+               % actions
+               local_boost_event_trigger = PM.active_particles *number_of_times_full_particles_sweep;
+               global_boost_event_trigger = local_boost_event_trigger + delay_turns;
+               %% revive particle goes here
            end
        end    
        %% plot
@@ -507,3 +539,20 @@ function [x_candidate,z]=GPLocalExploitation(PM,BO,particle_index,zooming_switch
 end
 
 
+function [x_candidate]=GPGlobalExploitation(BO,zooming_switch)
+%% remove zooming
+    if(zooming_switch)
+        BO.ZoomingOut();
+    end
+   % with this surrogate i should take into account which is the current
+   % global maximum and see if there are other point in the space that
+   % looks promising
+    BO.SetSurrogate('eci');
+    x_candidate = BO.AcqMax();
+end
+% this is a move that i perform only if i have only one active particle and
+% the inaction plus the volume of the gaussian is getting to small to make
+% it move. so i basically reinflate the gaussian in the hope that if there
+% is something better around the particle im will find it
+function ReviveParticle()
+end

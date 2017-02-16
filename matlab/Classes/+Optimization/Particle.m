@@ -10,7 +10,10 @@ classdef Particle < handle
    properties
       maxAction
       minAction
-      % external parameters (visible from mixture of gaussian)-------------
+      explorationRate
+      nIterations
+      n_constraints
+      % external parameters 
       mean;    % mean vector 
       %C;       % covariance matrix  
       % internal parameters -----------------------------------------------
@@ -39,6 +42,7 @@ classdef Particle < handle
       clr;
       turns_of_inaction; % with turn_of_inaction i count i many turns the particle do not evolve in order to cancel it
       constraints; % this is a swtich that i sue to deactivate or activate constraints. Constraints is TRUE from default
+      ex
    end
             
    methods
@@ -47,6 +51,9 @@ classdef Particle < handle
          obj.maxAction = maxAction;
          obj.minAction = minAction;
          obj.n = size_action;
+         obj.n_constraints = n_constraints;
+         obj.nIterations = nIterations;
+         obj.explorationRate = explorationRate;
          obj.mean = zeros(nIterations, obj.n);                                             % mean vector 
          obj.sigma = zeros(nIterations,1);                                                 % sigma vector
          %obj.C     = cell(nIterations,1);                                                  % C vector 
@@ -207,6 +214,11 @@ classdef Particle < handle
           y = obj.performances(obj.current_index);
       end
       
+      function [V,v] = GetConstraintsRelatedQuantities(obj)
+          V = obj.V{obj.current_index};
+          v = obj.v(obj.current_index,:);
+      end
+      
       function DeactivateConstraints(obj)
           obj.constraints = false;
       end
@@ -214,7 +226,17 @@ classdef Particle < handle
       function ActivateConstraints(obj)
           obj.constraints = true;
       end
-          
+      % i had to introduce this function because somehow if i copy with the
+      % = command the two particle are entagled (very weird behaviour)
+      function new_particle = CopyParticle(obj)
+          new_particle = Optimization.Particle(obj.n,obj.maxAction,obj.minAction,obj.n_constraints,obj.nIterations,obj.explorationRate,obj.GetMean(),obj.GetBestPerfomance(),obj.clr);
+          new_particle.sigma(1,:) = obj.GetSigma();
+          new_particle.A{1} = obj.GetCholCov();
+          [Vi,vi] = obj.GetConstraintsRelatedQuantities();
+          new_particle.v(1,:) = vi;
+          new_particle.V{1} = Vi;
+          new_particle.constraints = obj.constraints;
+      end
       
       function [mu,V_s,tlb,tup] = GetRotTraslBound(obj)
           p = 0.95; 
@@ -251,7 +273,6 @@ classdef Particle < handle
           mu = repmat(mu',size(x,1),1);
           ret = mu + x*V_s';
           % saturation 
-         
       end
       
       %% visualization functions
@@ -327,9 +348,9 @@ classdef Particle < handle
           plot(x_transf(:,1),x_transf(:,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
       end
       
-   end
-   
-   methods(Static)
+  end
+      
+  methods(Static)
        %%%%%%%%%%%%
 
         % CONF2MAHAL - Translates a confidence interval to a Mahalanobis
@@ -385,7 +406,7 @@ classdef Particle < handle
 %             m = m(2) ;
         end
        
-   end
+  end
    
    
    

@@ -1,3 +1,5 @@
+%% TOADD current global maximum among the particle to see if it makes sense to add a new particle with the global exploitation move
+
 classdef ParticleManager < handle
       
     properties
@@ -15,6 +17,7 @@ classdef ParticleManager < handle
       particle_counter   % counter that is used to assign color
       epsilon            % this number identify which is the codition for which the particle are considerer too close
       inaction_limit     % it defines the longest tolerable series of inaction for a particle
+      global_maximum_among_particles % this field is a structure with the current maximum perfomances among all the particles and the index of the particle that holds the best perfomances
     end
     
     methods
