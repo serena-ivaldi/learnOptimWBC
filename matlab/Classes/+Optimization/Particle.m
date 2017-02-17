@@ -130,6 +130,7 @@ classdef Particle < handle
                index = index + 1;
              end
              obj.mean(obj.current_index + 1,:) = obj.mean(obj.current_index,:);                                                                                                                             % no update mean
+             obj.performances(obj.current_index + 1) =  obj.performances(obj.current_index);                                                                                                                % no perfomance update         
              obj.s(obj.current_index + 1,:) = obj.s(obj.current_index,:);                                                                                                                                      % no update s
              value = zeros(size(obj.A{1}));
              index = 1;
@@ -178,10 +179,10 @@ classdef Particle < handle
                 end
                 % no update of mean turn of inaction + 1;
                 obj.turns_of_inaction = obj.turns_of_inaction + 1;
-             end
-             % move current_index one step forward 
-             obj.current_index = obj.current_index + 1;
+             end  
           end
+          % move current_index one step forward 
+          obj.current_index = obj.current_index + 1;
       end
       
       %% set and get work by working on the last value according to current_index
@@ -232,9 +233,10 @@ classdef Particle < handle
           new_particle = Optimization.Particle(obj.n,obj.maxAction,obj.minAction,obj.n_constraints,obj.nIterations,obj.explorationRate,obj.GetMean(),obj.GetBestPerfomance(),obj.clr);
           new_particle.sigma(1,:) = obj.GetSigma();
           new_particle.A{1} = obj.GetCholCov();
-          [Vi,vi] = obj.GetConstraintsRelatedQuantities();
-          new_particle.v(1,:) = vi;
-          new_particle.V{1} = Vi;
+          %% is probably not useful
+          %[Vi,vi] = obj.GetConstraintsRelatedQuantities();
+          %new_particle.v(1,:) = vi;
+          %new_particle.V{1} = Vi;
           new_particle.constraints = obj.constraints;
       end
       

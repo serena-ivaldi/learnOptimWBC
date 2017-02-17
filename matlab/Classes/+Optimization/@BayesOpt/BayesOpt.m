@@ -67,7 +67,7 @@ classdef BayesOpt < handle
             % Surrogate placeholder
             self.kind = 'ecv';
             self.SetMinMax();
-            self.kappa =0.1;
+            self.kappa =0.01;
             self.xi = 0;
             self.surrogate = @(self_,x_)Surrogate(self_, x_);
    
