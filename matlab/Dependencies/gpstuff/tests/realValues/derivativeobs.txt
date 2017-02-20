@@ -1,0 +1,25 @@
+GP model without derivative obs
+Checking gradient ...
+
+   analytic   diffs     delta
+
+    2.2001    2.2001    0.0000
+   -1.0624   -1.0624   -0.0000
+
+ TolFun reached. Func-count 17. Final f(x)=5.67863. Elapsed time 0.12
+GP model with derivative obs
+Checking gradient ...
+
+   analytic   diffs     delta
+
+    3.6684    3.6684    0.0000
+  -10.3567  -10.3567   -0.0000
+    1.1596    1.1596    0.0000
+
+ TolX reached. Func-count 19. Final f(x)=3.15085. Elapsed time 0.17
+
+ gp hyperparameters: 
+ 
+   -1.6957   -0.3805   -4.1351
+
+Demo completed in 0.012 minutes

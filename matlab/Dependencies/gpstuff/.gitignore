@@ -1,0 +1,14 @@
+*~
+*.aux
+*.bbl
+*.blg
+*.toc
+*.tmp
+*.log
+*.nav
+*.snm
+auto
+_region_.*
+\#*\#
+SuiteSparse/
+*.mexa64
