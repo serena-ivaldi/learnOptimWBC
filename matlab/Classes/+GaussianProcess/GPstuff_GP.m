@@ -4,6 +4,10 @@ classdef GPstuff_GP < GaussianProcess.AbstractGP
       X
       Y
       Y_original
+      K             % i store here this variable to speed up the prediction 
+      C             % i store here this variable to speed up the prediction
+      L             % i store here this variable to speed up the prediction
+      a             % i store here this variable to speed up the prediction
       upper_bound   % they are bound defined on the value of y (the output)
       lower_bound   % they are bound defined on the value of y (the output)
       gp
@@ -45,19 +49,20 @@ classdef GPstuff_GP < GaussianProcess.AbstractGP
                obj.Y = Y_i;
            end
            try
-               obj.gp = gp_optim(obj.gp,obj.X,obj.Y,'optimf',@fmincon,'opt',obj.options_opt);
+               obj.Train();
                %obj.gp = gp_optim(obj.gp,obj.X,obj.Y);
            catch
                 disp('optim falied due to non positve defined gramiam matrix')
            end
        end
        
-       %% TODO understand if it is usefull
-       function Train(obj,x_i,y_i)
-           
+       %% i use this function to decouple the moment that acquire a new point from the moment that i update the internal variable for the computation
+       function Train(obj)
+           obj.gp = gp_optim(obj.gp,obj.X,obj.Y,'optimf',@fmincon,'opt',obj.options_opt);
+           obj.UpdateCovariance();
        end
        
-       function Update(obj,x_n,y_n) 
+       function Update(obj,x_n,y_n,train) 
            obj.X(end + 1,:) = x_n;
            % normalization
            if(obj.normalization)
@@ -79,53 +84,67 @@ classdef GPstuff_GP < GaussianProcess.AbstractGP
            end
            %% TODEBUG i try to pass a normalize Y only for optimization to see if it makes work the gp better
            % optimize hyper parameters
-           try
-               obj.gp = gp_optim(obj.gp,obj.X,obj.Y,'optimf',@fmincon,'opt',obj.options_opt);
-               %obj.gp = gp_optim(obj.gp,obj.X,obj.Y);
-           catch
-               disp('optim falied due to non positve defined gramiam matrix')
-               %% TODO introduce a function that restrict the data matrix in order to obtain a kernel matrix positive defined or maybe i can try to restart the kernel parameters
-               %% this is the way to manage the kernel matrix
+           if(train)
+               try
+                   obj.Train();
+                   %obj.gp = gp_optim(obj.gp,obj.X,obj.Y);
+               catch
+                   disp('optim falied due to non positve defined gramiam matrix')
+                   %% TODO introduce a function that restrict the data matrix in order to obtain a kernel matrix positive defined or maybe i can try to restart the kernel parameters
+                   %% this is the way to manage the kernel matrix
+               end
            end
        end
        
-       function [ymu,ys2] = Predict(obj,x_t)
+       function UpdateCovariance(obj)
+           [obj.K,obj.C] = gp_trcov(obj.gp, obj.X); 
+           obj.L = chol(obj.C,'lower');        
+           obj.a = obj.L'\(obj.L\obj.Y);               
+       end
+       
+       function [ymu,ys2] = Predict(obj,xt)
            % too slow
            %[ymu, ys2] = gp_pred(obj.gp, obj.X, obj.Y, x_t);
            % faster method working only with gaussian exact 
            %% zooming procedure for prediction
            if(obj.zooming)    
-               [ymu, ys2] = obj.reduced_gp.Predict(x_t);
+               [ymu, ys2] = obj.reduced_gp.Predict(xt);
            %% standard prediction               
-           else  
-                 %% TOFIX this way to compute the prediction was giving me solutions so differents from the one 
-                 %% that are computed with gp_pred() function and noy just that. The value that i found they where unreliable in the sense
-                 %% that even a region of space with a lot of point was giving me huge variance or point and it was generating huge mistake in the mean computation too.
-                 %% it is necessary to extrapolate from gp_pred only the working part and remove the rest of the function that is the real reason why this function is soo slow
-%                [K, C] = gp_trcov(obj.gp,obj.X);
-%                %% doing this modification change the behaviour of the prediction a bit
-%                %invC = inv(C);
-%                invC = C \ eye(size(C,1)); 
-%                %a = C\obj.Y;
-%                a = invC * obj.Y;
-%                %%
-%                Knx = gp_cov(obj.gp,x_t,obj.X);
-%                Kn = gp_trvar(obj.gp,x_t);
-%                % mean
-%                ymu = Knx*a; ymu=ymu(1:size(x_t,1));
-%                invCKnxt = invC*Knx';
-%                % variance
-%                ys2 = Kn - sum(Knx.*invCKnxt',2); 
-%                % i need to check for negative variance because it could happens
-%                % and the previous approach is less robust to numerical error
-%                % i check if the variance are correct than 
-%                index = ys2 > 0;
-%                if(~prod(index))
-                    %% if i obtain a negative variance i want to use the GP_stuff that is slower but more robust
-                    %%  TODO extract only the working part from gp_pred
-                    %disp('negative variance')
-                    [ymu, ys2] = gp_pred(obj.gp, obj.X, obj.Y, x_t);
-%               end
+           else 
+                % i need this for the visualization otherwise is useless (it let predict do the prediction even if im not explictly train the GP)
+                if(size(obj.L,1)~=size(obj.X,1))
+                    disp('you did not train the GP before fix it!')
+                    obj.UpdateCovariance();
+                end
+                %% TOFIX this way to compute the prediction was giving me solutions so differents from the one 
+                %% that are computed with gp_pred() function and noy just that. The value that i found they where unreliable in the sense
+                %% that even a region of space with a lot of point was giving me huge variance or point and it was generating huge mistake in the mean computation too.
+                %% it is necessary to extrapolate from gp_pred only the working part and remove the rest of the function that is the real reason why this function is soo slow      
+                nxt = size(xt,1); nblock=10000;                  
+                ind = ceil(nxt./nblock);                         
+                ymu = zeros(nxt,1);    % Mean                    
+                ys2 = zeros(nxt,1);    % Variance                
+                for i1=1:ind                                     
+                    % Do the prediction in blocks to save memory
+                    xtind = (i1-1)*nblock+1:min(i1*nblock,nxt);    
+                    xtind2 = xtind;
+                    K_=gp_cov(obj.gp,obj.X,xt(xtind,:),[]);
+                    if ~isempty(K_)            
+                        ymu(xtind2) = K_'*obj.a;   
+                    end                       
+                    V = gp_trvar(obj.gp,xt((i1-1)*nblock+1:min(i1*nblock,nxt),:),[]);    
+                    v = obj.L\K_;                                                         
+                    ys2(xtind2) = V - sum(v'.*v',2);   
+                end
+                index = ys2 > 0;
+                if(~prod(index))
+                    disp('negative variance');
+                end
+                %% if i obtain a negative variance i want to use the GP_stuff that is slower but more robust
+                %%  TODO extract only the working part from gp_pred
+                %disp('negative variance')
+                %[ymu, ys2] = gp_pred(obj.gp, obj.X, obj.Y, xt);
+%               
            end
        end
        

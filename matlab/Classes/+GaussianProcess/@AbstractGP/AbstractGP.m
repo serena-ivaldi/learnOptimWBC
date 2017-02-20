@@ -7,10 +7,10 @@ classdef AbstractGP < handle
        
     
    methods(Abstract = true)
-      Init(X_i,Y_i); 
-      Train(x_i,y_i);
-      Update(x_n,y_n);
-      y_t = Predict(x_t);
+      Init(obj,X_i,Y_i); 
+      Train(obj);
+      Update(obj,x_n,y_n,train);
+      y_t = Predict(obj,x_t);
    end
    
    methods

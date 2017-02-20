@@ -67,11 +67,11 @@ classdef GPML_GP < GaussianProcess.AbstractGP
        end
        
        %% TODO understand if it is usefull
-       function Train(obj,x_i,y_i)
+       function Train(obj)
            
        end
        
-       function Update(obj,x_n,y_n) 
+       function Update(obj,x_n,y_n,train) 
            obj.X(end + 1,:) = x_n;
            % normalization
            if(obj.normalization)

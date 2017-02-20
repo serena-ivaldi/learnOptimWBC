@@ -3,6 +3,7 @@
 % constraints and to the surrogate function.
 %% TODO fix the not psotive define gramiam matrix issue
 %% this object just receive from outside the results of the simulations (fitness and constraints)
+%% this class allows for the "lazy update" of the Internal matrixes and the hyperparameters of the GPs
 classdef BayesOpt < handle
     
     
@@ -275,8 +276,13 @@ classdef BayesOpt < handle
             % point technicalities this is not always the case.
             clip(x_max, lb, up);
         end
+        function TrainGPs(self)
+            for i=1:length(self.gp_s)
+                 self.gp_s{i}.Train();
+            end
+        end
         % here new y is a vector with the all the values [constraints violations,satisfy or not the constraints,fitness]
-        function Update(self,new_x, new_y)
+        function Update(self,new_x, new_y,train)
             % Find unique rows of X to avoid GP from breaking
             X = self.gp_s{1}.X;
             mat_x_new = repmat(new_x,size(X,1),1);
@@ -290,7 +296,7 @@ classdef BayesOpt < handle
             %% on the other side i need to assure that new point are added (adding a little bit of noise for example)
             if(uniqueness)
                 for i=1:length(self.gp_s)     
-                    self.gp_s{i}.Update(new_x,new_y(i));
+                    self.gp_s{i}.Update(new_x,new_y(i),train);
                 end
 
                 %% TODEBUG checking if updating the ymax without checking feasibility is better than update the same 
@@ -392,9 +398,15 @@ classdef BayesOpt < handle
               % compute the value for the surrogate function;
              fun = @(x_)self.surrogate(self,x_);
              if(strcmp(self.kind,'custom'))
+                not_obsolete_surrogate = true; 
                 [X_trasl,Y_trasl] = meshgrid(linspace(self.temporary_lb(1),self.temporary_ub(1),100),linspace(self.temporary_lb(2),self.temporary_ub(2),100)); 
                 xl_trasl = [X_trasl(:) Y_trasl(:)];
-                [sur, x_transf] = fun(xl_trasl);
+                try
+                    [sur, x_transf] = fun(xl_trasl);
+                catch
+                    disp('obsolete surrogate function due to cancellation of particles, i cannot print this function')
+                    not_obsolete_surrogate = false;
+                end
              else    
                 [sur, x_transf] = fun(self.xl_vis);
              end
@@ -435,12 +447,12 @@ classdef BayesOpt < handle
              %l2=plot(xnews(:,1),xnews(:,2), 'ro', 'MarkerSize', 10);
              l3=plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
              
-             % Plot the expected improvement 
-             subplot(img_rows,img_col,2), hold on, title(sprintf('Surrogate function %.2e', max(sur)))
+             % Plot current surrogate function;  
+             subplot(img_rows,img_col,2), hold on, title(sprintf(strcat('Surrogate function kind = ', self.kind)))
              box on
              axis normal ;
              axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
-             if(strcmp(self.kind,'custom'))
+             if(strcmp(self.kind,'custom') && not_obsolete_surrogate)
                  %blank = zeros(size(self.X_vis));
                  %pcolor (self.X_vis,self.Y_vis,blank),shading flat
                  pcolor(reshape(x_transf(:,1),100,100),reshape(x_transf(:,2),100,100),reshape(sur,100,100)),shading flat
@@ -523,16 +535,22 @@ classdef BayesOpt < handle
              SetSurrogate(self,kind,varargin(:));
              fun = @(x_)self.surrogate(self,x_);
              if(strcmp(kind,'custom'))
+                not_obsolete_surrogate = true; 
                 [X_trasl,Y_trasl] = meshgrid(linspace(self.temporary_lb(1),self.temporary_ub(1),100),linspace(self.temporary_lb(2),self.temporary_ub(2),100)); 
                 xl_trasl = [X_trasl(:) Y_trasl(:)];
-                [sur, x_transf] = fun(xl_trasl);
+                try
+                    [sur, x_transf] = fun(xl_trasl);
+                catch
+                    disp('obsolete surrogate function due to cancellation of particles, i cannot print this function');
+                    not_obsolete_surrogate = false;
+                end
              else    
                 [sur, x_transf] = fun(self.xl_vis);
              end
              box on
              axis normal ;
              axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
-             if(strcmp(kind,'custom'))
+             if(strcmp(kind,'custom') && not_obsolete_surrogate)
                  %blank = zeros(size(self.X_vis));
                  %pcolor (self.X_vis,self.Y_vis,blank),shading flat
                  pcolor(reshape(x_transf(:,1),100,100),reshape(x_transf(:,2),100,100),reshape(sur,100,100)),shading flat

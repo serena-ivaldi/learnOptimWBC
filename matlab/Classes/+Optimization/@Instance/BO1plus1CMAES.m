@@ -8,8 +8,8 @@
 %% this object just receive from outside the results of the simulations (fitness and constraints)
 function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = BO1plus1CMAES(obj,settings)
     %% global flags(for the method) 
-    debug = true;
-    visualization = false;      % visualize intermediate result for debug
+    debug = false;
+    visualization = false;           % visualize intermediate result for debug
     local_boost_switch = true;      % with this variable i control if the boost is active or not 
     global_boost_switch = true;
     prune_switch =true;       % with this variable i activate or deactivate the prune move
@@ -385,7 +385,9 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
        if(debug)
            disp('BO update');
        end
-       BO.Update(x_candidate, y);
+       % with this variable i state that i will update the hyperparameter and the covariance matrxi only when i call it explicitly
+       Train = false; 
+       BO.Update(x_candidate, y,Train);
        %% collect data for the visualization (only if i have active particles (why?) )
        if(PM.active_particles > 0)
            if(PM.global_maximum_among_particles.cur_max ~= -inf)
@@ -489,8 +491,11 @@ function [x_candidate]=GPLocalExploration(PM,BO,emergency_particle,EM_flag,zoomi
     transf_for_AcqMax = @(x_)emergency_particle.RotoTraslWithoutSaturation(x_,mu,V_s);
     % insert zooming
     if(zooming_switch)
-        % for the radius i get 
+        %% the Update of hyperparameter and covariance of the GPs is carried out inside the initialization of the reducedGP
         BO.ZoomingIn(mu,tub);
+    else
+        %% Update hyperparameter and covariance of the GPs
+        BO.TrainGPs();
     end
     if(EM_flag) 
          % emergency mode (here when im getting closer to the free
@@ -539,6 +544,8 @@ function [x_candidate]=GPGlobalExploration(BO,EM_flag,zooming_switch)
     if(zooming_switch)
         BO.ZoomingOut();
     end
+    %% Update hyperparameter and covariance of the GPs
+    BO.TrainGPs();
     if(EM_flag)
         % emergency mode (here i do not want to explore i want to
         % get straight to the free region as fast as possible so im gonna use
@@ -565,8 +572,11 @@ function [x_candidate,z]=GPLocalExploitation(PM,BO,particle_index,zooming_switch
     transf_for_AcqMax = @(x_)PM.GetParticle(particle_index).RotoTraslWithoutSaturation(x_,mu,V_s);
     % insert zooming
     if(zooming_switch)
-        % for the radius i get 
+        %% the Update of hyperparameter and covariance of the GPs is carried out inside the initialization of the reducedGP
         BO.ZoomingIn(mu,tub);
+    else
+        %% Update hyperparameter and covariance of the GPs
+        BO.TrainGPs();
     end
     custom_function = @(x_)BO.cucb(transf(x_));
     BO.SetSurrogate('custom',custom_function);
@@ -586,13 +596,15 @@ end
 
 
 function [x_candidate]=GPGlobalExploitation(BO,zooming_switch)
-%% remove zooming
+    %% remove zooming
     if(zooming_switch)
         BO.ZoomingOut();
     end
-   % with this surrogate i should take into account which is the current
-   % global maximum and see if there are other point in the space that
-   % looks promising
+    %% Update hyperparameter and covariance of the GPs
+    BO.TrainGPs();
+    % with this surrogate i should take into account which is the current
+    % global maximum and see if there are other point in the space that
+    % looks promising
     BO.SetSurrogate('eci');
     x_candidate = BO.AcqMax();
 end
