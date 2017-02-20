@@ -16,7 +16,7 @@ classdef ParticleManager < handle
       explorationRate;
       cmap;              % set of color to give to the particle
       particle_counter   % counter that is used to assign color
-      epsilon            % this number identify which is the codition for which the particle are considerer too close
+      epsilon            % this number identify which is the condition in which the particle are considerer too close
       inaction_limit     % it defines the longest tolerable series of inaction for a particle
       global_maximum_among_particles % this field is a structure with the current maximum perfomances among all the particles and the index of the particle that holds the best perfomances
     end
@@ -44,6 +44,7 @@ classdef ParticleManager < handle
            obj.inaction_limit = 10;
            obj.global_maximum_among_particles.cur_max = -inf;
            obj.global_maximum_among_particles.cur_best_particle = 0;
+           obj.global_maximum_among_particles.cur_best_action = zeros(1,size_action);
         end
         
         %% ( i need a conversion from particle 1 to the actual position of the first particle in the particle array)
@@ -64,10 +65,10 @@ classdef ParticleManager < handle
         function UpdateParticle(obj,cur_index,violated_constrained,z,candidate,performances_new,update_max)
             %% index conversion
             particle_index = obj.index_map(cur_index);
-            obj.particles{particle_index}.Evolve(violated_constrained,z,candidate,performances_new)
+            obj.particles{particle_index}.Evolve(violated_constrained,z,candidate,performances_new);
             %% update best solution (only if is the right fitness function)
             if(update_max)
-                obj.UpdateCurrentMax(particle_index)    
+                obj.UpdateCurrentMax(particle_index);    
             end
         end
         
@@ -80,6 +81,7 @@ classdef ParticleManager < handle
             if(obj.particles{index}.GetBestPerfomance()>obj.global_maximum_among_particles.cur_max)
                 obj.global_maximum_among_particles.cur_max = obj.particles{index}.GetBestPerfomance();
                 obj.global_maximum_among_particles.cur_best_particle = index;
+                obj.global_maximum_among_particles.cur_best_action = obj.particles{index}.GetMean();
             end
         end
         %% in this function i made the assumption that index_map is in "ascendind order"
@@ -130,10 +132,10 @@ classdef ParticleManager < handle
                     obj.active_particles = obj.active_particles + 1;
                     added_particle = true;
                     %% update ind_map
-                    obj.UpdateIndMap(i,'add')
+                    obj.UpdateIndMap(i,'add');
                     %% update best solution (only if is the right fitness function)
                     if(update_max)
-                        obj.UpdateCurrentMax(i)    
+                        obj.UpdateCurrentMax(i);    
                     end
                     break;
                 end
@@ -147,10 +149,10 @@ classdef ParticleManager < handle
                  % i have to update lambda on top of 
                  obj.lambda = obj.lambda + 1;
                  %% update ind_map
-                 obj.UpdateIndMap(obj.lambda,'add')
+                 obj.UpdateIndMap(obj.lambda,'add');
                  %% update best solution (only if is the right fitness function)
                  if(update_max)
-                    obj.UpdateCurrentMax(obj.lambda)    
+                    obj.UpdateCurrentMax(obj.lambda);   
                  end
                  
             end
@@ -174,10 +176,10 @@ classdef ParticleManager < handle
             end
             obj.active_particles = cur_num_of_active_particles;
             %% update ind_map
-            obj.UpdateIndMap(index,'add')
+            obj.UpdateIndMap(index,'add');
             %% update best solution (only if is the right fitness function)
             if(update_max)
-               obj.UpdateCurrentMax(index)    
+               obj.UpdateCurrentMax(index);    
             end
         end
         
@@ -185,9 +187,9 @@ classdef ParticleManager < handle
             %% change the status of particle
             obj.particles{index}.status = cause;
             %% update ind_map
-            obj.UpdateIndMap(index,'delete')
+            obj.UpdateIndMap(index,'delete');
             %% store the particle only if is not empty
-            if(~isempty(obj.particles{index}))
+            if(~isempty(obj.particles{index}));
                 obj.old_particles{end + 1} = obj.particles{index};
                 obj.active_particles = obj.active_particles - 1;
                 obj.particles{index} = [];
@@ -203,7 +205,8 @@ classdef ParticleManager < handle
         % in this way in the end i will be with one particles that is the absoulte best
         % there is no need to to manage the empty slot problem here because
         % i iterate through all the slot at the end of a full sweept
-        function PruneParticles(obj)
+        function str = PruneParticles(obj)
+            str = [];
             if(obj.active_particles >1)
                 %% closeness (check the distance between candidates and remove the close one)
                 for i=1:obj.lambda - 1
@@ -215,12 +218,12 @@ classdef ParticleManager < handle
                                 dist = norm(cur_particle_pos-compare_particle_pos);
                                 if(dist<=obj.epsilon)
                                     if(obj.particles{j}.GetBestPerfomance() >= obj.particles{i}.GetBestPerfomance())
-                                        disp('delete because is too close!')
+                                        str ='delete because is too close!';
                                         % im cancelling the current particle that im comparing with the other so i need to stop the inner for
                                         obj.DeleteParticle(i,'closeness');
                                         break;
                                     else
-                                        disp('delete because is too close!')
+                                        str='delete because is too close!';
                                         % i delete the other particle so i keep searching using the current_particle (the one specified by i index)
                                         obj.DeleteParticle(j,'closeness');
                                     end
@@ -234,7 +237,7 @@ classdef ParticleManager < handle
                     if(~isempty(obj.particles{ii}))
                         if(obj.particles{ii}.turns_of_inaction>obj.inaction_limit)
                             if(ii~=obj.global_maximum_among_particles.cur_best_particle)  
-                                disp('delete because is inactive for too long!')
+                                str = 'delete because is inactive for too long!';
                                 obj.DeleteParticle(ii,'inaction');
                             end
                         end

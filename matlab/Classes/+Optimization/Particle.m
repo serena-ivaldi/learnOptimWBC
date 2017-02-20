@@ -124,7 +124,7 @@ classdef Particle < handle
                obj.v(j,:) = (1-obj.c_c)*obj.V{obj.current_index}(j,:) + obj.c_c*(obj.A{obj.current_index}*z')';                                           %only if the constraints is violated udpate exponentially fading record vj 
              end
              obj.V{obj.current_index+1} = obj.v;
-             index = 1;obj.v(j,:)  % to fix no commit without fixing
+             index = 1;obj.v(j,:);  % to fix no commit without fixing
              for j = violated_constrained
                w(index,:) = (obj.A{obj.current_index}^(-1)*obj.v(j,:)')';
                index = index + 1;
@@ -238,6 +238,14 @@ classdef Particle < handle
           %new_particle.v(1,:) = vi;
           %new_particle.V{1} = Vi;
           new_particle.constraints = obj.constraints;
+      end
+      
+      function [L] = GetPrincipalAxes(obj)
+          p = 0.95;
+          C = obj.GetCov();
+          [V_s, D] = eig(C);
+          k = obj.conf2mahal(p, obj.n);
+          L = k * sqrt(abs(diag(D)))*obj.GetSigma();
       end
       
       function [mu,V_s,tlb,tup] = GetRotTraslBound(obj)

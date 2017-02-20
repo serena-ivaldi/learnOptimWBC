@@ -12,6 +12,7 @@ classdef GPstuff_GP < GaussianProcess.AbstractGP
       zoom_center   % zooming around
       zoom_radius   % zooming radius     
       reduced_gp    % reduced_gp for the current zooming
+      options_opt   
    end
        
     
@@ -27,6 +28,7 @@ classdef GPstuff_GP < GaussianProcess.AbstractGP
            %% i try to raise the value of the jitter to avoid the problem of negative eigenvalue in the gramiam matrix
            obj.gp = gp_set('cf', {cfse}, 'lik', lik,'jitterSigma2',1e-6);
            obj.normalization = false;
+           obj.options_opt = struct('Algorithm','interior-point','LargeScale','off','GradObj','on','Display','none');
        end
        
        function Init(obj,X_i,Y_i)
@@ -43,9 +45,7 @@ classdef GPstuff_GP < GaussianProcess.AbstractGP
                obj.Y = Y_i;
            end
            try
-               % optimize hyper parameters
-               options_opt = struct('Algorithm','interior-point','LargeScale','off','GradObj','on');
-               obj.gp = gp_optim(obj.gp,obj.X,obj.Y,'optimf',@fmincon,'opt',options_opt);
+               obj.gp = gp_optim(obj.gp,obj.X,obj.Y,'optimf',@fmincon,'opt',obj.options_opt);
                %obj.gp = gp_optim(obj.gp,obj.X,obj.Y);
            catch
                 disp('optim falied due to non positve defined gramiam matrix')
@@ -80,8 +80,7 @@ classdef GPstuff_GP < GaussianProcess.AbstractGP
            %% TODEBUG i try to pass a normalize Y only for optimization to see if it makes work the gp better
            % optimize hyper parameters
            try
-               options_opt = struct('Algorithm','interior-point','LargeScale','off','GradObj','on');
-               obj.gp = gp_optim(obj.gp,obj.X,obj.Y,'optimf',@fmincon,'opt',options_opt);
+               obj.gp = gp_optim(obj.gp,obj.X,obj.Y,'optimf',@fmincon,'opt',obj.options_opt);
                %obj.gp = gp_optim(obj.gp,obj.X,obj.Y);
            catch
                disp('optim falied due to non positve defined gramiam matrix')

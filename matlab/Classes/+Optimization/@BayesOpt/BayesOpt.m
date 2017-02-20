@@ -273,7 +273,7 @@ classdef BayesOpt < handle
             %% TODO extend clip to different bound per each dimension
             % Clip output to make sure it lies within the bounds. Due to floating
             % point technicalities this is not always the case.
-            clip(x_max, lb, up)
+            clip(x_max, lb, up);
         end
         % here new y is a vector with the all the values [constraints violations,satisfy or not the constraints,fitness]
         function Update(self,new_x, new_y)
