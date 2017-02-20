@@ -13,16 +13,16 @@ fresh_gpstuff  = false;
 p = mfilename('fullpath');
 fullpath = fileparts(p);
 local_rcvtools_path = fullfile('Dependencies','rvctools','startup_rvc.m');
-dep_rcvtools_launcher_path = strcat(fullpath,local_rcvtools_path);
+dep_rcvtools_launcher_path = strcat(fullpath,'/',local_rcvtools_path);
 local_gpstuff_path = fullfile('Dependencies','gpstuff','startup.m');
-dep_gpstuff_launcher_path = strcat(fullpath,local_gpstuff_path);
+dep_gpstuff_launcher_path = strcat(fullpath,'/',local_gpstuff_path);
 
 %% check for robotics toolbox 
 p = path;
 k = strfind(p,'rvctools');
 if(isempty(k))
     if(~fresh_rcvtools)
-      str2func(dep_rcvtools_launcher_path);
+      run(dep_rcvtools_launcher_path);
       disp('robotics toolbox is installed')
     else
         disp('before installing OptWBI toolbox install robotics toolbox 9.10')
@@ -68,7 +68,7 @@ p = path;
 k = strfind(p,'gpstuff');
 if(isempty(k))
    if(~fresh_rcvtools)
-        str2func(dep_gpstuff_launcher_path);
+        run(dep_gpstuff_launcher_path);
         disp('GPstuff toolbox is installed')
     else
         disp('before installing OptWBI toolbox install robotics toolbox 9.10')
