@@ -314,7 +314,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                    %% TODO introduce best perfomance in PM (and only if the current point is better than best perfomance i create i new particle)
                    %% and change add.particle in orded to allow a flexible lambda value (i can have more particle than the number fixed at the beginning)
                    if(isempty(violated_constrained))
-                       if(performances_new > MP.global_maximum_among_particles.cur_max)
+                       if(performances_new > PM.global_maximum_among_particles.cur_max)
                            if(debug)
                                disp('optimization add particle');
                            end
@@ -625,12 +625,13 @@ end
 % the inaction plus the volume of the gaussian is getting to small to make
 % it move. so i basically reinflate the gaussian in the hope that if there
 % is something better around the particle im will find it
+%% TODO change this function in order to keep the direction of the principle axis of the gaussian 
 function str = ReviveParticle(PM)
     str = [];
     cur_particle = PM.GetParticle(1);
     L = cur_particle.GetPrincipalAxes();
     if(max(L)<PM.epsilon)
         str = 'particle reinflated';
-        PM.AddParticleInPosition(cur_particle.GetMean(),cur_particle.GetBestPerfomance(),1,false)
+        PM.AddParticleInPosition(cur_particle.GetMean(),cur_particle.GetBestPerfomance(),PM.index_map(1),false)
     end
 end
