@@ -8,7 +8,7 @@
 %% this object just receive from outside the results of the simulations (fitness and constraints)
 function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = BO1plus1CMAES(obj,settings)
     %% global flags(for the method) 
-    debug = false;
+    debug = true;
     visualization = false;           % visualize intermediate result for debug
     local_boost_switch = true;      % with this variable i control if the boost is active or not 
     global_boost_switch = true;
@@ -83,6 +83,8 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
   
    % fixed starting value for iterator / counter                      
    % emergency variables
+   emergency_particle = [];
+   current_real_fitness_for_emergency_particle = 0; 
    turn_of_emergency = 0;
    emergency_counter = 1;         % this iterator is used to trigger the emergency phase if we do not find any 
    emergency_iterator = 1;
@@ -108,13 +110,13 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
            end
            %% EMERGENCY actions
            if( emergency_iterator == 1)
-               if( ~isempty(PM.particles{1}))
-                   if(abs(PM.particles{1}.GetBestPerfomance()) <= locality_treshold)
+               if( ~isempty(emergency_particle))
+                   if(abs(emergency_particle.GetBestPerfomance()) <= locality_treshold)
                        %% GP_local_search 
                        if(debug)
                            disp('emergency GP local search')
                        end
-                       [x_candidate]=GPLocalExploration(PM,BO,PM.particles{1},true,zooming_switch,visualization);
+                       [x_candidate]=GPLocalExploration(PM,BO,emergency_particle,true,zooming_switch,visualization);
                        %% TODO when i do local exlploration is better to update the particle instead oc building a new one
                    else
                        %% GP_global_search
@@ -126,8 +128,8 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                else
                    %% GP_global_search
                    if(debug)
-                           disp('emergency GP global search')
-                       end
+                       disp('emergency GP global search')
+                   end
                    x_candidate = GPGlobalExploration(BO,true,zooming_switch);
                end
            else
@@ -135,7 +137,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                if(debug)
                    disp('emergency particle sample')
                end
-               [x_candidate,z] = PM.Sample(1);
+               [x_candidate,z] = emergency_particle.Sample();
            end
            %% check the candidate
            [performances_new succeeded(ii)] = fnForwardModel(obj,x_candidate,1, 1); % compute fitness 
@@ -148,16 +150,29 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
            turn_of_emergency = turn_of_emergency + 1;
            %% update section
            if(emergency_iterator == 1)
-               % check if the global search has produced a better solution
-               % than the particle or the particle vector is empty
-               if(PM.active_particles == 0 || -emergency_perfomance > PM.particles{1}.GetBestPerfomance())
-                   PM.AddParticleInPosition(x_candidate,-emergency_perfomance,1,false);
-                   PM.particles{1}.DeactivateConstraints();
+               % check if the GP global search or the GP local search has produced a better solution
+               % or the emergency particle is empty. in both case i replace
+               % the particle 
+               if(isempty(emergency_particle) || -emergency_perfomance > emergency_particle.GetBestPerfomance())
+                   % create new emergency_particle
+                   emergency_particle = Optimization.Particle(PM.size_action,PM.maxAction,PM.minAction,PM.n_constraints,PM.nIterations,...
+                                                             PM.explorationRate,x_candidate,-emergency_perfomance,[]);
+                   emergency_particle.DeactivateConstraints();
+                   % update current real fitness value
+                   current_real_fitness_for_emergency_particle = performances_new;
+                   
                end    
            else
+               % here i update the
+               % current_real_fitness_for_emergency_particle only if the
+               % particle move and it happens only when particle fitness
+               % get better (in this case the fitness im talking about is the constraint violation fitness)
+               if(-emergency_perfomance > emergency_particle.GetBestPerfomance())
+                   current_real_fitness_for_emergency_particle = performances_new;
+               end
                % i have to pass - emergency_perfomance because the
                % particle maximize and the constraints has to be minimized
-               PM.UpdateParticle(1,violated_constrained,z,x_candidate, -(emergency_perfomance), false);
+               emergency_particle.Evolve(violated_constrained,z,x_candidate,-(emergency_perfomance));
            end
        % update the internal iterator
        emergency_iterator = emergency_iterator + 1;
@@ -170,12 +185,10 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
            if(debug)
                disp('out of emergency');
            end
-           % i save the particle in mergency particle WITHOUT activating
-           % the constraints managements inside the particle
-           emergency_particle = PM.particles{1}.CopyParticle();
-           % for the first particle i reactivate the constraints
-           PM.particles{1}.ActivateConstraints(); 
-           % i put emergency swith to false (i have found at least one free point im happy)
+           % i create from emergency particle the first PM particle that i
+           % will use in the optimization process
+           PM.AddParticleInPosition(emergency_particle.GetMean(),current_real_fitness_for_emergency_particle,1,true);
+           % i put emergency swith to false (i have found at least one free point, im happy)
            emergency_switch = false;
            % i signal that im getting out of emergency
            out_of_emergency = true;
