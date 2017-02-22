@@ -13,7 +13,7 @@ function CMAEStest
     learn_approach = 'BO(1+1)CMAES'; %CMAES (1+1)CMAES  CEM   BO  BO(1+1)CMAES fmincon     with (1+1)CMAES and BO(1+1)CMAES i have to use nopenalty
     method_to_use = 'nopenalty';  % adaptive , vanilla ,empty,fmincon, nopenalty
 
-    repetition_of_the_experiment = 3; % at least 2
+    repetition_of_the_experiment = 10; % at least 2
     threshold = 2.5; % value to identify the beginning of steady state
     % the threshold is express in %, means +/- 2,5% from the steady value
 

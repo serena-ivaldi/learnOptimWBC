@@ -43,7 +43,7 @@ classdef ParticleManager < handle
            % before deletion 
            %% TODO define it as a parameter of the method
            obj.inaction_limit = 20;
-           obj.local_GP_reboot_threshold = 3;
+           obj.local_GP_reboot_threshold = 2; % (is not gonna harm the computation a small value)
            obj.global_maximum_among_particles.cur_max = -inf;
            obj.global_maximum_among_particles.cur_best_particle = 0;
            obj.global_maximum_among_particles.cur_best_action = zeros(1,size_action);
@@ -211,8 +211,21 @@ classdef ParticleManager < handle
         function cur_max = GetCurrentLocalMax(obj,particle_index)
             cur_particle = obj.GetParticle(particle_index);
             if(cur_particle.turn_of_not_improve_with_localGPboost > obj.local_GP_reboot_threshold)
-                % here i get the worst perfomances for the current particle
-                cur_max = cur_particle.GetWorstPerfomance();
+                if(cur_particle.GetWorstPerfomance() == cur_particle.GetBestPerfomance())
+                    % 100 is a magic number and means that im penalizing
+                    % the current value in order to broaden the non zero
+                    % point in the search area around the mean of the
+                    % particle
+                    if(cur_particle.GetWorstPerfomance()>0)
+                        cur_max = 0 - 100*floor(cur_particle.turn_of_not_improve_with_localGPboost/obj.local_GP_reboot_threshold);
+                    else
+                        cur_max = cur_particle.GetWorstPerfomance()-100*floor(cur_particle.turn_of_not_improve_with_localGPboost/obj.local_GP_reboot_threshold);
+                    end
+                    
+                else
+                    % here i get the worst perfomances for the current particle
+                    cur_max = cur_particle.GetWorstPerfomance();
+                end
             else
                 cur_max = cur_particle.GetBestPerfomance();
             end

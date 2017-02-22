@@ -92,7 +92,7 @@ classdef Particle < handle
          obj.status = 'active';
          obj.clr = color;
          obj.turns_of_inaction = 0;
-         obj.turn_of_not_improvment_with_localGPboost = 0;
+         obj.turn_of_not_improve_with_localGPboost = 0;
          obj.constraints = true;
       end
    

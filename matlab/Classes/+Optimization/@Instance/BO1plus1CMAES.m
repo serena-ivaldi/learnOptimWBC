@@ -9,7 +9,7 @@
 function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = BO1plus1CMAES(obj,settings)
     %% global flags(for the method) 
     debug = true;
-    visualization = true;           % visualize intermediate result for debug
+    visualization = false;           % visualize intermediate result for debug
     local_boost_switch = true;      % with this variable i control if the boost is active or not 
     global_boost_switch = true;
     prune_switch =true;       % with this variable i activate or deactivate the prune move
