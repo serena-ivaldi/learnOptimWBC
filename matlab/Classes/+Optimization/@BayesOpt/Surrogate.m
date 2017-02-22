@@ -18,7 +18,7 @@ function [ret, x] = Surrogate(self, x,varargin)
         
         elseif strcmp(self.kind,'eci')
             %self.min_or_max = 'max';
-            [ret, x] =  self.eci(x);
+            [ret, x] =  self.eci(x,varargin{1});
             ret = - ret;
         
         elseif strcmp(self.kind,'ecv')

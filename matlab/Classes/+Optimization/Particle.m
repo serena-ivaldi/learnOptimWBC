@@ -41,6 +41,7 @@ classdef Particle < handle
       status;        % active, candidate attained, merged
       clr;
       turns_of_inaction; % with turn_of_inaction i count i many turns the particle do not evolve in order to cancel it
+      turn_of_not_improve_with_localGPboost;   % with this variable i count the number of turn that local boost is not effective 
       constraints; % this is a swtich that i sue to deactivate or activate constraints. Constraints is TRUE from default
       ex
    end
@@ -91,6 +92,7 @@ classdef Particle < handle
          obj.status = 'active';
          obj.clr = color;
          obj.turns_of_inaction = 0;
+         obj.turn_of_not_improvment_with_localGPboost = 0;
          obj.constraints = true;
       end
    
@@ -211,6 +213,15 @@ classdef Particle < handle
       function sigma = GetSigma(obj)
           sigma = obj.sigma(obj.current_index);
       end
+      
+      function sigmamult = GetSigmaMultiplier(obj)
+          sigmamult = obj.sigma_multiplier;
+      end
+      
+      function y = GetWorstPerfomance(obj)
+          y = obj.performances(1);
+      end
+      
       function y = GetBestPerfomance(obj)
           y = obj.performances(obj.current_index);
       end
@@ -227,6 +238,17 @@ classdef Particle < handle
       function ActivateConstraints(obj)
           obj.constraints = true;
       end
+      
+      % if local GP boost not increment the particle do plus one
+      % i have to signal when im in local
+      function UpdateCounterLocalGPBoost(obj)
+          if(obj.performances(obj.current_index)>obj.performances(obj.current_index - 1))
+              obj.turn_of_not_improve_with_localGPboost = 0;
+          else
+               obj.turn_of_not_improve_with_localGPboost = obj.turn_of_not_improve_with_localGPboost + 1;
+          end
+      end
+      
       % i had to introduce this function because somehow if i copy with the
       % = command the two particle are entagled (very weird behaviour)
       function new_particle = CopyParticle(obj)

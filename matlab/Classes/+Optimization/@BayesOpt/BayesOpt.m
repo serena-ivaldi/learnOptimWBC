@@ -34,6 +34,8 @@ classdef BayesOpt < handle
         min_or_max
         temporary_lb
         temporary_ub
+        local_sampling_distribution % with this variable i specify if the distribution to sample the initial point to optimize when i do the local GP 
+        d_par      % distribution parameter for local sampling of the starting point in the optimization: in this struct i store all the parameter that i need to compute the disitribution at the current iteration
     end
     
     methods
@@ -114,7 +116,9 @@ classdef BayesOpt < handle
             % optimization ooptions for the surrogate function 
             %self.options_opt = optimoptions('fmincon','Algorithm','interior-point','Display','none','TolFun',1e-9,'TolX',1e-6);
             self.options_opt = optimoptions('fmincon','GradObj','off','Algorithm','interior-point','TolFun',1e-9,'TolX',1e-6,'Display','none');
-            
+            % defautl for now is gaussian
+            self.local_sampling_distribution = 'gaussian';
+            self.d_par = [];
         end
         
         function Init(self, x_init,y_init)
@@ -182,13 +186,13 @@ classdef BayesOpt < handle
             % this modified bound are related to the traslation
             if length(varargin) == 3
                 lb = varargin{1};
-                up = varargin{2};
+                ub = varargin{2};
                 %% for visualization only
                 self.temporary_lb = varargin{1};
                 self.temporary_ub = varargin{2};
             else
                 lb = self.bounds(1,:);
-                up = self.bounds(2,:);
+                ub = self.bounds(2,:);
             end
 
             % Start with the lower bound as the argmax
@@ -217,13 +221,18 @@ classdef BayesOpt < handle
                 % i need to do this to select the point that are 
                 new_n_starting_point = n_starting_point*5;
                 x_0=[];
+                %% equiprobable distribution
                 extended_lb = repmat(lb,new_n_starting_point,1);
-                extended_up = repmat(up,new_n_starting_point,1);
+                extended_ub = repmat(ub,new_n_starting_point,1);
                 minaction = repmat(self.bounds(1,:),new_n_starting_point,1);
                 %maxaction = repmat(self.bounds(2,:),new_n_starting_point,1);
                 % i keep adding point till i reach "n_starting_point" points
                 while(length(x_0)<n_starting_point)
-                    x_test = (extended_up - extended_lb).*rand([new_n_starting_point,self.dim]) + extended_lb;
+                    if(strcmp(self.local_sampling_distribution,'equiprobable'))
+                        x_test = self.EquiprobableDistribution(new_n_starting_point,extended_lb,extended_ub);
+                    elseif(strcmp(self.local_sampling_distribution,'gaussian'))
+                        x_test = self.GaussianDistribution(new_n_starting_point);
+                    end
                     x_test_transf = varargin{3}(x_test);
                     %% in this index i have all the point that satisfy minaction
                     index_min = prod( (x_test_transf > minaction),2 );
@@ -245,10 +254,10 @@ classdef BayesOpt < handle
 %                     x_0(index,:) = [];
 %                 end
             else
-                %% for global search
+                %% for global search (here i only use equirobable distribution to sample starting point)
                 extended_lb = repmat(lb,n_starting_point,1);
-                extended_up = repmat(up,n_starting_point,1); 
-                x_0 = (extended_up - extended_lb).*rand([n_starting_point,self.dim]) + extended_lb;
+                extended_ub = repmat(ub,n_starting_point,1); 
+                x_0 = (extended_ub - extended_lb).*rand([n_starting_point,self.dim]) + extended_lb;
             end
             
             %% TODO specify the structure of self.surrogate
@@ -256,7 +265,7 @@ classdef BayesOpt < handle
                 % Find the minimum of minus the acquisition function
                fun = @(x_)self.surrogate(self,x_);
                %% TODO Check if the surrogate function have the right sign (i want to maximize but im using a minimization)
-               [x,fval] = fmincon(fun,x_0(i,:),[],[],[],[],lb,up,[],self.options_opt);
+               [x,fval] = fmincon(fun,x_0(i,:),[],[],[],[],lb,ub,[],self.options_opt);
                % Store it if better than previous minimum(maximum).
                if(strcmp(self.min_or_max,'max'))
                    if (-fval >= max_acq)
@@ -274,8 +283,9 @@ classdef BayesOpt < handle
             %% TODO extend clip to different bound per each dimension
             % Clip output to make sure it lies within the bounds. Due to floating
             % point technicalities this is not always the case.
-            clip(x_max, lb, up);
+            clip(x_max, lb, ub);
         end
+        
         function TrainGPs(self)
             for i=1:length(self.gp_s)
                  self.gp_s{i}.Train();
@@ -309,7 +319,8 @@ classdef BayesOpt < handle
                 %end
             end
 
-        end
+        end     
+        
         function SetMinMax(self,varargin)
             
             if strcmp(self.kind,'custom');
@@ -361,7 +372,7 @@ classdef BayesOpt < handle
         % use this function to change the surrogate function during the
         % execution from constructor default is 'ecv'
         % kind is a string
-        %% the first vararging is reservef to the function handle for the zooming
+        %% for kind = custom the first vararging is reservef to the function handle for the zooming
         function SetSurrogate(self,kind,varargin)
             %% TODO change this value from outside
             self.kappa =0.1;
@@ -385,6 +396,50 @@ classdef BayesOpt < handle
             end
         end
         
+        function SetSampleDistribution(self,distr)
+            self.local_sampling_distribution = distr;
+        end
+        
+        %% TODO this section has to be organized in a proper way now is quite crappy!
+        function SetSampleDistributionParam(self,varargin)
+            if(strcmp(self.local_sampling_distribution,'equiprobable'))
+                %self.d_par.lb = varargin{1};
+                %self.d_par.ub = varargin{2};
+            elseif(strcmp(self.local_sampling_distribution,'gaussian'))
+                self.d_par.A = varargin{1};      % this is the cholesky factor of the covariance matrix 
+                self.d_par.mean = varargin{2};
+                self.d_par.sigma = varargin{3};
+                self.d_par.sigma_multiplier = varargin{4};
+                self.d_par.lb = varargin{5};
+                self.d_par.ub = varargin{6};
+            end
+        end
+        
+        %% distribution to sample starting point for local GP optimization
+        %% TODO i should put all the disitribution togheter in one function
+        function x = EquiprobableDistribution(self,n_points,lb,ub)
+            x = (ub - lb).*rand([n_points,self.dim]) + lb;
+        end
+        
+        function x = GaussianDistribution(self,n_points)
+            x = zeros(n_points,self.dim);
+            % i set the mean at zero if the value is empty
+            if(isempty(self.d_par.mean))
+                self.d_par.mean = zeros(1,self.dim);
+            end
+            for i=1:n_points
+               z =  mvnrnd(zeros(1, self.dim), eye(self.dim));
+               candidate = self.d_par.mean + self.d_par.sigma * self.d_par.sigma_multiplier *(self.d_par.A * z')';
+               %% DEBUG
+               if(~isreal(candidate))
+                   disp('errore x non reale');
+               end
+               % saturation
+               candidate(1, candidate(1,:) > self.d_par.ub) = self.d_par.ub(candidate(1,:) > self.d_par.ub);
+               candidate(1, candidate(1,:) < self.d_par.lb) = self.d_par.lb(candidate(1,:) < self.d_par.lb);
+               x(i,:) = candidate;
+            end
+        end
          %% GRAPHIC FUNCTION
 
  
@@ -457,7 +512,7 @@ classdef BayesOpt < handle
                  %pcolor (self.X_vis,self.Y_vis,blank),shading flat
                  pcolor(reshape(x_transf(:,1),100,100),reshape(x_transf(:,2),100,100),reshape(sur,100,100)),shading flat
              else
-                 pcolor(self.X_vis,self.Y_vis,reshape(sur,100,100)),shading flat
+%                 pcolor(self.X_vis,self.Y_vis,reshape(sur,100,100)),shading flat
              end
              
              %plot(xnews(:,1),xnews(:,2), 'ro', 'MarkerSize', 10);
@@ -551,11 +606,10 @@ classdef BayesOpt < handle
              axis normal ;
              axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
              if(strcmp(kind,'custom') && not_obsolete_surrogate)
-                 %blank = zeros(size(self.X_vis));
-                 %pcolor (self.X_vis,self.Y_vis,blank),shading flat
                  pcolor(reshape(x_transf(:,1),100,100),reshape(x_transf(:,2),100,100),reshape(sur,100,100)),shading flat
              else
-                 pcolor(self.X_vis,self.Y_vis,reshape(sur,100,100)),shading flat
+                 disp('i cannot print the particle')
+                 %pcolor(self.X_vis,self.Y_vis,reshape(sur,100,100)),shading flat
              end
              % set back the old surrogate
              self.surrogate = cur_surrogate;

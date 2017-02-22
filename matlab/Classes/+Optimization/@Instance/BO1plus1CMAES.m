@@ -4,12 +4,12 @@
 
 
 %% for now the concept of the algortihm is that i start with many particles and then i converge to a (1+1)CMA-ES enhanced with GP
-%% 2 phase plus 1 (deploy ---> optimization and if deploy fails in the first attempts it trigger an emergency phase)
+%% 2 phase plus 1 (deploy ---> optimization and if deploy fails (do not complete the deploy) in the first attempts it trigger an emergency phase to accelerate the process)
 %% this object just receive from outside the results of the simulations (fitness and constraints)
 function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = BO1plus1CMAES(obj,settings)
     %% global flags(for the method) 
     debug = true;
-    visualization = false;           % visualize intermediate result for debug
+    visualization = true;           % visualize intermediate result for debug
     local_boost_switch = true;      % with this variable i control if the boost is active or not 
     global_boost_switch = true;
     prune_switch =true;       % with this variable i activate or deactivate the prune move
@@ -156,7 +156,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                if(isempty(emergency_particle) || -emergency_perfomance > emergency_particle.GetBestPerfomance())
                    % create new emergency_particle
                    emergency_particle = Optimization.Particle(PM.size_action,PM.maxAction,PM.minAction,PM.n_constraints,PM.nIterations,...
-                                                             PM.explorationRate,x_candidate,-emergency_perfomance,[]);
+                                                             PM.explorationRate,x_candidate,-emergency_perfomance,[1 0 0]);
                    emergency_particle.DeactivateConstraints();
                    % update current real fitness value
                    current_real_fitness_for_emergency_particle = performances_new;
@@ -187,7 +187,10 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
            end
            % i create from emergency particle the first PM particle that i
            % will use in the optimization process
-           PM.AddParticleInPosition(emergency_particle.GetMean(),current_real_fitness_for_emergency_particle,1,true);
+           % PM.AddParticleInPosition(emergency_particle.GetMean(),current_real_fitness_for_emergency_particle,1,true);
+           %% it can happen that a new particles are added before i get into the emergency so when i get out of emergency i 
+           %% i have to add the new particle 
+           PM.AddParticle(emergency_particle.GetMean(),current_real_fitness_for_emergency_particle,true)
            % i put emergency swith to false (i have found at least one free point, im happy)
            emergency_switch = false;
            % i signal that im getting out of emergency
@@ -234,7 +237,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                         alternating_counter = 2;
                    end
                else
-                   %% gobal action for deploy new particle far away (Default Move)
+                   %% global action for deploy new particle far away (Default Move)
                    if(debug)
                        disp('deploy GP global search')
                    end
@@ -261,12 +264,16 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                    if(debug)
                        disp('optimization global boost');
                    end
-                   [x_candidate] = GPGlobalExploitation(BO,zooming_switch);
+                   [x_candidate] = GPGlobalExploitation(PM,BO,zooming_switch);
                else
                    if(debug)
                        disp('sample from particle');
                    end
                    %% particle selector (for now we just iterate through the particle in order)
+                   if(debug)
+                        str = sprintf('optimization: current particle is %d.',particle_iterator);
+                        disp(str);
+                   end
                    [x_candidate,z] = PM.Sample(particle_iterator);
                end
            end
@@ -301,15 +308,18 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                 %% TODO here goes revive particle for the emergency particle
            else
            %% Update after running the sample during OPTIMIZATION
-               if(debug)
-                   str = sprintf('optimization: current particle is %d.',particle_iterator);
-                   disp(str);
-               end
                if(global_boost_counter <= global_boost_event_trigger)
                    % evolve selected particle
                    PM.UpdateParticle(particle_iterator,violated_constrained,z,x_candidate,performances_new,true);
+                   if(local_boost_counter > local_boost_event_trigger)
+                       % if i get there it means that im doing a sweep with the
+                       % local GP boost so i have to update the internal
+                       % counter of the current particle if the local boost was
+                       % ineffective
+                       PM.GetParticle(particle_iterator).UpdateCounterLocalGPBoost();
+                   end
                    % update particle iterator 
-                   particle_iterator = particle_iterator + 1;  
+                   particle_iterator = particle_iterator + 1; 
                else
                    %% TODO introduce best perfomance in PM (and only if the current point is better than best perfomance i create i new particle)
                    %% and change add.particle in orded to allow a flexible lambda value (i can have more particle than the number fixed at the beginning)
@@ -384,8 +394,8 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                else
                    PM.Plot(x_candidate,particle_iterator - 1,true,false);
                end
-           else
-               if(out_of_emergency)
+           else    
+               if(~isempty(emergency_particle))
                    figure
                    emergency_particle.Plot();
                    axis normal;
@@ -500,6 +510,8 @@ end
 
 function [x_candidate]=GPLocalExploration(PM,BO,emergency_particle,EM_flag,zooming_switch,visualization_switch)
     [mu,V_s,tlb,tub] = emergency_particle.GetRotTraslBound();
+    sigma = emergency_particle.GetSigma();
+    sigma_mult = emergency_particle.GetSigmaMultiplier();
     transf = @(x_)emergency_particle.RotoTrasl(x_,mu,V_s);
     transf_for_AcqMax = @(x_)emergency_particle.RotoTraslWithoutSaturation(x_,mu,V_s);
     % insert zooming
@@ -527,7 +539,9 @@ function [x_candidate]=GPLocalExploration(PM,BO,emergency_particle,EM_flag,zoomi
          custom_function = @(x_)BO.mcd_constr(transf(x_),mean);
          BO.SetSurrogate('custom',custom_function);
     end
-    %% y_res used to debug
+    %% i use this function to set the parameter of the disitribution that i use 
+    %% to sample the starting point for the optimization in the BO.AcqMax function
+    BO.SetSampleDistributionParam(diag(tub),[],sigma,sigma_mult,tlb,tub);
     [x_res,y_res] = BO.AcqMax(tlb,tub,transf_for_AcqMax);
     x_candidate = transf(x_res);
     %% TODEBUG
@@ -581,6 +595,8 @@ end
 function [x_candidate,z]=GPLocalExploitation(PM,BO,particle_index,zooming_switch,visualization_switch)
     [mu,V_s,tlb,tub] = PM.GetParticle(particle_index).GetRotTraslBound();
     A  = PM.GetParticle(particle_index).GetCholCov();
+    sigma = PM.GetParticle(particle_index).GetSigma();
+    sigma_mult = PM.GetParticle(particle_index).GetSigmaMultiplier();
     transf = @(x_)PM.GetParticle(particle_index).RotoTrasl(x_,mu,V_s);
     transf_for_AcqMax = @(x_)PM.GetParticle(particle_index).RotoTraslWithoutSaturation(x_,mu,V_s);
     % insert zooming
@@ -591,9 +607,14 @@ function [x_candidate,z]=GPLocalExploitation(PM,BO,particle_index,zooming_switch
         %% Update hyperparameter and covariance of the GPs
         BO.TrainGPs();
     end
-    custom_function = @(x_)BO.cucb(transf(x_));
+    % here i use eci with the current best perfomance for the particle (only once in a while i use the worst perfomance to reboot eci.it seems to help)
+    current_max = PM.GetCurrentLocalMax(particle_index);
+    custom_function = @(x_)BO.eci(transf(x_),current_max);
     BO.SetSurrogate('custom',custom_function);
-    x_res = BO.AcqMax(tlb,tub,transf_for_AcqMax);
+    %% i use this function to set the parameters of the disitribution that i use 
+    %% to sample the starting point for the optimization in the BO.AcqMax function
+    BO.SetSampleDistributionParam(diag(tub),[],sigma,sigma_mult,tlb,tub);
+    [x_res,y_res] = BO.AcqMax(tlb,tub,transf_for_AcqMax);
     x_candidate = transf(x_res);
     % i have removed sigma from the equation to avoid explotion in the
     % covariance of the particle after the boost move
@@ -608,17 +629,16 @@ function [x_candidate,z]=GPLocalExploitation(PM,BO,particle_index,zooming_switch
 end
 
 
-function [x_candidate]=GPGlobalExploitation(BO,zooming_switch)
+function [x_candidate]=GPGlobalExploitation(PM,BO,zooming_switch)
     %% remove zooming
     if(zooming_switch)
         BO.ZoomingOut();
     end
     %% Update hyperparameter and covariance of the GPs
     BO.TrainGPs();
-    % with this surrogate i should take into account which is the current
-    % global maximum and see if there are other point in the space that
-    % looks promising
-    BO.SetSurrogate('eci');
+    % with this surrogate i use the current constrained cur max to assure
+    % that not cover the real constrained global optimum 
+    BO.SetSurrogate('eci',PM.global_maximum_among_particles.cur_max);
     x_candidate = BO.AcqMax();
 end
 % this is a move that i perform only if i have only one active particle and

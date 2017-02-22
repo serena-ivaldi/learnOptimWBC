@@ -18,6 +18,7 @@ classdef ParticleManager < handle
       particle_counter   % counter that is used to assign color
       epsilon            % this number identify which is the condition in which the particle are considerer too close
       inaction_limit     % it defines the longest tolerable series of inaction for a particle
+      local_GP_reboot_threshold % with this limit i control when is time to reboot the surrogate function by using  a maximum value way below the current max inside the current particle 
       global_maximum_among_particles % this field is a structure with the current maximum perfomances among all the particles and the index of the particle that holds the best perfomances
     end
     
@@ -41,7 +42,8 @@ classdef ParticleManager < handle
            % number of turn that the particle is allowed to not improve
            % before deletion 
            %% TODO define it as a parameter of the method
-           obj.inaction_limit = 10;
+           obj.inaction_limit = 20;
+           obj.local_GP_reboot_threshold = 3;
            obj.global_maximum_among_particles.cur_max = -inf;
            obj.global_maximum_among_particles.cur_best_particle = 0;
            obj.global_maximum_among_particles.cur_best_action = zeros(1,size_action);
@@ -92,7 +94,7 @@ classdef ParticleManager < handle
                 if(isempty(obj.index_map))
                     obj.index_map(1) = 1;
                     updated = true;
-                % at the beginngin we check if the index is lower than the
+                % at the beginning we check if the index is lower than the
                 % first element or higher than the last
                 elseif(index < obj.index_map(1))
                     obj.index_map = [index;obj.index_map];
@@ -194,8 +196,27 @@ classdef ParticleManager < handle
                 obj.active_particles = obj.active_particles - 1;
                 obj.particles{index} = [];
             end
-            
-            
+        end
+        
+        
+         % with this function i control in which turn i reboot the surrogate
+        % function ECI. it means that after n turn of stalling of the
+        % local GP optimization i pass to the surrogate eci a y_max that is
+        % way below the current one. I have observed that this move is
+        % benfical in order to "restart" the optimization and find some new
+        % optima
+        % i can use the particle inside PM because im using this function
+        % only during optimization when emergency particle is not usefull
+        % anymore
+        function cur_max = GetCurrentLocalMax(obj,particle_index)
+            cur_particle = obj.GetParticle(particle_index);
+            if(cur_particle.turn_of_not_improve_with_localGPboost > obj.local_GP_reboot_threshold)
+                % here i get the worst perfomances for the current particle
+                cur_max = cur_particle.GetWorstPerfomance();
+            else
+                cur_max = cur_particle.GetBestPerfomance();
+            end
+                
         end
         
         % remove redundant particles that are heading to the same local maxima / minima 
