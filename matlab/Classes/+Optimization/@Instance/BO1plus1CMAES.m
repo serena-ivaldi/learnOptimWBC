@@ -10,7 +10,8 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
     %% global flags(for the method) 
     debug = true;
     visualization = false;           % visualize intermediate result for debug
-    local_boost_switch = true;      % with this variable i control if the boost is active or not 
+    visualization_for_paper = true;  % visualize stuff for the paper
+    local_boost_switch = true;       % with this variable i control if the boost is active or not 
     global_boost_switch = true;
     prune_switch =true;       % with this variable i activate or deactivate the prune move
     emergency_switch =true;    % with this i activate the emergency behaviour when it is needed
@@ -30,15 +31,21 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
    end
 
    n = size(minAction,2);
-   %% this is a parameter of the problem (higher more exploration == more local minima founded) TODO move it out
+   %% TODOhis is a parameter of the problem (higher more exploration == more local minima founded) TODO move it out
    lambda = 3; 
+   
    n_constraints = obj.penalty_handling.n_constraint;
-
    fnForwardModel = @(obj_,actionLearn_,curr_candidate_,isMean_)TransAction(obj_,actionLearn_,curr_candidate_,isMean_, settings);
     
    %% TODO pass from outside the GP_lib parameter to specify which gaussian process library i wanna use
    BO = Optimization.BayesOpt(minAction, maxAction, n,n_constraints,'GP_stuff');
+   %% TODO set this variable of BO outside BO
+   % self.kappa =0.01;
+   % self.xi = 0;
    PM = Optimization.ParticleManager(lambda,n,n_constraints,maxAction,minAction,nIterations,settings.explorationRate);
+   %% TODO define this varible outside PM
+   %obj.inaction_limit = 20;
+   %obj.local_GP_reboot_threshold = 2; % (is not gonna harm the computation a small value)
     
    %% TODO for metrics i need to introduce the same structure fo the other method
    performances = zeros(1,nIterations);  % row vector
@@ -116,12 +123,18 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                        if(debug)
                            disp('emergency GP local search')
                        end
+                       if(visualization_for_paper)
+                           act = 'local';
+                       end
                        [x_candidate]=GPLocalExploration(PM,BO,emergency_particle,true,zooming_switch,visualization);
                        %% TODO when i do local exlploration is better to update the particle instead oc building a new one
                    else
                        %% GP_global_search
                        if(debug)
                            disp('emergency GP global search')
+                       end
+                       if(visualization_for_paper)
+                           act = 'global';
                        end
                        x_candidate = GPGlobalExploration(BO,true,zooming_switch);
                    end
@@ -130,6 +143,9 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                    if(debug)
                        disp('emergency GP global search')
                    end
+                   if(visualization_for_paper)
+                       act = 'global';
+                   end
                    x_candidate = GPGlobalExploration(BO,true,zooming_switch);
                end
            else
@@ -137,26 +153,29 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                if(debug)
                    disp('emergency particle sample')
                end
+               if(visualization_for_paper)
+                   act = 'sample';
+               end
                [x_candidate,z] = emergency_particle.Sample();
            end
            %% check the candidate
            [performances_new succeeded(ii)] = fnForwardModel(obj,x_candidate,1, 1); % compute fitness 
-           emergency_perfomance = ArtificialConstraints(obj.penalty_handling.penalties); % compute emergency perfomance
+           constraints_violation_cost = ArtificialConstraints(obj.penalty_handling.penalties); % compute emergency perfomance
            y = obj.penalty_handling.penalties;
-           y(end + 1) = emergency_perfomance;
+           y(end + 1) = constraints_violation_cost;
            y(end + 1) = performances_new;
            % with this counter i count the number of turn that i spend for
-           % emrgency
+           % emergency
            turn_of_emergency = turn_of_emergency + 1;
            %% update section
            if(emergency_iterator == 1)
                % check if the GP global search or the GP local search has produced a better solution
                % or the emergency particle is empty. in both case i replace
                % the particle 
-               if(isempty(emergency_particle) || -emergency_perfomance > emergency_particle.GetBestPerfomance())
+               if(isempty(emergency_particle) || -constraints_violation_cost > emergency_particle.GetBestPerfomance())
                    % create new emergency_particle
                    emergency_particle = Optimization.Particle(PM.size_action,PM.maxAction,PM.minAction,PM.n_constraints,PM.nIterations,...
-                                                             PM.explorationRate,x_candidate,-emergency_perfomance,[1 0 0]);
+                                                             PM.explorationRate,x_candidate,-constraints_violation_cost,[1 0 0]);
                    emergency_particle.DeactivateConstraints();
                    % update current real fitness value
                    current_real_fitness_for_emergency_particle = performances_new;
@@ -167,12 +186,12 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                % current_real_fitness_for_emergency_particle only if the
                % particle move and it happens only when particle fitness
                % get better (in this case the fitness im talking about is the constraint violation fitness)
-               if(-emergency_perfomance > emergency_particle.GetBestPerfomance())
+               if(-constraints_violation_cost > emergency_particle.GetBestPerfomance())
                    current_real_fitness_for_emergency_particle = performances_new;
                end
-               % i have to pass - emergency_perfomance because the
+               % i have to pass - constraints_violation_cost because the
                % particle maximize and the constraints has to be minimized
-               emergency_particle.Evolve(violated_constrained,z,x_candidate,-(emergency_perfomance));
+               emergency_particle.Evolve(violated_constrained,z,x_candidate,-(constraints_violation_cost));
            end
        % update the internal iterator
        emergency_iterator = emergency_iterator + 1;
@@ -181,7 +200,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
            emergency_iterator = 1;
        end
        %% if i reach the free region (- emergency perfomance > 0) i get out from the emergency mode
-       if(emergency_perfomance <= 0)
+       if(constraints_violation_cost <= 0)
            if(debug)
                disp('out of emergency');
            end
@@ -226,13 +245,19 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                         if(debug)
                             disp('deploy GP local exploration')
                         end
+                        if(visualization_for_paper)
+                            act = 'local';
+                        end
                         x_candidate = GPLocalExploration(PM,BO,emergency_particle,false,zooming_switch,visualization);
                         alternating_counter = 1;
                    elseif(alternating_counter == 1)
                         %% local action by evolving the emergency particle
                         if(debug)
                            disp('deploy sample (emergency) particle')
-                       end
+                        end
+                        if(visualization_for_paper)
+                            act = 'sample';
+                        end
                         [x_candidate,z] = emergency_particle.Sample();
                         alternating_counter = 2;
                    end
@@ -240,6 +265,9 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                    %% global action for deploy new particle far away (Default Move)
                    if(debug)
                        disp('deploy GP global search')
+                   end
+                   if(visualization_for_paper)
+                       act = 'global';
                    end
                    x_candidate = GPGlobalExploration(BO,false,zooming_switch);
                    % in this way in the next turn i will look for a
@@ -259,20 +287,27 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                    if(debug)
                        disp('optimization local boost');
                    end
+                   if(visualization_for_paper)
+                       act = 'local';
+                   end
                    [x_candidate,z] = GPLocalExploitation(PM,BO,particle_iterator,zooming_switch,visualization);
                elseif(global_boost_switch && (global_boost_counter > global_boost_event_trigger))
                    if(debug)
                        disp('optimization global boost');
                    end
+                   if(visualization_for_paper)
+                        act = 'global';
+                    end
                    [x_candidate] = GPGlobalExploitation(PM,BO,zooming_switch);
                else
                    if(debug)
                        disp('sample from particle');
+                       str = sprintf('optimization: current particle is %d.',particle_iterator);
+                       disp(str);
                    end
                    %% particle selector (for now we just iterate through the particle in order)
-                   if(debug)
-                        str = sprintf('optimization: current particle is %d.',particle_iterator);
-                        disp(str);
+                   if(visualization_for_paper)
+                        act = 'sample';
                    end
                    [x_candidate,z] = PM.Sample(particle_iterator);
                end
@@ -302,7 +337,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                 end
                 % Update emergency particle (i ahve to put here alternating_counter==2 because in this way i update the particle after sampling from it)
                 if(alternating_counter == 2)
-                    emergency_particle.Evolve(violated_constrained,z,x_candidate,-(emergency_perfomance) );
+                    emergency_particle.Evolve(violated_constrained,z,x_candidate,-(constraints_violation_cost) );
                     % check on emergency particle if it gets to small
                 end
                 %% TODO here goes revive particle for the emergency particle
@@ -383,7 +418,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                end
            end
        end    
-       %% plot
+       %% plot for debug
        if(visualization)
            BO.Plot(x_candidate);
            BO.PlotArtificial();
@@ -404,6 +439,14 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                PM.Plot(x_candidate,[],false,false);  
            end
        end
+       
+       %% this portion od code is devoted to the visualization of the images of the paper
+       if(visualization_for_paper)
+            state = StateMachine(deploy,emergency_switch,emergency_counter,emergency_event_trigger);
+            success = MoveSuccessCheck(act,state,constraints_violation_cost,performances_new,emergency_particle,particle_iterator,PM);
+            PaperPlot(state,act,emergency_particle,PM,BO,x_candidate,particle_iterator);
+       end
+       
        %% update gaussian process (i keep updating the gaussian process even during the emergency phase)
        if(debug)
            disp('BO update');
@@ -431,7 +474,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
        end
        
        %% plot
-       if(visualization)
+       if(visualization || visualization_for_paper)
            pause(0.05)
            close all;
        end
@@ -463,6 +506,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
    performances =  -costs;
       
 end
+
 
 % with this function we generate the set of points to initiliaze the search
 function [init_x,init_y]=InitialSample(obj,fnForwardModel,lb,ub,number_init_points)
@@ -655,3 +699,189 @@ function str = ReviveParticle(PM)
         PM.AddParticleInPosition(cur_particle.GetMean(),cur_particle.GetBestPerfomance(),PM.index_map(1),false)
     end
 end
+
+
+%% AD-HOC visualization functions to realize images for the paper
+
+
+% this function establish in which state currently the system is in
+function state = StateMachine(deploy,emergency_swtich,emergency_counter,emergency_event_trigger)
+    if(deploy)
+        if(emergency_swtich && emergency_counter>emergency_event_trigger)
+            state = 'emergency';
+        else
+            state = 'deploy';
+        end
+    else
+        state = 'optimization';
+    end
+end
+
+
+% this function tell us if the current move was succesfull or not (the x_candidate satisify the constraints its fitness function is better than the current best one)
+function success = MoveSuccessCheck(act,state,constraints_violation_cost,performances_new,emergency_particle,cur_particle,PM)
+     switch state
+         case 'deploy'
+             if(constraints_violation_cost<0)
+                 pls = strcat(state,' action = ',act,' successful!');
+                 disp(pls);
+                 success = true;
+             else
+                 pls = strcat(state,' action = ',act,' NOT successful!');
+                 disp(pls);
+                 success = false;
+             end
+         case 'emergency'
+             if(-constraints_violation_cost>emergency_particle.GetBestPerfomance())
+                 pls = strcat(state,' action = ',act,' successful!');
+                 disp(pls);
+                 success = true;
+             else
+                 pls = strcat(state,' action = ',act,' NOT successful!');
+                 disp(pls);
+                 success = false;
+             end
+         case 'optimization'
+             if(strcmp(act,'local') || strcmp(act,'sample'))
+                 if(constraints_violation_cost<0 && performances_new > cur_particle.GetBestPerfomance())
+                     pls = strcat(state,' action = ',act,' successful!');
+                     disp(pls);
+                     success = true;
+                 else
+                     pls = strcat(state,' action = ',act,' NOT successful!');
+                     disp(pls);
+                     success = false;
+                 end
+             elseif(strcmp(act,'global'))
+                 if(constraints_violation_cost<0 && performances_new > PM.global_maximum_among_particles.cur_max)
+                     pls = strcat(state,' action = ',act,' successful!');
+                     disp(pls);
+                     success = true;
+                 else
+                     pls = strcat(state,' action = ',act,' NOT successful!');
+                     disp(pls);
+                     success = false;
+                 end
+             end
+                 
+     end
+end
+
+
+function PaperPlot(state,action,emergency_particle,PM,BO,x_candidate,particle_iterator)
+    p = 0.95;
+    % compute the value for the surrogate function;
+    fun = @(x_)BO.surrogate(BO,x_);
+    if(strcmp(BO.kind,'custom'))
+       not_obsolete_surrogate = true; 
+       [X_trasl,Y_trasl] = meshgrid(linspace(BO.temporary_lb(1),BO.temporary_ub(1),100),linspace(BO.temporary_lb(2),BO.temporary_ub(2),100)); 
+       xl_trasl = [X_trasl(:) Y_trasl(:)];
+       try
+           [sur, x_transf] = fun(xl_trasl);
+       catch
+           disp('obsolete surrogate function due to cancellation of particles, i cannot print this function')
+           not_obsolete_surrogate = false;
+       end
+    else    
+       [sur, x_transf] = fun(BO.xl_vis);
+    end
+    switch state
+        %% DEPLOY
+        case 'deploy'
+            switch action
+                % emergency particle last and rectangle and local gp (subplot) 
+                case 'local'
+                    figure
+                    % Plot the objective function
+                    subplot(1,2,1),hold on, title('Particle Path')
+                    box on
+                    emergency_particle.PlotBox();
+                    plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
+                    axis normal;
+                    subplot(1,2,2),hold on, title('Particle Path')
+                    box on
+                    pcolor(reshape(x_transf(:,1),100,100),reshape(x_transf(:,2),100,100),reshape(sur,100,100)),shading flat
+                    plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
+                    axis normal;
+                    axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
+                % global GP     
+                case 'global'
+                    figure
+                    pcolor(BO.X_vis,BO.Y_vis,reshape(sur,100,100)),shading flat 
+                % empty         
+                case 'sample'
+                    disp('none')
+            end  
+        % general plot with all the particle deployed in the same figure  
+        figure
+        PM.PlotSameWindow(p,'false')    
+        %% EMERGENCY   
+        case 'emergency'
+            switch action
+                % emergency particle last + rectangle and local gp (subplot)
+                case 'local'
+                     figure
+                     % Plot the objective function
+                     subplot(1,2,1),hold on, title('Particle Path')
+                     box on
+                     emergency_particle.PlotBox();
+                     plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
+                     axis normal;
+                     subplot(1,2,2),hold on, title('Particle Path')
+                     box on
+                     pcolor(reshape(x_transf(:,1),100,100),reshape(x_transf(:,2),100,100),reshape(sur,100,100)),shading flat
+                     plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
+                     axis normal;
+                     axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
+                %new emergency particle strobo and global gp (subplot)     
+                case 'global'
+                    figure
+                    pcolor(BO.X_vis,BO.Y_vis,reshape(sur,100,100)),shading flat             
+                % none   
+                case 'sample'
+                    disp('none')
+            end
+            figure
+            emergency_particle.PlotStrobo(p);
+        % emergency particle strobo (single plot)    
+           
+        %% optimization    
+        case 'optimization'
+            switch action
+                % current particle rectangle and local GP (subplot)
+                case 'local'
+                    % Plot the objective function
+                    subplot(1,2,1),hold on, title('Particle Path')
+                    box on
+                    PM.GetParticle(particle_iterator).PlotBox();
+                    plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
+                    axis normal;
+                    subplot(1,2,2),hold on, title('Particle Path')
+                    box on
+                    pcolor(reshape(x_transf(:,1),100,100),reshape(x_transf(:,2),100,100),reshape(sur,100,100)),shading flat
+                    plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
+                    axis normal;
+                    axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
+                % global GP    
+                case 'global'
+                    figure
+                    pcolor(BO.X_vis,BO.Y_vis,reshape(sur,100,100)),shading flat   
+                % none    
+                case 'sample'
+                    disp('none')
+            end   
+         % strobo active particles
+         figure
+         PM.PlotSameWindow(p,true)
+         % only last position all particles
+         figure
+         PM.PlotSameWindow(p,false)
+        otherwise
+            warning('something is wrong with the expected state')
+    end
+end
+
+
+
+
+

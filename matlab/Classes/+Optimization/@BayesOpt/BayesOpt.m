@@ -554,7 +554,7 @@ classdef BayesOpt < handle
          end
          
          function PlotArtificial(self)
-              %% print of artificial constraints
+             %% print of artificial constraints
              figure
              gp_test = self.gp_s{end - 1};
              [ymu_a,ys2_a]=self.gp_s{end - 1}.Predict(self.xl_vis);

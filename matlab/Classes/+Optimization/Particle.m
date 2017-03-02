@@ -308,7 +308,7 @@ classdef Particle < handle
       end
       
       %% visualization functions
-      function Plot(obj)
+      function Plot(obj,varargin)
           mu = obj.GetMean()';
           C = obj.GetCov();
           if size(C) ~= [2 2]
@@ -317,7 +317,11 @@ classdef Particle < handle
           if length(mu) ~= 2, 
               disp('mu must be a 2 by 1 vector'); 
           end
-          p = 0.95; % probability mass enclosed insided the ellipsoid
+          if(isempty(varargin{1}))
+            p = 0.95; % probability mass enclosed insided the ellipsoid
+          else
+            p = varargin{1};
+          end
           point_number = 100;  % number of point
           h = [];
           % holding = ishold;
@@ -362,6 +366,64 @@ classdef Particle < handle
           h = [h; plot( z(1, :), z(2, :), 'color', obj.clr, 'LineWidth', 2)];
           % if (~holding) hold off; end
           % set(draw_to_these_axes,'NextPlot',holding);
+      end
+      
+      
+      function PlotStrobo(obj,p)
+          all_mu = obj.mean(1:obj.current_index);
+          all_A =  obj.A{1:obj.current_index};
+          if size(all_A{1}) ~= [2 2]
+              disp('Sigma must be a 2 by 2 matrix'); 
+          end
+          if length(all_mu(1,:)) ~= 2, 
+              disp('mu must be a 2 by 1 vector'); 
+          end
+          point_number = 100;  % number of point
+          h = [];
+          for i = 1:obj.current_index
+              mu = all_mu(i,:);
+              C  = all_A{i}'*all_A{i};
+              if (C == zeros(2, 2))
+                  z = mu;
+              else
+                  % Compute the Mahalanobis radius of the ellipsoid that encloses
+                  % the desired probability mass.
+                  k = obj.conf2mahal(p, 2);
+                  % The major and minor axes of the covariance ellipse are given by
+                  % the eigenvectors of the covariance matrix.  Their lengths (for
+                  % the ellipse with unit Mahalanobis radius) are given by the
+                  % square roots of the corresponding eigenvalues.
+                  %   if (issparse(Sigma))
+                  %     [V, D] = eigs(Sigma);
+                  %   else
+                  %     [V_s, D] = eig(Sigma);
+                  %   end
+                  %[~,D,V_s]=svd(C) ;
+                  [V_s, D] = eig(C);
+                  %% DEBUG
+                  %disp('principal directions module')
+                  %sqrt(abs(diag(D)))'
+                  %L1 = k * sqrt(abs(diag(D)));
+                  %L1'
+                  % Compute the points on the surface of the ellipse.
+                  t = linspace(0, 2*pi, point_number);
+                  u = [cos(t); sin(t)];
+                  w = (k * V_s * sqrt(D)) * u*obj.GetSigma();
+                  z = repmat(mu, [1 point_number]) + w;
+
+                  % Plot the major and minor axes.
+                  L = k * sqrt(abs(diag(D))) * obj.GetSigma();
+                  h = plot( [mu(1); mu(1) + L(1) * V_s(1, 1)], ...
+                       [mu(2); mu(2) + L(1) * V_s(2, 1)], 'color', obj.clr);
+                  hold on;
+                  h = [h; plot( [mu(1); mu(1) + L(2) * V_s(1, 2)], ...
+                           [mu(2); mu(2) + L(2) * V_s(2, 2)], 'color', obj.clr)];
+              end
+              h = [h; plot( z(1, :), z(2, :), 'color', obj.clr, 'LineWidth', 2)];
+              % if (~holding) hold off; end
+              % set(draw_to_these_axes,'NextPlot',holding);
+          end
+          
       end
       
       % i plot all the old mean expect the last one

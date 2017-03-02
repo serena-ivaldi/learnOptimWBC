@@ -106,7 +106,7 @@ function steady_state_begin = IndetifySteadyState(vector,tresh)
     steady_value = vector(end);
     keep_search = true;
     for zzz = 1:length(vector)
-        if(abs(steady_value-vector(zzz))<abs(tresh/100*steady_value) && keep_search)
+        if(abs(steady_value-vector(zzz))<=abs(tresh/100*steady_value) && keep_search)
             steady_state_begin = zzz;
             keep_search = false;
         end

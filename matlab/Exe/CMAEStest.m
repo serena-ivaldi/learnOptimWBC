@@ -8,7 +8,7 @@ function CMAEStest
 
     %% DATA 1
     robotics_experiment = [0]; % series of value that say if the current experiment is a robotics experiments or not 1 or 0
-    niter_tot = 150;  %number of functions evaluations
+    niter_tot = 300;  %number of functions evaluations
     function_2_test ={'g06'};%'robotic_experiments','g06','g07','g09','f240','f241','HB' ,'to_test_withBOGP_stuff'}
     learn_approach = 'BO(1+1)CMAES'; %CMAES (1+1)CMAES  CEM   BO  BO(1+1)CMAES fmincon     with (1+1)CMAES and BO(1+1)CMAES i have to use nopenalty
     method_to_use = 'nopenalty';  % adaptive , vanilla ,empty,fmincon, nopenalty
@@ -232,7 +232,7 @@ function CMAEStest
         %% DATA 2
 
         m1 = zeros(repetition_of_the_experiment,1);  % distance from best action
-        m2 = zeros(repetition_of_the_experiment,n_constraints);  % constraints violations
+        m2 = zeros(repetition_of_the_experiment,1);  % constraints violations
         m3 = zeros(repetition_of_the_experiment,1); % steady state solutions
         m4 = zeros(repetition_of_the_experiment,1); % execution time
         %-----------------------------------------------------------------------------------
@@ -278,7 +278,10 @@ function CMAEStest
 
             %% collect all the data from each experiments
             % perfomance
-            %% TODEBUG there was a transposition in mean_performances, i removed it.
+            %% 
+            if(iscolumn(mean_performances))
+                mean_performances = mean_performances';
+            end
             m5{kk,:} = mean_performances;
             m3(kk) = IndetifySteadyState(m5{kk,:},threshold);
             % best results
@@ -296,7 +299,7 @@ function CMAEStest
             %end
             % violations
             [c, ceq] = inst.computeConstr(bestAction.parameters);
-            m2 = sum(abs((c > 0).*c)) + sum(abs((ceq ~= 0).*ceq));
+            m2(kk,1) = sum(abs((c > 0).*c)) + sum(abs((ceq ~= 0).*ceq));
             close all
 
         end
@@ -437,7 +440,7 @@ end
 function zzz = IndetifySteadyState(vector,tresh)
     steady_value = vector(end);
     for zzz = 1:length(vector)
-        if(abs(steady_value-vector(zzz))<(tresh/100*steady_value))
+        if(abs(steady_value-vector(zzz))<=(tresh/100*steady_value))
             break
         end
     end

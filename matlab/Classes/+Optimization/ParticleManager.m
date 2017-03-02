@@ -336,8 +336,27 @@ classdef ParticleManager < handle
                     axis normal ;
                     axis([obj.minAction(1,1),obj.maxAction(1,1),obj.minAction(1,2),obj.maxAction(1,2)])
                 end
-            end
-             
+            end     
+        end
+        
+       function PlotSameWindow(obj,p,strobo)
+           if(obj.active_particles>0)
+               figure
+               hold on;
+           end
+           for counter = 1:obj.lambda
+               if(~isempty(obj.particles{counter}))     
+                   box on
+                   if(strobo)
+                        obj.particles{counter}.PlotStrobo(p);
+                   else
+                        obj.particles{counter}.Plot(p);
+                   end
+                    
+                end
+           end 
+           axis normal ;
+           axis([obj.minAction(1,1),obj.maxAction(1,1),obj.minAction(1,2),obj.maxAction(1,2)]) 
         end
         
         
