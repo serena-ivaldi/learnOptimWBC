@@ -380,6 +380,15 @@ classdef Particle < handle
           end
           point_number = 100;  % number of point
           h = [];
+         
+          transparency_values = 1;
+          transparency_step = 1/obj.current_index;
+          
+          for k = 1:obj.current_index
+              transparency_values = [transparency_values , (1 - transparency_step*(k))];
+          end
+          transparency_values = transparency_values(end:-1:1);
+          transparency_values(1) = [];
           for i = 1:obj.current_index
               mu = obj.mean(i,:)';
               C  =  obj.A{i}'* obj.A{i};
@@ -419,13 +428,13 @@ classdef Particle < handle
                   h = [h; plot( [mu(1); mu(1) + L(2) * V_s(1, 2)], ...
                            [mu(2); mu(2) + L(2) * V_s(2, 2)], 'color', obj.clr)];
               end
-              h = [h; plot( z(1, :), z(2, :), 'color', obj.clr, 'LineWidth', 2)];
+              %h = [h; plot( z(1, :), z(2, :), 'color', obj.clr, 'LineWidth', 2)];
+              patch(z(1, :),z(2, :),'k','FaceColor',obj.clr,'FaceAlpha',transparency_values(i));
               % if (~holding) hold off; end
               % set(draw_to_these_axes,'NextPlot',holding);
-              axis normal ;
-              axis([obj.minAction(1,1),obj.maxAction(1,1),obj.minAction(1,2),obj.maxAction(1,2)]) 
           end
-          
+          axis normal ;
+          axis([obj.minAction(1,1),obj.maxAction(1,1),obj.minAction(1,2),obj.maxAction(1,2)]) 
       end
       
       % i plot all the old mean expect the last one
