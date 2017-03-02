@@ -732,18 +732,11 @@ function success = MoveSuccessCheck(act,state,constraints_violation_cost,perform
                  success = false;
              end
          case 'emergency'
-             if(-constraints_violation_cost>emergency_particle.GetBestPerfomance())
-                 pls = strcat(state,' action = ',act,' successful!');
-                 disp(pls);
-                 success = true;
-             else
-                 pls = strcat(state,' action = ',act,' NOT successful!');
-                 disp(pls);
+             if(isempty(emergency_particle))
+                 disp('this is the last generation of deploy the next turn im gonna be in emergency')
                  success = false;
-             end
-         case 'optimization'
-             if(strcmp(act,'local') || strcmp(act,'sample'))
-                 if(constraints_violation_cost<0 && performances_new > cur_particle.GetBestPerfomance())
+             else    
+                 if(-constraints_violation_cost>emergency_particle.GetBestPerfomance())
                      pls = strcat(state,' action = ',act,' successful!');
                      disp(pls);
                      success = true;
@@ -751,6 +744,23 @@ function success = MoveSuccessCheck(act,state,constraints_violation_cost,perform
                      pls = strcat(state,' action = ',act,' NOT successful!');
                      disp(pls);
                      success = false;
+                 end
+             end
+         case 'optimization'
+             if(strcmp(act,'local') || strcmp(act,'sample'))
+                 if(isempty(cur_particle))
+                     disp('this is the last generation of deploy the next turn im gonna be in optimization')
+                     success = false;
+                 else    
+                     if(constraints_violation_cost<0 && performances_new > cur_particle.GetBestPerfomance())
+                         pls = strcat(state,' action = ',act,' successful!');
+                         disp(pls);
+                         success = true;
+                     else
+                         pls = strcat(state,' action = ',act,' NOT successful!');
+                         disp(pls);
+                         success = false;
+                     end
                  end
              elseif(strcmp(act,'global'))
                  if(constraints_violation_cost<0 && performances_new > PM.global_maximum_among_particles.cur_max)
@@ -770,11 +780,15 @@ end
 
 function PaperPlot(state,action,emergency_particle,PM,BO,x_candidate,particle_iterator)
     p = 0.95;
+    % artificial constraints function
+    [ymu_a,ys2_a]=BO.gp_s{end-1}.Predict(BO.xl_vis);
+    % fitness function 
+    [ymu_f,ys2_f]=BO.gp_s{end}.Predict(BO.xl_vis);
     % compute the value for the surrogate function;
     fun = @(x_)BO.surrogate(BO,x_);
     if(strcmp(BO.kind,'custom'))
        not_obsolete_surrogate = true; 
-       [X_trasl,Y_trasl] = meshgrid(linspace(BO.temporary_lb(1),BO.temporary_ub(1),100),linspace(BO.temporary_lb(2),BO.temporary_ub(2),100)); 
+       [X_trasl,Y_trasl] = meshgrid(linspace(BO.temporary_lb(1),BO.temporary_ub(1),BO.res_vis),linspace(BO.temporary_lb(2),BO.temporary_ub(2),BO.res_vis)); 
        xl_trasl = [X_trasl(:) Y_trasl(:)];
        try
            [sur, x_transf] = fun(xl_trasl);
@@ -793,21 +807,34 @@ function PaperPlot(state,action,emergency_particle,PM,BO,x_candidate,particle_it
                 case 'local'
                     figure
                     % Plot the objective function
-                    subplot(1,2,1),hold on, title('Particle Path')
+                    subplot(1,2,1),hold on, title('current particle')
                     box on
                     emergency_particle.PlotBox();
                     plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
                     axis normal;
-                    subplot(1,2,2),hold on, title('Particle Path')
+                    subplot(1,2,2),hold on, title('local surrogate')
                     box on
-                    pcolor(reshape(x_transf(:,1),100,100),reshape(x_transf(:,2),100,100),reshape(sur,100,100)),shading flat
+                    pcolor(reshape(x_transf(:,1),BO.res_vis,BO.res_vis),reshape(x_transf(:,2),BO.res_vis,BO.res_vis),reshape(sur,BO.res_vis,BO.res_vis)),shading flat
                     plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
                     axis normal;
                     axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
                 % global GP     
                 case 'global'
                     figure
-                    pcolor(BO.X_vis,BO.Y_vis,reshape(sur,100,100)),shading flat 
+                    subplot(1,3,1),hold on, title('fitness ground truth')
+                    pcolor(BO.X_vis,BO.Y_vis,BO.Z_vis),shading flat
+                    plot(BO.gp_s{end}.X(1:end,1),BO.gp_s{end}.X(1:end,2), 'kx', 'MarkerSize', 10);
+                    axis normal;
+                    axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
+                    subplot(1,3,2),hold on, title('feasible region ground truth')
+                    pcolor(BO.X_vis,BO.Y_vis,BO.Z_constr_combined),shading flat
+                    axis normal;
+                    axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
+                    subplot(1,3,3),hold on, title('global surrogate')
+                    pcolor(BO.X_vis,BO.Y_vis,reshape(sur,BO.res_vis,BO.res_vis)),shading flat 
+                    plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
+                    axis normal;
+                    axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
                 % empty         
                 case 'sample'
                     disp('none')
@@ -829,20 +856,22 @@ function PaperPlot(state,action,emergency_particle,PM,BO,x_candidate,particle_it
                      axis normal;
                      subplot(1,2,2),hold on, title('Particle Path')
                      box on
-                     pcolor(reshape(x_transf(:,1),100,100),reshape(x_transf(:,2),100,100),reshape(sur,100,100)),shading flat
+                     pcolor(reshape(x_transf(:,1),BO.res_vis,BO.res_vis),reshape(x_transf(:,2),BO.res_vis,BO.res_vis),reshape(sur,BO.res_vis,BO.res_vis)),shading flat
                      plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
                      axis normal;
                      axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
                 %new emergency particle strobo and global gp (subplot)     
                 case 'global'
                     figure
-                    pcolor(BO.X_vis,BO.Y_vis,reshape(sur,100,100)),shading flat             
+                    pcolor(BO.X_vis,BO.Y_vis,reshape(sur,BO.res_vis,BO.res_vis)),shading flat             
                 % none   
                 case 'sample'
                     disp('none')
             end
             figure
-            emergency_particle.PlotStrobo(p);
+            if(~isempty(emergency_particle))
+                emergency_particle.PlotStrobo(p);
+            end
         % emergency particle strobo (single plot)    
            
         %% optimization    
@@ -858,14 +887,14 @@ function PaperPlot(state,action,emergency_particle,PM,BO,x_candidate,particle_it
                     axis normal;
                     subplot(1,2,2),hold on, title('Particle Path')
                     box on
-                    pcolor(reshape(x_transf(:,1),100,100),reshape(x_transf(:,2),100,100),reshape(sur,100,100)),shading flat
+                    pcolor(reshape(x_transf(:,1),BO.res_vis,BO.res_vis),reshape(x_transf(:,2),BO.res_vis,BO.res_vis),reshape(sur,BO.res_vis,BO.res_vis)),shading flat
                     plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
                     axis normal;
                     axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
                 % global GP    
                 case 'global'
                     figure
-                    pcolor(BO.X_vis,BO.Y_vis,reshape(sur,100,100)),shading flat   
+                    pcolor(BO.X_vis,BO.Y_vis,reshape(sur,BO.res_vis,BO.res_vis)),shading flat   
                 % none    
                 case 'sample'
                     disp('none')

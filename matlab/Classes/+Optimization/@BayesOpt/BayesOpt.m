@@ -24,12 +24,14 @@ classdef BayesOpt < handle
         radius
         options_opt
         %current_constraints_to_optimize   % maybe im gonna remove this feature
-        % for visualization 
+        % for visualization
+        res_vis
         X_vis
         Y_vis
         xl_vis
-        Z_vis
-        z_constr
+        Z_vis       % in this field i store the ground truth value for the fitnsse function
+        z_constr    % (is a cell variable)in this field i colect the ground truth value for each constraints (i display only where the point is satisfacted)
+        Z_constr_combined    % here i combine all the z constraints to show which is the feasible region (i ahve to do the intersection amogn all the cosntraints)
         kind
         min_or_max
         temporary_lb
@@ -93,16 +95,18 @@ classdef BayesOpt < handle
             
             % for visualization
             if(dim <= 2)
-                [self.X_vis,self.Y_vis] = meshgrid(linspace(lb(1),ub(1),100),linspace(lb(2),ub(2),100));
+                self.res_vis = 800;
+                [self.X_vis,self.Y_vis] = meshgrid(linspace(lb(1),ub(1),self.res_vis),linspace(lb(2),ub(2),self.res_vis));
                 self.xl_vis = [self.X_vis(:) self.Y_vis(:)];
                 %% TODO pass the name of the function that we want to optimize from the outside 
                 name_real_function = 'g06'; % to_test_withBOGP_stuff g06
                 fx = str2func(name_real_function);
-                self.Z_vis = reshape(fx([],self.xl_vis),100,100);
+                self.Z_vis = reshape(fx([],self.xl_vis),self.res_vis,self.res_vis);
                 %% TODO pass the name of the function that we want to optimize from the outside 
                 % precompute the constraints
                 constr_function = {'g06Constr1','g06Constr2'};  %{'stuffGPConstr1_0','stuffGPConstr1_1','stuffGPConstr2_1'}; {'g06Constr1','g06Constr2'}
                 %const = [0 0.8 ; -10 0.1];
+                self.Z_constr_combined = ones(size(self.xl_vis,1),1);
                 for ii = 1:n_of_constraints
                     cur_f = str2func(constr_function{ii});
                     val = cur_f(self.xl_vis,[]);
@@ -110,8 +114,15 @@ classdef BayesOpt < handle
                     val(val > 0) = nan;
                     %val(val<const(ii,1) | val>const(ii,2)) = nan;
                     val(~isnan(val))=1;
-                    self.z_constr{ii} = reshape(val,100,100);
+                    self.z_constr{ii} = reshape(val,self.res_vis,self.res_vis);
+                    % this part i s to compute the combined constraints
+                    % ground truth
+                    val(isnan(val)) = 0;
+                    self.Z_constr_combined = self.Z_constr_combined & val;
                 end
+                self.Z_constr_combined = double(self.Z_constr_combined);
+                self.Z_constr_combined(self.Z_constr_combined == 0) = nan;
+                self.Z_constr_combined = reshape(self.Z_constr_combined,self.res_vis,self.res_vis);
             end
             % optimization ooptions for the surrogate function 
             %self.options_opt = optimoptions('fmincon','Algorithm','interior-point','Display','none','TolFun',1e-9,'TolX',1e-6);
@@ -454,7 +465,7 @@ classdef BayesOpt < handle
              fun = @(x_)self.surrogate(self,x_);
              if(strcmp(self.kind,'custom'))
                 not_obsolete_surrogate = true; 
-                [X_trasl,Y_trasl] = meshgrid(linspace(self.temporary_lb(1),self.temporary_ub(1),100),linspace(self.temporary_lb(2),self.temporary_ub(2),100)); 
+                [X_trasl,Y_trasl] = meshgrid(linspace(self.temporary_lb(1),self.temporary_ub(1),self.res_vis),linspace(self.temporary_lb(2),self.temporary_ub(2),self.res_vis)); 
                 xl_trasl = [X_trasl(:) Y_trasl(:)];
                 try
                     [sur, x_transf] = fun(xl_trasl);
@@ -490,7 +501,7 @@ classdef BayesOpt < handle
              box on
              axis normal ;
              axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
-             pcolor(self.X_vis,self.Y_vis,reshape(ymu,100,100)),shading flat
+             pcolor(self.X_vis,self.Y_vis,reshape(ymu,self.res_vis,self.res_vis)),shading flat
              %caxis(clim)
              
              % Plot the posterior variance of GP model
@@ -498,7 +509,7 @@ classdef BayesOpt < handle
              box on
              axis normal ;
              axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
-             pcolor(self.X_vis,self.Y_vis,reshape(ys2,100,100)),shading flat
+             pcolor(self.X_vis,self.Y_vis,reshape(ys2,self.res_vis,self.res_vis)),shading flat
              %l2=plot(xnews(:,1),xnews(:,2), 'ro', 'MarkerSize', 10);
              l3=plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
              
@@ -510,7 +521,7 @@ classdef BayesOpt < handle
              if(strcmp(self.kind,'custom') && not_obsolete_surrogate)
                  %blank = zeros(size(self.X_vis));
                  %pcolor (self.X_vis,self.Y_vis,blank),shading flat
-                 pcolor(reshape(x_transf(:,1),100,100),reshape(x_transf(:,2),100,100),reshape(sur,100,100)),shading flat
+                 pcolor(reshape(x_transf(:,1),self.res_vis,self.res_vis),reshape(x_transf(:,2),self.res_vis,self.res_vis),reshape(sur,self.res_vis,self.res_vis)),shading flat
              else
 %                 pcolor(self.X_vis,self.Y_vis,reshape(sur,100,100)),shading flat
              end
@@ -545,7 +556,7 @@ classdef BayesOpt < handle
                 cur_ymu(cur_ymu > 0) = nan;
                 %cur_ymu(cur_ymu<const(counter,1) | cur_ymu>const(counter,2)) = nan;
                 cur_ymu(~isnan(cur_ymu))=1;
-                pcolor(self.X_vis,self.Y_vis,reshape(cur_ymu,100,100)),shading flat
+                pcolor(self.X_vis,self.Y_vis,reshape(cur_ymu,self.res_vis,self.res_vis)),shading flat
                 plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10)
                 
                 subplot_position = subplot_position + 1;
@@ -556,20 +567,19 @@ classdef BayesOpt < handle
          function PlotArtificial(self)
              %% print of artificial constraints
              figure
-             gp_test = self.gp_s{end - 1};
              [ymu_a,ys2_a]=self.gp_s{end - 1}.Predict(self.xl_vis);
              subplot(1,3,2),hold on, title('artificial constraints mean')
              box on
              axis normal ;
              axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
-             pcolor(self.X_vis,self.Y_vis,reshape(ymu_a,100,100)),shading flat
+             pcolor(self.X_vis,self.Y_vis,reshape(ymu_a,self.res_vis,self.res_vis)),shading flat
              %caxis(clim)
              
              subplot(1,3,3),hold on, title('artificial constraints variance')
              box on
              axis normal ;
              axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
-             pcolor(self.X_vis,self.Y_vis,reshape(ys2_a,100,100)),shading flat
+             pcolor(self.X_vis,self.Y_vis,reshape(ys2_a,self.res_vis,self.res_vis)),shading flat
              %caxis(clim)
              
              ymu_a(ymu_a > 0) = nan;
@@ -579,7 +589,7 @@ classdef BayesOpt < handle
              box on
              axis normal ;
              axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
-             pcolor(self.X_vis,self.Y_vis,reshape(ymu_a,100,100)),shading flat
+             pcolor(self.X_vis,self.Y_vis,reshape(ymu_a,self.res_vis,self.res_vis)),shading flat
              %caxis(clim)
          end
          
@@ -591,7 +601,7 @@ classdef BayesOpt < handle
              fun = @(x_)self.surrogate(self,x_);
              if(strcmp(kind,'custom'))
                 not_obsolete_surrogate = true; 
-                [X_trasl,Y_trasl] = meshgrid(linspace(self.temporary_lb(1),self.temporary_ub(1),100),linspace(self.temporary_lb(2),self.temporary_ub(2),100)); 
+                [X_trasl,Y_trasl] = meshgrid(linspace(self.temporary_lb(1),self.temporary_ub(1),self.res_vis),linspace(self.temporary_lb(2),self.temporary_ub(2),self.res_vis)); 
                 xl_trasl = [X_trasl(:) Y_trasl(:)];
                 try
                     [sur, x_transf] = fun(xl_trasl);
@@ -606,7 +616,7 @@ classdef BayesOpt < handle
              axis normal ;
              axis([self.bounds(1,1),self.bounds(2,1),self.bounds(1,2),self.bounds(2,2)])
              if(strcmp(kind,'custom') && not_obsolete_surrogate)
-                 pcolor(reshape(x_transf(:,1),100,100),reshape(x_transf(:,2),100,100),reshape(sur,100,100)),shading flat
+                 pcolor(reshape(x_transf(:,1),self.res_vis,self.res_vis),reshape(x_transf(:,2),self.res_vis,self.res_vis),reshape(sur,self.res_vis,self.res_vis)),shading flat
              else
                  disp('i cannot print the particle')
                  %pcolor(self.X_vis,self.Y_vis,reshape(sur,100,100)),shading flat

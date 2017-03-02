@@ -364,25 +364,25 @@ classdef Particle < handle
           end
 
           h = [h; plot( z(1, :), z(2, :), 'color', obj.clr, 'LineWidth', 2)];
+          axis normal ;
+          axis([obj.minAction(1,1),obj.maxAction(1,1),obj.minAction(1,2),obj.maxAction(1,2)]) 
           % if (~holding) hold off; end
           % set(draw_to_these_axes,'NextPlot',holding);
       end
       
       
-      function PlotStrobo(obj,p)
-          all_mu = obj.mean(1:obj.current_index);
-          all_A =  obj.A{1:obj.current_index};
-          if size(all_A{1}) ~= [2 2]
+      function PlotStrobo(obj,p)     
+          if size( obj.A{1}) ~= [2 2]
               disp('Sigma must be a 2 by 2 matrix'); 
           end
-          if length(all_mu(1,:)) ~= 2, 
+          if length(obj.mean(1,:)) ~= 2, 
               disp('mu must be a 2 by 1 vector'); 
           end
           point_number = 100;  % number of point
           h = [];
           for i = 1:obj.current_index
-              mu = all_mu(i,:);
-              C  = all_A{i}'*all_A{i};
+              mu = obj.mean(i,:)';
+              C  =  obj.A{i}'* obj.A{i};
               if (C == zeros(2, 2))
                   z = mu;
               else
@@ -422,6 +422,8 @@ classdef Particle < handle
               h = [h; plot( z(1, :), z(2, :), 'color', obj.clr, 'LineWidth', 2)];
               % if (~holding) hold off; end
               % set(draw_to_these_axes,'NextPlot',holding);
+              axis normal ;
+              axis([obj.minAction(1,1),obj.maxAction(1,1),obj.minAction(1,2),obj.maxAction(1,2)]) 
           end
           
       end
@@ -440,6 +442,8 @@ classdef Particle < handle
           xl_trasl = [X_trasl(:) Y_trasl(:)];
           [x_transf] = func(xl_trasl);
           plot(x_transf(:,1),x_transf(:,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
+          axis normal ;
+          axis([obj.minAction(1,1),obj.maxAction(1,1),obj.minAction(1,2),obj.maxAction(1,2)]) 
       end
       
   end
