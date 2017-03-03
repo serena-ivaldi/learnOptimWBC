@@ -84,12 +84,15 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
    % updated
    global_boost_event_trigger = local_boost_event_trigger*lambda + delay_turn; 
    % emergency parameters 
-   emergency_event_trigger = 8;                % this variables trigger the emergency mode when at the beginning i fail to deploy the particles 
+   emergency_event_trigger = 4;                % this variables trigger the emergency mode when at the beginning i fail to deploy the particles 
    locality_treshold = 200;                    % with this threshold i activate the GP optimization around the local optimal solution inside emergency mode
    emergency_boost_search_trigger = 10;        % number of turn to switch from exploration with particle to boost move (local or global) in emergency mode
   
    % fixed starting value for iterator / counter                      
    % emergency variables
+   if(visualization_for_paper)
+       emergency_particle_old = [];
+   end
    emergency_particle = [];
    current_real_fitness_for_emergency_particle = 0; 
    turn_of_emergency = 0;
@@ -164,6 +167,9 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
            y = obj.penalty_handling.penalties;
            y(end + 1) = constraints_violation_cost;
            y(end + 1) = performances_new;
+           % constraints check (i do not need this part here because im optimizing only looking at the constraints fitness)
+           %constraints = obj.penalty_handling.feasibility_vec(1,:)==-1; % vector of index of the violated constrained
+           %violated_constrained = find(constraints);
            % with this counter i count the number of turn that i spend for
            % emergency
            turn_of_emergency = turn_of_emergency + 1;
@@ -173,13 +179,15 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
                % or the emergency particle is empty. in both case i replace
                % the particle 
                if(isempty(emergency_particle) || -constraints_violation_cost > emergency_particle.GetBestPerfomance())
+                   if(visualization_for_paper)
+                       emergency_particle_old = emergency_particle;
+                   end
                    % create new emergency_particle
                    emergency_particle = Optimization.Particle(PM.size_action,PM.maxAction,PM.minAction,PM.n_constraints,PM.nIterations,...
                                                              PM.explorationRate,x_candidate,-constraints_violation_cost,[1 0 0]);
                    emergency_particle.DeactivateConstraints();
                    % update current real fitness value
                    current_real_fitness_for_emergency_particle = performances_new;
-                   
                end    
            else
                % here i update the
@@ -444,7 +452,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
        if(visualization_for_paper)
             state = StateMachine(deploy,emergency_switch,emergency_counter,emergency_event_trigger);
             success = MoveSuccessCheck(act,state,constraints_violation_cost,performances_new,emergency_particle,particle_iterator,PM);
-            PaperPlot(state,act,emergency_particle,PM,BO,x_candidate,particle_iterator);
+            PaperPlot(state,act,emergency_particle,emergency_particle_old,PM,BO,x_candidate,particle_iterator);
        end
        
        %% update gaussian process (i keep updating the gaussian process even during the emergency phase)
@@ -736,6 +744,7 @@ function success = MoveSuccessCheck(act,state,constraints_violation_cost,perform
                  disp('this is the last generation of deploy the next turn im gonna be in emergency')
                  success = false;
              else    
+                 %% TOCHECK
                  if(-constraints_violation_cost>emergency_particle.GetBestPerfomance())
                      pls = strcat(state,' action = ',act,' successful!');
                      disp(pls);
@@ -778,7 +787,7 @@ function success = MoveSuccessCheck(act,state,constraints_violation_cost,perform
 end
 
 
-function PaperPlot(state,action,emergency_particle,PM,BO,x_candidate,particle_iterator)
+function PaperPlot(state,action,emergency_particle,emergency_particle_old,PM,BO,x_candidate,particle_iterator)
     p = 0.95;
     % artificial constraints function
     [ymu_a,ys2_a]=BO.gp_s{end-1}.Predict(BO.xl_vis);
@@ -809,7 +818,11 @@ function PaperPlot(state,action,emergency_particle,PM,BO,x_candidate,particle_it
                     % Plot the objective function
                     subplot(1,2,1),hold on, title('current particle')
                     box on
-                    emergency_particle.PlotBox();
+                    if(emergency_particle.current_index == 1)
+                        emergency_particle_old.PlotBox();
+                    else
+                        emergency_particle.PlotBox();
+                    end
                     plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
                     axis normal;
                     subplot(1,2,2),hold on, title('local surrogate')
@@ -824,10 +837,12 @@ function PaperPlot(state,action,emergency_particle,PM,BO,x_candidate,particle_it
                     subplot(1,3,1),hold on, title('fitness ground truth')
                     pcolor(BO.X_vis,BO.Y_vis,BO.Z_vis),shading flat
                     plot(BO.gp_s{end}.X(1:end,1),BO.gp_s{end}.X(1:end,2), 'kx', 'MarkerSize', 10);
+                    plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
                     axis normal;
                     axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
                     subplot(1,3,2),hold on, title('feasible region ground truth')
                     pcolor(BO.X_vis,BO.Y_vis,BO.Z_constr_combined),shading flat
+                    plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
                     axis normal;
                     axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
                     subplot(1,3,3),hold on, title('global surrogate')
@@ -838,23 +853,44 @@ function PaperPlot(state,action,emergency_particle,PM,BO,x_candidate,particle_it
                 % empty         
                 case 'sample'
                     disp('none')
-            end  
-        % general plot with all the particle deployed in the same figure  
+            end
+        %% full window    
         figure
-        PM.PlotSameWindow(p,'false')    
+        pcolor(BO.X_vis,BO.Y_vis,BO.Z_constr_combined),shading flat
+        PM.PlotSameWindow(p,'false')
+        axis normal;
+        axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])    
+        %% general plot with all the particle deployed in the same figure
+        %% split window
+        figure
+        subplot(1,2,1),hold on, title('deployed particle')
+        pcolor(BO.X_vis,BO.Y_vis,BO.Z_constr_combined),shading flat
+        PM.PlotSameWindow(p,'false')
+        axis normal;
+        axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
+        subplot(1,2,2),hold on, title('zooming')
+        pcolor(BO.X_vis,BO.Y_vis,BO.Z_constr_combined),shading flat
+        PM.PlotSameWindow(0.01,'false')
+        axis normal;
+        axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
         %% EMERGENCY   
         case 'emergency'
             switch action
                 % emergency particle last + rectangle and local gp (subplot)
+                %% TOCHECK in this case i need to use the older version of the emergency particle before i replace it witih the new one
                 case 'local'
                      figure
                      % Plot the objective function
-                     subplot(1,2,1),hold on, title('Particle Path')
+                     subplot(1,2,1),hold on, title('Emergency Particle Search Box')
                      box on
-                     emergency_particle.PlotBox();
+                     if(emergency_particle.current_index == 1)
+                        emergency_particle_old.PlotBox();
+                     else
+                        emergency_particle.PlotBox(); 
+                     end
                      plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
                      axis normal;
-                     subplot(1,2,2),hold on, title('Particle Path')
+                     subplot(1,2,2),hold on, title('local surrogate')
                      box on
                      pcolor(reshape(x_transf(:,1),BO.res_vis,BO.res_vis),reshape(x_transf(:,2),BO.res_vis,BO.res_vis),reshape(sur,BO.res_vis,BO.res_vis)),shading flat
                      plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
@@ -863,15 +899,46 @@ function PaperPlot(state,action,emergency_particle,PM,BO,x_candidate,particle_it
                 %new emergency particle strobo and global gp (subplot)     
                 case 'global'
                     figure
-                    pcolor(BO.X_vis,BO.Y_vis,reshape(sur,BO.res_vis,BO.res_vis)),shading flat             
+                    subplot(1,2,1),hold on, title('emergency particle')
+                    if(~isempty(emergency_particle))
+                        emergency_particle.Plot();
+                    end
+                    axis normal;
+                    axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
+                    subplot(1,2,2),hold on, title('global surrogate')
+                    pcolor(BO.X_vis,BO.Y_vis,reshape(sur,BO.res_vis,BO.res_vis)),shading flat
+                    plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
+                    axis normal;
+                    axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
                 % none   
                 case 'sample'
                     disp('none')
             end
+            %% full window with emergency particle        
             figure
+            pcolor(BO.X_vis,BO.Y_vis,BO.Z_constr_combined),shading flat
             if(~isempty(emergency_particle))
                 emergency_particle.PlotStrobo(p);
             end
+            axis normal;
+            axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])        
+            
+            %% split window with emergency particle and zoom
+            figure
+            subplot(1,2,1),hold on, title('emergency particle')
+            pcolor(BO.X_vis,BO.Y_vis,BO.Z_constr_combined),shading flat
+            if(~isempty(emergency_particle))
+                emergency_particle.PlotStrobo(p);
+            end
+            axis normal;
+            axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
+            subplot(1,2,2),hold on, title('zommed')
+            pcolor(BO.X_vis,BO.Y_vis,BO.Z_constr_combined),shading flat
+            if(~isempty(emergency_particle))
+                emergency_particle.PlotStrobo(0.01);
+            end
+            axis normal;
+            axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
         % emergency particle strobo (single plot)    
            
         %% optimization    
@@ -902,9 +969,32 @@ function PaperPlot(state,action,emergency_particle,PM,BO,x_candidate,particle_it
          % strobo active particles
          figure
          PM.PlotSameWindow(p,true)
+         axis normal;
+         axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
          % only last position all particles
          figure
          PM.PlotSameWindow(p,false)
+         axis normal;
+         axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
+         %% general plot with all the particle deployed in the same figure
+         %% split window
+         figure
+         subplot(1,3,1),hold on, title('deployed particle')
+         pcolor(BO.X_vis,BO.Y_vis,BO.Z_constr_combined),shading flat
+         PM.PlotSameWindow(p,'false')
+         axis normal;
+         axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
+         subplot(1,3,2),hold on, title('zooming')
+         pcolor(BO.X_vis,BO.Y_vis,BO.Z_constr_combined),shading flat
+         %% add position of optimal solution
+         PM.PlotSameWindow(0.01,'false')
+         axis normal;
+         axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
+         subplot(1,3,3),hold on, title('real function')
+         plot(BO.gp_s{end}.X(1:end,1),BO.gp_s{end}.X(1:end,2), 'kx', 'MarkerSize', 10);
+         axis normal;
+         axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
+         
         otherwise
             warning('something is wrong with the expected state')
     end

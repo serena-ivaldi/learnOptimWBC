@@ -225,7 +225,7 @@ classdef BayesOpt < handle
             
             
             % [a,b] -------> (b-a).*rand(n,1) + a;
-            %% to do i need to add a check to verify if the bounding box of the local search is all insde the bounding box of the global functions
+            %% to do i need to add a check to verify if the bounding box of the local search is all inside the bounding box of the global functions
             %% in that case i can skip this selection procedure
             if (length(varargin) == 3)
                 %% for local search

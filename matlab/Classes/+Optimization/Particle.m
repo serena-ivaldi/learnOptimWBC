@@ -317,7 +317,7 @@ classdef Particle < handle
           if length(mu) ~= 2, 
               disp('mu must be a 2 by 1 vector'); 
           end
-          if(isempty(varargin{1}))
+          if(isempty(varargin))
             p = 0.95; % probability mass enclosed insided the ellipsoid
           else
             p = varargin{1};
@@ -371,7 +371,8 @@ classdef Particle < handle
       end
       
       
-      function PlotStrobo(obj,p)     
+      function PlotStrobo(obj,p)   
+          hold on;
           if size( obj.A{1}) ~= [2 2]
               disp('Sigma must be a 2 by 2 matrix'); 
           end
@@ -422,14 +423,20 @@ classdef Particle < handle
 
                   % Plot the major and minor axes.
                   L = k * sqrt(abs(diag(D))) * obj.GetSigma();
-                  h = plot( [mu(1); mu(1) + L(1) * V_s(1, 1)], ...
-                       [mu(2); mu(2) + L(1) * V_s(2, 1)], 'color', obj.clr);
-                  hold on;
-                  h = [h; plot( [mu(1); mu(1) + L(2) * V_s(1, 2)], ...
-                           [mu(2); mu(2) + L(2) * V_s(2, 2)], 'color', obj.clr)];
+                  %h = plot( [mu(1); mu(1) + L(1) * V_s(1, 1)], ...
+                  %      [mu(2); mu(2) + L(1) * V_s(2, 1)], 'color', [0 0 0]);
+                  
+                  %h = [h; plot( [mu(1); mu(1) + L(2) * V_s(1, 2)], ...
+                  %         [mu(2); mu(2) + L(2) * V_s(2, 2)], 'color', [0 0 0])];
               end
               %h = [h; plot( z(1, :), z(2, :), 'color', obj.clr, 'LineWidth', 2)];
-              patch(z(1, :),z(2, :),'k','FaceColor',obj.clr,'FaceAlpha',transparency_values(i));
+              patch(z(1, :),z(2, :),'k','FaceColor',obj.clr,'FaceAlpha',transparency_values(i),'EdgeAlpha',transparency_values(i));
+              if(i == obj.current_index)
+                  h = plot( [mu(1); mu(1) + L(1) * V_s(1, 1)], ...
+                          [mu(2); mu(2) + L(1) * V_s(2, 1)], 'color', [0 0 0]);
+                  h = [h; plot( [mu(1); mu(1) + L(2) * V_s(1, 2)], ...
+                              [mu(2); mu(2) + L(2) * V_s(2, 2)], 'color', [0 0 0])];
+              end
               % if (~holding) hold off; end
               % set(draw_to_these_axes,'NextPlot',holding);
           end

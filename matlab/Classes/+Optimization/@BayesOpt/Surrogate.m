@@ -50,7 +50,7 @@ function [ret, x] = Surrogate(self, x,varargin)
             ret = - ret;
         elseif strcmp(self.kind,'cucb')
             %self.min_or_max = 'max';
-            [ret, x] =  self.mcd_constr(x);
+            [ret, x] =  self.cucb(x);
             ret = - ret;    
         
         elseif strcmp(self.kind,'custom');
