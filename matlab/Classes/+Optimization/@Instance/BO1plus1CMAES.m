@@ -1,3 +1,6 @@
+%% IDEAS
+%%  it is possible to add a fourth move where i use a great number of point sampled inside the gaussian of the particle but the results are comuted from the surrogate function
+%% to accelerate the evolution of the covariance (we should not use point that satisfy the constraints and improve the fitness)
 %% TODO
 %% TOFIX 
 %% way that i compute the remaining deploy budget after mergency phase 
@@ -757,11 +760,11 @@ function success = MoveSuccessCheck(act,state,constraints_violation_cost,perform
              end
          case 'optimization'
              if(strcmp(act,'local') || strcmp(act,'sample'))
-                 if(isempty(cur_particle))
+                 if(isempty(PM.GetParticle(cur_particle)))
                      disp('this is the last generation of deploy the next turn im gonna be in optimization')
                      success = false;
                  else    
-                     if(constraints_violation_cost<0 && performances_new > cur_particle.GetBestPerfomance())
+                     if(constraints_violation_cost<0 && performances_new > PM.GetParticle(cur_particle).GetBestPerfomance())
                          pls = strcat(state,' action = ',act,' successful!');
                          disp(pls);
                          success = true;
@@ -954,7 +957,9 @@ function PaperPlot(state,action,emergency_particle,emergency_particle_old,PM,BO,
                     axis normal;
                     subplot(1,2,2),hold on, title('Particle Path')
                     box on
-                    pcolor(reshape(x_transf(:,1),BO.res_vis,BO.res_vis),reshape(x_transf(:,2),BO.res_vis,BO.res_vis),reshape(sur,BO.res_vis,BO.res_vis)),shading flat
+                    if(not_obsolete_surrogate)
+                        pcolor(reshape(x_transf(:,1),BO.res_vis,BO.res_vis),reshape(x_transf(:,2),BO.res_vis,BO.res_vis),reshape(sur,BO.res_vis,BO.res_vis)),shading flat
+                    end
                     plot(x_candidate(1,1),x_candidate(1,2), 'ro', 'MarkerSize', 10, 'linewidth', 3);
                     axis normal;
                     axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
@@ -991,6 +996,7 @@ function PaperPlot(state,action,emergency_particle,emergency_particle_old,PM,BO,
          axis normal;
          axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])
          subplot(1,3,3),hold on, title('real function')
+         pcolor(BO.X_vis,BO.Y_vis,BO.Z_vis),shading flat
          plot(BO.gp_s{end}.X(1:end,1),BO.gp_s{end}.X(1:end,2), 'kx', 'MarkerSize', 10);
          axis normal;
          axis([BO.bounds(1,1),BO.bounds(2,1),BO.bounds(1,2),BO.bounds(2,2)])

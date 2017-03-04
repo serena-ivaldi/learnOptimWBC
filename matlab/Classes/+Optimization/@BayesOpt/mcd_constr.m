@@ -11,7 +11,7 @@ function [ret1, x] = mcd_constr(obj,x,particles_pos)
     if isempty(len)
         len = length(x);
     end
-    % this is not a big dial because im gonna trigger this cicle only when
+    % this is not a big deal because im gonna trigger this cicle only when
     % i want to plot the function (just for debugging)
     siz1 = size(particles_pos);
     len1 = siz1(siz1~=obj.dim);
