@@ -1,0 +1,3 @@
+for updating robotics toolbox subsitute the file in the toolbox with the ones that are inside this folder
+
+frne.c -----------> /path to rcvtoolbox/rvctools/robot/mex

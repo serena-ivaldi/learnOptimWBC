@@ -1,0 +1,156 @@
+%%%;;
+
+%% GENERAL PARAMETERS
+% for other strucutures
+time_struct.ti = 0;
+time_struct.tf = 20;
+time_struct.step = 0.001;
+
+%% TASK PARAMETERS
+%name_dat = 'sere/LBR4p5.0_scene5_UF_repellers_on_elbow__atrtactive_point_on_ee_fit5_SERE';
+%name_dat = 'sere/LBR4p9.0_scene5_GHC_table_and_an_one_attractive_point_and_posture_task_SERE';
+%name_dat = 'LBR4p8.0_scene9_GHC_test_wall_and_two_attractive_point';
+%name_dat = 'LBR4p11.0_scene9_UF_mulitple_task_stability_Null_space_projectors';
+%name_dat = 'LBR4p10.0_scene10_UF_lemniscate';
+%name_dat = 'LBR4p12.0_scene0_UF_test_elastic_reference';
+%name_dat = 'Jaco1.3_scene1.1';
+%name_dat = 'LBR4p2.2_scene2_generalization';
+%name_dat = 'lwrsimple1.0_scene_test_obs';
+name_dat = 'iCub_1.0';
+%name_dat = 'humanoid_bench_generator_lbrsimple_1.0';
+%path=LoadParameters(name_dat);
+%load(path);
+%% TYPE OF CONTROLLER 
+CONTROLLERTYPE ='UF';   % GHC or UF
+%%
+
+%SUBCHAIN PARAMETERS 
+subchain1 =  {'r_hand','r_elbow_1','none'};
+target_link{1} = subchain1;
+
+
+%% Robot
+bot1 = iCub('model_arms_torso_free');
+chain_1 = DummyRvc_iCub(bot1,'l_sole'); 
+robots{1} = chain_1;
+chains = SubChains(target_link,robots,bot1);
+%%  REFERENCE PARAMETERS
+deg = pi/180;
+% primary trajectory
+% traj_type = {'impedance'};
+% control_type = {'x'};
+% type_of_traj = {'func'};
+% geometric_path = {'fixed'};
+% time_law = {'none'};
+% %parameters first chains
+% geom_parameters{1,1} = [0.30 -0.71 0.5]; 
+% %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
+% dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
+
+traj_type = {'cartesian','cartesian','joint'};
+control_type = {'x','x','none'};
+type_of_traj = {'sampled','sampled','sampled'};
+geometric_path = {'fixed','fixed','fixed'};
+time_law = {'none','none','none'};
+%parameters first chains
+geom_parameters{1,1} = [0.35,-0.15,0.7]; %[0.38,-0.1,0.7]; 
+geom_parameters{1,2} = [0.24,-0.23,0.7]; %[0.24,-0.23,0.7];
+geom_parameters{1,3} = [0;0.785398163397448;0;0;-0.349065850398866;0.523598775598299;0;0;0.785398163397448;0;0;0;0.523598775598299;0;0;0;0]';
+dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.ndof,1); 
+
+% traj_type = {'cartesian'};
+% control_type = {'rpy'};
+% type_of_traj = {'func'};
+% geometric_path = {'fixed'};
+% time_law = {'none'};
+% %parameters first chains
+% geom_parameters{1,1} = [pi/2 0 -pi/2]; 
+% %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
+% dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(bot1.n,1); %dim_of_task{1,4}=ones(bot1.n,1);
+
+% secondary trajectory
+traj_type_sec = {'none','none','none'};
+control_type_sec = {'rpy','rpy','rpy'};
+type_of_traj_sec = {'func','func','func'};
+geometric_path_sec = {'fixed','fixed','fixed'};
+time_law_sec = {'linear','linear','linear'};
+%parameters first chains
+geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
+geom_parameters_sec{1,2} = [-0.309 -0.469 0.581];
+geom_parameters_sec{1,3} = [-0.309 -0.469 0.581];
+geom_parameters_sec{1,4} = [-0.309 -0.469 0.581];
+geom_parameters_sec{1,5} = [-0.309 -0.469 0.581];
+geom_parameters_sec{1,6} = [-0.309 -0.469 0.581];
+geom_parameters_sec{1,7} = [120 116 90 0 0 0 0]* deg; 
+dim_of_task_sec{1,1}=[1;1;1]; 
+dim_of_task_sec{1,2}=[1;1;1]; 
+dim_of_task_sec{1,3}=[1;1;1]; 
+dim_of_task_sec{1,4}=[1;1;1]; 
+dim_of_task_sec{1,5}=[1;1;1]; 
+dim_of_task_sec{1,6}=[1;1;1]; 
+dim_of_task_sec{1,7}= ones(bot1.ndof,1); 
+
+switch CONTROLLERTYPE
+    case 'UF'
+        % REPELLER PARAMETERS
+        % scenario dependant
+        rep_subchain = [7];
+        rep_target_link{1} = rep_subchain;
+        rep_type = {'cartesian_x'};
+        rep_mask {1,1}=[1,1,1]; 
+        rep_type_of_J_rep = {'DirectionCartesian'};
+        for ii=1:chains.GetNumChains()
+             chain_dof(ii) = chains.GetNumLinks(ii);
+        end
+        UF_StaticParameters
+    case 'GHC'
+        GHC_StaticParameters
+    otherwise
+        warning('Unexpected control method')
+end
+
+%% SCENARIO
+name_scenario = 'iCub_1';%'lbr_scenario_2_gen' lbr_scenario2; %lbr_scenario5.1,'lbr_scenario9','lbr_scenario10';
+
+%% RBT SIMULATOR PARAMETERS
+time_sym_struct = time_struct;
+time_sym_struct.step = 0.001; 
+% TODO generalize for multichain
+
+simulator_type = {'icub_matlab'};
+if strcmp(simulator_type{1},'rbt')
+    % rbt sim
+    qi{1} = qz;
+    %qi{1} = zeros(1,chains.GetNumLinks(1)); %stretched arm
+    qdi{1} = zeros(1,chains.GetNumLinks(1));
+    options= [];
+    % define the type of integration of the sytem of differential equation
+    fixed_step = false; %true;
+    torque_saturation =100000; % high value == no saturation
+    maxtime = 100; % maximum time before a simulation is stopped for being too long
+elseif strcmp(simulator_type{1},'icub_matlab')
+    % iCub sim
+    %% building initial configuration
+    qi{1} = [];
+    qdi{1} = [];
+    list_of_kin_chain = {'trunk','left_arm','right_arm'};
+    params.feet_on_ground =  [1,1];
+    params.qjInit      = bot1.InitializeState(list_of_kin_chain, params.feet_on_ground);
+    params.dqjInit     = zeros(bot1.ndof,1);
+    % icub starting velocity floating base
+    params.dx_bInit    = zeros(3,1);
+    params.omega_bInit = zeros(3,1);
+    % root reference link;
+    params.root_reference_link ='l_sole';
+    params.tStart   = time_sym_struct.ti;
+    params.tEnd     = time_sym_struct.tf;
+    params.sim_step = 0.01;
+    params.demo_movements = 0 ;
+    params.wait     = waitbar(0,'State integration in progress...');
+    params.maxtime = 100;
+    params.torque_saturation = 100000;
+
+end
+%% Parameters Dependant on the type of controller
+
+%%%EOF

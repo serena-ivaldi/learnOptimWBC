@@ -1,0 +1,74 @@
+%%%;;
+
+hold on;axis equal;
+%% modify from this point
+global G_OB;
+
+depth = 0.18;
+width = 0.20;
+center = -0.0681;
+thickness = 0.01;
+[X,Y,Z]=meshgrid(depth,center-width/2:0.001:center+width/2,0.3:0.001:0.9);
+%Y = -0.4*ones(1,size(X,1));
+
+%Display the wall
+% for i=1:size(X,3)
+%     scatter3(X(:,:,i),Y(:,:,i),Z(:,:,i))
+% end
+Xmax = max(X(:)); Xmin = min(X(:));
+Ymax = max(Y(:)); Ymin = min(Y(:));
+Zmax = max(Z(:)); Zmin = min(Z(:));
+if Xmax == Xmin
+    Xmin = Xmin - thickness/2; Xmax = Xmax + thickness/2;
+elseif Ymax == Ymin
+    Ymin = Ymin - thickness/2; Ymax = Ymax + thickness/2;
+elseif Zmax == Zmin
+    Zmin = Zmin - thickness/2; Zmax = Zmax + thickness/2;
+end
+
+xyzpatch.vertices = [Xmax , Ymax , Zmax;
+    Xmax , Ymin , Zmax;
+    Xmin , Ymin , Zmax;
+    Xmin , Ymax , Zmax;
+    Xmax , Ymax , Zmin;
+    Xmax , Ymin , Zmin;
+    Xmin , Ymin , Zmin;
+    Xmin , Ymax , Zmin;];
+
+xyzpatch.faces   = [ 1 2 3 4;
+    1 4 8 5;
+    5 8 7 6;
+    7 3 2 6;
+    2 6 5 1;
+    3 7 8 4];
+
+lnkpatch_wall = patch('vertices',xyzpatch.vertices,'faces',xyzpatch.faces,'FaceColor',[255, 165, 0]./255,'FaceAlpha',0.8);
+
+
+r_e_e_point = [0.2775, -0.2023, 0.7268]; %[0.35,-0.15,0.7]
+r_elbow_point = [0.1540, -0.2600, 0.7050];
+scatter3(r_elbow_point(1,1),r_elbow_point(1,2),r_elbow_point(1,3),130,'c','LineWidth',3);
+scatter3(r_e_e_point(1,1),r_e_e_point(1,2),r_e_e_point(1,3),130,'r','LineWidth',3);
+
+l_e_e_point = [0.2775, 0.0661, 0.7268]; %[0.35,0.0138,0.7]
+l_elbow_point = [0.1540, 0.1238, 0.7050];
+scatter3(l_elbow_point(1,1),l_elbow_point(1,2),l_elbow_point(1,3),130,'c','LineWidth',3);
+scatter3(l_e_e_point(1,1),l_e_e_point(1,2),l_e_e_point(1,3),130,'r','LineWidth',3);
+
+% wrist_point = [-0.174,-0.317,0.480];
+% e_e_point = [-0.022,-0.722,0.709];
+% %intermediate_e_e_point = [ -0.3,-0.2,0.7];
+% scatter3(wrist_point(1,1),wrist_point(1,2),wrist_point(1,3),130,'b');
+% scatter3(e_e_point(1,1),e_e_point(1,2),e_e_point(1,3),130,'b');
+%scatter3(intermediate_e_e_point(1,1),intermediate_e_e_point(1,2),intermediate_e_e_point(1,3),130,'b');
+% global obstacle
+rapresentation.X = X(1,:,1);
+rapresentation.Y = Y(:,1,1)';
+rapresentation.Z = permute(Z(1,1,:),[2 3 1]);
+ob1 = Obstacle(rapresentation,'wall',0.002);
+
+G_OB = [ob1]; % G_OB has to be a row vector of obstacles
+
+
+
+%%%EOF
