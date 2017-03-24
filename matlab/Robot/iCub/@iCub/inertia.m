@@ -17,4 +17,4 @@ function I = inertia(rob,q)
 %    
  
 %    
-I = wbm_massMatrix(rob.R_b,rob.x_b,q);
+I = wbm_massMatrix(rob.state.w_R_b,rob.state.x_b,q);

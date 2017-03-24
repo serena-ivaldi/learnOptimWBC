@@ -15,5 +15,5 @@ function [ Omega ] = CentroidalMomentum( rob,q,qd )
 % Genova, Dec 2014
 
                     
-            Omega = wbm_centroidalMomentum(rob.R_b,rob.x_b,q,qd,[rob.dx_b;rob.omega_W]);
+            Omega = wbm_centroidalMomentum(rob.state.w_R_b,rob.state.x_b,q,qd,[rob.state.dx_b;rob.state.w_omega_b]);
 end

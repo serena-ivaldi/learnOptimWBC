@@ -25,7 +25,7 @@ params.demo_movements = 0;
 % current model
 %% SUBCHAIN PARAMETERS
 
-icub = iCub('model_arms_torso_free');
+icub = iCub('icubGazeboSim');
 chain_1 = DummyRvc_iCub(icub,'l_sole');
  
 subchain1 = {'l_sole'};
@@ -60,7 +60,7 @@ elseif   params.feet_on_ground(1) == 0 && params.feet_on_ground(2) == 1
 end
 % FLOATING BASE
 params.active_floating_base = false;
-params.qjInit      = icub.InitializeState(list_of_kin_chain, params.feet_on_ground, joints_initial_values);
+params.qjInit      = icub.InitializeStateicubGazeboSim(params.feet_on_ground);
 params.dqjInit     = zeros(icub.ndof,1);
 % icub starting velocity floating base
 params.dx_bInit    = zeros(3,1);
@@ -77,6 +77,14 @@ params.sim_step =  0.01;%time_struct.step;
 params.demo_movements = 0;
 params.maxtime = 1000;
 params.torque_saturation = 100000;
+%% other parameters
+params.use_QPsolver = 0;                          %either 0 or 1
+params.pinv_tol           = 1e-8;
+params.pinv_damp          = 5e-6;
+params.reg_HessianQP      = 1e-3;
+% feet size
+params.footSize  = [-0.07 0.07;       % xMin, xMax
+                    -0.03 0.03];      % yMin, yMax
     
 %% Visualization
 
@@ -90,7 +98,6 @@ else
     [jl1,jl2]        = wbm_jointLimits();
     limits           = [jl1 jl2];
     params.limits    = limits;
-    
     %%  REFERENCE PARAMETERS
     deg = pi/180;
     % primary trajectory
@@ -227,7 +234,7 @@ else
 
     %% controller
     repellers = [];
-    controller = Controllers.UF(chains,reference,secondary_refs,alphas,repellers,metric,Param,Param_secondary,combine_rule,regularizer);
+    controller = Controllers.BalanceController(chains,reference,secondary_refs,alphas,repellers,metric,Param,Param_secondary,combine_rule,regularizer,params);
 
     %% simulator
     [t,chi,visual_param]=DynSim_iCub(controller,params);
