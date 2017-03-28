@@ -88,6 +88,7 @@ classdef iCub < handle
                 leftLegInit  = [  25.5    5   0  -40    -5.5  0]';
                 rightLegInit = [  25.5   15   0  -18.5  -5.5  0]';
             end
+            
             % joints configuration [rad]
             qjInit    = [torsoInit;leftArmInit;rightArmInit;leftLegInit;rightLegInit]*(pi/180);
             obj.init_state.qi = qjInit;
@@ -213,11 +214,11 @@ classdef iCub < handle
             state = obj.state;
         end
         
-        function SetWorldFrameiCub(obj,qjInit,dqjInit,dx_bInit,omega_WInit,reference_link)
+        function SetWorldFrameiCub(obj,qjInit,dqjInit,dx_bInit,w_omega_bInit,reference_link)
             % Updating the robot position
-            wbm_updateState(qjInit,dqjInit,[dx_bInit;omega_WInit]);
+            wbm_updateState(qjInit,dqjInit,[dx_bInit;w_omega_bInit]);
             % fixing the world reference frame w.r.t. the foot on ground position
-            [x_b0,R_b0] = wbm_getWorldFrameFromFixLik(reference_link,qjInit);
+            [x_b0,R_b0] = wbm_getWorldFrameFromFixLnk(reference_link,qjInit);
             % define world frame
             wbm_setWorldFrame(R_b0,x_b0,[0 0 -9.81]');
             % update position and orientation of the floating base repect of the root base
@@ -227,14 +228,15 @@ classdef iCub < handle
             obj.state.w_R_b = R_b0;
             % initial velocity floating base
             obj.state.dx_b   = dx_bInit;
-            obj.state.w_omega_b = omega_WInit;
+            obj.state.w_omega_b = w_omega_bInit;
             
             obj.init_state.qi = qjInit;
             obj.init_state.qdi = dqjInit;
             obj.init_state.x_bi = x_b0;
             obj.init_state.w_R_bi = R_b0;
             obj.init_state.dx_bi   = dx_bInit;
-            obj.init_state.w_omega_bi = omega_WInit;
+            obj.init_state.w_omega_bi = w_omega_bInit;
+            %% TODEBUG
             % solo per adesso per la integrazione del balance
             Xcom_pose = wbm_forwardKinematics(obj.init_state.w_R_bi,obj.init_state.x_bi,obj.init_state.qi,'com');
             obj.init_state.xCoMRef = Xcom_pose(1:3);
@@ -254,11 +256,11 @@ classdef iCub < handle
         %qt_b       orientation fo the floating base with quaternion
         %dx_b       linear velocity of the floating base
         %omega_w    angular velocity of the floating base in world frame
-        function  SetFloatingBaseState(obj,x_b,qt_b,dx_b,omega_W)
+        function  SetFloatingBaseState(obj,x_b,qt_b,dx_b,w_omega_b)
             import WBM.utilities.frame2posRotm; 
             obj.state.x_b = x_b;
             obj.state.dx_b = dx_b;
-            obj.state.w_omega_b = omega_W;
+            obj.state.w_omega_b = w_omega_b;
             % Obtaining the rotation matrix from root link to world frame
             qT         = [x_b;qt_b];
             [~,obj.state.w_R_b]    = frame2posRotm(qT);

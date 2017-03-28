@@ -5,43 +5,39 @@
 
 % #TODO substitute icub with controller.subchains
 function [t, q, qd] = DynSim_iCub(controller,params)
-WS = controller.GetWholeSystem();
-%% Updating the robot position and define the world link
-WS.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
-[~,T_b,~,~] = WS.GetState();
+    WS = controller.GetWholeSystem();
+    %% Updating the robot position and define the world link
+    WS.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
+    [~,T_b,~,~] = WS.GetState();
 
-params.chiInit = [T_b; params.qjInit; WS.state.dx_b; WS.state.w_omega_b; params.dqjInit];
-%% Integrate forward dynamics
-if params.demo_movements == 0
-    options = odeset('RelTol',1e-3,'AbsTol', 1e-4);
-else
-    options = odeset('RelTol',1e-6,'AbsTol',1e-6);
-end
+    params.chiInit = [T_b; params.qjInit; WS.state.dx_b; WS.state.w_omega_b; params.dqjInit];
+    %% Integrate forward dynamics
+    if params.demo_movements == 0
+        options = odeset('RelTol',1e-3,'AbsTol', 1e-4);
+    else
+        options = odeset('RelTol',1e-6,'AbsTol',1e-6);
+    end
 
-params.lfoot_ini = wbm_forwardKinematics('l_sole');
-params.rfoot_ini = wbm_forwardKinematics('r_sole');
+    params.lfoot_ini = wbm_forwardKinematics('l_sole');
+    params.rfoot_ini = wbm_forwardKinematics('r_sole');
 
-forwardDynFunc  = @(t,chi)forwardDynamics(t,chi,controller,params);
+    forwardDynFunc  = @(t,chi)forwardDynamics(t,chi,controller,params);
 
+    try                        
+        [t,chi,visual_param] = ode15s(forwardDynFunc,params.tStart:params.sim_step:params.tEnd,params.chiInit,options);
+        q = chi(:,1:7+WS.ndof);
+        qd = chi(:,8+WS.ndof:end);
+        %delete(params.wait)
 
-try
-    [t,chi,visual_param] = ode15s(forwardDynFunc,params.tStart:params.sim_step:params.tEnd,params.chiInit,options);
-    q = chi(:,1:7+WS.ndof);
-    qd = chi(:,8+WS.ndof:end);
-    %delete(params.wait)
-
-catch err
-    disp('integration error');
-    rethrow(err);
-end
-
+    catch err
+        disp('integration error');
+        rethrow(err);
+    end
 end
 
 function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
     t
     %% Config parameters
-    import WBM.utilities.frame2posRotm;
-    import WBM.utilities.rotm2eulAngVelTF;
     import WBM.utilities.dquat;
     % i get the pointer to the whole system
     if isempty(controller.current_time)
@@ -73,19 +69,20 @@ function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
     tau(tau<-param.torque_saturation) = -param.torque_saturation;
 
     %% contact dynamic simulation    
-    [tauContact]=DynSim_iCubContacts(ndof,state,dynamic,jacobian_contact,param,tau);
+    [tauContact,fc]=DynSim_iCubContacts(ndof,state,dynamic,jacobian_contact,param,tau);
     %% State derivative computation
     % Need to calculate the quaternions derivative
     b_omega_w = transpose(w_R_b)*w_omega_b; %% TODO floating base flag required (parameter of the simulator)
     dqt_b   = dquat(qt_b,b_omega_w);   %% TODO floating base flag required (parameter of the simulator)
-    dx      = [dx_b;dqt_b;qd];
+    Nu      = [dx_b;dqt_b;qd];
     dNu     = M\(tauContact + [zeros(6,1); tau]-h);
-    dchi    = [dx;dNu];
+    dchi    = [Nu;dNu];
 
-    if toc(controller.current_time) > param.maxtime;
-        controller.current_time = [];
-        error('Stopped. Taking too long.')
-    end
+    %% for debug
+    %if toc(controller.current_time) > param.maxtime;
+    %    controller.current_time = [];
+    %    error('Stopped. Taking too long.')
+    %end
     %% Visualization
     % These are the variables that can be plotted by the visualizer.m
     % function

@@ -5,14 +5,13 @@ clc
 %% test selection
 
 visualization_test = false;
-
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
 time_struct.tf = 10;
 time_struct.step = 0.01;
 %% Parameters for simulator
-ndof = 17;
+ndof = 25;
 % balancing on two feet or one foot
 params.feet_on_ground =  [1,1];                                  %either 0 or 1; [left,right] (in the simulator)
 % allows the visualization of torques, forces and other user-defined graphics
@@ -20,7 +19,7 @@ visualizer_graphics   =  1;                                      %either 0 or 1
 visualizer_demo       =  1;                                      %either 0 or 1
 visualizer_jointsPos  =  0;                                      %either 0 or 1; only if visualizer_graphics = 1
 
-params.demo_movements = 0;
+params.demo_movements = 1;
 % list of kin is a way to establish the kinematic part that are inside the
 % current model
 %% SUBCHAIN PARAMETERS
@@ -37,14 +36,14 @@ robots{1} = chain_1;
 chains = SubChains(target_link,robots,icub);
 
 %% building initial configuration
-qi{1} = [];
-qdi{1} = [];
-list_of_kin_chain = {'trunk','left_arm','right_arm','l_sole','r_sole'};
-joints_initial_values{1,1} = [0.0  0.0  0.0];
-joints_initial_values{1,2} = [0.0  30.0  0.0  45.0  0.0 0.0 0.0];
-joints_initial_values{1,3} = [0.0  30.0  0.0  45.0  0.0 0.0 0.0];
-joints_initial_values{1,4} = [25.5   5.0    0.0  -40    -5.5  -0.1];
-joints_initial_values{1,5} = [25.5   5.0    0.0  -40    -5.5  -0.1];
+%qi{1} = [];
+%qdi{1} = [];
+% list_of_kin_chain = {'trunk','left_arm','right_arm','l_sole','r_sole'};
+% joints_initial_values{1,1} = [0.0  0.0  0.0];
+% joints_initial_values{1,2} = [0.0  30.0  0.0  45.0  0.0 0.0 0.0];
+% joints_initial_values{1,3} = [0.0  30.0  0.0  45.0  0.0 0.0 0.0];
+% joints_initial_values{1,4} = [25.5   5.0    0.0  -40    -5.5  -0.1];
+% joints_initial_values{1,5} = [25.5   5.0    0.0  -40    -5.5  -0.1];
 
 params.feet_on_ground =  [1,1];
 params.numContacts = sum(params.feet_on_ground,2);
@@ -59,7 +58,7 @@ elseif   params.feet_on_ground(1) == 0 && params.feet_on_ground(2) == 1
     params.contactLinkNames      = {'r_sole'};
 end
 % FLOATING BASE
-params.active_floating_base = false;
+%params.active_floating_base = false;
 params.qjInit      = icub.InitializeStateicubGazeboSim(params.feet_on_ground);
 params.dqjInit     = zeros(icub.ndof,1);
 % icub starting velocity floating base
@@ -74,7 +73,7 @@ end
 params.tStart   = time_struct.ti;
 params.tEnd     = time_struct.tf;
 params.sim_step =  0.01;%time_struct.step;
-params.demo_movements = 0;
+params.demo_movements = 1;
 params.maxtime = 1000;
 params.torque_saturation = 100000;
 %% other parameters
@@ -85,9 +84,10 @@ params.reg_HessianQP      = 1e-3;
 % feet size
 params.footSize  = [-0.07 0.07;       % xMin, xMax
                     -0.03 0.03];      % yMin, yMax
-    
+%% DEBUGGING
+%icub.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
+%test = wbm_dJdq(icub.state.w_R_b,icub.state.x_b,params.qjInit,params.dqjInit,[icub.state.dx_b;icub.state.w_omega_b],'r_sole');                
 %% Visualization
-
 if (visualization_test)
     [~,xTb,~,~] = icub.GetState();
     chi = [xTb',params.qjInit'];
@@ -95,9 +95,9 @@ if (visualization_test)
 else
     %% limit parameters
     
-    [jl1,jl2]        = wbm_jointLimits();
-    limits           = [jl1 jl2];
-    params.limits    = limits;
+    %[jl1,jl2]        = wbm_jointLimits();
+    %limits           = [jl1 jl2];
+    %params.limits    = limits;
     %%  REFERENCE PARAMETERS
     deg = pi/180;
     % primary trajectory

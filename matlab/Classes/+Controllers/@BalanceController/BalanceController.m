@@ -243,6 +243,7 @@ classdef  BalanceController < Controllers.AbstractController
           dJc_nu = contact_jacobians.dJcNu;
           %% Config parameters
           pinv_tol            = CONFIG.pinv_tol;
+          pinv_damp           = CONFIG.pinv_damp;
           feet_on_ground      = CONFIG.feet_on_ground;
           ndof                = icub.ndof;
 
@@ -346,8 +347,7 @@ classdef  BalanceController < Controllers.AbstractController
           SigmaNA            =  Sigma*NullA;
 
           % Postural task correction
-          % Postural task correction
-          pinvLambdaDamp     =  Lambda'/(Lambda*Lambda' + CONFIG.pinv_damp*eye(size(Lambda,1)));
+          pinvLambdaDamp     =  Lambda'/(Lambda*Lambda' + pinv_damp*eye(size(Lambda,1)));
           NullLambdaDamp     =  eye(ndof)-pinvLambdaDamp*Lambda;
           posturalCorr       =  NullLambdaDamp*Mbar;
           impedances         =  impedances*pinv(posturalCorr,pinv_tol) + 0.01*eye(ndof);

@@ -1,4 +1,4 @@
-function [tauContact]=DynSim_iCubContacts(ndof,state,dynamic,contact_jacobian,param,tau)
+function [tauContact,fc]=DynSim_iCubContacts(ndof,state,dynamic,contact_jacobian,param,tau)
     import WBM.utilities.frame2posRotm;
     import WBM.utilities.rotm2eulAngVelTF
     Jc = contact_jacobian.Jc;
@@ -13,7 +13,7 @@ function [tauContact]=DynSim_iCubContacts(ndof,state,dynamic,contact_jacobian,pa
     
     %% moving floating base
     % feet correction gain
-    K_corr_pos  = 2.5;
+    K_corr_pos  = 100;
     K_corr_vel  = 2*sqrt(K_corr_pos);
     % feet current position and orientation
     l_sole   = wbm_forwardKinematics(w_R_b,x_b,q,'l_sole');
@@ -22,13 +22,16 @@ function [tauContact]=DynSim_iCubContacts(ndof,state,dynamic,contact_jacobian,pa
     [x_rfoot,R_b_rfoot]    = frame2posRotm(r_sole);
 
     % orientation is parametrized with euler angles
-    [phi_lfoot,~]          = rotm2eulAngVelTF(R_b_lfoot);
-    [phi_rfoot,~]          = rotm2eulAngVelTF(R_b_rfoot);
+    [phi_lfoot,TLfoot]          = rotm2eulAngVelTF(R_b_lfoot);
+    [phi_rfoot,TRfoot]          = rotm2eulAngVelTF(R_b_rfoot);
 
     pos_leftFoot           = [x_lfoot; phi_lfoot];
     pos_rightFoot          = [x_rfoot; phi_rfoot];
-
-    % feet original position and orientation
+ 
+    TL = [eye(3) zeros(3) ; zeros(3) TLfoot];
+    TR = [eye(3) zeros(3) ; zeros(3) TRfoot];
+    
+    %    feet original position and orientation
     lsole_ini              = param.lfoot_ini;
     rsole_ini              = param.rfoot_ini;
 
@@ -40,20 +43,24 @@ function [tauContact]=DynSim_iCubContacts(ndof,state,dynamic,contact_jacobian,pa
 
     lfoot_ini_tot          = [xi_lfoot; phi_lfoot_ini];
     rfoot_ini_tot          = [xi_rfoot; phi_rfoot_ini];
+    
+    deltaPoseLFoot        = TL*(pos_leftFoot-lfoot_ini_tot);    
+    deltaPoseRFoot        = TR*(pos_rightFoot-rfoot_ini_tot);
+    
+
 
     % error between original and current feet position and orientation
     if param.feet_on_ground(1) == 1 && param.feet_on_ground(2) == 0
 
-        pos_feet_delta = pos_leftFoot-lfoot_ini_tot;
+        pos_feet_delta =  deltaPoseLFoot;
 
     elseif param.feet_on_ground(1) == 0 && param.feet_on_ground(2) == 1
 
-        pos_feet_delta = pos_rightFoot-rfoot_ini_tot;
+        pos_feet_delta =  deltaPoseRFoot;
 
     elseif param.feet_on_ground(1) == 1 && param.feet_on_ground(2) == 1
 
-        pos_feet_delta = [(pos_leftFoot-lfoot_ini_tot);...
-            (pos_rightFoot-rfoot_ini_tot)];
+        pos_feet_delta = [deltaPoseLFoot;deltaPoseRFoot];
     end
     %% Compute contact forces
     % % Real contact forces computation
