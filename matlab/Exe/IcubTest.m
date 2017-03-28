@@ -89,9 +89,10 @@ params.footSize  = [-0.07 0.07;       % xMin, xMax
 %test = wbm_dJdq(icub.state.w_R_b,icub.state.x_b,params.qjInit,params.dqjInit,[icub.state.dx_b;icub.state.w_omega_b],'r_sole');                
 %% Visualization
 if (visualization_test)
-    [~,xTb,~,~] = icub.GetState();
-    chi = [xTb',params.qjInit'];
-    icub.plot(chi,params)
+    %[~,xTb,~,~] = icub.GetState();
+    %chi = [xTb',params.qjInit'];
+    %icub.plot(chi,params)
+    icub.EnhancedPlot(params.qjInit,params);
 else
     %% limit parameters
     
@@ -237,14 +238,18 @@ else
     controller = Controllers.BalanceController(chains,reference,secondary_refs,alphas,repellers,metric,Param,Param_secondary,combine_rule,regularizer,params);
 
     %% simulator
-    [t,chi,visual_param]=DynSim_iCub(controller,params);
+    [t,q_ext,qd_ext]=DynSim_iCub(controller,params);
 
     %% Visualize forward dynamics
     %params.wait     = waitbar(0,'Graphics generation in progress...');
     figure
     hold on
-    plot3(geom_parameters{1,1}(1),geom_parameters{1,1}(2),geom_parameters{1,1}(3),'g.','MarkerSize', 30);
-    icub.plot(chi,params);
+    %plot3(geom_parameters{1,1}(1),geom_parameters{1,1}(2),geom_parameters{1,1}(3),'g.','MarkerSize', 30);
+    %icub.plot(chi,params);
+    chi = [q_ext,qd_ext];
+    % get the joint position
+    [state,x_b,qt_b,w_R_b,base_pose,q,dx_b,w_omega_b,qd,Nu] = icub.State(chi');
+    icub.EnhancedPlot(q,params);
 
   
 end

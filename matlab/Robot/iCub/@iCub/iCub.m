@@ -21,6 +21,13 @@ classdef iCub < handle
         UBjointLimit        % Upper limit boundarie of all the revolute joints
         LBjointLimit        % Lower limit boundarie of all the revolute joints
         effortLimit         % Limit efforts of all the revolute joints
+        %% Enanched visualization field
+        modelName   
+        mdlLdr           
+        consideredJoints
+        setPos               
+        setCamera
+        lightDir
     end
     
     methods
@@ -61,8 +68,54 @@ classdef iCub < handle
                 end
                 obj.ndof = length(obj.revoluteJointList);
             end
+            
+            obj.InitEnhanViz();
+            
         end
         
+        function InitEnhanViz(obj)
+            obj.modelName        = 'iCub';
+            obj.setPos           = [1,0,0.5];    
+            obj.setCamera        = [0.4,0,0.5];
+            obj.mdlLdr           = iDynTree.ModelLoader();
+            obj.consideredJoints = iDynTree.StringVector();
+
+            obj.consideredJoints.push_back('torso_pitch');
+            obj.consideredJoints.push_back('torso_roll');
+            obj.consideredJoints.push_back('torso_yaw');
+            obj.consideredJoints.push_back('l_shoulder_pitch');
+            obj.consideredJoints.push_back('l_shoulder_roll');
+            obj.consideredJoints.push_back('l_shoulder_yaw');
+            obj.consideredJoints.push_back('l_elbow');
+            obj.consideredJoints.push_back('l_wrist_prosup');
+            obj.consideredJoints.push_back('r_shoulder_pitch');
+            obj.consideredJoints.push_back('r_shoulder_roll');
+            obj.consideredJoints.push_back('r_shoulder_yaw');
+            obj.consideredJoints.push_back('r_elbow');
+            obj.consideredJoints.push_back('r_wrist_prosup');
+            obj.consideredJoints.push_back('l_hip_pitch');
+            obj.consideredJoints.push_back('l_hip_roll');
+            obj.consideredJoints.push_back('l_hip_yaw');
+            obj.consideredJoints.push_back('l_knee');
+            obj.consideredJoints.push_back('l_ankle_pitch');
+            obj.consideredJoints.push_back('l_ankle_roll');
+            obj.consideredJoints.push_back('r_hip_pitch');
+            obj.consideredJoints.push_back('r_hip_roll');
+            obj.consideredJoints.push_back('r_hip_yaw');
+            obj.consideredJoints.push_back('r_knee');
+            obj.consideredJoints.push_back('r_ankle_pitch');
+            obj.consideredJoints.push_back('r_ankle_roll');
+            
+            urdf_model_name = 'model.urdf';
+            allpath = which('Icub_model_placeholder.m');
+            path =fileparts(allpath);
+            path = strcat(path,'/',urdf_model_name);
+            obj.mdlLdr.loadReducedModelFromFile(path,obj.consideredJoints);
+            
+            % set lights
+            obj.lightDir = iDynTree.Direction();     
+            obj.lightDir.fromMatlab([-0.5 0 -0.5]/sqrt(2));    
+        end
         
         function qjInit = InitializeStateicubGazeboSim(obj,feet_on_ground)
             %% Initial joints position [deg]
