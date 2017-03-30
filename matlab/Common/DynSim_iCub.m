@@ -20,6 +20,8 @@ function [t, q, qd] = DynSim_iCub(controller,params)
 
     params.lfoot_ini = wbm_forwardKinematics('l_sole');
     params.rfoot_ini = wbm_forwardKinematics('r_sole');
+    params.lu_leg_ini = wbm_forwardKinematics('l_upper_leg');
+    params.ru_leg_ini = wbm_forwardKinematics('r_upper_leg');
 
     forwardDynFunc  = @(t,chi)forwardDynamics(t,chi,controller,params);
 
@@ -58,9 +60,17 @@ function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
     %% dynamics
     [dynamic,M,h,g,H,C_nu,JCoM,dJCoM_nu,JH,dJH_nu] = icub.Dynamics();
     %% update contact state
+    if(t>=2)
+        param.contact_sym.state(3) = 0;
+        param.contact_sym.state(4) = 0;
+        param.feet_on_ground(3) = 0;
+        param.feet_on_ground(4) = 0;
+        res = param.contact_sym.UpdateContact();
+        param.numContacts = res;
+    end
     %% TODO
     %% contact jacobian
-    jacobian_contact = icub.ContactJacobians(param);
+    [jacobian_contact,Jc_sym,dJcNu_sym] = icub.ContactJacobians(param,param.contact_sym);
     %% Control torques calculation
     tau = controller.Policy(t,q,qd,[],jacobian_contact,param); 
     %% torque saturation
@@ -68,7 +78,7 @@ function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
     tau(tau<-param.torque_saturation) = -param.torque_saturation;
 
     %% contact dynamic simulation    
-    [tauContact,fc]=DynSim_iCubContacts(ndof,state,dynamic,jacobian_contact,param,tau);
+    [tauContact,fc]=DynSim_iCubContacts(ndof,state,dynamic,Jc_sym,dJcNu_sym,param,tau);
     %% State derivative computation
     % Need to calculate the quaternions derivative
     b_omega_w = transpose(w_R_b)*w_omega_b; %% TODO floating base flag required (parameter of the simulator)

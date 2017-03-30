@@ -8,12 +8,11 @@ visualization_test = false;
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
-time_struct.tf = 10;
+time_struct.tf = 6;
 time_struct.step = 0.01;
 %% Parameters for simulator
 ndof = 25;
-% balancing on two feet or one foot
-params.feet_on_ground =  [1,1];                                  %either 0 or 1; [left,right] (in the simulator)
+% balancing on two feet or one foot                              
 % allows the visualization of torques, forces and other user-defined graphics
 visualizer_graphics   =  1;                                      %either 0 or 1
 visualizer_demo       =  1;                                      %either 0 or 1
@@ -44,16 +43,31 @@ chains = SubChains(target_link,robots,icub);
 % joints_initial_values{1,3} = [0.0  30.0  0.0  45.0  0.0 0.0 0.0];
 % joints_initial_values{1,4} = [25.5   5.0    0.0  -40    -5.5  -0.1];
 % joints_initial_values{1,5} = [25.5   5.0    0.0  -40    -5.5  -0.1];
+%% here I build to different structure one for the controller and for the simulator
+%% to manage contacts
+contact_state = [1 1 1 1];
+names         =  {'l_sole','r_sole','l_upper_leg','r_upper_leg'};   
+params.contact_sym = Contacts(contact_state,names);
 
-params.feet_on_ground =  [1,1];
+
+params.feet_on_ground = [1 1 1 1];         %either 0 or 1; [left,right] (in the simulator)
 params.numContacts = sum(params.feet_on_ground,2);
-if       params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 1 
+if  params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 1 && params.feet_on_ground(3) == 1  && params.feet_on_ground(4) == 1 
     % contact constraints for 2 feet on ground
-    params.contactLinkNames      = {'l_sole','r_sole'};     
-elseif   params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 0
+    params.contactLinkNames      = {'l_sole','r_sole','l_upper_leg','r_upper_leg'};
+elseif   params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 1 && params.feet_on_ground(3) == 1  && params.feet_on_ground(4) == 0
+    % contact constraints for 2 feet on ground
+    params.contactLinkNames      = {'l_sole','r_sole','l_upper_leg'};
+elseif   params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 1 && params.feet_on_ground(3) == 0  && params.feet_on_ground(4) == 1
+    % contact constraints for 2 feet on ground
+    params.contactLinkNames      = {'l_sole','r_sole','r_upper_leg'};
+elseif   params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 1 && params.feet_on_ground(3) == 0  && params.feet_on_ground(4) == 0
+    % contact constraints for 2 feet on ground
+    params.contactLinkNames      = {'l_sole','r_sole'};
+elseif   params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 0 && params.feet_on_ground(3) == 0 && params.feet_on_ground(4) == 0
     % contact constraints for left foot on ground
     params.contactLinkNames      = {'l_sole'};
-elseif   params.feet_on_ground(1) == 0 && params.feet_on_ground(2) == 1
+elseif   params.feet_on_ground(1) == 0 && params.feet_on_ground(2) == 1 && params.feet_on_ground(3) == 0 && params.feet_on_ground(4) == 0
     % contact constraints for right foot on ground
     params.contactLinkNames      = {'r_sole'};
 end
@@ -83,16 +97,19 @@ params.pinv_damp          = 5e-6;
 params.reg_HessianQP      = 1e-3;
 % feet size
 params.footSize  = [-0.07 0.07;       % xMin, xMax
-                    -0.03 0.03];      % yMin, yMax
-%% DEBUGGING
-%icub.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
-%test = wbm_dJdq(icub.state.w_R_b,icub.state.x_b,params.qjInit,params.dqjInit,[icub.state.dx_b;icub.state.w_omega_b],'r_sole');                
+                    -0.03 0.03];      % yMin, yMax               
 %% Visualization
 if (visualization_test)
-    %[~,xTb,~,~] = icub.GetState();
-    %chi = [xTb',params.qjInit'];
-    %icub.plot(chi,params)
-    icub.EnhancedPlot(params.qjInit,params);
+    icub.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
+    [~,xTb,~,~] = icub.GetState();
+    chi = [xTb',params.qjInit'];
+    icub.plot(chi,params);
+%     figure
+%     hold on;
+%     root_link_pos=wbm_forwardKinematics(icub.state.w_R_b,icub.state.x_b,params.qjInit,'root_link');
+%     scatter3(0,0,0,'LineWidth',100);
+%     scatter3(root_link_pos(1),root_link_pos(2),root_link_pos(3));
+    %icub.EnhancedPlot(params.qjInit,params);
 else
     %% limit parameters
     

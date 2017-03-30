@@ -3,7 +3,7 @@ classdef iCub < handle
     properties
         %% Structural Parameters
         model_name
-        %active_floating_base          % switch to control if the icub has %or not a floating base i want to use param for this variable
+        %active_floating_base         % switch to control if the icub has %or not a floating base i want to use param for this variable
         ndof                          % dependant on the model used for the simulaztion
         %list_of_kin_chain             % string matching URDF name of the link (frame)
         %dim_of_kin_chain
@@ -34,11 +34,38 @@ classdef iCub < handle
         %% initialization functions
         function obj = iCub(model)
             if(strcmp(model,'icubGazeboSim'))
-                obj.model_name = model;
+                obj.model_name = 'model';
                 %obj.active_floating_base = true;
                 % Initialize the mexWholeBodyModel
                 wbm_modelInitialize('icubGazeboSim');
                 obj.ndof = 25; % degrees of freedom with floating base
+                % fixed joint list for icubGazeboSim
+                obj.revoluteJointList = {'torso_pitch','torso_roll','torso_yaw','l_shoulder_pitch','l_shoulder_roll','l_shoulder_yaw','l_elbow','l_wrist_prosup','r_shoulder_pitch','r_shoulder_roll',...
+                                  'r_shoulder_yaw','r_elbow','r_wrist_prosup','l_hip_pitch','l_hip_roll','l_hip_yaw','l_knee','l_ankle_pitch','l_ankle_roll','r_hip_pitch','r_hip_roll',...
+                                  'r_hip_yaw,r_knee','r_ankle_pitch','r_ankle_roll'};
+                              
+                model = strcat(obj.model_name,'.urdf');
+                path = which(model);              
+                scheme = xml2struct(path);
+                obj.UBjointLimit = [];
+                obj.LBjointLimit = [];
+                obj.effortLimit = [];
+                iii = 1;
+                for i = 1:length(scheme.robot.link)
+                    if(~strcmp(scheme.robot.link{i}.Attributes.name,'base_link'))
+                        obj.linkList{iii} = scheme.robot.link{i}.Attributes.name;
+                        iii = iii + 1;
+                    end
+                end
+                for i = 1:length(scheme.robot.joint)
+                    obj.jointList{i} = scheme.robot.joint{i};
+                    current_joint = scheme.robot.joint{i}.Attributes.name;
+                    if  ( sum((strcmp(current_joint, obj.revoluteJointList))) )
+                        obj.UBjointLimit = [obj.UBjointLimit, str2double(scheme.robot.joint{i}.limit.Attributes.upper)];
+                        obj.LBjointLimit = [obj.LBjointLimit, str2double(scheme.robot.joint{i}.limit.Attributes.lower)];
+                        obj.effortLimit = [obj.effortLimit, str2double(scheme.robot.joint{i}.limit.Attributes.effort)];
+                    end
+                end              
             else
                 obj.model_name = model;
                 model = strcat(model,'.urdf');
@@ -76,7 +103,7 @@ classdef iCub < handle
         function InitEnhanViz(obj)
             obj.modelName        = 'iCub';
             obj.setPos           = [1,0,0.5];    
-            obj.setCamera        = [0.4,0,0.5];
+            obj.setCamera        = [0.4,0.2,0.5];%[0.4,0,0.5];
             obj.mdlLdr           = iDynTree.ModelLoader();
             obj.consideredJoints = iDynTree.StringVector();
 
@@ -123,11 +150,11 @@ classdef iCub < handle
             rightArmInit = [ -20  30  0  45  0]';
             torsoInit    = [ -10   0  0]';
 
-            if sum(feet_on_ground) == 2
+            if sum(feet_on_ground) >= 2
 
                 % initial conditions for balancing on two feet
-                leftLegInit  = [  25.5   0   0  -18.5  -5.5  0]';
-                rightLegInit = [  25.5   0   0  -18.5  -5.5  0]';
+                leftLegInit  = [  90   0   0  -90  -5.5  0]';
+                rightLegInit = [  90   0   0  -90  -5.5  0]';
 
             elseif feet_on_ground(1) == 1 && feet_on_ground(2) == 0
 
@@ -377,16 +404,22 @@ classdef iCub < handle
             f = wbm_generalisedBiasForces(obj.state.w_R_b,obj.state.x_b,q,qd,[obj.state.dx_b;obj.state.w_omega_b]) -Jc_t*fc;
         end
         %% kinematic functions
-        function contact_jacobians=ContactJacobians(obj,param)
+        function [contact_jacobians,Jc_sym,dJcNu_sym]=ContactJacobians(obj,param,contact)
             q  = obj.state.q;
             qd = obj.state.qd;
-            % contact jacobians
+            % contact jacobians for controller
             Jc    = zeros(6*param.numContacts,6+obj.ndof);
             dJcNu = zeros(6*param.numContacts,1);
-
             for i=1:param.numContacts
                 Jc(6*(i-1)+1:6*i,:)    = wbm_jacobian(obj.state.w_R_b,obj.state.x_b,q,param.contactLinkNames{i});
                 dJcNu(6*(i-1)+1:6*i,:) = wbm_dJdq(obj.state.w_R_b,obj.state.x_b,q,qd,[obj.state.dx_b;obj.state.w_omega_b],param.contactLinkNames{i});
+            end
+            % contact jacobian for simulator
+            Jc_sym       =  zeros(6*contact.num_of_active_contacts,6+obj.ndof);
+            dJcNu_sym    =  zeros(6*contact.num_of_active_contacts,1);
+            for i=1:contact.num_of_active_contacts
+                Jc_sym(6*(i-1)+1:6*i,:)    = wbm_jacobian(obj.state.w_R_b,obj.state.x_b,q,contact.names{i});
+                dJcNu_sym(6*(i-1)+1:6*i,:) = wbm_dJdq(obj.state.w_R_b,obj.state.x_b,q,qd,[obj.state.dx_b;obj.state.w_omega_b],contact.names{i});
             end
             obj.contact_jacobians.Jc = Jc;
             obj.contact_jacobians.dJcNu = dJcNu;
@@ -414,6 +447,8 @@ classdef iCub < handle
             [~,R_base]    = frame2posrot([x_base;qt_b]);
             jacob0 = wholeBodyModel('jacobian',reshape(R_base,[],1),x_base,q,tag);
         end
+        
+        
         %% miscellanea
         function suppConvHull = computeSupPoly(obj, feet_on_ground,chi)
         %Compute the support polygone wrt feet_on_ground

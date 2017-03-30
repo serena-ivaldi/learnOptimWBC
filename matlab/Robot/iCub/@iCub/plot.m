@@ -37,13 +37,20 @@ if ~(isempty(varargin))
     end
 end
 
+%% to plot stuff in the robot structure i have to use params.plot_objs{1} to keep object in place in plot
+r_upper_leg=wbm_forwardKinematics(obj.state.w_R_b,obj.state.x_b,params.qjInit,'r_upper_leg');
+l_upper_leg=wbm_forwardKinematics(obj.state.w_R_b,obj.state.x_b,params.qjInit,'l_upper_leg');
+middle_point = (r_upper_leg(1:3) + l_upper_leg(1:3))/2;
 
-params.plot_objs{1} = plot3(0,0,0,'.');
+
+params.plot_objs{1} = plot3(middle_point(1),middle_point(2),middle_point(3),'.','MarkerSize',10);
 axis([-1.2 1.2 -1 1 0 1.2]);
 %axis equal
 hold on
 
-patch([-0.45 -0.45 0.45 0.45],[-0.53 0.37 0.37 -0.53],[0 0 0 0],[0.6 0.6 0.8]);
+
+
+patch([-0.45 -0.45 0.45 0.45],[-0.53 0.37 0.37 -0.53],[0 0 0 0],[0.6 0.6 0.8],'FaceAlpha',0.5);
 
 %campos([5.1705   -8.3894    6.4718])%([10.3675    4.9702    4.4582]);
 %set(gca,'CameraViewAngle',7.8687);
@@ -318,6 +325,7 @@ lnkpatch(jj)      = patch('vertices',xyzpatch.vertices,'faces',xyzpatch.faces,'F
 
 % store axes objects' handles to a vector
 params.plot_objs{1} = [lnkpatch';lin';x_b0'];
+
 %% UPDATING THE PLOTS
 ii=2;
 movieframenum = 1;
@@ -346,6 +354,8 @@ while ii<n+1   % the visualization instance
             xyzpairs(i,:) = row;
         end
     end
+    
+    
     
     % update the lines for the links wrt the new joint positions
     for jj=1:n_lin
@@ -387,13 +397,13 @@ while ii<n+1   % the visualization instance
     qq4 =  orthlnk1-orthlnk2;
     
     xyzpatch.vertices = [xyzpairs(r_foot_index,2)+qq1(1)      , xyzpairs(r_foot_index,4)+qq1(2) , xyzpairs(r_foot_index,6)+qq1(3);
-        xyzpairs(r_foot_index,2)+qq2(1)      , xyzpairs(r_foot_index,4)+qq2(2) , xyzpairs(r_foot_index,6)+qq2(3);
-        xyzpairs(r_foot_index,2)+qq3(1)      , xyzpairs(r_foot_index,4)+qq3(2) , xyzpairs(r_foot_index,6)+qq3(3);
-        xyzpairs(r_foot_index,2)+qq4(1)      , xyzpairs(r_foot_index,4)+qq4(2) , xyzpairs(r_foot_index,6)+qq4(3);
-        xyzpairs(r_foot_index,2)+qq1(1)+0.03 , xyzpairs(r_foot_index,4)+qq1(2) , xyzpairs(r_foot_index,6)+qq1(3);
-        xyzpairs(r_foot_index,2)+qq2(1)+0.03 , xyzpairs(r_foot_index,4)+qq2(2) , xyzpairs(r_foot_index,6)+qq2(3);
-        xyzpairs(r_foot_index,2)+qq3(1)+0.03 , xyzpairs(r_foot_index,4)+qq3(2) , xyzpairs(r_foot_index,6)+qq3(3);
-        xyzpairs(r_foot_index,2)+qq4(1)+0.03 , xyzpairs(r_foot_index,4)+qq4(2) , xyzpairs(r_foot_index,6)+qq4(3)];
+                        xyzpairs(r_foot_index,2)+qq2(1)      , xyzpairs(r_foot_index,4)+qq2(2) , xyzpairs(r_foot_index,6)+qq2(3);
+                        xyzpairs(r_foot_index,2)+qq3(1)      , xyzpairs(r_foot_index,4)+qq3(2) , xyzpairs(r_foot_index,6)+qq3(3);
+                        xyzpairs(r_foot_index,2)+qq4(1)      , xyzpairs(r_foot_index,4)+qq4(2) , xyzpairs(r_foot_index,6)+qq4(3);
+                        xyzpairs(r_foot_index,2)+qq1(1)+0.03 , xyzpairs(r_foot_index,4)+qq1(2) , xyzpairs(r_foot_index,6)+qq1(3);
+                        xyzpairs(r_foot_index,2)+qq2(1)+0.03 , xyzpairs(r_foot_index,4)+qq2(2) , xyzpairs(r_foot_index,6)+qq2(3);
+                        xyzpairs(r_foot_index,2)+qq3(1)+0.03 , xyzpairs(r_foot_index,4)+qq3(2) , xyzpairs(r_foot_index,6)+qq3(3);
+                        xyzpairs(r_foot_index,2)+qq4(1)+0.03 , xyzpairs(r_foot_index,4)+qq4(2) , xyzpairs(r_foot_index,6)+qq4(3)];
     
     set(lnkpatch(jj),'vertices',xyzpatch.vertices);
     
@@ -409,24 +419,24 @@ while ii<n+1   % the visualization instance
     qq4 =  orthlnk1-orthlnk2;
     
     xyzpatch.vertices = [xyzpairs(l_foot_index,2)+qq1(1)      , xyzpairs(l_foot_index,4)+qq1(2) , xyzpairs(l_foot_index,6)+qq1(3);
-        xyzpairs(l_foot_index,2)+qq2(1)      , xyzpairs(l_foot_index,4)+qq2(2) , xyzpairs(l_foot_index,6)+qq2(3);
-        xyzpairs(l_foot_index,2)+qq3(1)      , xyzpairs(l_foot_index,4)+qq3(2) , xyzpairs(l_foot_index,6)+qq3(3);
-        xyzpairs(l_foot_index,2)+qq4(1)      , xyzpairs(l_foot_index,4)+qq4(2) , xyzpairs(l_foot_index,6)+qq4(3);
-        xyzpairs(l_foot_index,2)+qq1(1)+0.03 , xyzpairs(l_foot_index,4)+qq1(2) , xyzpairs(l_foot_index,6)+qq1(3);
-        xyzpairs(l_foot_index,2)+qq2(1)+0.03 , xyzpairs(l_foot_index,4)+qq2(2) , xyzpairs(l_foot_index,6)+qq2(3);
-        xyzpairs(l_foot_index,2)+qq3(1)+0.03 , xyzpairs(l_foot_index,4)+qq3(2) , xyzpairs(l_foot_index,6)+qq3(3);
-        xyzpairs(l_foot_index,2)+qq4(1)+0.03 , xyzpairs(l_foot_index,4)+qq4(2) , xyzpairs(l_foot_index,6)+qq4(3)];
+                        xyzpairs(l_foot_index,2)+qq2(1)      , xyzpairs(l_foot_index,4)+qq2(2) , xyzpairs(l_foot_index,6)+qq2(3);
+                        xyzpairs(l_foot_index,2)+qq3(1)      , xyzpairs(l_foot_index,4)+qq3(2) , xyzpairs(l_foot_index,6)+qq3(3);
+                        xyzpairs(l_foot_index,2)+qq4(1)      , xyzpairs(l_foot_index,4)+qq4(2) , xyzpairs(l_foot_index,6)+qq4(3);
+                        xyzpairs(l_foot_index,2)+qq1(1)+0.03 , xyzpairs(l_foot_index,4)+qq1(2) , xyzpairs(l_foot_index,6)+qq1(3);
+                        xyzpairs(l_foot_index,2)+qq2(1)+0.03 , xyzpairs(l_foot_index,4)+qq2(2) , xyzpairs(l_foot_index,6)+qq2(3);
+                        xyzpairs(l_foot_index,2)+qq3(1)+0.03 , xyzpairs(l_foot_index,4)+qq3(2) , xyzpairs(l_foot_index,6)+qq3(3);
+                        xyzpairs(l_foot_index,2)+qq4(1)+0.03 , xyzpairs(l_foot_index,4)+qq4(2) , xyzpairs(l_foot_index,6)+qq4(3)];
     
     set(lnkpatch(jj),'vertices',xyzpatch.vertices);
     
     % end feet patches
     
     % store axes objects to a vector
-    params.plot_objs{1} = [lnkpatch';lin';x_b0'];
+    params.plot_objs{1} = [lnkpatch';lin';x_b0'];    
     
     
     drawnow;
-    
+  
     % to update the visualizer speed to keep it close to real simulation time
     if ~(params.slowmode)
         time_dif = vis_speed*params.sim_step-toc();

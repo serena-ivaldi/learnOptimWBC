@@ -35,7 +35,7 @@ classdef  BalanceController < Controllers.AbstractController
          obj.display_opt.step = 0.00000001;
          obj.display_opt.trajtrack = false;
          %% Gains for two feet on ground
-         if sum(varargin{1}.feet_on_ground) == 2
+         if sum(varargin{1}.feet_on_ground(1:2)) == 2
             % CoM and angular momentum gains
             gainsPCoM           = diag([40 45 40]);
             gainsDCoM           = 2*sqrt(gainsPCoM);
@@ -50,7 +50,7 @@ classdef  BalanceController < Controllers.AbstractController
          end
 
          %% Parameters for one foot on ground
-         if  sum(varargin{1}.feet_on_ground) == 1
+         if  sum(varargin{1}.feet_on_ground(1:2)) == 1
 
             % CoM and angular momentum gains
             gainsPCoM          = diag([30 35 30]);
@@ -196,6 +196,8 @@ classdef  BalanceController < Controllers.AbstractController
          % feet pose (quaternions), CoM position
          poseLFoot_qt                     = wbm_forwardKinematics(icub.state.w_R_b,icub.state.x_b,q,'l_sole');
          poseRFoot_qt                     = wbm_forwardKinematics(icub.state.w_R_b,icub.state.x_b,q,'r_sole');
+         poseLULeg_qt                     = wbm_forwardKinematics(icub.state.w_R_b,icub.state.x_b,q,'l_upper_leg');
+         poseRULeg_qt                     = wbm_forwardKinematics(icub.state.w_R_b,icub.state.x_b,q,'r_upper_leg');
          poseCoM                          = wbm_forwardKinematics(icub.state.w_R_b,icub.state.x_b,q,'com');
          xCoM                             = poseCoM(1:3);
          dposeCoM                         = icub.dynamic.JCoM*icub.state.Nu;
@@ -204,22 +206,33 @@ classdef  BalanceController < Controllers.AbstractController
          % feet current position and orientation (rotation matrix)
          [x_Lfoot,b_R_Lfoot]              = frame2posRotm(poseLFoot_qt);
          [x_Rfoot,b_R_Rfoot]              = frame2posRotm(poseRFoot_qt);
+         [x_LULeg,b_R_x_LULeg]            = frame2posRotm(poseLULeg_qt);
+         [x_RULeg,b_R_x_RULeg]            = frame2posRotm(poseRULeg_qt);
 
          % orientation is parametrized with euler angles
          [theta_Lfoot,~]             = rotm2eulAngVelTF(b_R_Lfoot);
          [theta_Rfoot,~]             = rotm2eulAngVelTF(b_R_Rfoot);
+         [theta_LULeg,~]             = rotm2eulAngVelTF(b_R_x_LULeg);
+         [theta_RULeg,~]             = rotm2eulAngVelTF(b_R_x_RULeg);
          poseLFoot_ang                    = [x_Lfoot; theta_Lfoot];
          poseRFoot_ang                    = [x_Rfoot; theta_Rfoot];
+         poseLULeg_ang                 = [x_LULeg;theta_LULeg];
+         poseRULeg_ang                 = [x_RULeg;theta_RULeg];
          % feet velocity, CoM velocity
          FORKINEMATICS.xCoM               = xCoM;
          FORKINEMATICS.dxCoM              = dxCoM;
          FORKINEMATICS.poseRFoot_ang      = poseRFoot_ang;
          FORKINEMATICS.poseLFoot_ang      = poseLFoot_ang;
+         FORKINEMATICS.poseLULeg_ang   = poseLULeg_ang;
+         FORKINEMATICS.poseRULeg_ang   = poseRULeg_ang;
          %% CoM and joints trajectory generator
          trajectory.jointReferences.ddqjRef = zeros(icub.ndof,1);
          trajectory.jointReferences.dqjRef  = zeros(icub.ndof,1);
          trajectory.jointReferences.qjRef   = icub.init_state.qi;
          trajectory.desired_x_dx_ddx_CoM    = obj.trajectoryGenerator(icub.init_state.xCoMRef,t,param);
+         
+         %% given the value of the com trajectory if the desired com is different from the starting position i will
+         %% update the feet on ground to remove the bottom contact
                
          controlParam = InnerPolicy(obj,param,obj.gains,trajectory,icub.dynamic,FORKINEMATICS,icub.state,icub.contact_jacobians);  
          if  param.use_QPsolver == 1                 
@@ -275,7 +288,8 @@ classdef  BalanceController < Controllers.AbstractController
           dxCoM               = FORKINEMATICS.dxCoM;
           poseRFoot_ang       = FORKINEMATICS.poseRFoot_ang;
           poseLFoot_ang       = FORKINEMATICS.poseLFoot_ang;
-
+          poseLULeg_ang    = FORKINEMATICS.poseLULeg_ang;
+          poseRULeg_ang    = FORKINEMATICS.poseRULeg_ang;
           %% Robot State
           qj                  = STATE.q;
           dqj                 = STATE.qd;
@@ -299,16 +313,34 @@ classdef  BalanceController < Controllers.AbstractController
           %% Multiplier of contact wrenches at CoM
           x_RFoot              = poseRFoot_ang(1:3);
           x_LFoot              = poseLFoot_ang(1:3);
+          x_LULeg              = poseLULeg_ang(1:3);
+          x_RULeg              = poseRULeg_ang(1:3);
           r_RF                 = x_RFoot - xCoM;       % Application point of the contact force on the right foot w.r.t. CoM
           r_LF                 = x_LFoot - xCoM;       % Application point of the contact force on the left  foot w.r.t. CoM
+          r_LUL                = x_LULeg - xCoM;
+          r_RUL                = x_RULeg - xCoM;
           AL                   = [eye(3),    zeros(3);
                                 skewm(r_LF),eye(3)];
           AR                   = [eye(3),    zeros(3);
                                 skewm(r_RF),eye(3)];
+          LUL                   = [eye(3),    zeros(3);
+                                skewm(r_LUL),eye(3)];     
+          RUL                   = [eye(3),    zeros(3);
+                                 skewm(r_RUL),eye(3)];     
 
           % One foot or two feet on ground selector
-          if      sum(feet_on_ground) == 2
-
+          if      sum(feet_on_ground) == 4
+              A      = [AL,AR,LUL,RUL];
+              pinvA  = pinv(A,pinv_tol);
+          elseif      sum(feet_on_ground) == 3
+              if(feet_on_ground(3)==1)
+                  A      = [AL,AR,LUL];
+                  pinvA  = pinv(A,pinv_tol);
+              else
+                  A      = [AL,AR,RUL];
+                  pinvA  = pinv(A,pinv_tol);
+              end
+          elseif      sum(feet_on_ground) == 2
               A      = [AL,AR];
               pinvA  = pinv(A,pinv_tol);
           else
@@ -362,7 +394,7 @@ classdef  BalanceController < Controllers.AbstractController
           % Desired f0 without Quadratic Programming
           f0                 = zeros(6,1);
 
-          if  sum(feet_on_ground) == 2
+          if  sum(feet_on_ground) >= 2
 
               f0             = -pinv(SigmaNA,pinv_tol)*(tauModel+Sigma*fcHDot);
           end
@@ -401,7 +433,7 @@ classdef  BalanceController < Controllers.AbstractController
           %% Trajectory definition
           if  demo_movements == 1
 
-                if  sum(feet_on_ground) == 2
+                if  sum(feet_on_ground(1:2)) >= 2
 
                     directionOfOscillation = [0;1;0];
                     referenceParams        = [0.035 0.35];
@@ -424,9 +456,13 @@ classdef  BalanceController < Controllers.AbstractController
                     amplitude  = 0;
                 end
 
-                xCoMDes    =  xCoMInit + amplitude*sin(2*pi*frequency*t)*directionOfOscillation;
-                dxCoMDes   =             amplitude*2*pi*frequency*cos(2*pi*frequency*t)*directionOfOscillation;
-                ddxCoMDes  =           - amplitude*(2*pi*frequency)^2*sin(2*pi*frequency*t)*directionOfOscillation;
+%                 xCoMDes    =  xCoMInit + amplitude*sin(2*pi*frequency*t)*directionOfOscillation;
+%                 dxCoMDes   =             amplitude*2*pi*frequency*cos(2*pi*frequency*t)*directionOfOscillation;
+%                 ddxCoMDes  =           - amplitude*(2*pi*frequency)^2*sin(2*pi*frequency*t)*directionOfOscillation;
+                xCoMDes    =  xCoMInit; 
+                dxCoMDes   =  zeros(size(xCoMInit)); 
+                ddxCoMDes  =  zeros(size(xCoMInit));
+
 
                 desired_x_dx_ddx_CoM = [xCoMDes dxCoMDes ddxCoMDes];
           else
