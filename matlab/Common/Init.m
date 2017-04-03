@@ -26,12 +26,32 @@ switch CONTROLLERTYPE
     case 'GHC'
         % constraints
         constraints = ContrPart.Constraints(robots,target_link,constraints_list,constraints_data);
+    case 'BalanceControllers'
+        repellers = [];
     otherwise
         warning('Unexpected control method')
 end
 %% alpha function
 switch CONTROLLERTYPE
     case 'UF'
+        switch choose_alpha
+            case 'RBF'
+                % TODO generalize to multichain and generalize respect of controller
+                if(strcmp(combine_rule,'sum'))
+                    number_of_action = chains.GetNumTasks(1) ;
+                elseif(strcmp(combine_rule,'projector'))
+                    number_of_action = chains.GetNumTasks(1) + repellers.GetNumberOfWeightFuncRep(1);
+                end
+                %---
+                alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,value_range,precomp_sample,numeric_theta,optim);
+            case 'constant'
+                alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,value_range_for_optimization_routine,time_struct);
+            case 'handTuned'
+                alphas = Alpha.HandTuneAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),starting_value,ti,transition_interval,time_struct);
+            otherwise
+                warning('Uexpected alpha functions')
+        end
+    case 'BalanceController'
         switch choose_alpha
             case 'RBF'
                 % TODO generalize to multichain and generalize respect of controller
@@ -71,6 +91,8 @@ end
 switch CONTROLLERTYPE
     case 'UF'
         controller = Controllers.UF(chains,reference,secondary_refs,alphas,repellers,metric,Param,Param_secondary,combine_rule,regularizer);
+    case 'BalanceController'
+            controller = Controllers.BalanceController(chains,reference,[],[],[],[],[],[],[],[],params);
     case 'GHC'
         delta_t = time_sym_struct.tf*time_struct.step;
         controller = Controllers.GHC(chains,reference,alphas,constraints,Kp,Kd,regularization,epsilon,delta_t);

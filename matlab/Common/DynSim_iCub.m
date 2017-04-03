@@ -46,8 +46,7 @@ function [t, q, qd] = DynSim_iCub(controller,params)
     end
 end
 
-function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
-    t
+function [dchi,fitness_param]=forwardDynamics(t,chi,controller,param)
     %% Config parameters
     import WBM.utilities.dquat;
     % i get the pointer to the whole system
@@ -63,7 +62,7 @@ function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
     %% Extraction of state
     [state,x_b,qt_b,w_R_b,base_pose,q,dx_b,w_omega_b,qd,Nu]=icub.State(chi);
 
-    %% Update state (in the robot model)
+    %% Update state (in the robot model) (it is necessary when i want to recompute offline data from the current rollout)
     wbm_setWorldFrame(w_R_b,x_b,[0 0 -9.81]');
     wbm_updateState(q,qd,[dx_b;w_omega_b]);
 
@@ -112,18 +111,11 @@ function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
     %% Visualization
     % These are the variables that can be plotted by the visualizer.m
     % function
-     %controller.visual_param.Href      =  [M(1,1)*desired_x_dx_ddx_CoM(:,2);zeros(3,1)];
-     %controller.visual_param.H         =  H;
-     %controller.visual_param.pos_feet  =  [l_sole;r_sole];
-     controller.visual_param.t(end + 1)      =  t;
-     %controller.visual_param.fc(end + 1,:)   =  fc';
-     controller.visual_param.tau(end +1 ,:)  =  tau';
-     controller.visual_param.qj(end + 1,:)   =  q';
-     controller.visual_param.zmp(end + 1,:)  =  zmp;
-     controller.visual_param.xCoM(end + 1,:) =  xCoM';
-     %controller.visual_param.error_com =  errorCoM;
-     %controller.visual_param.f0        =  f0;
-
+    fitness_param.t    =  t;
+    fitness_param.tau  =  tau';
+    fitness_param.q    =  q';
+    fitness_param.zmp  =  zmp;
+    fitness_param.xCoM =  xCoM';
 end
 
 

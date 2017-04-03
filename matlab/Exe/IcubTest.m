@@ -143,7 +143,7 @@ else
     numeric_reference_parameter{1,1}=[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]'; % is not used but just to be compliant with the input structure
 
     %% ALPHA PARAMETERS
-    choose_alpha = 'RBF';  % RBF , constant, handTune
+    choose_alpha = 'constant';  % RBF , constant, handTune
     %RBF
     number_of_basis = 5; %5; %10; %basis functions for the RBF
     redundancy = 2; %3; %overlap of the RBF
@@ -160,63 +160,63 @@ else
     %% CONTROLLER PARAMETERS
     max_time = 50; %50
     combine_rule = {'sum'}; % sum or projector (with sum reppelers are removed)
-
-    % the metric change between regularized and not regularized because in the
-    % regularized case i have to do N^(-1) 
-    % not regularized case i have N^(-1/2)
-    metric = {'M','M'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
-    kd = 110;
-    kp = 70; % row vector one for each chain
-    for i= 1:chains.GetNumChains()
-        for par = 1:chains.GetNumTasks(i)
-            if(strcmp(traj_type{i},'impedance'))
-                M = diag([1 1 1]);
-                D = diag([110 110 110]);
-                P =  kp(i,par)*eye(size(dim_of_task{i,par},1));
-                obj.M = M;
-                obj.D = D;
-                obj.P = P;
-                Param{i,par} = obj;
-            else
-                K_p = kp(i,par)*eye(size(dim_of_task{i,par},1));  
-                K_d = kd(i,par)*eye(size(dim_of_task{i,par},1)); 
-                obj.Kp = K_p;
-                obj.Kd = K_d;
-                Param{i,par} = obj;
-            end
-        end
-
-     end
-     % secondary task gains
-     kd = 110;
-     kp = 70; % row vector one for each chain
-
-     for i= 1:chains.GetNumChains()
-        for par = 1:chains.GetNumTasks(i)
-             if(strcmp(traj_type_sec{i},'impedance'))
-                M = diag([1 1 1]);
-                D = diag([110 10 110]);
-                P =  kp(i,par)*eye(size(dim_of_task{i,par},1));
-                obj.M = M;
-                obj.D = D;
-                obj.P = P;
-                Param_secondary{i,par} = obj;
-            else
-                K_p = kp(i,par)*eye(size(dim_of_task{i,par},1));  
-                K_d = kd(i,par)*eye(size(dim_of_task{i,par},1)); 
-                obj.Kp = K_p;
-                obj.Kd = K_d;
-                Param_secondary{i,par} = obj;
-            end
-        end
-     end
-    % with this term i introduce a damped least square structure inside my
-    % controller if regularizer is 0 i remove the regularizer action 
-    % ONE FOR EACH TASK
-    regularizer_chain_1 = [0 0.001 0.001 0.001]; 
-    regularized_chain_2 = [1];
-    regularizer{1} = regularizer_chain_1;
-    regularizer{2} = regularized_chain_2;
+% 
+%     % the metric change between regularized and not regularized because in the
+%     % regularized case i have to do N^(-1) 
+%     % not regularized case i have N^(-1/2)
+%     metric = {'M','M'};  % ex: if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2);        
+%     kd = 110;
+%     kp = 70; % row vector one for each chain
+%     for i= 1:chains.GetNumChains()
+%         for par = 1:chains.GetNumTasks(i)
+%             if(strcmp(traj_type{i},'impedance'))
+%                 M = diag([1 1 1]);
+%                 D = diag([110 110 110]);
+%                 P =  kp(i,par)*eye(size(dim_of_task{i,par},1));
+%                 obj.M = M;
+%                 obj.D = D;
+%                 obj.P = P;
+%                 Param{i,par} = obj;
+%             else
+%                 K_p = kp(i,par)*eye(size(dim_of_task{i,par},1));  
+%                 K_d = kd(i,par)*eye(size(dim_of_task{i,par},1)); 
+%                 obj.Kp = K_p;
+%                 obj.Kd = K_d;
+%                 Param{i,par} = obj;
+%             end
+%         end
+% 
+%      end
+%      % secondary task gains
+%      kd = 110;
+%      kp = 70; % row vector one for each chain
+% 
+%      for i= 1:chains.GetNumChains()
+%         for par = 1:chains.GetNumTasks(i)
+%              if(strcmp(traj_type_sec{i},'impedance'))
+%                 M = diag([1 1 1]);
+%                 D = diag([110 10 110]);
+%                 P =  kp(i,par)*eye(size(dim_of_task{i,par},1));
+%                 obj.M = M;
+%                 obj.D = D;
+%                 obj.P = P;
+%                 Param_secondary{i,par} = obj;
+%             else
+%                 K_p = kp(i,par)*eye(size(dim_of_task{i,par},1));  
+%                 K_d = kd(i,par)*eye(size(dim_of_task{i,par},1)); 
+%                 obj.Kp = K_p;
+%                 obj.Kd = K_d;
+%                 Param_secondary{i,par} = obj;
+%             end
+%         end
+%      end
+%     % with this term i introduce a damped least square structure inside my
+%     % controller if regularizer is 0 i remove the regularizer action 
+%     % ONE FOR EACH TASK
+%     regularizer_chain_1 = [0 0.001 0.001 0.001]; 
+%     regularized_chain_2 = [1];
+%     regularizer{1} = regularizer_chain_1;
+%     regularizer{2} = regularized_chain_2;
 
 
     %%  Primary Reference
@@ -233,7 +233,7 @@ else
 
     %% activation policies
 
-    % TODO generalize to multichain and generalize respect of controller
+    %% TODO generalize to multichain and generalize respect of controller
     if(strcmp(combine_rule,'sum'))
         number_of_action = chains.GetNumTasks(1) ;
     elseif(strcmp(combine_rule,'projector'))
@@ -253,7 +253,7 @@ else
 
     %% controller
     repellers = [];
-    controller = Controllers.BalanceController(chains,reference,secondary_refs,alphas,repellers,metric,Param,Param_secondary,combine_rule,regularizer,params);
+    controller = Controllers.BalanceController(chains,reference,[],[],[],[],[],[],[],[],params);
 
     %% simulator
     [t,q_ext,qd_ext]=DynSim_iCub(controller,params);

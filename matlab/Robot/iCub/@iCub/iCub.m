@@ -535,6 +535,8 @@ classdef iCub < handle
                  obj.support_poly.max =  x_r_sole(1:2)' + x_dir + y_dir + x_shift;
                  
              end
+             
+             obj.support_poly.center = (obj.support_poly.min + obj.support_poly.max)/2;
             
         end
 
