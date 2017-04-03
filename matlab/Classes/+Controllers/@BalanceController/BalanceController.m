@@ -150,17 +150,20 @@ classdef  BalanceController < Controllers.AbstractController
       % for repellers 
       % and then i update the parameter that govern the reference
       function UpdateParameters(obj,parameters)
-       %disp('im in update parameters')   
-         for i=1:size(obj.alpha,1) 
-             index = 1;
-             for j=1:size(obj.alpha,2)  
-                 n_param = obj.alpha{i,j}.GetParamNum();
-                 app_param = parameters(index:index+n_param - 1);
-                 obj.alpha{i,j}.ComputeNumValue(app_param')
-                 index = index+n_param;
-             end
-         end
+       %disp('im in update parameters')  
+       %% in this controller i remove the update of the activation fuction 
+       %% because we do not have any of them in place
+%          for i=1:size(obj.alpha,1) 
+%              index = 1;
+%              for j=1:size(obj.alpha,2)  
+%                  n_param = obj.alpha{i,j}.GetParamNum();
+%                  app_param = parameters(index:index+n_param - 1);
+%                  obj.alpha{i,j}.ComputeNumValue(app_param')
+%                  index = index+n_param;
+%              end
+%          end
          % update parameters of the references (if there are some)
+         index = 1;
          for i=1:size(obj.references.parameter_dim,1) 
              for j=1:size(obj.references.parameter_dim,2)  
                  n_param = obj.references.parameter_dim{i,j};
@@ -229,7 +232,7 @@ classdef  BalanceController < Controllers.AbstractController
          %% CoM and joints trajectory generator
          trajectory.jointReferences.ddqjRef = zeros(icub.ndof,1);
          trajectory.jointReferences.dqjRef  = zeros(icub.ndof,1);
-         trajectory.jointReferences.qjRef   = icub.init_state.qi;
+         trajectory.jointReferences.qjRef   = icub.init_state.qi;%param.qfinal;
          trajectory.desired_x_dx_ddx_CoM = trajectoryGenerator(obj,t,icub.init_state.xCoMRef,param.xComfinal);
          
          %% given the value of the com trajectory if the desired com is different from the starting position i will
@@ -422,11 +425,11 @@ classdef  BalanceController < Controllers.AbstractController
                 if(t<=0.1)
                     xCoMDes     = xCoMInit;
                     dxCoMDes    = zeros(size(xCoMInit));
-                    ddxCoMDes   = zeros((xCoMInit));
+                    ddxCoMDes   = zeros(size(xCoMInit));
                 elseif(t>9.9)
                     xCoMDes     = xComfinal;
                     dxCoMDes    = zeros(size(xComfinal));
-                    ddxCoMDes   = zeros((xComfinal));
+                    ddxCoMDes   = zeros(size(xComfinal));
                 else
                     [xCoMDes,dxCoMDes,ddxCoMDes]=obj.references.GetTraj(1,1,t);
                 end

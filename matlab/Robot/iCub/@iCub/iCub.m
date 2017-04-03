@@ -151,12 +151,15 @@ classdef iCub < handle
             rightArmInit = [ -20  30  0  45  0]';
             torsoInit    = [ -10   0  0]';
 
+            [-10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0,25.5   0   0  -18.5  -5.5  0]*(pi/180);
+            
             if sum(feet_on_ground) >= 2
 
                 % initial conditions for balancing on two feet
-                leftLegInit  = [  90   0   0  -90  -5.5  0]';
-                rightLegInit = [  90   0   0  -90  -5.5  0]';
-
+                 leftLegInit  = [  90   0   0  -90  -5.5  0]';
+                 rightLegInit = [  90   0   0  -90  -5.5  0]';
+%                   leftLegInit  = [  25.5   0   0  -18.5  -5.5  0]';
+%                   rightLegInit = [  25.5   0   0  -18.5  -5.5  0]';
             elseif feet_on_ground(1) == 1 && feet_on_ground(2) == 0
 
                 % initial conditions for the robot standing on the left foot

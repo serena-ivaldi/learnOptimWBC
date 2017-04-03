@@ -40,7 +40,7 @@ elseif (strcmp(simulator,'icub_matlab'))
     controller.UpdateParameters(parameters)
     
     tic
-    [t, q, qd]=DynSim_iCub(controller,obj.input_4_run{2});
+    [t, q, qd]=DynSim_iCub(controller,obj.input_4_run);
     toc
     %toc(controller.current_time) for debugging the time deadline
 end

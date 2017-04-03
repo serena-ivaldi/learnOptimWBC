@@ -4,11 +4,11 @@ clc
 
 %% test selection
 
-visualization_test = true;
+visualization_test = false;
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
-time_struct.tf = 10;
+time_struct.tf = 9.92;
 time_struct.step = 0.01;
 %% Parameters for simulator
 ndof = 25;
@@ -24,7 +24,7 @@ visualizer_jointsPos  =  0;                                      %either 0 or 1;
 icub = iCub('icubGazeboSim');
 chain_1 = DummyRvc_iCub(icub,'l_sole');
  
-subchain1 = {'l_sole'};
+subchain1 = {'com'};
 target_link{1} = subchain1;
 
 robots{1} = chain_1;
@@ -41,7 +41,7 @@ chains = SubChains(target_link,robots,icub);
 % joints_initial_values{1,3} = [0.0  30.0  0.0  45.0  0.0 0.0 0.0];
 % joints_initial_values{1,4} = [25.5   5.0    0.0  -40    -5.5  -0.1];
 % joints_initial_values{1,5} = [25.5   5.0    0.0  -40    -5.5  -0.1];
-%% here I build to different structure one for the controller and for the simulator
+%% here I build to different structure one for the controller and one for the simulator
 %% to manage contacts
 contact_state = [1 1 1 1];
 names         =  {'l_sole','r_sole','l_upper_leg','r_upper_leg'};   
@@ -96,7 +96,9 @@ params.reg_HessianQP      = 1e-3;
 % feet size
 params.footSize  = [0.07 0.03];    % foot_xlength, foot_ylength 
 %% parameters for controller
-params.footSize = xComfinal;                                    
+params.xComfinal = [0.0167667444901888;-0.0681008604452745;0.503988037442802];
+params.qfinal    = [-10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0,25.5   0   0  -18.5  -5.5  0]'*(pi/180);   
+
 %% Visualization
 if (visualization_test)
     icub.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
@@ -118,15 +120,15 @@ else
     %%  REFERENCE PARAMETERS
     deg = pi/180;
     % primary trajectory
-    traj_type = {'joint'};
+    traj_type = {'cartesian'};
     control_type = {'x'};
     type_of_traj = {'func'};
-    geometric_path = {'fixed'};
+    geometric_path = {'AdHocBalance'};
     time_law = {'none'};
     %parameters first chains
-    geom_parameters{1,1} = [0.78;0.785398163397448;0;0;-0.349065850398866;0.523598775598299;0;0;0.785398163397448;0;0;0;0.523598775598299;0;0;0;0]'; %[0.209290598956330,0.147080124030923,0.607101111147211]; 
+    geom_parameters{1,1} =  [5 ,2 ,-0.120249695321353,-0.0680999719842103,0.369603821651986]; %[0.209290598956330,0.147080124030923,0.607101111147211]; 
     %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
-    dim_of_task{1,1}=ones(icub.ndof,1); %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(icub.n,1); %dim_of_task{1,4}=ones(icub.n,1);
+    dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(icub.n,1); %dim_of_task{1,4}=ones(icub.n,1);
 
     % secondary trajectory
     traj_type_sec = {'none'};
@@ -138,7 +140,7 @@ else
     geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
     dim_of_task_sec{1,1}={[1;1;1]};
 
-    numeric_reference_parameter{1,1}=[]; % is not used but just to be compliant with the input structure
+    numeric_reference_parameter{1,1}=[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]'; % is not used but just to be compliant with the input structure
 
     %% ALPHA PARAMETERS
     choose_alpha = 'RBF';  % RBF , constant, handTune
