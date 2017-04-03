@@ -8,6 +8,7 @@ function [t, q, qd] = DynSim_iCub(controller,params)
     WS = controller.GetWholeSystem();
     %% Updating the robot position and define the world link
     WS.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
+    WS.ComputeSupportPoly(params);
     [~,T_b,~,~] = WS.GetState();
 
     params.chiInit = [T_b; params.qjInit; WS.state.dx_b; WS.state.w_omega_b; params.dqjInit];
@@ -22,6 +23,15 @@ function [t, q, qd] = DynSim_iCub(controller,params)
     params.rfoot_ini = wbm_forwardKinematics('r_sole');
     params.lu_leg_ini = wbm_forwardKinematics('l_upper_leg');
     params.ru_leg_ini = wbm_forwardKinematics('r_upper_leg');
+    
+    
+    %% initilization for controller visual
+     controller.visual_param.t    =  [];
+     %controller.visual_param.fc   =  [];
+     controller.visual_param.tau  =  [];
+     controller.visual_param.qj   =  [];
+     controller.visual_param.zmp  =  [];
+     controller.visual_param.xCoM =  [];
 
     forwardDynFunc  = @(t,chi)forwardDynamics(t,chi,controller,params);
 
@@ -59,26 +69,33 @@ function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
 
     %% dynamics
     [dynamic,M,h,g,H,C_nu,JCoM,dJCoM_nu,JH,dJH_nu] = icub.Dynamics();
-    %% update contact state
-    if(t>=2)
-        param.contact_sym.state(3) = 0;
-        param.contact_sym.state(4) = 0;
-        param.feet_on_ground(3) = 0;
-        param.feet_on_ground(4) = 0;
-        res = param.contact_sym.UpdateContact();
-        param.numContacts = res;
+    
+    %% compute com position (TODO (provisory) i need to reorder how the kinematics is computed)
+    poseCoM  = wbm_forwardKinematics(icub.state.w_R_b,icub.state.x_b,q,'com');
+    xCoM     = poseCoM(1:3);
+    %% update contact state (i  suppose that i start to move after 0.1 seconds)
+    if(t>0.1)
+       param.feet_on_ground(3) = 0;
+       param.feet_on_ground(4) = 0; 
+       param.numContacts = sum(param.feet_on_ground);
+       param.contact_sym.state(3) = 0;
+       param.contact_sym.state(4) = 0;
+       param.contact_sym.UpdateContact();
     end
+  
     %% TODO
     %% contact jacobian
     [jacobian_contact,Jc_sym,dJcNu_sym] = icub.ContactJacobians(param,param.contact_sym);
     %% Control torques calculation
     tau = controller.Policy(t,q,qd,[],jacobian_contact,param); 
     %% torque saturation
-    tau(tau>param.torque_saturation) = param.torque_saturation;
+    tau(tau>param.torque_saturation)  = param.torque_saturation;
     tau(tau<-param.torque_saturation) = -param.torque_saturation;
 
     %% contact dynamic simulation    
     [tauContact,fc]=DynSim_iCubContacts(ndof,state,dynamic,Jc_sym,dJcNu_sym,param,tau);
+    %% compute zmp
+    [zmp]=DynSim_iCubZmp(fc,param); 
     %% State derivative computation
     % Need to calculate the quaternions derivative
     b_omega_w = transpose(w_R_b)*w_omega_b; %% TODO floating base flag required (parameter of the simulator)
@@ -95,14 +112,17 @@ function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
     %% Visualization
     % These are the variables that can be plotted by the visualizer.m
     % function
-    %  visual_param.Href      =  [M(1,1)*desired_x_dx_ddx_CoM(:,2);zeros(3,1)];
-    %  visual_param.H         =  H;
-    %  visual_param.pos_feet  =  [l_sole;r_sole];
-    %    controller.visual_param.fc        =  [controller.visual_param.fc, fc];
-    %  visual_param.tau       =  tau;
-    %  visual_param.qj        =  qj;
-    %  visual_param.error_com =  errorCoM;
-    %  visual_param.f0        =  f0;
+     %controller.visual_param.Href      =  [M(1,1)*desired_x_dx_ddx_CoM(:,2);zeros(3,1)];
+     %controller.visual_param.H         =  H;
+     %controller.visual_param.pos_feet  =  [l_sole;r_sole];
+     controller.visual_param.t(end + 1)      =  t;
+     %controller.visual_param.fc(end + 1,:)   =  fc';
+     controller.visual_param.tau(end +1 ,:)  =  tau';
+     controller.visual_param.qj(end + 1,:)   =  q';
+     controller.visual_param.zmp(end + 1,:)  =  zmp;
+     controller.visual_param.xCoM(end + 1,:) =  xCoM';
+     %controller.visual_param.error_com =  errorCoM;
+     %controller.visual_param.f0        =  f0;
 
 end
 

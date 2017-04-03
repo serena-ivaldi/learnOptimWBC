@@ -43,7 +43,7 @@ l_upper_leg=wbm_forwardKinematics(obj.state.w_R_b,obj.state.x_b,params.qjInit,'l
 middle_point = (r_upper_leg(1:3) + l_upper_leg(1:3))/2;
 
 
-params.plot_objs{1} = plot3(middle_point(1),middle_point(2),middle_point(3),'.','MarkerSize',10);
+params.plot_objs{1} = plot3(0,0.1,0,'.','MarkerSize',30);
 axis([-1.2 1.2 -1 1 0 1.2]);
 %axis equal
 hold on
@@ -190,7 +190,7 @@ lnkpatch          = zeros(1,n_joint);
 xyzpatch.vertices = zeros(8,3);
 xyzpatch.faces    = zeros(6,4);
 
-%TO DO adapt approximate correclyt the size of the boxes to iCub dimension
+%% TODO adapt approximate correclyt the size of the boxes to iCub dimension
 mult_patch = ones(n_lin,2);
 mult_patch(:,1) = mult_patch(:,1)*0.03;
 mult_patch(:,2) = mult_patch(:,2)*0.03;
@@ -276,24 +276,36 @@ end
 % right foot patch
 jj=n_lin+1;
 
-orthlnk1 = [0 0.03 0]';
-orthlnk2 = [0 0 0.03]';
+x_lenght = 0.07; 
+y_lenght = 0.03;
+shift_mult = x_lenght - 0.03;
+orthlnk1 = x_lenght*[1 0 0]';
+orthlnk2 = y_lenght*[0 1 0]';
+shift = shift_mult*[1 0 0]';
 
-qq1 =  orthlnk1+2*orthlnk2;
-qq2 = -orthlnk1+2*orthlnk2;
-qq3 = -orthlnk1-orthlnk2;
-qq4 =  orthlnk1-orthlnk2;
 
-r_foot_index = find(strcmp(obj.linkList,'r_foot'));
+qq1 =  orthlnk1+orthlnk2 + shift;
+qq2 = -orthlnk1+orthlnk2 + shift;  % move it 
+qq3 = -orthlnk1-orthlnk2 + shift;  % move it 
+qq4 =  orthlnk1-orthlnk2 + shift;  
 
-xyzpatch.vertices = [xyzpairs(r_foot_index,2)+qq1(1)      , xyzpairs(r_foot_index,4)+qq1(2) , xyzpairs(r_foot_index,6)+qq1(3);
-    xyzpairs(r_foot_index,2)+qq2(1)      , xyzpairs(r_foot_index,4)+qq2(2) , xyzpairs(r_foot_index,6)+qq2(3);
-    xyzpairs(r_foot_index,2)+qq3(1)      , xyzpairs(r_foot_index,4)+qq3(2) , xyzpairs(r_foot_index,6)+qq3(3);
-    xyzpairs(r_foot_index,2)+qq4(1)      , xyzpairs(r_foot_index,4)+qq4(2) , xyzpairs(r_foot_index,6)+qq4(3);
-    xyzpairs(r_foot_index,2)+qq1(1)+0.03 , xyzpairs(r_foot_index,4)+qq1(2) , xyzpairs(r_foot_index,6)+qq1(3);
-    xyzpairs(r_foot_index,2)+qq2(1)+0.03 , xyzpairs(r_foot_index,4)+qq2(2) , xyzpairs(r_foot_index,6)+qq2(3);
-    xyzpairs(r_foot_index,2)+qq3(1)+0.03 , xyzpairs(r_foot_index,4)+qq3(2) , xyzpairs(r_foot_index,6)+qq3(3);
-    xyzpairs(r_foot_index,2)+qq4(1)+0.03 , xyzpairs(r_foot_index,4)+qq4(2) , xyzpairs(r_foot_index,6)+qq4(3)];
+r_foot_index = find(strcmp(obj.linkList,'r_sole'));
+
+xyzpatch.vertices = [xyzpairs(r_foot_index,2)+qq1(1)     , xyzpairs(r_foot_index,4)+qq1(2) , xyzpairs(r_foot_index,6)+qq1(3);
+                    xyzpairs(r_foot_index,2)+qq2(1)      , xyzpairs(r_foot_index,4)+qq2(2) , xyzpairs(r_foot_index,6)+qq2(3);
+                    xyzpairs(r_foot_index,2)+qq3(1)      , xyzpairs(r_foot_index,4)+qq3(2) , xyzpairs(r_foot_index,6)+qq3(3);
+                    xyzpairs(r_foot_index,2)+qq4(1)      , xyzpairs(r_foot_index,4)+qq4(2) , xyzpairs(r_foot_index,6)+qq4(3);
+                    xyzpairs(r_foot_index,2)+qq1(1)      , xyzpairs(r_foot_index,4)+qq1(2) , xyzpairs(r_foot_index,6)+qq1(3);
+                    xyzpairs(r_foot_index,2)+qq2(1)      , xyzpairs(r_foot_index,4)+qq2(2) , xyzpairs(r_foot_index,6)+qq2(3);
+                    xyzpairs(r_foot_index,2)+qq3(1)      , xyzpairs(r_foot_index,4)+qq3(2) , xyzpairs(r_foot_index,6)+qq3(3);
+                    xyzpairs(r_foot_index,2)+qq4(1)      , xyzpairs(r_foot_index,4)+qq4(2) , xyzpairs(r_foot_index,6)+qq4(3)];
+
+xyzpatch.faces   = [ 1 2 3 4;
+                    1 4 8 5;
+                    5 8 7 6;
+                    7 3 2 6;
+                    2 6 5 1;
+                    3 7 8 4];
 
 
 lnkpatch(jj)      = patch('vertices',xyzpatch.vertices,'faces',xyzpatch.faces,'FaceAlpha',alpha);
@@ -301,23 +313,35 @@ lnkpatch(jj)      = patch('vertices',xyzpatch.vertices,'faces',xyzpatch.faces,'F
 % left foot patch
 jj=n_lin+2;
 
-orthlnk1 = [0 0.03 0]';
-orthlnk2 = [0 0 0.03]';
+x_lenght = 0.07; 
+y_lenght = 0.03;
+shift_mult = x_lenght - 0.03;
+orthlnk1 = x_lenght*[1 0 0]';
+orthlnk2 = y_lenght*[0 1 0]';
+shift = shift_mult*[1 0 0]';
 
-qq1 =  orthlnk1+2*orthlnk2;
-qq2 = -orthlnk1+2*orthlnk2;
-qq3 = -orthlnk1-orthlnk2;
-qq4 =  orthlnk1-orthlnk2;
+qq1 =  orthlnk1+orthlnk2 + shift;
+qq2 = -orthlnk1+orthlnk2 + shift;
+qq3 = -orthlnk1-orthlnk2 + shift;
+qq4 =  orthlnk1-orthlnk2 + shift;
 
-l_foot_index = find(strcmp(obj.linkList,'l_foot'));
-xyzpatch.vertices = [xyzpairs(l_foot_index,2)+qq1(1)      , xyzpairs(l_foot_index,4)+qq1(2) , xyzpairs(l_foot_index,6)+qq1(3);
-    xyzpairs(l_foot_index,2)+qq2(1)      , xyzpairs(l_foot_index,4)+qq2(2) , xyzpairs(l_foot_index,6)+qq2(3);
-    xyzpairs(l_foot_index,2)+qq3(1)      , xyzpairs(l_foot_index,4)+qq3(2) , xyzpairs(l_foot_index,6)+qq3(3);
-    xyzpairs(l_foot_index,2)+qq4(1)      , xyzpairs(l_foot_index,4)+qq4(2) , xyzpairs(l_foot_index,6)+qq4(3);
-    xyzpairs(l_foot_index,2)+qq1(1)+0.03 , xyzpairs(l_foot_index,4)+qq1(2) , xyzpairs(l_foot_index,6)+qq1(3);
-    xyzpairs(l_foot_index,2)+qq2(1)+0.03 , xyzpairs(l_foot_index,4)+qq2(2) , xyzpairs(l_foot_index,6)+qq2(3);
-    xyzpairs(l_foot_index,2)+qq3(1)+0.03 , xyzpairs(l_foot_index,4)+qq3(2) , xyzpairs(l_foot_index,6)+qq3(3);
-    xyzpairs(l_foot_index,2)+qq4(1)+0.03 , xyzpairs(l_foot_index,4)+qq4(2) , xyzpairs(l_foot_index,6)+qq4(3)];
+l_foot_index = find(strcmp(obj.linkList,'l_sole'));
+xyzpatch.vertices = [xyzpairs(l_foot_index,2)+qq1(1)     , xyzpairs(l_foot_index,4)+qq1(2) , xyzpairs(l_foot_index,6)+qq1(3);
+                     xyzpairs(l_foot_index,2)+qq2(1)     , xyzpairs(l_foot_index,4)+qq2(2) , xyzpairs(l_foot_index,6)+qq2(3);
+                     xyzpairs(l_foot_index,2)+qq3(1)     , xyzpairs(l_foot_index,4)+qq3(2) , xyzpairs(l_foot_index,6)+qq3(3);
+                     xyzpairs(l_foot_index,2)+qq4(1)     , xyzpairs(l_foot_index,4)+qq4(2) , xyzpairs(l_foot_index,6)+qq4(3);
+                     xyzpairs(l_foot_index,2)+qq1(1)     , xyzpairs(l_foot_index,4)+qq1(2) , xyzpairs(l_foot_index,6)+qq1(3);
+                     xyzpairs(l_foot_index,2)+qq2(1)     , xyzpairs(l_foot_index,4)+qq2(2) , xyzpairs(l_foot_index,6)+qq2(3);
+                     xyzpairs(l_foot_index,2)+qq3(1)     , xyzpairs(l_foot_index,4)+qq3(2) , xyzpairs(l_foot_index,6)+qq3(3);
+                     xyzpairs(l_foot_index,2)+qq4(1)     , xyzpairs(l_foot_index,4)+qq4(2) , xyzpairs(l_foot_index,6)+qq4(3)];
+
+
+xyzpatch.faces   = [ 1 2 3 4;
+                    1 4 8 5;
+                    5 8 7 6;
+                    7 3 2 6;
+                    2 6 5 1;
+                    3 7 8 4];
 
 lnkpatch(jj)      = patch('vertices',xyzpatch.vertices,'faces',xyzpatch.faces,'FaceAlpha',alpha);
 

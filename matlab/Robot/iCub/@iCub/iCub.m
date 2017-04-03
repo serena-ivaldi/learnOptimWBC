@@ -14,6 +14,7 @@ classdef iCub < handle
         dynamic             % M,h,g,H,C_nu,JCoM,dJCoM_nu,Jc,dJc_nu,JH,dJH_nu;       
         %% kinematic information
         contact_jacobians
+        support_poly
         %% URDF parameter   (only for urdf model for the IcubGazeboSim model i wil not consider this value)
         jointList           % the list of all the joints in the same order than the urdf
         linkList            % the list of all the links in the same order than the urdf
@@ -450,35 +451,91 @@ classdef iCub < handle
         
         
         %% miscellanea
-        function suppConvHull = computeSupPoly(obj, feet_on_ground,chi)
-        %Compute the support polygone wrt feet_on_ground
-            if     feet_on_ground(1) == 1 && feet_on_ground(2) == 1
-                %if both feet on the ground the ref frame is l_sole
-                %l_foot
-                [pos_lfoot,~]    = obj.offlineFkine(chi,'r_sole');
-                X__lfoot = pos_lfoot(1);    Y_lfoot = pos_lfoot(2);
-                X(1,1) = X__lfoot + 0.12;      Y(1,1) = Y_lfoot + 0.025;
-                X(1,2) = X__lfoot + 0.12;      Y(1,2) = Y_lfoot -0.025;
-                X(1,3) = X__lfoot - 0.06;     Y(1,3) = Y_lfoot - 0.025;
-                X(1,4) = X__lfoot - 0.06;     Y(1,4) = Y_lfoot + 0.025;
-                %r_foot
-                [pos_rfoot,~]    = obj.offlineFkine(chi,'l_sole');
-                X__rfoot = pos_rfoot(1);    Y_rfoot = pos_rfoot(2);
-                X(1,5) = X__rfoot + 0.12;     Y(1,5) = Y_rfoot + 0.025;
-                X(1,6) = X__rfoot + 0.12;     Y(1,6) = Y_rfoot - 0.025;
-                X(1,7) = X__rfoot - 0.06;     Y(1,7) = Y_rfoot - 0.025;
-                X(1,8) = X__rfoot - 0.06;     Y(1,8) = Y_rfoot + 0.025;
-            end
-            if     feet_on_ground(1) == 0 || feet_on_ground(2) == 0
-                %if only  left foot is on the ground the ref frame is l_sole
-                %if only right foot is on the ground the ref frame is r_sole
-                X(1,1) = 0.12;      Y(1,1) = 0.025;
-                X(1,2) = 0.12;      Y(1,2) = -0.025;
-                X(1,3) = -0.06;     Y(1,3) = -0.025;
-                X(1,4) = -0.06;     Y(1,4) = 0.025;
-            end
-            suppConvHull = ConvexHull(X,Y);
+%         function suppConvHull = computeSupPoly(obj, feet_on_ground,chi)
+%         %Compute the support polygone wrt feet_on_ground
+%             if     feet_on_ground(1) == 1 && feet_on_ground(2) == 1
+%                 %if both feet on the ground the ref frame is l_sole
+%                 %l_foot
+%                 [pos_lfoot,~]    = obj.offlineFkine(chi,'r_sole');
+%                 X__lfoot = pos_lfoot(1);    Y_lfoot = pos_lfoot(2);
+%                 X(1,1) = X__lfoot + 0.12;      Y(1,1) = Y_lfoot + 0.025;
+%                 X(1,2) = X__lfoot + 0.12;      Y(1,2) = Y_lfoot -0.025;
+%                 X(1,3) = X__lfoot - 0.06;     Y(1,3) = Y_lfoot - 0.025;
+%                 X(1,4) = X__lfoot - 0.06;     Y(1,4) = Y_lfoot + 0.025;
+%                 %r_foot
+%                 [pos_rfoot,~]    = obj.offlineFkine(chi,'l_sole');
+%                 X__rfoot = pos_rfoot(1);    Y_rfoot = pos_rfoot(2);
+%                 X(1,5) = X__rfoot + 0.12;     Y(1,5) = Y_rfoot + 0.025;
+%                 X(1,6) = X__rfoot + 0.12;     Y(1,6) = Y_rfoot - 0.025;
+%                 X(1,7) = X__rfoot - 0.06;     Y(1,7) = Y_rfoot - 0.025;
+%                 X(1,8) = X__rfoot - 0.06;     Y(1,8) = Y_rfoot + 0.025;
+%             end
+%             if     feet_on_ground(1) == 0 || feet_on_ground(2) == 0
+%                 %if only  left foot is on the ground the ref frame is l_sole
+%                 %if only right foot is on the ground the ref frame is r_sole
+%                 X(1,1) = 0.12;      Y(1,1) = 0.025;
+%                 X(1,2) = 0.12;      Y(1,2) = -0.025;
+%                 X(1,3) = -0.06;     Y(1,3) = -0.025;
+%                 X(1,4) = -0.06;     Y(1,4) = 0.025;
+%             end
+%             suppConvHull = ConvexHull(X,Y);
+%         end
+
+
+% %           right_foot      left_foot
+% %         C  _______  B   C' _______ B'          
+% %           |       |       |       |   Y
+% %           |       |       |   ---------->
+% %           |       |       |   |   |
+% %         D |_______| A   D'|___|__ | A'
+% %                               |
+% %                             X |
+% %                               v
+% %         double support :   
+% %             support_poly.min = C
+% %             support_poly.max = A'
+% %         single support  left foot:
+% %             support_poly.min = C'
+% %             support_poly.max = A'
+% %         single support  left foot:
+% %             support_poly.min = C
+% %             support_poly.max = A
+                                
+        function ComputeSupportPoly(obj,params)
+             import WBM.utilities.frame2posRotm; 
+             l_sole_pos   = wbm_forwardKinematics(obj.state.w_R_b,obj.state.x_b,obj.state.q,'l_sole');
+             r_sole_pos   = wbm_forwardKinematics(obj.state.w_R_b,obj.state.x_b,obj.state.q,'r_sole');
+             
+             [x_l_sole,~] = frame2posRotm(l_sole_pos);
+             [x_r_sole,~] = frame2posRotm(r_sole_pos);
+             
+             
+             shift_mult = params.footSize(1) - 0.03;
+             x_dir = params.footSize(1)*[1,0];
+             y_dir = params.footSize(2)*[0,1];
+             x_shift = shift_mult* [1 0];
+             
+             
+             if  params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 1 
+                 
+                 obj.support_poly.min =  x_r_sole(1:2)' - x_dir - y_dir + x_shift;
+                 obj.support_poly.max =  x_l_sole(1:2)' + x_dir + y_dir + x_shift;
+                 
+             elseif params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 0 
+                 
+                 obj.support_poly.min =  x_l_sole(1:2)' - x_dir - y_dir + x_shift;
+                 obj.support_poly.max =  x_l_sole(1:2)' + x_dir + y_dir + x_shift;
+                 
+             elseif params.feet_on_ground(1) == 0 && params.feet_on_ground(2) == 1
+                 
+                 obj.support_poly.min =  x_r_sole(1:2)' - x_dir - y_dir + x_shift;
+                 obj.support_poly.max =  x_r_sole(1:2)' + x_dir + y_dir + x_shift;
+                 
+             end
+            
         end
+
+        
         % Create the constraints_values vector need to compute the constraints
         % Used in AllRUntimeParameters
         function vector = createConstraintsVector(obj)

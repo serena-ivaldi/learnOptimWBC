@@ -4,11 +4,11 @@ clc
 
 %% test selection
 
-visualization_test = false;
+visualization_test = true;
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
-time_struct.tf = 6;
+time_struct.tf = 10;
 time_struct.step = 0.01;
 %% Parameters for simulator
 ndof = 25;
@@ -17,8 +17,6 @@ ndof = 25;
 visualizer_graphics   =  1;                                      %either 0 or 1
 visualizer_demo       =  1;                                      %either 0 or 1
 visualizer_jointsPos  =  0;                                      %either 0 or 1; only if visualizer_graphics = 1
-
-params.demo_movements = 1;
 % list of kin is a way to establish the kinematic part that are inside the
 % current model
 %% SUBCHAIN PARAMETERS
@@ -96,8 +94,9 @@ params.pinv_tol           = 1e-8;
 params.pinv_damp          = 5e-6;
 params.reg_HessianQP      = 1e-3;
 % feet size
-params.footSize  = [-0.07 0.07;       % xMin, xMax
-                    -0.03 0.03];      % yMin, yMax               
+params.footSize  = [0.07 0.03];    % foot_xlength, foot_ylength 
+%% parameters for controller
+params.footSize = xComfinal;                                    
 %% Visualization
 if (visualization_test)
     icub.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
@@ -258,7 +257,6 @@ else
     [t,q_ext,qd_ext]=DynSim_iCub(controller,params);
 
     %% Visualize forward dynamics
-    %params.wait     = waitbar(0,'Graphics generation in progress...');
     figure
     hold on
     %plot3(geom_parameters{1,1}(1),geom_parameters{1,1}(2),geom_parameters{1,1}(3),'g.','MarkerSize', 30);

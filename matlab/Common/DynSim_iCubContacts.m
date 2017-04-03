@@ -101,7 +101,7 @@ function [tauContact,fc]=DynSim_iCubContacts(ndof,state,dynamic,Jc,dJcNu,param,t
         delta = 0.001;
         JcMinvJc_t = JcMinv*Jc_t;
         One = eye(size(JcMinvJc_t,1));
-        fc              = (JcMinv*Jc_t + One*0.001)\(JcMinv*h -JcMinvS*tau -dJcNu -K_corr_vel.*Jc*Nu -K_corr_pos.*pos_feet_delta);
+        fc              = (JcMinv*Jc_t + One*delta)\(JcMinv*h -JcMinvS*tau -dJcNu -K_corr_vel.*Jc*Nu -K_corr_pos.*pos_feet_delta);
     else
         fc              = (JcMinv*Jc_t)\(JcMinv*h -JcMinvS*tau -dJcNu -K_corr_vel.*Jc*Nu -K_corr_pos.*pos_feet_delta);
     end

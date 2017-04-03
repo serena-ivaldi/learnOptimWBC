@@ -53,7 +53,7 @@ function EnhancedPlot(obj,q,param)
         odom.setModel(model);
         odom.updateKinematics(jointPos);
 
-        if sum(param.feet_on_ground) == 2
+        if sum(param.feet_on_ground) >= 2
 
             odom.init('l_sole','l_sole');
 

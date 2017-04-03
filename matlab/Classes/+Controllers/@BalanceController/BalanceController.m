@@ -15,6 +15,7 @@ classdef  BalanceController < Controllers.AbstractController
       torques_time     % all the time istant when i aply a torque.
       display_opt      % display settings display_opt.step display_opt.trajtrack
       gains
+      visual_param   
    end
 
 
@@ -188,7 +189,7 @@ classdef  BalanceController < Controllers.AbstractController
           end
       end
       
-      function  final_tau  = Policy(obj,t,q,qd,Fc,Jc,param)
+      function  [final_tau] = Policy(obj,t,q,qd,Fc,Jc,param)
          import WBM.utilities.frame2posRotm;
          import WBM.utilities.rotm2eulAngVelTF
          icub = obj.GetWholeSystem(); 
@@ -229,7 +230,7 @@ classdef  BalanceController < Controllers.AbstractController
          trajectory.jointReferences.ddqjRef = zeros(icub.ndof,1);
          trajectory.jointReferences.dqjRef  = zeros(icub.ndof,1);
          trajectory.jointReferences.qjRef   = icub.init_state.qi;
-         trajectory.desired_x_dx_ddx_CoM    = obj.trajectoryGenerator(icub.init_state.xCoMRef,t,param);
+         trajectory.desired_x_dx_ddx_CoM = trajectoryGenerator(obj,t,icub.init_state.xCoMRef,param.xComfinal);
          
          %% given the value of the com trajectory if the desired com is different from the starting position i will
          %% update the feet on ground to remove the bottom contact
@@ -415,76 +416,22 @@ classdef  BalanceController < Controllers.AbstractController
       end
       
       
-      function  desired_x_dx_ddx_CoM = trajectoryGenerator(obj,xCoMInit,t,CONFIG)
-
-          % Config parameters
-          feet_on_ground             = CONFIG.feet_on_ground;
-          demo_movements             = CONFIG.demo_movements;
-
-          % Initial parameters
-          directionOfOscillation     = [0;0;0];
-          referenceParams            = [0.0 0.0];   %referenceParams(1) = amplitude of ascillations in meters
-                                                      %referenceParams(2) = frequency of ascillations in Hertz
-
-          % NB: IF THE INTEGRATION IS PERFORMED USING ODE15S THIS PARAMETER SHOULD REMAIN ZERO                                           
-          noOscillationTime          = 0;           % If params.demo_movements = 1, the variable noOscillationTime is the time, in seconds,
-                                                      % that the robot waits before starting the left-and-right
-
-          %% Trajectory definition
-          if  demo_movements == 1
-
-                if  sum(feet_on_ground(1:2)) >= 2
-
-                    directionOfOscillation = [0;1;0];
-                    referenceParams        = [0.035 0.35];
+      function  desired_x_dx_ddx_CoM = trajectoryGenerator(obj,t,xCoMInit,xComfinal)
+                % in this way i specify in a fixed way the final value and
+                % the starting value
+                if(t<=0.1)
+                    xCoMDes     = xCoMInit;
+                    dxCoMDes    = zeros(size(xCoMInit));
+                    ddxCoMDes   = zeros((xCoMInit));
+                elseif(t>9.9)
+                    xCoMDes     = xComfinal;
+                    dxCoMDes    = zeros(size(xComfinal));
+                    ddxCoMDes   = zeros((xComfinal));
                 else
-
-                    directionOfOscillation = [0;1;0];
-                    referenceParams        = [0.015 0.15];
+                    [xCoMDes,dxCoMDes,ddxCoMDes]=obj.references.GetTraj(1,1,t);
                 end
-          end
-
-          %% Trajectory generation
-          frequency  = referenceParams(2);
-
-          if size(t,1)==1 && size(t,2)==1
-
-                if t >= noOscillationTime
-
-                    amplitude  = referenceParams(1);
-                else
-                    amplitude  = 0;
-                end
-
-%                 xCoMDes    =  xCoMInit + amplitude*sin(2*pi*frequency*t)*directionOfOscillation;
-%                 dxCoMDes   =             amplitude*2*pi*frequency*cos(2*pi*frequency*t)*directionOfOscillation;
-%                 ddxCoMDes  =           - amplitude*(2*pi*frequency)^2*sin(2*pi*frequency*t)*directionOfOscillation;
-                xCoMDes    =  xCoMInit; 
-                dxCoMDes   =  zeros(size(xCoMInit)); 
-                ddxCoMDes  =  zeros(size(xCoMInit));
-
 
                 desired_x_dx_ddx_CoM = [xCoMDes dxCoMDes ddxCoMDes];
-          else
-
-                % in case t is a vector
-                desired_x_dx_ddx_CoM = zeros(3,3,length(t));
-
-                for k = 1:length(t)
-                    if t(k) >= noOscillationTime
-
-                        amplitude  = referenceParams(1);
-                     else
-                        amplitude  = 0;
-                    end
-
-                    xCoMDes    =  xCoMInit + amplitude*sin(2*pi*frequency*t(k))*directionOfOscillation;
-                    dxCoMDes   =             amplitude*2*pi*frequency*cos(2*pi*frequency*t(k))*directionOfOscillation;
-                    ddxCoMDes  =           - amplitude*(2*pi*frequency)^2*sin(2*pi*frequency*t(k))*directionOfOscillation;
-
-                    desired_x_dx_ddx_CoM(:,:,k) = [xCoMDes dxCoMDes ddxCoMDes]; 
-                end
-          end
       end
    end   
 end
