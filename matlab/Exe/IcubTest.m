@@ -8,7 +8,7 @@ visualization_test = false;
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
-time_struct.tf = 9.92;
+time_struct.tf = 5;
 time_struct.step = 0.01;
 %% Parameters for simulator
 ndof = 25;
@@ -43,12 +43,11 @@ chains = SubChains(target_link,robots,icub);
 % joints_initial_values{1,5} = [25.5   5.0    0.0  -40    -5.5  -0.1];
 %% here I build to different structure one for the controller and one for the simulator
 %% to manage contacts
-contact_state = [1 1 1 1];
-names         =  {'l_sole','r_sole','l_upper_leg','r_upper_leg'};   
+contact_state = [1 1 0 0];
+names         =  {'l_sole','r_sole'};   
 params.contact_sym = Contacts(contact_state,names);
 
-
-params.feet_on_ground = [1 1 1 1];         %either 0 or 1; [left,right] (in the simulator)
+params.feet_on_ground = [1 1 0 0];         %either 0 or 1; [left,right] (in the simulator)
 params.numContacts = sum(params.feet_on_ground,2);
 if  params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 1 && params.feet_on_ground(3) == 1  && params.feet_on_ground(4) == 1 
     % contact constraints for 2 feet on ground
@@ -85,8 +84,8 @@ end
 params.tStart   = time_struct.ti;
 params.tEnd     = time_struct.tf;
 params.sim_step =  0.01;%time_struct.step;
-params.demo_movements = 1;
-params.maxtime = 1000;
+params.demo_movements = 0;
+params.maxtime = 100;
 params.torque_saturation = 100000;
 %% other parameters
 params.use_QPsolver = 0;                          %either 0 or 1
@@ -95,7 +94,7 @@ params.pinv_damp          = 5e-6;
 params.reg_HessianQP      = 1e-3;
 % feet size
 params.footSize  = [0.07 0.03];    % foot_xlength, foot_ylength 
-%% parameters for controller
+%% parameters for controller and fitness
 params.xComfinal = [0.0167667444901888;-0.0681008604452745;0.503988037442802];
 params.qfinal    = [-10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0,25.5   0   0  -18.5  -5.5  0]'*(pi/180);   
 
@@ -112,11 +111,6 @@ if (visualization_test)
 %     scatter3(root_link_pos(1),root_link_pos(2),root_link_pos(3));
     %icub.EnhancedPlot(params.qjInit,params);
 else
-    %% limit parameters
-    
-    %[jl1,jl2]        = wbm_jointLimits();
-    %limits           = [jl1 jl2];
-    %params.limits    = limits;
     %%  REFERENCE PARAMETERS
     deg = pi/180;
     % primary trajectory
@@ -126,7 +120,8 @@ else
     geometric_path = {'AdHocBalance'};
     time_law = {'none'};
     %parameters first chains
-    geom_parameters{1,1} =  [5 ,2 ,-0.120249695321353,-0.0680999719842103,0.369603821651986]; %[0.209290598956330,0.147080124030923,0.607101111147211]; 
+                         % #basis overlap                    starting com position
+    geom_parameters{1,1} =  [5 ,     2 ,       0.0167667444901888,-0.0681008604452745,0.503988037442802];% sitting_com:-0.120249695321353,-0.0680999719842103,0.369603821651986]; 
     %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
     dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(icub.n,1); %dim_of_task{1,4}=ones(icub.n,1);
 
@@ -140,7 +135,7 @@ else
     geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
     dim_of_task_sec{1,1}={[1;1;1]};
 
-    numeric_reference_parameter{1,1}=[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]'; % is not used but just to be compliant with the input structure
+    numeric_reference_parameter{1,1}=[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]'; 
 
     %% ALPHA PARAMETERS
     choose_alpha = 'constant';  % RBF , constant, handTune
@@ -257,6 +252,26 @@ else
 
     %% simulator
     [t,q_ext,qd_ext]=DynSim_iCub(controller,params);
+    
+    
+    %% compute fitness (for this we use a sliglty different version of the fitness function (the one with Test at the end))
+    output{1} = t;
+    output{2} = q_ext;
+    output{3} = qd_ext;
+    %% CONSTRAINTS PARAMETERS
+    constraints_values = icub.createConstraintsVector;
+    for k = 1:2:length(constraints_values)
+        constraints_functions{k} = 'LinInequality';
+        constraints_functions{k+1} = 'LinInequality2';
+    end
+    constraints_functions{end+1} = 'EmptyConstraints'; 
+    constraints_values = [constraints_values,nan];   % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
+    constraints_type = ones(1,length(constraints_values)); % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
+    activate_constraints_handling = true;
+    penalty_handling=Optimization.FixPenalty(controller.GetTotalParamNum(),constraints_functions,constraints_type,constraints_values);
+    
+    
+    fitnessHumanoidsIcubStandUpTest(output,penalty_handling,controller,params)
 
     %% Visualize forward dynamics
     figure

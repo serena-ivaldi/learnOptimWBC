@@ -43,14 +43,14 @@ classdef iCub < handle
                 % fixed joint list for icubGazeboSim
                 obj.revoluteJointList = {'torso_pitch','torso_roll','torso_yaw','l_shoulder_pitch','l_shoulder_roll','l_shoulder_yaw','l_elbow','l_wrist_prosup','r_shoulder_pitch','r_shoulder_roll',...
                                   'r_shoulder_yaw','r_elbow','r_wrist_prosup','l_hip_pitch','l_hip_roll','l_hip_yaw','l_knee','l_ankle_pitch','l_ankle_roll','r_hip_pitch','r_hip_roll',...
-                                  'r_hip_yaw,r_knee','r_ankle_pitch','r_ankle_roll'};
+                                  'r_hip_yaw','r_knee','r_ankle_pitch','r_ankle_roll'};
                               
                 model = strcat(obj.model_name,'.urdf');
                 path = which(model);              
                 scheme = xml2struct(path);
-                obj.UBjointLimit = [];
-                obj.LBjointLimit = [];
-                obj.effortLimit = [];
+                obj.UBjointLimit = zeros(1,obj.ndof);
+                obj.LBjointLimit = zeros(1,obj.ndof);
+                obj.effortLimit  = zeros(1,obj.ndof);
                 iii = 1;
                 for i = 1:length(scheme.robot.link)
                     if(~strcmp(scheme.robot.link{i}.Attributes.name,'base_link'))
@@ -61,10 +61,11 @@ classdef iCub < handle
                 for i = 1:length(scheme.robot.joint)
                     obj.jointList{i} = scheme.robot.joint{i};
                     current_joint = scheme.robot.joint{i}.Attributes.name;
-                    if  ( sum((strcmp(current_joint, obj.revoluteJointList))) )
-                        obj.UBjointLimit = [obj.UBjointLimit, str2double(scheme.robot.joint{i}.limit.Attributes.upper)];
-                        obj.LBjointLimit = [obj.LBjointLimit, str2double(scheme.robot.joint{i}.limit.Attributes.lower)];
-                        obj.effortLimit = [obj.effortLimit, str2double(scheme.robot.joint{i}.limit.Attributes.effort)];
+                    index = strcmp(current_joint, obj.revoluteJointList);
+                    if  ( sum(index) )
+                        obj.UBjointLimit(index) =  str2double(scheme.robot.joint{i}.limit.Attributes.upper);
+                        obj.LBjointLimit(index) =  str2double(scheme.robot.joint{i}.limit.Attributes.lower);
+                        obj.effortLimit(index)  =  str2double(scheme.robot.joint{i}.limit.Attributes.effort);
                     end
                 end              
             else
@@ -104,7 +105,7 @@ classdef iCub < handle
         function InitEnhanViz(obj)
             obj.modelName        = 'iCub';
             obj.setPos           = [1,0,0.5];    
-            obj.setCamera        = [0.4,0.2,0.5];%[0.4,0,0.5];
+            obj.setCamera        = [0.4,0,0.5];%[0.4,0,0.5];
             obj.mdlLdr           = iDynTree.ModelLoader();
             obj.consideredJoints = iDynTree.StringVector();
 
@@ -150,16 +151,13 @@ classdef iCub < handle
             leftArmInit  = [ -20  30  0  45  0]';
             rightArmInit = [ -20  30  0  45  0]';
             torsoInit    = [ -10   0  0]';
-
-            [-10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0,25.5   0   0  -18.5  -5.5  0]*(pi/180);
             
             if sum(feet_on_ground) >= 2
-
                 % initial conditions for balancing on two feet
-                 leftLegInit  = [  90   0   0  -90  -5.5  0]';
-                 rightLegInit = [  90   0   0  -90  -5.5  0]';
-%                   leftLegInit  = [  25.5   0   0  -18.5  -5.5  0]';
-%                   rightLegInit = [  25.5   0   0  -18.5  -5.5  0]';
+%                  leftLegInit  = [  90   0   0  -90  -5.5  0]';
+%                  rightLegInit = [  90   0   0  -90  -5.5  0]';
+                   leftLegInit  = [  25.5   0   0  -18.5  -5.5  0]';
+                   rightLegInit = [  25.5   0   0  -18.5  -5.5  0]';
             elseif feet_on_ground(1) == 1 && feet_on_ground(2) == 0
 
                 % initial conditions for the robot standing on the left foot
@@ -302,14 +300,15 @@ classdef iCub < handle
             % Updating the robot position
             wbm_updateState(qjInit,dqjInit,[dx_bInit;w_omega_bInit]);
             % fixing the world reference frame w.r.t. the foot on ground position
-            [x_b0,R_b0] = wbm_getWorldFrameFromFixLnk(reference_link,qjInit);
+            [x_b0,w_R_b0] = wbm_getWorldFrameFromFixLnk(reference_link,qjInit);
             % define world frame
-            wbm_setWorldFrame(R_b0,x_b0,[0 0 -9.81]');
+            wbm_setWorldFrame(w_R_b0,x_b0,[0 0 -9.81]');
+                      
             % update position and orientation of the floating base repect of the root base
             obj.state.q = qjInit;
             obj.state.qd = dqjInit;
             obj.state.x_b = x_b0;
-            obj.state.w_R_b = R_b0;
+            obj.state.w_R_b = w_R_b0;
             % initial velocity floating base
             obj.state.dx_b   = dx_bInit;
             obj.state.w_omega_b = w_omega_bInit;
@@ -317,7 +316,7 @@ classdef iCub < handle
             obj.init_state.qi = qjInit;
             obj.init_state.qdi = dqjInit;
             obj.init_state.x_bi = x_b0;
-            obj.init_state.w_R_bi = R_b0;
+            obj.init_state.w_R_bi = w_R_b0;
             obj.init_state.dx_bi   = dx_bInit;
             obj.init_state.w_omega_bi = w_omega_bInit;
             %% TODEBUG
@@ -418,6 +417,9 @@ classdef iCub < handle
                 Jc(6*(i-1)+1:6*i,:)    = wbm_jacobian(obj.state.w_R_b,obj.state.x_b,q,param.contactLinkNames{i});
                 dJcNu(6*(i-1)+1:6*i,:) = wbm_dJdq(obj.state.w_R_b,obj.state.x_b,q,qd,[obj.state.dx_b;obj.state.w_omega_b],param.contactLinkNames{i});
             end
+            % i had to put this correction because for some reason the
+            % r_sole does not work properly
+            dJcNu(9) = 0;
             % contact jacobian for simulator
             Jc_sym       =  zeros(6*contact.num_of_active_contacts,6+obj.ndof);
             dJcNu_sym    =  zeros(6*contact.num_of_active_contacts,1);
@@ -425,6 +427,10 @@ classdef iCub < handle
                 Jc_sym(6*(i-1)+1:6*i,:)    = wbm_jacobian(obj.state.w_R_b,obj.state.x_b,q,contact.names{i});
                 dJcNu_sym(6*(i-1)+1:6*i,:) = wbm_dJdq(obj.state.w_R_b,obj.state.x_b,q,qd,[obj.state.dx_b;obj.state.w_omega_b],contact.names{i});
             end
+            % i had to put this correction because for some reason the
+            % r_sole does not work properly and give me a non zero element
+            % for the r_sole
+            dJcNu_sym(9) = 0;
             obj.contact_jacobians.Jc = Jc;
             obj.contact_jacobians.dJcNu = dJcNu;
             contact_jacobians = obj.contact_jacobians;
@@ -487,12 +493,12 @@ classdef iCub < handle
 
 % %           right_foot      left_foot
 % %         C  _______  B   C' _______ B'          
-% %           |       |       |       |   Y
+% %           |       |       |       |   Y_w
 % %           |       |       |   ---------->
 % %           |       |       |   |   |
 % %         D |_______| A   D'|___|__ | A'
 % %                               |
-% %                             X |
+% %                           X_w |
 % %                               v
 % %         double support :   
 % %             support_poly.min = C
@@ -537,6 +543,9 @@ classdef iCub < handle
              end
              
              obj.support_poly.center = (obj.support_poly.min + obj.support_poly.max)/2;
+             obj.support_poly.height =  obj.support_poly.max(1) - obj.support_poly.min(1);
+             obj.support_poly.width  =  obj.support_poly.max(2) - obj.support_poly.min(2); 
+             
             
         end
 
@@ -546,6 +555,7 @@ classdef iCub < handle
         function vector = createConstraintsVector(obj)
             vector = [];
             for i = 1:obj.ndof
+                                   %upper bound                %lower bound  
                 vector = [vector, obj.UBjointLimit(i), obj.LBjointLimit(i)];
             end
             for i = 1:obj.ndof

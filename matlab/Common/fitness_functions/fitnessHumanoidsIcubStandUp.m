@@ -5,9 +5,9 @@ function fit  = fitnessHumanoidsIcubStandUp(obj,output)
 % fixed distance constraints activate. All that done with minimal torques
 %and under the usual constraints : joints limits, torques limits and colision detection.
     
-    t  = output{1};
-    q  = output{2};
-    qd = output{3};
+    t_all  = output{1};
+    q_all  = output{2};
+    qd_all = output{3};
      
     %%%;;
     downsaple = 1;
@@ -25,16 +25,26 @@ function fit  = fitnessHumanoidsIcubStandUp(obj,output)
     effort   = 0;
      
     evaluate_constraints_index = 1;
-    for i=1:downsaple:size(t,1)
-        t_cur = t(i);
-        q_cur = q(i,:);
-        qd_cur= qd(i,:);
-        chi_cur = [q_cur,qd_cur];
-        q = q_cur(8:8+iCub.ndof);
-        [dchi,res]=forwardDynamics(t_cur,chi_cur,contr,param);
+    
+    % i reset the icub in the initial position and i ciompute the part of
+    % param that is not updated when i run the simulation (no side effect)
+    iCub.SetWorldFrameiCub(param.qjInit,param.dqjInit,param.dx_bInit,param.omega_bInit,param.root_reference_link);
+    param.lfoot_ini = wbm_forwardKinematics('l_sole');
+    param.rfoot_ini = wbm_forwardKinematics('r_sole');
+    param.lu_leg_ini = wbm_forwardKinematics('l_upper_leg');
+    param.ru_leg_ini = wbm_forwardKinematics('r_upper_leg');
+    
+    
+    for i=1:downsaple:size(t_all,1)
+        t_cur = t_all(i);
+        q_cur = q_all(i,:);
+        qd_cur= qd_all(i,:);
+        chi_cur = [q_cur,qd_cur]';
+        q = q_cur(8:8+iCub.ndof-1);
+        [dchi,res]=DynSim_iCubForwardDynamics(t_cur,chi_cur,contr,param);
         
         %% fitness computation
-        traj_err = traj_err + norm((params.xComfinal - res.xCoM),L);
+        traj_err = traj_err + norm((param.xComfinal' - res.xCoM),L);
         effort   = effort   + norm(res.tau);
         %% constraint computation
         
@@ -42,7 +52,7 @@ function fit  = fitnessHumanoidsIcubStandUp(obj,output)
         balance      = CheckBalance(res.zmp,iCub.support_poly);
         
         
-        input_vector = {q(1),q(1),q(2),q(2),q(3),q(3),q(4),q(4),q(5),q(5),q(6),q(6),q(7),rq(7),q(8),q(8),q(9),q(9),q(10),q(10),q(11),q(11),q(12),q(12),q(13),q(13),q(14),q(14),...
+        input_vector = {q(1),q(1),q(2),q(2),q(3),q(3),q(4),q(4),q(5),q(5),q(6),q(6),q(7),q(7),q(8),q(8),q(9),q(9),q(10),q(10),q(11),q(11),q(12),q(12),q(13),q(13),q(14),q(14),...
                         q(15),q(15),q(16),q(16),q(17),q(17),q(18),q(18),q(19),q(19),q(20),q(20),q(21),q(21),q(22),q(22),q(23),q(23),q(24),q(24),q(25),q(25),...
                         res.tau(1),res.tau(1),res.tau(2),res.tau(2),res.tau(3),res.tau(3),res.tau(4),res.tau(4),res.tau(5),res.tau(5),res.tau(6),res.tau(6),res.tau(7),res.tau(7),...
                         res.tau(8),res.tau(8),res.tau(9),res.tau(9),res.tau(10),res.tau(10),res.tau(11),res.tau(11),res.tau(12),res.tau(12),res.tau(13),res.tau(13),res.tau(14),res.tau(14),...

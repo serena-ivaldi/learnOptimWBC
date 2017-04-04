@@ -1,7 +1,4 @@
-% inequality of the kind  x < k  ---->  x - k < 0
-
-
-
+% inequality 
 function violation = CheckBalance(zmp,support_poly)
     violation_flag = false;
     
@@ -13,8 +10,12 @@ function violation = CheckBalance(zmp,support_poly)
    end
    
     if(violation_flag)
-        violation = norm()
+         % here the value is positive because im in violation
+         cx = max(min(zmp(1), support_poly.min(1)+support_poly.height), support_poly.min(1));
+         cy = max(min(zmp(2), support_poly.min(2)+support_poly.height), support_poly.min(2));
+         violation = sqrt( (zmp(1)-cx)*(zmp(1)-cx) + (zmp(2)-cy)*(zmp(2)-cy) );
     else
-        violation = - norm(zmp - support_poly.center);
+         % here the value si negative because the constraint sisatisfied
+         violation = - norm(zmp - support_poly.center);
     end    
 end

@@ -154,11 +154,9 @@ switch CONTROLLERTYPE
             constraints_functions{k+1} = 'LinInequality2';
         end
         %% with the empty constraints it means that i compute the constraints directly inside the fitness function and i provide the result through the input of the empty constraints
-        constraints_functions{end+1} = 'EmptyConstraint'; 
+        constraints_functions{end+1} = 'EmptyConstraints'; 
         constraints_values = [constraints_values,nan];   % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
         constraints_type = ones(1,length(constraints_values)); % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
-        constraints_type(end) = 0; %beacause the last constraint is an equality
-        
         activate_constraints_handling = true;
         %% INSTANCE PARAMETER
         run_function = @RobotExperiment;

@@ -182,11 +182,11 @@ classdef  BalanceController < Controllers.AbstractController
       function n_param=GetTotalParamNum(obj)
           
           n_param = 0;
-          for i=1:1:size(obj.alpha,1) 
-             for j=1:size(obj.alpha,2) 
-                 n_param = n_param + obj.alpha{i,j}.GetParamNum();
-             end
-          end
+%           for i=1:1:size(obj.alpha,1) 
+%              for j=1:size(obj.alpha,2) 
+%                  n_param = n_param + obj.alpha{i,j}.GetParamNum();
+%              end
+%           end
           for i=1:1:size(obj.references.parameter_dim,1) 
              n_param = n_param + obj.references.GetNumParam(i);
           end
@@ -233,7 +233,7 @@ classdef  BalanceController < Controllers.AbstractController
          trajectory.jointReferences.ddqjRef = zeros(icub.ndof,1);
          trajectory.jointReferences.dqjRef  = zeros(icub.ndof,1);
          trajectory.jointReferences.qjRef   = icub.init_state.qi;%param.qfinal;
-         trajectory.desired_x_dx_ddx_CoM = trajectoryGenerator(obj,t,icub.init_state.xCoMRef,param.xComfinal);
+         trajectory.desired_x_dx_ddx_CoM = myTrajectoryGenerator(obj,t,icub.init_state.xCoMRef,param.xComfinal);
          
          %% given the value of the com trajectory if the desired com is different from the starting position i will
          %% update the feet on ground to remove the bottom contact
@@ -419,7 +419,7 @@ classdef  BalanceController < Controllers.AbstractController
       end
       
       
-      function  desired_x_dx_ddx_CoM = trajectoryGenerator(obj,t,xCoMInit,xComfinal)
+      function  desired_x_dx_ddx_CoM = myTrajectoryGenerator(obj,t,xCoMInit,xComfinal)
                 % in this way i specify in a fixed way the final value and
                 % the starting value
                 if(t<=0.1)
