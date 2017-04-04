@@ -154,10 +154,10 @@ classdef iCub < handle
             
             if sum(feet_on_ground) >= 2
                 % initial conditions for balancing on two feet
-%                  leftLegInit  = [  90   0   0  -90  -5.5  0]';
-%                  rightLegInit = [  90   0   0  -90  -5.5  0]';
-                   leftLegInit  = [  25.5   0   0  -18.5  -5.5  0]';
-                   rightLegInit = [  25.5   0   0  -18.5  -5.5  0]';
+                 leftLegInit  = [  90   0   0  -90  -5.5  0]';
+                 rightLegInit = [  90   0   0  -90  -5.5  0]';
+%                    leftLegInit  = [  25.5   0   0  -18.5  -5.5  0]';
+%                    rightLegInit = [  25.5   0   0  -18.5  -5.5  0]';
             elseif feet_on_ground(1) == 1 && feet_on_ground(2) == 0
 
                 % initial conditions for the robot standing on the left foot
@@ -545,8 +545,7 @@ classdef iCub < handle
              obj.support_poly.center = (obj.support_poly.min + obj.support_poly.max)/2;
              obj.support_poly.height =  obj.support_poly.max(1) - obj.support_poly.min(1);
              obj.support_poly.width  =  obj.support_poly.max(2) - obj.support_poly.min(2); 
-             
-            
+             obj.support_poly.max_dist = norm(obj.support_poly.max - obj.support_poly.center);
         end
 
         

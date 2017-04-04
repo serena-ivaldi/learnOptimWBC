@@ -8,7 +8,7 @@ visualization_test = false;
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
-time_struct.tf = 5;
+time_struct.tf = 10;
 time_struct.step = 0.01;
 %% Parameters for simulator
 ndof = 25;
@@ -43,11 +43,11 @@ chains = SubChains(target_link,robots,icub);
 % joints_initial_values{1,5} = [25.5   5.0    0.0  -40    -5.5  -0.1];
 %% here I build to different structure one for the controller and one for the simulator
 %% to manage contacts
-contact_state = [1 1 0 0];
-names         =  {'l_sole','r_sole'};   
-params.contact_sym = Contacts(contact_state,names);
+params.init_contact_state = [1 1 1 1];
+names         =  {'l_sole','r_sole','l_upper_leg','r_upper_leg'};   
+params.contact_sym = Contacts(params.init_contact_state,names);
 
-params.feet_on_ground = [1 1 0 0];         %either 0 or 1; [left,right] (in the simulator)
+params.feet_on_ground = params.init_contact_state;         %either 0 or 1; [left,right] (in the simulator)
 params.numContacts = sum(params.feet_on_ground,2);
 if  params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 1 && params.feet_on_ground(3) == 1  && params.feet_on_ground(4) == 1 
     % contact constraints for 2 feet on ground
@@ -95,8 +95,12 @@ params.reg_HessianQP      = 1e-3;
 % feet size
 params.footSize  = [0.07 0.03];    % foot_xlength, foot_ylength 
 %% parameters for controller and fitness
-params.xComfinal = [0.0167667444901888;-0.0681008604452745;0.503988037442802];
-params.qfinal    = [-10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0,25.5   0   0  -18.5  -5.5  0]'*(pi/180);   
+% sitting_com:-0.120249695321353,-0.0680999719842103,0.369603821651986];
+% stading_com:0.0167667444901888,-0.0681008604452745,0.503988037442802
+params.xComfinal = [-0.120249695321353,-0.0680999719842103,0.369603821651986]';
+% stading_pose: -10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0, 25.5   0   0  -18.5  -5.5  0
+% sitting_pose: -10   0  0, -20  30  0  45  0, -20  30  0  45  0,  90    0   0  -90    -5.5  0,  90    0   0   -90   -5.5  0
+params.qfinal    = [-10   0  0, -20  30  0  45  0, -20  30  0  45  0,  90    0   0  -90    -5.5  0,  90    0   0   -90   -5.5  0]'*(pi/180);   
 
 %% Visualization
 if (visualization_test)
@@ -121,7 +125,8 @@ else
     time_law = {'none'};
     %parameters first chains
                          % #basis overlap                    starting com position
-    geom_parameters{1,1} =  [5 ,     2 ,       0.0167667444901888,-0.0681008604452745,0.503988037442802];% sitting_com:-0.120249695321353,-0.0680999719842103,0.369603821651986]; 
+    geom_parameters{1,1} =  [5 ,     2 ,      -0.120249695321353,-0.0680999719842103,0.369603821651986];% sitting_com:-0.120249695321353,-0.0680999719842103,0.369603821651986];
+                                                                                                         % stading_com:0.0167667444901888,-0.0681008604452745,0.503988037442802
     %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
     dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(icub.n,1); %dim_of_task{1,4}=ones(icub.n,1);
 
