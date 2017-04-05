@@ -63,16 +63,17 @@ classdef  NoPenalty < Optimization.AbstractPenalty
            for i=1:obj.n_constraint
                % i sum only the constraints violation it means that i have to discard value less then zero 
                % in this part i consider only the violation on each constraint for the overall experiments
-               index = obj.constraints_violation(i,:)>0;
-               %% TODO check isempty on the other constraints manager
-               if(index ~= 0)
-                    obj.penalties(1,i) = sum(obj.constraints_violation(i,index),2); 
-                    obj.feasibility_vec(1,i) = -1;
-               else
-                   % otherwise i take all the index where T
-                   index = obj.constraints_violation(i,:)<=0;
+               index = obj.constraints_violation(i,:)<=0;
+               if(prod(index))
+                   % the current constraints is always satisified
+                   %index = obj.constraints_violation(i,:)<=0;
                    obj.penalties(1,i) = sum(obj.constraints_violation(i,index),2); 
                    obj.feasibility_vec(1,i) = 1;
+               else
+                   % at least in one time step the current constraints is
+                   % not satisfied
+                   obj.penalties(1,i) = sum(obj.constraints_violation(i,~index),2); 
+                   obj.feasibility_vec(1,i) = -1;
                end
            end
            

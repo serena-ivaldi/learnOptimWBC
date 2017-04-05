@@ -89,6 +89,8 @@ addpath(fullfile(OptWBIpath, 'Common'));
 addpath(fullfile(OptWBIpath, 'Common', 'sampling'));
 addpath(fullfile(OptWBIpath, 'Common', 'fitness_functions'));
 addpath(fullfile(OptWBIpath, 'Common', 'black_box_functions'));
+addpath(fullfile(OptWBIpath, 'Common', 'constraints'));
+addpath(fullfile(OptWBIpath, 'Common', 'trajectory_generators'));
 addpath(fullfile(OptWBIpath, 'Classes'));
 addpath(fullfile(OptWBIpath, 'Interface'));
 testpath = fullfile(OptWBIpath, 'TestResults');

@@ -85,7 +85,7 @@ params.tStart   = time_struct.ti;
 params.tEnd     = time_struct.tf;
 params.sim_step =  0.01;%time_struct.step;
 params.demo_movements = 0;
-params.maxtime = 100;
+params.maxtime = 50;
 params.torque_saturation = 100000;
 %% other parameters
 params.use_QPsolver = 0;                          %either 0 or 1
@@ -158,7 +158,7 @@ else
 
 
     %% CONTROLLER PARAMETERS
-    max_time = 50; %50
+    %max_time = 50; %50
     combine_rule = {'sum'}; % sum or projector (with sum reppelers are removed)
 % 
 %     % the metric change between regularized and not regularized because in the
@@ -273,7 +273,7 @@ else
     constraints_values = [constraints_values,nan];   % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
     constraints_type = ones(1,length(constraints_values)); % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
     activate_constraints_handling = true;
-    penalty_handling=Optimization.FixPenalty(controller.GetTotalParamNum(),constraints_functions,constraints_type,constraints_values);
+    penalty_handling=Optimization.NoPenalty(controller.GetTotalParamNum(),constraints_functions,constraints_type,constraints_values);
     
     
     fitnessHumanoidsIcubStandUpTest(output,penalty_handling,controller,params)

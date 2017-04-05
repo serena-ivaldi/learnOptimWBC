@@ -8,7 +8,7 @@ time_struct.tf = 10;
 time_struct.step = 0.01;
 
 %% TASK PARAMETERS
-name_dat = 'iCub_stand_up_1.0'; % this is the name to give to the folder where im going to save the results
+name_dat = 'iCub_stand_up_1.1'; % this is the name to give to the folder where im going to save the results
 %path=LoadParameters(name_dat);
 %load(path);
 %% TYPE OF CONTROLLER
@@ -157,10 +157,10 @@ switch CONTROLLERTYPE
         constraints_functions{end+1} = 'EmptyConstraints'; 
         constraints_values = [constraints_values,nan];   % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
         constraints_type = ones(1,length(constraints_values)); % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
-        activate_constraints_handling = true;
+        activate_constraints_handling = false;
         %% INSTANCE PARAMETER
         run_function = @RobotExperiment;
-        fitness = @fitnessHumanoidsIcubStandUp;
+        fitness = @fitnessHumanoidsIcubStandUpSearchFreeSolution;
         clean_function = @RobotExperimentCleanData;
         
         if strcmp(simulator_type{1},'rbt')
@@ -192,9 +192,9 @@ switch CONTROLLERTYPE
         %cmaes_value_range = [-14 , 14];  % boudn that define the search space
         cmaes_value_range{1} = [-5,-5,-5,-5,-5, -0.12,-0.12,-0.12,-0.12,-0.12,  0.36,0.36,0.36,0.36,0.36 ];  % lower bound that define the search space
         cmaes_value_range{2} = [ 5, 5, 5, 5, 5,  0.016,0.016,0.016,0.016,0.016, 0.50,0.50,0.50,0.50,0.50];  % upper bound that define the search space
-        learn_approach = 'CMAES'; %CMAES (1+1)CMAES
+        learn_approach = '(1+1)CMAES'; %CMAES (1+1)CMAES
         %--- Parameter for constraints method
-        method_to_use = 'vanilla';  % adaptive , vanilla , empty
+        method_to_use = 'nopenalty';  % adaptive , vanilla , empty
         epsilon = 0.001*ones(1,length(constraints_functions)); %vector with a number of value related to the number of constraints (used only with Aaptive constraints)
         %% FITNESS PARAMETERS
         

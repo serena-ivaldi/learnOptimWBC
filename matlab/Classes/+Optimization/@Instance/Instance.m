@@ -18,13 +18,16 @@ classdef  Instance
    end
        
    methods
-       function obj = Instance(penalty_handling,learn_procedure,run_function,fitness,clean_function,input_4_run)
+       function obj = Instance(penalty_handling,learn_procedure,run_function,fitness,clean_function,input_4_run,varargin)
            if(isempty(penalty_handling))
               obj.constraints = false;
               penalty_handling.EvaluateConstraints=@(input_,iteration_)DoNothing(input_,iteration_);
               penalty_handling.n_constraint = 0;
            else
               obj.constraints = true;
+           end
+           if(isempty(varargin))
+               obj.constraints = varargin{1};
            end
            obj.learn_procedure = learn_procedure;
            obj.penalty_handling = penalty_handling;

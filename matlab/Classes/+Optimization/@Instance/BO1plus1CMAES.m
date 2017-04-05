@@ -464,7 +464,7 @@ function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,
        if(debug)
            disp('BO update');
        end
-       % with this variable i state that i will update the hyperparameter and the covariance matrxi only when i call it explicitly
+       % with this variable i state that i will update the hyperparameter and the covariance matrix only when i call it explicitly
        Train = false; 
        BO.Update(x_candidate, y,Train);
        %% collect data for the visualization (only if i have active particles (why?) )
@@ -604,22 +604,6 @@ function [x_candidate]=GPLocalExploration(PM,BO,emergency_particle,EM_flag,zoomi
     %% TODEBUG
     if(visualization_switch)
         PM.Plot([],1,false,true);
-    end
-end
-
-function y = ArtificialConstraints(penalties)
-    % i check if there are violated constraints
-    % in that case pull at all the non violated and sum up the violation
-    % otherwise i sum all the constraints that are satisfied
-    %% i check for all the constraints that are satisfied 
-    index = penalties < 0; % in index: 0 = not satisfied      1 = satisfied
-    %% because if the product is zero means that i have violation i sum only the violation 
-    %% otherwise i sum all the satisfaction 
-    if((prod(index)))
-        y = sum(penalties);
-    else
-        penalties(index) = 0;
-        y = sum(penalties);
     end
 end
 

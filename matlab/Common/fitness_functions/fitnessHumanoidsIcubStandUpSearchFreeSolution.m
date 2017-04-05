@@ -1,4 +1,4 @@
-function fit  = fitnessHumanoidsIcubStandUp(obj,output)
+function fit  = fitnessHumanoidsIcubStandUpSearchFreeSolution(obj,output)
 % fitness function of the two arms + manipulation experience on the iCub :
 % reaching two goals behind a wall, one with each hands, before a fixed
 % time Tswitch after which the goals positions behind the wall change and a
@@ -12,17 +12,11 @@ function fit  = fitnessHumanoidsIcubStandUp(obj,output)
     %%%;;
     downsaple = 1;
     L = 1; 
-    max_effort = 3.5000e+05;
-    max_traj_error = 250;
-    weight_effort = 1;
-    weight_traj_err = 3;
     %%%EOF
     param = obj.input_4_run{2};
     contr = obj.input_4_run{4};
     iCub = contr.GetWholeSystem();
     
-    traj_err = 0;
-    effort   = 0;
      
     evaluate_constraints_index = 1;
     
@@ -45,11 +39,7 @@ function fit  = fitnessHumanoidsIcubStandUp(obj,output)
         qd_cur= qd_all(i,:);
         chi_cur = [q_cur,qd_cur]';
         q = q_cur(8:8+iCub.ndof-1);
-        [dchi,res]=DynSim_iCubForwardDynamics(t_cur,chi_cur,contr,param);
-        
-        %% fitness computation
-        traj_err = traj_err + norm((param.xComfinal' - res.xCoM),L);
-        effort   = effort   + norm(res.tau);
+        [~,res]=DynSim_iCubForwardDynamics(t_cur,chi_cur,contr,param);
         %% constraint computation
         
         
@@ -69,20 +59,10 @@ function fit  = fitnessHumanoidsIcubStandUp(obj,output)
         obj.penalty_handling.EvaluateConstraints(input_vector,evaluate_constraints_index);
         evaluate_constraints_index = evaluate_constraints_index + 1;   
     end 
-    % saturations 
-    if(effort>max_effort)
-       effort = max_effort;
-    end
-
-    if(traj_err>max_traj_error)
-       traj_err = max_traj_error;
-    end
-
-    traj_err  = traj_err/max_traj_error;
-    effort = effort/max_effort;
+    % compute violation 
+    constraints_violation_cost = ArtificialConstraintViolations(obj.penalty_handling.constraints_violation,obj.penalty_handling.n_constraint);
     %%DEBUG
-    fprintf('traj error is %f\n', traj_err)
-    fprintf('effort term is %f\n', effort)
+    fprintf('constraints violation is %f\n', constraints_violation_cost)
     %---
-    fit = (-traj_err*(weight_traj_err) - effort*(weight_effort))*( 1/(weight_traj_err+weight_effort) );
+    fit = -constraints_violation_cost;
 end

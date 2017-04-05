@@ -106,7 +106,7 @@ for k = 1:(nIterations - 1)
         violated_constrained = find(constraints);
     end 
     %%  update   
-    if(~isempty(violated_constrained)) % some constraints are violated
+    if(~isempty(violated_constrained) && obj.constraints) % some constraints are violated
        v = V{k};
        for j = violated_constrained
          v(j,:) = (1-c_c)*V{k}(j,:) + c_c*(A{k}*z')';                                           %only if the constraints is violated udpate exponentially fading record vj 

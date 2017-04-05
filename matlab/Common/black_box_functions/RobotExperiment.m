@@ -34,13 +34,14 @@ if(strcmp(simulator,'rbt'))
     toc
     %toc(controller.current_time) for debugging the time deadline
 elseif (strcmp(simulator,'icub_matlab'))
-    controller = obj.input_4_run{4}; % structure that contains every information about the specific instance of the problem
+    controller = obj.input_4_run{4}; % structure that contains every information about the specific instance of the problem+
+    params     = obj.input_4_run{2};
     % update of the parameters of activation functions and some reference
     % (if they are optimized)
     controller.UpdateParameters(parameters)
     
     tic
-    [t, q, qd]=DynSim_iCub(controller,obj.input_4_run);
+    [t, q, qd]=DynSim_iCub(controller,params);
     toc
     %toc(controller.current_time) for debugging the time deadline
 end

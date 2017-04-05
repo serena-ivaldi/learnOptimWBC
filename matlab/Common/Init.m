@@ -1,5 +1,6 @@
-function [bot1,name_scenario,time_struct,time_sym_struct,simulator_type,reference,alphas,controller,constr,learn_approach,inst,generation_of_starting_point,user_defined_start_action,...
-    niter,explorationRate,cmaes_value_range,input,rawTextFromStorage,name_dat]=Init(name_of_file,optim)
+function [bot1,name_scenario,time_struct,time_sym_struct,simulator_type,reference,alphas,controller,constr,learn_approach,inst,...
+          generation_of_starting_point,user_defined_start_action,niter,explorationRate,cmaes_value_range,input,...
+          rawTextFromStorage,name_dat,activate_constraints_handling]=Init(name_of_file,optim)
 %% parameters
  data_storage = str2func(name_of_file);
  data_storage()
@@ -26,7 +27,7 @@ switch CONTROLLERTYPE
     case 'GHC'
         % constraints
         constraints = ContrPart.Constraints(robots,target_link,constraints_list,constraints_data);
-    case 'BalanceControllers'
+    case 'BalanceController'
         repellers = [];
     otherwise
         warning('Unexpected control method')
@@ -107,6 +108,8 @@ elseif(strcmp(method_to_use,'adaptive'))
     constr = Optimization.AdaptivePenalty(epsilon,niter,controller.GetTotalParamNum(),constraints_functions,constraints_type,constraints_values);
  elseif(strcmp(method_to_use,'fmincon'))
     constr =Optimization.ObjProblemPenalty(controller.GetTotalParamNum(),constraints_functions,constraints_type,constraints_values);
+elseif(strcmp(method_to_use,'nopenalty'))
+    constr=Optimization.NoPenalty(controller.GetTotalParamNum(),constraints_functions,constraints_type,constraints_values);
 elseif(strcmp(method_to_use,'empty'))
     constr = [];
 end
@@ -122,5 +125,5 @@ end
 if(strcmp(learn_approach,'fmincon'))
     inst = ObjProblem(controller.GetTotalParamNum(),cmaes_value_range,constr,learn_approach,run_function,fitness,clean_function,input);       
 else
-    inst = Optimization.Instance(constr,learn_approach,run_function,fitness,clean_function,input);
+    inst = Optimization.Instance(constr,learn_approach,run_function,fitness,clean_function,input,activate_constraints_handling);
 end
