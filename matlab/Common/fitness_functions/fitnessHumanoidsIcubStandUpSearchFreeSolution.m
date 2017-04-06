@@ -34,12 +34,19 @@ function fit  = fitnessHumanoidsIcubStandUpSearchFreeSolution(obj,output)
     
     
     for i=1:downsaple:size(t_all,1)
-        t_cur = t_all(i);
-        q_cur = q_all(i,:);
-        qd_cur= qd_all(i,:);
-        chi_cur = [q_cur,qd_cur]';
-        q = q_cur(8:8+iCub.ndof-1);
-        [~,res]=DynSim_iCubForwardDynamics(t_cur,chi_cur,contr,param);
+        if(param.integrateWithFixedStep)
+            res.tau  = contr.simulation_results.tau(i,:);
+            q        = contr.simulation_results.q(i,:);
+            res.xCoM = contr.simulation_results.xCoM(i,:);
+            res.zmp  = contr.simulation_results.zmp(i,:);
+        else
+            t_cur = t_all(i);
+            q_cur = q_all(i,:);
+            qd_cur= qd_all(i,:);
+            chi_cur = [q_cur,qd_cur]';
+            q = q_cur(8:8+iCub.ndof - 1);
+            [dchi,res]=DynSim_iCubForwardDynamics(t_cur,chi_cur,contr,param);
+        end
         %% constraint computation
         
         

@@ -25,17 +25,31 @@ function [t, q, qd] = DynSim_iCub(controller,params)
     params.ru_leg_ini = wbm_forwardKinematics('r_upper_leg');
     
     
-    %% initilization for controller visual
-     controller.visual_param.t    =  [];
-     controller.visual_param.tau  =  [];
-     controller.visual_param.qj   =  [];
-     controller.visual_param.zmp  =  [];
-     controller.visual_param.xCoM =  [];
-
+    %% initilization and at the same time reset for controller simulation_results
+    
+     time = params.tStart:params.sim_step:params.tEnd;
+     
+     if(params.integrateWithFixedStep)
+         controller.simulation_iterator     = 1;
+         controller.simulation_results.t    =  zeros(length(time),1);
+         controller.simulation_results.tau  =  zeros(length(time),WS.ndof);
+         controller.simulation_results.q    =  zeros(length(time),WS.ndof);
+         controller.simulation_results.zmp  =  zeros(length(time),2);
+         controller.simulation_results.xCoM =  zeros(length(time),3);
+         controller.simulation_results.Cop  =  zeros(length(time),4);
+         controller.simulation_results.fc   =  cell(length(time),1);
+     end
+     
     forwardDynFunc  = @(t,chi)DynSim_iCubForwardDynamics(t,chi,controller,params);
 
-    try                        
-        [t,chi,visual_param] = ode15s(forwardDynFunc,params.tStart:params.sim_step:params.tEnd,params.chiInit,options);
+    try 
+        
+        if(params.integrateWithFixedStep)
+            chi = Ode1(forwardDynFunc,time,params.chiInit); 
+            t = controller.simulation_results.t;
+        else
+            [t,chi] = ode15s(forwardDynFunc,time,params.chiInit,options);
+        end
         q = chi(:,1:7+WS.ndof);
         qd = chi(:,8+WS.ndof:end);
         %delete(params.wait)

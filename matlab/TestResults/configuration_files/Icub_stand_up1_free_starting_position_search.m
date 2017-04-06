@@ -115,6 +115,12 @@ elseif strcmp(simulator_type{1},'icub_matlab')
     params.demo_movements = 1;
     params.maxtime = 100;
     params.torque_saturation = 100000;
+    params.integrateWithFixedStep = true;
+    if params.integrateWithFixedStep   
+        params.massCorr = 0.05;
+    else
+        params.massCorr = 0;
+    end
     %% other parameters
     params.use_QPsolver = 0;                          %either 0 or 1
     params.pinv_tol           = 1e-8;

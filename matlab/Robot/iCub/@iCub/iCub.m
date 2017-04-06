@@ -360,6 +360,7 @@ classdef iCub < handle
            
            % dynamic quantity
            M = obj.inertia(q);
+           
            [C_nu ,h, g] = obj.coriolis(q,qd);
            % Jacobians and dJ_nu
            JCoM = wbm_jacobian(w_R_b,x_b,q,'com');

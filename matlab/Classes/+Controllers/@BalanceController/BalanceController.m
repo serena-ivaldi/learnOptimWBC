@@ -1,21 +1,22 @@
 classdef  BalanceController < Controllers.AbstractController
     
    properties
-      subchains        % object that contains the subchain of the robot and the J dot for each subchain  (maybe i can leave it) 
-      references       % object that contains the reference trajectory for each primary tasks 
-      Secondary_refs   % object that contains the reference trajecotry for secondary tasks when specified
-      alpha            % cell array of weight function
-      repellers        % object of repellers
-      metric           % vector of matlab command     for example M_inv^2, M_inv,eye(lenght(q)) 
-      current_chain    % index that define the current robot that i want to move
-      Param            % cell array of matrix that are contains to kind of object Param{i,j}.Kp, Param{i,j}.Kd  and Param{i,j}.M, obj.Param{i,j}.D, obj.Param{i,j}.P 
-      Param_secondary  % cell array of matrix that are contains to kind of object Param{i,j}.Kp, Param{i,j}.Kd  and Param{i,j}.M, obj.Param{i,j}.D, obj.Param{i,j}.P 
-      current_time     % current time to force stop for long iteration
-      torques          %  resulting torque (cell array of matrix)
-      torques_time     % all the time istant when i aply a torque.
-      display_opt      % display settings display_opt.step display_opt.trajtrack
+      subchains            % object that contains the subchain of the robot and the J dot for each subchain  (maybe i can leave it) 
+      references           % object that contains the reference trajectory for each primary tasks 
+      Secondary_refs       % object that contains the reference trajecotry for secondary tasks when specified
+      alpha                % cell array of weight function
+      repellers            % object of repellers
+      metric               % vector of matlab command     for example M_inv^2, M_inv,eye(lenght(q)) 
+      current_chain        % index that define the current robot that i want to move
+      Param                % cell array of matrix that are contains to kind of object Param{i,j}.Kp, Param{i,j}.Kd  and Param{i,j}.M, obj.Param{i,j}.D, obj.Param{i,j}.P 
+      Param_secondary      % cell array of matrix that are contains to kind of object Param{i,j}.Kp, Param{i,j}.Kd  and Param{i,j}.M, obj.Param{i,j}.D, obj.Param{i,j}.P 
+      current_time         % current time to force stop for long iteration
+      torques              %  resulting torque (cell array of matrix)
+      torques_time         % all the time istant when i aply a torque.
+      display_opt          % display settings display_opt.step display_opt.trajtrack
       gains
-      visual_param   
+      simulation_results   % in this variable i save the result of the integration for fixed step  
+      simulation_iterator  % i use this to save the data during the execution of the simulation
    end
 
 
@@ -153,6 +154,8 @@ classdef  BalanceController < Controllers.AbstractController
        %disp('im in update parameters')  
        %% in this controller i remove the update of the activation fuction 
        %% because we do not have any of them in place
+       disp('im in update parameter inside balance controller')
+       parameters
 %          for i=1:size(obj.alpha,1) 
 %              index = 1;
 %              for j=1:size(obj.alpha,2)  

@@ -8,7 +8,7 @@ function [dchi,fitness_param]=DynSim_iCubForwardDynamics(t,chi,controller,param)
 
     icub = controller.GetWholeSystem();
     ndof = icub.ndof;
-    % disp(t)
+    disp(t)
 
     %% Extraction of state
     [state,x_b,qt_b,w_R_b,base_pose,q,dx_b,w_omega_b,qd,Nu]=icub.State(chi);
@@ -19,6 +19,14 @@ function [dchi,fitness_param]=DynSim_iCubForwardDynamics(t,chi,controller,param)
 
     %% dynamics
     [dynamic,M,h,g,H,C_nu,JCoM,dJCoM_nu,JH,dJH_nu] = icub.Dynamics();
+    
+   
+    %% correction to ensure the mass matrix to be positive definite. It is used
+    %% only when the system is integrated using a fixed step integrator,
+    %% otherwise it won't converge to a solution.
+    M(7:end,7:end)               = M(7:end,7:end) + param.massCorr.*eye(ndof);
+    dynamic.M(7:end,7:end)       = dynamic.M(7:end,7:end) + param.massCorr.*eye(ndof);
+    icub.dynamic.M(7:end,7:end)  = icub.dynamic.M(7:end,7:end) + param.massCorr.*eye(ndof);
     
     %% compute com position (TODO (provisory) i need to reorder how the kinematics is computed)
     poseCoM  = wbm_forwardKinematics(icub.state.w_R_b,icub.state.x_b,q,'com');
@@ -54,20 +62,32 @@ function [dchi,fitness_param]=DynSim_iCubForwardDynamics(t,chi,controller,param)
     dNu     = M\(tauContact + [zeros(6,1); tau]-h);
     dchi    = [Nu;dNu];
 
-    %% in this way i remove the test input that are too long
-    if toc(controller.current_time) > param.maxtime;
-       controller.current_time = [];
-       disp('Stopped. Taking too long.')
-       error('Stopped. Taking too long.')
-    end
+    %% TO PUT BACK in this way i remove the test input that are too long 
+%     if toc(controller.current_time) > param.maxtime;
+%        controller.current_time = [];
+%        disp('Stopped. Taking too long.')
+%        error('Stopped. Taking too long.')
+%     end
     %% Visualization
     % These are the variables that can be plotted by the visualizer.m
     % function
-    fitness_param.Cop  =  Cop;
-    fitness_param.fc   =  fc;
-    fitness_param.t    =  t;
-    fitness_param.tau  =  tau';
-    fitness_param.q    =  q';
-    fitness_param.zmp  =  zmp;
-    fitness_param.xCoM =  xCoM';
+    if(param.integrateWithFixedStep)
+        index                                       = controller.simulation_iterator;
+        controller.simulation_results.t(index)      = t;
+        controller.simulation_results.tau(index,:)  = tau';
+        controller.simulation_results.q(index,:)    = q';
+        controller.simulation_results.zmp(index,:)  = zmp;
+        controller.simulation_results.xCoM(index,:) = xCoM';
+        controller.simulation_results.Cop(index,:)  = Cop;
+        controller.simulation_results.fc{end + 1}   = fc';
+        controller.simulation_iterator              = controller.simulation_iterator + 1;
+    else
+        fitness_param.Cop  =  Cop;
+        fitness_param.fc   =  fc';
+        fitness_param.t    =  t;
+        fitness_param.tau  =  tau';
+        fitness_param.q    =  q';
+        fitness_param.zmp  =  zmp;
+        fitness_param.xCoM =  xCoM';
+    end
 end

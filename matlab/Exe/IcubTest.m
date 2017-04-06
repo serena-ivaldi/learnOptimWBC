@@ -87,6 +87,12 @@ params.sim_step =  0.01;%time_struct.step;
 params.demo_movements = 0;
 params.maxtime = 50;
 params.torque_saturation = 100000;
+params.integrateWithFixedStep = true;
+if params.integrateWithFixedStep   
+    params.massCorr = 0.05;
+else
+    params.massCorr = 0;
+end
 %% other parameters
 params.use_QPsolver = 0;                          %either 0 or 1
 params.pinv_tol           = 1e-8;
@@ -140,7 +146,7 @@ else
     geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
     dim_of_task_sec{1,1}={[1;1;1]};
 
-    numeric_reference_parameter{1,1}=[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]'; 
+    numeric_reference_parameter{1,1}=[ -3.5811,-0.7824,4.1574,2.9221,4.5949,-0.0308,-0.1151,-0.0045,0.0070,-0.0277,0.4661,0.4640,0.4149,0.4518,0.3840]'; 
 
     %% ALPHA PARAMETERS
     choose_alpha = 'constant';  % RBF , constant, handTune
@@ -274,7 +280,6 @@ else
     constraints_type = ones(1,length(constraints_values)); % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
     activate_constraints_handling = true;
     penalty_handling=Optimization.NoPenalty(controller.GetTotalParamNum(),constraints_functions,constraints_type,constraints_values);
-    
     
     fitnessHumanoidsIcubStandUpTest(output,penalty_handling,controller,params)
 
