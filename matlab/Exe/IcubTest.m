@@ -5,6 +5,7 @@ clc
 %% test selection
 
 visualization_test = false;
+simulation         = false;
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
@@ -130,9 +131,9 @@ else
     geometric_path = {'AdHocBalance'};
     time_law = {'none'};
     %parameters first chains
-                         % #basis overlap                    starting com position
-    geom_parameters{1,1} =  [5 ,     2 ,      -0.120249695321353,-0.0680999719842103,0.369603821651986];% sitting_com:-0.120249695321353,-0.0680999719842103,0.369603821651986];
-                                                                                                         % stading_com:0.0167667444901888,-0.0681008604452745,0.503988037442802
+                         % #basis overlap                    starting com position                                          ending com position
+    geom_parameters{1,1} =  [5 ,     2 ,      -0.120249695321353,-0.0680999719842103,0.369603821651986, 0.0167667444901888,-0.0681008604452745,0.503988037442802];% sitting_com:-0.120249695321353,-0.0680999719842103,0.369603821651986];
+                                                                                                                                                                  % stading_com:0.0167667444901888,-0.0681008604452745,0.503988037442802
     %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
     dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(icub.n,1); %dim_of_task{1,4}=ones(icub.n,1);
 
@@ -146,8 +147,8 @@ else
     geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
     dim_of_task_sec{1,1}={[1;1;1]};
 
-    numeric_reference_parameter{1,1}=[ -3.5811,-0.7824,4.1574,2.9221,4.5949,-0.0308,-0.1151,-0.0045,0.0070,-0.0277,0.4661,0.4640,0.4149,0.4518,0.3840]'; 
-
+    %numeric_reference_parameter{1,1}=[-2.6927 -1.9295 3.0885 2.1126 1.6506 -0.0113 -0.1107 -0.0148 0.0160 -0.0510 0.4647 0.4607 0.4194 0.4561 0.3719]'; 
+    numeric_reference_parameter{1,1}=[-2.6927 -1.9295 3.0885 2.1126 1.6506 -0.0113 -0.001 0 0.005 0.01 0.49 0.49 0.49 0.49 0.50]'; 
     %% ALPHA PARAMETERS
     choose_alpha = 'constant';  % RBF , constant, handTune
     %RBF
@@ -261,37 +262,73 @@ else
     repellers = [];
     controller = Controllers.BalanceController(chains,reference,[],[],[],[],[],[],[],[],params);
 
-    %% simulator
-    [t,q_ext,qd_ext]=DynSim_iCub(controller,params);
+    if(simulation)
+        %% simulator
+        [t,q_ext,qd_ext]=DynSim_iCub(controller,params);
+
+
+        %% compute fitness (for this we use a sliglty different version of the fitness function (the one with Test at the end))
+        output{1} = t;
+        output{2} = q_ext;
+        output{3} = qd_ext;
+        %% CONSTRAINTS PARAMETERS
+        constraints_values = icub.createConstraintsVector;
+        for k = 1:2:length(constraints_values)
+            constraints_functions{k} = 'LinInequality';
+            constraints_functions{k+1} = 'LinInequality2';
+        end
+        constraints_functions{end+1} = 'EmptyConstraints'; 
+        constraints_values = [constraints_values,nan];   % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
+        constraints_type = ones(1,length(constraints_values)); % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
+        activate_constraints_handling = true;
+        penalty_handling=Optimization.NoPenalty(controller.GetTotalParamNum(),constraints_functions,constraints_type,constraints_values);
+
+        fitnessHumanoidsIcubStandUpTest(output,penalty_handling,controller,params)
     
-    
-    %% compute fitness (for this we use a sliglty different version of the fitness function (the one with Test at the end))
-    output{1} = t;
-    output{2} = q_ext;
-    output{3} = qd_ext;
-    %% CONSTRAINTS PARAMETERS
-    constraints_values = icub.createConstraintsVector;
-    for k = 1:2:length(constraints_values)
-        constraints_functions{k} = 'LinInequality';
-        constraints_functions{k+1} = 'LinInequality2';
+        %% Visualize forward dynamics
+        figure
+        hold on
+        %plot3(geom_parameters{1,1}(1),geom_parameters{1,1}(2),geom_parameters{1,1}(3),'g.','MarkerSize', 30);
+        %icub.plot(chi,params);
+        chi = [q_ext,qd_ext];
+        % get the joint position
+        [state,x_b,qt_b,w_R_b,base_pose,q,dx_b,w_omega_b,qd,Nu] = icub.State(chi');
+        icub.EnhancedPlot(q,params);
     end
-    constraints_functions{end+1} = 'EmptyConstraints'; 
-    constraints_values = [constraints_values,nan];   % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
-    constraints_type = ones(1,length(constraints_values)); % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
-    activate_constraints_handling = true;
-    penalty_handling=Optimization.NoPenalty(controller.GetTotalParamNum(),constraints_functions,constraints_type,constraints_values);
+    %% visualize trajectory (time profile and geometric trajectory)
+    s_ext = 0;
+    [p,pd,pdd,time,obj4visual]=AdHocBalanceControllerTrajectory(s_ext,time_struct,geom_parameters{1,1},'func');
+    time_vec = time_struct.ti:time_struct.step:time_struct.tf;
     
-    fitnessHumanoidsIcubStandUpTest(output,penalty_handling,controller,params)
-
-    %% Visualize forward dynamics
+    s   = zeros(length(time_vec),1);
+    sd  = zeros(length(time_vec),1);
+    sdd = zeros(length(time_vec),1);
+    index = 1;
+    for t=time_struct.ti:time_struct.step:time_struct.tf
+         s(index)     = obj4visual.s(t,numeric_reference_parameter{1,1});
+         sd(index)    = obj4visual.sd(t,numeric_reference_parameter{1,1});
+         sdd(index)   = obj4visual.sdd(t,numeric_reference_parameter{1,1});
+         index = index + 1;
+    end
+    transformed_time_vec = 0:0.001:1;
+    p_v = zeros(length(transformed_time_vec),3);
+    index = 1;
+    for t = 0:0.001:1
+    p_v(index,:) = obj4visual.p_v(t,numeric_reference_parameter{1,1})';
+    index = index + 1;
+    end
+    
     figure
-    hold on
-    %plot3(geom_parameters{1,1}(1),geom_parameters{1,1}(2),geom_parameters{1,1}(3),'g.','MarkerSize', 30);
-    %icub.plot(chi,params);
-    chi = [q_ext,qd_ext];
-    % get the joint position
-    [state,x_b,qt_b,w_R_b,base_pose,q,dx_b,w_omega_b,qd,Nu] = icub.State(chi');
-    icub.EnhancedPlot(q,params);
-
+    plot(transformed_time_vec,p_v(:,1))
+    figure
+    plot(transformed_time_vec,p_v(:,3))
+    figure
+    plot(p_v(:,1),p_v(:,3));   
+    figure
+    plot(time_vec,s);
+    figure
+    plot(time_vec,sd);
+    figure
+    plot(time_vec,sdd);
   
 end

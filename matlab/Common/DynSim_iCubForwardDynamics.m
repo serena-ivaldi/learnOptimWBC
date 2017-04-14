@@ -8,7 +8,7 @@ function [dchi,fitness_param]=DynSim_iCubForwardDynamics(t,chi,controller,param)
 
     icub = controller.GetWholeSystem();
     ndof = icub.ndof;
-    disp(t)
+    %disp(t)
 
     %% Extraction of state
     [state,x_b,qt_b,w_R_b,base_pose,q,dx_b,w_omega_b,qd,Nu]=icub.State(chi);
