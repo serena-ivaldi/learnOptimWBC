@@ -1,0 +1,25 @@
+% with this function i check if the time law velocity is all positive or
+% not. if it is not positive im not gonna tun the experiment because it
+% means that im going back and fort over the desired trajectory
+
+%% this preprocessing works only with AdHocBalanceControllerTrajectory
+function [run_flag,performance]=CheckTimeLawVelocity(obj,action)
+    
+    simulator         = obj.input_4_run{1}; % rbt or v-rep
+    if(strcmp(simulator,'icub_matlab'))
+        time = 
+
+
+
+        run_flag = true;
+        performance = [];
+    else
+        disp('this preprocessro is not desgined to work with the rbt simulator for now')
+        error('')
+        run_flag = -1;
+        performance = [];
+    end
+    
+    
+    
+end

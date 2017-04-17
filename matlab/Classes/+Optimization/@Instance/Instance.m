@@ -10,6 +10,7 @@ classdef  Instance
       learn_procedure  % string that specify which learning method im going to use
       constraints      % flag that activates or deactivates the constraints handling (true: constraints active, false: constraints not active) 
       run_function     % function called in run specific for each optimization problem
+      preprocessing    % this field contains a function handle that add preprocessing pahse to the evaluation of the current candidates 
       fitness          % fitness function handle
       clean_function   % function called to do some stuff after using the run function (optionally could be empty)
       input_4_run      % this variable is a cell array that contains the data that are needed to execute the run function

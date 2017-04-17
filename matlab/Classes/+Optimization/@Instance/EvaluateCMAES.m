@@ -23,26 +23,34 @@ function [performance, succeeded, data2save] = EvaluateCMAES(obj,action,cur_cand
     try
         %disp('i am in evaluate CMAES')
         %action
-        [output]=obj.run(action);
+        
+        [run_flag,performance]=obj.preprocessing(obj,action);
+        % if run flag is true the preprocessing phase states that the
+        % candidate is valid
+        if(run_flag)
+            [output]=obj.run(action);
 
-        succeeded = 1;
+            succeeded = 1;
 
-        %tic
-        % insert fitness function 
-        performance = feval(obj.fitness,obj,output);
-        %toc
+            %tic
+            % insert fitness function 
+            performance = feval(obj.fitness,obj,output);
+            %toc
 
-        %% DO NOT CHANGE THIS PART!
-        if(obj.constraints)
-           % here i compute the final penalty value for each candidate of the
-           % current population
-           obj.penalty_handling.ComputeConstraintsViolation(cur_candidates_index)
-           if(cur_candidates_index < 0)
-              % here im going to save the average perfomance without correction
-              data2save.performance = performance;
-              % perfomance with correction
-              performance = performance - obj.penalty_handling.fitness_penalties(1);
-           end
+            %% DO NOT CHANGE THIS PART!
+            if(obj.constraints)
+               % here i compute the final penalty value for each candidate of the
+               % current population
+               obj.penalty_handling.ComputeConstraintsViolation(cur_candidates_index)
+               if(cur_candidates_index < 0)
+                  % here im going to save the average perfomance without correction
+                  data2save.performance = performance;
+                  % perfomance with correction
+                  performance = performance - obj.penalty_handling.fitness_penalties(1);
+               end
+            end
+        else
+            succeeded = 0;
         end
         %%
 

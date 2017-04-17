@@ -128,6 +128,10 @@ function [p,pd,pdd,time,obj4visual] = AdHocBalanceControllerTrajectory(s_ext,tim
    
    rbfz = + ( phi(2:end-1)*theta(n_of_basis*2 + 1:n_of_basis*3)  + lambda(1)*phi(1) + lambda(2)*phi(end) )/sumphi;
    
+   % i need this to change the value from time to s coordinate to add the
+   % time law
+   p = subs(p,t,s);
+   
    p   = [rbfx;rbfy;rbfz];
    pd  = diff(p,t);
    pdd = diff(pd,t);
@@ -140,13 +144,13 @@ function [p,pd,pdd,time,obj4visual] = AdHocBalanceControllerTrajectory(s_ext,tim
 
    time = 0;
    
-%    if(strcmp(type,'sampled'))
-%       time=time_struct.ti:time_struct.step:time_struct.tf;
-%  
-%       p = p(time);
-%       pd = pd(time);
-%       pdd = pdd(time);     
-%    end
+   if(strcmp(type,'sampled'))
+      time=time_struct.ti:time_struct.step:time_struct.tf;
+ 
+      p = p(time);
+      pd = pd(time);
+      pdd = pdd(time);     
+   end
    %% for visualization
    obj4visual.p_v = p;
    sd = diff(s,t);
