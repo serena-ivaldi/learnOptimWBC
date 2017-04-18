@@ -43,5 +43,30 @@ Now you are ready to try learnOptimWBC toolbox on your machine.
 	-you can run a single experiment given a specific scenario, a controller and set of parameters for the activation policies using  /learnOptimWBC/matlab/Exe/MainExec.m,
 	-you can compute an optimal parameters set for the activation policies given a scenario and a controller with /learnOptimWBC/matlab/Exe/MainOptRobust.m .
 
+### Possible issues (by Oriane)
+
+* You need to add the toolbox folder to matlab's path.
+To add it, click on the "Set Path" icon in the matlab gui, or right-click on the folder in the tree-viewer to add all the learnOptimWBC folder
+
+* In Linux, you may have a problem during the "make" with your gcc compiler.
+First you need to know which version of gcc you have:
+
+``gcc -v``
+
+Find the "mexopts.sh" file (launch "find -name "mexopts.sh" from the /usr/local path). 
+It should be at the path "/usr/local/MATLAB/R2013a/bin/mexopts.sh" (don't take the one in the toolbox). Modify these lines:
+
+```
+l59 : CC = 'gcc' in CC = 'gcc-4.8'
+l66 :             CLIBS="$CLIBS -lstdc++" in CLIBS="$CLIBS -L/usr/local/MATLAB/R2013a/sys/os/glnxa64 -lstdc++"
+l74 : in CXX='g++-4.8'
+l88 : in FC='gfortran-4.8'
+```
+
+* If an error about the path appears while compiling, a possible trick is to open ``make.m`` and delete the line ``"CD [...]'``
+
+* If a problem about the comments lines ``//`` appears (because the matlab compiler doesn't understand the ``"//"`` comment in C), open ``frne.c`` and ``ne.c`` (use ``find -name`` if you don't find them) and then change these comments in ``/* comment */``
+
+
 
 
