@@ -19,7 +19,7 @@ classdef  Instance
    end
        
    methods
-       function obj = Instance(penalty_handling,learn_procedure,run_function,fitness,clean_function,input_4_run,varargin)
+       function obj = Instance(penalty_handling,learn_procedure,preprocessing,run_function,fitness,clean_function,input_4_run,varargin)
            if(isempty(penalty_handling))
               obj.constraints = false;
               penalty_handling.EvaluateConstraints=@(input_,iteration_)DoNothing(input_,iteration_);
@@ -32,6 +32,7 @@ classdef  Instance
            end
            obj.learn_procedure = learn_procedure;
            obj.penalty_handling = penalty_handling;
+           obj.preprocessing = preprocessing;
            obj.run_function = run_function;  
            obj.fitness = fitness;
            obj.input_4_run = input_4_run;

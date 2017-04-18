@@ -24,7 +24,7 @@ function [performance, succeeded, data2save] = EvaluateCMAES(obj,action,cur_cand
         %disp('i am in evaluate CMAES')
         %action
         
-        [run_flag,performance]=obj.preprocessing(obj,action);
+        [run_flag,performance,action]=obj.preprocessing(obj,action);
         % if run flag is true the preprocessing phase states that the
         % candidate is valid
         if(run_flag)

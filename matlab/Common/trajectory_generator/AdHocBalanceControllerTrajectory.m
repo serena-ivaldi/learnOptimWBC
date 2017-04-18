@@ -19,6 +19,7 @@ function [p,pd,pdd,time,obj4visual] = AdHocBalanceControllerTrajectory(s_ext,tim
    real_n_of_basis = n_of_basis + 2;
    
    t = sym('t');
+   v = sym('v');
    theta = sym('theta',[n_of_basis*3,1]);
    
    
@@ -72,13 +73,13 @@ function [p,pd,pdd,time,obj4visual] = AdHocBalanceControllerTrajectory(s_ext,tim
    s = (phi(2:end-1)*theta(1:n_of_basis) + lambda(1)*phi(1) + lambda(2)*phi(end))/sumphi;
    
    
-   %% geometric path. TODO change back the time depenecy into s (the time law)
+   %% geometric path
    T = 1;
    sigma = (T)/((real_n_of_basis-1)*redundancy); % this value of sigma produces a 15% of overlapping between two consecutive gaussian with redundancy = 3;
    cof = 2*sigma^2;
    sumphi = 0;
    for i=0:(real_n_of_basis - 1)
-       phi(i + 1) = exp(-(t-(i*T)/(real_n_of_basis-1))^2/cof);
+       phi(i + 1) = exp(-(v-(i*T)/(real_n_of_basis-1))^2/cof);
        basis_functions_time{i + 1} = matlabFunction(phi(i+1));
        sumphi = sumphi + phi(i + 1);
    end
@@ -100,14 +101,14 @@ function [p,pd,pdd,time,obj4visual] = AdHocBalanceControllerTrajectory(s_ext,tim
 %    end
    %% end plot
    
-   mat = [subs(phi(1), t, 0)      subs(phi(end), t, 0);
-          subs(phi(1), t, T)      subs(phi(end), t, T) ];
+   mat = [subs(phi(1), v, 0)      subs(phi(end), v, 0);
+          subs(phi(1), v, T)      subs(phi(end), v, T) ];
       
    phi_computed_in_start =[];
    phi_computed_in_end   =[];
    for i=1:length(phi)
-       phi_computed_in_start = [phi_computed_in_start,subs(phi(i), t, 0)];
-       phi_computed_in_end   = [phi_computed_in_end  ,subs(phi(i), t, T)];
+       phi_computed_in_start = [phi_computed_in_start,subs(phi(i), v, 0)];
+       phi_computed_in_end   = [phi_computed_in_end  ,subs(phi(i), v, T)];
    end   
    
    o_x = starting_position_x;
@@ -128,11 +129,12 @@ function [p,pd,pdd,time,obj4visual] = AdHocBalanceControllerTrajectory(s_ext,tim
    
    rbfz = + ( phi(2:end-1)*theta(n_of_basis*2 + 1:n_of_basis*3)  + lambda(1)*phi(1) + lambda(2)*phi(end) )/sumphi;
    
+   p   = [rbfx;rbfy;rbfz];
+   
    % i need this to change the value from time to s coordinate to add the
    % time law
-   p = subs(p,t,s);
+   p = subs(p,v,s);
    
-   p   = [rbfx;rbfy;rbfz];
    pd  = diff(p,t);
    pdd = diff(pd,t);
    
@@ -151,8 +153,13 @@ function [p,pd,pdd,time,obj4visual] = AdHocBalanceControllerTrajectory(s_ext,tim
       pd = pd(time);
       pdd = pdd(time);     
    end
-   %% for visualization
-   obj4visual.p_v = p;
+   %% for visualization and for execution (TODO change the name fo the struct in a more meaningfull way)
+   
+   p_visual   = [rbfx;rbfy;rbfz];
+   p_visual   = matlabFunction(p_visual,'vars', {v,theta});
+   
+   obj4visual.p_real = p; 
+   obj4visual.p_test = p_visual;
    sd = diff(s,t);
    sdd = diff(sd,t);
    

@@ -6,22 +6,23 @@ classdef  References < handle
       % vector that define wich kind of link i want to control with the e-e effector too (row vector) one for every kinematic chain
       %
       % @type char 
-      target_link                %  
-      type;                      % cartesian_x,cartesian_rpy, joint vector or empty 
-      control_type;              % tracking,regulation vector
-      traj;                      % circular, rectilinear, point-point_quintic, point-point_trapezoidal vector
-      geom_parameters;           % vector of parameters that define the properties of every trajectories (both functional and sampled)
-      time_law;                  % exponential,linear,constant,trapezoidal
-      %time_parameters;         % vector of the time parameters of the specified time law
-      time_struct                % struct with time_struct.ti time_struct.tf time_struct.step
-      mask;                      % vector of vector(3 or DOF) (col vec) that contains a mask that specify what i want to control for the specific task. for example x and z (control a subset of variable) mask = (1;0:1)
-      type_of_traj;              % sampled func
-      parameter_dim;             % lenght of the vector of parameter that i use for the reference (cell array)
-      cur_param_set;             % this is a cell array of values that is used when we use a parametric trajectory so we can optimize this parameters.
-      trajectories;              % cell array with the sampling of the trajectory with position velocity and desired acceleration  
-                                 % in case of sampled trajectory i build up a struct with four fields "p" "pd" "pdd" (row matrix) contains the value of the  trajectory 
-                                 %and "time" (row vector) that contains the sampling time
-      time_law_and_derivatives;  % here i store the value of the time laws and its derivatives (till the second-th (acceleration))
+      target_link                   %  
+      type;                         % cartesian_x,cartesian_rpy, joint vector or empty 
+      control_type;                 % tracking,regulation vector
+      traj;                         % circular, rectilinear, point-point_quintic, point-point_trapezoidal vector
+      geom_parameters;              % vector of parameters that define the properties of every trajectories (both functional and sampled)
+      time_law;                     % exponential,linear,constant,trapezoidal
+      %time_parameters;             % vector of the time parameters of the specified time law
+      time_struct                   % struct with time_struct.ti time_struct.tf time_struct.step
+      mask;                         % vector of vector(3 or DOF) (col vec) that contains a mask that specify what i want to control for the specific task. for example x and z (control a subset of variable) mask = (1;0:1)
+      type_of_traj;                 % sampled func
+      parameter_dim;                % lenght of the vector of parameter that i use for the reference (cell array)
+      n_of_parameter_per_regressor  % here i save how many parameters for each regressor inside the trajectory per target link (cell array of vector)
+      cur_param_set;                % this is a cell array of values that is used when we use a parametric trajectory so we can optimize this parameters.
+      trajectories;                 % cell array with the sampling of the trajectory with position velocity and desired acceleration  
+                                    % in case of sampled trajectory i build up a struct with four fields "p" "pd" "pdd" (row matrix) contains the value of the  trajectory 
+                                    % and "time" (row vector) that contains the sampling time
+      time_law_and_derivatives;     % here i store the value of the time laws and its derivatives (till the second-th (acceleration))
                     
    end
        
@@ -68,6 +69,7 @@ classdef  References < handle
                % initialize the structure for each task for each kinematic chain to manage parameters in the reference   
                obj.parameter_dim{i,j} = 0;
                obj.cur_param_set{i,j} = [];
+               obj.n_of_parameter_per_regressor{i,j} = [];
                obj.SetTraj(i,j)
              end
           end    

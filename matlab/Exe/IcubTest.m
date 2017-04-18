@@ -148,7 +148,7 @@ else
     dim_of_task_sec{1,1}={[1;1;1]};
 
     %numeric_reference_parameter{1,1}=[-2.6927 -1.9295 3.0885 2.1126 1.6506 -0.0113 -0.1107 -0.0148 0.0160 -0.0510 0.4647 0.4607 0.4194 0.4561 0.3719]'; 
-    numeric_reference_parameter{1,1}=[-2.6927 -1.9295 3.0885 2.1126 1.6506 -0.0113 -0.001 0 0.005 0.01 0.49 0.49 0.49 0.49 0.50]'; 
+    numeric_reference_parameter{1,1}=[-1.8 -0.9 -0.9 +1.9 1 -0.0113 -0.001 0 0.005 0.01 0.49 0.49 0.49 0.49 0.50]'; 
     %% ALPHA PARAMETERS
     choose_alpha = 'constant';  % RBF , constant, handTune
     %RBF
@@ -303,32 +303,51 @@ else
     s   = zeros(length(time_vec),1);
     sd  = zeros(length(time_vec),1);
     sdd = zeros(length(time_vec),1);
+    p_v = zeros(length(time_vec),3);
     index = 1;
     for t=time_struct.ti:time_struct.step:time_struct.tf
+         p_v(index,:) = obj4visual.p_real(t,numeric_reference_parameter{1,1})';
          s(index)     = obj4visual.s(t,numeric_reference_parameter{1,1});
          sd(index)    = obj4visual.sd(t,numeric_reference_parameter{1,1});
          sdd(index)   = obj4visual.sdd(t,numeric_reference_parameter{1,1});
          index = index + 1;
     end
     transformed_time_vec = 0:0.001:1;
-    p_v = zeros(length(transformed_time_vec),3);
+    p_test = zeros(length(transformed_time_vec),3);
     index = 1;
     for t = 0:0.001:1
-    p_v(index,:) = obj4visual.p_v(t,numeric_reference_parameter{1,1})';
+    p_test(index,:) = obj4visual.p_test(t,numeric_reference_parameter{1,1})';
     index = index + 1;
     end
     
+    
     figure
-    plot(transformed_time_vec,p_v(:,1))
+    plot(time_vec,p_v(:,1))
     figure
-    plot(transformed_time_vec,p_v(:,3))
+    plot(time_vec,p_v(:,3))
+    %figure
+    %plot(p_v(:,1),p_v(:,3));
     figure
-    plot(p_v(:,1),p_v(:,3));   
+    plot(transformed_time_vec,p_test(:,1))
+    figure
+    plot(transformed_time_vec,p_test(:,3))
+    %figure
+    %plot(p_real(:,1),p_real(:,3));   
     figure
     plot(time_vec,s);
     figure
     plot(time_vec,sd);
     figure
     plot(time_vec,sdd);
+    
+    
+    %% debugging preprocessor
+    fake_istance.input_4_run{1} ='icub_matlab';
+    fake_istance.input_4_run{2} = params ;
+    fake_istance.input_4_run{4} = controller;
+    [run_flag1,performance1,action1]=CheckTimeLawVelocity(fake_istance,numeric_reference_parameter{1,1});
+    [run_flag,performance,action]=StickBreaking4MonotoneTimeLaw(fake_istance,numeric_reference_parameter{1,1});
+    
+    
   
 end

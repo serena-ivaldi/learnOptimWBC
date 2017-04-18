@@ -125,5 +125,5 @@ end
 if(strcmp(learn_approach,'fmincon'))
     inst = ObjProblem(controller.GetTotalParamNum(),cmaes_value_range,constr,learn_approach,run_function,fitness,clean_function,input);       
 else
-    inst = Optimization.Instance(constr,learn_approach,run_function,fitness,clean_function,input,activate_constraints_handling);
+    inst = Optimization.Instance(constr,learn_approach,preprocessing,run_function,fitness,clean_function,input,activate_constraints_handling);
 end

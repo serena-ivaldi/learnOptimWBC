@@ -33,8 +33,8 @@ control_type = {'x'};
 type_of_traj = {'func'};
 geometric_path = {'AdHocBalance'};
 time_law = {'none'};
-%parameters first chains
-geom_parameters{1,1} =  [5 ,2 ,-0.120249695321353,-0.0680999719842103,0.369603821651986];
+%parameters first chains% #basis overlap                    starting com position                                          ending com position
+geom_parameters{1,1} =     [5 ,     2 ,      -0.120249695321353,-0.0680999719842103,0.369603821651986, 0.0167667444901888,-0.0681008604452745,0.503988037442802];
 dim_of_task{1,1}=[1;1;1]; 
 
 % secondary trajectory (Not used)
@@ -165,6 +165,7 @@ switch CONTROLLERTYPE
         constraints_type = ones(1,length(constraints_values)); % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
         activate_constraints_handling = true;
         %% INSTANCE PARAMETER
+        preprocessing = @StickBreaking4MonotoneTimeLaw;
         run_function = @RobotExperiment;
         fitness = @fitnessHumanoidsIcubStandUp;
         clean_function = @RobotExperimentCleanData;
@@ -196,8 +197,8 @@ switch CONTROLLERTYPE
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
         niter = 100;  %number of generations
         %cmaes_value_range = [-14 , 14];  % boudn that define the search space
-        cmaes_value_range{1} = [-5,-5,-5,-5,-5, -0.12,-0.12,-0.12,-0.12,-0.12,  0.36,0.36,0.36,0.36,0.36 ];  % lower bound that define the search space
-        cmaes_value_range{2} = [ 5, 5, 5, 5, 5,  0.016,0.016,0.016,0.016,0.016, 0.50,0.50,0.50,0.50,0.50];  % upper bound that define the search space
+        cmaes_value_range{1} = [0,0,0,0,0, -0.12,-0.12,-0.12,-0.12,-0.12,  0.36,0.36,0.36,0.36,0.36];  % lower bound that define the search space
+        cmaes_value_range{2} = [1,1,1,1,1,  0.016,0.016,0.016,0.016,0.016, 0.50,0.50,0.50,0.50,0.50];  % upper bound that define the search space
         learn_approach = 'CMAES'; %CMAES (1+1)CMAES
         %--- Parameter for constraints method
         method_to_use = 'vanilla';  % adaptive , vanilla , empty

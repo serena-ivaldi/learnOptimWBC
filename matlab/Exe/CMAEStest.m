@@ -191,9 +191,10 @@ function CMAEStest
                 benchmark_fval = 0;
             end
             explorationRate = 0.4; %0.1; %0.5; %0.1;%[0, 1]
-            run_function = @EmptyPreprocessing;
+            preprocessing = @EmptyPreprocessing;
+            run_function = @EmptyRunFunction;
             fitness = str2func(function_2_test{jj});
-            clean_function = @EmptyPostprocessing;
+            clean_function = @EmptyDelete;
             input = [];
         end
 
@@ -269,7 +270,7 @@ function CMAEStest
                 % execution time
                 m4(kk) = toc;
             else
-                inst =  Optimization.Instance(constr,learn_approach,run_function,fitness,clean_function,input);
+                inst =  Optimization.Instance(constr,learn_approach,preprocessing,run_function,fitness,clean_function,input);
                 tic
                 [mean_performances, bestAction] = inst.CMAES(search_space_dimension,start_action,niter,explorationRate,cmaes_value_range);
                 % execution time

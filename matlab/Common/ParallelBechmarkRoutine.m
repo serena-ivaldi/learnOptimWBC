@@ -140,9 +140,10 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
             benchmark_fval = -3.066553867178332e+04;
         end
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-        run_function = @EmptyPreprocessing;
+        preprocessing = @EmptyPreprocessing;
+        run_function = @EmptyRunFunction;
         fitness = str2func(function_2_test);
-        clean_function = @EmptyPostprocessing;
+        clean_function = @EmptyDelete;
         input = [];
     end
     %% CONSTRAINTS
@@ -196,7 +197,7 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
         m4 = toc(starting_time);
         m8 = inst;
     else
-        inst =  Optimization.Instance(constr,learn_approach,run_function,fitness,clean_function,input);
+        inst =  Optimization.Instance(constr,learn_approach,preprocessing,run_function,fitness,clean_function,input);
         starting_time = tic;
         [mean_performances, bestAction,~,~,~,~,G_data2save] = inst.CMAES(search_space_dimension,start_action,niter,explorationRate,cmaes_value_range); 
         % execution time

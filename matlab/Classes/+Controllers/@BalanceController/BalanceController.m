@@ -429,10 +429,6 @@ classdef  BalanceController < Controllers.AbstractController
                     xCoMDes     = xCoMInit;
                     dxCoMDes    = zeros(size(xCoMInit));
                     ddxCoMDes   = zeros(size(xCoMInit));
-                elseif(t>9.9)
-                    xCoMDes     = xComfinal;
-                    dxCoMDes    = zeros(size(xComfinal));
-                    ddxCoMDes   = zeros(size(xComfinal));
                 else
                     [xCoMDes,dxCoMDes,ddxCoMDes]=obj.references.GetTraj(1,1,t);
                 end
