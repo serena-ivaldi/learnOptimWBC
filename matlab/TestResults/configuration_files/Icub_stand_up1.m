@@ -21,7 +21,9 @@ target_link{1} = subchain1;
 
 
 %% Robot
-bot1 = iCub('icubGazeboSim');
+%bot1 = iCub('icubGazeboSim');
+fake_robot.ndof = 25;
+bot1 = fake_robot;
 chain_1 = DummyRvc_iCub(bot1,'l_sole');
 robots{1} = chain_1;
 chains = SubChains(target_link,robots,bot1);
@@ -98,7 +100,7 @@ elseif strcmp(simulator_type{1},'icub_matlab')
     end
     % FLOATING BASE
     %params.active_floating_base = false;
-    params.qjInit      = bot1.InitializeStateicubGazeboSim(params.feet_on_ground);
+    params.qjInit      = zeros(bot1.ndof,1);
     params.dqjInit     = zeros(bot1.ndof,1);
     % icub starting velocity floating base
     params.dx_bInit    = zeros(3,1);
@@ -154,20 +156,19 @@ switch CONTROLLERTYPE
         %% CONTROLLER PARAMETER
         combine_rule = {'sum'}; % sum or projector (with sum reppelers are removed)
         %% CONSTRAINTS PARAMETERS
-        constraints_values = bot1.createConstraintsVector;
+        constraints_values = ones(1,100);
         for k = 1:2:length(constraints_values)
             constraints_functions{k} = 'LinInequality';
             constraints_functions{k+1} = 'LinInequality2';
         end
         %% with the empty constraints it means that i compute the constraints directly inside the fitness function and i provide the result through the input of the empty constraints
-        constraints_functions{end+1} = 'EmptyConstraints'; 
-        constraints_values = [constraints_values,nan];   % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
+        constraints_values = [constraints_values];   % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
         constraints_type = ones(1,length(constraints_values)); % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
         activate_constraints_handling = true;
         %% INSTANCE PARAMETER
         preprocessing = @StickBreaking4MonotoneTimeLaw;
-        run_function = @RobotExperiment;
-        fitness = @fitnessHumanoidsIcubStandUp;
+        run_function = @FakeRobotExperiment;
+        fitness = @fitnessFakeHumanoidsIcubStandUp;
         clean_function = @RobotExperimentCleanData;
         
         if strcmp(simulator_type{1},'rbt')
@@ -195,7 +196,7 @@ switch CONTROLLERTYPE
         a = 5; b = 5; c = 5; d = 5; e = 6;
         user_defined_start_action = [a a a a a b b b b b c c c c c d d d d d e e e e e];
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-        niter = 80;  %number of generations
+        niter = 5;  %number of generations
         %cmaes_value_range = [-14 , 14];  % boudn that define the search space
         cmaes_value_range{1} = [0,0,0,0,0, -0.12,-0.12,-0.12,-0.12,-0.12,  0.36,0.36,0.36,0.36,0.36];  % lower bound that define the search space
         cmaes_value_range{2} = [1,1,1,1,1,  0.016,0.016,0.016,0.016,0.016, 0.50,0.50,0.50,0.50,0.50];  % upper bound that define the search space
