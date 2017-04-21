@@ -58,6 +58,7 @@ function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, co
      assignin('base', 'new_name_folder', strcat(num2str(n_of_experiment),'_',name_dat));
      
      tau = controller.torques;
-    
+     clearvars -except tau mean_performances bestAction BestActionPerEachGen policies costs succeeded name_dat
+
 
 end

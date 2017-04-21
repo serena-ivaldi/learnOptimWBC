@@ -195,7 +195,7 @@ switch CONTROLLERTYPE
         a = 5; b = 5; c = 5; d = 5; e = 6;
         user_defined_start_action = [a a a a a b b b b b c c c c c d d d d d e e e e e];
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-        niter = 100;  %number of generations
+        niter = 80;  %number of generations
         %cmaes_value_range = [-14 , 14];  % boudn that define the search space
         cmaes_value_range{1} = [0,0,0,0,0, -0.12,-0.12,-0.12,-0.12,-0.12,  0.36,0.36,0.36,0.36,0.36];  % lower bound that define the search space
         cmaes_value_range{2} = [1,1,1,1,1,  0.016,0.016,0.016,0.016,0.016, 0.50,0.50,0.50,0.50,0.50];  % upper bound that define the search space
