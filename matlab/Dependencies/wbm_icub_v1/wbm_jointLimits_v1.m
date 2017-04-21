@@ -1,4 +1,4 @@
-function [jl_lower,jl_upper]  = wbm_jointLimits( varargin )
+function [jl_lower,jl_upper]  = wbm_jointLimits_v1( varargin )
 %WBM_JOINTLIMITS Obtains the joint limits for the chosen robot
 %
 %   Arguments : 

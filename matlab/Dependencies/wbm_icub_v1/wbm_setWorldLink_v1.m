@@ -1,4 +1,4 @@
-function []  = wbm_setWorldLink( varargin )
+function []  = wbm_setWorldLink_v1( varargin )
 %WBM_SETWORLDFRAME Sets the world frame at a given rototranslation from the
 %from a chosen reference link. At a given joint configuration, the
 %rototranslation from the root link to the world can then be computed to

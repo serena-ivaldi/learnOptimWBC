@@ -1,4 +1,4 @@
-function [  ] = wbm_modelInitialise( varargin )
+function [  ] = wbm_modelInitialise_v1( varargin )
 %WMB_MODELINITIALISE initialises the whole body model
 %   Arguments : 
 %       Optimised Mode : No arguments

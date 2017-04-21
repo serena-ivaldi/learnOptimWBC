@@ -167,8 +167,8 @@ switch CONTROLLERTYPE
         activate_constraints_handling = true;
         %% INSTANCE PARAMETER
         preprocessing = @StickBreaking4MonotoneTimeLaw;
-        run_function = @FakeRobotExperiment;
-        fitness = @fitnessFakeHumanoidsIcubStandUp;
+        run_function = @RobotExperiment;
+        fitness = @fitnessHumanoidsIcubStandUp;
         clean_function = @RobotExperimentCleanData;
         
         if strcmp(simulator_type{1},'rbt')

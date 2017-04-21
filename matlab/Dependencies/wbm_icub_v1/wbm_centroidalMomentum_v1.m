@@ -1,4 +1,4 @@
-function [ H ] = wbm_centroidalMomentum( varargin )
+function [ H ] = wbm_centroidalMomentum_v1( varargin )
 %WMB_CENTROIDALMOMENTUM computes the centroidal momentum of the system -
 %functions of the state q, state derivative qDot, and floating base
 %velocity vxb

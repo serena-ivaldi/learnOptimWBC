@@ -1,4 +1,4 @@
-function [ M ] = wbm_massMatrix( varargin )
+function [ M ] = wbm_massMatrix_v1( varargin )
 %WMB_MASSMATRIX computes the mass matrix of the floating base system at a
 %given joint configuration
 %

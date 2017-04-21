@@ -1,4 +1,4 @@
-function [qj,xTb,qjDot,vb]  = wbm_getState( varargin )
+function [qj,xTb,qjDot,vb]  = wbm_getState_v1( varargin )
 %WBM_GETSTATE Obtains the currently stored state (joint angles, floating base joint
 %velocities, floating base velocity)
 %   Arguments :

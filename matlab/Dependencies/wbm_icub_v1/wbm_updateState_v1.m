@@ -1,4 +1,4 @@
-function []  = wbm_updateState( varargin )
+function []  = wbm_updateState_v1( varargin )
 %WBM_UPDATESTATE Updates the robot state, i.e. joint angles, joint
 %velocities, floating base velocity.
 %

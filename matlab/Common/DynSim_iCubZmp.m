@@ -25,7 +25,7 @@ function [zmp,CoP]=DynSim_iCubZmp(fc,param,x_b,w_R_b,q)
         
         % the cop in the right foot is expressed in the local frame of the
         % foot so we need to express it in the world referecence frame
-        r_sole_pos = wbm_forwardKinematics(w_R_b,x_b,q,'r_sole');
+        r_sole_pos = wbm_forwardKinematics_v1(w_R_b,x_b,q,'r_sole');
         r_sole_position = r_sole_pos(1:2)';
         [~,w_R_rsole]    = frame2posRotm(r_sole_pos);
         

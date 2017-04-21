@@ -1,4 +1,4 @@
-function [ J ] = wbm_jacobian( varargin )
+function [ J ] = wbm_jacobian_v1( varargin )
 %WMB_JACOBIAN computes the Jacobian to a desired link (frame) at a given
 %joint configuration
 %velocity vxb

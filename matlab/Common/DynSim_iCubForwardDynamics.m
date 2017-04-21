@@ -8,14 +8,14 @@ function [dchi,fitness_param]=DynSim_iCubForwardDynamics(t,chi,controller,param)
 
     icub = controller.GetWholeSystem();
     ndof = icub.ndof;
-    %disp(t)
+    disp(t)
 
     %% Extraction of state
     [state,x_b,qt_b,w_R_b,base_pose,q,dx_b,w_omega_b,qd,Nu]=icub.State(chi);
 
     %% Update state (in the robot model) (it is necessary when i want to recompute offline data from the current rollout)
-    wbm_setWorldFrame(w_R_b,x_b,[0 0 -9.81]');
-    wbm_updateState(q,qd,[dx_b;w_omega_b]);
+    wbm_setWorldFrame_v1(w_R_b,x_b,[0 0 -9.81]');
+    wbm_updateState_v1(q,qd,[dx_b;w_omega_b]);
 
     %% dynamics
     [dynamic,M,h,g,H,C_nu,JCoM,dJCoM_nu,JH,dJH_nu] = icub.Dynamics();
@@ -29,7 +29,7 @@ function [dchi,fitness_param]=DynSim_iCubForwardDynamics(t,chi,controller,param)
     icub.dynamic.M(7:end,7:end)  = icub.dynamic.M(7:end,7:end) + param.massCorr.*eye(ndof);
     
     %% compute com position (TODO (provisory) i need to reorder how the kinematics is computed)
-    poseCoM  = wbm_forwardKinematics(icub.state.w_R_b,icub.state.x_b,q,'com');
+    poseCoM  = wbm_forwardKinematics_v1(icub.state.w_R_b,icub.state.x_b,q,'com');
     xCoM     = poseCoM(1:3);
     %% update contact state (i  suppose that i start to move after 0.1 seconds)
     if(t>0.1)

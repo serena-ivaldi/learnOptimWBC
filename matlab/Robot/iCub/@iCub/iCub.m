@@ -38,8 +38,7 @@ classdef iCub < handle
                 obj.model_name = 'model';
                 %obj.active_floating_base = true;
                 % Initialize the mexWholeBodyModel
-                wbm_modelInitialize('icubGazeboSim');
-                wbm_resetWorldFrame();
+                wbm_modelInitialise_v1('icubGazeboSim');
                 obj.ndof = 25; % degrees of freedom with floating base
                 % fixed joint list for icubGazeboSim
                 obj.revoluteJointList = {'torso_pitch','torso_roll','torso_yaw','l_shoulder_pitch','l_shoulder_roll','l_shoulder_yaw','l_elbow','l_wrist_prosup','r_shoulder_pitch','r_shoulder_roll',...
@@ -73,8 +72,7 @@ classdef iCub < handle
                 obj.model_name = model;
                 model = strcat(model,'.urdf');
                 path = which(model);
-                wbm_modelInitializeFromURDF(path);
-                wbm_resetWorldFrame();
+                wbm_modelInitialiseFromURDF_v1(path);
                 scheme = xml2struct(path);
                 obj.UBjointLimit = [];
                 obj.LBjointLimit = [];
@@ -300,11 +298,11 @@ classdef iCub < handle
         
         function SetWorldFrameiCub(obj,qjInit,dqjInit,dx_bInit,w_omega_bInit,reference_link)
             % Updating the robot position
-            wbm_updateState(qjInit,dqjInit,[dx_bInit;w_omega_bInit]);
+            wbm_updateState_v1(qjInit,dqjInit,[dx_bInit;w_omega_bInit]);
             % fixing the world reference frame w.r.t. the foot on ground position
-            [x_b0,w_R_b0] = wbm_getWorldFrameFromFixLnk(reference_link,qjInit);
+            [w_R_b0,x_b0] = wbm_getWorldFrameFromFixedLink_v1(reference_link,qjInit);
             % define world frame
-            wbm_setWorldFrame(w_R_b0,x_b0,[0 0 -9.81]');
+            wbm_setWorldFrame_v1(w_R_b0,x_b0,[0 0 -9.81]');
                       
             % update position and orientation of the floating base repect of the root base
             obj.state.q = qjInit;
@@ -323,7 +321,7 @@ classdef iCub < handle
             obj.init_state.w_omega_bi = w_omega_bInit;
             %% TODEBUG
             % solo per adesso per la integrazione del balance
-            Xcom_pose = wbm_forwardKinematics(obj.init_state.w_R_bi,obj.init_state.x_bi,obj.init_state.qi,'com');
+            Xcom_pose = wbm_forwardKinematics_v1(obj.init_state.w_R_bi,obj.init_state.x_bi,obj.init_state.qi,'com');
             obj.init_state.xCoMRef = Xcom_pose(1:3);
         end
         
@@ -334,7 +332,7 @@ classdef iCub < handle
         %   dqj - joint velocities (NumDoF x 1)
         %   vxb - floating base velocity (6 x 1)
         function [qj,xTb,qjDot,vb] = GetState(obj)
-            [xTb,qj,vb,qjDot]=wbm_getState();
+            [qj,xTb,qjDot,vb]=wbm_getState_v1();
         end
         
         %x_b        position of the floating base
@@ -365,8 +363,8 @@ classdef iCub < handle
            
            [C_nu ,h, g] = obj.coriolis(q,qd);
            % Jacobians and dJ_nu
-           JCoM = wbm_jacobian(w_R_b,x_b,q,'com');
-           dJCoM_nu = wbm_dJdq(w_R_b,x_b,q,qd,[dx_b;w_omega_b],'com');
+           JCoM = wbm_jacobian_v1(w_R_b,x_b,q,'com');
+           dJCoM_nu = wbm_djdq_v1(w_R_b,x_b,q,qd,[dx_b;w_omega_b],'com');
            % centroidal momemntum 
            H = obj.CentroidalMomentum(q,qd);
            % centroidal momentum Jacobian
@@ -375,13 +373,13 @@ classdef iCub < handle
            for ii = 1:6
                v_bJH         = zeros(6,1);
                v_bJH(ii)     = 1;
-               JHBase(:,ii)  = wbm_centroidalMomentum(w_R_b,x_b,q,zeros(obj.ndof,1),v_bJH);
+               JHBase(:,ii)  = wbm_centroidalMomentum_v1(w_R_b,x_b,q,zeros(obj.ndof,1),v_bJH);
            end
 
            for ii = 1:obj.ndof
                dqjJH          = zeros(obj.ndof,1);
                dqjJH(ii)      = 1;
-               JHJoint(:,ii)  = wbm_centroidalMomentum(w_R_b,x_b,q,dqjJH,zeros(6,1));
+               JHJoint(:,ii)  = wbm_centroidalMomentum_v1(w_R_b,x_b,q,dqjJH,zeros(6,1));
            end
            JH      = [JHBase JHJoint];
            dJH_nu  = [M(1,1)*dJCoM_nu(1:3); zeros(3,1)];
@@ -399,15 +397,15 @@ classdef iCub < handle
            dynamic = obj.dynamic;
         end
         
-        function [M,F,Omega]=WholeBodyDynamics(obj,q,qd)
-            M = obj.inertia(q);
-            F = wbm_generalizedBiasForces(obj.state.w_R_b,obj.state.x_b,q,qd,[obj.state.dx_b;obj.state.w_omega_b]);
-            Omega = obj.CentroidalMomentum(q,qd);
-        end
+%         function [M,F,Omega]=WholeBodyDynamics(obj,q,qd)
+%             M = obj.inertia(q);
+%             F = wbm_generalizedBiasForces(obj.state.w_R_b,obj.state.x_b,q,qd,[obj.state.dx_b;obj.state.w_omega_b]);
+%             Omega = obj.CentroidalMomentum(q,qd);
+%         end
         
         % the hypothesis is that fc is already premultiplied by the Jc (contact jacobian)
         function f = F(obj,q,qd,fc,Jc_t)
-            f = wbm_generalisedBiasForces(obj.state.w_R_b,obj.state.x_b,q,qd,[obj.state.dx_b;obj.state.w_omega_b]) -Jc_t*fc;
+            %f = wbm_generalisedBiasForces(obj.state.w_R_b,obj.state.x_b,q,qd,[obj.state.dx_b;obj.state.w_omega_b]) -Jc_t*fc;
         end
         %% kinematic functions
         function [contact_jacobians,Jc_sym,dJcNu_sym]=ContactJacobians(obj,param,contact)
@@ -417,8 +415,8 @@ classdef iCub < handle
             Jc    = zeros(6*param.numContacts,6+obj.ndof);
             dJcNu = zeros(6*param.numContacts,1);
             for i=1:param.numContacts
-                Jc(6*(i-1)+1:6*i,:)    = wbm_jacobian(obj.state.w_R_b,obj.state.x_b,q,param.contactLinkNames{i});
-                dJcNu(6*(i-1)+1:6*i,:) = wbm_dJdq(obj.state.w_R_b,obj.state.x_b,q,qd,[obj.state.dx_b;obj.state.w_omega_b],param.contactLinkNames{i});
+                Jc(6*(i-1)+1:6*i,:)    = wbm_jacobian_v1(obj.state.w_R_b,obj.state.x_b,q,param.contactLinkNames{i});
+                dJcNu(6*(i-1)+1:6*i,:) = wbm_djdq_v1(obj.state.w_R_b,obj.state.x_b,q,qd,[obj.state.dx_b;obj.state.w_omega_b],param.contactLinkNames{i});
             end
             % i had to put this correction because for some reason the
             % r_sole does not work properly
@@ -427,8 +425,8 @@ classdef iCub < handle
             Jc_sym       =  zeros(6*contact.num_of_active_contacts,6+obj.ndof);
             dJcNu_sym    =  zeros(6*contact.num_of_active_contacts,1);
             for i=1:contact.num_of_active_contacts
-                Jc_sym(6*(i-1)+1:6*i,:)    = wbm_jacobian(obj.state.w_R_b,obj.state.x_b,q,contact.names{i});
-                dJcNu_sym(6*(i-1)+1:6*i,:) = wbm_dJdq(obj.state.w_R_b,obj.state.x_b,q,qd,[obj.state.dx_b;obj.state.w_omega_b],contact.names{i});
+                Jc_sym(6*(i-1)+1:6*i,:)    = wbm_jacobian_v1(obj.state.w_R_b,obj.state.x_b,q,contact.names{i});
+                dJcNu_sym(6*(i-1)+1:6*i,:) = wbm_djdq_v1(obj.state.w_R_b,obj.state.x_b,q,qd,[obj.state.dx_b;obj.state.w_omega_b],contact.names{i});
             end
             % i had to put this correction because for some reason the
             % r_sole does not work properly and give me a non zero element
@@ -441,25 +439,25 @@ classdef iCub < handle
         
         % Same as the method fkine but can be call at anytime. By tag you
         % specify through a string the name of the joint you want
-        function  [x,R] = offlineFkine(rob,chi,tag)
-        import WBM.utilities.frame2posRotm;    
-            x_base  = chi(1:3,:);  %TODO floating base flag required (parameter of the simulator)
-            qt_b = chi(4:7,:);  %TODO floating base flag required (parameter of the simulator)
-            q   = chi(8:8+rob.ndof-1,:);
-            [~,R_base]    = frame2posRotm([x_base;qt_b]);
-            fkine = wholeBodyModel('forward-kinematics',reshape(R_base,[],1),x_base,q,tag);
-            % Obtaining the rotation matrix from root link to world frame
-            [x,R]    = frame2posrot(fkine);
-        end
-        % Same as the method jacob0 but can be call at anytime. By tag you
-        % specify through a string the name of the joint you want
-        function  jacob0 = offlineJacob0(rob,chi,tag)
-            x_base  = chi(1:3,:);  %TODO floating base flag required (parameter of the simulator)
-            qt_b = chi(4:7,:);  %TODO floating base flag required (parameter of the simulator)
-            q   = chi(8:8+rob.ndof-1,:);
-            [~,R_base]    = frame2posrot([x_base;qt_b]);
-            jacob0 = wholeBodyModel('jacobian',reshape(R_base,[],1),x_base,q,tag);
-        end
+%         function  [x,R] = offlineFkine(rob,chi,tag)
+%         import WBM.utilities.frame2posRotm;    
+%             x_base  = chi(1:3,:);  %TODO floating base flag required (parameter of the simulator)
+%             qt_b = chi(4:7,:);  %TODO floating base flag required (parameter of the simulator)
+%             q   = chi(8:8+rob.ndof-1,:);
+%             [~,R_base]    = frame2posRotm([x_base;qt_b]);
+%             fkine = wholeBodyModel('forward-kinematics',reshape(R_base,[],1),x_base,q,tag);
+%             % Obtaining the rotation matrix from root link to world frame
+%             [x,R]    = frame2posrot(fkine);
+%         end
+%         % Same as the method jacob0 but can be call at anytime. By tag you
+%         % specify through a string the name of the joint you want
+%         function  jacob0 = offlineJacob0(rob,chi,tag)
+%             x_base  = chi(1:3,:);  %TODO floating base flag required (parameter of the simulator)
+%             qt_b = chi(4:7,:);  %TODO floating base flag required (parameter of the simulator)
+%             q   = chi(8:8+rob.ndof-1,:);
+%             [~,R_base]    = frame2posrot([x_base;qt_b]);
+%             jacob0 = wholeBodyModel('jacobian',reshape(R_base,[],1),x_base,q,tag);
+%         end
         
         
         %% miscellanea
@@ -515,8 +513,8 @@ classdef iCub < handle
                                 
         function ComputeSupportPoly(obj,params)
              import WBM.utilities.frame2posRotm; 
-             l_sole_pos   = wbm_forwardKinematics(obj.state.w_R_b,obj.state.x_b,obj.state.q,'l_sole');
-             r_sole_pos   = wbm_forwardKinematics(obj.state.w_R_b,obj.state.x_b,obj.state.q,'r_sole');
+             l_sole_pos   = wbm_forwardKinematics_v1(obj.state.w_R_b,obj.state.x_b,obj.state.q,'l_sole');
+             r_sole_pos   = wbm_forwardKinematics_v1(obj.state.w_R_b,obj.state.x_b,obj.state.q,'r_sole');
              
              [x_l_sole,~] = frame2posRotm(l_sole_pos);
              [x_r_sole,~] = frame2posRotm(r_sole_pos);

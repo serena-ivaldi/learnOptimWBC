@@ -58,7 +58,6 @@ if size(t,1)==1 && size(t,2)==1
 
     desired_x_dx_ddx_CoM = [xCoMDes dxCoMDes ddxCoMDes];
 else
-    
     % in case t is a vector
     desired_x_dx_ddx_CoM = zeros(3,3,length(t));
 

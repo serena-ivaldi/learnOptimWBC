@@ -1,4 +1,4 @@
-function [ world_R_base,world_p_base ] = wbm_getWorldFrameFromFixedLink( varargin )
+function [ world_R_base,world_p_base ] = wbm_getWorldFrameFromFixedLink_v1( varargin )
 %WBM_GETWORLDFRAMEFROMFIXEDLINK returns the floating base position wrt to a
 %world frame that is intentionally set at a specified link frame. The
 %returned floating base position and rotation is obtained from  forward kinematics 
@@ -28,7 +28,7 @@ end
 
 function [world_R_base, world_p_base] = computeNewWorldToBase(varargin)
     
-    [~,oldWorld_qH_base,~,~]  = wbm_getState();
+    [~,oldWorld_qH_base,~,~]  = wbm_getState_v1();
     [oldWorld_p_base,oldWorld_R_base] = frame2posrot(oldWorld_qH_base);
     oldWorld_H_base = [oldWorld_R_base oldWorld_p_base; zeros(1,3) 1];
 
@@ -36,7 +36,7 @@ function [world_R_base, world_p_base] = computeNewWorldToBase(varargin)
     if(nargin == 1)
         [oldWorld_qH_referenceLink] = wbm_forwardKinematics(varargin{1});
     else
-        [oldWorld_qH_referenceLink] = wbm_forwardKinematics(oldWorld_R_base,oldWorld_p_base,varargin{2},varargin{1});
+        [oldWorld_qH_referenceLink] = wbm_forwardKinematics_v1(oldWorld_R_base,oldWorld_p_base,varargin{2},varargin{1});
     end
 
      [oldWorld_p_referenceLink,oldWorld_R_referenceLink] = frame2posrot(oldWorld_qH_referenceLink);

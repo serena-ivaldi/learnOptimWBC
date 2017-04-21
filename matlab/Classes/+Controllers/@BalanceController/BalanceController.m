@@ -154,7 +154,6 @@ classdef  BalanceController < Controllers.AbstractController
        %disp('im in update parameters')  
        %% in this controller i remove the update of the activation fuction 
        %% because we do not have any of them in place
-       disp('im in update parameter inside balance controller')
        parameters
 %          for i=1:size(obj.alpha,1) 
 %              index = 1;
@@ -201,11 +200,11 @@ classdef  BalanceController < Controllers.AbstractController
          icub = obj.GetWholeSystem(); 
          %% FORWARD KINEMATICS
          % feet pose (quaternions), CoM position
-         poseLFoot_qt                     = wbm_forwardKinematics(icub.state.w_R_b,icub.state.x_b,q,'l_sole');
-         poseRFoot_qt                     = wbm_forwardKinematics(icub.state.w_R_b,icub.state.x_b,q,'r_sole');
-         poseLULeg_qt                     = wbm_forwardKinematics(icub.state.w_R_b,icub.state.x_b,q,'l_upper_leg');
-         poseRULeg_qt                     = wbm_forwardKinematics(icub.state.w_R_b,icub.state.x_b,q,'r_upper_leg');
-         poseCoM                          = wbm_forwardKinematics(icub.state.w_R_b,icub.state.x_b,q,'com');
+         poseLFoot_qt                     = wbm_forwardKinematics_v1(icub.state.w_R_b,icub.state.x_b,q,'l_sole');
+         poseRFoot_qt                     = wbm_forwardKinematics_v1(icub.state.w_R_b,icub.state.x_b,q,'r_sole');
+         poseLULeg_qt                     = wbm_forwardKinematics_v1(icub.state.w_R_b,icub.state.x_b,q,'l_upper_leg');
+         poseRULeg_qt                     = wbm_forwardKinematics_v1(icub.state.w_R_b,icub.state.x_b,q,'r_upper_leg');
+         poseCoM                          = wbm_forwardKinematics_v1(icub.state.w_R_b,icub.state.x_b,q,'com');
          xCoM                             = poseCoM(1:3);
          dposeCoM                         = icub.dynamic.JCoM*icub.state.Nu;
          dxCoM                            = dposeCoM(1:3);
@@ -236,7 +235,8 @@ classdef  BalanceController < Controllers.AbstractController
          trajectory.jointReferences.ddqjRef = zeros(icub.ndof,1);
          trajectory.jointReferences.dqjRef  = zeros(icub.ndof,1);
          trajectory.jointReferences.qjRef   = icub.init_state.qi;%param.qfinal;
-         trajectory.desired_x_dx_ddx_CoM = myTrajectoryGenerator(obj,t,icub.init_state.xCoMRef,param.xComfinal);
+         trajectory.desired_x_dx_ddx_CoM    = trajectoryGenerator(icub.init_state.xCoMRef,t,param);
+         %trajectory.desired_x_dx_ddx_CoM = myTrajectoryGenerator(obj,t,icub.init_state.xCoMRef,param.xComfinal);
          
          %% given the value of the com trajectory if the desired com is different from the starting position i will
          %% update the feet on ground to remove the bottom contact

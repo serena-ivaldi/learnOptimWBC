@@ -5,7 +5,7 @@ clc
 %% test selection
 
 visualization_test = false;
-simulation         = false;
+simulation         = true;
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
@@ -85,7 +85,7 @@ end
 params.tStart   = time_struct.ti;
 params.tEnd     = time_struct.tf;
 params.sim_step =  0.01;%time_struct.step;
-params.demo_movements = 0;
+params.demo_movements = 1;
 params.maxtime = 50;
 params.torque_saturation = 100000;
 params.integrateWithFixedStep = true;
@@ -296,58 +296,58 @@ else
         icub.EnhancedPlot(q,params);
     end
     %% visualize trajectory (time profile and geometric trajectory)
-    s_ext = 0;
-    [p,pd,pdd,time,obj4visual]=AdHocBalanceControllerTrajectory(s_ext,time_struct,geom_parameters{1,1},'func');
-    time_vec = time_struct.ti:time_struct.step:time_struct.tf;
-    
-    s   = zeros(length(time_vec),1);
-    sd  = zeros(length(time_vec),1);
-    sdd = zeros(length(time_vec),1);
-    p_v = zeros(length(time_vec),3);
-    index = 1;
-    for t=time_struct.ti:time_struct.step:time_struct.tf
-         p_v(index,:) = obj4visual.p_real(t,numeric_reference_parameter{1,1})';
-         s(index)     = obj4visual.s(t,numeric_reference_parameter{1,1});
-         sd(index)    = obj4visual.sd(t,numeric_reference_parameter{1,1});
-         sdd(index)   = obj4visual.sdd(t,numeric_reference_parameter{1,1});
-         index = index + 1;
-    end
-    transformed_time_vec = 0:0.001:1;
-    p_test = zeros(length(transformed_time_vec),3);
-    index = 1;
-    for t = 0:0.001:1
-    p_test(index,:) = obj4visual.p_test(t,numeric_reference_parameter{1,1})';
-    index = index + 1;
-    end
-    
-    
-    figure
-    plot(time_vec,p_v(:,1))
-    figure
-    plot(time_vec,p_v(:,3))
-    %figure
-    %plot(p_v(:,1),p_v(:,3));
-    figure
-    plot(transformed_time_vec,p_test(:,1))
-    figure
-    plot(transformed_time_vec,p_test(:,3))
-    %figure
-    %plot(p_real(:,1),p_real(:,3));   
-    figure
-    plot(time_vec,s);
-    figure
-    plot(time_vec,sd);
-    figure
-    plot(time_vec,sdd);
+%     s_ext = 0;
+%     [p,pd,pdd,time,obj4visual]=AdHocBalanceControllerTrajectory(s_ext,time_struct,geom_parameters{1,1},'func');
+%     time_vec = time_struct.ti:time_struct.step:time_struct.tf;
+%     
+%     s   = zeros(length(time_vec),1);
+%     sd  = zeros(length(time_vec),1);
+%     sdd = zeros(length(time_vec),1);
+%     p_v = zeros(length(time_vec),3);
+%     index = 1;
+%     for t=time_struct.ti:time_struct.step:time_struct.tf
+%          p_v(index,:) = obj4visual.p_real(t,numeric_reference_parameter{1,1})';
+%          s(index)     = obj4visual.s(t,numeric_reference_parameter{1,1});
+%          sd(index)    = obj4visual.sd(t,numeric_reference_parameter{1,1});
+%          sdd(index)   = obj4visual.sdd(t,numeric_reference_parameter{1,1});
+%          index = index + 1;
+%     end
+%     transformed_time_vec = 0:0.001:1;
+%     p_test = zeros(length(transformed_time_vec),3);
+%     index = 1;
+%     for t = 0:0.001:1
+%     p_test(index,:) = obj4visual.p_test(t,numeric_reference_parameter{1,1})';
+%     index = index + 1;
+%     end
+%     
+%     
+%     figure
+%     plot(time_vec,p_v(:,1))
+%     figure
+%     plot(time_vec,p_v(:,3))
+%     %figure
+%     %plot(p_v(:,1),p_v(:,3));
+%     figure
+%     plot(transformed_time_vec,p_test(:,1))
+%     figure
+%     plot(transformed_time_vec,p_test(:,3))
+%     %figure
+%     %plot(p_real(:,1),p_real(:,3));   
+%     figure
+%     plot(time_vec,s);
+%     figure
+%     plot(time_vec,sd);
+%     figure
+%     plot(time_vec,sdd);
     
     
     %% debugging preprocessor
-    fake_istance.input_4_run{1} ='icub_matlab';
-    fake_istance.input_4_run{2} = params ;
-    fake_istance.input_4_run{4} = controller;
-    [run_flag1,performance1,action1]=CheckTimeLawVelocity(fake_istance,numeric_reference_parameter{1,1});
-    [run_flag,performance,action]=StickBreaking4MonotoneTimeLaw(fake_istance,numeric_reference_parameter{1,1});
-    
+%     fake_istance.input_4_run{1} ='icub_matlab';
+%     fake_istance.input_4_run{2} = params ;
+%     fake_istance.input_4_run{4} = controller;
+%     [run_flag1,performance1,action1]=CheckTimeLawVelocity(fake_istance,numeric_reference_parameter{1,1});
+%     [run_flag,performance,action]=StickBreaking4MonotoneTimeLaw(fake_istance,numeric_reference_parameter{1,1});
+%     
     
   
 end

@@ -17,9 +17,6 @@ function RobotExperimentCleanData(obj,fake_input)
 if(strcmp(obj.input_4_run{1},'rbt'))
     controller = obj.input_4_run{5};
 elseif(strcmp(obj.input_4_run{1},'icub_matlab'))
-    % at the end of each iteration i need to reset rotation value in case
-    % of numerical error
-    wbm_resetWorldFrame();
     controller = obj.input_4_run{4};
 end
 controller.CleanTau();

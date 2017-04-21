@@ -17,8 +17,8 @@ function [F ,h, g]= coriolis(rob,q,qd)
 %  Output:: 
 %    C:   Coriolis matrix 
 zero = zeros(size(q));
-h = wbm_generalizedBiasForces(rob.state.w_R_b,rob.state.x_b,q,qd,[rob.state.dx_b;rob.state.w_omega_b]);
-g = wbm_generalizedBiasForces(rob.state.w_R_b,rob.state.x_b,q,zero,zeros(6,1));
+h = wbm_generalisedBiasForces_v1(rob.state.w_R_b,rob.state.x_b,q,qd,[rob.state.dx_b;rob.state.w_omega_b]);
+g = wbm_generalisedBiasForces_v1(rob.state.w_R_b,rob.state.x_b,q,zero,zeros(6,1));
 F = h-g;
 
 end

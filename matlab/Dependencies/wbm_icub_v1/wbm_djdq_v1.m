@@ -1,4 +1,4 @@
-function [ dJdq ] = wbm_djdq( varargin )
+function [ dJdq ] = wbm_djdq_v1( varargin )
 %WBM_DJDQ computes the product of derivative of Jacobian wrt to state
 %(DJ/dq) and the derivative of state for a desired link. Used for providing external contact contraints
 %   Arguments : 

@@ -19,10 +19,10 @@ function [t, q, qd] = DynSim_iCub(controller,params)
         options = odeset('RelTol',1e-6,'AbsTol',1e-6);
     end
 
-    params.lfoot_ini = wbm_forwardKinematics('l_sole');
-    params.rfoot_ini = wbm_forwardKinematics('r_sole');
-    params.lu_leg_ini = wbm_forwardKinematics('l_upper_leg');
-    params.ru_leg_ini = wbm_forwardKinematics('r_upper_leg');
+    params.lfoot_ini  = wbm_forwardKinematics_v1('l_sole');
+    params.rfoot_ini  = wbm_forwardKinematics_v1('r_sole');
+    params.lu_leg_ini = wbm_forwardKinematics_v1('l_upper_leg');
+    params.ru_leg_ini = wbm_forwardKinematics_v1('r_upper_leg');
     
     
     %% initilization and at the same time reset for controller simulation_results
@@ -42,7 +42,7 @@ function [t, q, qd] = DynSim_iCub(controller,params)
      
     forwardDynFunc  = @(t,chi)DynSim_iCubForwardDynamics(t,chi,controller,params);
 
-    try 
+    %try 
         
         if(params.integrateWithFixedStep)
             chi = Ode1(forwardDynFunc,time,params.chiInit); 
@@ -53,10 +53,10 @@ function [t, q, qd] = DynSim_iCub(controller,params)
         q = chi(:,1:7+WS.ndof);
         qd = chi(:,8+WS.ndof:end);
         %delete(params.wait)
-    catch err
-        disp('integration error');
-        rethrow(err);
-    end
+%     catch err
+%         disp('integration error');
+%         rethrow(err);
+%     end
 end
 
 

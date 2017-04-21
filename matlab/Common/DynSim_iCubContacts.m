@@ -15,10 +15,10 @@ function [tauContact,fc]=DynSim_iCubContacts(ndof,state,dynamic,Jc,dJcNu,param,t
     K_corr_pos  = 100;
     K_corr_vel  = 2*sqrt(K_corr_pos);
     % feet current position and orientation
-    l_sole       = wbm_forwardKinematics(w_R_b,x_b,q,'l_sole');
-    r_sole       = wbm_forwardKinematics(w_R_b,x_b,q,'r_sole');
-    l_upper_leg  = wbm_forwardKinematics(w_R_b,x_b,q,'l_upper_leg');
-    r_upper_leg  = wbm_forwardKinematics(w_R_b,x_b,q,'r_upper_leg');
+    l_sole       = wbm_forwardKinematics_v1(w_R_b,x_b,q,'l_sole');
+    r_sole       = wbm_forwardKinematics_v1(w_R_b,x_b,q,'r_sole');
+    l_upper_leg  = wbm_forwardKinematics_v1(w_R_b,x_b,q,'l_upper_leg');
+    r_upper_leg  = wbm_forwardKinematics_v1(w_R_b,x_b,q,'r_upper_leg');
     [x_lfoot,R_b_lfoot]              = frame2posRotm(l_sole);
     [x_rfoot,R_b_rfoot]              = frame2posRotm(r_sole);
     [x_lupper_leg,R_b_lupper_leg]    = frame2posRotm(l_upper_leg);

@@ -1,4 +1,4 @@
-function [  ] = wbm_modelInitialiseFromURDF( varargin )
+function [  ] = wbm_modelInitialiseFromURDF_v1( varargin )
 %WMB_MODELINITIALISE initialises the whole body model using an URDF file
 %   Arguments :
 %       path to the URDF file to load as a string,
