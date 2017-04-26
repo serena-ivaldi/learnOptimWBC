@@ -15,7 +15,7 @@ function violation = CheckBalance(zmp,support_poly)
         cy = max(min(zmp(2), support_poly.min(2)+support_poly.width), support_poly.min(2));
         violation = sqrt( (zmp(1)-cx)*(zmp(1)-cx) + (zmp(2)-cy)*(zmp(2)-cy) );
    else
-        % here the value si negative because the constraint sisatisfied
+        % here the value is negative because the constraint sisatisfied
         violation = -( support_poly.max_dist - norm(zmp - support_poly.center));
    end    
 end

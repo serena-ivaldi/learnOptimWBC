@@ -27,7 +27,8 @@ classdef  Instance
            else
               obj.constraints = true;
            end
-           if(isempty(varargin))
+           %% TODO manage better the case where im using the penalty handling object for a constraints free optimization problem
+           if(~isempty(varargin))
                obj.constraints = varargin{1};
            end
            obj.learn_procedure = learn_procedure;

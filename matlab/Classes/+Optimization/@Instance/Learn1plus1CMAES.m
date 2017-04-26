@@ -104,9 +104,11 @@ for k = 1:(nIterations - 1)
         %% TODO check constraints violations for equality constraints
         constraints = obj.penalty_handling.feasibility_vec(1,:)==-1; % vector of index of the violated constrained
         violated_constrained = find(constraints);
+    else
+        violated_constrained = [];
     end 
     %%  update   
-    if(~isempty(violated_constrained) && obj.constraints) % some constraints are violated
+    if(~isempty(violated_constrained)) % some constraints are violated
        v = V{k};
        for j = violated_constrained
          v(j,:) = (1-c_c)*V{k}(j,:) + c_c*(A{k}*z')';                                           %only if the constraints is violated udpate exponentially fading record vj 
