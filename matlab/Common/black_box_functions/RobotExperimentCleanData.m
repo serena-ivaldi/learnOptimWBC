@@ -26,6 +26,7 @@ if(strcmp(obj.input_4_run{1},'rbt'))
     obj.input_4_run{5} = controller;
 elseif(strcmp(obj.input_4_run{1},'icub_matlab'))
     obj.input_4_run{4} = controller;
+    %wbm_resetWorldFrame();
 end
 
 

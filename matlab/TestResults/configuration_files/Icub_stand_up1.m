@@ -21,9 +21,7 @@ target_link{1} = subchain1;
 
 
 %% Robot
-%bot1 = iCub('icubGazeboSim');
-fake_robot.ndof = 25;
-bot1 = fake_robot;
+bot1 = iCub('icubGazeboSim');
 chain_1 = DummyRvc_iCub(bot1,'l_sole');
 robots{1} = chain_1;
 chains = SubChains(target_link,robots,bot1);
@@ -115,9 +113,9 @@ elseif strcmp(simulator_type{1},'icub_matlab')
     params.tEnd     = time_struct.tf;
     params.sim_step =  0.01;%time_struct.step;
     params.demo_movements = 1;
-    params.maxtime = 100;
+    params.maxtime = 20;
     params.torque_saturation = 100000;
-    params.integrateWithFixedStep = true;
+    params.integrateWithFixedStep = false;
     if params.integrateWithFixedStep   
         params.massCorr = 0.05;
     else
@@ -162,7 +160,8 @@ switch CONTROLLERTYPE
             constraints_functions{k+1} = 'LinInequality2';
         end
         %% with the empty constraints it means that i compute the constraints directly inside the fitness function and i provide the result through the input of the empty constraints
-        constraints_values = [constraints_values];   % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
+         constraints_functions{end+1} = 'EmptyConstraints'; 
+        constraints_values = [constraints_values,nan];   % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
         constraints_type = ones(1,length(constraints_values)); % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
         activate_constraints_handling = true;
         %% INSTANCE PARAMETER

@@ -42,7 +42,7 @@ function [t, q, qd] = DynSim_iCub(controller,params)
      
     forwardDynFunc  = @(t,chi)DynSim_iCubForwardDynamics(t,chi,controller,params);
 
-    %try 
+    try 
         
         if(params.integrateWithFixedStep)
             chi = Ode1(forwardDynFunc,time,params.chiInit); 
@@ -53,10 +53,10 @@ function [t, q, qd] = DynSim_iCub(controller,params)
         q = chi(:,1:7+WS.ndof);
         qd = chi(:,8+WS.ndof:end);
         %delete(params.wait)
-%     catch err
-%         disp('integration error');
-%         rethrow(err);
-%     end
+    catch err
+        disp('integration error');
+        rethrow(err);
+    end
 end
 
 

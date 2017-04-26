@@ -39,6 +39,7 @@ classdef iCub < handle
                 %obj.active_floating_base = true;
                 % Initialize the mexWholeBodyModel
                 wbm_modelInitialise_v1('icubGazeboSim');
+                %wbm_resetWorldFrame();
                 obj.ndof = 25; % degrees of freedom with floating base
                 % fixed joint list for icubGazeboSim
                 obj.revoluteJointList = {'torso_pitch','torso_roll','torso_yaw','l_shoulder_pitch','l_shoulder_roll','l_shoulder_yaw','l_elbow','l_wrist_prosup','r_shoulder_pitch','r_shoulder_roll',...
@@ -73,6 +74,7 @@ classdef iCub < handle
                 model = strcat(model,'.urdf');
                 path = which(model);
                 wbm_modelInitialiseFromURDF_v1(path);
+                wbm_resetWorldFrame();
                 scheme = xml2struct(path);
                 obj.UBjointLimit = [];
                 obj.LBjointLimit = [];

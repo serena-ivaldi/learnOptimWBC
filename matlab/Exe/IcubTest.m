@@ -86,7 +86,7 @@ params.tStart   = time_struct.ti;
 params.tEnd     = time_struct.tf;
 params.sim_step =  0.01;%time_struct.step;
 params.demo_movements = 1;
-params.maxtime = 50;
+params.maxtime = 1000000;
 params.torque_saturation = 100000;
 params.integrateWithFixedStep = true;
 if params.integrateWithFixedStep   
@@ -128,7 +128,7 @@ else
     traj_type = {'cartesian'};
     control_type = {'x'};
     type_of_traj = {'func'};
-    geometric_path = {'AdHocBalance'};
+    geometric_path = {'none'};
     time_law = {'none'};
     %parameters first chains
                          % #basis overlap                    starting com position                                          ending com position

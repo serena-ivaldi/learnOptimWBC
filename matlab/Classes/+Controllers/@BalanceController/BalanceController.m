@@ -235,8 +235,8 @@ classdef  BalanceController < Controllers.AbstractController
          trajectory.jointReferences.ddqjRef = zeros(icub.ndof,1);
          trajectory.jointReferences.dqjRef  = zeros(icub.ndof,1);
          trajectory.jointReferences.qjRef   = icub.init_state.qi;%param.qfinal;
-         trajectory.desired_x_dx_ddx_CoM    = trajectoryGenerator(icub.init_state.xCoMRef,t,param);
-         %trajectory.desired_x_dx_ddx_CoM = myTrajectoryGenerator(obj,t,icub.init_state.xCoMRef,param.xComfinal);
+         %trajectory.desired_x_dx_ddx_CoM    = trajectoryGenerator(icub.init_state.xCoMRef,t,param);
+         trajectory.desired_x_dx_ddx_CoM = myTrajectoryGenerator(obj,t,icub.init_state.xCoMRef,param.xComfinal);
          
          %% given the value of the com trajectory if the desired com is different from the starting position i will
          %% update the feet on ground to remove the bottom contact

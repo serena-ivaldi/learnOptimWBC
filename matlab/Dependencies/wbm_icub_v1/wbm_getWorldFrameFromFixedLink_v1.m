@@ -29,6 +29,10 @@ end
 function [world_R_base, world_p_base] = computeNewWorldToBase(varargin)
     
     [~,oldWorld_qH_base,~,~]  = wbm_getState_v1();
+    if(isnan(oldWorld_qH_base(1)))
+        oldWorld_qH_base = zeros(7,1);
+        oldWorld_qH_base(end) = 1;
+    end
     [oldWorld_p_base,oldWorld_R_base] = frame2posrot(oldWorld_qH_base);
     oldWorld_H_base = [oldWorld_R_base oldWorld_p_base; zeros(1,3) 1];
 

@@ -8,7 +8,7 @@ function [dchi,fitness_param]=DynSim_iCubForwardDynamics(t,chi,controller,param)
 
     icub = controller.GetWholeSystem();
     ndof = icub.ndof;
-    disp(t)
+    %disp(t)
 
     %% Extraction of state
     [state,x_b,qt_b,w_R_b,base_pose,q,dx_b,w_omega_b,qd,Nu]=icub.State(chi);
@@ -32,7 +32,7 @@ function [dchi,fitness_param]=DynSim_iCubForwardDynamics(t,chi,controller,param)
     poseCoM  = wbm_forwardKinematics_v1(icub.state.w_R_b,icub.state.x_b,q,'com');
     xCoM     = poseCoM(1:3);
     %% update contact state (i  suppose that i start to move after 0.1 seconds)
-    if(t>0.1)
+    if(t>0.1)% && param.contact_sym.state(3)==1 && param.contact_sym.state(4)==1)
        param.feet_on_ground(3) = 0;
        param.feet_on_ground(4) = 0; 
        param.numContacts = sum(param.feet_on_ground);
@@ -63,11 +63,11 @@ function [dchi,fitness_param]=DynSim_iCubForwardDynamics(t,chi,controller,param)
     dchi    = [Nu;dNu];
 
     %% TO PUT BACK in this way i remove the test input that are too long 
-%     if toc(controller.current_time) > param.maxtime;
-%        controller.current_time = [];
-%        disp('Stopped. Taking too long.')
-%        error('Stopped. Taking too long.')
-%     end
+    if toc(controller.current_time) > param.maxtime;
+       controller.current_time = [];
+       disp('Stopped. Taking too long.')
+       error('Stopped. Taking too long.')
+    end
     %% Visualization
     % These are the variables that can be plotted by the visualizer.m
     % function
