@@ -34,7 +34,7 @@ type_of_traj = {'func'};
 geometric_path = {'AdHocBalance'};
 time_law = {'none'};
 %parameters first chains% #basis overlap                    starting com position                                          ending com position
-geom_parameters{1,1} =     [5 ,     2 ,      -0.120249695321353,-0.0680999719842103,0.369603821651986, 0.0167667444901888,-0.0681008604452745,0.503988037442802];
+geom_parameters{1,1} =     [5, 5 ,     2 ,      -0.120249695321353,-0.0680999719842103,0.369603821651986, 0.0167667444901888,-0.0681008604452745,0.503988037442802];
 dim_of_task{1,1}=[1;1;1]; 
 
 % secondary trajectory (Not used)

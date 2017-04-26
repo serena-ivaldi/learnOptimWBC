@@ -4,33 +4,36 @@
 
 
 function [p,pd,pdd,time,obj4visual] = AdHocBalanceControllerTrajectory(s_ext,time_struct,parameters,type)
- 
-   n_of_basis   = parameters(1);
-   redundancy   = parameters(2);
-   starting_position_x = parameters(3);  
-   starting_position_y = parameters(4);
-   starting_position_z = parameters(5); 
-   ending_position_x = parameters(6);  
-   ending_position_y = parameters(7);
-   ending_position_z = parameters(8);
+   
+   n_of_basis_time_law    = parameters(1);
+   n_of_basis_geometric   = parameters(2);
+   redundancy             = parameters(3);
+   starting_position_x    = parameters(4);  
+   starting_position_y    = parameters(5);
+   starting_position_z    = parameters(6); 
+   ending_position_x      = parameters(7);  
+   ending_position_y      = parameters(8);
+   ending_position_z      = parameters(9);
    
    
    % i need to more basis to fix the first and the last value of the rbf
-   real_n_of_basis = n_of_basis + 2;
+   real_n_of_basis_time_law  = n_of_basis_time_law + 2;
+   real_n_of_basis_geometric = n_of_basis_geometric + 2;
    
    t = sym('t');
    v = sym('v');
-   theta = sym('theta',[n_of_basis*3,1]);
+   theta = sym('theta',[n_of_basis_time_law + n_of_basis_geometric*2,1]);
    
    
    %% time law
    T = time_struct.tf;
-   sigma = (T)/((real_n_of_basis-1)*redundancy); % this value of sigma produces a 15% of overlapping between two consecutive gaussian with redundancy = 3;
+   sigma = (T)/((real_n_of_basis_time_law-1)*redundancy); % this value of sigma produces a 15% of overlapping between two consecutive gaussian with redundancy = 3;
    cof = 2*sigma^2;
    sumphi = 0;
+   phi = sym('phi', [1,real_n_of_basis_time_law]);
    % first and last basis function are special
-   for i=0:(real_n_of_basis - 1)
-       phi(i + 1) = exp(-(t-(i*T)/(real_n_of_basis-1))^2/cof);
+   for i=0:(real_n_of_basis_time_law - 1)
+       phi(i + 1) = exp(-(t-(i*T)/(real_n_of_basis_time_law-1))^2/cof);
        basis_functions_time{i + 1} = matlabFunction(phi(i+1));
        sumphi = sumphi + phi(i + 1);
    end
@@ -65,21 +68,22 @@ function [p,pd,pdd,time,obj4visual] = AdHocBalanceControllerTrajectory(s_ext,tim
          
    y0 = 0;
    yf = 1;
-   vector = [y0*sum(phi_computed_in_start) - phi_computed_in_start(2:end-1)*theta(1:n_of_basis); 
-             yf*sum(phi_computed_in_end)   - phi_computed_in_end(2:end-1)*theta(1:n_of_basis) ];
+   vector = [y0*sum(phi_computed_in_start) - phi_computed_in_start(2:end-1)*theta(1:n_of_basis_time_law); 
+             yf*sum(phi_computed_in_end)   - phi_computed_in_end(2:end-1)*theta(1:n_of_basis_time_law) ];
          
    lambda = mat\vector;
    
-   s = (phi(2:end-1)*theta(1:n_of_basis) + lambda(1)*phi(1) + lambda(2)*phi(end))/sumphi;
+   s = (phi(2:end-1)*theta(1:n_of_basis_time_law) + lambda(1)*phi(1) + lambda(2)*phi(end))/sumphi;
    
    
    %% geometric path
    T = 1;
-   sigma = (T)/((real_n_of_basis-1)*redundancy); % this value of sigma produces a 15% of overlapping between two consecutive gaussian with redundancy = 3;
+   sigma = (T)/((real_n_of_basis_geometric-1)*redundancy); % this value of sigma produces a 15% of overlapping between two consecutive gaussian with redundancy = 3;
    cof = 2*sigma^2;
    sumphi = 0;
-   for i=0:(real_n_of_basis - 1)
-       phi(i + 1) = exp(-(v-(i*T)/(real_n_of_basis-1))^2/cof);
+   phi = sym('phi', [1,real_n_of_basis_geometric]);
+   for i=0:(real_n_of_basis_geometric - 1)
+       phi(i + 1) = exp(-(v-(i*T)/(real_n_of_basis_geometric-1))^2/cof);
        basis_functions_time{i + 1} = matlabFunction(phi(i+1));
        sumphi = sumphi + phi(i + 1);
    end
@@ -113,21 +117,21 @@ function [p,pd,pdd,time,obj4visual] = AdHocBalanceControllerTrajectory(s_ext,tim
    
    o_x = starting_position_x;
    f_x = ending_position_x;
-   vector = [o_x*sum(phi_computed_in_start) - phi_computed_in_start(2:end-1) * theta(n_of_basis + 1:n_of_basis*2); 
-             f_x*sum(phi_computed_in_end)   - phi_computed_in_end(2:end-1)   * theta(n_of_basis + 1:n_of_basis*2) ];    
+   vector = [o_x*sum(phi_computed_in_start) - phi_computed_in_start(2:end-1) * theta(n_of_basis_time_law + 1: n_of_basis_time_law + n_of_basis_geometric ); 
+             f_x*sum(phi_computed_in_end)   - phi_computed_in_end(2:end-1)   * theta(n_of_basis_time_law + 1: n_of_basis_time_law + n_of_basis_geometric ) ];    
    lambda = mat\vector;      
    
-   rbfx = ( phi(2:end-1)*theta(n_of_basis + 1:n_of_basis*2) + lambda(1)*phi(1) + lambda(2)*phi(end) )/sumphi;
+   rbfx = ( phi(2:end-1)*theta(n_of_basis_time_law + 1:n_of_basis_time_law + n_of_basis_geometric) + lambda(1)*phi(1) + lambda(2)*phi(end) )/sumphi;
    
    rbfy = starting_position_y;
    
    o_z = starting_position_z;
    f_z = ending_position_z;
-   vector = [o_z*sum(phi_computed_in_start) - phi_computed_in_start(2:end-1) * theta(n_of_basis*2 + 1:n_of_basis*3); 
-             f_z*sum(phi_computed_in_end)   - phi_computed_in_end(2:end-1)   * theta(n_of_basis*2 + 1:n_of_basis*3) ];
+   vector = [o_z*sum(phi_computed_in_start) - phi_computed_in_start(2:end-1) * theta(n_of_basis_time_law + n_of_basis_geometric + 1: n_of_basis_time_law + n_of_basis_geometric*2); 
+             f_z*sum(phi_computed_in_end)   - phi_computed_in_end(2:end-1)   * theta(n_of_basis_time_law + n_of_basis_geometric + 1: n_of_basis_time_law + n_of_basis_geometric*2) ];
    lambda = mat\vector; 
    
-   rbfz = + ( phi(2:end-1)*theta(n_of_basis*2 + 1:n_of_basis*3)  + lambda(1)*phi(1) + lambda(2)*phi(end) )/sumphi;
+   rbfz = + ( phi(2:end-1)*theta(n_of_basis_time_law + n_of_basis_geometric + 1:n_of_basis_time_law + n_of_basis_geometric*2)  + lambda(1)*phi(1) + lambda(2)*phi(end) )/sumphi;
    
    p   = [rbfx;rbfy;rbfz];
    

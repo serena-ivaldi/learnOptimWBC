@@ -76,10 +76,11 @@ function SetTraj(obj,ind_subchain,ind_task)
           obj.time_law_and_derivatives.s = visualizatio_struct.s;
           obj.time_law_and_derivatives.sd = visualizatio_struct.sd;
           obj.time_law_and_derivatives.sdd = visualizatio_struct.sdd;
-          paramXregressor                                         = obj.geom_parameters{ind_subchain,ind_task}(1);
-          obj.n_of_parameter_per_regressor{ind_subchain,ind_task} = [ paramXregressor, paramXregressor, paramXregressor];
+          paramXregressor1                                         = obj.geom_parameters{ind_subchain,ind_task}(1);
+          paramXregressor2                                         = obj.geom_parameters{ind_subchain,ind_task}(2);
+          obj.n_of_parameter_per_regressor{ind_subchain,ind_task} = [ paramXregressor1, paramXregressor2, paramXregressor2];
           % number of basis x number of euclidean dimensions
-          obj.parameter_dim{ind_subchain,ind_task}                = paramXregressor*3; % here 3 represents the number of rbf that im using inside and geom_param 1 number of basis
+          obj.parameter_dim{ind_subchain,ind_task}                = paramXregressor1 + paramXregressor2*2; % here 3 represents the number of rbf that im using inside and geom_param 1 number of basis
      elseif(strcmp(obj.traj{ind_subchain,ind_task},'fixed'))
          [p ,pd,pdd,t]=Fixedpoint(obj.geom_parameters{ind_subchain,ind_task});
          obj.trajectories{ind_subchain,ind_task}.p = p;
