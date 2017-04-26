@@ -235,7 +235,7 @@ classdef  BalanceController < Controllers.AbstractController
          %% CoM and joints trajectory generator
          trajectory.jointReferences.ddqjRef = zeros(icub.ndof,1);
          trajectory.jointReferences.dqjRef  = zeros(icub.ndof,1);
-         trajectory.jointReferences.qjRef   = icub.init_state.qi;%param.qfinal;
+         trajectory.jointReferences.qjRef   = param.qfinal;%icub.init_state.qi;%;
          trajectory.desired_x_dx_ddx_CoM = myTrajectoryGenerator(obj,t,icub.init_state.xCoMRef,param.xComfinal);
          
          %% given the value of the com trajectory if the desired com is different from the starting position i will

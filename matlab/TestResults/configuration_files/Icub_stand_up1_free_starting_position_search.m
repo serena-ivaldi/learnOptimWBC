@@ -130,6 +130,9 @@ elseif strcmp(simulator_type{1},'icub_matlab')
     params.footSize  = [0.07 0.03];    % foot_xlength, foot_ylength 
     %% parameters for controller and fitness (fitnessHumanoidsIcubStandUp)
     params.xComfinal = [0.0167667444901888;-0.0681008604452745;0.503988037442802];
+    params.xComfinal = [-0.120249695321353,-0.0680999719842103,0.369603821651986]';
+    % standing_pose: -10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0, 25.5   0   0  -18.5  -5.5  0
+    % sitting_pose: -10   0  0, -20  30  0  45  0, -20  30  0  45  0,  90    0   0  -90    -5.5  0,  90    0   0   -90   -5.5  0
     params.qfinal    = [-10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0,25.5   0   0  -18.5  -5.5  0]'*(pi/180);   
 end
 %% Parameters Dependant on the type of controller

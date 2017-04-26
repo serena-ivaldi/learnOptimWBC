@@ -5,7 +5,7 @@ clc
 %% test selection
 
 visualization_test = false;
-simulation         = false;
+simulation         = true;
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
@@ -105,9 +105,9 @@ params.footSize  = [0.07 0.03];    % foot_xlength, foot_ylength
 % sitting_com:-0.120249695321353,-0.0680999719842103,0.369603821651986];
 % stading_com:0.0167667444901888,-0.0681008604452745,0.503988037442802
 params.xComfinal = [-0.120249695321353,-0.0680999719842103,0.369603821651986]';
-% stading_pose: -10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0, 25.5   0   0  -18.5  -5.5  0
+% standing_pose: -10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0, 25.5   0   0  -18.5  -5.5  0
 % sitting_pose: -10   0  0, -20  30  0  45  0, -20  30  0  45  0,  90    0   0  -90    -5.5  0,  90    0   0   -90   -5.5  0
-params.qfinal    = [-10   0  0, -20  30  0  45  0, -20  30  0  45  0,  90    0   0  -90    -5.5  0,  90    0   0   -90   -5.5  0]'*(pi/180);   
+params.qfinal    = [-10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0, 25.5   0   0  -18.5  -5.5  0]'*(pi/180);   
 
 %% Visualization
 if (visualization_test)
@@ -132,7 +132,7 @@ else
     time_law = {'none'};
     %parameters first chains
                          % #basis overlap                    starting com position                                          ending com position
-    geom_parameters{1,1} =  [5 ,     2 ,      -0.120249695321353,-0.0680999719842103,0.369603821651986, 0.0167667444901888,-0.0681008604452745,0.503988037442802];% sitting_com:-0.120249695321353,-0.0680999719842103,0.369603821651986];
+    geom_parameters{1,1} =  [5 , 5 ,     2 ,      -0.120249695321353,-0.0680999719842103,0.369603821651986, 0.0167667444901888,-0.0681008604452745,0.503988037442802];% sitting_com:-0.120249695321353,-0.0680999719842103,0.369603821651986];
                                                                                                                                                                   % stading_com:0.0167667444901888,-0.0681008604452745,0.503988037442802
     %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
     dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(icub.n,1); %dim_of_task{1,4}=ones(icub.n,1);
@@ -148,7 +148,9 @@ else
     dim_of_task_sec{1,1}={[1;1;1]};
 
     %numeric_reference_parameter{1,1}=[-2.6927 -1.9295 3.0885 2.1126 1.6506 -0.0113 -0.1107 -0.0148 0.0160 -0.0510 0.4647 0.4607 0.4194 0.4561 0.3719]'; 
-    numeric_reference_parameter{1,1}=[-1.8 -0.9 -0.9 +1.9 1 -0.0113 -0.001 0 0.005 0.01 0.49 0.49 0.49 0.49 0.50]'; 
+    numeric_reference_parameter{1,1}=[  0.3370   0.3674    0.40    0.6      0.8...   
+                                       -0.0911  -0.0633   -0.0486 -0.1094  -0.1200...
+                                       0.3776    0.3800    0.4000  0.4204   0.459]'; 
     %% ALPHA PARAMETERS
     choose_alpha = 'constant';  % RBF , constant, handTune
     %RBF
