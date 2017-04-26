@@ -10,7 +10,7 @@ function fit  = fitnessHumanoidsIcubStandUpTest(output,penalty_handling,contr,pa
     qd_all = output{3};
      
     %%%;;
-    downsaple = 5;
+    downsaple = 1;
     L = 1; 
     max_effort = 3.5000e+05;
     max_traj_error = 250;
