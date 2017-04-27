@@ -3,8 +3,8 @@ close all
 clc
 
 %% test selection
-
 visualization_test = false;
+visualize_trajectory = false;
 simulation         = true;
 %% GENERAL PARAMETERS
 % for other strucutures
@@ -106,7 +106,7 @@ params.footSize  = [0.07 0.03];    % foot_xlength, foot_ylength
 % stading_com:0.0167667444901888,-0.0681008604452745,0.503988037442802
 params.xComfinal = [-0.120249695321353,-0.0680999719842103,0.369603821651986]';
 % standing_pose: -10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0, 25.5   0   0  -18.5  -5.5  0
-% sitting_pose: -10   0  0, -20  30  0  45  0, -20  30  0  45  0,  90    0   0  -90    -5.5  0,  90    0   0   -90   -5.5  0
+% sitting_pose:  -10   0  0, -20  30  0  45  0, -20  30  0  45  0,  90    0   0  -90    -5.5  0,  90    0   0   -90   -5.5  0
 params.qfinal    = [-10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0, 25.5   0   0  -18.5  -5.5  0]'*(pi/180);   
 
 %% Visualization
@@ -147,10 +147,22 @@ else
     geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
     dim_of_task_sec{1,1}={[1;1;1]};
 
+    to_preprocess = true;
     %numeric_reference_parameter{1,1}=[-2.6927 -1.9295 3.0885 2.1126 1.6506 -0.0113 -0.1107 -0.0148 0.0160 -0.0510 0.4647 0.4607 0.4194 0.4561 0.3719]'; 
-    numeric_reference_parameter{1,1}=[  0.3370   0.3674    0.40    0.6      0.8...   
-                                       -0.0911  -0.0633   -0.0486 -0.1094  -0.1200...
-                                       0.3776    0.3800    0.4000  0.4204   0.459]'; 
+    numeric_reference_parameter{1,1}=[1,0.964878035677109,0.375315655310099,0.885783725568362,0.893629995876643,...
+                                     -0.0941178517530773,-0.0440289795185478,-0.0186410495215999,0.000185094484882252,0.00816051347453277,...
+                                     0.360000000000000,0.481009346166596,0.491745812810415,0.504269474441607,0.501774345536011]'; 
+                                 
+    if(to_preprocess)
+        fake_controller.references.n_of_parameter_per_regressor{1,1}(1) = geom_parameters{1,1}(1);
+        fake_istance.input_4_run{1} ='icub_matlab';
+        fake_istance.input_4_run{2} = params ;
+        fake_istance.input_4_run{4} = fake_controller;
+        
+        [run_flag,performance,action]=StickBreaking4MonotoneTimeLaw(fake_istance,numeric_reference_parameter{1,1});
+        numeric_reference_parameter{1,1} = action;
+    end
+                                 
     %% ALPHA PARAMETERS
     choose_alpha = 'constant';  % RBF , constant, handTune
     %RBF
@@ -297,51 +309,52 @@ else
         [state,x_b,qt_b,w_R_b,base_pose,q,dx_b,w_omega_b,qd,Nu] = icub.State(chi');
         icub.EnhancedPlot(q,params);
     end
-    %% visualize trajectory (time profile and geometric trajectory)
-    s_ext = 0;
-    [p,pd,pdd,time,obj4visual]=AdHocBalanceControllerTrajectory(s_ext,time_struct,geom_parameters{1,1},'func');
-    time_vec = time_struct.ti:time_struct.step:time_struct.tf;
-    
-    s   = zeros(length(time_vec),1);
-    sd  = zeros(length(time_vec),1);
-    sdd = zeros(length(time_vec),1);
-    p_v = zeros(length(time_vec),3);
-    index = 1;
-    for t=time_struct.ti:time_struct.step:time_struct.tf
-         p_v(index,:) = obj4visual.p_real(t,numeric_reference_parameter{1,1})';
-         s(index)     = obj4visual.s(t,numeric_reference_parameter{1,1});
-         sd(index)    = obj4visual.sd(t,numeric_reference_parameter{1,1});
-         sdd(index)   = obj4visual.sdd(t,numeric_reference_parameter{1,1});
-         index = index + 1;
+    if(visualize_trajectory)
+        %% visualize trajectory (time profile and geometric trajectory)
+        s_ext = 0;
+        [p,pd,pdd,time,obj4visual]=AdHocBalanceControllerTrajectory(s_ext,time_struct,geom_parameters{1,1},'func');
+        time_vec = time_struct.ti:time_struct.step:time_struct.tf;
+
+        s   = zeros(length(time_vec),1);
+        sd  = zeros(length(time_vec),1);
+        sdd = zeros(length(time_vec),1);
+        p_v = zeros(length(time_vec),3);
+        index = 1;
+        for t=time_struct.ti:time_struct.step:time_struct.tf
+             p_v(index,:) = obj4visual.p_real(t,numeric_reference_parameter{1,1})';
+             s(index)     = obj4visual.s(t,numeric_reference_parameter{1,1});
+             sd(index)    = obj4visual.sd(t,numeric_reference_parameter{1,1});
+             sdd(index)   = obj4visual.sdd(t,numeric_reference_parameter{1,1});
+             index = index + 1;
+        end
+        transformed_time_vec = 0:0.001:1;
+        p_test = zeros(length(transformed_time_vec),3);
+        index = 1;
+        for t = 0:0.001:1
+        p_test(index,:) = obj4visual.p_test(t,numeric_reference_parameter{1,1})';
+        index = index + 1;
+        end
+
+
+        figure
+        plot(time_vec,p_v(:,1))
+        figure
+        plot(time_vec,p_v(:,3))
+        %figure
+        %plot(p_v(:,1),p_v(:,3));
+        figure
+        plot(transformed_time_vec,p_test(:,1))
+        figure
+        plot(transformed_time_vec,p_test(:,3))
+        %figure
+        %plot(p_real(:,1),p_real(:,3));   
+        figure
+        plot(time_vec,s);
+        figure
+        plot(time_vec,sd);
+        figure
+        plot(time_vec,sdd);
     end
-    transformed_time_vec = 0:0.001:1;
-    p_test = zeros(length(transformed_time_vec),3);
-    index = 1;
-    for t = 0:0.001:1
-    p_test(index,:) = obj4visual.p_test(t,numeric_reference_parameter{1,1})';
-    index = index + 1;
-    end
-    
-    
-    figure
-    plot(time_vec,p_v(:,1))
-    figure
-    plot(time_vec,p_v(:,3))
-    %figure
-    %plot(p_v(:,1),p_v(:,3));
-    figure
-    plot(transformed_time_vec,p_test(:,1))
-    figure
-    plot(transformed_time_vec,p_test(:,3))
-    %figure
-    %plot(p_real(:,1),p_real(:,3));   
-    figure
-    plot(time_vec,s);
-    figure
-    plot(time_vec,sd);
-    figure
-    plot(time_vec,sdd);
-    
     
     %% debugging preprocessor
     fake_istance.input_4_run{1} ='icub_matlab';

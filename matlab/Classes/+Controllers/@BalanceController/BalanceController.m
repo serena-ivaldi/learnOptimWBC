@@ -1,3 +1,5 @@
+%% TODO move the visualization from the controller to the icub class
+
 classdef  BalanceController < Controllers.AbstractController
     
    properties
@@ -39,7 +41,7 @@ classdef  BalanceController < Controllers.AbstractController
          %% Gains for two feet on ground
          if sum(varargin{1}.feet_on_ground(1:2)) == 2
             % CoM and angular momentum gains
-            gainsPCoM           = diag([40 45 40]);
+            gainsPCoM           = diag([100 105 100]);%diag([100 105 100]);%diag([40 45 40]);
             gainsDCoM           = 2*sqrt(gainsPCoM);
             gainsPAngMom        = diag([1 5 1]);
             gainsDAngMom        = 2*sqrt(gainsPAngMom);
