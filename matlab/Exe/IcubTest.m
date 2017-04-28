@@ -147,12 +147,12 @@ else
     geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
     dim_of_task_sec{1,1}={[1;1;1]};
 
-    to_preprocess = true;
+    to_preprocess = false;
     %numeric_reference_parameter{1,1}=[-2.6927 -1.9295 3.0885 2.1126 1.6506 -0.0113 -0.1107 -0.0148 0.0160 -0.0510 0.4647 0.4607 0.4194 0.4561 0.3719]'; 
-    numeric_reference_parameter{1,1}=[1,0.964878035677109,0.375315655310099,0.885783725568362,0.893629995876643,...
-                                     -0.0941178517530773,-0.0440289795185478,-0.0186410495215999,0.000185094484882252,0.00816051347453277,...
-                                     0.360000000000000,0.481009346166596,0.491745812810415,0.504269474441607,0.501774345536011]'; 
-                                 
+    numeric_reference_parameter{1,1}= [1,1,1,1,1,... %[1,0.567862928329883,0.106280019314498,0.541134070833768,0.950510023348100,...
+                                     -0.0263267253002408,-0.0254869318082244,-0.0194498966516130,-0.0157373298592839,-0.00593517271763315,...
+                                      0.368342112777283,0.464653164439905,0.499966386192785,0.437924456216005,0.395176979556707]'; 
+                                  
     if(to_preprocess)
         fake_controller.references.n_of_parameter_per_regressor{1,1}(1) = geom_parameters{1,1}(1);
         fake_istance.input_4_run{1} ='icub_matlab';
@@ -357,11 +357,11 @@ else
     end
     
     %% debugging preprocessor
-    fake_istance.input_4_run{1} ='icub_matlab';
-    fake_istance.input_4_run{2} = params ;
-    fake_istance.input_4_run{4} = controller;
-    [run_flag1,performance1,action1]=CheckTimeLawVelocity(fake_istance,numeric_reference_parameter{1,1});
-    [run_flag,performance,action]=StickBreaking4MonotoneTimeLaw(fake_istance,numeric_reference_parameter{1,1});
+%     fake_istance.input_4_run{1} ='icub_matlab';
+%     fake_istance.input_4_run{2} = params ;
+%     fake_istance.input_4_run{4} = controller;
+%     [run_flag1,performance1,action1]=CheckTimeLawVelocity(fake_istance,numeric_reference_parameter{1,1});
+%     [run_flag,performance,action]=StickBreaking4MonotoneTimeLaw(fake_istance,numeric_reference_parameter{1,1});
     
     
   

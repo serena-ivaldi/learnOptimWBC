@@ -168,7 +168,7 @@ switch CONTROLLERTYPE
         constraints_type = ones(1,length(constraints_values)); % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
         activate_constraints_handling = false;
         %% INSTANCE PARAMETER
-        preprocessing = @StickBreaking4MonotoneTimeLaw;
+        preprocessing = @EmptyPreprocessing;
         run_function = @RobotExperiment;
         fitness = @fitnessHumanoidsIcubStandUpSearchFreeSolution;
         clean_function = @RobotExperimentCleanData;
@@ -193,15 +193,17 @@ switch CONTROLLERTYPE
         end
         %% CMAES PARAMETER
         %--- Starting value of parameters
-        generation_of_starting_point = 'random'; % 'test':user defined by user_defined_start_action 'given':is redundant with test  'random': random starting point
+        generation_of_starting_point = 'test'; % 'test':user defined by user_defined_start_action 'given':is redundant with test  'random': random starting point
         %init_parameters = 6;
-        a = 5; b = 5; c = 5; d = 5; e = 6;
-        user_defined_start_action = [a a a a a b b b b b c c c c c d d d d d e e e e e];
+       
+        user_defined_start_action =  [1,1,1,1,1,...
+                                     -0.0263267253002408,-0.0254869318082244,-0.0194498966516130,-0.0157373298592839,-0.00593517271763315,...
+                                      0.368342112777283,0.464653164439905,0.499966386192785,0.437924456216005,0.395176979556707]; 
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
         niter = 500;  %number of generations
         %cmaes_value_range = [-14 , 14];  % boudn that define the search space
         cmaes_value_range{1} = [ 0, 0, 0, 0, 0, -0.12,-0.12,-0.12,-0.12,-0.12,  0.36,0.36,0.36,0.36,0.36 ];  % lower bound that define the search space
-        cmaes_value_range{2} = [ 1, 1, 1, 1, 1,  0.016,0.016,0.016,0.016,0.016, 0.50,0.50,0.50,0.50,0.50];  % upper bound that define the search space
+        cmaes_value_range{2} = [ 2, 2, 2, 2, 2,  0.016,0.016,0.016,0.016,0.016, 0.50,0.50,0.50,0.50,0.50];  % upper bound that define the search space
         learn_approach = '(1+1)CMAES'; %CMAES (1+1)CMAES
         %--- Parameter for constraints method
         method_to_use = 'nopenalty';  % adaptive , vanilla , empty

@@ -31,6 +31,9 @@ function [zmp,CoP]=DynSim_iCubZmp(fc,param,x_b,w_R_b,q)
         
         w_rsole_cop = w_R_rsole(1:2,1:2)*CoP(3:4)' + r_sole_position';
         
+        % here i save the rotated value for the cop for the right foot
+        CoP(3) = w_rsole_cop(1);
+        CoP(4) = w_rsole_cop(2);
         
         zmp = (fc(3)*CoP(1:2) + fc(9)*w_rsole_cop')/(fc(3)+fc(9));
         

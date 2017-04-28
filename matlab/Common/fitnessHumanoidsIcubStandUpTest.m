@@ -95,4 +95,48 @@ function fit  = fitnessHumanoidsIcubStandUpTest(output,penalty_handling,contr,pa
     fprintf('effort term is %f\n', effort)
     %---
     fit = (-traj_err*(weight_traj_err) - effort*(weight_effort))*( 1/(weight_traj_err+weight_effort) );
+    
+    
+    %% visualization (to move inside icub)
+    
+    %plot zmp evolution 
+     max = iCub.support_poly.max;
+     min = iCub.support_poly.min;
+     h   = iCub.support_poly.height;
+     w   = iCub.support_poly.width;
+     
+     % i specified the point from the top left in a cloacwise order
+     a   = min;
+     b   = min + [0 w];
+     c   = max;
+     d   = max - [0 w];
+     
+     rect = [a;b;c;d;a];
+     figure
+     hold on
+     plot(rect(1:2,1),rect(1:2,2))
+     plot(rect(2:3,1),rect(2:3,2))
+     plot(rect(3:4,1),rect(3:4,2))
+     plot(rect(4:5,1),rect(4:5,2))
+     scatter(contr.simulation_results.zmp(:,1),contr.simulation_results.zmp(:,2));
+     %h = scatter(rect(:,1),rect(:,2));
+     xlabel('X');
+     ylabel('Y');
+     %camroll(-90)
+     
+     
+     % plot cops
+     figure
+     hold on
+     plot(rect(1:2,1),rect(1:2,2))
+     plot(rect(2:3,1),rect(2:3,2))
+     plot(rect(3:4,1),rect(3:4,2))
+     plot(rect(4:5,1),rect(4:5,2))
+     scatter(contr.simulation_results.Cop(:,1),contr.simulation_results.Cop(:,2));
+     scatter(contr.simulation_results.Cop(:,3),contr.simulation_results.Cop(:,4));
+     
+     % plot torques
+     figure
+     plot(contr.simulation_results.tau);
+     xlim([0 size(t_all,1)])
 end
