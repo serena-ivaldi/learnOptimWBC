@@ -49,9 +49,9 @@ function [tauContact,fc]=DynSim_iCubContacts(ndof,state,dynamic,Jc,dJcNu,param,t
     [xi_rfoot,R_bi_rfoot]  = frame2posRotm(rsole_ini);
     [xi_luleg,R_bi_luleg]  = frame2posRotm(lu_leg_ini);
     [xi_ruleg,R_bi_ruleg]  = frame2posRotm(ru_leg_ini);
-
-    [phi_rfoot_ini,~]      = rotm2eulAngVelTF(R_bi_rfoot);
+    
     [phi_lfoot_ini,~]      = rotm2eulAngVelTF(R_bi_lfoot);
+    [phi_rfoot_ini,~]      = rotm2eulAngVelTF(R_bi_rfoot);
     [phi_luleg_ini,~]      = rotm2eulAngVelTF(R_bi_luleg);
     [phi_ruleg_ini,~]      = rotm2eulAngVelTF(R_bi_ruleg);
 

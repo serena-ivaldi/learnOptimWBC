@@ -8,7 +8,7 @@ function [dchi,fitness_param]=DynSim_iCubForwardDynamics(t,chi,controller,param)
 
     icub = controller.GetWholeSystem();
     ndof = icub.ndof;
-    %disp(t)
+    disp(t)
 
     %% Extraction of state
     [state,x_b,qt_b,w_R_b,base_pose,q,dx_b,w_omega_b,qd,Nu]=icub.State(chi);
@@ -32,7 +32,7 @@ function [dchi,fitness_param]=DynSim_iCubForwardDynamics(t,chi,controller,param)
     poseCoM  = wbm_forwardKinematics(icub.state.w_R_b,icub.state.x_b,q,'com');
     xCoM     = poseCoM(1:3);
     %% update contact state (i  suppose that i start to move after 0.1 seconds)
-    if(t>0.1)
+    if(t>=0)
        param.feet_on_ground(3) = 0;
        param.feet_on_ground(4) = 0; 
        param.numContacts = sum(param.feet_on_ground);

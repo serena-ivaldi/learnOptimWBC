@@ -78,6 +78,8 @@ function fit  = fitnessHumanoidsIcubStandUpTest(output,penalty_handling,contr,pa
     % compute violation 
     penalty_handling.ComputeConstraintsViolation(1)
     constraints_violation_cost = ArtificialConstraints(penalty_handling.penalties);
+    disp('constraints violations')
+    constraints_violation_cost
 %     constraints_violation_cost = ArtificialConstraintViolations(penalty_handling.constraints_violation,penalty_handling.n_constraint);
     % saturations 
     if(effort>max_effort)
@@ -123,7 +125,13 @@ function fit  = fitnessHumanoidsIcubStandUpTest(output,penalty_handling,contr,pa
      xlabel('X');
      ylabel('Y');
      %camroll(-90)
-     
+     figure
+     hold on;
+     plot(contr.simulation_results.zmp(:,1))
+     upper_bound = max(1)*ones(length(contr.simulation_results.xCoM(:,1)));
+     lower_bound = min(1)*ones(length(contr.simulation_results.xCoM(:,1)));
+     plot(upper_bound);
+     plot(lower_bound);
      
      % plot cops
      figure
@@ -134,6 +142,21 @@ function fit  = fitnessHumanoidsIcubStandUpTest(output,penalty_handling,contr,pa
      plot(rect(4:5,1),rect(4:5,2))
      scatter(contr.simulation_results.Cop(:,1),contr.simulation_results.Cop(:,2));
      scatter(contr.simulation_results.Cop(:,3),contr.simulation_results.Cop(:,4));
+     
+     % plot com 
+     plot(rect(1:2,1),rect(1:2,2))
+     plot(rect(2:3,1),rect(2:3,2))
+     plot(rect(3:4,1),rect(3:4,2))
+     plot(rect(4:5,1),rect(4:5,2))
+     scatter(contr.simulation_results.xCoM(:,1),contr.simulation_results.xCoM(:,2));
+     % plot com x coordinate
+     figure
+     hold on;
+     plot(contr.simulation_results.xCoM(:,1))
+     upper_bound = max(1)*ones(length(contr.simulation_results.xCoM(:,1)));
+     lower_bound = min(1)*ones(length(contr.simulation_results.xCoM(:,1)));
+     plot(upper_bound);
+     plot(lower_bound);
      
      % plot torques
      figure

@@ -121,6 +121,29 @@ if (visualization_test)
 %     scatter3(0,0,0,'LineWidth',100);
 %     scatter3(root_link_pos(1),root_link_pos(2),root_link_pos(3));
     %icub.EnhancedPlot(params.qjInit,params);
+    
+     icub.ComputeSupportPoly(params);
+     max = icub.support_poly.max;
+     min = icub.support_poly.min;
+     h   = icub.support_poly.height;
+     w   = icub.support_poly.width;
+     
+     % i specified the point from the top left in a cloacwise order
+     a   = min;
+     b   = min + [0 w];
+     c   = max;
+     d   = max - [0 w];
+     
+     rect = [a;b;c;d;a];
+     figure
+     hold on
+     plot(rect(1:2,1),rect(1:2,2))
+     plot(rect(2:3,1),rect(2:3,2))
+     plot(rect(3:4,1),rect(3:4,2))
+     plot(rect(4:5,1),rect(4:5,2))
+     poseCoM  = wbm_forwardKinematics(icub.state.w_R_b,icub.state.x_b,params.qjInit,'com');
+     xCoM     = poseCoM(1:3);
+     scatter(xCoM(1),xCoM(2));
 else
     %%  REFERENCE PARAMETERS
     deg = pi/180;
@@ -130,9 +153,13 @@ else
     type_of_traj = {'func'};
     geometric_path = {'AdHocBalance'};
     time_law = {'none'};
+    
+    %% i need to do that right here to give the right com starting position to the trajectory
+    icub.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
+    
     %parameters first chains
                          % #basis overlap                    starting com position                                          ending com position
-    geom_parameters{1,1} =  [5 , 5 ,     2 ,      -0.120249695321353,-0.0680999719842103,0.369603821651986, 0.0167667444901888,-0.0681008604452745,0.503988037442802];% sitting_com:-0.120249695321353,-0.0680999719842103,0.369603821651986];
+    geom_parameters{1,1} =  [5 , 5 ,     2 ,      icub.init_state.xCoMRef(1),icub.init_state.xCoMRef(2),icub.init_state.xCoMRef(3), 0.0167667444901888,-0.0681008604452745,0.503988037442802];% sitting_com:-0.120249695321353,-0.0680999719842103,0.369603821651986];
                                                                                                                                                                   % stading_com:0.0167667444901888,-0.0681008604452745,0.503988037442802
     %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
     dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(icub.n,1); %dim_of_task{1,4}=ones(icub.n,1);
@@ -147,12 +174,13 @@ else
     geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
     dim_of_task_sec{1,1}={[1;1;1]};
 
-    to_preprocess = false;
+    
     %numeric_reference_parameter{1,1}=[-2.6927 -1.9295 3.0885 2.1126 1.6506 -0.0113 -0.1107 -0.0148 0.0160 -0.0510 0.4647 0.4607 0.4194 0.4561 0.3719]'; 
-    numeric_reference_parameter{1,1}= [1,1,1,1,1,... %[1,0.567862928329883,0.106280019314498,0.541134070833768,0.950510023348100,...
+    numeric_reference_parameter{1,1}= [1,1,1,1,1,...%[1,0.567862928329883,0.106280019314498,0.541134070833768,0.950510023348100,...
                                      -0.0263267253002408,-0.0254869318082244,-0.0194498966516130,-0.0157373298592839,-0.00593517271763315,...
                                       0.368342112777283,0.464653164439905,0.499966386192785,0.437924456216005,0.395176979556707]'; 
-                                  
+    to_preprocess = false;
+    
     if(to_preprocess)
         fake_controller.references.n_of_parameter_per_regressor{1,1}(1) = geom_parameters{1,1}(1);
         fake_istance.input_4_run{1} ='icub_matlab';

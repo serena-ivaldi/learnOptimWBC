@@ -38,10 +38,10 @@ classdef  BalanceController < Controllers.AbstractController
          obj.display_opt.fixed_step = false;
          obj.display_opt.step = 0.00000001;
          obj.display_opt.trajtrack = false;
-         %% Gains for two feet on ground
+         %% Gains for two feet on ground TODO move the gains out of the controller
          if sum(varargin{1}.feet_on_ground(1:2)) == 2
             % CoM and angular momentum gains
-            gainsPCoM           = diag([100 105 100]);%diag([100 105 100]);%diag([40 45 40]);
+            gainsPCoM           = diag([1 2 1]);%diag([100 105 100]);%diag([40 45 40]);
             gainsDCoM           = 2*sqrt(gainsPCoM);
             gainsPAngMom        = diag([1 5 1]);
             gainsDAngMom        = 2*sqrt(gainsPAngMom);
@@ -427,7 +427,7 @@ classdef  BalanceController < Controllers.AbstractController
       function  desired_x_dx_ddx_CoM = myTrajectoryGenerator(obj,t,xCoMInit,xComfinal)
                 % in this way i specify in a fixed way the final value and
                 % the starting value
-                if(t<=0.1)
+                if(t<=0)
                     xCoMDes     = xCoMInit;
                     dxCoMDes    = zeros(size(xCoMInit));
                     ddxCoMDes   = zeros(size(xCoMInit));

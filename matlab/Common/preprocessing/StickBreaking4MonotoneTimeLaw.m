@@ -21,7 +21,7 @@ function [run_flag,performance,action]=StickBreaking4MonotoneTimeLaw(obj,action)
             disp('value of the action sequence for the time law should be between zero and one for this preprocessor unit')
             warning('fix time law action sequence for non positive values');
         end
-        
+        %% TODO lenght has to be defined outside in order to have i bigger than one value to have bigger velocity
         length = 1;
         for i = 1:number_of_param_time_law
             cut = ( length*abs(action(i)) );

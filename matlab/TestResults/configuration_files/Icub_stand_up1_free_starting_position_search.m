@@ -25,28 +25,6 @@ bot1 = iCub('icubGazeboSim');
 chain_1 = DummyRvc_iCub(bot1,'l_sole');
 robots{1} = chain_1;
 chains = SubChains(target_link,robots,bot1);
-%%  REFERENCE PARAMETERS
-deg = pi/180;
-% primary trajectory
-traj_type = {'cartesian'};
-control_type = {'x'};
-type_of_traj = {'func'};
-geometric_path = {'AdHocBalance'};
-time_law = {'none'};
-%parameters first chains
-geom_parameters{1,1} =  [5, 5 ,     2 ,      -0.120249695321353,-0.0680999719842103,0.369603821651986, 0.0167667444901888,-0.0681008604452745,0.503988037442802];
-dim_of_task{1,1}=[1;1;1]; 
-
-% secondary trajectory (Not used)
-traj_type_sec = {'none'};
-control_type_sec = {'rpy'};
-type_of_traj_sec = {'func'};
-geometric_path_sec = {'fixed'};
-time_law_sec = {'linear'};
-%parameters first chains
-geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
-dim_of_task_sec{1,1}={[1;1;1]};
-
 
 %% SCENARIO
 name_scenario = 'Icub_stand_up';
@@ -135,6 +113,34 @@ elseif strcmp(simulator_type{1},'icub_matlab')
     % sitting_pose: -10   0  0, -20  30  0  45  0, -20  30  0  45  0,  90    0   0  -90    -5.5  0,  90    0   0   -90   -5.5  0
     params.qfinal    = [-10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0,25.5   0   0  -18.5  -5.5  0]'*(pi/180);   
 end
+
+
+%%  REFERENCE PARAMETERS
+
+bot1.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
+
+deg = pi/180;
+% primary trajectory
+traj_type = {'cartesian'};
+control_type = {'x'};
+type_of_traj = {'func'};
+geometric_path = {'AdHocBalance'};
+time_law = {'none'};
+%parameters first chains
+geom_parameters{1,1} =  [5, 5 ,     2 , bot1.init_state.xCoMRef(1),bot1.init_state.xCoMRef(2),bot1.init_state.xCoMRef(3), 0.0167667444901888,-0.0681008604452745,0.503988037442802];
+dim_of_task{1,1}=[1;1;1]; 
+
+% secondary trajectory (Not used)
+traj_type_sec = {'none'};
+control_type_sec = {'rpy'};
+type_of_traj_sec = {'func'};
+geometric_path_sec = {'fixed'};
+time_law_sec = {'linear'};
+%parameters first chains
+geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
+dim_of_task_sec{1,1}={[1;1;1]};
+
+
 %% Parameters Dependant on the type of controller
 
 %%%EOF
@@ -196,7 +202,7 @@ switch CONTROLLERTYPE
         generation_of_starting_point = 'test'; % 'test':user defined by user_defined_start_action 'given':is redundant with test  'random': random starting point
         %init_parameters = 6;
        
-        user_defined_start_action =  [1,1,1,1,1,...
+        user_defined_start_action =  [1,1,1,1,1,...%[1,0.567862928329883,0.106280019314498,0.541134070833768,0.950510023348100,...
                                      -0.0263267253002408,-0.0254869318082244,-0.0194498966516130,-0.0157373298592839,-0.00593517271763315,...
                                       0.368342112777283,0.464653164439905,0.499966386192785,0.437924456216005,0.395176979556707]; 
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
