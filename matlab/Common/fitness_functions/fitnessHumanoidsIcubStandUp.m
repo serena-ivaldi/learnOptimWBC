@@ -25,18 +25,16 @@ function fit  = fitnessHumanoidsIcubStandUp(obj,output)
     effort   = 0;
      
     evaluate_constraints_index = 1;
-    
     % i reset the icub in the initial position and i ciompute the part of
     % param that is not updated when i run the simulation (no side effect)
-    iCub.SetWorldFrameiCub(param.qjInit,param.dqjInit,param.dx_bInit,param.omega_bInit,param.root_reference_link);
-    param.lfoot_ini = wbm_forwardKinematics('l_sole');
-    param.rfoot_ini = wbm_forwardKinematics('r_sole');
-    param.lu_leg_ini = wbm_forwardKinematics('l_upper_leg');
-    param.ru_leg_ini = wbm_forwardKinematics('r_upper_leg');
-    
-    param.contact_sym.state = param.init_contact_state;
-    param.feet_on_ground    = param.init_contact_state;
-    param.numContacts = param.contact_sym.UpdateContact();
+    if(~param.integrateWithFixedStep)
+       feval(obj.clean_function,obj);
+       iCub.SetWorldFrameiCub(param.qjInit,param.dqjInit,param.dx_bInit,param.omega_bInit,param.root_reference_link);
+       param.lfoot_ini = wbm_forwardKinematics('l_sole');
+       param.rfoot_ini = wbm_forwardKinematics('r_sole');
+       param.lu_leg_ini = wbm_forwardKinematics('l_upper_leg');
+       param.ru_leg_ini = wbm_forwardKinematics('r_upper_leg');
+    end
     
     
     for i=1:downsaple:size(t_all,1)

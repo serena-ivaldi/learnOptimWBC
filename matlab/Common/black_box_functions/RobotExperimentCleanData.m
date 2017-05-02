@@ -20,6 +20,10 @@ elseif(strcmp(obj.input_4_run{1},'icub_matlab'))
     % at the end of each iteration i need to reset rotation value in case
     % of numerical error
     wbm_resetWorldFrame();
+    % here i ahve to reset the contact state of the robot 
+    obj.input_4_run{1, 2}.contact_sym.state = obj.input_4_run{1, 2}.init_contact_state;
+    obj.input_4_run{1, 2}.feet_on_ground    = obj.input_4_run{1, 2}.init_contact_state;
+    obj.input_4_run{1, 2}.numContacts       = obj.input_4_run{1, 2}.contact_sym.UpdateContact();
     controller = obj.input_4_run{4};
 end
 controller.CleanTau();
