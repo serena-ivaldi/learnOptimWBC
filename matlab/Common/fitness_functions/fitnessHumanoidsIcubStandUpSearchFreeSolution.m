@@ -20,14 +20,14 @@ function fit  = fitnessHumanoidsIcubStandUpSearchFreeSolution(obj,output)
      
     evaluate_constraints_index = 1;
     
-     if(~param.integrateWithFixedStep)
-        feval(obj.clean_function,obj);
-        iCub.SetWorldFrameiCub(param.qjInit,param.dqjInit,param.dx_bInit,param.omega_bInit,param.root_reference_link);
-        param.lfoot_ini = wbm_forwardKinematics('l_sole');
-        param.rfoot_ini = wbm_forwardKinematics('r_sole');
-        param.lu_leg_ini = wbm_forwardKinematics('l_upper_leg');
-        param.ru_leg_ini = wbm_forwardKinematics('r_upper_leg');
-     end
+    if(~param.integrateWithFixedStep)
+       feval(obj.clean_function,obj);
+       iCub.SetWorldFrameiCub(param.qjInit,param.dqjInit,param.dx_bInit,param.omega_bInit,param.root_reference_link);
+       param.lfoot_ini = wbm_forwardKinematics('l_sole');
+       param.rfoot_ini = wbm_forwardKinematics('r_sole');
+       param.lu_leg_ini = wbm_forwardKinematics('l_upper_leg');
+       param.ru_leg_ini = wbm_forwardKinematics('r_upper_leg');
+    end
        
     
     for i=1:downsaple:size(t_all,1)
