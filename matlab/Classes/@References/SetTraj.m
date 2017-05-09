@@ -81,6 +81,24 @@ function SetTraj(obj,ind_subchain,ind_task)
           obj.n_of_parameter_per_regressor{ind_subchain,ind_task} = [ paramXregressor1, paramXregressor2, paramXregressor2];
           % number of basis x number of euclidean dimensions
           obj.parameter_dim{ind_subchain,ind_task}                = paramXregressor1 + paramXregressor2*2; % here 3 represents the number of rbf that im using inside and geom_param 1 number of basis
+     elseif(strcmp(obj.traj{ind_subchain,ind_task},'AdHocBalanceTwoTimeLaws'))
+          s = 0;
+          [p,pd,pdd,t,visualizatio_struct] = AdHocBalanceControllerTrajectoryTwoTimeLaws(s,obj.time_struct,obj.geom_parameters{ind_subchain,ind_task},obj.type_of_traj{ind_subchain,ind_task});
+          obj.trajectories{ind_subchain,ind_task}.p = p;
+          obj.trajectories{ind_subchain,ind_task}.pd = pd;
+          obj.trajectories{ind_subchain,ind_task}.pdd = pdd;
+          obj.trajectories{ind_subchain,ind_task}.time = t;
+          obj.time_law_and_derivatives.s{1} = visualizatio_struct.s_x;
+          obj.time_law_and_derivatives.sd{1} = visualizatio_struct.sd_x;
+          obj.time_law_and_derivatives.sdd{1} = visualizatio_struct.sdd_x;
+           obj.time_law_and_derivatives.s{2} = visualizatio_struct.s_z;
+          obj.time_law_and_derivatives.sd{2} = visualizatio_struct.sd_z;
+          obj.time_law_and_derivatives.sdd{2} = visualizatio_struct.sdd_z;
+          paramXregressor1                                         = obj.geom_parameters{ind_subchain,ind_task}(1);
+          paramXregressor2                                         = obj.geom_parameters{ind_subchain,ind_task}(2);
+          obj.n_of_parameter_per_regressor{ind_subchain,ind_task} = [ paramXregressor1, paramXregressor1, paramXregressor2, paramXregressor2];
+          % number of basis x number of euclidean dimensions
+          obj.parameter_dim{ind_subchain,ind_task}                = paramXregressor1*2 + paramXregressor2*2; % here 3 represents the number of rbf that im using inside and geom_param 1 number of basis
      elseif(strcmp(obj.traj{ind_subchain,ind_task},'fixed'))
          [p ,pd,pdd,t]=Fixedpoint(obj.geom_parameters{ind_subchain,ind_task});
          obj.trajectories{ind_subchain,ind_task}.p = p;

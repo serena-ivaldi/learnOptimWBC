@@ -3,9 +3,9 @@ close all
 clc
 
 %% test selection
-visualization_test = true;
+visualization_test   = false;
 visualize_trajectory = false;
-simulation         =false;
+simulation           = true;
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
@@ -151,16 +151,22 @@ else
     traj_type = {'cartesian'};
     control_type = {'x'};
     type_of_traj = {'func'};
-    geometric_path = {'AdHocBalance'};
+    geometric_path = {'AdHocBalanceTwoTimeLaws'};
     time_law = {'none'};
     
     %% i need to do that right here to give the right com starting position to the trajectory
     icub.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
     
+  %-0.0527124699846168
+    
     %parameters first chains
                          % #basis overlap                    starting com position                                          ending com position
-    geom_parameters{1,1} =  [5 , 5 ,     2 ,      icub.init_state.xCoMRef(1),icub.init_state.xCoMRef(2),icub.init_state.xCoMRef(3), 0.0167667444901888,-0.0681008604452745,0.503988037442802];% sitting_com:-0.120249695321353,-0.0680999719842103,0.369603821651986];
-                                                                                                                                                                  % stading_com:0.0167667444901888,-0.0681008604452745,0.503988037442802
+    geom_parameters{1,1} =  [5 , 5 ,     2 ,...
+                             -0.0527124699846168,-0.0680991417977443,0.318040664483625,...
+                             0.0167667444901888,-0.0681008604452745,0.503988037442802];% sitting_com:-0.120249695321353,-0.0680999719842103,0.369603821651986];
+    
+    
+                                                                                                                                                               
     %geom_parameters{1,2} = [-0.309 -0.469 0.581]; geom_parameters{1,3} = [120 116 90 0 0 0]* deg; geom_parameters{1,4} = [0 0 0 0 0 0 0];
     dim_of_task{1,1}=[1;1;1]; %dim_of_task{1,2}= [1;1;1]; dim_of_task{1,3}= ones(icub.n,1); %dim_of_task{1,4}=ones(icub.n,1);
 
@@ -173,12 +179,16 @@ else
     %parameters first chains
     geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
     dim_of_task_sec{1,1}={[1;1;1]};
+                                      
+                                         
+    numeric_reference_parameter{1,1}=[0.991221986571585,1.10045144464145,1.11440342040965,1.60499168353230,1.46748425429034,...
+                                      0.991221986571585,1.10045144464145,1.11440342040965,1.60499168353230,1.46748425429034,...
+                                     -0.02800863753444,-0.0278361490435566,-0.0146154272285895,0.0134390845173483,-0.00801177055714880,...
+                                     0.350954589796539,0.364988639468307,0.365816381480233,0.389461591950187,0.402856738959637]';
+%       numeric_reference_parameter{1,1}= [0.913076139695994,0.905282671038423,1.16925695886780,1.99897101764829,1.71346167883188,...
+%                                         -0.0252589378181975,-0.00171875837190067,0.0130805429422483,-0.0141668463935478,-0.0608148916683415,...
+%                                         0.468857336154740,0.433709756339607,0.442003448052191,0.482619376729153,0.360000000000000]';
 
-    
-    %numeric_reference_parameter{1,1}=[-2.6927 -1.9295 3.0885 2.1126 1.6506 -0.0113 -0.1107 -0.0148 0.0160 -0.0510 0.4647 0.4607 0.4194 0.4561 0.3719]'; 
-    numeric_reference_parameter{1,1}= [1.00221295849037,1.32683955804897,1.97154461906160,1.99989146483604,1.97647672670228,...
-                                      -0.0136480404763163,0.0151743474398875,0.0160000000000000,0.0143918791000284,-0.0203734103549212,...
-                                      0.381156363677889,0.462113853939222,0.490052115530968,0.477254183102340,0.394721787864584]'; 
     to_preprocess = false;
     
     if(to_preprocess)
@@ -340,48 +350,104 @@ else
     if(visualize_trajectory)
         %% visualize trajectory (time profile and geometric trajectory)
         s_ext = 0;
-        [p,pd,pdd,time,obj4visual]=AdHocBalanceControllerTrajectory(s_ext,time_struct,geom_parameters{1,1},'func');
+        if(strcmp(geometric_path{1},'AdHocBalance'))
+            [p,pd,pdd,time,obj4visual] = AdHocBalanceControllerTrajectory(s_ext,time_struct,geom_parameters{1,1},'func');
+        else
+            [p,pd,pdd,time,obj4visual] = AdHocBalanceControllerTrajectoryTwoTimeLaws(s_ext,time_struct,geom_parameters{1,1},'func');
+        end
         time_vec = time_struct.ti:time_struct.step:time_struct.tf;
+        if(strcmp(geometric_path{1},'AdHocBalance'))
+            s   = zeros(length(time_vec),1);
+            sd  = zeros(length(time_vec),1);
+            sdd = zeros(length(time_vec),1);
+            p_v = zeros(length(time_vec),3);
+            index = 1;
+            for t=time_struct.ti:time_struct.step:time_struct.tf
+                 p_v(index,:) = obj4visual.p_real(t,numeric_reference_parameter{1,1})';
+                 s(index)     = obj4visual.s(t,numeric_reference_parameter{1,1});
+                 sd(index)    = obj4visual.sd(t,numeric_reference_parameter{1,1});
+                 sdd(index)   = obj4visual.sdd(t,numeric_reference_parameter{1,1});
+                 index = index + 1;
+            end
+            transformed_time_vec = 0:0.001:1;
+            p_test = zeros(length(transformed_time_vec),3);
+            index = 1;
+            for t = 0:0.001:1
+            p_test(index,:) = obj4visual.p_test(t,numeric_reference_parameter{1,1})';
+            index = index + 1;
+            end
 
-        s   = zeros(length(time_vec),1);
-        sd  = zeros(length(time_vec),1);
-        sdd = zeros(length(time_vec),1);
-        p_v = zeros(length(time_vec),3);
-        index = 1;
-        for t=time_struct.ti:time_struct.step:time_struct.tf
-             p_v(index,:) = obj4visual.p_real(t,numeric_reference_parameter{1,1})';
-             s(index)     = obj4visual.s(t,numeric_reference_parameter{1,1});
-             sd(index)    = obj4visual.sd(t,numeric_reference_parameter{1,1});
-             sdd(index)   = obj4visual.sdd(t,numeric_reference_parameter{1,1});
-             index = index + 1;
+            figure
+            plot(time_vec,p_v(:,1))
+            figure
+            plot(time_vec,p_v(:,3))
+            %figure
+            %plot(p_v(:,1),p_v(:,3));
+            figure
+            plot(transformed_time_vec,p_test(:,1))
+            figure
+            plot(transformed_time_vec,p_test(:,3))
+            %figure
+            %plot(p_real(:,1),p_real(:,3));   
+            figure
+            plot(time_vec,s);
+            figure
+            plot(time_vec,sd);
+            figure
+            plot(time_vec,sdd);
+        else
+            s_x   = zeros(length(time_vec),1);
+            sd_x  = zeros(length(time_vec),1);
+            sdd_x = zeros(length(time_vec),1);
+            s_z   = zeros(length(time_vec),1);
+            sd_z  = zeros(length(time_vec),1);
+            sdd_z = zeros(length(time_vec),1);
+            p_v = zeros(length(time_vec),3);
+            index = 1;
+            for t=time_struct.ti:time_struct.step:time_struct.tf
+                 p_v(index,:) = obj4visual.p_real(t,numeric_reference_parameter{1,1})';
+                 s_x(index)     = obj4visual.s_x(t,numeric_reference_parameter{1,1});
+                 sd_x(index)    = obj4visual.sd_x(t,numeric_reference_parameter{1,1});
+                 sdd_x(index)   = obj4visual.sdd_x(t,numeric_reference_parameter{1,1});
+                 s_z(index)     = obj4visual.s_z(t,numeric_reference_parameter{1,1});
+                 sd_z(index)    = obj4visual.sd_z(t,numeric_reference_parameter{1,1});
+                 sdd_z(index)   = obj4visual.sdd_z(t,numeric_reference_parameter{1,1});
+                 index = index + 1;
+            end
+            transformed_time_vec = 0:0.001:1;
+            p_test = zeros(length(transformed_time_vec),3);
+            index = 1;
+            for t = 0:0.001:1
+            p_test(index,:) = obj4visual.p_test(t,numeric_reference_parameter{1,1})';
+            index = index + 1;
+            end
+
+            figure
+            plot(time_vec,p_v(:,1))
+            figure
+            plot(time_vec,p_v(:,3))
+            %figure
+            %plot(p_v(:,1),p_v(:,3));
+            figure
+            plot(transformed_time_vec,p_test(:,1))
+            figure
+            plot(transformed_time_vec,p_test(:,3))
+            %figure
+            %plot(p_real(:,1),p_real(:,3));   
+            figure
+            plot(time_vec,s_x);
+            figure
+            plot(time_vec,sd_x);
+            figure
+            plot(time_vec,sdd_x);
+            figure
+            plot(time_vec,s_z);
+            figure
+            plot(time_vec,sd_z);
+            figure
+            plot(time_vec,sdd_z);
+            
         end
-        transformed_time_vec = 0:0.001:1;
-        p_test = zeros(length(transformed_time_vec),3);
-        index = 1;
-        for t = 0:0.001:1
-        p_test(index,:) = obj4visual.p_test(t,numeric_reference_parameter{1,1})';
-        index = index + 1;
-        end
-
-
-        figure
-        plot(time_vec,p_v(:,1))
-        figure
-        plot(time_vec,p_v(:,3))
-        %figure
-        %plot(p_v(:,1),p_v(:,3));
-        figure
-        plot(transformed_time_vec,p_test(:,1))
-        figure
-        plot(transformed_time_vec,p_test(:,3))
-        %figure
-        %plot(p_real(:,1),p_real(:,3));   
-        figure
-        plot(time_vec,s);
-        figure
-        plot(time_vec,sd);
-        figure
-        plot(time_vec,sdd);
     end
     
     %% debugging preprocessor
