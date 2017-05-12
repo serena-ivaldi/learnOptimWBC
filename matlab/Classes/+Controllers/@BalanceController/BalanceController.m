@@ -41,16 +41,20 @@ classdef  BalanceController < Controllers.AbstractController
          %% Gains for two feet on ground TODO move the gains out of the controller
          if sum(varargin{1}.feet_on_ground(1:2)) == 2
             % CoM and angular momentum gains
-            gainsPCoM           = diag([20 25 20]);%diag([100 105 100]);%diag([40 45 40]);
+            gainsPCoM           = diag([40 45 40]);%diag([100 105 100]);%diag([40 45 40]);
             gainsDCoM           = 2*sqrt(gainsPCoM);
             gainsPAngMom        = diag([1 5 1]);
             gainsDAngMom        = 2*sqrt(gainsPAngMom);
 
             % impedances acting in the null space of the desired contact forces
-            impTorso            = [ 20  30  20];
-            impArms             = [ 10  10  10   5   5];
-            impLeftLeg          = [ 35  40  10  30   5  10];
-            impRightLeg         = [ 35  40  10  30   5  10];
+%             impTorso            = [ 20  30  20];
+%             impArms             = [ 10  10  10   5   5];
+%             impLeftLeg          = [ 35  40  10  30   5  10];
+%             impRightLeg         = [ 35  40  10  30   5  10];
+            impTorso            = [ 50  60  50];
+            impArms             = [  20  20  20   10   10];
+            impLeftLeg          = [ 55  70  30  50   25  30];
+            impRightLeg         = [ 55  70  30  50   25  30];
          end
 
          %% Parameters for one foot on ground
@@ -427,11 +431,12 @@ classdef  BalanceController < Controllers.AbstractController
       function  desired_x_dx_ddx_CoM = myTrajectoryGenerator(obj,t,xCoMInit,xComfinal)
                 % in this way i specify in a fixed way the final value and
                 % the starting value
-                if(t<=2)
+                if(t<=10)
+                      [xCoMDes,dxCoMDes,ddxCoMDes]=obj.references.GetTraj(1,1,0);
 %                     xCoMDes     = xCoMInit;
-%                     dxCoMDes    = zeros(size(xCoMInit));
-%                     ddxCoMDes   = zeros(size(xCoMInit));
-                    [xCoMDes,dxCoMDes,ddxCoMDes]=obj.references.GetTraj(1,1,0);
+                     dxCoMDes    = zeros(size(xCoMInit));
+                     ddxCoMDes   = zeros(size(xCoMInit));
+                    %
                 else
                     [xCoMDes,dxCoMDes,ddxCoMDes]=obj.references.GetTraj(1,1,t);
                 end

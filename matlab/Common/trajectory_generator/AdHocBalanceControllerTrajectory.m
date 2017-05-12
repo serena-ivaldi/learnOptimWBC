@@ -148,12 +148,16 @@ function [p,pd,pdd,time,obj4visual] = AdHocBalanceControllerTrajectory(s_ext,tim
        pd  = matlabFunction(pd,'vars', {t,theta});
        pdd = matlabFunction(pdd,'vars', {t,theta});
    else
-       path               = which('find_traj_generator');
-       [pathstr,name,ext] = fileparts(path); 
-       % transform the expression in matlab function of t 
-       p   = matlabFunction(p,'vars', {t,theta},pathstr,'p');
-       pd  = matlabFunction(pd,'vars', {t,theta},pathstr,'pd');
-       pdd = matlabFunction(pdd,'vars', {t,theta},pathstr,'pdd');
+       if(varargin{1})
+           path               = which('find_traj_generator');
+           [pathstr,name,ext] = fileparts(path); 
+           % transform the expression in matlab function of t 
+           p   = matlabFunction(p,'vars', {t,theta},'File',strcat(pathstr,'/p.m'));
+           pd  = matlabFunction(pd,'vars', {t,theta},'File',strcat(pathstr,'/pd.m'));
+           pdd = matlabFunction(pdd,'vars', {t,theta},'File',strcat(pathstr,'/pdd.m'));
+       else
+           error('the extra input (varargin) is not true. fix it!')
+       end
    end
 
    time = 0;

@@ -108,7 +108,7 @@ params.xComfinal = [-0.120249695321353,-0.0680999719842103,0.369603821651986]';
 % standing_pose: -10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0, 25.5   0   0  -18.5  -5.5  0
 % sitting_pose:  -10   0  0, -20  30  0  45  0, -20  30  0  45  0,  90    0   0  -90    -5.5  0,  90    0   0   -90   -5.5  0
 params.qfinal    = [-10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0, 25.5   0   0  -18.5  -5.5  0]'*(pi/180);   
-
+%params.qfinal = [10   0  0 -20  30  0  45  0 -20  30  0  45  0 90   0   0  -90  -10.5  0 90   0   0  -90  -10.5  0]'*(pi/180);
 %% Visualization
 if (visualization_test)
     icub.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
@@ -151,7 +151,7 @@ else
     traj_type = {'cartesian'};
     control_type = {'x'};
     type_of_traj = {'func'};
-    geometric_path = {'AdHocBalanceTwoTimeLaws'};
+    geometric_path = {'AdHocBalance'};
     time_law = {'none'};
     
     %% i need to do that right here to give the right com starting position to the trajectory
@@ -162,7 +162,7 @@ else
     %parameters first chains
                          % #basis overlap                    starting com position                                          ending com position
     geom_parameters{1,1} =  [5 , 5 ,     2 ,...
-                             -0.0527124699846168,-0.0680991417977443,0.318040664483625,...
+                             0.0167667444902538,-0.0681008604408596,0.503988037443396,...
                              0.0167667444901888,-0.0681008604452745,0.503988037442802];% sitting_com:-0.120249695321353,-0.0680999719842103,0.369603821651986];
     
     
@@ -182,7 +182,6 @@ else
                                       
                                          
     numeric_reference_parameter{1,1}=[0.991221986571585,1.10045144464145,1.11440342040965,1.60499168353230,1.46748425429034,...
-                                      0.991221986571585,1.10045144464145,1.11440342040965,1.60499168353230,1.46748425429034,...
                                      -0.02800863753444,-0.0278361490435566,-0.0146154272285895,0.0134390845173483,-0.00801177055714880,...
                                      0.350954589796539,0.364988639468307,0.365816381480233,0.389461591950187,0.402856738959637]';
 %       numeric_reference_parameter{1,1}= [0.913076139695994,0.905282671038423,1.16925695886780,1.99897101764829,1.71346167883188,...
