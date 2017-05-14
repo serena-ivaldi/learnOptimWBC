@@ -48,8 +48,8 @@ if strcmp(simulator_type{1},'rbt')
 elseif strcmp(simulator_type{1},'icub_matlab') 
     %% here I build to different structure one for the controller and one for the simulator
     %% to manage contacts
-    params.init_contact_state = [1 1 1 1]; 
-    names         =  {'l_sole','r_sole','l_upper_leg','r_upper_leg'};   
+    params.init_contact_state = [1 1 0 0]; 
+    names         =  {'l_sole','r_sole'};   
     params.contact_sym = Contacts(params.init_contact_state,names);
 
 
@@ -100,17 +100,20 @@ elseif strcmp(simulator_type{1},'icub_matlab')
         params.massCorr = 0;
     end
     %% other parameters
-    params.use_QPsolver = 0;                          %either 0 or 1
+    params.use_QPsolver = 1;                          %either 0 or 1
     params.pinv_tol           = 1e-8;
     params.pinv_damp          = 5e-6;
     params.reg_HessianQP      = 1e-3;
     % feet size
     params.footSize  = [0.07 0.03];    % foot_xlength, foot_ylength 
+    params.footSizeForOpitmization = [-0.07 0.07;       % xMin, xMax
+                                     -0.03 0.03];      % yMin, yMax
+
     %% parameters for controller and fitness (fitnessHumanoidsIcubStandUp)
     params.xComfinal = [0.0167667444901888;-0.0681008604452745;0.503988037442802];
     %params.xComfinal = [-0.120249695321353,-0.0680999719842103,0.369603821651986]';
     % standing_pose: -10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0, 25.5   0   0  -18.5  -5.5  0
-    % sitting_pose: -10   0  0, -20  30  0  45  0, -20  30  0  45  0,  90    0   0  -90    -5.5  0,  90    0   0   -90   -5.5  0
+    % sitting_pose: 10   0  0, -20  30  0  45  0, -20  30  0  45  0,  90    0   0  -90    -5.5  0,  90    0   0   -90   -5.5  0
     params.qfinal    = [-10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0,25.5   0   0  -18.5  -5.5  0]'*(pi/180);   
 end
 
@@ -127,7 +130,9 @@ type_of_traj = {'func'};
 geometric_path = {'AdHocBalance'};
 time_law = {'none'};
 %parameters first chains
-geom_parameters{1,1} =  [5, 5 ,     2 , bot1.init_state.xCoMRef(1),bot1.init_state.xCoMRef(2),bot1.init_state.xCoMRef(3), 0.0167667444901888,-0.0681008604452745,0.503988037442802];
+geom_parameters{1,1} =  [5, 5 ,     2 ,...
+                        bot1.init_state.xCoMRef(1),bot1.init_state.xCoMRef(2),bot1.init_state.xCoMRef(3),...
+                        0.0167667444901888,-0.0681008604452745,0.503988037442802];  
 dim_of_task{1,1}=[1;1;1]; 
 
 % secondary trajectory (Not used)
@@ -202,11 +207,11 @@ switch CONTROLLERTYPE
         generation_of_starting_point = 'test'; % 'test':user defined by user_defined_start_action 'given':is redundant with test  'random': random starting point
         %init_parameters = 6;
        
-        user_defined_start_action =  [1,1,1,1,1,...%[1,0.567862928329883,0.106280019314498,0.541134070833768,0.950510023348100,...
-                                     -0.0263267253002408,-0.0254869318082244,-0.0194498966516130,-0.0157373298592839,-0.00593517271763315,...
-                                      0.368342112777283,0.464653164439905,0.499966386192785,0.437924456216005,0.395176979556707]; 
+        user_defined_start_action =  [0.1,0.2,1.11440342040965,1.60499168353230,1.46748425429034,...
+                                     -0.02800863753444,-0.0278361490435566,-0.0146154272285895,0.0134390845173483,-0.00801177055714880,...
+                                     0.350954589796539,0.364988639468307,0.365816381480233,0.389461591950187,0.402856738959637]; 
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-        niter = 500;  %number of generations
+        niter = 700;  %number of generations
         %cmaes_value_range = [-14 , 14];  % boudn that define the search space
         cmaes_value_range{1} = [ 0, 0, 0, 0, 0, -0.12,-0.12,-0.12,-0.12,-0.12,  0.36,0.36,0.36,0.36,0.36 ];  % lower bound that define the search space
         cmaes_value_range{2} = [ 2, 2, 2, 2, 2,  0.016,0.016,0.016,0.016,0.016, 0.50,0.50,0.50,0.50,0.50];  % upper bound that define the search space

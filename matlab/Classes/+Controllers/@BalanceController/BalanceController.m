@@ -51,10 +51,10 @@ classdef  BalanceController < Controllers.AbstractController
 %             impArms             = [ 10  10  10   5   5];
 %             impLeftLeg          = [ 35  40  10  30   5  10];
 %             impRightLeg         = [ 35  40  10  30   5  10];
-            impTorso            = [ 50  60  50];
-            impArms             = [  20  20  20   10   10];
-            impLeftLeg          = [ 55  70  30  50   25  30];
-            impRightLeg         = [ 55  70  30  50   25  30];
+            impTorso            = [ 20  30  20];
+            impArms             = [  10  10  10   5   5];
+            impLeftLeg          = [ 35  40  10  30   5  10];
+            impRightLeg         = [ 35  40  10  30   5  10];
          end
 
          %% Parameters for one foot on ground
@@ -234,6 +234,8 @@ classdef  BalanceController < Controllers.AbstractController
          % feet velocity, CoM velocity
          FORKINEMATICS.xCoM               = xCoM;
          FORKINEMATICS.dxCoM              = dxCoM;
+         FORKINEMATICS.poseLFoot_qt       = poseLFoot_qt;
+          FORKINEMATICS.poseRFoot_qt       = poseRFoot_qt;
          FORKINEMATICS.poseRFoot_ang      = poseRFoot_ang;
          FORKINEMATICS.poseLFoot_ang      = poseLFoot_ang;
          FORKINEMATICS.poseLULeg_ang   = poseLULeg_ang;
@@ -431,7 +433,7 @@ classdef  BalanceController < Controllers.AbstractController
       function  desired_x_dx_ddx_CoM = myTrajectoryGenerator(obj,t,xCoMInit,xComfinal)
                 % in this way i specify in a fixed way the final value and
                 % the starting value
-                if(t<=10)
+                if(t<=0)
                       [xCoMDes,dxCoMDes,ddxCoMDes]=obj.references.GetTraj(1,1,0);
 %                     xCoMDes     = xCoMInit;
                      dxCoMDes    = zeros(size(xCoMInit));
