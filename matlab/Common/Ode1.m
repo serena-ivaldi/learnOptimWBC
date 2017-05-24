@@ -41,13 +41,13 @@ end
 
 
 
-try
+%try
   f0 = feval(odefun,tspan(1),y0,varargin{:});
-catch
-  disp('Unable to evaluate the ODEFUN at t0,y0. ')  
-  msg = 'Unable to evaluate the ODEFUN at t0,y0. ';
-  error(msg);  
-end  
+% catch
+%   disp('Unable to evaluate the ODEFUN at t0,y0. ')  
+%   msg = 'Unable to evaluate the ODEFUN at t0,y0. ';
+%   error(msg);  
+% end  
 
 y0 = y0(:);   % Make a column vector.
 if ~isequal(size(y0),size(f0))

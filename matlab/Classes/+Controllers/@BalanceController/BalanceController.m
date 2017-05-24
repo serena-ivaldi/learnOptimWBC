@@ -436,8 +436,8 @@ classdef  BalanceController < Controllers.AbstractController
                 if(t<=0)
                       [xCoMDes,dxCoMDes,ddxCoMDes]=obj.references.GetTraj(1,1,0);
 %                     xCoMDes     = xCoMInit;
-                     dxCoMDes    = zeros(size(xCoMInit));
-                     ddxCoMDes   = zeros(size(xCoMInit));
+                      %dxCoMDes    = zeros(size(xCoMInit));
+                      %ddxCoMDes   = zeros(size(xCoMInit));
                     %
                 else
                     [xCoMDes,dxCoMDes,ddxCoMDes]=obj.references.GetTraj(1,1,t);

@@ -1,0 +1,82 @@
+#--------------------------- Tool Specifications -------------------------
+#
+# Modify the following macros to reflect the tools you wish to use for
+# compiling and linking your code.
+#
+CC = /home/vale/MATLAB/R2013a/bin/mex
+LD = $(CC)
+ 
+MACHINE     = torqueBalancing2012b
+TARGET      = sfun
+CHART_SRCS 	= c1_torqueBalancing2012b.c c2_torqueBalancing2012b.c c3_torqueBalancing2012b.c c4_torqueBalancing2012b.c c5_torqueBalancing2012b.c c6_torqueBalancing2012b.c c7_torqueBalancing2012b.c c8_torqueBalancing2012b.c c9_torqueBalancing2012b.c c10_torqueBalancing2012b.c c11_torqueBalancing2012b.c c12_torqueBalancing2012b.c c13_torqueBalancing2012b.c c14_torqueBalancing2012b.c c15_torqueBalancing2012b.c c16_torqueBalancing2012b.c c17_torqueBalancing2012b.c c18_torqueBalancing2012b.c c19_torqueBalancing2012b.c c20_torqueBalancing2012b.c c21_torqueBalancing2012b.c c22_torqueBalancing2012b.c c23_torqueBalancing2012b.c c24_torqueBalancing2012b.c c25_torqueBalancing2012b.c c26_torqueBalancing2012b.c c27_torqueBalancing2012b.c c28_torqueBalancing2012b.c c29_torqueBalancing2012b.c c30_torqueBalancing2012b.c c31_torqueBalancing2012b.c c32_torqueBalancing2012b.c c33_torqueBalancing2012b.c c34_torqueBalancing2012b.c c35_torqueBalancing2012b.c c36_torqueBalancing2012b.c c37_torqueBalancing2012b.c c38_torqueBalancing2012b.c c39_torqueBalancing2012b.c c40_torqueBalancing2012b.c c41_torqueBalancing2012b.c c42_torqueBalancing2012b.c
+MACHINE_SRC	= torqueBalancing2012b_sfun.c
+MACHINE_REG = torqueBalancing2012b_sfun_registry.c
+MAKEFILE    = torqueBalancing2012b_sfun.mku
+MATLAB_ROOT	= /home/vale/MATLAB/R2013a
+BUILDARGS   = 
+#------------------------------ Include/Lib Path ------------------------------
+ 
+USER_INCLUDES = 
+AUX_INCLUDES = 
+ML_INCLUDES     = -I/home/vale/MATLAB/R2013a/extern/include
+SL_INCLUDES     = -I/home/vale/MATLAB/R2013a/simulink/include
+SF_INCLUDES     = -I/home/vale/MATLAB/R2013a/stateflow/c/mex/include -I/home/vale/MATLAB/R2013a/stateflow/c/debugger/include
+
+THIRD_PARTY_INCLUDES = 
+
+INCLUDE_PATH = $(USER_INCLUDES) $(AUX_INCLUDES) $(MATLAB_INCLUDES) $(SF_INCLUDES) $(COMPILER_INCLUDES) $(THIRD_PARTY_INCLUDES)
+ 
+#----------------- Compiler and Linker Options --------------------------------
+ 
+# Optimization Options
+ 
+CC_OPTS = -O 
+CPP_REQ_DEFINES = -DMATLAB_MEX_FILE
+ 
+# Uncomment this line to move warning level to W4
+# cflags = $(cflags:W3=W4)
+CFLAGS = $(CC_OPTS) $(CPP_REQ_DEFINES) $(INCLUDE_PATH)
+ 
+LDFLAGS =  
+ 
+AUXLDFLAGS = 
+#----------------------------- Source Files -----------------------------------
+ 
+REQ_SRCS  = $(MACHINE_SRC) $(MACHINE_REG) $(CHART_SRCS)
+
+USER_ABS_OBJS =
+
+AUX_ABS_OBJS =
+REQ_OBJS = $(REQ_SRCS:.cpp=.o)
+REQ_OBJS2 = $(REQ_OBJS:.c=.o)
+OBJS = $(REQ_OBJS2) $(USER_ABS_OBJS) $(AUX_ABS_OBJS)
+OBJLIST_FILE = torqueBalancing2012b_sfun.mol
+SFCLIB = /home/vale/MATLAB/R2013a/stateflow/c/mex/lib/glnxa64/sfc_mex.a /home/vale/MATLAB/R2013a/stateflow/c/debugger/lib/glnxa64/sfc_debug.a 
+AUX_LNK_OBJS = 
+USER_LIBS = 
+LINK_MACHINE_LIBS = /home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/slprj/_sfprj/torqueBalancing2012b/WBToolboxLibrary/sfun/src/WBToolboxLibrary_sfun.a 
+TMWLIB = -L/home/vale/MATLAB/R2013a/bin/glnxa64 -lfixedpoint -L/home/vale/MATLAB/R2013a/bin/glnxa64 -lut -L/home/vale/MATLAB/R2013a/bin/glnxa64 -lemlrt -L/home/vale/MATLAB/R2013a/bin/glnxa64 -lmwmathutil -L/home/vale/MATLAB/R2013a/bin/glnxa64 -lmwblas -L/home/vale/MATLAB/R2013a/bin/glnxa64 -lippmwipt 
+PARLIB = 
+MSGLIB =
+  MAPCSF = /home/vale/MATLAB/R2013a/tools/glnxa64/mapcsf
+   # RUN_MAPCSF_ON_UNIX is defined only if MAPCSF exists on this platform.
+   ifneq ($(wildcard $(MAPCSF)),) # run MAPCSF if it exists on this platform
+      RUN_MAPCSF_ON_UNIX =  /home/vale/MATLAB/R2013a/tools/glnxa64/mapcsf $@
+   endif
+THIRD_PARTY_LIBS = 
+ 
+#--------------------------------- Rules --------------------------------------
+ 
+MEX_FILE_NAME = $(MACHINE)_$(TARGET).mexa64
+ 
+ $(MEX_FILE_NAME): $(MAKEFILE) $(OBJS) $(SFCLIB) $(AUX_LNK_OBJS) $(USER_LIBS)
+	@echo ### Linking ...
+	$(CC) -silent LDFLAGS="\$$LDFLAGS $(AUXLDFLAGS)" -output $(MEX_FILE_NAME) $(OBJS) $(AUX_LNK_OBJS) $(USER_LIBS) $(LINK_MACHINE_LIBS) $(SFCLIB) $(TMWLIB) $(PARLIB) $(IPPLIB) $(THIRD_PARTY_LIBS) $(MSGLIB)
+	$(RUN_MAPCSF_ON_UNIX)
+
+%.o :	%.c
+	$(CC) -c $(CFLAGS) $<
+
+%.o :	%.cpp
+	$(CC) -c $(CFLAGS) $<
+

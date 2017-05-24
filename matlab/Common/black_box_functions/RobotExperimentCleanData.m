@@ -25,6 +25,8 @@ elseif(strcmp(obj.input_4_run{1},'icub_matlab'))
     obj.input_4_run{1, 2}.feet_on_ground    = obj.input_4_run{1, 2}.init_contact_state;
     obj.input_4_run{1, 2}.numContacts       = obj.input_4_run{1, 2}.contact_sym.UpdateContact();
     controller = obj.input_4_run{4};
+elseif(strcmp(obj.input_4_run{1},'icub_matlab_sim'))
+    system('gz world -r')
 end
 controller.CleanTau();
 controller.CleanTime();

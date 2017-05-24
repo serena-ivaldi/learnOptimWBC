@@ -35,7 +35,7 @@ classdef iCub < handle
         %% initialization functions
         function obj = iCub(model)
             if(strcmp(model,'icubGazeboSim'))
-                obj.model_name = 'model';
+                obj.model_name = 'modelMatlab';
                 %obj.active_floating_base = true;
                 % Initialize the mexWholeBodyModel
                 wbm_modelInitialize('icubGazeboSim');
@@ -46,7 +46,41 @@ classdef iCub < handle
                                   'r_shoulder_yaw','r_elbow','r_wrist_prosup','l_hip_pitch','l_hip_roll','l_hip_yaw','l_knee','l_ankle_pitch','l_ankle_roll','r_hip_pitch','r_hip_roll',...
                                   'r_hip_yaw','r_knee','r_ankle_pitch','r_ankle_roll'};
                               
-                model = strcat(obj.model_name,'.urdf');
+                model = strcat('model.urdf');
+                path = which(model);              
+                scheme = xml2struct(path);
+                obj.UBjointLimit = zeros(1,obj.ndof);
+                obj.LBjointLimit = zeros(1,obj.ndof);
+                obj.effortLimit  = zeros(1,obj.ndof);
+                iii = 1;
+                for i = 1:length(scheme.robot.link)
+                    if(~strcmp(scheme.robot.link{i}.Attributes.name,'base_link'))
+                        obj.linkList{iii} = scheme.robot.link{i}.Attributes.name;
+                        iii = iii + 1;
+                    end
+                end
+                for i = 1:length(scheme.robot.joint)
+                    obj.jointList{i} = scheme.robot.joint{i};
+                    current_joint = scheme.robot.joint{i}.Attributes.name;
+                    index = strcmp(current_joint, obj.revoluteJointList);
+                    if  ( sum(index) )
+                        obj.UBjointLimit(index) =  str2double(scheme.robot.joint{i}.limit.Attributes.upper);
+                        obj.LBjointLimit(index) =  str2double(scheme.robot.joint{i}.limit.Attributes.lower);
+                        obj.effortLimit(index)  =  str2double(scheme.robot.joint{i}.limit.Attributes.effort);
+                    end
+                end              
+            elseif(strcmp(model,'icubGazeboSimSimulink'))
+                obj.model_name = 'modelSimulink';
+                % Initialize the mexWholeBodyModel
+                %wbm_modelInitialize('icubGazeboSim');
+                %wbm_resetWorldFrame();
+                obj.ndof = 23; 
+                % fixed joint list for icubGazeboSim
+                obj.revoluteJointList = {'torso_pitch','torso_roll','torso_yaw','l_shoulder_pitch','l_shoulder_roll','l_shoulder_yaw','l_elbow','r_shoulder_pitch','r_shoulder_roll',...
+                                  'r_shoulder_yaw','r_elbow','l_hip_pitch','l_hip_roll','l_hip_yaw','l_knee','l_ankle_pitch','l_ankle_roll','r_hip_pitch','r_hip_roll',...
+                                  'r_hip_yaw','r_knee','r_ankle_pitch','r_ankle_roll'};
+                              
+                model = strcat('model.urdf');
                 path = which(model);              
                 scheme = xml2struct(path);
                 obj.UBjointLimit = zeros(1,obj.ndof);
@@ -70,7 +104,7 @@ classdef iCub < handle
                     end
                 end              
             else
-                obj.model_name = model;
+                obj.model_name = 'modelMatlab';
                 model = strcat(model,'.urdf');
                 path = which(model);
                 wbm_modelInitializeFromURDF(path);
@@ -110,33 +144,58 @@ classdef iCub < handle
             obj.setCamera        = [0.4,0,0.5];%[0.4,0,0.5];
             obj.mdlLdr           = iDynTree.ModelLoader();
             obj.consideredJoints = iDynTree.StringVector();
-
-            obj.consideredJoints.push_back('torso_pitch');
-            obj.consideredJoints.push_back('torso_roll');
-            obj.consideredJoints.push_back('torso_yaw');
-            obj.consideredJoints.push_back('l_shoulder_pitch');
-            obj.consideredJoints.push_back('l_shoulder_roll');
-            obj.consideredJoints.push_back('l_shoulder_yaw');
-            obj.consideredJoints.push_back('l_elbow');
-            obj.consideredJoints.push_back('l_wrist_prosup');
-            obj.consideredJoints.push_back('r_shoulder_pitch');
-            obj.consideredJoints.push_back('r_shoulder_roll');
-            obj.consideredJoints.push_back('r_shoulder_yaw');
-            obj.consideredJoints.push_back('r_elbow');
-            obj.consideredJoints.push_back('r_wrist_prosup');
-            obj.consideredJoints.push_back('l_hip_pitch');
-            obj.consideredJoints.push_back('l_hip_roll');
-            obj.consideredJoints.push_back('l_hip_yaw');
-            obj.consideredJoints.push_back('l_knee');
-            obj.consideredJoints.push_back('l_ankle_pitch');
-            obj.consideredJoints.push_back('l_ankle_roll');
-            obj.consideredJoints.push_back('r_hip_pitch');
-            obj.consideredJoints.push_back('r_hip_roll');
-            obj.consideredJoints.push_back('r_hip_yaw');
-            obj.consideredJoints.push_back('r_knee');
-            obj.consideredJoints.push_back('r_ankle_pitch');
-            obj.consideredJoints.push_back('r_ankle_roll');
             
+            if(strcmp( obj.model_name ,'icubGazeboSim'))
+                obj.consideredJoints.push_back('torso_pitch');
+                obj.consideredJoints.push_back('torso_roll');
+                obj.consideredJoints.push_back('torso_yaw');
+                obj.consideredJoints.push_back('l_shoulder_pitch');
+                obj.consideredJoints.push_back('l_shoulder_roll');
+                obj.consideredJoints.push_back('l_shoulder_yaw');
+                obj.consideredJoints.push_back('l_elbow');
+                obj.consideredJoints.push_back('l_wrist_prosup');
+                obj.consideredJoints.push_back('r_shoulder_pitch');
+                obj.consideredJoints.push_back('r_shoulder_roll');
+                obj.consideredJoints.push_back('r_shoulder_yaw');
+                obj.consideredJoints.push_back('r_elbow');
+                obj.consideredJoints.push_back('r_wrist_prosup');
+                obj.consideredJoints.push_back('l_hip_pitch');
+                obj.consideredJoints.push_back('l_hip_roll');
+                obj.consideredJoints.push_back('l_hip_yaw');
+                obj.consideredJoints.push_back('l_knee');
+                obj.consideredJoints.push_back('l_ankle_pitch');
+                obj.consideredJoints.push_back('l_ankle_roll');
+                obj.consideredJoints.push_back('r_hip_pitch');
+                obj.consideredJoints.push_back('r_hip_roll');
+                obj.consideredJoints.push_back('r_hip_yaw');
+                obj.consideredJoints.push_back('r_knee');
+                obj.consideredJoints.push_back('r_ankle_pitch');
+                obj.consideredJoints.push_back('r_ankle_roll');
+            elseif(strcmp( obj.model_name ,'icubGazeboSimSimulink'))
+                obj.consideredJoints.push_back('torso_pitch');
+                obj.consideredJoints.push_back('torso_roll');
+                obj.consideredJoints.push_back('torso_yaw');
+                obj.consideredJoints.push_back('l_shoulder_pitch');
+                obj.consideredJoints.push_back('l_shoulder_roll');
+                obj.consideredJoints.push_back('l_shoulder_yaw');
+                obj.consideredJoints.push_back('l_elbow');
+                obj.consideredJoints.push_back('r_shoulder_pitch');
+                obj.consideredJoints.push_back('r_shoulder_roll');
+                obj.consideredJoints.push_back('r_shoulder_yaw');
+                obj.consideredJoints.push_back('r_elbow');
+                obj.consideredJoints.push_back('l_hip_pitch');
+                obj.consideredJoints.push_back('l_hip_roll');
+                obj.consideredJoints.push_back('l_hip_yaw');
+                obj.consideredJoints.push_back('l_knee');
+                obj.consideredJoints.push_back('l_ankle_pitch');
+                obj.consideredJoints.push_back('l_ankle_roll');
+                obj.consideredJoints.push_back('r_hip_pitch');
+                obj.consideredJoints.push_back('r_hip_roll');
+                obj.consideredJoints.push_back('r_hip_yaw');
+                obj.consideredJoints.push_back('r_knee');
+                obj.consideredJoints.push_back('r_ankle_pitch');
+                obj.consideredJoints.push_back('r_ankle_roll');
+            end
             urdf_model_name = 'model.urdf';
             allpath = which('Icub_model_placeholder.m');
             path =fileparts(allpath);
@@ -149,30 +208,57 @@ classdef iCub < handle
         end
         
         function qjInit = InitializeStateicubGazeboSim(obj,feet_on_ground)
-            %% Initial joints position [deg]
-            % lifted arm      [ -20  30  0  45  0]
-            % stretched arm   [  20  30  0  45  0]
-            leftArmInit  = [  -20  30  0  45  0]'; 
-            rightArmInit = [  -20  30  0  45  0]';
-            torsoInit    = [   10   0  0]';  %[60 0 0]'
-            
-            if sum(feet_on_ground) >= 2
-                % initial conditions for balancing on two feet
-                 leftLegInit  = [  90   0   0  -90  -10.5  0]'; % 25.5   0   0  -18.5  -5.5  0
-                 rightLegInit = [  90   0   0  -90  -10.5  0]';
-%                leftLegInit  = [  100   0   0  -90  -5.5  0]';
-%                rightLegInit = [  100   0   0  -90  -5.5  0]';
-            elseif feet_on_ground(1) == 1 && feet_on_ground(2) == 0
+            if(strcmp( obj.model_name ,'modelMatlab'))
+                %% Initial joints position [deg]
+                % lifted arm      [ -20  30  0  45  0]
+                % stretched arm   [  20  30  0  45  0]
+                leftArmInit  = [  -30  30  0  45  0]'; 
+                rightArmInit = [  -30  30  0  45  0]';
+                torsoInit    = [   0   0  0]';  %[60 0 0]'
 
-                % initial conditions for the robot standing on the left foot
-                leftLegInit  = [  25.5   15   0  -18.5  -5.5  0]';
-                rightLegInit = [  25.5    5   0  -40    -5.5  0]';
+                if sum(feet_on_ground) >= 2
+                    % initial conditions for balancing on two feet
+                     leftLegInit  = [  0   0   0     0     0  0]'; % 25.5   0   0  -18.5  -5.5  0
+                     rightLegInit = [  0   0   0     0     0  0]';
+    %                leftLegInit  = [  100   0   0  -90  -5.5  0]';
+    %                rightLegInit = [  100   0   0  -90  -5.5  0]';
+                elseif feet_on_ground(1) == 1 && feet_on_ground(2) == 0
 
-            elseif feet_on_ground(1) == 0 && feet_on_ground(2) == 1
+                    % initial conditions for the robot standing on the left foot
+                    leftLegInit  = [  25.5   15   0  -18.5  -5.5  0]';
+                    rightLegInit = [  25.5    5   0  -40    -5.5  0]';
 
-                % initial conditions for the robot standing on the right foot
-                leftLegInit  = [  25.5    5   0  -40    -5.5  0]';
-                rightLegInit = [  25.5   15   0  -18.5  -5.5  0]';
+                elseif feet_on_ground(1) == 0 && feet_on_ground(2) == 1
+
+                    % initial conditions for the robot standing on the right foot
+                    leftLegInit  = [  25.5    5   0  -40    -5.5  0]';
+                    rightLegInit = [  25.5   15   0  -18.5  -5.5  0]';
+                end
+            elseif(strcmp( obj.model_name ,'modelSimulink'))
+                % lifted arm      [ -20  30  0  45  0]
+                % stretched arm   [  20  30  0  45  0]
+                leftArmInit  = [  -30  30  0  45 ]'; 
+                rightArmInit = [  -30  30  0  45 ]';
+                torsoInit    = [   0   0  0]';  %[60 0 0]'
+
+                if sum(feet_on_ground) >= 2
+                    % initial conditions for balancing on two feet
+                     leftLegInit  = [  0   0   0     0     0  0]'; % 25.5   0   0  -18.5  -5.5  0
+                     rightLegInit = [  0   0   0     0     0  0]';
+    %                leftLegInit  = [  100   0   0  -90  -5.5  0]';
+    %                rightLegInit = [  100   0   0  -90  -5.5  0]';
+                elseif feet_on_ground(1) == 1 && feet_on_ground(2) == 0
+
+                    % initial conditions for the robot standing on the left foot
+                    leftLegInit  = [  25.5   15   0  -18.5  -5.5  0]';
+                    rightLegInit = [  25.5    5   0  -40    -5.5  0]';
+
+                elseif feet_on_ground(1) == 0 && feet_on_ground(2) == 1
+
+                    % initial conditions for the robot standing on the right foot
+                    leftLegInit  = [  25.5    5   0  -40    -5.5  0]';
+                    rightLegInit = [  25.5   15   0  -18.5  -5.5  0]';
+                end
             end
             
             % joints configuration [rad]

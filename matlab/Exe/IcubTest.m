@@ -6,6 +6,7 @@ clc
 visualization_test   = false;
 visualize_trajectory = false;
 simulation           = true;
+simulator            = 'icub_matlab_sim';
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
@@ -22,6 +23,11 @@ visualizer_jointsPos  =  0;                                      %either 0 or 1;
 % current model
 %% SUBCHAIN PARAMETERS
 
+if(strcmp(simulator,'icub_matlab'))
+    icub = iCub('icubGazeboSim');
+elseif(strcmp(simulator,'icub_matlab_sim'))
+    icub = iCub('icubGazeboSimSimulink');
+end
 icub = iCub('icubGazeboSim');
 chain_1 = DummyRvc_iCub(icub,'l_sole');
  
@@ -163,8 +169,9 @@ else
     
     %parameters first chains
                          % #basis overlap                    starting com position                                          ending com position
-    geom_parameters{1,1} =  [5 , 5 ,     2 ,...
-                             icub.init_state.xCoMRef(1),icub.init_state.xCoMRef(2),icub.init_state.xCoMRef(3),...
+                                                                                                                          
+    geom_parameters{1,1} =  [5 , 5 ,     2 ,...                                                                   
+                             -0.02800863753444,icub.init_state.xCoMRef(2),icub.init_state.xCoMRef(3),...            [-0.0698659683530936,-0.0680997608937098,0.369854083160630] icub.init_state.xCoMRef(1),icub.init_state.xCoMRef(2),icub.init_state.xCoMRef(3)
                              0.0167667444901888,-0.0681008604452745,0.503988037442802];% sitting_com:-0.120249695321353,-0.0680999719842103,0.369603821651986];
     
     
@@ -183,8 +190,8 @@ else
     dim_of_task_sec{1,1}={[1;1;1]};
                                       
                                          
-    numeric_reference_parameter{1,1}=[0.1,0.2,1.11440342040965,1.60499168353230,1.46748425429034,...
-                                     -0.02800863753444,-0.0278361490435566,-0.0146154272285895,0.0134390845173483,-0.00801177055714880,...
+    numeric_reference_parameter{1,1}=[2,2,1.11440342040965,1.60499168353230,1.46748425429034,...
+                                     -0.02800863753444,-0.0288361490435566,-0.0146154272285895,0.0134390845173483,-0.00801177055714880,...
                                      0.350954589796539,0.364988639468307,0.365816381480233,0.389461591950187,0.402856738959637]';
 %       numeric_reference_parameter{1,1}= [0.913076139695994,0.905282671038423,1.16925695886780,1.99897101764829,1.71346167883188,...
 %                                         -0.0252589378181975,-0.00171875837190067,0.0130805429422483,-0.0141668463935478,-0.0608148916683415,...
@@ -317,9 +324,12 @@ else
 
     if(simulation)
         %% simulator
-        [t,q_ext,qd_ext]=DynSim_iCub(controller,params);
-
-
+        if(strcmp(simulator,'icub_matlab'))
+            [t,q_ext,qd_ext] = DynSim_iCub(controller,params);
+        elseif(strcmp(simulator,'icub_matlab_sim'))
+            [t,q_ext,qd_ext] = DynSim_iCubSim(controller,params);
+            system('gz world -r');
+        end
         %% compute fitness (for this we use a sliglty different version of the fitness function (the one with Test at the end))
         output{1} = t;
         output{2} = q_ext;
