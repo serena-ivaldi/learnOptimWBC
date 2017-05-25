@@ -713,7 +713,7 @@ static void init_script_number_translation(uint32_T c12_machineNumber, uint32_T
   c12_chartNumber)
 {
   _SFD_SCRIPT_TRANSLATION(c12_chartNumber, 0U, sf_debug_get_script_id(
-    "/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/pinvDamped.m"));
+    "/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/pinvDamped.m"));
 }
 
 static const mxArray *c12_sf_marshallOut(void *chartInstanceVoid, void
@@ -1368,13 +1368,13 @@ static void c12_info_helper(c12_ResolvedFunctionInfo c12_info[128])
   c12_info[1].name = "pinvDamped";
   c12_info[1].dominantType = "double";
   c12_info[1].resolved =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/pinvDamped.m";
-  c12_info[1].fileTimeLo = 1495126739U;
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/pinvDamped.m";
+  c12_info[1].fileTimeLo = 1495631764U;
   c12_info[1].fileTimeHi = 0U;
   c12_info[1].mFileTimeLo = 0U;
   c12_info[1].mFileTimeHi = 0U;
   c12_info[2].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/pinvDamped.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/pinvDamped.m";
   c12_info[2].name = "mtimes";
   c12_info[2].dominantType = "double";
   c12_info[2].resolved =
@@ -1461,7 +1461,7 @@ static void c12_info_helper(c12_ResolvedFunctionInfo c12_info[128])
   c12_info[10].mFileTimeLo = 0U;
   c12_info[10].mFileTimeHi = 0U;
   c12_info[11].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/pinvDamped.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/pinvDamped.m";
   c12_info[11].name = "eye";
   c12_info[11].dominantType = "double";
   c12_info[11].resolved =
@@ -1621,7 +1621,7 @@ static void c12_info_helper(c12_ResolvedFunctionInfo c12_info[128])
   c12_info[26].mFileTimeLo = 0U;
   c12_info[26].mFileTimeHi = 0U;
   c12_info[27].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/pinvDamped.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/pinvDamped.m";
   c12_info[27].name = "mrdivide";
   c12_info[27].dominantType = "double";
   c12_info[27].resolved =
@@ -4106,10 +4106,10 @@ static void mdlSetWorkWidths_c12_torqueBalancing2012b(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(2550902123U));
-  ssSetChecksum1(S,(2476535463U));
-  ssSetChecksum2(S,(897090036U));
-  ssSetChecksum3(S,(823670958U));
+  ssSetChecksum0(S,(240957980U));
+  ssSetChecksum1(S,(3091098244U));
+  ssSetChecksum2(S,(1685212973U));
+  ssSetChecksum3(S,(2360109791U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
   ssSupportsMultipleExecInstances(S,1);

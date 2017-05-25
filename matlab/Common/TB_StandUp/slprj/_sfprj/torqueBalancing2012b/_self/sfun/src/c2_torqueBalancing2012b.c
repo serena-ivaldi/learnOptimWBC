@@ -2153,19 +2153,19 @@ static void init_script_number_translation(uint32_T c2_machineNumber, uint32_T
   c2_chartNumber)
 {
   _SFD_SCRIPT_TRANSLATION(c2_chartNumber, 0U, sf_debug_get_script_id(
-    "/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m"));
+    "/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m"));
   _SFD_SCRIPT_TRANSLATION(c2_chartNumber, 1U, sf_debug_get_script_id(
-    "/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rotz.m"));
+    "/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rotz.m"));
   _SFD_SCRIPT_TRANSLATION(c2_chartNumber, 2U, sf_debug_get_script_id(
-    "/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/roty.m"));
+    "/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/roty.m"));
   _SFD_SCRIPT_TRANSLATION(c2_chartNumber, 3U, sf_debug_get_script_id(
-    "/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rotx.m"));
+    "/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rotx.m"));
   _SFD_SCRIPT_TRANSLATION(c2_chartNumber, 4U, sf_debug_get_script_id(
-    "/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rollPitchYawFromRotation.m"));
+    "/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rollPitchYawFromRotation.m"));
   _SFD_SCRIPT_TRANSLATION(c2_chartNumber, 5U, sf_debug_get_script_id(
-    "/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/correctIMU.m"));
+    "/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/correctIMU.m"));
   _SFD_SCRIPT_TRANSLATION(c2_chartNumber, 6U, sf_debug_get_script_id(
-    "/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/evalDHMatrix.m"));
+    "/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/evalDHMatrix.m"));
 }
 
 static const mxArray *c2_sf_marshallOut(void *chartInstanceVoid, void *c2_inData)
@@ -2940,13 +2940,13 @@ static void c2_info_helper(c2_ResolvedFunctionInfo c2_info[147])
   c2_info[0].name = "fromBaseToWorldWithImu";
   c2_info[0].dominantType = "struct";
   c2_info[0].resolved =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m";
-  c2_info[0].fileTimeLo = 1495096798U;
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m";
+  c2_info[0].fileTimeLo = 1495631764U;
   c2_info[0].fileTimeHi = 0U;
   c2_info[0].mFileTimeLo = 0U;
   c2_info[0].mFileTimeHi = 0U;
   c2_info[1].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m";
   c2_info[1].name = "mtimes";
   c2_info[1].dominantType = "double";
   c2_info[1].resolved = "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/ops/mtimes.m";
@@ -2955,7 +2955,7 @@ static void c2_info_helper(c2_ResolvedFunctionInfo c2_info[147])
   c2_info[1].mFileTimeLo = 0U;
   c2_info[1].mFileTimeHi = 0U;
   c2_info[2].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m";
   c2_info[2].name = "mrdivide";
   c2_info[2].dominantType = "double";
   c2_info[2].resolved =
@@ -2993,17 +2993,17 @@ static void c2_info_helper(c2_ResolvedFunctionInfo c2_info[147])
   c2_info[5].mFileTimeLo = 0U;
   c2_info[5].mFileTimeHi = 0U;
   c2_info[6].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m";
   c2_info[6].name = "rotz";
   c2_info[6].dominantType = "double";
   c2_info[6].resolved =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rotz.m";
-  c2_info[6].fileTimeLo = 1495096797U;
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rotz.m";
+  c2_info[6].fileTimeLo = 1495631764U;
   c2_info[6].fileTimeHi = 0U;
   c2_info[6].mFileTimeLo = 0U;
   c2_info[6].mFileTimeHi = 0U;
   c2_info[7].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rotz.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rotz.m";
   c2_info[7].name = "cos";
   c2_info[7].dominantType = "double";
   c2_info[7].resolved = "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/elfun/cos.m";
@@ -3021,7 +3021,7 @@ static void c2_info_helper(c2_ResolvedFunctionInfo c2_info[147])
   c2_info[8].mFileTimeLo = 0U;
   c2_info[8].mFileTimeHi = 0U;
   c2_info[9].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rotz.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rotz.m";
   c2_info[9].name = "sin";
   c2_info[9].dominantType = "double";
   c2_info[9].resolved = "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/elfun/sin.m";
@@ -3039,17 +3039,17 @@ static void c2_info_helper(c2_ResolvedFunctionInfo c2_info[147])
   c2_info[10].mFileTimeLo = 0U;
   c2_info[10].mFileTimeHi = 0U;
   c2_info[11].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m";
   c2_info[11].name = "roty";
   c2_info[11].dominantType = "double";
   c2_info[11].resolved =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/roty.m";
-  c2_info[11].fileTimeLo = 1495096798U;
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/roty.m";
+  c2_info[11].fileTimeLo = 1495631764U;
   c2_info[11].fileTimeHi = 0U;
   c2_info[11].mFileTimeLo = 0U;
   c2_info[11].mFileTimeHi = 0U;
   c2_info[12].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/roty.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/roty.m";
   c2_info[12].name = "cos";
   c2_info[12].dominantType = "double";
   c2_info[12].resolved = "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/elfun/cos.m";
@@ -3058,7 +3058,7 @@ static void c2_info_helper(c2_ResolvedFunctionInfo c2_info[147])
   c2_info[12].mFileTimeLo = 0U;
   c2_info[12].mFileTimeHi = 0U;
   c2_info[13].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/roty.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/roty.m";
   c2_info[13].name = "sin";
   c2_info[13].dominantType = "double";
   c2_info[13].resolved = "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/elfun/sin.m";
@@ -3144,17 +3144,17 @@ static void c2_info_helper(c2_ResolvedFunctionInfo c2_info[147])
   c2_info[21].mFileTimeLo = 0U;
   c2_info[21].mFileTimeHi = 0U;
   c2_info[22].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m";
   c2_info[22].name = "rotx";
   c2_info[22].dominantType = "double";
   c2_info[22].resolved =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rotx.m";
-  c2_info[22].fileTimeLo = 1495096798U;
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rotx.m";
+  c2_info[22].fileTimeLo = 1495631764U;
   c2_info[22].fileTimeHi = 0U;
   c2_info[22].mFileTimeLo = 0U;
   c2_info[22].mFileTimeHi = 0U;
   c2_info[23].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rotx.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rotx.m";
   c2_info[23].name = "cos";
   c2_info[23].dominantType = "double";
   c2_info[23].resolved = "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/elfun/cos.m";
@@ -3163,7 +3163,7 @@ static void c2_info_helper(c2_ResolvedFunctionInfo c2_info[147])
   c2_info[23].mFileTimeLo = 0U;
   c2_info[23].mFileTimeHi = 0U;
   c2_info[24].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rotx.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rotx.m";
   c2_info[24].name = "sin";
   c2_info[24].dominantType = "double";
   c2_info[24].resolved = "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/elfun/sin.m";
@@ -3172,17 +3172,17 @@ static void c2_info_helper(c2_ResolvedFunctionInfo c2_info[147])
   c2_info[24].mFileTimeLo = 0U;
   c2_info[24].mFileTimeHi = 0U;
   c2_info[25].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m";
   c2_info[25].name = "rollPitchYawFromRotation";
   c2_info[25].dominantType = "double";
   c2_info[25].resolved =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rollPitchYawFromRotation.m";
-  c2_info[25].fileTimeLo = 1495096797U;
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rollPitchYawFromRotation.m";
+  c2_info[25].fileTimeLo = 1495631764U;
   c2_info[25].fileTimeHi = 0U;
   c2_info[25].mFileTimeLo = 0U;
   c2_info[25].mFileTimeHi = 0U;
   c2_info[26].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rollPitchYawFromRotation.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rollPitchYawFromRotation.m";
   c2_info[26].name = "asin";
   c2_info[26].dominantType = "double";
   c2_info[26].resolved =
@@ -3210,7 +3210,7 @@ static void c2_info_helper(c2_ResolvedFunctionInfo c2_info[147])
   c2_info[28].mFileTimeLo = 0U;
   c2_info[28].mFileTimeHi = 0U;
   c2_info[29].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rollPitchYawFromRotation.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rollPitchYawFromRotation.m";
   c2_info[29].name = "atan2";
   c2_info[29].dominantType = "double";
   c2_info[29].resolved =
@@ -3250,17 +3250,17 @@ static void c2_info_helper(c2_ResolvedFunctionInfo c2_info[147])
   c2_info[32].mFileTimeLo = 0U;
   c2_info[32].mFileTimeHi = 0U;
   c2_info[33].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m";
   c2_info[33].name = "correctIMU";
   c2_info[33].dominantType = "double";
   c2_info[33].resolved =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/correctIMU.m";
-  c2_info[33].fileTimeLo = 1495096797U;
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/correctIMU.m";
+  c2_info[33].fileTimeLo = 1495631764U;
   c2_info[33].fileTimeHi = 0U;
   c2_info[33].mFileTimeLo = 0U;
   c2_info[33].mFileTimeHi = 0U;
   c2_info[34].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/correctIMU.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/correctIMU.m";
   c2_info[34].name = "mtimes";
   c2_info[34].dominantType = "double";
   c2_info[34].resolved =
@@ -3270,7 +3270,7 @@ static void c2_info_helper(c2_ResolvedFunctionInfo c2_info[147])
   c2_info[34].mFileTimeLo = 0U;
   c2_info[34].mFileTimeHi = 0U;
   c2_info[35].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/correctIMU.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/correctIMU.m";
   c2_info[35].name = "mrdivide";
   c2_info[35].dominantType = "double";
   c2_info[35].resolved =
@@ -3280,17 +3280,17 @@ static void c2_info_helper(c2_ResolvedFunctionInfo c2_info[147])
   c2_info[35].mFileTimeLo = 1319729966U;
   c2_info[35].mFileTimeHi = 0U;
   c2_info[36].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/correctIMU.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/correctIMU.m";
   c2_info[36].name = "evalDHMatrix";
   c2_info[36].dominantType = "double";
   c2_info[36].resolved =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/evalDHMatrix.m";
-  c2_info[36].fileTimeLo = 1495096798U;
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/evalDHMatrix.m";
+  c2_info[36].fileTimeLo = 1495631765U;
   c2_info[36].fileTimeHi = 0U;
   c2_info[36].mFileTimeLo = 0U;
   c2_info[36].mFileTimeHi = 0U;
   c2_info[37].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/evalDHMatrix.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/evalDHMatrix.m";
   c2_info[37].name = "cos";
   c2_info[37].dominantType = "double";
   c2_info[37].resolved = "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/elfun/cos.m";
@@ -3299,7 +3299,7 @@ static void c2_info_helper(c2_ResolvedFunctionInfo c2_info[147])
   c2_info[37].mFileTimeLo = 0U;
   c2_info[37].mFileTimeHi = 0U;
   c2_info[38].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/evalDHMatrix.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/evalDHMatrix.m";
   c2_info[38].name = "sin";
   c2_info[38].dominantType = "double";
   c2_info[38].resolved = "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/elfun/sin.m";
@@ -3308,7 +3308,7 @@ static void c2_info_helper(c2_ResolvedFunctionInfo c2_info[147])
   c2_info[38].mFileTimeLo = 0U;
   c2_info[38].mFileTimeHi = 0U;
   c2_info[39].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/evalDHMatrix.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/evalDHMatrix.m";
   c2_info[39].name = "mtimes";
   c2_info[39].dominantType = "double";
   c2_info[39].resolved =
@@ -4366,7 +4366,7 @@ static void c2_c_info_helper(c2_ResolvedFunctionInfo c2_info[147])
   c2_info[144].mFileTimeLo = 0U;
   c2_info[144].mFileTimeHi = 0U;
   c2_info[145].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m";
   c2_info[145].name = "mldivide";
   c2_info[145].dominantType = "double";
   c2_info[145].resolved =
@@ -5919,10 +5919,10 @@ static void mdlSetWorkWidths_c2_torqueBalancing2012b(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(2932372538U));
-  ssSetChecksum1(S,(3214370410U));
-  ssSetChecksum2(S,(2777288562U));
-  ssSetChecksum3(S,(964382622U));
+  ssSetChecksum0(S,(934922706U));
+  ssSetChecksum1(S,(213835802U));
+  ssSetChecksum2(S,(2284732244U));
+  ssSetChecksum3(S,(2379420338U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
   ssSupportsMultipleExecInstances(S,1);

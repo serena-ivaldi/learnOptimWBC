@@ -33,7 +33,7 @@
 % setenv('YARP_ROBOT_NAME','iCubGenova05');
 
 % Simulation time in seconds
-CONFIG.SIMULATION_TIME = 3;%params.tEnd;   
+CONFIG.SIMULATION_TIME = params.tEnd;   
 
 %% PRELIMINARY CONFIGURATIONS 
 % SM.SM_TYPE: defines the kind of state machines that can be chosen.
@@ -159,8 +159,8 @@ run(robotSpecificFSM);
 % whwn both CONFIG.iCubStandUp and CONFIG.useExtHandForces are setted to TRUE,
 % the robot will be aware of the external forces at the arms and will use
 % also them for lifting up.
-CONFIG.iCubStandUp       = false;
-CONFIG.useExtArmForces   = true;
+CONFIG.iCubStandUp       = true;
+CONFIG.useExtArmForces   = false;
 
 %% Define which simulation will be performed
 if strcmpi(SM.SM_TYPE, 'COORDINATOR')

@@ -367,7 +367,7 @@ static void c10_chartstep_c10_torqueBalancing2012b
   }
 
   for (c10_i19 = 0; c10_i19 < 2; c10_i19++) {
-    c10_b_Lcop[c10_i19] = c10_y[c10_i19] + c10_Lcontact[c10_i19 + 8];
+    c10_b_Lcop[c10_i19] = c10_y[c10_i19] + c10_Lcontact[c10_i19 + 12];
   }
 
   _SFD_SYMBOL_SWITCH(0U, 0U);
@@ -399,11 +399,11 @@ static void c10_chartstep_c10_torqueBalancing2012b
   }
 
   for (c10_i28 = 0; c10_i28 < 2; c10_i28++) {
-    c10_b_Rcop[c10_i28] = c10_y[c10_i28] + c10_Rcontact[c10_i28 + 8];
+    c10_b_Rcop[c10_i28] = c10_y[c10_i28] + c10_Rcontact[c10_i28 + 12];
   }
 
   _SFD_SYMBOL_SWITCH(1U, 1U);
-  _SFD_EML_CALL(0U, chartInstance->c10_sfEvent, 8);
+  _SFD_EML_CALL(0U, chartInstance->c10_sfEvent, 9);
   c10_b_a = c10_fz_left;
   for (c10_i29 = 0; c10_i29 < 2; c10_i29++) {
     c10_b[c10_i29] = c10_b_Lcop[c10_i29];
@@ -433,7 +433,7 @@ static void c10_chartstep_c10_torqueBalancing2012b
     c10_zmp[c10_i34] = c10_b[c10_i34] / c10_c_y;
   }
 
-  _SFD_EML_CALL(0U, chartInstance->c10_sfEvent, -8);
+  _SFD_EML_CALL(0U, chartInstance->c10_sfEvent, -9);
   _SFD_SYMBOL_SCOPE_POP();
   for (c10_i35 = 0; c10_i35 < 2; c10_i35++) {
     (*c10_b_zmp)[c10_i35] = c10_zmp[c10_i35];
@@ -921,10 +921,10 @@ extern void utFree(void*);
 
 void sf_c10_torqueBalancing2012b_get_check_sum(mxArray *plhs[])
 {
-  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(2204672434U);
-  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(3088196122U);
-  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(4019375003U);
-  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(3556812918U);
+  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(3682668841U);
+  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(3541030052U);
+  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(3330767569U);
+  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(151866303U);
 }
 
 mxArray *sf_c10_torqueBalancing2012b_get_autoinheritance_info(void)
@@ -936,7 +936,7 @@ mxArray *sf_c10_torqueBalancing2012b_get_autoinheritance_info(void)
     autoinheritanceFields);
 
   {
-    mxArray *mxChecksum = mxCreateString("BGUwbKyc2qs5FOYSBSOATH");
+    mxArray *mxChecksum = mxCreateString("UvPxi1ZdnPR7AHUR623VMC");
     mxSetField(mxAutoinheritanceInfo,0,"checksum",mxChecksum);
   }
 
@@ -1184,7 +1184,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
         /* Initialization of MATLAB Function Model Coverage */
         _SFD_CV_INIT_EML(0,1,1,0,0,0,0,0,0,0,0);
-        _SFD_CV_INIT_EML_FCN(0,0,"eML_blk_kernel",0,-1,266);
+        _SFD_CV_INIT_EML_FCN(0,0,"eML_blk_kernel",0,-1,267);
         _SFD_TRANS_COV_WTS(0,0,0,1,0);
         if (chartAlreadyPresent==0) {
           _SFD_TRANS_COV_MAPS(0,
@@ -1275,7 +1275,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
 static const char* sf_get_instance_specialization(void)
 {
-  return "HLVCLN8LZNxilU1OoGswQF";
+  return "n8EtlPdLXBAK10lkieUrlB";
 }
 
 static void sf_opaque_initialize_c10_torqueBalancing2012b(void *chartInstanceVar)
@@ -1459,10 +1459,10 @@ static void mdlSetWorkWidths_c10_torqueBalancing2012b(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(399554545U));
-  ssSetChecksum1(S,(2787385504U));
-  ssSetChecksum2(S,(1330255111U));
-  ssSetChecksum3(S,(145055319U));
+  ssSetChecksum0(S,(1222420032U));
+  ssSetChecksum1(S,(3114174418U));
+  ssSetChecksum2(S,(74068730U));
+  ssSetChecksum3(S,(2669218505U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
   ssSupportsMultipleExecInstances(S,1);

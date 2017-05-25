@@ -5586,11 +5586,11 @@ static void init_script_number_translation(uint32_T c17_machineNumber, uint32_T
   c17_chartNumber)
 {
   _SFD_SCRIPT_TRANSLATION(c17_chartNumber, 0U, sf_debug_get_script_id(
-    "/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m"));
+    "/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m"));
   _SFD_SCRIPT_TRANSLATION(c17_chartNumber, 1U, sf_debug_get_script_id(
-    "/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/Sf.m"));
+    "/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/Sf.m"));
   _SFD_SCRIPT_TRANSLATION(c17_chartNumber, 2U, sf_debug_get_script_id(
-    "/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/pinvDamped.m"));
+    "/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/pinvDamped.m"));
 }
 
 static void c17_emlrt_marshallIn(SFc17_torqueBalancing2012bInstanceStruct
@@ -8232,13 +8232,13 @@ static void c17_info_helper(c17_ResolvedFunctionInfo c17_info[302])
   c17_info[0].name = "balancingController";
   c17_info[0].dominantType = "struct";
   c17_info[0].resolved =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
-  c17_info[0].fileTimeLo = 1495126737U;
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
+  c17_info[0].fileTimeLo = 1495631764U;
   c17_info[0].fileTimeHi = 0U;
   c17_info[0].mFileTimeLo = 0U;
   c17_info[0].mFileTimeHi = 0U;
   c17_info[1].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
   c17_info[1].name = "eye";
   c17_info[1].dominantType = "double";
   c17_info[1].resolved = "[ILXE]$matlabroot$/toolbox/eml/lib/matlab/elmat/eye.m";
@@ -8397,7 +8397,7 @@ static void c17_info_helper(c17_ResolvedFunctionInfo c17_info[302])
   c17_info[16].mFileTimeLo = 0U;
   c17_info[16].mFileTimeHi = 0U;
   c17_info[17].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
   c17_info[17].name = "mtimes";
   c17_info[17].dominantType = "double";
   c17_info[17].resolved =
@@ -8487,17 +8487,17 @@ static void c17_info_helper(c17_ResolvedFunctionInfo c17_info[302])
   c17_info[25].mFileTimeLo = 0U;
   c17_info[25].mFileTimeHi = 0U;
   c17_info[26].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
   c17_info[26].name = "Sf";
   c17_info[26].dominantType = "double";
   c17_info[26].resolved =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/Sf.m";
-  c17_info[26].fileTimeLo = 1495096798U;
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/Sf.m";
+  c17_info[26].fileTimeLo = 1495631764U;
   c17_info[26].fileTimeHi = 0U;
   c17_info[26].mFileTimeLo = 0U;
   c17_info[26].mFileTimeHi = 0U;
   c17_info[27].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
   c17_info[27].name = "pinv";
   c17_info[27].dominantType = "double";
   c17_info[27].resolved =
@@ -10004,7 +10004,7 @@ static void c17_c_info_helper(c17_ResolvedFunctionInfo c17_info[302])
   c17_info[176].mFileTimeLo = 0U;
   c17_info[176].mFileTimeHi = 0U;
   c17_info[177].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
   c17_info[177].name = "inv";
   c17_info[177].dominantType = "double";
   c17_info[177].resolved =
@@ -10972,7 +10972,7 @@ static void c17_e_info_helper(c17_ResolvedFunctionInfo c17_info[302])
   c17_info[272].mFileTimeLo = 0U;
   c17_info[272].mFileTimeHi = 0U;
   c17_info[273].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
   c17_info[273].name = "norm";
   c17_info[273].dominantType = "double";
   c17_info[273].resolved =
@@ -11002,7 +11002,7 @@ static void c17_e_info_helper(c17_ResolvedFunctionInfo c17_info[302])
   c17_info[275].mFileTimeLo = 0U;
   c17_info[275].mFileTimeHi = 0U;
   c17_info[276].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
   c17_info[276].name = "mrdivide";
   c17_info[276].dominantType = "double";
   c17_info[276].resolved =
@@ -11112,17 +11112,17 @@ static void c17_e_info_helper(c17_ResolvedFunctionInfo c17_info[302])
   c17_info[286].mFileTimeLo = 0U;
   c17_info[286].mFileTimeHi = 0U;
   c17_info[287].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
   c17_info[287].name = "pinvDamped";
   c17_info[287].dominantType = "double";
   c17_info[287].resolved =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/pinvDamped.m";
-  c17_info[287].fileTimeLo = 1495126739U;
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/pinvDamped.m";
+  c17_info[287].fileTimeLo = 1495631764U;
   c17_info[287].fileTimeHi = 0U;
   c17_info[287].mFileTimeLo = 0U;
   c17_info[287].mFileTimeHi = 0U;
   c17_info[288].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/pinvDamped.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/pinvDamped.m";
   c17_info[288].name = "mtimes";
   c17_info[288].dominantType = "double";
   c17_info[288].resolved =
@@ -11132,7 +11132,7 @@ static void c17_e_info_helper(c17_ResolvedFunctionInfo c17_info[302])
   c17_info[288].mFileTimeLo = 0U;
   c17_info[288].mFileTimeHi = 0U;
   c17_info[289].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/pinvDamped.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/pinvDamped.m";
   c17_info[289].name = "eye";
   c17_info[289].dominantType = "double";
   c17_info[289].resolved =
@@ -11142,7 +11142,7 @@ static void c17_e_info_helper(c17_ResolvedFunctionInfo c17_info[302])
   c17_info[289].mFileTimeLo = 0U;
   c17_info[289].mFileTimeHi = 0U;
   c17_info[290].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/pinvDamped.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/pinvDamped.m";
   c17_info[290].name = "mrdivide";
   c17_info[290].dominantType = "double";
   c17_info[290].resolved =
@@ -11152,7 +11152,7 @@ static void c17_e_info_helper(c17_ResolvedFunctionInfo c17_info[302])
   c17_info[290].mFileTimeLo = 1319729966U;
   c17_info[290].mFileTimeHi = 0U;
   c17_info[291].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
   c17_info[291].name = "diag";
   c17_info[291].dominantType = "double";
   c17_info[291].resolved =
@@ -11202,7 +11202,7 @@ static void c17_e_info_helper(c17_ResolvedFunctionInfo c17_info[302])
   c17_info[295].mFileTimeLo = 0U;
   c17_info[295].mFileTimeHi = 0U;
   c17_info[296].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/balancingController.m";
   c17_info[296].name = "blkdiag";
   c17_info[296].dominantType = "double";
   c17_info[296].resolved =
@@ -23217,10 +23217,10 @@ static void mdlSetWorkWidths_c17_torqueBalancing2012b(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(263371942U));
-  ssSetChecksum1(S,(3282022333U));
-  ssSetChecksum2(S,(113007278U));
-  ssSetChecksum3(S,(3824697968U));
+  ssSetChecksum0(S,(4220789321U));
+  ssSetChecksum1(S,(4080733617U));
+  ssSetChecksum2(S,(452420089U));
+  ssSetChecksum3(S,(4211959385U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
   ssSupportsMultipleExecInstances(S,1);

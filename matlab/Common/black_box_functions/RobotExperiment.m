@@ -48,7 +48,8 @@ elseif (strcmp(simulator,'icub_matlab_sim'))
     controller = obj.input_4_run{4}; % structure that contains every information about the specific instance of the problem
     params     = obj.input_4_run{2};
     %% current_parameter_set is used in InitRefGen to test the new trajectory
-    current_parameter_set = parameters;
+    controller.UpdateParameters(parameters)
+    
     tic
     [t, q, qd]=DynSim_iCubSim(controller,params);
     toc

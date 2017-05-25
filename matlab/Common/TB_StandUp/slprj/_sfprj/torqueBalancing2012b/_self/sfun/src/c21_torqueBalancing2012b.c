@@ -263,7 +263,7 @@ static void init_script_number_translation(uint32_T c21_machineNumber, uint32_T
   c21_chartNumber)
 {
   _SFD_SCRIPT_TRANSLATION(c21_chartNumber, 0U, sf_debug_get_script_id(
-    "/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/contactDetector.m"));
+    "/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/contactDetector.m"));
 }
 
 static const mxArray *c21_sf_marshallOut(void *chartInstanceVoid, void
@@ -341,8 +341,8 @@ const mxArray *sf_c21_torqueBalancing2012b_get_eml_resolved_functions_info(void)
   (*c21_b_info)[0].name = "contactDetector";
   (*c21_b_info)[0].dominantType = "double";
   (*c21_b_info)[0].resolved =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/contactDetector.m";
-  (*c21_b_info)[0].fileTimeLo = 1495126738U;
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/contactDetector.m";
+  (*c21_b_info)[0].fileTimeLo = 1495631764U;
   (*c21_b_info)[0].fileTimeHi = 0U;
   (*c21_b_info)[0].mFileTimeLo = 0U;
   (*c21_b_info)[0].mFileTimeHi = 0U;
@@ -895,10 +895,10 @@ static void mdlSetWorkWidths_c21_torqueBalancing2012b(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(4157171949U));
-  ssSetChecksum1(S,(2637729773U));
-  ssSetChecksum2(S,(1388985520U));
-  ssSetChecksum3(S,(485657227U));
+  ssSetChecksum0(S,(765045379U));
+  ssSetChecksum1(S,(1897385976U));
+  ssSetChecksum2(S,(2968512635U));
+  ssSetChecksum3(S,(2330007304U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
   ssSupportsMultipleExecInstances(S,1);

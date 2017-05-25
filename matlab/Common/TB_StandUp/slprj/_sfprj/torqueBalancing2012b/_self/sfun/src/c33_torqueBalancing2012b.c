@@ -340,7 +340,7 @@ static void init_script_number_translation(uint32_T c33_machineNumber, uint32_T
   c33_chartNumber)
 {
   _SFD_SCRIPT_TRANSLATION(c33_chartNumber, 0U, sf_debug_get_script_id(
-    "/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rollPitchYawFromRotation.m"));
+    "/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rollPitchYawFromRotation.m"));
 }
 
 static const mxArray *c33_sf_marshallOut(void *chartInstanceVoid, void
@@ -600,13 +600,13 @@ static void c33_info_helper(c33_ResolvedFunctionInfo c33_info[13])
   c33_info[0].name = "rollPitchYawFromRotation";
   c33_info[0].dominantType = "double";
   c33_info[0].resolved =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rollPitchYawFromRotation.m";
-  c33_info[0].fileTimeLo = 1495096797U;
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rollPitchYawFromRotation.m";
+  c33_info[0].fileTimeLo = 1495631764U;
   c33_info[0].fileTimeHi = 0U;
   c33_info[0].mFileTimeLo = 0U;
   c33_info[0].mFileTimeHi = 0U;
   c33_info[1].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rollPitchYawFromRotation.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rollPitchYawFromRotation.m";
   c33_info[1].name = "asin";
   c33_info[1].dominantType = "double";
   c33_info[1].resolved =
@@ -634,7 +634,7 @@ static void c33_info_helper(c33_ResolvedFunctionInfo c33_info[13])
   c33_info[3].mFileTimeLo = 0U;
   c33_info[3].mFileTimeHi = 0U;
   c33_info[4].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rollPitchYawFromRotation.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/rollPitchYawFromRotation.m";
   c33_info[4].name = "atan2";
   c33_info[4].dominantType = "double";
   c33_info[4].resolved =
@@ -1258,10 +1258,10 @@ static void mdlSetWorkWidths_c33_torqueBalancing2012b(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(1762239779U));
-  ssSetChecksum1(S,(1753739080U));
-  ssSetChecksum2(S,(1150659335U));
-  ssSetChecksum3(S,(460100820U));
+  ssSetChecksum0(S,(499960768U));
+  ssSetChecksum1(S,(3374671668U));
+  ssSetChecksum2(S,(4220104180U));
+  ssSetChecksum3(S,(1398812520U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
   ssSupportsMultipleExecInstances(S,1);

@@ -2794,7 +2794,7 @@ static void init_script_number_translation(uint32_T c20_machineNumber, uint32_T
   c20_chartNumber)
 {
   _SFD_SCRIPT_TRANSLATION(c20_chartNumber, 0U, sf_debug_get_script_id(
-    "/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/stateMachineStandUp.m"));
+    "/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/stateMachineStandUp.m"));
 }
 
 static const mxArray *c20_sf_marshallOut(void *chartInstanceVoid, void
@@ -4715,13 +4715,13 @@ static void c20_info_helper(c20_ResolvedFunctionInfo c20_info[127])
   c20_info[0].name = "stateMachineStandUp";
   c20_info[0].dominantType = "struct";
   c20_info[0].resolved =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/stateMachineStandUp.m";
-  c20_info[0].fileTimeLo = 1495126739U;
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/stateMachineStandUp.m";
+  c20_info[0].fileTimeLo = 1495631764U;
   c20_info[0].fileTimeHi = 0U;
   c20_info[0].mFileTimeLo = 0U;
   c20_info[0].mFileTimeHi = 0U;
   c20_info[1].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/stateMachineStandUp.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/stateMachineStandUp.m";
   c20_info[1].name = "mrdivide";
   c20_info[1].dominantType = "double";
   c20_info[1].resolved =
@@ -5789,7 +5789,7 @@ static void c20_b_info_helper(c20_ResolvedFunctionInfo c20_info[127])
   c20_info[107].mFileTimeLo = 0U;
   c20_info[107].mFileTimeHi = 0U;
   c20_info[108].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/stateMachineStandUp.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/stateMachineStandUp.m";
   c20_info[108].name = "eye";
   c20_info[108].dominantType = "double";
   c20_info[108].resolved =
@@ -5889,7 +5889,7 @@ static void c20_b_info_helper(c20_ResolvedFunctionInfo c20_info[127])
   c20_info[117].mFileTimeLo = 0U;
   c20_info[117].mFileTimeHi = 0U;
   c20_info[118].context =
-    "[E]/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/stateMachineStandUp.m";
+    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/stateMachineStandUp.m";
   c20_info[118].name = "mtimes";
   c20_info[118].dominantType = "double";
   c20_info[118].resolved =
@@ -7470,8 +7470,8 @@ static const mxArray *sf_get_sim_state_info_c20_torqueBalancing2012b(void)
 
   mxArray *mxInfo = mxCreateStructMatrix(1, 1, 2, infoFields);
   const char *infoEncStr[] = {
-    "100 S1x10'type','srcId','name','auxInfo'{{M[1],M[88],T\"CoM_Des\",},{M[1],M[43],T\"constraints\",},{M[1],M[68],T\"currentState\",},{M[1],M[66],T\"impedances\",},{M[1],M[81],T\"jointsSmoothingTime\",},{M[1],M[83],T\"kdCom\",},{M[1],M[82],T\"kpCom\",},{M[1],M[85],T\"qjDes\",},{M[1],M[71],T\"w_H_b\",},{M[4],M[0],T\"CoMprevious\",S'l','i','p'{{M1x2[355 366],M[1],T\"/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/stateMachineStandUp.m\"}}}}",
-    "100 S1x4'type','srcId','name','auxInfo'{{M[4],M[0],T\"state\",S'l','i','p'{{M1x2[279 284],M[1],T\"/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/stateMachineStandUp.m\"}}},{M[4],M[0],T\"tSwitch\",S'l','i','p'{{M1x2[301 308],M[1],T\"/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/stateMachineStandUp.m\"}}},{M[4],M[0],T\"w_H_fixedLink\",S'l','i','p'{{M1x2[325 338],M[1],T\"/home/vale/git/learnOptimWBC/matlab/Common/TB_StandUp/src/stateMachineStandUp.m\"}}},{M[8],M[0],T\"is_active_c20_torqueBalancing2012b\",}}"
+    "100 S1x10'type','srcId','name','auxInfo'{{M[1],M[88],T\"CoM_Des\",},{M[1],M[43],T\"constraints\",},{M[1],M[68],T\"currentState\",},{M[1],M[66],T\"impedances\",},{M[1],M[81],T\"jointsSmoothingTime\",},{M[1],M[83],T\"kdCom\",},{M[1],M[82],T\"kpCom\",},{M[1],M[85],T\"qjDes\",},{M[1],M[71],T\"w_H_b\",},{M[4],M[0],T\"CoMprevious\",S'l','i','p'{{M1x2[355 366],M[1],T\"/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/stateMachineStandUp.m\"}}}}",
+    "100 S1x4'type','srcId','name','auxInfo'{{M[4],M[0],T\"state\",S'l','i','p'{{M1x2[279 284],M[1],T\"/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/stateMachineStandUp.m\"}}},{M[4],M[0],T\"tSwitch\",S'l','i','p'{{M1x2[301 308],M[1],T\"/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/stateMachineStandUp.m\"}}},{M[4],M[0],T\"w_H_fixedLink\",S'l','i','p'{{M1x2[325 338],M[1],T\"/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/src/stateMachineStandUp.m\"}}},{M[8],M[0],T\"is_active_c20_torqueBalancing2012b\",}}"
   };
 
   mxArray *mxVarInfo = sf_mex_decode_encoded_mx_struct_array(infoEncStr, 14, 10);
@@ -8094,10 +8094,10 @@ static void mdlSetWorkWidths_c20_torqueBalancing2012b(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(1292297447U));
-  ssSetChecksum1(S,(798471830U));
-  ssSetChecksum2(S,(777393549U));
-  ssSetChecksum3(S,(1305846815U));
+  ssSetChecksum0(S,(1957563056U));
+  ssSetChecksum1(S,(1884295407U));
+  ssSetChecksum2(S,(1477251939U));
+  ssSetChecksum3(S,(1801573084U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
   ssSupportsMultipleExecInstances(S,1);

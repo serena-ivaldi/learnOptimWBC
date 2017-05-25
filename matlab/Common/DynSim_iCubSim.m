@@ -17,19 +17,31 @@ function [t, q, qd] = DynSim_iCubSim(controller,params)
     controller.simulation_results.Cop  =  zeros(length(time),4);
     controller.simulation_results.fc   =  cell(length(time),1);
     
-     
+    
+    % precompute as time series desidered com and its derivatives
+    data_xCoMDes    =  zeros(length(time),3);
+    data_dxCoMDes   =  zeros(length(time),3);
+    data_ddxCoMDes  =  zeros(length(time),3);
+    index = 1;
+    for ti=time
+        [xCoMDes,dxCoMDes,ddxCoMDes]   = controller.references.GetTraj(1,1,ti);
+        data_xCoMDes(index,:)          = xCoMDes;
+        data_dxCoMDes(index,:)         = dxCoMDes;
+        data_ddxCoMDes(index,:)        = ddxCoMDes;
+    end
+    ts_xCoMDes    = timeseries(data_xCoMDes,time);
+    ts_dxCoMDes   = timeseries(data_dxCoMDes,time);
+    ts_ddxCoMDes  = timeseries(data_ddxCoMDes,time);
     %try 
         %% TODO devo cambiare la cartella nel file di configurazione esterno
         options = simset('SrcWorkspace','current');
         sim('torqueBalancing2012b',[],options);
         controller.simulation_iterator     = 1;
-        controller.simulation_results.tau  =  torque_sim;
-        controller.simulation_results.zmp  =  zmp_sim;
-        controller.simulation_results.xCoM =  com_pos_sim;
-        controller.simulation_results.Cop  =  zeros(length(time),4);
-        controller.simulation_results.fc   =  cell(length(time),1);
-        q  = q_sim; % row vectors (TODO check if they are in the right order)
-        qd = qd_sim;% row vectors
+        controller.simulation_results.tau  =  torque_sim.Data;
+        controller.simulation_results.zmp  =  zmp_sim.Data;
+        controller.simulation_results.xCoM =  com_pos_sim.Data;
+        q  = q_sim.Data; % row vectors (TODO check if they are in the right order)
+        qd = qd_sim.Data;% row vectors
         t  = params.tStart:params.sim_step:params.tEnd;
 %     catch err
 %         disp('integration error');
