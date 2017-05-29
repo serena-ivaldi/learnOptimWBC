@@ -1,7 +1,7 @@
 CONFIG.DEMO_MOVEMENTS      = true; % Either true or false
 
 
-CONFIG.TIME_CONTROLLER_SWITCH = 1.2;                          
+CONFIG.TIME_CONTROLLER_SWITCH = params.tswitch;                          
                           
                           
 % in this model i do not have the last joint of the arms (wrist prosup i guess)
@@ -10,11 +10,8 @@ CONFIG.TIME_CONTROLLER_SWITCH = 1.2;
 % sitting
 %CONFIG.JOINTS = [  13   0  0   -20.0  30.0  0.0  45.0  -20.0  30.0  0.0  45.0   90 0  0 -100 -10.4 0   90 0  0 -100 -10.4 0]'*(pi/180);
 %CONFIG.JOINTS = [  70   0  0   -71.0  30.0  0.0  45.0  -71.0  30.0  0.0  45.0   52 0  0 -100 -18 0   52 0  0 -100 -18 0]'*(pi/180);
- CONFIG.JOINTS = [-19.8489489798941,-0.000413985158624370,0.000150564491137521,...
-                  -30.0067159673530,29.9995314103079,0.00468234540018706,44.9981612781197,...
-                  -30.0066745007058,29.9996692999222,0.00463640083707327,44.9981453763818,...
-                  25.6264973669345,0.0818188594140245,-0.0245922676543004,-7.81022006782442,-5.92392284322166,-0.0978269901884488,...
-                  25.8430773596325,0.0955879979189031,0.0380734526803952,-7.79721794699025,-5.73319900900046,-0.0860392199745725]'*(pi/180);
+ CONFIG.JOINTS = params.qfinal; %% final joint position
+ CONFIG.JOINTSITING = 
 
     
 

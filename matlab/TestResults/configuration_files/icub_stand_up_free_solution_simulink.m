@@ -1,10 +1,16 @@
 %configuration file for the icub sitting stand up simulation
 %%%;;
 
+%% change folder (move to the folder with the simulink scheme)
+name_simulink_model = 'TB_StandUp';
+fullPath = which('find_simulatorIcubSim.m');
+path = fileparts(fullPath);
+path = strcat(path,'/',name_simulink_model);
+cd(path)
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
-time_struct.tf = 10;
+time_struct.tf = 4;
 time_struct.step = 0.01;
 
 %% TASK PARAMETERS
@@ -34,63 +40,15 @@ time_sym_struct = time_struct;
 time_sym_struct.step = 0.01;
 % TODO generalize for multichain
 
-simulator_type = {'icub_matlab'};
-if strcmp(simulator_type{1},'rbt')
-    % rbt sim
-    qi{1} = qz;
-    %qi{1} = zeros(1,chains.GetNumLinks(1)); %stretched arm
-    qdi{1} = zeros(1,chains.GetNumLinks(1));
-    options= [];
-    % define the type of integration of the sytem of differential equation
-    fixed_step = false; %true;
-    torque_saturation =100000; % high value == no saturation
-    maxtime = 100; % maximum time before a simulation is stopped for being too long
-elseif strcmp(simulator_type{1},'icub_matlab') 
-    %% here I build to different structure one for the controller and one for the simulator
-    %% to manage contacts
-    params.init_contact_state = [1 1]; 
-    names         =  {'l_sole','r_sole'};   
-    params.contact_sym = Contacts(params.init_contact_state,names);
+simulator_type = {'icub_matlab_sim'};
+%% TODO for now im not gonna use the structure that i used for the matlab simulator. Im going to use only init_contact_state
+params.init_contact_state = [1 1]; 
+params.feet_on_ground = params.init_contact_state;         %either 0 or 1; [left,right] (in the simulator)
+params.numContacts = sum(params.feet_on_ground,2);
 
-
-    params.feet_on_ground = params.init_contact_state;         %either 0 or 1; [left,right] (in the simulator)
-    params.numContacts = sum(params.feet_on_ground,2);
-    if  params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 1 && params.feet_on_ground(3) == 1  && params.feet_on_ground(4) == 1 
-        % contact constraints for 2 feet on ground
-        params.contactLinkNames      = {'l_sole','r_sole','l_upper_leg','r_upper_leg'};
-    elseif   params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 1 && params.feet_on_ground(3) == 1  && params.feet_on_ground(4) == 0
-        % contact constraints for 2 feet on ground
-        params.contactLinkNames      = {'l_sole','r_sole','l_upper_leg'};
-    elseif   params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 1 && params.feet_on_ground(3) == 0  && params.feet_on_ground(4) == 1
-        % contact constraints for 2 feet on ground
-        params.contactLinkNames      = {'l_sole','r_sole','r_upper_leg'};
-    elseif   params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 1 && params.feet_on_ground(3) == 0  && params.feet_on_ground(4) == 0
-        % contact constraints for 2 feet on ground
-        params.contactLinkNames      = {'l_sole','r_sole'};
-    elseif   params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 0 && params.feet_on_ground(3) == 0 && params.feet_on_ground(4) == 0
-        % contact constraints for left foot on ground
-        params.contactLinkNames      = {'l_sole'};
-    elseif   params.feet_on_ground(1) == 0 && params.feet_on_ground(2) == 1 && params.feet_on_ground(3) == 0 && params.feet_on_ground(4) == 0
-        % contact constraints for right foot on ground
-        params.contactLinkNames      = {'r_sole'};
-    end
-    % FLOATING BASE
-    %params.active_floating_base = false;
-    params.qjInit      = bot1.InitializeStateicubGazeboSim(params.feet_on_ground);
-    params.dqjInit     = zeros(bot1.ndof,1);
-    % icub starting velocity floating base
-    params.dx_bInit    = zeros(3,1);
-    params.omega_bInit = zeros(3,1);
-    % root reference link;
-    if params.feet_on_ground(1) == 1
-        params.root_reference_link ='l_sole';
-    else
-        params.root_reference_link ='r_sole';
-    end
-    params.tStart   = time_struct.ti;
-    params.tEnd     = time_struct.tf;
-    params.sim_step =  0.01;%time_struct.step;
-    params.demo_movements = 1;
+params.tStart   = time_struct.ti;
+params.tEnd     = time_struct.tf;
+params.sim_step =  0.01;%time_struct.step;
    
 
 
@@ -101,7 +59,7 @@ elseif strcmp(simulator_type{1},'icub_matlab')
     params.qfinalSitting = [-10   0  0, -20  30  0  45  , -20  30  0  45  , 25.5   0   0  -18.5  -5.5  0,25.5   0   0  -18.5  -5.5  0]'*(pi/180);  
     params.qfinal        = [-10   0  0, -20  30  0  45  , -20  30  0  45  , 25.5   0   0  -18.5  -5.5  0,25.5   0   0  -18.5  -5.5  0]'*(pi/180);   
     params.tswitch       = 1;
-end
+
 
 
 %%  REFERENCE PARAMETERS
@@ -167,33 +125,15 @@ switch CONTROLLERTYPE
         %% INSTANCE PARAMETER
         preprocessing = @EmptyPreprocessing;
         run_function = @RobotExperiment;
-        fitness = @fitnessHumanoidsIcubStandUpSearchFreeSolution;
+        fitness = @fitnessHumanoidsIcubStandUpSearchFreeSolutionSimulink;
         clean_function = @RobotExperimentCleanData;
         
-        if strcmp(simulator_type{1},'rbt')
-            % TODO generalize for multichain
-            input{1} = simulator_type{1};  % rbt / v-rep
-            input{2} = qi;                 % initial position
-            input{3} = qdi;                % initial velocity
-            %------
-            input{4} = time_sym_struct;    %time struct for simulation with fixed step
-            input{5} = [];                 % here i have to insert the controller i will do that in init()
-            input{6} = fixed_step;         % if is true i use ode4 (runge-kutta)
-            input{7} = torque_saturation;  % i define the torque saturation that i want to apply
-            input{8} = maxtime;            % maxtime before the simulation is stopped because is too long
-        elseif strcmp(simulator_type{1},'icub_matlab')
-            input{1} = simulator_type{1};  % rbt / v-rep
-            input{2} = params;
-            input{3} = time_sym_struct;
-            input{4} = [];                 % here i have to insert the controller i will do that in init()
-            %input{5} = fixDistance;
-        elseif strcmp(simulator_type{1},'icub_matlab_sim')
-            input{1} = simulator_type{1};  % rbt / v-rep
-            input{2} = params;
-            input{3} = time_sym_struct;
-            input{4} = [];                 % here i have to insert the controller i will do that in init()
-            %input{5} = fixDistance;
-        end
+        input{1} = simulator_type{1};  % rbt / v-rep
+        input{2} = params;
+        input{3} = time_sym_struct;
+        input{4} = [];                 % here i have to insert the controller i will do that in init()
+       
+        
         %% CMAES PARAMETER
         %--- Starting value of parameters
         generation_of_starting_point = 'test'; % 'test':user defined by user_defined_start_action 'given':is redundant with test  'random': random starting point
@@ -203,7 +143,7 @@ switch CONTROLLERTYPE
                                      -0.02800863753444,-0.0278361490435566,-0.0146154272285895,0.0134390845173483,-0.00801177055714880,...
                                      0.350954589796539,0.364988639468307,0.365816381480233,0.389461591950187,0.402856738959637]; 
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-        niter = 700;  %number of generations
+        niter = 100;  %number of generations
         %cmaes_value_range = [-14 , 14];  % boudn that define the search space
         cmaes_value_range{1} = [ 0, 0, 0, 0, 0, -0.12,-0.12,-0.12,-0.12,-0.12,  0.36,0.36,0.36,0.36,0.36 ];  % lower bound that define the search space
         cmaes_value_range{2} = [ 2, 2, 2, 2, 2,  0.016,0.016,0.016,0.016,0.016, 0.50,0.50,0.50,0.50,0.50];  % upper bound that define the search space
