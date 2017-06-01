@@ -7,22 +7,6 @@
 #include "rtwtypes.h"
 
 /* Type Definitions */
-#ifndef typedef_c21_ResolvedFunctionInfo
-#define typedef_c21_ResolvedFunctionInfo
-
-typedef struct {
-  const char * context;
-  const char * name;
-  const char * dominantType;
-  const char * resolved;
-  uint32_T fileTimeLo;
-  uint32_T fileTimeHi;
-  uint32_T mFileTimeLo;
-  uint32_T mFileTimeHi;
-} c21_ResolvedFunctionInfo;
-
-#endif                                 /*typedef_c21_ResolvedFunctionInfo*/
-
 #ifndef typedef_SFc21_torqueBalancing2012bInstanceStruct
 #define typedef_SFc21_torqueBalancing2012bInstanceStruct
 

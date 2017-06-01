@@ -44,6 +44,7 @@
 #include "c40_torqueBalancing2012b.h"
 #include "c41_torqueBalancing2012b.h"
 #include "c42_torqueBalancing2012b.h"
+#include "c43_torqueBalancing2012b.h"
 
 /* Type Definitions */
 
@@ -280,6 +281,11 @@ unsigned int sf_torqueBalancing2012b_method_dispatcher(SimStruct *simstructPtr,
     return 1;
   }
 
+  if (chartFileNumber==43) {
+    c43_torqueBalancing2012b_method_dispatcher(simstructPtr, method, data);
+    return 1;
+  }
+
   return 0;
 }
 
@@ -313,10 +319,10 @@ unsigned int sf_torqueBalancing2012b_process_check_sum_call( int nlhs, mxArray *
       ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(0U);
       ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(0U);
     } else if (!strcmp(commandName,"makefile")) {
-      ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(3287738645U);
-      ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(2859966220U);
-      ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(4092532194U);
-      ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(1477562468U);
+      ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(34994864U);
+      ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(3318357992U);
+      ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(2461293363U);
+      ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(3681778989U);
     } else if (nrhs==3 && !strcmp(commandName,"chart")) {
       unsigned int chartFileNumber;
       chartFileNumber = (unsigned int)mxGetScalar(prhs[2]);
@@ -615,6 +621,13 @@ unsigned int sf_torqueBalancing2012b_process_check_sum_call( int nlhs, mxArray *
           break;
         }
 
+       case 43:
+        {
+          extern void sf_c43_torqueBalancing2012b_get_check_sum(mxArray *plhs[]);
+          sf_c43_torqueBalancing2012b_get_check_sum(plhs);
+          break;
+        }
+
        default:
         ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(0.0);
         ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(0.0);
@@ -630,10 +643,10 @@ unsigned int sf_torqueBalancing2012b_process_check_sum_call( int nlhs, mxArray *
       return 0;
     }
   } else {
-    ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(2935129250U);
-    ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(2777736952U);
-    ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(2429666985U);
-    ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(3861376703U);
+    ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(4204922701U);
+    ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(62306509U);
+    ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(2985527080U);
+    ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(3676961892U);
   }
 
   return 1;
@@ -671,7 +684,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
     switch (chartFileNumber) {
      case 1:
       {
-        if (strcmp(aiChksum, "bCquAs73MeQEENAlwI1bID") == 0) {
+        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
           extern mxArray *sf_c1_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c1_torqueBalancing2012b_get_autoinheritance_info();
@@ -684,7 +697,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 2:
       {
-        if (strcmp(aiChksum, "bCquAs73MeQEENAlwI1bID") == 0) {
+        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
           extern mxArray *sf_c2_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c2_torqueBalancing2012b_get_autoinheritance_info();
@@ -762,7 +775,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 8:
       {
-        if (strcmp(aiChksum, "bCquAs73MeQEENAlwI1bID") == 0) {
+        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
           extern mxArray *sf_c8_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c8_torqueBalancing2012b_get_autoinheritance_info();
@@ -775,7 +788,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 9:
       {
-        if (strcmp(aiChksum, "bCquAs73MeQEENAlwI1bID") == 0) {
+        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
           extern mxArray *sf_c9_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c9_torqueBalancing2012b_get_autoinheritance_info();
@@ -801,7 +814,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 11:
       {
-        if (strcmp(aiChksum, "bCquAs73MeQEENAlwI1bID") == 0) {
+        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
           extern mxArray *sf_c11_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c11_torqueBalancing2012b_get_autoinheritance_info();
@@ -840,7 +853,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 14:
       {
-        if (strcmp(aiChksum, "bCquAs73MeQEENAlwI1bID") == 0) {
+        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
           extern mxArray *sf_c14_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c14_torqueBalancing2012b_get_autoinheritance_info();
@@ -931,7 +944,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 21:
       {
-        if (strcmp(aiChksum, "KoLmo0mf4Fe7yJfW6cbgX") == 0) {
+        if (strcmp(aiChksum, "UfUWrvCHAdM09TZZtnwTOG") == 0) {
           extern mxArray *sf_c21_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c21_torqueBalancing2012b_get_autoinheritance_info();
@@ -996,7 +1009,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 26:
       {
-        if (strcmp(aiChksum, "bCquAs73MeQEENAlwI1bID") == 0) {
+        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
           extern mxArray *sf_c26_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c26_torqueBalancing2012b_get_autoinheritance_info();
@@ -1009,7 +1022,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 27:
       {
-        if (strcmp(aiChksum, "bCquAs73MeQEENAlwI1bID") == 0) {
+        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
           extern mxArray *sf_c27_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c27_torqueBalancing2012b_get_autoinheritance_info();
@@ -1100,7 +1113,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 34:
       {
-        if (strcmp(aiChksum, "bCquAs73MeQEENAlwI1bID") == 0) {
+        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
           extern mxArray *sf_c34_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c34_torqueBalancing2012b_get_autoinheritance_info();
@@ -1113,7 +1126,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 35:
       {
-        if (strcmp(aiChksum, "bCquAs73MeQEENAlwI1bID") == 0) {
+        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
           extern mxArray *sf_c35_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c35_torqueBalancing2012b_get_autoinheritance_info();
@@ -1126,7 +1139,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 36:
       {
-        if (strcmp(aiChksum, "bCquAs73MeQEENAlwI1bID") == 0) {
+        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
           extern mxArray *sf_c36_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c36_torqueBalancing2012b_get_autoinheritance_info();
@@ -1178,7 +1191,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 40:
       {
-        if (strcmp(aiChksum, "bCquAs73MeQEENAlwI1bID") == 0) {
+        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
           extern mxArray *sf_c40_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c40_torqueBalancing2012b_get_autoinheritance_info();
@@ -1191,7 +1204,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 41:
       {
-        if (strcmp(aiChksum, "PNLcD52gNSROdBz8Fdq1eH") == 0) {
+        if (strcmp(aiChksum, "Aj2vDlXJg2IlLkz3oEjXcB") == 0) {
           extern mxArray *sf_c41_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c41_torqueBalancing2012b_get_autoinheritance_info();
@@ -1204,10 +1217,23 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 42:
       {
-        if (strcmp(aiChksum, "bCquAs73MeQEENAlwI1bID") == 0) {
+        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
           extern mxArray *sf_c42_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c42_torqueBalancing2012b_get_autoinheritance_info();
+          break;
+        }
+
+        plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL);
+        break;
+      }
+
+     case 43:
+      {
+        if (strcmp(aiChksum, "Dmv7LooWSjPyxMANfBtNNG") == 0) {
+          extern mxArray *sf_c43_torqueBalancing2012b_get_autoinheritance_info
+            (void);
+          plhs[0] = sf_c43_torqueBalancing2012b_get_autoinheritance_info();
           break;
         }
 
@@ -1712,6 +1738,17 @@ unsigned int sf_torqueBalancing2012b_get_eml_resolved_functions_info( int nlhs,
         break;
       }
 
+     case 43:
+      {
+        extern const mxArray
+          *sf_c43_torqueBalancing2012b_get_eml_resolved_functions_info(void);
+        mxArray *persistentMxArray = (mxArray *)
+          sf_c43_torqueBalancing2012b_get_eml_resolved_functions_info();
+        plhs[0] = mxDuplicateArray(persistentMxArray);
+        mxDestroyArray(persistentMxArray);
+        break;
+      }
+
      default:
       plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL);
     }
@@ -1749,7 +1786,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
     switch (chartFileNumber) {
      case 1:
       {
-        if (strcmp(tpChksum, "fKnxCgBJ16ooe4dAvveDxB") == 0) {
+        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
           extern mxArray *sf_c1_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c1_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -1758,7 +1795,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 2:
       {
-        if (strcmp(tpChksum, "fKnxCgBJ16ooe4dAvveDxB") == 0) {
+        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
           extern mxArray *sf_c2_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c2_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -1812,7 +1849,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 8:
       {
-        if (strcmp(tpChksum, "fKnxCgBJ16ooe4dAvveDxB") == 0) {
+        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
           extern mxArray *sf_c8_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c8_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -1821,7 +1858,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 9:
       {
-        if (strcmp(tpChksum, "fKnxCgBJ16ooe4dAvveDxB") == 0) {
+        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
           extern mxArray *sf_c9_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c9_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -1839,7 +1876,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 11:
       {
-        if (strcmp(tpChksum, "fKnxCgBJ16ooe4dAvveDxB") == 0) {
+        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
           extern mxArray *sf_c11_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c11_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -1866,7 +1903,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 14:
       {
-        if (strcmp(tpChksum, "fKnxCgBJ16ooe4dAvveDxB") == 0) {
+        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
           extern mxArray *sf_c14_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c14_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -1929,7 +1966,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 21:
       {
-        if (strcmp(tpChksum, "2ZQrZDcauKj7aoltzWdlDG") == 0) {
+        if (strcmp(tpChksum, "wMMqBoimxPEI8p2FmqF1BC") == 0) {
           extern mxArray *sf_c21_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c21_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -1974,7 +2011,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 26:
       {
-        if (strcmp(tpChksum, "fKnxCgBJ16ooe4dAvveDxB") == 0) {
+        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
           extern mxArray *sf_c26_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c26_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -1983,7 +2020,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 27:
       {
-        if (strcmp(tpChksum, "fKnxCgBJ16ooe4dAvveDxB") == 0) {
+        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
           extern mxArray *sf_c27_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c27_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -2046,7 +2083,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 34:
       {
-        if (strcmp(tpChksum, "fKnxCgBJ16ooe4dAvveDxB") == 0) {
+        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
           extern mxArray *sf_c34_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c34_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -2055,7 +2092,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 35:
       {
-        if (strcmp(tpChksum, "fKnxCgBJ16ooe4dAvveDxB") == 0) {
+        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
           extern mxArray *sf_c35_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c35_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -2064,7 +2101,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 36:
       {
-        if (strcmp(tpChksum, "fKnxCgBJ16ooe4dAvveDxB") == 0) {
+        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
           extern mxArray *sf_c36_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c36_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -2100,7 +2137,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 40:
       {
-        if (strcmp(tpChksum, "fKnxCgBJ16ooe4dAvveDxB") == 0) {
+        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
           extern mxArray *sf_c40_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c40_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -2109,7 +2146,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 41:
       {
-        if (strcmp(tpChksum, "hMHxia2a2IDJ6Qre11RbVE") == 0) {
+        if (strcmp(tpChksum, "GV4wsb4uYKv2IucWDMmv1C") == 0) {
           extern mxArray *sf_c41_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c41_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -2118,9 +2155,18 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 42:
       {
-        if (strcmp(tpChksum, "fKnxCgBJ16ooe4dAvveDxB") == 0) {
+        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
           extern mxArray *sf_c42_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c42_torqueBalancing2012b_third_party_uses_info();
+          break;
+        }
+      }
+
+     case 43:
+      {
+        if (strcmp(tpChksum, "X1Y6S2YfpDQgrncrDMdBiF") == 0) {
+          extern mxArray *sf_c43_torqueBalancing2012b_third_party_uses_info(void);
+          plhs[0] = sf_c43_torqueBalancing2012b_third_party_uses_info();
           break;
         }
       }
@@ -2137,7 +2183,7 @@ void torqueBalancing2012b_debug_initialize(struct SfDebugInstanceStruct*
   debugInstance)
 {
   _torqueBalancing2012bMachineNumber_ = sf_debug_initialize_machine
-    (debugInstance,"torqueBalancing2012b","sfun",0,42,0,0,0);
+    (debugInstance,"torqueBalancing2012b","sfun",0,43,0,0,0);
   sf_debug_set_machine_event_thresholds(debugInstance,
     _torqueBalancing2012bMachineNumber_,0,0);
   sf_debug_set_machine_data_thresholds(debugInstance,

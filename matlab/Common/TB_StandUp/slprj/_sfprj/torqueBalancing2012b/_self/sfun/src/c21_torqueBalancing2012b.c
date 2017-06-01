@@ -17,11 +17,8 @@
 /* Variable Declarations */
 
 /* Variable Definitions */
-static const char * c21_debug_family_names[5] = { "nargin", "nargout",
-  "icubStandup", "state", "legsInContact" };
-
-static const char * c21_b_debug_family_names[5] = { "nargin", "nargout",
-  "icubStandup", "state", "legsInContact" };
+static const char * c21_debug_family_names[5] = { "nargin", "nargout", "t",
+  "tswitch", "legsInContact" };
 
 /* Function Declarations */
 static void initialize_c21_torqueBalancing2012b
@@ -162,86 +159,50 @@ static void sf_c21_torqueBalancing2012b(SFc21_torqueBalancing2012bInstanceStruct
 {
   real_T c21_hoistedGlobal;
   real_T c21_b_hoistedGlobal;
-  real_T c21_icubStandup;
-  real_T c21_state;
+  real_T c21_t;
+  real_T c21_tswitch;
   uint32_T c21_debug_family_var_map[5];
   real_T c21_nargin = 2.0;
   real_T c21_nargout = 1.0;
   real_T c21_legsInContact;
-  real_T c21_b_icubStandup;
-  real_T c21_b_state;
-  real_T c21_b_nargin = 2.0;
-  real_T c21_b_nargout = 1.0;
-  real_T *c21_c_icubStandup;
+  real_T *c21_b_t;
   real_T *c21_b_legsInContact;
-  real_T *c21_c_state;
-  boolean_T guard1 = FALSE;
-  c21_c_state = (real_T *)ssGetInputPortSignal(chartInstance->S, 1);
+  real_T *c21_b_tswitch;
+  c21_b_tswitch = (real_T *)ssGetInputPortSignal(chartInstance->S, 1);
   c21_b_legsInContact = (real_T *)ssGetOutputPortSignal(chartInstance->S, 1);
-  c21_c_icubStandup = (real_T *)ssGetInputPortSignal(chartInstance->S, 0);
+  c21_b_t = (real_T *)ssGetInputPortSignal(chartInstance->S, 0);
   _sfTime_ = (real_T)ssGetT(chartInstance->S);
   _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 20U, chartInstance->c21_sfEvent);
-  _SFD_DATA_RANGE_CHECK(*c21_c_icubStandup, 0U);
+  _SFD_DATA_RANGE_CHECK(*c21_b_t, 0U);
   _SFD_DATA_RANGE_CHECK(*c21_b_legsInContact, 1U);
-  _SFD_DATA_RANGE_CHECK(*c21_c_state, 2U);
+  _SFD_DATA_RANGE_CHECK(*c21_b_tswitch, 2U);
   chartInstance->c21_sfEvent = CALL_EVENT;
   _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 20U, chartInstance->c21_sfEvent);
-  c21_hoistedGlobal = *c21_c_icubStandup;
-  c21_b_hoistedGlobal = *c21_c_state;
-  c21_icubStandup = c21_hoistedGlobal;
-  c21_state = c21_b_hoistedGlobal;
+  c21_hoistedGlobal = *c21_b_t;
+  c21_b_hoistedGlobal = *c21_b_tswitch;
+  c21_t = c21_hoistedGlobal;
+  c21_tswitch = c21_b_hoistedGlobal;
   _SFD_SYMBOL_SCOPE_PUSH_EML(0U, 5U, 5U, c21_debug_family_names,
     c21_debug_family_var_map);
   _SFD_SYMBOL_SCOPE_ADD_EML_IMPORTABLE(&c21_nargin, 0U, c21_sf_marshallOut,
     c21_sf_marshallIn);
   _SFD_SYMBOL_SCOPE_ADD_EML_IMPORTABLE(&c21_nargout, 1U, c21_sf_marshallOut,
     c21_sf_marshallIn);
-  _SFD_SYMBOL_SCOPE_ADD_EML(&c21_icubStandup, 2U, c21_sf_marshallOut);
-  _SFD_SYMBOL_SCOPE_ADD_EML(&c21_state, 3U, c21_sf_marshallOut);
+  _SFD_SYMBOL_SCOPE_ADD_EML(&c21_t, 2U, c21_sf_marshallOut);
+  _SFD_SYMBOL_SCOPE_ADD_EML(&c21_tswitch, 3U, c21_sf_marshallOut);
   _SFD_SYMBOL_SCOPE_ADD_EML_IMPORTABLE(&c21_legsInContact, 4U,
     c21_sf_marshallOut, c21_sf_marshallIn);
   CV_EML_FCN(0, 0);
   _SFD_EML_CALL(0U, chartInstance->c21_sfEvent, 3);
-  c21_b_icubStandup = c21_icubStandup;
-  c21_b_state = c21_state;
-  _SFD_SYMBOL_SCOPE_PUSH_EML(0U, 5U, 5U, c21_b_debug_family_names,
-    c21_debug_family_var_map);
-  _SFD_SYMBOL_SCOPE_ADD_EML_IMPORTABLE(&c21_b_nargin, 0U, c21_sf_marshallOut,
-    c21_sf_marshallIn);
-  _SFD_SYMBOL_SCOPE_ADD_EML_IMPORTABLE(&c21_b_nargout, 1U, c21_sf_marshallOut,
-    c21_sf_marshallIn);
-  _SFD_SYMBOL_SCOPE_ADD_EML_IMPORTABLE(&c21_b_icubStandup, 2U,
-    c21_sf_marshallOut, c21_sf_marshallIn);
-  _SFD_SYMBOL_SCOPE_ADD_EML_IMPORTABLE(&c21_b_state, 3U, c21_sf_marshallOut,
-    c21_sf_marshallIn);
-  _SFD_SYMBOL_SCOPE_ADD_EML_IMPORTABLE(&c21_legsInContact, 4U,
-    c21_sf_marshallOut, c21_sf_marshallIn);
-  CV_SCRIPT_FCN(0, 0);
-  _SFD_SCRIPT_CALL(0U, chartInstance->c21_sfEvent, 3);
-  c21_legsInContact = 0.0;
-  _SFD_SCRIPT_CALL(0U, chartInstance->c21_sfEvent, 5);
-  guard1 = FALSE;
-  if (CV_SCRIPT_COND(0, 0, c21_b_state < 3.0)) {
-    if (CV_SCRIPT_COND(0, 1, c21_b_icubStandup == 1.0)) {
-      CV_SCRIPT_MCDC(0, 0, TRUE);
-      CV_SCRIPT_IF(0, 0, TRUE);
-      _SFD_SCRIPT_CALL(0U, chartInstance->c21_sfEvent, 7);
-      c21_legsInContact = 1.0;
-    } else {
-      guard1 = TRUE;
-    }
+  if (CV_EML_IF(0, 1, 0, c21_t <= c21_tswitch)) {
+    _SFD_EML_CALL(0U, chartInstance->c21_sfEvent, 4);
+    c21_legsInContact = 100.0;
   } else {
-    guard1 = TRUE;
+    _SFD_EML_CALL(0U, chartInstance->c21_sfEvent, 6);
+    c21_legsInContact = -100.0;
   }
 
-  if (guard1 == TRUE) {
-    CV_SCRIPT_MCDC(0, 0, FALSE);
-    CV_SCRIPT_IF(0, 0, FALSE);
-  }
-
-  _SFD_SCRIPT_CALL(0U, chartInstance->c21_sfEvent, -7);
-  _SFD_SYMBOL_SCOPE_POP();
-  _SFD_EML_CALL(0U, chartInstance->c21_sfEvent, -3);
+  _SFD_EML_CALL(0U, chartInstance->c21_sfEvent, -6);
   _SFD_SYMBOL_SCOPE_POP();
   *c21_b_legsInContact = c21_legsInContact;
   _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 20U, chartInstance->c21_sfEvent);
@@ -262,8 +223,6 @@ static void registerMessagesc21_torqueBalancing2012b
 static void init_script_number_translation(uint32_T c21_machineNumber, uint32_T
   c21_chartNumber)
 {
-  _SFD_SCRIPT_TRANSLATION(c21_chartNumber, 0U, sf_debug_get_script_id(
-    "/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/contactDetector.m"));
 }
 
 static const mxArray *c21_sf_marshallOut(void *chartInstanceVoid, void
@@ -328,52 +287,10 @@ static void c21_sf_marshallIn(void *chartInstanceVoid, const mxArray
 
 const mxArray *sf_c21_torqueBalancing2012b_get_eml_resolved_functions_info(void)
 {
-  const mxArray *c21_nameCaptureInfo;
-  c21_ResolvedFunctionInfo c21_info[1];
-  c21_ResolvedFunctionInfo (*c21_b_info)[1];
-  const mxArray *c21_m0 = NULL;
-  int32_T c21_i0;
-  c21_ResolvedFunctionInfo *c21_r0;
+  const mxArray *c21_nameCaptureInfo = NULL;
   c21_nameCaptureInfo = NULL;
-  c21_nameCaptureInfo = NULL;
-  c21_b_info = (c21_ResolvedFunctionInfo (*)[1])c21_info;
-  (*c21_b_info)[0].context = "";
-  (*c21_b_info)[0].name = "contactDetector";
-  (*c21_b_info)[0].dominantType = "double";
-  (*c21_b_info)[0].resolved =
-    "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/contactDetector.m";
-  (*c21_b_info)[0].fileTimeLo = 1495631764U;
-  (*c21_b_info)[0].fileTimeHi = 0U;
-  (*c21_b_info)[0].mFileTimeLo = 0U;
-  (*c21_b_info)[0].mFileTimeHi = 0U;
-  sf_mex_assign(&c21_m0, sf_mex_createstruct("nameCaptureInfo", 1, 1), FALSE);
-  for (c21_i0 = 0; c21_i0 < 1; c21_i0++) {
-    c21_r0 = &c21_info[c21_i0];
-    sf_mex_addfield(c21_m0, sf_mex_create("nameCaptureInfo", c21_r0->context, 15,
-      0U, 0U, 0U, 2, 1, strlen(c21_r0->context)), "context", "nameCaptureInfo",
-                    c21_i0);
-    sf_mex_addfield(c21_m0, sf_mex_create("nameCaptureInfo", c21_r0->name, 15,
-      0U, 0U, 0U, 2, 1, strlen(c21_r0->name)), "name", "nameCaptureInfo", c21_i0);
-    sf_mex_addfield(c21_m0, sf_mex_create("nameCaptureInfo",
-      c21_r0->dominantType, 15, 0U, 0U, 0U, 2, 1, strlen(c21_r0->dominantType)),
-                    "dominantType", "nameCaptureInfo", c21_i0);
-    sf_mex_addfield(c21_m0, sf_mex_create("nameCaptureInfo", c21_r0->resolved,
-      15, 0U, 0U, 0U, 2, 1, strlen(c21_r0->resolved)), "resolved",
-                    "nameCaptureInfo", c21_i0);
-    sf_mex_addfield(c21_m0, sf_mex_create("nameCaptureInfo", &c21_r0->fileTimeLo,
-      7, 0U, 0U, 0U, 0), "fileTimeLo", "nameCaptureInfo", c21_i0);
-    sf_mex_addfield(c21_m0, sf_mex_create("nameCaptureInfo", &c21_r0->fileTimeHi,
-      7, 0U, 0U, 0U, 0), "fileTimeHi", "nameCaptureInfo", c21_i0);
-    sf_mex_addfield(c21_m0, sf_mex_create("nameCaptureInfo",
-      &c21_r0->mFileTimeLo, 7, 0U, 0U, 0U, 0), "mFileTimeLo", "nameCaptureInfo",
-                    c21_i0);
-    sf_mex_addfield(c21_m0, sf_mex_create("nameCaptureInfo",
-      &c21_r0->mFileTimeHi, 7, 0U, 0U, 0U, 0), "mFileTimeHi", "nameCaptureInfo",
-                    c21_i0);
-  }
-
-  sf_mex_assign(&c21_nameCaptureInfo, c21_m0, FALSE);
-  sf_mex_emlrtNameCapturePostProcessR2012a(&c21_nameCaptureInfo);
+  sf_mex_assign(&c21_nameCaptureInfo, sf_mex_create("nameCaptureInfo", NULL, 0,
+    0U, 1U, 0U, 2, 0, 1), FALSE);
   return c21_nameCaptureInfo;
 }
 
@@ -397,9 +314,9 @@ static int32_T c21_c_emlrt_marshallIn(SFc21_torqueBalancing2012bInstanceStruct
   *chartInstance, const mxArray *c21_u, const emlrtMsgIdentifier *c21_parentId)
 {
   int32_T c21_y;
-  int32_T c21_i1;
-  sf_mex_import(c21_parentId, sf_mex_dup(c21_u), &c21_i1, 1, 6, 0U, 0, 0U, 0);
-  c21_y = c21_i1;
+  int32_T c21_i0;
+  sf_mex_import(c21_parentId, sf_mex_dup(c21_u), &c21_i0, 1, 6, 0U, 0, 0U, 0);
+  c21_y = c21_i0;
   sf_mex_destroy(&c21_u);
   return c21_y;
 }
@@ -477,10 +394,10 @@ extern void utFree(void*);
 
 void sf_c21_torqueBalancing2012b_get_check_sum(mxArray *plhs[])
 {
-  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(110478553U);
-  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(3460026149U);
-  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(408537783U);
-  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(4221391420U);
+  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(2132936263U);
+  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(3980959155U);
+  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(622965U);
+  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(2427254152U);
 }
 
 mxArray *sf_c21_torqueBalancing2012b_get_autoinheritance_info(void)
@@ -492,7 +409,7 @@ mxArray *sf_c21_torqueBalancing2012b_get_autoinheritance_info(void)
     autoinheritanceFields);
 
   {
-    mxArray *mxChecksum = mxCreateString("KoLmo0mf4Fe7yJfW6cbgX");
+    mxArray *mxChecksum = mxCreateString("UfUWrvCHAdM09TZZtnwTOG");
     mxSetField(mxAutoinheritanceInfo,0,"checksum",mxChecksum);
   }
 
@@ -624,7 +541,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
            0,
            0,
            0,
-           1,
+           0,
            &(chartInstance->chartNumber),
            &(chartInstance->instanceNumber),
            ssGetPath(S),
@@ -642,9 +559,9 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
             0,
             0,
             0);
-          _SFD_SET_DATA_PROPS(0,1,1,0,"icubStandup");
+          _SFD_SET_DATA_PROPS(0,1,1,0,"t");
           _SFD_SET_DATA_PROPS(1,2,0,1,"legsInContact");
-          _SFD_SET_DATA_PROPS(2,1,1,0,"state");
+          _SFD_SET_DATA_PROPS(2,1,1,0,"tswitch");
           _SFD_STATE_INFO(0,0,2);
           _SFD_CH_SUBSTATE_COUNT(0);
           _SFD_CH_SUBSTATE_DECOMP(0);
@@ -659,23 +576,9 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
         _SFD_CV_INIT_TRANS(0,0,NULL,NULL,0,NULL);
 
         /* Initialization of MATLAB Function Model Coverage */
-        _SFD_CV_INIT_EML(0,1,1,0,0,0,0,0,0,0,0);
-        _SFD_CV_INIT_EML_FCN(0,0,"eML_blk_kernel",0,-1,120);
-        _SFD_CV_INIT_SCRIPT(0,1,1,0,0,0,0,0,2,1);
-        _SFD_CV_INIT_SCRIPT_FCN(0,0,"contactDetector",0,-1,168);
-        _SFD_CV_INIT_SCRIPT_IF(0,0,90,126,-1,163);
-
-        {
-          static int condStart[] = { 94, 109 };
-
-          static int condEnd[] = { 103, 125 };
-
-          static int pfixExpr[] = { 0, 1, -3 };
-
-          _SFD_CV_INIT_SCRIPT_MCDC(0,0,93,126,2,0,&(condStart[0]),&(condEnd[0]),
-            3,&(pfixExpr[0]));
-        }
-
+        _SFD_CV_INIT_EML(0,1,1,1,0,0,0,0,0,0,0);
+        _SFD_CV_INIT_EML_FCN(0,0,"eML_blk_kernel",0,-1,163);
+        _SFD_CV_INIT_EML_IF(0,1,0,61,75,111,154);
         _SFD_TRANS_COV_WTS(0,0,0,1,0);
         if (chartAlreadyPresent==0) {
           _SFD_TRANS_COV_MAPS(0,
@@ -693,16 +596,16 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
           (MexFcnForType)c21_sf_marshallOut,(MexInFcnForType)NULL);
 
         {
-          real_T *c21_icubStandup;
+          real_T *c21_t;
           real_T *c21_legsInContact;
-          real_T *c21_state;
-          c21_state = (real_T *)ssGetInputPortSignal(chartInstance->S, 1);
+          real_T *c21_tswitch;
+          c21_tswitch = (real_T *)ssGetInputPortSignal(chartInstance->S, 1);
           c21_legsInContact = (real_T *)ssGetOutputPortSignal(chartInstance->S,
             1);
-          c21_icubStandup = (real_T *)ssGetInputPortSignal(chartInstance->S, 0);
-          _SFD_SET_DATA_VALUE_PTR(0U, c21_icubStandup);
+          c21_t = (real_T *)ssGetInputPortSignal(chartInstance->S, 0);
+          _SFD_SET_DATA_VALUE_PTR(0U, c21_t);
           _SFD_SET_DATA_VALUE_PTR(1U, c21_legsInContact);
-          _SFD_SET_DATA_VALUE_PTR(2U, c21_state);
+          _SFD_SET_DATA_VALUE_PTR(2U, c21_tswitch);
         }
       }
     } else {
@@ -715,7 +618,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
 static const char* sf_get_instance_specialization(void)
 {
-  return "2ZQrZDcauKj7aoltzWdlDG";
+  return "wMMqBoimxPEI8p2FmqF1BC";
 }
 
 static void sf_opaque_initialize_c21_torqueBalancing2012b(void *chartInstanceVar)
@@ -895,10 +798,10 @@ static void mdlSetWorkWidths_c21_torqueBalancing2012b(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(765045379U));
-  ssSetChecksum1(S,(1897385976U));
-  ssSetChecksum2(S,(2968512635U));
-  ssSetChecksum3(S,(2330007304U));
+  ssSetChecksum0(S,(3668289663U));
+  ssSetChecksum1(S,(741102112U));
+  ssSetChecksum2(S,(1007921821U));
+  ssSetChecksum3(S,(73682364U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
   ssSupportsMultipleExecInstances(S,1);

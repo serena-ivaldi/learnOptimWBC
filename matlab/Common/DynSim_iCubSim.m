@@ -28,6 +28,7 @@ function [t, q, qd] = DynSim_iCubSim(controller,params)
         data_xCoMDes(index,:)          = xCoMDes;
         data_dxCoMDes(index,:)         = dxCoMDes;
         data_ddxCoMDes(index,:)        = ddxCoMDes;
+        index = index + 1;
     end
     ts_xCoMDes    = timeseries(data_xCoMDes,time);
     ts_dxCoMDes   = timeseries(data_dxCoMDes,time);

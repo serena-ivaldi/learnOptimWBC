@@ -6,6 +6,7 @@
 #include "c1_KUAKXEagfs8AeITP6Td37B_WBToolboxLibrary.h"
 #include "c1_SaIbQGVykbN93G6oZHOX8C_WBToolboxLibrary.h"
 #include "c1_ShVT4BxSmtBPnRwC5cMTHH_WBToolboxLibrary.h"
+#include "c1_nJzEs4bzwNB8XgjFfBu6J_WBToolboxLibrary.h"
 
 /* Type Definitions */
 
@@ -56,6 +57,12 @@ unsigned int sf_WBToolboxLibrary_method_dispatcher(SimStruct *simstructPtr,
       return 1;
     }
 
+    if (!strcmp(specsCksum, "nJzEs4bzwNB8XgjFfBu6J")) {
+      c1_nJzEs4bzwNB8XgjFfBu6J_WBToolboxLibrary_method_dispatcher(simstructPtr,
+        method, data);
+      return 1;
+    }
+
     return 0;
   }
 
@@ -87,10 +94,10 @@ unsigned int sf_WBToolboxLibrary_process_check_sum_call( int nlhs, mxArray *
       machineName[(sizeof(machineName)/sizeof(char)-1)] = '\0';
       if (!strcmp(machineName,"WBToolboxLibrary")) {
         if (nrhs==3) {
-          ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(823323235U);
-          ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(2928924604U);
-          ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(213798549U);
-          ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(2321884351U);
+          ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(1471957645U);
+          ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(4076168139U);
+          ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(193342071U);
+          ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(1023958712U);
         } else if (nrhs==4) {
           unsigned int chartFileNumber;
           chartFileNumber = (unsigned int)mxGetScalar(prhs[3]);
@@ -98,9 +105,9 @@ unsigned int sf_WBToolboxLibrary_process_check_sum_call( int nlhs, mxArray *
            case 1:
             {
               extern void
-                sf_c1_ShVT4BxSmtBPnRwC5cMTHH_WBToolboxLibrary_get_check_sum
+                sf_c1_nJzEs4bzwNB8XgjFfBu6J_WBToolboxLibrary_get_check_sum
                 (mxArray *plhs[]);
-              sf_c1_ShVT4BxSmtBPnRwC5cMTHH_WBToolboxLibrary_get_check_sum(plhs);
+              sf_c1_nJzEs4bzwNB8XgjFfBu6J_WBToolboxLibrary_get_check_sum(plhs);
               break;
             }
 
@@ -198,6 +205,16 @@ unsigned int sf_WBToolboxLibrary_autoinheritance_info( int nlhs, mxArray * plhs[
           break;
         }
 
+        if (strcmp(aiChksum, "WTZVj4KFVwsi8dGEeflH7G") == 0) {
+          extern mxArray
+            *sf_c1_nJzEs4bzwNB8XgjFfBu6J_WBToolboxLibrary_get_autoinheritance_info
+            (void);
+          plhs[0] =
+            sf_c1_nJzEs4bzwNB8XgjFfBu6J_WBToolboxLibrary_get_autoinheritance_info
+            ();
+          break;
+        }
+
         plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL);
         break;
       }
@@ -240,10 +257,10 @@ unsigned int sf_WBToolboxLibrary_get_eml_resolved_functions_info( int nlhs,
      case 1:
       {
         extern const mxArray
-          *sf_c1_ShVT4BxSmtBPnRwC5cMTHH_WBToolboxLibrary_get_eml_resolved_functions_info
+          *sf_c1_nJzEs4bzwNB8XgjFfBu6J_WBToolboxLibrary_get_eml_resolved_functions_info
           (void);
         mxArray *persistentMxArray = (mxArray *)
-          sf_c1_ShVT4BxSmtBPnRwC5cMTHH_WBToolboxLibrary_get_eml_resolved_functions_info
+          sf_c1_nJzEs4bzwNB8XgjFfBu6J_WBToolboxLibrary_get_eml_resolved_functions_info
           ();
         plhs[0] = mxDuplicateArray(persistentMxArray);
         mxDestroyArray(persistentMxArray);
@@ -320,6 +337,15 @@ unsigned int sf_WBToolboxLibrary_third_party_uses_info( int nlhs, mxArray *
             (void);
           plhs[0] =
             sf_c1_ShVT4BxSmtBPnRwC5cMTHH_WBToolboxLibrary_third_party_uses_info();
+          break;
+        }
+
+        if (strcmp(tpChksum, "nJzEs4bzwNB8XgjFfBu6J") == 0) {
+          extern mxArray
+            *sf_c1_nJzEs4bzwNB8XgjFfBu6J_WBToolboxLibrary_third_party_uses_info
+            (void);
+          plhs[0] =
+            sf_c1_nJzEs4bzwNB8XgjFfBu6J_WBToolboxLibrary_third_party_uses_info();
           break;
         }
       }

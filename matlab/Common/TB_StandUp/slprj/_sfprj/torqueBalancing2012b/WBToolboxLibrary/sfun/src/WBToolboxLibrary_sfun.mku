@@ -8,7 +8,7 @@ LD = $(CC)
  
 MACHINE     = WBToolboxLibrary
 TARGET      = sfun
-CHART_SRCS 	= c1_8EAxsT4XkBwuvlN9PQRf3D_WBToolboxLibrary.c c1_KUAKXEagfs8AeITP6Td37B_WBToolboxLibrary.c c1_SaIbQGVykbN93G6oZHOX8C_WBToolboxLibrary.c c1_ShVT4BxSmtBPnRwC5cMTHH_WBToolboxLibrary.c
+CHART_SRCS 	= c1_8EAxsT4XkBwuvlN9PQRf3D_WBToolboxLibrary.c c1_KUAKXEagfs8AeITP6Td37B_WBToolboxLibrary.c c1_SaIbQGVykbN93G6oZHOX8C_WBToolboxLibrary.c c1_ShVT4BxSmtBPnRwC5cMTHH_WBToolboxLibrary.c c1_nJzEs4bzwNB8XgjFfBu6J_WBToolboxLibrary.c
 MACHINE_SRC	= WBToolboxLibrary_sfun.c
 MACHINE_REG = 
 MAKEFILE    = WBToolboxLibrary_sfun.mku

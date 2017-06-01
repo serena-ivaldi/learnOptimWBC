@@ -10,7 +10,7 @@ simulator            = 'icub_matlab_sim';
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
-time_struct.tf = 10;
+time_struct.tf = 4.5;
 time_struct.step = 0.01;
 %% Parameters for simulator
 ndof = 25;
@@ -112,11 +112,16 @@ params.footSizeForOpitmization = [-0.07 0.07;       % xMin, xMax
 %% parameters for controller and fitness
 % sitting_com:-0.120249695321353,-0.0680999719842103,0.369603821651986];
 % stading_com:0.0167667444901888,-0.0681008604452745,0.503988037442802
-params.xComfinal = [-0.120249695321353,-0.0680999719842103,0.369603821651986]';
+%params.xComfinal     = [-0.120249695321353,-0.0680999719842103,0.369603821651986]';
 % standing_pose: -10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0, 25.5   0   0  -18.5  -5.5  0
 % sitting_pose:   10   0  0, -20  30  0  45  0, -20  30  0  45  0,  90    0   0  -90    -5.5  0,  90    0   0   -90   -5.5  0
-params.qfinal    = [-10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0, 25.5   0   0  -18.5  -5.5  0]'*(pi/180);   
-%params.qfinal = [10   0  0 -20  30  0  45  0 -20  30  0  45  0 90   0   0  -90  -10.5  0 90   0   0  -90  -10.5  0]'*(pi/180);
+params.qfinalSitting =  [70.0000001093867 0.618804962651733 0.399999267875981...
+                        -67.2000001361580 34.0999961120969 4.79796140019389 43.1917772138638...
+                        -67.2000001361580 34.0999961120969 4.79796140019389 43.1917772138638...
+                        84.2999649174303	0.761524617074400	0.0867967193079845	-99.2529302018096	-15.8102389048266	0.0632937999425440...
+                        84.2999649174303	0.761524617074400	0.0867967193079845	-99.2529302018096	-15.8102389048266	0.0632937999425440]'*(pi/180);   
+params.qfinal        = [-10   0  0, -20  30  0  45  , -20  30  0  45  , 25.5   0   0  -18.5  -5.5  0,25.5   0   0  -18.5  -5.5  0]'*(pi/180);   
+params.tswitch       = 1; %1.5
 %% Visualization
 if (visualization_test)
     icub.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
@@ -171,7 +176,7 @@ else
                          % #basis overlap                    starting com position                                          ending com position
                                                                                                                           
     geom_parameters{1,1} =  [5 , 5 ,     2 ,...                                                                   
-                             -0.02800863753444,icub.init_state.xCoMRef(2),icub.init_state.xCoMRef(3),...            [-0.0698659683530936,-0.0680997608937098,0.369854083160630] icub.init_state.xCoMRef(1),icub.init_state.xCoMRef(2),icub.init_state.xCoMRef(3)
+                             -0.0254627184564190	-0.0679301926936281	0.308024116757686,...            [-0.0698659683530936,-0.0680997608937098,0.369854083160630] icub.init_state.xCoMRef(1),icub.init_state.xCoMRef(2),icub.init_state.xCoMRef(3)
                              0.0167667444901888,-0.0681008604452745,0.503988037442802];% sitting_com:-0.120249695321353,-0.0680999719842103,0.369603821651986];
     
     

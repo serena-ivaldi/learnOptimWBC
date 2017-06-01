@@ -75,7 +75,7 @@ static void registerMessagesc34_torqueBalancing2012b
 static void c34_fromBaseToWorldWithImu(SFc34_torqueBalancing2012bInstanceStruct *
   chartInstance, real_T c34_imu_H_link[16], real_T c34_imu_H_link_0[16], real_T
   c34_link_H_root[16], real_T c34_inertial_0[12], real_T c34_inertial[12],
-  real_T c34_neck[3], c34_struct_szunj786Fa70tQRn01KlgE *c34_b_CONFIG, real_T
+  real_T c34_neck[3], c34_struct_HZPQIAn1UwxVqJtlH5llbD *c34_b_CONFIG, real_T
   c34_w_H_root[16]);
 static void c34_rotz(SFc34_torqueBalancing2012bInstanceStruct *chartInstance,
                      real_T c34_alpha, real_T c34_R[9]);
@@ -108,7 +108,7 @@ static const mxArray *c34_b_sf_marshallOut(void *chartInstanceVoid, void
   *c34_inData);
 static void c34_c_emlrt_marshallIn(SFc34_torqueBalancing2012bInstanceStruct
   *chartInstance, const mxArray *c34_u, const emlrtMsgIdentifier *c34_parentId,
-  c34_struct_szunj786Fa70tQRn01KlgE *c34_y);
+  c34_struct_HZPQIAn1UwxVqJtlH5llbD *c34_y);
 static real_T c34_d_emlrt_marshallIn(SFc34_torqueBalancing2012bInstanceStruct
   *chartInstance, const mxArray *c34_u, const emlrtMsgIdentifier *c34_parentId);
 static c34_struct_amzdx4J7qaaMzgPI7fQ3WD c34_e_emlrt_marshallIn
@@ -220,7 +220,7 @@ static void initialize_params_c34_torqueBalancing2012b
 {
   const mxArray *c34_m0 = NULL;
   const mxArray *c34_mxField;
-  c34_struct_szunj786Fa70tQRn01KlgE c34_r0;
+  c34_struct_HZPQIAn1UwxVqJtlH5llbD c34_r0;
   const mxArray *c34_m1 = NULL;
   const mxArray *c34_b_mxField;
   sf_set_error_prefix_string(
@@ -294,15 +294,15 @@ static void initialize_params_c34_torqueBalancing2012b
   c34_mxField = sf_mex_getfield(c34_m0, "DEMO_MOVEMENTS", "CONFIG", 0);
   sf_mex_import_named("CONFIG", sf_mex_dup(c34_mxField), &c34_r0.DEMO_MOVEMENTS,
                       1, 11, 0U, 0, 0U, 0);
-  c34_mxField = sf_mex_getfield(c34_m0, "PARAM", "CONFIG", 0);
-  sf_mex_import_named("CONFIG", sf_mex_dup(c34_mxField), &c34_r0.PARAM, 1, 0, 0U,
-                      0, 0U, 0);
   c34_mxField = sf_mex_getfield(c34_m0, "TIME_CONTROLLER_SWITCH", "CONFIG", 0);
   sf_mex_import_named("CONFIG", sf_mex_dup(c34_mxField),
                       &c34_r0.TIME_CONTROLLER_SWITCH, 1, 0, 0U, 0, 0U, 0);
   c34_mxField = sf_mex_getfield(c34_m0, "JOINTS", "CONFIG", 0);
   sf_mex_import_named("CONFIG", sf_mex_dup(c34_mxField), c34_r0.JOINTS, 1, 0, 0U,
                       1, 0U, 2, 23, 1);
+  c34_mxField = sf_mex_getfield(c34_m0, "JOINTSITING", "CONFIG", 0);
+  sf_mex_import_named("CONFIG", sf_mex_dup(c34_mxField), c34_r0.JOINTSITING, 1,
+                      0, 0U, 1, 0U, 2, 23, 1);
   c34_mxField = sf_mex_getfield(c34_m0, "iCubStandUp", "CONFIG", 0);
   sf_mex_import_named("CONFIG", sf_mex_dup(c34_mxField), &c34_r0.iCubStandUp, 1,
                       11, 0U, 0, 0U, 0);
@@ -417,7 +417,7 @@ static void sf_c34_torqueBalancing2012b(SFc34_torqueBalancing2012bInstanceStruct
   real_T c34_inertial[12];
   int32_T c34_i14;
   real_T c34_neck[3];
-  c34_struct_szunj786Fa70tQRn01KlgE c34_b_CONFIG;
+  c34_struct_HZPQIAn1UwxVqJtlH5llbD c34_b_CONFIG;
   uint32_T c34_debug_family_var_map[10];
   real_T c34_nargin = 7.0;
   real_T c34_nargout = 1.0;
@@ -434,7 +434,7 @@ static void sf_c34_torqueBalancing2012b(SFc34_torqueBalancing2012bInstanceStruct
   real_T c34_b_inertial[12];
   int32_T c34_i20;
   real_T c34_b_neck[3];
-  c34_struct_szunj786Fa70tQRn01KlgE c34_c_CONFIG;
+  c34_struct_HZPQIAn1UwxVqJtlH5llbD c34_c_CONFIG;
   real_T c34_dv1[16];
   int32_T c34_i21;
   int32_T c34_i22;
@@ -583,7 +583,7 @@ static void registerMessagesc34_torqueBalancing2012b
 static void c34_fromBaseToWorldWithImu(SFc34_torqueBalancing2012bInstanceStruct *
   chartInstance, real_T c34_imu_H_link[16], real_T c34_imu_H_link_0[16], real_T
   c34_link_H_root[16], real_T c34_inertial_0[12], real_T c34_inertial[12],
-  real_T c34_neck[3], c34_struct_szunj786Fa70tQRn01KlgE *c34_b_CONFIG, real_T
+  real_T c34_neck[3], c34_struct_HZPQIAn1UwxVqJtlH5llbD *c34_b_CONFIG, real_T
   c34_w_H_root[16])
 {
   uint32_T c34_debug_family_var_map[23];
@@ -2288,7 +2288,7 @@ static const mxArray *c34_b_sf_marshallOut(void *chartInstanceVoid, void
   *c34_inData)
 {
   const mxArray *c34_mxArrayOutData;
-  c34_struct_szunj786Fa70tQRn01KlgE c34_u;
+  c34_struct_HZPQIAn1UwxVqJtlH5llbD c34_u;
   const mxArray *c34_y = NULL;
   real_T c34_b_u;
   const mxArray *c34_b_y = NULL;
@@ -2337,9 +2337,10 @@ static const mxArray *c34_b_sf_marshallOut(void *chartInstanceVoid, void
   const mxArray *c34_w_y = NULL;
   real_T c34_x_u;
   const mxArray *c34_x_y = NULL;
-  real_T c34_y_u;
-  const mxArray *c34_y_y = NULL;
   int32_T c34_i228;
+  real_T c34_y_u[23];
+  const mxArray *c34_y_y = NULL;
+  int32_T c34_i229;
   real_T c34_ab_u[23];
   const mxArray *c34_ab_y = NULL;
   boolean_T c34_bb_u;
@@ -2350,7 +2351,7 @@ static const mxArray *c34_b_sf_marshallOut(void *chartInstanceVoid, void
   chartInstance = (SFc34_torqueBalancing2012bInstanceStruct *)chartInstanceVoid;
   c34_mxArrayOutData = NULL;
   c34_mxArrayOutData = NULL;
-  c34_u = *(c34_struct_szunj786Fa70tQRn01KlgE *)c34_inData;
+  c34_u = *(c34_struct_HZPQIAn1UwxVqJtlH5llbD *)c34_inData;
   c34_y = NULL;
   sf_mex_assign(&c34_y, sf_mex_createstruct("structure", 2, 1, 1), FALSE);
   c34_b_u = c34_u.SIMULATION_TIME;
@@ -2447,23 +2448,27 @@ static const mxArray *c34_b_sf_marshallOut(void *chartInstanceVoid, void
   c34_w_y = NULL;
   sf_mex_assign(&c34_w_y, sf_mex_create("y", &c34_w_u, 11, 0U, 0U, 0U, 0), FALSE);
   sf_mex_addfield(c34_y, c34_w_y, "DEMO_MOVEMENTS", "DEMO_MOVEMENTS", 0);
-  c34_x_u = c34_u.PARAM;
+  c34_x_u = c34_u.TIME_CONTROLLER_SWITCH;
   c34_x_y = NULL;
   sf_mex_assign(&c34_x_y, sf_mex_create("y", &c34_x_u, 0, 0U, 0U, 0U, 0), FALSE);
-  sf_mex_addfield(c34_y, c34_x_y, "PARAM", "PARAM", 0);
-  c34_y_u = c34_u.TIME_CONTROLLER_SWITCH;
-  c34_y_y = NULL;
-  sf_mex_assign(&c34_y_y, sf_mex_create("y", &c34_y_u, 0, 0U, 0U, 0U, 0), FALSE);
-  sf_mex_addfield(c34_y, c34_y_y, "TIME_CONTROLLER_SWITCH",
+  sf_mex_addfield(c34_y, c34_x_y, "TIME_CONTROLLER_SWITCH",
                   "TIME_CONTROLLER_SWITCH", 0);
   for (c34_i228 = 0; c34_i228 < 23; c34_i228++) {
-    c34_ab_u[c34_i228] = c34_u.JOINTS[c34_i228];
+    c34_y_u[c34_i228] = c34_u.JOINTS[c34_i228];
+  }
+
+  c34_y_y = NULL;
+  sf_mex_assign(&c34_y_y, sf_mex_create("y", c34_y_u, 0, 0U, 1U, 0U, 2, 23, 1),
+                FALSE);
+  sf_mex_addfield(c34_y, c34_y_y, "JOINTS", "JOINTS", 0);
+  for (c34_i229 = 0; c34_i229 < 23; c34_i229++) {
+    c34_ab_u[c34_i229] = c34_u.JOINTSITING[c34_i229];
   }
 
   c34_ab_y = NULL;
   sf_mex_assign(&c34_ab_y, sf_mex_create("y", c34_ab_u, 0, 0U, 1U, 0U, 2, 23, 1),
                 FALSE);
-  sf_mex_addfield(c34_y, c34_ab_y, "JOINTS", "JOINTS", 0);
+  sf_mex_addfield(c34_y, c34_ab_y, "JOINTSITING", "JOINTSITING", 0);
   c34_bb_u = c34_u.iCubStandUp;
   c34_bb_y = NULL;
   sf_mex_assign(&c34_bb_y, sf_mex_create("y", &c34_bb_u, 11, 0U, 0U, 0U, 0),
@@ -2480,15 +2485,15 @@ static const mxArray *c34_b_sf_marshallOut(void *chartInstanceVoid, void
 
 static void c34_c_emlrt_marshallIn(SFc34_torqueBalancing2012bInstanceStruct
   *chartInstance, const mxArray *c34_u, const emlrtMsgIdentifier *c34_parentId,
-  c34_struct_szunj786Fa70tQRn01KlgE *c34_y)
+  c34_struct_HZPQIAn1UwxVqJtlH5llbD *c34_y)
 {
   emlrtMsgIdentifier c34_thisId;
   static const char * c34_fieldNames[21] = { "SIMULATION_TIME", "SCOPES",
     "CHECK_LIMITS", "USE_IMU4EST_BASE", "YAW_IMU_FILTER", "PITCH_IMU_FILTER",
     "CORRECT_NECK_IMU", "ONSOFTCARPET", "USE_QP_SOLVER", "Ts", "ON_GAZEBO",
     "LEFT_RIGHT_FOOT_IN_CONTACT", "SMOOTH_DES_COM", "SMOOTH_DES_Q",
-    "smoothingTimeTranDynamics", "DEMO_MOVEMENTS", "PARAM",
-    "TIME_CONTROLLER_SWITCH", "JOINTS", "iCubStandUp", "useExtArmForces" };
+    "smoothingTimeTranDynamics", "DEMO_MOVEMENTS", "TIME_CONTROLLER_SWITCH",
+    "JOINTS", "JOINTSITING", "iCubStandUp", "useExtArmForces" };
 
   c34_thisId.fParent = c34_parentId;
   sf_mex_check_struct(c34_parentId, c34_u, 21, c34_fieldNames, 0U, 0);
@@ -2546,9 +2551,6 @@ static void c34_c_emlrt_marshallIn(SFc34_torqueBalancing2012bInstanceStruct
   c34_thisId.fIdentifier = "DEMO_MOVEMENTS";
   c34_y->DEMO_MOVEMENTS = c34_f_emlrt_marshallIn(chartInstance, sf_mex_dup
     (sf_mex_getfield(c34_u, "DEMO_MOVEMENTS", "DEMO_MOVEMENTS", 0)), &c34_thisId);
-  c34_thisId.fIdentifier = "PARAM";
-  c34_y->PARAM = c34_d_emlrt_marshallIn(chartInstance, sf_mex_dup
-    (sf_mex_getfield(c34_u, "PARAM", "PARAM", 0)), &c34_thisId);
   c34_thisId.fIdentifier = "TIME_CONTROLLER_SWITCH";
   c34_y->TIME_CONTROLLER_SWITCH = c34_d_emlrt_marshallIn(chartInstance,
     sf_mex_dup(sf_mex_getfield(c34_u, "TIME_CONTROLLER_SWITCH",
@@ -2556,6 +2558,9 @@ static void c34_c_emlrt_marshallIn(SFc34_torqueBalancing2012bInstanceStruct
   c34_thisId.fIdentifier = "JOINTS";
   c34_h_emlrt_marshallIn(chartInstance, sf_mex_dup(sf_mex_getfield(c34_u,
     "JOINTS", "JOINTS", 0)), &c34_thisId, c34_y->JOINTS);
+  c34_thisId.fIdentifier = "JOINTSITING";
+  c34_h_emlrt_marshallIn(chartInstance, sf_mex_dup(sf_mex_getfield(c34_u,
+    "JOINTSITING", "JOINTSITING", 0)), &c34_thisId, c34_y->JOINTSITING);
   c34_thisId.fIdentifier = "iCubStandUp";
   c34_y->iCubStandUp = c34_f_emlrt_marshallIn(chartInstance, sf_mex_dup
     (sf_mex_getfield(c34_u, "iCubStandUp", "iCubStandUp", 0)), &c34_thisId);
@@ -2626,11 +2631,11 @@ static void c34_g_emlrt_marshallIn(SFc34_torqueBalancing2012bInstanceStruct
   real_T c34_y[2])
 {
   real_T c34_dv23[2];
-  int32_T c34_i229;
+  int32_T c34_i230;
   sf_mex_import(c34_parentId, sf_mex_dup(c34_u), c34_dv23, 1, 0, 0U, 1, 0U, 2, 1,
                 2);
-  for (c34_i229 = 0; c34_i229 < 2; c34_i229++) {
-    c34_y[c34_i229] = c34_dv23[c34_i229];
+  for (c34_i230 = 0; c34_i230 < 2; c34_i230++) {
+    c34_y[c34_i230] = c34_dv23[c34_i230];
   }
 
   sf_mex_destroy(&c34_u);
@@ -2641,11 +2646,11 @@ static void c34_h_emlrt_marshallIn(SFc34_torqueBalancing2012bInstanceStruct
   real_T c34_y[23])
 {
   real_T c34_dv24[23];
-  int32_T c34_i230;
+  int32_T c34_i231;
   sf_mex_import(c34_parentId, sf_mex_dup(c34_u), c34_dv24, 1, 0, 0U, 1, 0U, 2,
                 23, 1);
-  for (c34_i230 = 0; c34_i230 < 23; c34_i230++) {
-    c34_y[c34_i230] = c34_dv24[c34_i230];
+  for (c34_i231 = 0; c34_i231 < 23; c34_i231++) {
+    c34_y[c34_i231] = c34_dv24[c34_i231];
   }
 
   sf_mex_destroy(&c34_u);
@@ -2657,7 +2662,7 @@ static void c34_b_sf_marshallIn(void *chartInstanceVoid, const mxArray
   const mxArray *c34_b_CONFIG;
   const char_T *c34_identifier;
   emlrtMsgIdentifier c34_thisId;
-  c34_struct_szunj786Fa70tQRn01KlgE c34_y;
+  c34_struct_HZPQIAn1UwxVqJtlH5llbD c34_y;
   SFc34_torqueBalancing2012bInstanceStruct *chartInstance;
   chartInstance = (SFc34_torqueBalancing2012bInstanceStruct *)chartInstanceVoid;
   c34_b_CONFIG = sf_mex_dup(c34_mxArrayInData);
@@ -2667,7 +2672,7 @@ static void c34_b_sf_marshallIn(void *chartInstanceVoid, const mxArray
   c34_c_emlrt_marshallIn(chartInstance, sf_mex_dup(c34_b_CONFIG), &c34_thisId,
     &c34_y);
   sf_mex_destroy(&c34_b_CONFIG);
-  *(c34_struct_szunj786Fa70tQRn01KlgE *)c34_outData = c34_y;
+  *(c34_struct_HZPQIAn1UwxVqJtlH5llbD *)c34_outData = c34_y;
   sf_mex_destroy(&c34_mxArrayInData);
 }
 
@@ -2675,20 +2680,20 @@ static const mxArray *c34_c_sf_marshallOut(void *chartInstanceVoid, void
   *c34_inData)
 {
   const mxArray *c34_mxArrayOutData = NULL;
-  int32_T c34_i231;
-  real_T c34_b_inData[3];
   int32_T c34_i232;
+  real_T c34_b_inData[3];
+  int32_T c34_i233;
   real_T c34_u[3];
   const mxArray *c34_y = NULL;
   SFc34_torqueBalancing2012bInstanceStruct *chartInstance;
   chartInstance = (SFc34_torqueBalancing2012bInstanceStruct *)chartInstanceVoid;
   c34_mxArrayOutData = NULL;
-  for (c34_i231 = 0; c34_i231 < 3; c34_i231++) {
-    c34_b_inData[c34_i231] = (*(real_T (*)[3])c34_inData)[c34_i231];
+  for (c34_i232 = 0; c34_i232 < 3; c34_i232++) {
+    c34_b_inData[c34_i232] = (*(real_T (*)[3])c34_inData)[c34_i232];
   }
 
-  for (c34_i232 = 0; c34_i232 < 3; c34_i232++) {
-    c34_u[c34_i232] = c34_b_inData[c34_i232];
+  for (c34_i233 = 0; c34_i233 < 3; c34_i233++) {
+    c34_u[c34_i233] = c34_b_inData[c34_i233];
   }
 
   c34_y = NULL;
@@ -2701,20 +2706,20 @@ static const mxArray *c34_d_sf_marshallOut(void *chartInstanceVoid, void
   *c34_inData)
 {
   const mxArray *c34_mxArrayOutData = NULL;
-  int32_T c34_i233;
-  real_T c34_b_inData[12];
   int32_T c34_i234;
+  real_T c34_b_inData[12];
+  int32_T c34_i235;
   real_T c34_u[12];
   const mxArray *c34_y = NULL;
   SFc34_torqueBalancing2012bInstanceStruct *chartInstance;
   chartInstance = (SFc34_torqueBalancing2012bInstanceStruct *)chartInstanceVoid;
   c34_mxArrayOutData = NULL;
-  for (c34_i233 = 0; c34_i233 < 12; c34_i233++) {
-    c34_b_inData[c34_i233] = (*(real_T (*)[12])c34_inData)[c34_i233];
+  for (c34_i234 = 0; c34_i234 < 12; c34_i234++) {
+    c34_b_inData[c34_i234] = (*(real_T (*)[12])c34_inData)[c34_i234];
   }
 
-  for (c34_i234 = 0; c34_i234 < 12; c34_i234++) {
-    c34_u[c34_i234] = c34_b_inData[c34_i234];
+  for (c34_i235 = 0; c34_i235 < 12; c34_i235++) {
+    c34_u[c34_i235] = c34_b_inData[c34_i235];
   }
 
   c34_y = NULL;
@@ -2763,35 +2768,35 @@ static const mxArray *c34_f_sf_marshallOut(void *chartInstanceVoid, void
   *c34_inData)
 {
   const mxArray *c34_mxArrayOutData = NULL;
-  int32_T c34_i235;
   int32_T c34_i236;
   int32_T c34_i237;
-  real_T c34_b_inData[9];
   int32_T c34_i238;
+  real_T c34_b_inData[9];
   int32_T c34_i239;
   int32_T c34_i240;
+  int32_T c34_i241;
   real_T c34_u[9];
   const mxArray *c34_y = NULL;
   SFc34_torqueBalancing2012bInstanceStruct *chartInstance;
   chartInstance = (SFc34_torqueBalancing2012bInstanceStruct *)chartInstanceVoid;
   c34_mxArrayOutData = NULL;
-  c34_i235 = 0;
-  for (c34_i236 = 0; c34_i236 < 3; c34_i236++) {
-    for (c34_i237 = 0; c34_i237 < 3; c34_i237++) {
-      c34_b_inData[c34_i237 + c34_i235] = (*(real_T (*)[9])c34_inData)[c34_i237
-        + c34_i235];
+  c34_i236 = 0;
+  for (c34_i237 = 0; c34_i237 < 3; c34_i237++) {
+    for (c34_i238 = 0; c34_i238 < 3; c34_i238++) {
+      c34_b_inData[c34_i238 + c34_i236] = (*(real_T (*)[9])c34_inData)[c34_i238
+        + c34_i236];
     }
 
-    c34_i235 += 3;
+    c34_i236 += 3;
   }
 
-  c34_i238 = 0;
-  for (c34_i239 = 0; c34_i239 < 3; c34_i239++) {
-    for (c34_i240 = 0; c34_i240 < 3; c34_i240++) {
-      c34_u[c34_i240 + c34_i238] = c34_b_inData[c34_i240 + c34_i238];
+  c34_i239 = 0;
+  for (c34_i240 = 0; c34_i240 < 3; c34_i240++) {
+    for (c34_i241 = 0; c34_i241 < 3; c34_i241++) {
+      c34_u[c34_i241 + c34_i239] = c34_b_inData[c34_i241 + c34_i239];
     }
 
-    c34_i238 += 3;
+    c34_i239 += 3;
   }
 
   c34_y = NULL;
@@ -2805,11 +2810,11 @@ static void c34_i_emlrt_marshallIn(SFc34_torqueBalancing2012bInstanceStruct
   real_T c34_y[9])
 {
   real_T c34_dv25[9];
-  int32_T c34_i241;
+  int32_T c34_i242;
   sf_mex_import(c34_parentId, sf_mex_dup(c34_u), c34_dv25, 1, 0, 0U, 1, 0U, 2, 3,
                 3);
-  for (c34_i241 = 0; c34_i241 < 9; c34_i241++) {
-    c34_y[c34_i241] = c34_dv25[c34_i241];
+  for (c34_i242 = 0; c34_i242 < 9; c34_i242++) {
+    c34_y[c34_i242] = c34_dv25[c34_i242];
   }
 
   sf_mex_destroy(&c34_u);
@@ -2822,9 +2827,9 @@ static void c34_d_sf_marshallIn(void *chartInstanceVoid, const mxArray
   const char_T *c34_identifier;
   emlrtMsgIdentifier c34_thisId;
   real_T c34_y[9];
-  int32_T c34_i242;
   int32_T c34_i243;
   int32_T c34_i244;
+  int32_T c34_i245;
   SFc34_torqueBalancing2012bInstanceStruct *chartInstance;
   chartInstance = (SFc34_torqueBalancing2012bInstanceStruct *)chartInstanceVoid;
   c34_R = sf_mex_dup(c34_mxArrayInData);
@@ -2833,14 +2838,14 @@ static void c34_d_sf_marshallIn(void *chartInstanceVoid, const mxArray
   c34_thisId.fParent = NULL;
   c34_i_emlrt_marshallIn(chartInstance, sf_mex_dup(c34_R), &c34_thisId, c34_y);
   sf_mex_destroy(&c34_R);
-  c34_i242 = 0;
-  for (c34_i243 = 0; c34_i243 < 3; c34_i243++) {
-    for (c34_i244 = 0; c34_i244 < 3; c34_i244++) {
-      (*(real_T (*)[9])c34_outData)[c34_i244 + c34_i242] = c34_y[c34_i244 +
-        c34_i242];
+  c34_i243 = 0;
+  for (c34_i244 = 0; c34_i244 < 3; c34_i244++) {
+    for (c34_i245 = 0; c34_i245 < 3; c34_i245++) {
+      (*(real_T (*)[9])c34_outData)[c34_i245 + c34_i243] = c34_y[c34_i245 +
+        c34_i243];
     }
 
-    c34_i242 += 3;
+    c34_i243 += 3;
   }
 
   sf_mex_destroy(&c34_mxArrayInData);
@@ -2851,10 +2856,10 @@ static void c34_j_emlrt_marshallIn(SFc34_torqueBalancing2012bInstanceStruct
   real_T c34_y[3])
 {
   real_T c34_dv26[3];
-  int32_T c34_i245;
+  int32_T c34_i246;
   sf_mex_import(c34_parentId, sf_mex_dup(c34_u), c34_dv26, 1, 0, 0U, 1, 0U, 1, 3);
-  for (c34_i245 = 0; c34_i245 < 3; c34_i245++) {
-    c34_y[c34_i245] = c34_dv26[c34_i245];
+  for (c34_i246 = 0; c34_i246 < 3; c34_i246++) {
+    c34_y[c34_i246] = c34_dv26[c34_i246];
   }
 
   sf_mex_destroy(&c34_u);
@@ -2867,7 +2872,7 @@ static void c34_e_sf_marshallIn(void *chartInstanceVoid, const mxArray
   const char_T *c34_identifier;
   emlrtMsgIdentifier c34_thisId;
   real_T c34_y[3];
-  int32_T c34_i246;
+  int32_T c34_i247;
   SFc34_torqueBalancing2012bInstanceStruct *chartInstance;
   chartInstance = (SFc34_torqueBalancing2012bInstanceStruct *)chartInstanceVoid;
   c34_rollPitchYaw = sf_mex_dup(c34_mxArrayInData);
@@ -2877,8 +2882,8 @@ static void c34_e_sf_marshallIn(void *chartInstanceVoid, const mxArray
   c34_j_emlrt_marshallIn(chartInstance, sf_mex_dup(c34_rollPitchYaw),
     &c34_thisId, c34_y);
   sf_mex_destroy(&c34_rollPitchYaw);
-  for (c34_i246 = 0; c34_i246 < 3; c34_i246++) {
-    (*(real_T (*)[3])c34_outData)[c34_i246] = c34_y[c34_i246];
+  for (c34_i247 = 0; c34_i247 < 3; c34_i247++) {
+    (*(real_T (*)[3])c34_outData)[c34_i247] = c34_y[c34_i247];
   }
 
   sf_mex_destroy(&c34_mxArrayInData);
@@ -2889,11 +2894,11 @@ static void c34_k_emlrt_marshallIn(SFc34_torqueBalancing2012bInstanceStruct
   real_T c34_y[12])
 {
   real_T c34_dv27[12];
-  int32_T c34_i247;
+  int32_T c34_i248;
   sf_mex_import(c34_parentId, sf_mex_dup(c34_u), c34_dv27, 1, 0, 0U, 1, 0U, 1,
                 12);
-  for (c34_i247 = 0; c34_i247 < 12; c34_i247++) {
-    c34_y[c34_i247] = c34_dv27[c34_i247];
+  for (c34_i248 = 0; c34_i248 < 12; c34_i248++) {
+    c34_y[c34_i248] = c34_dv27[c34_i248];
   }
 
   sf_mex_destroy(&c34_u);
@@ -2906,7 +2911,7 @@ static void c34_f_sf_marshallIn(void *chartInstanceVoid, const mxArray
   const char_T *c34_identifier;
   emlrtMsgIdentifier c34_thisId;
   real_T c34_y[12];
-  int32_T c34_i248;
+  int32_T c34_i249;
   SFc34_torqueBalancing2012bInstanceStruct *chartInstance;
   chartInstance = (SFc34_torqueBalancing2012bInstanceStruct *)chartInstanceVoid;
   c34_inertial = sf_mex_dup(c34_mxArrayInData);
@@ -2916,8 +2921,8 @@ static void c34_f_sf_marshallIn(void *chartInstanceVoid, const mxArray
   c34_k_emlrt_marshallIn(chartInstance, sf_mex_dup(c34_inertial), &c34_thisId,
     c34_y);
   sf_mex_destroy(&c34_inertial);
-  for (c34_i248 = 0; c34_i248 < 12; c34_i248++) {
-    (*(real_T (*)[12])c34_outData)[c34_i248] = c34_y[c34_i248];
+  for (c34_i249 = 0; c34_i249 < 12; c34_i249++) {
+    (*(real_T (*)[12])c34_outData)[c34_i249] = c34_y[c34_i249];
   }
 
   sf_mex_destroy(&c34_mxArrayInData);
@@ -2928,7 +2933,7 @@ const mxArray *sf_c34_torqueBalancing2012b_get_eml_resolved_functions_info(void)
   const mxArray *c34_nameCaptureInfo;
   c34_ResolvedFunctionInfo c34_info[147];
   const mxArray *c34_m2 = NULL;
-  int32_T c34_i249;
+  int32_T c34_i250;
   c34_ResolvedFunctionInfo *c34_r1;
   c34_nameCaptureInfo = NULL;
   c34_nameCaptureInfo = NULL;
@@ -2936,30 +2941,30 @@ const mxArray *sf_c34_torqueBalancing2012b_get_eml_resolved_functions_info(void)
   c34_b_info_helper(c34_info);
   c34_c_info_helper(c34_info);
   sf_mex_assign(&c34_m2, sf_mex_createstruct("nameCaptureInfo", 1, 147), FALSE);
-  for (c34_i249 = 0; c34_i249 < 147; c34_i249++) {
-    c34_r1 = &c34_info[c34_i249];
+  for (c34_i250 = 0; c34_i250 < 147; c34_i250++) {
+    c34_r1 = &c34_info[c34_i250];
     sf_mex_addfield(c34_m2, sf_mex_create("nameCaptureInfo", c34_r1->context, 15,
       0U, 0U, 0U, 2, 1, strlen(c34_r1->context)), "context", "nameCaptureInfo",
-                    c34_i249);
+                    c34_i250);
     sf_mex_addfield(c34_m2, sf_mex_create("nameCaptureInfo", c34_r1->name, 15,
       0U, 0U, 0U, 2, 1, strlen(c34_r1->name)), "name", "nameCaptureInfo",
-                    c34_i249);
+                    c34_i250);
     sf_mex_addfield(c34_m2, sf_mex_create("nameCaptureInfo",
       c34_r1->dominantType, 15, 0U, 0U, 0U, 2, 1, strlen(c34_r1->dominantType)),
-                    "dominantType", "nameCaptureInfo", c34_i249);
+                    "dominantType", "nameCaptureInfo", c34_i250);
     sf_mex_addfield(c34_m2, sf_mex_create("nameCaptureInfo", c34_r1->resolved,
       15, 0U, 0U, 0U, 2, 1, strlen(c34_r1->resolved)), "resolved",
-                    "nameCaptureInfo", c34_i249);
+                    "nameCaptureInfo", c34_i250);
     sf_mex_addfield(c34_m2, sf_mex_create("nameCaptureInfo", &c34_r1->fileTimeLo,
-      7, 0U, 0U, 0U, 0), "fileTimeLo", "nameCaptureInfo", c34_i249);
+      7, 0U, 0U, 0U, 0), "fileTimeLo", "nameCaptureInfo", c34_i250);
     sf_mex_addfield(c34_m2, sf_mex_create("nameCaptureInfo", &c34_r1->fileTimeHi,
-      7, 0U, 0U, 0U, 0), "fileTimeHi", "nameCaptureInfo", c34_i249);
+      7, 0U, 0U, 0U, 0), "fileTimeHi", "nameCaptureInfo", c34_i250);
     sf_mex_addfield(c34_m2, sf_mex_create("nameCaptureInfo",
       &c34_r1->mFileTimeLo, 7, 0U, 0U, 0U, 0), "mFileTimeLo", "nameCaptureInfo",
-                    c34_i249);
+                    c34_i250);
     sf_mex_addfield(c34_m2, sf_mex_create("nameCaptureInfo",
       &c34_r1->mFileTimeHi, 7, 0U, 0U, 0U, 0), "mFileTimeHi", "nameCaptureInfo",
-                    c34_i249);
+                    c34_i250);
   }
 
   sf_mex_assign(&c34_nameCaptureInfo, c34_m2, FALSE);
@@ -4447,27 +4452,27 @@ static void c34_eml_scalar_eg(SFc34_torqueBalancing2012bInstanceStruct
 static void c34_eml_error(SFc34_torqueBalancing2012bInstanceStruct
   *chartInstance)
 {
-  int32_T c34_i250;
+  int32_T c34_i251;
   static char_T c34_cv0[30] = { 'C', 'o', 'd', 'e', 'r', ':', 't', 'o', 'o', 'l',
     'b', 'o', 'x', ':', 'E', 'l', 'F', 'u', 'n', 'D', 'o', 'm', 'a', 'i', 'n',
     'E', 'r', 'r', 'o', 'r' };
 
   char_T c34_u[30];
   const mxArray *c34_y = NULL;
-  int32_T c34_i251;
+  int32_T c34_i252;
   static char_T c34_cv1[4] = { 'a', 's', 'i', 'n' };
 
   char_T c34_b_u[4];
   const mxArray *c34_b_y = NULL;
-  for (c34_i250 = 0; c34_i250 < 30; c34_i250++) {
-    c34_u[c34_i250] = c34_cv0[c34_i250];
+  for (c34_i251 = 0; c34_i251 < 30; c34_i251++) {
+    c34_u[c34_i251] = c34_cv0[c34_i251];
   }
 
   c34_y = NULL;
   sf_mex_assign(&c34_y, sf_mex_create("y", c34_u, 10, 0U, 1U, 0U, 2, 1, 30),
                 FALSE);
-  for (c34_i251 = 0; c34_i251 < 4; c34_i251++) {
-    c34_b_u[c34_i251] = c34_cv1[c34_i251];
+  for (c34_i252 = 0; c34_i252 < 4; c34_i252++) {
+    c34_b_u[c34_i252] = c34_cv1[c34_i252];
   }
 
   c34_b_y = NULL;
@@ -4510,9 +4515,9 @@ static void c34_eml_matlab_zgetrf(SFc34_torqueBalancing2012bInstanceStruct
   *chartInstance, real_T c34_A[16], real_T c34_b_A[16], int32_T c34_ipiv[4],
   int32_T *c34_info)
 {
-  int32_T c34_i252;
-  for (c34_i252 = 0; c34_i252 < 16; c34_i252++) {
-    c34_b_A[c34_i252] = c34_A[c34_i252];
+  int32_T c34_i253;
+  for (c34_i253 = 0; c34_i253 < 16; c34_i253++) {
+    c34_b_A[c34_i253] = c34_A[c34_i253];
   }
 
   c34_b_eml_matlab_zgetrf(chartInstance, c34_b_A, c34_ipiv, c34_info);
@@ -4522,14 +4527,14 @@ static void c34_check_forloop_overflow_error
   (SFc34_torqueBalancing2012bInstanceStruct *chartInstance, boolean_T
    c34_overflow)
 {
-  int32_T c34_i253;
+  int32_T c34_i254;
   static char_T c34_cv2[34] = { 'C', 'o', 'd', 'e', 'r', ':', 't', 'o', 'o', 'l',
     'b', 'o', 'x', ':', 'i', 'n', 't', '_', 'f', 'o', 'r', 'l', 'o', 'o', 'p',
     '_', 'o', 'v', 'e', 'r', 'f', 'l', 'o', 'w' };
 
   char_T c34_u[34];
   const mxArray *c34_y = NULL;
-  int32_T c34_i254;
+  int32_T c34_i255;
   static char_T c34_cv3[23] = { 'c', 'o', 'd', 'e', 'r', '.', 'i', 'n', 't', 'e',
     'r', 'n', 'a', 'l', '.', 'i', 'n', 'd', 'e', 'x', 'I', 'n', 't' };
 
@@ -4537,15 +4542,15 @@ static void c34_check_forloop_overflow_error
   const mxArray *c34_b_y = NULL;
   if (!c34_overflow) {
   } else {
-    for (c34_i253 = 0; c34_i253 < 34; c34_i253++) {
-      c34_u[c34_i253] = c34_cv2[c34_i253];
+    for (c34_i254 = 0; c34_i254 < 34; c34_i254++) {
+      c34_u[c34_i254] = c34_cv2[c34_i254];
     }
 
     c34_y = NULL;
     sf_mex_assign(&c34_y, sf_mex_create("y", c34_u, 10, 0U, 1U, 0U, 2, 1, 34),
                   FALSE);
-    for (c34_i254 = 0; c34_i254 < 23; c34_i254++) {
-      c34_b_u[c34_i254] = c34_cv3[c34_i254];
+    for (c34_i255 = 0; c34_i255 < 23; c34_i255++) {
+      c34_b_u[c34_i255] = c34_cv3[c34_i255];
     }
 
     c34_b_y = NULL;
@@ -4560,9 +4565,9 @@ static void c34_eml_xger(SFc34_torqueBalancing2012bInstanceStruct *chartInstance
   int32_T c34_m, int32_T c34_n, real_T c34_alpha1, int32_T c34_ix0, int32_T
   c34_iy0, real_T c34_A[16], int32_T c34_ia0, real_T c34_b_A[16])
 {
-  int32_T c34_i255;
-  for (c34_i255 = 0; c34_i255 < 16; c34_i255++) {
-    c34_b_A[c34_i255] = c34_A[c34_i255];
+  int32_T c34_i256;
+  for (c34_i256 = 0; c34_i256 < 16; c34_i256++) {
+    c34_b_A[c34_i256] = c34_A[c34_i256];
   }
 
   c34_b_eml_xger(chartInstance, c34_m, c34_n, c34_alpha1, c34_ix0, c34_iy0,
@@ -4572,15 +4577,15 @@ static void c34_eml_xger(SFc34_torqueBalancing2012bInstanceStruct *chartInstance
 static void c34_eml_xtrsm(SFc34_torqueBalancing2012bInstanceStruct
   *chartInstance, real_T c34_A[16], real_T c34_B[16], real_T c34_b_B[16])
 {
-  int32_T c34_i256;
   int32_T c34_i257;
+  int32_T c34_i258;
   real_T c34_b_A[16];
-  for (c34_i256 = 0; c34_i256 < 16; c34_i256++) {
-    c34_b_B[c34_i256] = c34_B[c34_i256];
+  for (c34_i257 = 0; c34_i257 < 16; c34_i257++) {
+    c34_b_B[c34_i257] = c34_B[c34_i257];
   }
 
-  for (c34_i257 = 0; c34_i257 < 16; c34_i257++) {
-    c34_b_A[c34_i257] = c34_A[c34_i257];
+  for (c34_i258 = 0; c34_i258 < 16; c34_i258++) {
+    c34_b_A[c34_i258] = c34_A[c34_i258];
   }
 
   c34_c_eml_xtrsm(chartInstance, c34_b_A, c34_b_B);
@@ -4599,15 +4604,15 @@ static void c34_d_eml_scalar_eg(SFc34_torqueBalancing2012bInstanceStruct
 static void c34_b_eml_xtrsm(SFc34_torqueBalancing2012bInstanceStruct
   *chartInstance, real_T c34_A[16], real_T c34_B[16], real_T c34_b_B[16])
 {
-  int32_T c34_i258;
   int32_T c34_i259;
+  int32_T c34_i260;
   real_T c34_b_A[16];
-  for (c34_i258 = 0; c34_i258 < 16; c34_i258++) {
-    c34_b_B[c34_i258] = c34_B[c34_i258];
+  for (c34_i259 = 0; c34_i259 < 16; c34_i259++) {
+    c34_b_B[c34_i259] = c34_B[c34_i259];
   }
 
-  for (c34_i259 = 0; c34_i259 < 16; c34_i259++) {
-    c34_b_A[c34_i259] = c34_A[c34_i259];
+  for (c34_i260 = 0; c34_i260 < 16; c34_i260++) {
+    c34_b_A[c34_i260] = c34_A[c34_i260];
   }
 
   c34_d_eml_xtrsm(chartInstance, c34_b_A, c34_b_B);
@@ -4616,15 +4621,15 @@ static void c34_b_eml_xtrsm(SFc34_torqueBalancing2012bInstanceStruct
 static void c34_eml_warning(SFc34_torqueBalancing2012bInstanceStruct
   *chartInstance)
 {
-  int32_T c34_i260;
+  int32_T c34_i261;
   static char_T c34_varargin_1[27] = { 'C', 'o', 'd', 'e', 'r', ':', 'M', 'A',
     'T', 'L', 'A', 'B', ':', 's', 'i', 'n', 'g', 'u', 'l', 'a', 'r', 'M', 'a',
     't', 'r', 'i', 'x' };
 
   char_T c34_u[27];
   const mxArray *c34_y = NULL;
-  for (c34_i260 = 0; c34_i260 < 27; c34_i260++) {
-    c34_u[c34_i260] = c34_varargin_1[c34_i260];
+  for (c34_i261 = 0; c34_i261 < 27; c34_i261++) {
+    c34_u[c34_i261] = c34_varargin_1[c34_i261];
   }
 
   c34_y = NULL;
@@ -4654,9 +4659,9 @@ static int32_T c34_l_emlrt_marshallIn(SFc34_torqueBalancing2012bInstanceStruct
   *chartInstance, const mxArray *c34_u, const emlrtMsgIdentifier *c34_parentId)
 {
   int32_T c34_y;
-  int32_T c34_i261;
-  sf_mex_import(c34_parentId, sf_mex_dup(c34_u), &c34_i261, 1, 6, 0U, 0, 0U, 0);
-  c34_y = c34_i261;
+  int32_T c34_i262;
+  sf_mex_import(c34_parentId, sf_mex_dup(c34_u), &c34_i262, 1, 6, 0U, 0, 0U, 0);
+  c34_y = c34_i262;
   sf_mex_destroy(&c34_u);
   return c34_y;
 }
@@ -4709,7 +4714,7 @@ static uint8_T c34_n_emlrt_marshallIn(SFc34_torqueBalancing2012bInstanceStruct
 static void c34_b_eml_matlab_zgetrf(SFc34_torqueBalancing2012bInstanceStruct
   *chartInstance, real_T c34_A[16], int32_T c34_ipiv[4], int32_T *c34_info)
 {
-  int32_T c34_i262;
+  int32_T c34_i263;
   int32_T c34_j;
   int32_T c34_b_j;
   int32_T c34_a;
@@ -4785,7 +4790,7 @@ static void c34_b_eml_matlab_zgetrf(SFc34_torqueBalancing2012bInstanceStruct
   int32_T c34_d_c;
   int32_T c34_m_a;
   int32_T c34_i_b;
-  int32_T c34_i263;
+  int32_T c34_i264;
   int32_T c34_n_a;
   int32_T c34_j_b;
   int32_T c34_o_a;
@@ -4810,8 +4815,8 @@ static void c34_b_eml_matlab_zgetrf(SFc34_torqueBalancing2012bInstanceStruct
   real_T c34_d1;
   c34_realmin(chartInstance);
   c34_eps(chartInstance);
-  for (c34_i262 = 0; c34_i262 < 4; c34_i262++) {
-    c34_ipiv[c34_i262] = 1 + c34_i262;
+  for (c34_i263 = 0; c34_i263 < 4; c34_i263++) {
+    c34_ipiv[c34_i263] = 1 + c34_i263;
   }
 
   *c34_info = 0;
@@ -4931,9 +4936,9 @@ static void c34_b_eml_matlab_zgetrf(SFc34_torqueBalancing2012bInstanceStruct
       c34_d_c = c34_l_a;
       c34_m_a = c34_jp1j;
       c34_i_b = c34_d_c - 1;
-      c34_i263 = c34_m_a + c34_i_b;
+      c34_i264 = c34_m_a + c34_i_b;
       c34_n_a = c34_b_jp1j;
-      c34_j_b = c34_i263;
+      c34_j_b = c34_i264;
       c34_o_a = c34_n_a;
       c34_k_b = c34_j_b;
       if (c34_o_a > c34_k_b) {
@@ -4946,7 +4951,7 @@ static void c34_b_eml_matlab_zgetrf(SFc34_torqueBalancing2012bInstanceStruct
         c34_check_forloop_overflow_error(chartInstance, c34_b_overflow);
       }
 
-      for (c34_i = c34_b_jp1j; c34_i <= c34_i263; c34_i++) {
+      for (c34_i = c34_b_jp1j; c34_i <= c34_i264; c34_i++) {
         c34_b_i = c34_i;
         c34_k_x = c34_A[_SFD_EML_ARRAY_BOUNDS_CHECK("", (int32_T)
           _SFD_INTEGER_CHECK("", (real_T)c34_b_i), 1, 16, 1, 0) - 1];
@@ -5018,10 +5023,10 @@ static void c34_b_eml_xger(SFc34_torqueBalancing2012bInstanceStruct
   real_T c34_temp;
   int32_T c34_ix;
   int32_T c34_c_b;
-  int32_T c34_i264;
+  int32_T c34_i265;
   int32_T c34_b_a;
   int32_T c34_d_b;
-  int32_T c34_i265;
+  int32_T c34_i266;
   int32_T c34_c_a;
   int32_T c34_e_b;
   int32_T c34_d_a;
@@ -5076,12 +5081,12 @@ static void c34_b_eml_xger(SFc34_torqueBalancing2012bInstanceStruct
         c34_temp = c34_yjy * c34_d_alpha1;
         c34_ix = c34_ixstart;
         c34_c_b = c34_jA + 1;
-        c34_i264 = c34_c_b;
+        c34_i265 = c34_c_b;
         c34_b_a = c34_d_m;
         c34_d_b = c34_jA;
-        c34_i265 = c34_b_a + c34_d_b;
-        c34_c_a = c34_i264;
-        c34_e_b = c34_i265;
+        c34_i266 = c34_b_a + c34_d_b;
+        c34_c_a = c34_i265;
+        c34_e_b = c34_i266;
         c34_d_a = c34_c_a;
         c34_f_b = c34_e_b;
         if (c34_d_a > c34_f_b) {
@@ -5094,7 +5099,7 @@ static void c34_b_eml_xger(SFc34_torqueBalancing2012bInstanceStruct
           c34_check_forloop_overflow_error(chartInstance, c34_b_overflow);
         }
 
-        for (c34_ijA = c34_i264; c34_ijA <= c34_i265; c34_ijA++) {
+        for (c34_ijA = c34_i265; c34_ijA <= c34_i266; c34_ijA++) {
           c34_b_ijA = c34_ijA;
           c34_A[_SFD_EML_ARRAY_BOUNDS_CHECK("", (int32_T)_SFD_INTEGER_CHECK("",
             (real_T)c34_b_ijA), 1, 16, 1, 0) - 1] =
@@ -5138,7 +5143,7 @@ static void c34_c_eml_xtrsm(SFc34_torqueBalancing2012bInstanceStruct
   int32_T c34_e_b;
   int32_T c34_e_c;
   int32_T c34_d_a;
-  int32_T c34_i266;
+  int32_T c34_i267;
   boolean_T c34_overflow;
   int32_T c34_i;
   int32_T c34_b_i;
@@ -5178,13 +5183,13 @@ static void c34_c_eml_xtrsm(SFc34_torqueBalancing2012bInstanceStruct
       if (c34_B[_SFD_EML_ARRAY_BOUNDS_CHECK("", (int32_T)_SFD_INTEGER_CHECK("",
             (real_T)c34_e_c), 1, 16, 1, 0) - 1] != 0.0) {
         c34_d_a = c34_b_k;
-        c34_i266 = c34_d_a;
+        c34_i267 = c34_d_a;
         c34_overflow = FALSE;
         if (c34_overflow) {
           c34_check_forloop_overflow_error(chartInstance, c34_overflow);
         }
 
-        for (c34_i = c34_i266 + 1; c34_i < 5; c34_i++) {
+        for (c34_i = c34_i267 + 1; c34_i < 5; c34_i++) {
           c34_b_i = c34_i;
           c34_e_a = c34_b_i;
           c34_f_b = c34_jBcol;
@@ -5247,7 +5252,7 @@ static void c34_d_eml_xtrsm(SFc34_torqueBalancing2012bInstanceStruct
   real_T c34_y;
   real_T c34_z;
   int32_T c34_g_a;
-  int32_T c34_i267;
+  int32_T c34_i268;
   int32_T c34_i_b;
   int32_T c34_j_b;
   boolean_T c34_overflow;
@@ -5305,8 +5310,8 @@ static void c34_d_eml_xtrsm(SFc34_torqueBalancing2012bInstanceStruct
         c34_B[_SFD_EML_ARRAY_BOUNDS_CHECK("", (int32_T)_SFD_INTEGER_CHECK("",
           (real_T)c34_f_c), 1, 16, 1, 0) - 1] = c34_z;
         c34_g_a = c34_b_k - 1;
-        c34_i267 = c34_g_a;
-        c34_i_b = c34_i267;
+        c34_i268 = c34_g_a;
+        c34_i_b = c34_i268;
         c34_j_b = c34_i_b;
         if (1 > c34_j_b) {
           c34_overflow = FALSE;
@@ -5318,7 +5323,7 @@ static void c34_d_eml_xtrsm(SFc34_torqueBalancing2012bInstanceStruct
           c34_check_forloop_overflow_error(chartInstance, c34_overflow);
         }
 
-        for (c34_i = 1; c34_i <= c34_i267; c34_i++) {
+        for (c34_i = 1; c34_i <= c34_i268; c34_i++) {
           c34_b_i = c34_i;
           c34_h_a = c34_b_i;
           c34_k_b = c34_jBcol;
@@ -5374,10 +5379,10 @@ extern void utFree(void*);
 
 void sf_c34_torqueBalancing2012b_get_check_sum(mxArray *plhs[])
 {
-  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(296259682U);
-  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(3897454147U);
-  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(698888484U);
-  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(561131936U);
+  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(44106875U);
+  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(841437657U);
+  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(2368952469U);
+  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(3882389986U);
 }
 
 mxArray *sf_c34_torqueBalancing2012b_get_autoinheritance_info(void)
@@ -5389,7 +5394,7 @@ mxArray *sf_c34_torqueBalancing2012b_get_autoinheritance_info(void)
     autoinheritanceFields);
 
   {
-    mxArray *mxChecksum = mxCreateString("bCquAs73MeQEENAlwI1bID");
+    mxArray *mxChecksum = mxCreateString("YmIalEnk1h9C8xyxCnKh2D");
     mxSetField(mxAutoinheritanceInfo,0,"checksum",mxChecksum);
   }
 
@@ -5786,7 +5791,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
 static const char* sf_get_instance_specialization(void)
 {
-  return "fKnxCgBJ16ooe4dAvveDxB";
+  return "mcLsq81jT0i1ePjG1oQidD";
 }
 
 static void sf_opaque_initialize_c34_torqueBalancing2012b(void *chartInstanceVar)
@@ -5978,10 +5983,10 @@ static void mdlSetWorkWidths_c34_torqueBalancing2012b(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(934922706U));
-  ssSetChecksum1(S,(213835802U));
-  ssSetChecksum2(S,(2284732244U));
-  ssSetChecksum3(S,(2379420338U));
+  ssSetChecksum0(S,(2274714917U));
+  ssSetChecksum1(S,(1662336581U));
+  ssSetChecksum2(S,(937218894U));
+  ssSetChecksum3(S,(3161659269U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
   ssSupportsMultipleExecInstances(S,1);
