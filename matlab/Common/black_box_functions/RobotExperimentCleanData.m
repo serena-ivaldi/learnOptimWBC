@@ -27,6 +27,7 @@ elseif(strcmp(obj.input_4_run{1},'icub_matlab'))
     controller = obj.input_4_run{4};
 elseif(strcmp(obj.input_4_run{1},'icub_matlab_sim'))
     system('gz world -r')
+    controller = obj.input_4_run{4};
 end
 controller.CleanTau();
 controller.CleanTime();

@@ -119,6 +119,8 @@ if strcmp(simulator_type{1},'rbt')
     input{5} = controller;
 elseif strcmp(simulator_type{1},'icub_matlab')
     input{4} = controller;
+elseif strcmp(simulator_type{1},'icub_matlab_sim')
+    input{4} = controller;
 end
 
 % i added it for the using it in the preprocessing methods for benchmarks

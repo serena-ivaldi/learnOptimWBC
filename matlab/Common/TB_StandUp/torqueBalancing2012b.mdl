@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.3524"
+    ComputedModelVersion    "1.3525"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -31,7 +31,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [55.0, 14.0, 947.0, 1076.0]
+      Location		      [55.0, 14.0, 967.0, 1076.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -74,16 +74,16 @@ Model {
 	  IsActive		  [1]
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "2129"
-	  Extents		  [891.0, 880.0]
+	  Extents		  [911.0, 880.0]
 	  ZoomFactor		  [1.0]
-	  Offset		  [6.7629915098350466, 21.673129304250097]
+	  Offset		  [70.0, 21.673129304250097]
 	}
 	Object {
 	  $ObjectID		  8
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "2087"
-	  Extents		  [891.0, 880.0]
+	  Extents		  [911.0, 880.0]
 	  ZoomFactor		  [0.8]
 	  Offset		  [0.0, 2302.5]
 	}
@@ -97,9 +97,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "valerio"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Jun 01 16:38:06 2017"
-  RTWModifiedTimeStamp	  418235885
-  ModelVersionFormat	  "1.%<AutoIncrement:3524>"
+  LastModifiedDate	  "Mon Jun 05 13:55:15 2017"
+  RTWModifiedTimeStamp	  418571715
+  ModelVersionFormat	  "1.%<AutoIncrement:3525>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -1133,7 +1133,7 @@ Model {
       MaskHideContents	      off
       System {
 	Name			"DesValues"
-	Location		[55, 14, 1002, 1090]
+	Location		[55, 14, 1022, 1090]
 	Open			on
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1905,7 +1905,7 @@ Model {
 	      MaskHideContents	      off
 	      System {
 		Name			"refGen"
-		Location		[55, 14, 1002, 1090]
+		Location		[55, 14, 1022, 1090]
 		Open			on
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -1955,8 +1955,18 @@ Model {
 		  Lockdown		  off
 		}
 		Block {
+		  BlockType		  FromWorkspace
+		  Name			  "XcomDes"
+		  SID			  "4585"
+		  Position		  [25, 413, 105, 437]
+		  ZOrder		  561
+		  VariableName		  "ts_xCoMDes"
+		  SampleTime		  "0"
+		  ZeroCross		  on
+		}
+		Block {
 		  BlockType		  SubSystem
-		  Name			  "MATLAB Function"
+		  Name			  "com reference "
 		  SID			  "4507"
 		  Ports			  [6, 1]
 		  Position		  [650, 239, 1140, 591]
@@ -1974,7 +1984,7 @@ Model {
 		  MaskHideContents	  off
 		  SFBlockType		  "MATLAB Function"
 		  System {
-		    Name		    "MATLAB Function"
+		    Name		    "com reference "
 		    Location		    [223, 338, 826, 833]
 		    Open		    off
 		    ModelBrowserVisibility  off
@@ -2144,8 +2154,41 @@ Model {
 		  }
 		}
 		Block {
+		  BlockType		  FromWorkspace
+		  Name			  "dXcomDes"
+		  SID			  "4586"
+		  Position		  [20, 483, 105, 507]
+		  ZOrder		  562
+		  VariableName		  "ts_dxCoMDes"
+		  SampleTime		  "0"
+		  ZeroCross		  on
+		}
+		Block {
+		  BlockType		  FromWorkspace
+		  Name			  "ddXcomDes"
+		  SID			  "4587"
+		  Position		  [20, 545, 105, 565]
+		  ZOrder		  563
+		  VariableName		  "ts_ddxCoMDes"
+		  SampleTime		  "0"
+		  ZeroCross		  on
+		}
+		Block {
+		  BlockType		  Reference
+		  Name			  "holder\n1"
+		  SID			  "4588"
+		  Ports			  [1, 1]
+		  Position		  [190, 352, 250, 398]
+		  ZOrder		  580
+		  BackgroundColor	  "[0.537255, 0.721569, 1.000000]"
+		  ShowName		  off
+		  LibraryVersion	  "1.381"
+		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
+		  SourceType		  "Holder"
+		}
+		Block {
 		  BlockType		  SubSystem
-		  Name			  "MATLAB Function1"
+		  Name			  "joint reference "
 		  SID			  "4592"
 		  Ports			  [4, 1]
 		  Position		  [685, 63, 890, 217]
@@ -2163,7 +2206,7 @@ Model {
 		  MaskHideContents	  off
 		  SFBlockType		  "MATLAB Function"
 		  System {
-		    Name		    "MATLAB Function1"
+		    Name		    "joint reference "
 		    Location		    [223, 338, 826, 833]
 		    Open		    off
 		    ModelBrowserVisibility  off
@@ -2302,49 +2345,6 @@ Model {
 		  }
 		}
 		Block {
-		  BlockType		  FromWorkspace
-		  Name			  "XcomDes"
-		  SID			  "4585"
-		  Position		  [25, 413, 105, 437]
-		  ZOrder		  561
-		  VariableName		  "ts_xCoMDes"
-		  SampleTime		  "0"
-		  ZeroCross		  on
-		}
-		Block {
-		  BlockType		  FromWorkspace
-		  Name			  "dXcomDes"
-		  SID			  "4586"
-		  Position		  [20, 483, 105, 507]
-		  ZOrder		  562
-		  VariableName		  "ts_dxCoMDes"
-		  SampleTime		  "0"
-		  ZeroCross		  on
-		}
-		Block {
-		  BlockType		  FromWorkspace
-		  Name			  "ddXcomDes"
-		  SID			  "4587"
-		  Position		  [20, 545, 105, 565]
-		  ZOrder		  563
-		  VariableName		  "ts_ddxCoMDes"
-		  SampleTime		  "0"
-		  ZeroCross		  on
-		}
-		Block {
-		  BlockType		  Reference
-		  Name			  "holder\n1"
-		  SID			  "4588"
-		  Ports			  [1, 1]
-		  Position		  [190, 352, 250, 398]
-		  ZOrder		  580
-		  BackgroundColor	  "[0.537255, 0.721569, 1.000000]"
-		  ShowName		  off
-		  LibraryVersion	  "1.381"
-		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
-		  SourceType		  "Holder"
-		}
-		Block {
 		  BlockType		  Constant
 		  Name			  "parameters1"
 		  SID			  "4511"
@@ -2391,17 +2391,17 @@ Model {
 		  Points		  [15, 0]
 		  Branch {
 		    Points		    [0, -175]
-		    DstBlock		    "MATLAB Function1"
+		    DstBlock		    "joint reference "
 		    DstPort		    1
 		  }
 		  Branch {
 		    Points		    [0, 10]
-		    DstBlock		    "MATLAB Function"
+		    DstBlock		    "com reference "
 		    DstPort		    1
 		  }
 		}
 		Line {
-		  SrcBlock		  "MATLAB Function"
+		  SrcBlock		  "com reference "
 		  SrcPort		  1
 		  Points		  [27, 0; 0, -10]
 		  DstBlock		  "CoMrefs"
@@ -2419,7 +2419,7 @@ Model {
 		    DstPort		    1
 		    }
 		    Branch {
-		    DstBlock		    "MATLAB Function"
+		    DstBlock		    "com reference "
 		    DstPort		    4
 		    }
 		  }
@@ -2440,7 +2440,7 @@ Model {
 		  }
 		  Branch {
 		    Points		    [149, 0; 0, 10]
-		    DstBlock		    "MATLAB Function"
+		    DstBlock		    "com reference "
 		    DstPort		    3
 		  }
 		}
@@ -2448,18 +2448,18 @@ Model {
 		  SrcBlock		  "dXcomDes"
 		  SrcPort		  1
 		  Points		  [525, 0]
-		  DstBlock		  "MATLAB Function"
+		  DstBlock		  "com reference "
 		  DstPort		  5
 		}
 		Line {
 		  SrcBlock		  "ddXcomDes"
 		  SrcPort		  1
 		  Points		  [525, 0]
-		  DstBlock		  "MATLAB Function"
+		  DstBlock		  "com reference "
 		  DstPort		  6
 		}
 		Line {
-		  SrcBlock		  "MATLAB Function1"
+		  SrcBlock		  "joint reference "
 		  SrcPort		  1
 		  DstBlock		  "qDes"
 		  DstPort		  1
@@ -2468,13 +2468,13 @@ Model {
 		  SrcBlock		  "parameters1"
 		  SrcPort		  1
 		  Points		  [35, 0]
-		  DstBlock		  "MATLAB Function1"
+		  DstBlock		  "joint reference "
 		  DstPort		  4
 		}
 		Line {
 		  SrcBlock		  "parameters3"
 		  SrcPort		  1
-		  DstBlock		  "MATLAB Function1"
+		  DstBlock		  "joint reference "
 		  DstPort		  3
 		}
 		Line {
@@ -2483,12 +2483,12 @@ Model {
 		  Points		  [30, 0]
 		  Branch {
 		    Points		    [0, -195]
-		    DstBlock		    "MATLAB Function1"
+		    DstBlock		    "joint reference "
 		    DstPort		    2
 		  }
 		  Branch {
 		    Points		    [0, 10]
-		    DstBlock		    "MATLAB Function"
+		    DstBlock		    "com reference "
 		    DstPort		    2
 		  }
 		}
@@ -46445,7 +46445,7 @@ Stateflow {
   }
   chart {
     id			    489
-    name		    "DesValues/Internal coordinator/refGen/MATLAB Function"
+    name		    "DesValues/Internal coordinator/refGen/com reference "
     windowPosition	    [357.331 483.407 167 391]
     viewLimits		    [0 156.75 0 153.75]
     screen		    [1 1 1280 1024 1.041050272174191]
@@ -46453,10 +46453,7 @@ Stateflow {
     firstTransition	    499
     firstJunction	    498
     viewObj		    489
-    visible		    1
     machine		    1
-    subviewS {
-    }
     ssIdHighWaterMark	    14
     decomposition	    CLUSTER_CHART
     type		    EML_CHART
@@ -46678,7 +46675,7 @@ Stateflow {
   }
   instance {
     id			    500
-    name		    "DesValues/Internal coordinator/refGen/MATLAB Function"
+    name		    "DesValues/Internal coordinator/refGen/com reference "
     machine		    1
     chart		    489
   }
@@ -46940,7 +46937,7 @@ Stateflow {
   }
   chart {
     id			    514
-    name		    "DesValues/Internal coordinator/refGen/MATLAB Function1"
+    name		    "DesValues/Internal coordinator/refGen/joint reference "
     windowPosition	    [357.331 483.407 167 391]
     viewLimits		    [0 156.75 0 153.75]
     screen		    [1 1 1280 1024 1.041050272174191]
@@ -46948,10 +46945,7 @@ Stateflow {
     firstTransition	    522
     firstJunction	    521
     viewObj		    514
-    visible		    1
     machine		    1
-    subviewS {
-    }
     ssIdHighWaterMark	    14
     decomposition	    CLUSTER_CHART
     type		    EML_CHART
@@ -47126,7 +47120,7 @@ Stateflow {
   }
   instance {
     id			    523
-    name		    "DesValues/Internal coordinator/refGen/MATLAB Function1"
+    name		    "DesValues/Internal coordinator/refGen/joint reference "
     machine		    1
     chart		    514
   }

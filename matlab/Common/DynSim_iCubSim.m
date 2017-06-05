@@ -7,7 +7,11 @@ function [t, q, qd] = DynSim_iCubSim(controller,params)
     
    %% TODO in the config file i have to define the time and the number of dof 
    %% to provide this information outside simulink
-    WS = controller.GetWholeSystem(); 
+    WS = controller.GetWholeSystem();
+    %% Updating the robot position and define the world link
+    WS.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
+    WS.ComputeSupportPoly(params);
+    %% collecting data from experiments
     time = params.tStart:params.sim_step:params.tEnd;
     
     controller.simulation_iterator     = 1;

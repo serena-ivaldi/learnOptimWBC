@@ -15,7 +15,7 @@
 %  * Public License for more details
 %  */
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%
-clear; clc;
+%clear; clc;
 %% GENERAL SIMULATION INFO
 % If you are simulating the robot with Gazebo, 
 % remember that you have to launch Gazebo as follow:
@@ -33,7 +33,7 @@ clear; clc;
 % setenv('YARP_ROBOT_NAME','iCubGenova05');
 
 % Simulation time in seconds
-CONFIG.SIMULATION_TIME = 100;   
+CONFIG.SIMULATION_TIME = 1;   
 
 %% PRELIMINARY CONFIGURATIONS 
 

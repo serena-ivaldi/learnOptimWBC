@@ -27,7 +27,7 @@ target_link{1} = subchain1;
 
 
 %% Robot
-bot1 = iCub('icubGazeboSim');
+bot1 = iCub('icubGazeboSimSimulink');
 chain_1 = DummyRvc_iCub(bot1,'l_sole');
 robots{1} = chain_1;
 chains = SubChains(target_link,robots,bot1);
@@ -45,11 +45,26 @@ simulator_type = {'icub_matlab_sim'};
 params.init_contact_state = [1 1]; 
 params.feet_on_ground = params.init_contact_state;         %either 0 or 1; [left,right] (in the simulator)
 params.numContacts = sum(params.feet_on_ground,2);
-
+params.qjInit      = bot1.InitializeStateicubGazeboSim(params.feet_on_ground);
+% i need to add +2 to the joitn velocity values because of the difference
+% joints state between the matlba icub and gazebo icub (look at icub class for more information) 
+params.dqjInit     = zeros(bot1.ndof + 2 ,1);
+% icub starting velocity floating base
+params.dx_bInit    = zeros(3,1);
+params.omega_bInit = zeros(3,1);
+% root reference link;
+if params.feet_on_ground(1) == 1
+    params.root_reference_link ='l_sole';
+else
+    params.root_reference_link ='r_sole';
+end
 params.tStart   = time_struct.ti;
 params.tEnd     = time_struct.tf;
 params.sim_step =  0.01;%time_struct.step;
-   
+% feet size
+params.footSize  = [0.07 0.03];    % foot_xlength, foot_ylength 
+params.footSizeForOpitmization = [-0.07 0.07;       % xMin, xMax
+                                  -0.03 0.03];      % yMin, yMax   
 
 
     %% parameters for controller and fitness (fitnessHumanoidsIcubStandUp)
@@ -143,9 +158,9 @@ switch CONTROLLERTYPE
         generation_of_starting_point = 'test'; % 'test':user defined by user_defined_start_action 'given':is redundant with test  'random': random starting point
         %init_parameters = 6;
        
-        user_defined_start_action =  [0.1,0.2,1.11440342040965,1.60499168353230,1.46748425429034,...
-                                     -0.02800863753444,-0.0278361490435566,-0.0146154272285895,0.0134390845173483,-0.00801177055714880,...
-                                     0.350954589796539,0.364988639468307,0.365816381480233,0.389461591950187,0.402856738959637]; 
+        user_defined_start_action =  [0.913076139695994,0.905282671038423,1.16925695886780,1.99897101764829,1.71346167883188,...
+                                        -0.0252589378181975,-0.00171875837190067,0.0130805429422483,-0.0141668463935478,-0.0608148916683415,...
+                                        0.468857336154740,0.433709756339607,0.442003448052191,0.482619376729153,0.360000000000000]; 
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
         niter = 100;  %number of generations
         %cmaes_value_range = [-14 , 14];  % boudn that define the search space

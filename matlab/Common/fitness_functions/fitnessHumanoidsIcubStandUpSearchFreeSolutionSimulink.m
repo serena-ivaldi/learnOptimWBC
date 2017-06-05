@@ -25,7 +25,7 @@ function fit  = fitnessHumanoidsIcubStandUpSearchFreeSolutionSimulink(obj,output
     for i=1:downsaple:size(t_all,1)
         
         res.tau  = contr.simulation_results.tau(i,:);
-        q        = contr.simulation_results.q(i,:);
+        q        = q_all(i,:);%contr.simulation_results.q(i,:);
         res.xCoM = contr.simulation_results.xCoM(i,:);
         res.zmp  = contr.simulation_results.zmp(i,:);
         
