@@ -33,7 +33,10 @@
 % setenv('YARP_ROBOT_NAME','iCubGenova05');
 
 % Simulation time in seconds
-CONFIG.SIMULATION_TIME = params.tEnd;   
+%% ToRestore
+%CONFIG.SIMULATION_TIME = params.tEnd;   
+ CONFIG.SIMULATION_TIME = inf; 
+
 
 %% PRELIMINARY CONFIGURATIONS 
 % SM.SM_TYPE: defines the kind of state machines that can be chosen.
@@ -112,7 +115,7 @@ CONFIG.ONSOFTCARPET          = false;
 
 % CONFIG.USE_QP_SOLVER: if set to true, a QP solver is used to account for 
 % inequality constraints of contact wrenches
-CONFIG.USE_QP_SOLVER         = true; 
+CONFIG.USE_QP_SOLVER         = false; 
 
 % YARP PORTS
 PORTS.IMU                = '/icub/inertial';

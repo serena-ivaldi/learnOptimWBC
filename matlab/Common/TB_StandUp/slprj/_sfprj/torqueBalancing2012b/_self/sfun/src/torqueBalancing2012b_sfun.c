@@ -2,7 +2,6 @@
 
 #include "torqueBalancing2012b_sfun.h"
 #include "torqueBalancing2012b_sfun_debug_macros.h"
-#include "c1_torqueBalancing2012b.h"
 #include "c2_torqueBalancing2012b.h"
 #include "c3_torqueBalancing2012b.h"
 #include "c4_torqueBalancing2012b.h"
@@ -23,12 +22,7 @@
 #include "c19_torqueBalancing2012b.h"
 #include "c20_torqueBalancing2012b.h"
 #include "c21_torqueBalancing2012b.h"
-#include "c22_torqueBalancing2012b.h"
-#include "c23_torqueBalancing2012b.h"
-#include "c24_torqueBalancing2012b.h"
-#include "c25_torqueBalancing2012b.h"
 #include "c26_torqueBalancing2012b.h"
-#include "c27_torqueBalancing2012b.h"
 #include "c28_torqueBalancing2012b.h"
 #include "c29_torqueBalancing2012b.h"
 #include "c30_torqueBalancing2012b.h"
@@ -39,8 +33,6 @@
 #include "c35_torqueBalancing2012b.h"
 #include "c36_torqueBalancing2012b.h"
 #include "c37_torqueBalancing2012b.h"
-#include "c38_torqueBalancing2012b.h"
-#include "c39_torqueBalancing2012b.h"
 #include "c40_torqueBalancing2012b.h"
 #include "c41_torqueBalancing2012b.h"
 #include "c42_torqueBalancing2012b.h"
@@ -71,11 +63,6 @@ void torqueBalancing2012b_terminator(void)
 unsigned int sf_torqueBalancing2012b_method_dispatcher(SimStruct *simstructPtr,
   unsigned int chartFileNumber, const char* specsCksum, int_T method, void *data)
 {
-  if (chartFileNumber==1) {
-    c1_torqueBalancing2012b_method_dispatcher(simstructPtr, method, data);
-    return 1;
-  }
-
   if (chartFileNumber==2) {
     c2_torqueBalancing2012b_method_dispatcher(simstructPtr, method, data);
     return 1;
@@ -176,33 +163,8 @@ unsigned int sf_torqueBalancing2012b_method_dispatcher(SimStruct *simstructPtr,
     return 1;
   }
 
-  if (chartFileNumber==22) {
-    c22_torqueBalancing2012b_method_dispatcher(simstructPtr, method, data);
-    return 1;
-  }
-
-  if (chartFileNumber==23) {
-    c23_torqueBalancing2012b_method_dispatcher(simstructPtr, method, data);
-    return 1;
-  }
-
-  if (chartFileNumber==24) {
-    c24_torqueBalancing2012b_method_dispatcher(simstructPtr, method, data);
-    return 1;
-  }
-
-  if (chartFileNumber==25) {
-    c25_torqueBalancing2012b_method_dispatcher(simstructPtr, method, data);
-    return 1;
-  }
-
   if (chartFileNumber==26) {
     c26_torqueBalancing2012b_method_dispatcher(simstructPtr, method, data);
-    return 1;
-  }
-
-  if (chartFileNumber==27) {
-    c27_torqueBalancing2012b_method_dispatcher(simstructPtr, method, data);
     return 1;
   }
 
@@ -253,16 +215,6 @@ unsigned int sf_torqueBalancing2012b_method_dispatcher(SimStruct *simstructPtr,
 
   if (chartFileNumber==37) {
     c37_torqueBalancing2012b_method_dispatcher(simstructPtr, method, data);
-    return 1;
-  }
-
-  if (chartFileNumber==38) {
-    c38_torqueBalancing2012b_method_dispatcher(simstructPtr, method, data);
-    return 1;
-  }
-
-  if (chartFileNumber==39) {
-    c39_torqueBalancing2012b_method_dispatcher(simstructPtr, method, data);
     return 1;
   }
 
@@ -319,21 +271,14 @@ unsigned int sf_torqueBalancing2012b_process_check_sum_call( int nlhs, mxArray *
       ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(0U);
       ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(0U);
     } else if (!strcmp(commandName,"makefile")) {
-      ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(34994864U);
-      ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(3318357992U);
-      ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(2461293363U);
-      ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(3681778989U);
+      ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(4177917716U);
+      ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(2905489634U);
+      ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(4095513622U);
+      ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(1981048833U);
     } else if (nrhs==3 && !strcmp(commandName,"chart")) {
       unsigned int chartFileNumber;
       chartFileNumber = (unsigned int)mxGetScalar(prhs[2]);
       switch (chartFileNumber) {
-       case 1:
-        {
-          extern void sf_c1_torqueBalancing2012b_get_check_sum(mxArray *plhs[]);
-          sf_c1_torqueBalancing2012b_get_check_sum(plhs);
-          break;
-        }
-
        case 2:
         {
           extern void sf_c2_torqueBalancing2012b_get_check_sum(mxArray *plhs[]);
@@ -474,45 +419,10 @@ unsigned int sf_torqueBalancing2012b_process_check_sum_call( int nlhs, mxArray *
           break;
         }
 
-       case 22:
-        {
-          extern void sf_c22_torqueBalancing2012b_get_check_sum(mxArray *plhs[]);
-          sf_c22_torqueBalancing2012b_get_check_sum(plhs);
-          break;
-        }
-
-       case 23:
-        {
-          extern void sf_c23_torqueBalancing2012b_get_check_sum(mxArray *plhs[]);
-          sf_c23_torqueBalancing2012b_get_check_sum(plhs);
-          break;
-        }
-
-       case 24:
-        {
-          extern void sf_c24_torqueBalancing2012b_get_check_sum(mxArray *plhs[]);
-          sf_c24_torqueBalancing2012b_get_check_sum(plhs);
-          break;
-        }
-
-       case 25:
-        {
-          extern void sf_c25_torqueBalancing2012b_get_check_sum(mxArray *plhs[]);
-          sf_c25_torqueBalancing2012b_get_check_sum(plhs);
-          break;
-        }
-
        case 26:
         {
           extern void sf_c26_torqueBalancing2012b_get_check_sum(mxArray *plhs[]);
           sf_c26_torqueBalancing2012b_get_check_sum(plhs);
-          break;
-        }
-
-       case 27:
-        {
-          extern void sf_c27_torqueBalancing2012b_get_check_sum(mxArray *plhs[]);
-          sf_c27_torqueBalancing2012b_get_check_sum(plhs);
           break;
         }
 
@@ -586,20 +496,6 @@ unsigned int sf_torqueBalancing2012b_process_check_sum_call( int nlhs, mxArray *
           break;
         }
 
-       case 38:
-        {
-          extern void sf_c38_torqueBalancing2012b_get_check_sum(mxArray *plhs[]);
-          sf_c38_torqueBalancing2012b_get_check_sum(plhs);
-          break;
-        }
-
-       case 39:
-        {
-          extern void sf_c39_torqueBalancing2012b_get_check_sum(mxArray *plhs[]);
-          sf_c39_torqueBalancing2012b_get_check_sum(plhs);
-          break;
-        }
-
        case 40:
         {
           extern void sf_c40_torqueBalancing2012b_get_check_sum(mxArray *plhs[]);
@@ -643,10 +539,10 @@ unsigned int sf_torqueBalancing2012b_process_check_sum_call( int nlhs, mxArray *
       return 0;
     }
   } else {
-    ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(4204922701U);
-    ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(62306509U);
-    ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(2985527080U);
-    ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(3676961892U);
+    ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(2583430530U);
+    ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(4200885713U);
+    ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(4022489396U);
+    ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(1686879987U);
   }
 
   return 1;
@@ -682,22 +578,9 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
     unsigned int chartFileNumber;
     chartFileNumber = (unsigned int)mxGetScalar(prhs[1]);
     switch (chartFileNumber) {
-     case 1:
-      {
-        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
-          extern mxArray *sf_c1_torqueBalancing2012b_get_autoinheritance_info
-            (void);
-          plhs[0] = sf_c1_torqueBalancing2012b_get_autoinheritance_info();
-          break;
-        }
-
-        plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL);
-        break;
-      }
-
      case 2:
       {
-        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
+        if (strcmp(aiChksum, "GAMkWwz11uLc3rQ0ejtJpH") == 0) {
           extern mxArray *sf_c2_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c2_torqueBalancing2012b_get_autoinheritance_info();
@@ -775,7 +658,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 8:
       {
-        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
+        if (strcmp(aiChksum, "GAMkWwz11uLc3rQ0ejtJpH") == 0) {
           extern mxArray *sf_c8_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c8_torqueBalancing2012b_get_autoinheritance_info();
@@ -788,7 +671,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 9:
       {
-        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
+        if (strcmp(aiChksum, "GAMkWwz11uLc3rQ0ejtJpH") == 0) {
           extern mxArray *sf_c9_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c9_torqueBalancing2012b_get_autoinheritance_info();
@@ -814,7 +697,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 11:
       {
-        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
+        if (strcmp(aiChksum, "GAMkWwz11uLc3rQ0ejtJpH") == 0) {
           extern mxArray *sf_c11_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c11_torqueBalancing2012b_get_autoinheritance_info();
@@ -853,7 +736,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 14:
       {
-        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
+        if (strcmp(aiChksum, "GAMkWwz11uLc3rQ0ejtJpH") == 0) {
           extern mxArray *sf_c14_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c14_torqueBalancing2012b_get_autoinheritance_info();
@@ -944,7 +827,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 21:
       {
-        if (strcmp(aiChksum, "UfUWrvCHAdM09TZZtnwTOG") == 0) {
+        if (strcmp(aiChksum, "qWpq40tCqAq0Y38jsEMeXB") == 0) {
           extern mxArray *sf_c21_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c21_torqueBalancing2012b_get_autoinheritance_info();
@@ -955,77 +838,12 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
         break;
       }
 
-     case 22:
-      {
-        if (strcmp(aiChksum, "9B1P5X3qhYr65sYSis5Tw") == 0) {
-          extern mxArray *sf_c22_torqueBalancing2012b_get_autoinheritance_info
-            (void);
-          plhs[0] = sf_c22_torqueBalancing2012b_get_autoinheritance_info();
-          break;
-        }
-
-        plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL);
-        break;
-      }
-
-     case 23:
-      {
-        if (strcmp(aiChksum, "9B1P5X3qhYr65sYSis5Tw") == 0) {
-          extern mxArray *sf_c23_torqueBalancing2012b_get_autoinheritance_info
-            (void);
-          plhs[0] = sf_c23_torqueBalancing2012b_get_autoinheritance_info();
-          break;
-        }
-
-        plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL);
-        break;
-      }
-
-     case 24:
-      {
-        if (strcmp(aiChksum, "9B1P5X3qhYr65sYSis5Tw") == 0) {
-          extern mxArray *sf_c24_torqueBalancing2012b_get_autoinheritance_info
-            (void);
-          plhs[0] = sf_c24_torqueBalancing2012b_get_autoinheritance_info();
-          break;
-        }
-
-        plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL);
-        break;
-      }
-
-     case 25:
-      {
-        if (strcmp(aiChksum, "9B1P5X3qhYr65sYSis5Tw") == 0) {
-          extern mxArray *sf_c25_torqueBalancing2012b_get_autoinheritance_info
-            (void);
-          plhs[0] = sf_c25_torqueBalancing2012b_get_autoinheritance_info();
-          break;
-        }
-
-        plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL);
-        break;
-      }
-
      case 26:
       {
-        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
+        if (strcmp(aiChksum, "GAMkWwz11uLc3rQ0ejtJpH") == 0) {
           extern mxArray *sf_c26_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c26_torqueBalancing2012b_get_autoinheritance_info();
-          break;
-        }
-
-        plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL);
-        break;
-      }
-
-     case 27:
-      {
-        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
-          extern mxArray *sf_c27_torqueBalancing2012b_get_autoinheritance_info
-            (void);
-          plhs[0] = sf_c27_torqueBalancing2012b_get_autoinheritance_info();
           break;
         }
 
@@ -1113,7 +931,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 34:
       {
-        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
+        if (strcmp(aiChksum, "GAMkWwz11uLc3rQ0ejtJpH") == 0) {
           extern mxArray *sf_c34_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c34_torqueBalancing2012b_get_autoinheritance_info();
@@ -1126,7 +944,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 35:
       {
-        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
+        if (strcmp(aiChksum, "GAMkWwz11uLc3rQ0ejtJpH") == 0) {
           extern mxArray *sf_c35_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c35_torqueBalancing2012b_get_autoinheritance_info();
@@ -1139,7 +957,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 36:
       {
-        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
+        if (strcmp(aiChksum, "GAMkWwz11uLc3rQ0ejtJpH") == 0) {
           extern mxArray *sf_c36_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c36_torqueBalancing2012b_get_autoinheritance_info();
@@ -1163,35 +981,9 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
         break;
       }
 
-     case 38:
-      {
-        if (strcmp(aiChksum, "9B1P5X3qhYr65sYSis5Tw") == 0) {
-          extern mxArray *sf_c38_torqueBalancing2012b_get_autoinheritance_info
-            (void);
-          plhs[0] = sf_c38_torqueBalancing2012b_get_autoinheritance_info();
-          break;
-        }
-
-        plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL);
-        break;
-      }
-
-     case 39:
-      {
-        if (strcmp(aiChksum, "9B1P5X3qhYr65sYSis5Tw") == 0) {
-          extern mxArray *sf_c39_torqueBalancing2012b_get_autoinheritance_info
-            (void);
-          plhs[0] = sf_c39_torqueBalancing2012b_get_autoinheritance_info();
-          break;
-        }
-
-        plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL);
-        break;
-      }
-
      case 40:
       {
-        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
+        if (strcmp(aiChksum, "GAMkWwz11uLc3rQ0ejtJpH") == 0) {
           extern mxArray *sf_c40_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c40_torqueBalancing2012b_get_autoinheritance_info();
@@ -1204,7 +996,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 41:
       {
-        if (strcmp(aiChksum, "Aj2vDlXJg2IlLkz3oEjXcB") == 0) {
+        if (strcmp(aiChksum, "JVqb6xiYBG6GmL63tnomKH") == 0) {
           extern mxArray *sf_c41_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c41_torqueBalancing2012b_get_autoinheritance_info();
@@ -1217,7 +1009,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 42:
       {
-        if (strcmp(aiChksum, "YmIalEnk1h9C8xyxCnKh2D") == 0) {
+        if (strcmp(aiChksum, "GAMkWwz11uLc3rQ0ejtJpH") == 0) {
           extern mxArray *sf_c42_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c42_torqueBalancing2012b_get_autoinheritance_info();
@@ -1230,7 +1022,7 @@ unsigned int sf_torqueBalancing2012b_autoinheritance_info( int nlhs, mxArray *
 
      case 43:
       {
-        if (strcmp(aiChksum, "Dmv7LooWSjPyxMANfBtNNG") == 0) {
+        if (strcmp(aiChksum, "7fqLMcXWOY0gah5W9lnSGH") == 0) {
           extern mxArray *sf_c43_torqueBalancing2012b_get_autoinheritance_info
             (void);
           plhs[0] = sf_c43_torqueBalancing2012b_get_autoinheritance_info();
@@ -1276,17 +1068,6 @@ unsigned int sf_torqueBalancing2012b_get_eml_resolved_functions_info( int nlhs,
     unsigned int chartFileNumber;
     chartFileNumber = (unsigned int)mxGetScalar(prhs[1]);
     switch (chartFileNumber) {
-     case 1:
-      {
-        extern const mxArray
-          *sf_c1_torqueBalancing2012b_get_eml_resolved_functions_info(void);
-        mxArray *persistentMxArray = (mxArray *)
-          sf_c1_torqueBalancing2012b_get_eml_resolved_functions_info();
-        plhs[0] = mxDuplicateArray(persistentMxArray);
-        mxDestroyArray(persistentMxArray);
-        break;
-      }
-
      case 2:
       {
         extern const mxArray
@@ -1507,67 +1288,12 @@ unsigned int sf_torqueBalancing2012b_get_eml_resolved_functions_info( int nlhs,
         break;
       }
 
-     case 22:
-      {
-        extern const mxArray
-          *sf_c22_torqueBalancing2012b_get_eml_resolved_functions_info(void);
-        mxArray *persistentMxArray = (mxArray *)
-          sf_c22_torqueBalancing2012b_get_eml_resolved_functions_info();
-        plhs[0] = mxDuplicateArray(persistentMxArray);
-        mxDestroyArray(persistentMxArray);
-        break;
-      }
-
-     case 23:
-      {
-        extern const mxArray
-          *sf_c23_torqueBalancing2012b_get_eml_resolved_functions_info(void);
-        mxArray *persistentMxArray = (mxArray *)
-          sf_c23_torqueBalancing2012b_get_eml_resolved_functions_info();
-        plhs[0] = mxDuplicateArray(persistentMxArray);
-        mxDestroyArray(persistentMxArray);
-        break;
-      }
-
-     case 24:
-      {
-        extern const mxArray
-          *sf_c24_torqueBalancing2012b_get_eml_resolved_functions_info(void);
-        mxArray *persistentMxArray = (mxArray *)
-          sf_c24_torqueBalancing2012b_get_eml_resolved_functions_info();
-        plhs[0] = mxDuplicateArray(persistentMxArray);
-        mxDestroyArray(persistentMxArray);
-        break;
-      }
-
-     case 25:
-      {
-        extern const mxArray
-          *sf_c25_torqueBalancing2012b_get_eml_resolved_functions_info(void);
-        mxArray *persistentMxArray = (mxArray *)
-          sf_c25_torqueBalancing2012b_get_eml_resolved_functions_info();
-        plhs[0] = mxDuplicateArray(persistentMxArray);
-        mxDestroyArray(persistentMxArray);
-        break;
-      }
-
      case 26:
       {
         extern const mxArray
           *sf_c26_torqueBalancing2012b_get_eml_resolved_functions_info(void);
         mxArray *persistentMxArray = (mxArray *)
           sf_c26_torqueBalancing2012b_get_eml_resolved_functions_info();
-        plhs[0] = mxDuplicateArray(persistentMxArray);
-        mxDestroyArray(persistentMxArray);
-        break;
-      }
-
-     case 27:
-      {
-        extern const mxArray
-          *sf_c27_torqueBalancing2012b_get_eml_resolved_functions_info(void);
-        mxArray *persistentMxArray = (mxArray *)
-          sf_c27_torqueBalancing2012b_get_eml_resolved_functions_info();
         plhs[0] = mxDuplicateArray(persistentMxArray);
         mxDestroyArray(persistentMxArray);
         break;
@@ -1683,28 +1409,6 @@ unsigned int sf_torqueBalancing2012b_get_eml_resolved_functions_info( int nlhs,
         break;
       }
 
-     case 38:
-      {
-        extern const mxArray
-          *sf_c38_torqueBalancing2012b_get_eml_resolved_functions_info(void);
-        mxArray *persistentMxArray = (mxArray *)
-          sf_c38_torqueBalancing2012b_get_eml_resolved_functions_info();
-        plhs[0] = mxDuplicateArray(persistentMxArray);
-        mxDestroyArray(persistentMxArray);
-        break;
-      }
-
-     case 39:
-      {
-        extern const mxArray
-          *sf_c39_torqueBalancing2012b_get_eml_resolved_functions_info(void);
-        mxArray *persistentMxArray = (mxArray *)
-          sf_c39_torqueBalancing2012b_get_eml_resolved_functions_info();
-        plhs[0] = mxDuplicateArray(persistentMxArray);
-        mxDestroyArray(persistentMxArray);
-        break;
-      }
-
      case 40:
       {
         extern const mxArray
@@ -1784,18 +1488,9 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
     unsigned int chartFileNumber;
     chartFileNumber = (unsigned int)mxGetScalar(prhs[1]);
     switch (chartFileNumber) {
-     case 1:
-      {
-        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
-          extern mxArray *sf_c1_torqueBalancing2012b_third_party_uses_info(void);
-          plhs[0] = sf_c1_torqueBalancing2012b_third_party_uses_info();
-          break;
-        }
-      }
-
      case 2:
       {
-        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
+        if (strcmp(tpChksum, "mMoCWwY2BMjddmLlWvtQ7D") == 0) {
           extern mxArray *sf_c2_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c2_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -1849,7 +1544,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 8:
       {
-        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
+        if (strcmp(tpChksum, "mMoCWwY2BMjddmLlWvtQ7D") == 0) {
           extern mxArray *sf_c8_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c8_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -1858,7 +1553,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 9:
       {
-        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
+        if (strcmp(tpChksum, "mMoCWwY2BMjddmLlWvtQ7D") == 0) {
           extern mxArray *sf_c9_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c9_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -1876,7 +1571,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 11:
       {
-        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
+        if (strcmp(tpChksum, "mMoCWwY2BMjddmLlWvtQ7D") == 0) {
           extern mxArray *sf_c11_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c11_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -1903,7 +1598,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 14:
       {
-        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
+        if (strcmp(tpChksum, "mMoCWwY2BMjddmLlWvtQ7D") == 0) {
           extern mxArray *sf_c14_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c14_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -1966,63 +1661,18 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 21:
       {
-        if (strcmp(tpChksum, "wMMqBoimxPEI8p2FmqF1BC") == 0) {
+        if (strcmp(tpChksum, "n2hQR67RCIsglVoAkBNkpG") == 0) {
           extern mxArray *sf_c21_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c21_torqueBalancing2012b_third_party_uses_info();
           break;
         }
       }
 
-     case 22:
-      {
-        if (strcmp(tpChksum, "UFHwbqPs0saPLmVxuEEcbF") == 0) {
-          extern mxArray *sf_c22_torqueBalancing2012b_third_party_uses_info(void);
-          plhs[0] = sf_c22_torqueBalancing2012b_third_party_uses_info();
-          break;
-        }
-      }
-
-     case 23:
-      {
-        if (strcmp(tpChksum, "UFHwbqPs0saPLmVxuEEcbF") == 0) {
-          extern mxArray *sf_c23_torqueBalancing2012b_third_party_uses_info(void);
-          plhs[0] = sf_c23_torqueBalancing2012b_third_party_uses_info();
-          break;
-        }
-      }
-
-     case 24:
-      {
-        if (strcmp(tpChksum, "UFHwbqPs0saPLmVxuEEcbF") == 0) {
-          extern mxArray *sf_c24_torqueBalancing2012b_third_party_uses_info(void);
-          plhs[0] = sf_c24_torqueBalancing2012b_third_party_uses_info();
-          break;
-        }
-      }
-
-     case 25:
-      {
-        if (strcmp(tpChksum, "UFHwbqPs0saPLmVxuEEcbF") == 0) {
-          extern mxArray *sf_c25_torqueBalancing2012b_third_party_uses_info(void);
-          plhs[0] = sf_c25_torqueBalancing2012b_third_party_uses_info();
-          break;
-        }
-      }
-
      case 26:
       {
-        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
+        if (strcmp(tpChksum, "mMoCWwY2BMjddmLlWvtQ7D") == 0) {
           extern mxArray *sf_c26_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c26_torqueBalancing2012b_third_party_uses_info();
-          break;
-        }
-      }
-
-     case 27:
-      {
-        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
-          extern mxArray *sf_c27_torqueBalancing2012b_third_party_uses_info(void);
-          plhs[0] = sf_c27_torqueBalancing2012b_third_party_uses_info();
           break;
         }
       }
@@ -2083,7 +1733,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 34:
       {
-        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
+        if (strcmp(tpChksum, "mMoCWwY2BMjddmLlWvtQ7D") == 0) {
           extern mxArray *sf_c34_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c34_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -2092,7 +1742,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 35:
       {
-        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
+        if (strcmp(tpChksum, "mMoCWwY2BMjddmLlWvtQ7D") == 0) {
           extern mxArray *sf_c35_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c35_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -2101,7 +1751,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 36:
       {
-        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
+        if (strcmp(tpChksum, "mMoCWwY2BMjddmLlWvtQ7D") == 0) {
           extern mxArray *sf_c36_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c36_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -2117,27 +1767,9 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
         }
       }
 
-     case 38:
-      {
-        if (strcmp(tpChksum, "UFHwbqPs0saPLmVxuEEcbF") == 0) {
-          extern mxArray *sf_c38_torqueBalancing2012b_third_party_uses_info(void);
-          plhs[0] = sf_c38_torqueBalancing2012b_third_party_uses_info();
-          break;
-        }
-      }
-
-     case 39:
-      {
-        if (strcmp(tpChksum, "UFHwbqPs0saPLmVxuEEcbF") == 0) {
-          extern mxArray *sf_c39_torqueBalancing2012b_third_party_uses_info(void);
-          plhs[0] = sf_c39_torqueBalancing2012b_third_party_uses_info();
-          break;
-        }
-      }
-
      case 40:
       {
-        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
+        if (strcmp(tpChksum, "mMoCWwY2BMjddmLlWvtQ7D") == 0) {
           extern mxArray *sf_c40_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c40_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -2146,7 +1778,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 41:
       {
-        if (strcmp(tpChksum, "GV4wsb4uYKv2IucWDMmv1C") == 0) {
+        if (strcmp(tpChksum, "bUArhg8cyMaqpRYzORFrKH") == 0) {
           extern mxArray *sf_c41_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c41_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -2155,7 +1787,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 42:
       {
-        if (strcmp(tpChksum, "mcLsq81jT0i1ePjG1oQidD") == 0) {
+        if (strcmp(tpChksum, "mMoCWwY2BMjddmLlWvtQ7D") == 0) {
           extern mxArray *sf_c42_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c42_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -2164,7 +1796,7 @@ unsigned int sf_torqueBalancing2012b_third_party_uses_info( int nlhs, mxArray *
 
      case 43:
       {
-        if (strcmp(tpChksum, "X1Y6S2YfpDQgrncrDMdBiF") == 0) {
+        if (strcmp(tpChksum, "8OpXjWnDnjWNIkFSaXaeVH") == 0) {
           extern mxArray *sf_c43_torqueBalancing2012b_third_party_uses_info(void);
           plhs[0] = sf_c43_torqueBalancing2012b_third_party_uses_info();
           break;
@@ -2183,7 +1815,7 @@ void torqueBalancing2012b_debug_initialize(struct SfDebugInstanceStruct*
   debugInstance)
 {
   _torqueBalancing2012bMachineNumber_ = sf_debug_initialize_machine
-    (debugInstance,"torqueBalancing2012b","sfun",0,43,0,0,0);
+    (debugInstance,"torqueBalancing2012b","sfun",0,35,0,0,0);
   sf_debug_set_machine_event_thresholds(debugInstance,
     _torqueBalancing2012bMachineNumber_,0,0);
   sf_debug_set_machine_data_thresholds(debugInstance,

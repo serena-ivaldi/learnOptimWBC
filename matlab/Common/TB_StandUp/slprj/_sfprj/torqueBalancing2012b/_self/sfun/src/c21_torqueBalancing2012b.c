@@ -172,12 +172,12 @@ static void sf_c21_torqueBalancing2012b(SFc21_torqueBalancing2012bInstanceStruct
   c21_b_legsInContact = (real_T *)ssGetOutputPortSignal(chartInstance->S, 1);
   c21_b_t = (real_T *)ssGetInputPortSignal(chartInstance->S, 0);
   _sfTime_ = (real_T)ssGetT(chartInstance->S);
-  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 20U, chartInstance->c21_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 19U, chartInstance->c21_sfEvent);
   _SFD_DATA_RANGE_CHECK(*c21_b_t, 0U);
   _SFD_DATA_RANGE_CHECK(*c21_b_legsInContact, 1U);
   _SFD_DATA_RANGE_CHECK(*c21_b_tswitch, 2U);
   chartInstance->c21_sfEvent = CALL_EVENT;
-  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 20U, chartInstance->c21_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 19U, chartInstance->c21_sfEvent);
   c21_hoistedGlobal = *c21_b_t;
   c21_b_hoistedGlobal = *c21_b_tswitch;
   c21_t = c21_hoistedGlobal;
@@ -193,19 +193,12 @@ static void sf_c21_torqueBalancing2012b(SFc21_torqueBalancing2012bInstanceStruct
   _SFD_SYMBOL_SCOPE_ADD_EML_IMPORTABLE(&c21_legsInContact, 4U,
     c21_sf_marshallOut, c21_sf_marshallIn);
   CV_EML_FCN(0, 0);
-  _SFD_EML_CALL(0U, chartInstance->c21_sfEvent, 3);
-  if (CV_EML_IF(0, 1, 0, c21_t <= c21_tswitch)) {
-    _SFD_EML_CALL(0U, chartInstance->c21_sfEvent, 4);
-    c21_legsInContact = 100.0;
-  } else {
-    _SFD_EML_CALL(0U, chartInstance->c21_sfEvent, 6);
-    c21_legsInContact = -100.0;
-  }
-
+  _SFD_EML_CALL(0U, chartInstance->c21_sfEvent, 6);
+  c21_legsInContact = 100.0;
   _SFD_EML_CALL(0U, chartInstance->c21_sfEvent, -6);
   _SFD_SYMBOL_SCOPE_POP();
   *c21_b_legsInContact = c21_legsInContact;
-  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 20U, chartInstance->c21_sfEvent);
+  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 19U, chartInstance->c21_sfEvent);
   _SFD_CHECK_FOR_STATE_INCONSISTENCY(_torqueBalancing2012bMachineNumber_,
     chartInstance->chartNumber, chartInstance->instanceNumber);
 }
@@ -394,10 +387,10 @@ extern void utFree(void*);
 
 void sf_c21_torqueBalancing2012b_get_check_sum(mxArray *plhs[])
 {
-  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(2132936263U);
-  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(3980959155U);
-  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(622965U);
-  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(2427254152U);
+  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(4085333263U);
+  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(3849152349U);
+  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(2687988485U);
+  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(3569803106U);
 }
 
 mxArray *sf_c21_torqueBalancing2012b_get_autoinheritance_info(void)
@@ -409,7 +402,7 @@ mxArray *sf_c21_torqueBalancing2012b_get_autoinheritance_info(void)
     autoinheritanceFields);
 
   {
-    mxArray *mxChecksum = mxCreateString("UfUWrvCHAdM09TZZtnwTOG");
+    mxArray *mxChecksum = mxCreateString("qWpq40tCqAq0Y38jsEMeXB");
     mxSetField(mxAutoinheritanceInfo,0,"checksum",mxChecksum);
   }
 
@@ -576,9 +569,8 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
         _SFD_CV_INIT_TRANS(0,0,NULL,NULL,0,NULL);
 
         /* Initialization of MATLAB Function Model Coverage */
-        _SFD_CV_INIT_EML(0,1,1,1,0,0,0,0,0,0,0);
-        _SFD_CV_INIT_EML_FCN(0,0,"eML_blk_kernel",0,-1,163);
-        _SFD_CV_INIT_EML_IF(0,1,0,61,75,111,154);
+        _SFD_CV_INIT_EML(0,1,1,0,0,0,0,0,0,0,0);
+        _SFD_CV_INIT_EML_FCN(0,0,"eML_blk_kernel",0,-1,253);
         _SFD_TRANS_COV_WTS(0,0,0,1,0);
         if (chartAlreadyPresent==0) {
           _SFD_TRANS_COV_MAPS(0,
@@ -618,7 +610,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
 static const char* sf_get_instance_specialization(void)
 {
-  return "wMMqBoimxPEI8p2FmqF1BC";
+  return "n2hQR67RCIsglVoAkBNkpG";
 }
 
 static void sf_opaque_initialize_c21_torqueBalancing2012b(void *chartInstanceVar)
@@ -798,10 +790,10 @@ static void mdlSetWorkWidths_c21_torqueBalancing2012b(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(3668289663U));
-  ssSetChecksum1(S,(741102112U));
-  ssSetChecksum2(S,(1007921821U));
-  ssSetChecksum3(S,(73682364U));
+  ssSetChecksum0(S,(2739915456U));
+  ssSetChecksum1(S,(3684236348U));
+  ssSetChecksum2(S,(4230158583U));
+  ssSetChecksum3(S,(2210222341U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
   ssSupportsMultipleExecInstances(S,1);
