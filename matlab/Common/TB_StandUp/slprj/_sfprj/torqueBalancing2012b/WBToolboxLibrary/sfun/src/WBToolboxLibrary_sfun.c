@@ -98,9 +98,9 @@ unsigned int sf_WBToolboxLibrary_process_check_sum_call( int nlhs, mxArray *
            case 1:
             {
               extern void
-                sf_c1_KUAKXEagfs8AeITP6Td37B_WBToolboxLibrary_get_check_sum
+                sf_c1_ShVT4BxSmtBPnRwC5cMTHH_WBToolboxLibrary_get_check_sum
                 (mxArray *plhs[]);
-              sf_c1_KUAKXEagfs8AeITP6Td37B_WBToolboxLibrary_get_check_sum(plhs);
+              sf_c1_ShVT4BxSmtBPnRwC5cMTHH_WBToolboxLibrary_get_check_sum(plhs);
               break;
             }
 

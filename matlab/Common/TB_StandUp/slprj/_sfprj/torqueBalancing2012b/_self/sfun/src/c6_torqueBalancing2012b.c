@@ -814,7 +814,7 @@ static void sf_c6_torqueBalancing2012b(SFc6_torqueBalancing2012bInstanceStruct
     1);
   c6_b_connection = (boolean_T *)ssGetInputPortSignal(chartInstance->S, 0);
   _sfTime_ = (real_T)ssGetT(chartInstance->S);
-  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 5U, chartInstance->c6_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 4U, chartInstance->c6_sfEvent);
   _SFD_DATA_RANGE_CHECK((real_T)*c6_b_connection, 0U);
   for (c6_i12 = 0; c6_i12 < 6; c6_i12++) {
     _SFD_DATA_RANGE_CHECK((*c6_c_wrench_rightFoot)[c6_i12], 1U);
@@ -878,7 +878,7 @@ static void sf_c6_torqueBalancing2012b(SFc6_torqueBalancing2012bInstanceStruct
 
   _SFD_DATA_RANGE_CHECK(*c6_c_currentState, 18U);
   chartInstance->c6_sfEvent = CALL_EVENT;
-  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 5U, chartInstance->c6_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 4U, chartInstance->c6_sfEvent);
   c6_hoistedGlobal = *c6_b_connection;
   c6_connection = c6_hoistedGlobal;
   for (c6_i27 = 0; c6_i27 < 6; c6_i27++) {
@@ -1049,7 +1049,7 @@ static void sf_c6_torqueBalancing2012b(SFc6_torqueBalancing2012bInstanceStruct
   }
 
   *c6_c_currentState = c6_currentState;
-  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 5U, chartInstance->c6_sfEvent);
+  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 4U, chartInstance->c6_sfEvent);
   _SFD_CHECK_FOR_STATE_INCONSISTENCY(_torqueBalancing2012bMachineNumber_,
     chartInstance->chartNumber, chartInstance->instanceNumber);
 }

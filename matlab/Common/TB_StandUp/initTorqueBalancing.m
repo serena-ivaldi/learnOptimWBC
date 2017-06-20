@@ -35,7 +35,7 @@
 % Simulation time in seconds
 %% ToRestore
 %CONFIG.SIMULATION_TIME = params.tEnd;   
- CONFIG.SIMULATION_TIME = inf; 
+ CONFIG.SIMULATION_TIME = 4.5; 
 
 
 %% PRELIMINARY CONFIGURATIONS 
@@ -82,7 +82,7 @@ CONFIG.CHECK_LIMITS           = false;
 %% DO NOT MODIFY THE FOLLOWING VARIABLES, THEY ARE AUTOMATICALLY 
 %% CHANGED WHEN SIMULATING THE ROBOT ON GAZEBO, 
 WBT_modelName                 = 'matlabTorqueBalancing';
-
+WBT_modelName_second          = 'matlabTorqueBalancing1';
 % CONFIG.USE_IMU4EST_BASE: if set to false, the base frame is estimated by 
 % assuming that either the left or the right foot stay stuck on the ground. 
 % Which foot the  controller uses depends on the contact forces acting on it. 

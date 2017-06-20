@@ -311,7 +311,7 @@ static void sf_c12_torqueBalancing2012b(SFc12_torqueBalancing2012bInstanceStruct
   c12_JcRightFoot = (real_T (*)[174])ssGetInputPortSignal(chartInstance->S, 1);
   c12_JcLeftFoot = (real_T (*)[174])ssGetInputPortSignal(chartInstance->S, 0);
   _sfTime_ = (real_T)ssGetT(chartInstance->S);
-  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 11U, chartInstance->c12_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 10U, chartInstance->c12_sfEvent);
   for (c12_i2 = 0; c12_i2 < 174; c12_i2++) {
     _SFD_DATA_RANGE_CHECK((*c12_JcLeftFoot)[c12_i2], 0U);
   }
@@ -414,7 +414,7 @@ static void c12_chartstep_c12_torqueBalancing2012b
     (chartInstance->S, 2);
   c12_b_JcRightFoot = (real_T (*)[174])ssGetInputPortSignal(chartInstance->S, 1);
   c12_b_JcLeftFoot = (real_T (*)[174])ssGetInputPortSignal(chartInstance->S, 0);
-  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 11U, chartInstance->c12_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 10U, chartInstance->c12_sfEvent);
   for (c12_i7 = 0; c12_i7 < 174; c12_i7++) {
     c12_JcLeftFoot[c12_i7] = (*c12_b_JcLeftFoot)[c12_i7];
   }
@@ -581,7 +581,7 @@ static void c12_chartstep_c12_torqueBalancing2012b
     (*c12_c_y)[c12_i44] = c12_y[c12_i44];
   }
 
-  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 11U, chartInstance->c12_sfEvent);
+  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 10U, chartInstance->c12_sfEvent);
 }
 
 static void initSimStructsc12_torqueBalancing2012b

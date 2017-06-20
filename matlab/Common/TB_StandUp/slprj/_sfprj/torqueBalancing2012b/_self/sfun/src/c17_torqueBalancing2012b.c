@@ -1483,7 +1483,7 @@ static void sf_c17_torqueBalancing2012b(SFc17_torqueBalancing2012bInstanceStruct
   c17_Sigma = (real_T (*)[276])ssGetOutputPortSignal(chartInstance->S, 2);
   c17_tauModel = (real_T (*)[23])ssGetOutputPortSignal(chartInstance->S, 1);
   _sfTime_ = (real_T)ssGetT(chartInstance->S);
-  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 16U, chartInstance->c17_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 15U, chartInstance->c17_sfEvent);
   for (c17_i32 = 0; c17_i32 < 23; c17_i32++) {
     _SFD_DATA_RANGE_CHECK((*c17_tauModel)[c17_i32], 0U);
   }
@@ -1967,7 +1967,7 @@ static void c17_chartstep_c17_torqueBalancing2012b
   c17_c_NA = (real_T (*)[144])ssGetOutputPortSignal(chartInstance->S, 3);
   c17_c_Sigma = (real_T (*)[276])ssGetOutputPortSignal(chartInstance->S, 2);
   c17_c_tauModel = (real_T (*)[23])ssGetOutputPortSignal(chartInstance->S, 1);
-  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 16U, chartInstance->c17_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 15U, chartInstance->c17_sfEvent);
   c17_hoistedGlobal = *c17_b_useExtArmForces;
   for (c17_i77 = 0; c17_i77 < 2; c17_i77++) {
     c17_constraints[c17_i77] = (*c17_c_constraints)[c17_i77];
@@ -2432,7 +2432,7 @@ static void c17_chartstep_c17_torqueBalancing2012b
       c17_correctionFromSupportForce[c17_i165];
   }
 
-  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 16U, chartInstance->c17_sfEvent);
+  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 15U, chartInstance->c17_sfEvent);
 }
 
 static void initSimStructsc17_torqueBalancing2012b

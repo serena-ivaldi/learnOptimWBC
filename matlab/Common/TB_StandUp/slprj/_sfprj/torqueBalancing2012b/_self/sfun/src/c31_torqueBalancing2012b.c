@@ -215,7 +215,7 @@ static void sf_c31_torqueBalancing2012b(SFc31_torqueBalancing2012bInstanceStruct
   c31_b_rollPitchYaw = (real_T (*)[3])ssGetOutputPortSignal(chartInstance->S, 1);
   c31_c_R = (real_T (*)[9])ssGetInputPortSignal(chartInstance->S, 0);
   _sfTime_ = (real_T)ssGetT(chartInstance->S);
-  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 30U, chartInstance->c31_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 24U, chartInstance->c31_sfEvent);
   for (c31_i2 = 0; c31_i2 < 9; c31_i2++) {
     _SFD_DATA_RANGE_CHECK((*c31_c_R)[c31_i2], 0U);
   }
@@ -225,7 +225,7 @@ static void sf_c31_torqueBalancing2012b(SFc31_torqueBalancing2012bInstanceStruct
   }
 
   chartInstance->c31_sfEvent = CALL_EVENT;
-  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 30U, chartInstance->c31_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 24U, chartInstance->c31_sfEvent);
   for (c31_i4 = 0; c31_i4 < 9; c31_i4++) {
     c31_R[c31_i4] = (*c31_c_R)[c31_i4];
   }
@@ -321,7 +321,7 @@ static void sf_c31_torqueBalancing2012b(SFc31_torqueBalancing2012bInstanceStruct
     (*c31_b_rollPitchYaw)[c31_i10] = c31_rollPitchYaw[c31_i10];
   }
 
-  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 30U, chartInstance->c31_sfEvent);
+  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 24U, chartInstance->c31_sfEvent);
   _SFD_CHECK_FOR_STATE_INCONSISTENCY(_torqueBalancing2012bMachineNumber_,
     chartInstance->chartNumber, chartInstance->instanceNumber);
 }

@@ -202,7 +202,7 @@ static void sf_c10_torqueBalancing2012b(SFc10_torqueBalancing2012bInstanceStruct
   c10_fz_right = (real_T *)ssGetInputPortSignal(chartInstance->S, 1);
   c10_fz_left = (real_T *)ssGetInputPortSignal(chartInstance->S, 0);
   _sfTime_ = (real_T)ssGetT(chartInstance->S);
-  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 9U, chartInstance->c10_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 8U, chartInstance->c10_sfEvent);
   _SFD_DATA_RANGE_CHECK(*c10_fz_left, 0U);
   _SFD_DATA_RANGE_CHECK(*c10_fz_right, 1U);
   for (c10_i2 = 0; c10_i2 < 2; c10_i2++) {
@@ -299,7 +299,7 @@ static void c10_chartstep_c10_torqueBalancing2012b
   c10_c_Lcop = (real_T (*)[2])ssGetInputPortSignal(chartInstance->S, 2);
   c10_b_fz_right = (real_T *)ssGetInputPortSignal(chartInstance->S, 1);
   c10_b_fz_left = (real_T *)ssGetInputPortSignal(chartInstance->S, 0);
-  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 9U, chartInstance->c10_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 8U, chartInstance->c10_sfEvent);
   c10_hoistedGlobal = *c10_b_fz_left;
   c10_b_hoistedGlobal = *c10_b_fz_right;
   c10_fz_left = c10_hoistedGlobal;
@@ -439,7 +439,7 @@ static void c10_chartstep_c10_torqueBalancing2012b
     (*c10_b_zmp)[c10_i35] = c10_zmp[c10_i35];
   }
 
-  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 9U, chartInstance->c10_sfEvent);
+  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 8U, chartInstance->c10_sfEvent);
 }
 
 static void initSimStructsc10_torqueBalancing2012b

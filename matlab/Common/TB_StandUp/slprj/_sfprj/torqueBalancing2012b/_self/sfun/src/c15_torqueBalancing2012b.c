@@ -182,14 +182,14 @@ static void sf_c15_torqueBalancing2012b(SFc15_torqueBalancing2012bInstanceStruct
   c15_b_normU = (real_T *)ssGetOutputPortSignal(chartInstance->S, 1);
   c15_b_u = (real_T (*)[6])ssGetInputPortSignal(chartInstance->S, 0);
   _sfTime_ = (real_T)ssGetT(chartInstance->S);
-  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 14U, chartInstance->c15_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 13U, chartInstance->c15_sfEvent);
   for (c15_i0 = 0; c15_i0 < 6; c15_i0++) {
     _SFD_DATA_RANGE_CHECK((*c15_b_u)[c15_i0], 0U);
   }
 
   _SFD_DATA_RANGE_CHECK(*c15_b_normU, 1U);
   chartInstance->c15_sfEvent = CALL_EVENT;
-  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 14U, chartInstance->c15_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 13U, chartInstance->c15_sfEvent);
   for (c15_i1 = 0; c15_i1 < 6; c15_i1++) {
     c15_u[c15_i1] = (*c15_b_u)[c15_i1];
   }
@@ -231,7 +231,7 @@ static void sf_c15_torqueBalancing2012b(SFc15_torqueBalancing2012bInstanceStruct
   _SFD_EML_CALL(0U, chartInstance->c15_sfEvent, -4);
   _SFD_SYMBOL_SCOPE_POP();
   *c15_b_normU = c15_normU;
-  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 14U, chartInstance->c15_sfEvent);
+  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 13U, chartInstance->c15_sfEvent);
   _SFD_CHECK_FOR_STATE_INCONSISTENCY(_torqueBalancing2012bMachineNumber_,
     chartInstance->chartNumber, chartInstance->instanceNumber);
 }

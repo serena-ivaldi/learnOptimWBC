@@ -341,12 +341,12 @@ static void sf_c3_torqueBalancing2012b(SFc3_torqueBalancing2012bInstanceStruct
     1);
   c3_b_state = (real_T *)ssGetInputPortSignal(chartInstance->S, 0);
   _sfTime_ = (real_T)ssGetT(chartInstance->S);
-  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 2U, chartInstance->c3_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 1U, chartInstance->c3_sfEvent);
   _SFD_DATA_RANGE_CHECK(*c3_b_state, 0U);
   _SFD_DATA_RANGE_CHECK(*c3_b_thresholdContactLeft, 1U);
   _SFD_DATA_RANGE_CHECK(*c3_b_thresholdContactRight, 2U);
   chartInstance->c3_sfEvent = CALL_EVENT;
-  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 2U, chartInstance->c3_sfEvent);
+  _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 1U, chartInstance->c3_sfEvent);
   c3_hoistedGlobal = *c3_b_state;
   c3_state = c3_hoistedGlobal;
   c3_b_sm = chartInstance->c3_sm;
@@ -376,7 +376,7 @@ static void sf_c3_torqueBalancing2012b(SFc3_torqueBalancing2012bInstanceStruct
   _SFD_SYMBOL_SCOPE_POP();
   *c3_b_thresholdContactLeft = c3_thresholdContactLeft;
   *c3_b_thresholdContactRight = c3_thresholdContactRight;
-  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 2U, chartInstance->c3_sfEvent);
+  _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 1U, chartInstance->c3_sfEvent);
   _SFD_CHECK_FOR_STATE_INCONSISTENCY(_torqueBalancing2012bMachineNumber_,
     chartInstance->chartNumber, chartInstance->instanceNumber);
 }
