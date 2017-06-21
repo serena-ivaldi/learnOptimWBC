@@ -72,8 +72,8 @@ classdef iCub < handle
             elseif(strcmp(model,'icubGazeboSimSimulink'))
                 obj.model_name = 'modelSimulink';
                 % Initialize the mexWholeBodyModel
-                %wbm_modelInitialize('icubGazeboSim');
-                %wbm_resetWorldFrame();
+                wbm_modelInitialize('icubGazeboSim');
+                wbm_resetWorldFrame();
                 obj.ndof = 23; 
                 % fixed joint list for icubGazeboSim
                 obj.revoluteJointList = {'torso_pitch','torso_roll','torso_yaw','l_shoulder_pitch','l_shoulder_roll','l_shoulder_yaw','l_elbow','r_shoulder_pitch','r_shoulder_roll',...
@@ -237,7 +237,8 @@ classdef iCub < handle
                 % joints configuration [rad]
                 qjInit    = [torsoInit;leftArmInit;rightArmInit;leftLegInit;rightLegInit]*(pi/180);
             elseif(strcmp( obj.model_name ,'modelSimulink'))
-                
+                % i launch the measure scheme to read the starting joint
+                % position of the robot
                 options = simset('SrcWorkspace','current');
                 sim('scheme_Measure',[],options);
                 

@@ -1,6 +1,35 @@
 %configuration file for the icub sitting stand up simulation
 %%%;;
 
+% here i open all the program that are necessary for the simulation
+% execution and i create a symbolic link to matlab
+% create symbolic link of matlab executable in TB_standUp 
+system('cd ~/git/learnOptimWBC/matlab/Common/TB_StandUp && sh create_symbolic_link.sh')
+% check if yarpserver is running
+[a,pid]=system('pgrep yarpserver');
+if(strcmp('',pid))
+    system('gnome-terminal -x sh -c "yarpserver; bash"')
+    pause(15)
+else
+    disp('yarpserver already running')
+end
+% check if gazebo is running
+[a,pid]=system('pgrep gazebo');
+if(strcmp('',pid))
+    system('gnome-terminal -x sh -c "cd ~/git/learnOptimWBC/matlab/TestResults/scenarios/ && gazebo -slibgazebo_yarp_clock.so sit_icub_to_optimize_0_1.world; bash"');
+    pause(15)
+else
+    disp('gazebo already running')
+end
+% check if gazebo is running
+[a,pid]=system('pgrep wholeBody');
+if(strcmp('',pid))
+    system('gnome-terminal -x sh -c "wholeBodyDynamicsTree --autoconnect --robot icubSim; bash"')
+    pause(15)
+else
+    disp('wholeBodyDynamicsTree already running')
+end
+
 %% change folder (move to the folder with the simulink scheme)
 name_simulink_model = 'TB_StandUp';
 fullPath = which('find_simulatorIcubSim.m');
@@ -162,7 +191,7 @@ switch CONTROLLERTYPE
                                         -0.0252589378181975,-0.00171875837190067,0.0130805429422483,-0.0141668463935478,-0.0608148916683415,...
                                         0.468857336154740,0.433709756339607,0.442003448052191,0.482619376729153,0.360000000000000]; 
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-        niter = 100;  %number of generations
+        niter = 5;  %number of generations
         %cmaes_value_range = [-14 , 14];  % boudn that define the search space
         cmaes_value_range{1} = [ 0, 0, 0, 0, 0, -0.12,-0.12,-0.12,-0.12,-0.12,  0.36,0.36,0.36,0.36,0.36 ];  % lower bound that define the search space
         cmaes_value_range{2} = [ 2, 2, 2, 2, 2,  0.016,0.016,0.016,0.016,0.016, 0.50,0.50,0.50,0.50,0.50];  % upper bound that define the search space

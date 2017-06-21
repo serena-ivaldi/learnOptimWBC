@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.3525"
+    ComputedModelVersion    "1.3527"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -31,7 +31,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [55.0, 14.0, 967.0, 1076.0]
+      Location		      [55.0, -14.0, 1875.0, 1104.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -56,7 +56,7 @@ Model {
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "2355"
-	  Extents		  [911.0, 880.0]
+	  Extents		  [931.0, 880.0]
 	  ZoomFactor		  [0.8]
 	  Offset		  [161.83333333333235, 302.9666666666659]
 	}
@@ -65,27 +65,27 @@ Model {
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "4132"
-	  Extents		  [911.0, 880.0]
+	  Extents		  [931.0, 880.0]
 	  ZoomFactor		  [1.21]
 	  Offset		  [-8.501888558884616, 1.7053025658242404e-13]
 	}
 	Object {
 	  $ObjectID		  7
-	  IsActive		  [1]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "2129"
-	  Extents		  [911.0, 880.0]
-	  ZoomFactor		  [1.0]
-	  Offset		  [70.0, 21.673129304250097]
+	  IsActive		  [0]
+	  ViewObjType		  "SimulinkTopLevel"
+	  LoadSaveID		  "0"
+	  Extents		  [1819.0, 908.0]
+	  ZoomFactor		  [0.8]
+	  Offset		  [0.0, 32.5]
 	}
 	Object {
 	  $ObjectID		  8
-	  IsActive		  [0]
+	  IsActive		  [1]
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "2087"
-	  Extents		  [911.0, 880.0]
-	  ZoomFactor		  [0.8]
-	  Offset		  [0.0, 2302.5]
+	  Extents		  [1819.0, 908.0]
+	  ZoomFactor		  [1.5]
+	  Offset		  [1198.5833333333328, 2406.7899215643597]
 	}
 	PropName		"EditorsInfo"
       }
@@ -97,9 +97,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "valerio"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Jun 05 13:55:15 2017"
-  RTWModifiedTimeStamp	  418571715
-  ModelVersionFormat	  "1.%<AutoIncrement:3525>"
+  LastModifiedDate	  "Wed Jun 21 19:44:56 2017"
+  RTWModifiedTimeStamp	  419975092
+  ModelVersionFormat	  "1.%<AutoIncrement:3527>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -1100,8 +1100,8 @@ Model {
   }
   System {
     Name		    "torqueBalancing2012b"
-    Location		    [55, 14, 1002, 1090]
-    Open		    off
+    Location		    [55, -14, 1930, 1090]
+    Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -1114,7 +1114,7 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "80"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "4594"
+    SIDHighWatermark	    "4595"
     Block {
       BlockType		      SubSystem
       Name		      "DesValues"
@@ -1133,7 +1133,7 @@ Model {
       MaskHideContents	      off
       System {
 	Name			"DesValues"
-	Location		[55, 14, 1022, 1090]
+	Location		[55, -14, 1930, 1090]
 	Open			on
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1145,7 +1145,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"80"
+	ZoomFactor		"150"
 	Block {
 	  BlockType		  Reference
 	  Name			  "Compare\nTo Zero"
@@ -1905,8 +1905,8 @@ Model {
 	      MaskHideContents	      off
 	      System {
 		Name			"refGen"
-		Location		[55, 14, 1022, 1090]
-		Open			on
+		Location		[55, -14, 1930, 1090]
+		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
 		ScreenColor		"white"
@@ -3903,6 +3903,15 @@ Model {
 	  ShowName		  off
 	  OutputDimensionality	  "Customize"
 	  OutputDimensions	  "[3,3]"
+	}
+	Block {
+	  BlockType		  Constant
+	  Name			  "SMOOTH_DES_COM1"
+	  SID			  "4595"
+	  Position		  [2010, 2455, 2170, 2475]
+	  ZOrder		  717
+	  ShowName		  off
+	  Value			  "CONFIG.SMOOTH_DES_COM "
 	}
 	Block {
 	  BlockType		  Constant
@@ -25886,21 +25895,14 @@ Model {
 	  SrcPort		  8
 	  Points		  [454, 0; 0, -280]
 	  Branch {
-	    Points		    [0, -90]
+	    Points		    [0, -160]
 	    Branch {
-	      Points		      [0, -70]
-	      Branch {
-		Points			[0, -10]
-		DstBlock		"Switch1"
-		DstPort			1
-	      }
-	      Branch {
-		DstBlock		"Switch1"
-		DstPort			2
-	      }
+	      Points		      [0, -10]
+	      DstBlock		      "Switch1"
+	      DstPort		      1
 	    }
 	    Branch {
-	      DstBlock		      "Switch3"
+	      DstBlock		      "Switch1"
 	      DstPort		      2
 	    }
 	  }
@@ -26247,6 +26249,12 @@ Model {
 	  SrcPort		  1
 	  DstBlock		  "Switch1"
 	  DstPort		  3
+	}
+	Line {
+	  SrcBlock		  "SMOOTH_DES_COM1"
+	  SrcPort		  1
+	  DstBlock		  "Switch3"
+	  DstPort		  2
 	}
       }
     }
@@ -29070,7 +29078,7 @@ Model {
       MaskHideContents	      off
       System {
 	Name			"controller_QP"
-	Location		[55, 14, 1022, 1090]
+	Location		[55, 14, 1042, 1090]
 	Open			on
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -31125,7 +31133,7 @@ Model {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "integralOf Hw1"
-	    Location		    [55, 14, 1022, 1090]
+	    Location		    [55, 14, 1042, 1090]
 	    Open		    on
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
