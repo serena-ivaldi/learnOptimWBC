@@ -45,9 +45,10 @@ function [t, q, qd] = DynSim_iCubSim(controller,params)
     ts_dxCoMDes   = timeseries(data_dxCoMDes,time);
     ts_ddxCoMDes  = timeseries(data_ddxCoMDes,time);
     % save all the releavnt data for the thread
-    save('inputData.mat','ts_xCoMDes','ts_dxCoMDes','ts_ddxCoMDes','params');
+    %% commented to test how much variance i have between each simulation
+    %save('inputData.mat','ts_xCoMDes','ts_dxCoMDes','ts_ddxCoMDes','params');
     %% execution of the process and check of success 
-    system('gnome-terminal -x sh -c " cd ~/git/learnOptimWBC/matlab/Common/TB_StandUp && ./save_pid.sh &&   ./matlab_link -nodesktop -r threadSimulink; bash"');
+    system('gnome-terminal -x sh -c " cd ~/git/learnOptimWBC/matlab/Common/TB_StandUp && ./save_pid.sh &&   ./matlab_link  -nodesktop  -r threadSimulink; bash"');
     % waiting for the thread completion
     fid=fopen('~/git/learnOptimWBC/matlab/Common/TB_StandUp/simulationResults.mat');
     while(fid == -1)
@@ -65,7 +66,7 @@ function [t, q, qd] = DynSim_iCubSim(controller,params)
             system('gz world -r');
             pause(3);
             % create a new process with the same value
-            system('gnome-terminal -x sh -c " cd ~/git/learnOptimWBC/matlab/Common/TB_StandUp && ./save_pid.sh && cd ~/MATLAB/r2013a/bin/ && ./matlab -nodesktop -r threadSimulink; bash"');
+            system('gnome-terminal -x sh -c " cd ~/git/learnOptimWBC/matlab/Common/TB_StandUp && ./save_pid.sh && ./matlab_link -nodesktop -r threadSimulink; bash"');
             timer = 0;
             consecutive_fails_counter = consecutive_fails_counter + 1;
             disp('thread got stuck i had to restart it')

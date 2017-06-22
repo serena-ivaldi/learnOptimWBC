@@ -8,7 +8,7 @@ PORTS.LEFT_ARM         = '/wholeBodyDynamicsTree/right_arm/endEffectorWrench:o';
 
 CONFIG.LEFT_RIGHT_FOOT_IN_CONTACT = [1 1];
 
-CONFIG.SMOOTH_DES_COM      = 0;    % If equal to one, the desired streamed values 
+CONFIG.SMOOTH_DES_COM      = 1;    % If equal to one, the desired streamed values 
                                    % of the center of mass are smoothed internally 
 
 CONFIG.SMOOTH_DES_Q        = 0;    % If equal to one, the desired streamed values 

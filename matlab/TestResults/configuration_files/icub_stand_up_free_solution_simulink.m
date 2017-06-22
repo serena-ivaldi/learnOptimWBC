@@ -191,7 +191,7 @@ switch CONTROLLERTYPE
                                         -0.0252589378181975,-0.00171875837190067,0.0130805429422483,-0.0141668463935478,-0.0608148916683415,...
                                         0.468857336154740,0.433709756339607,0.442003448052191,0.482619376729153,0.360000000000000]; 
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-        niter = 5;  %number of generations
+        niter = 50;  %number of generations
         %cmaes_value_range = [-14 , 14];  % boudn that define the search space
         cmaes_value_range{1} = [ 0, 0, 0, 0, 0, -0.12,-0.12,-0.12,-0.12,-0.12,  0.36,0.36,0.36,0.36,0.36 ];  % lower bound that define the search space
         cmaes_value_range{2} = [ 2, 2, 2, 2, 2,  0.016,0.016,0.016,0.016,0.016, 0.50,0.50,0.50,0.50,0.50];  % upper bound that define the search space
