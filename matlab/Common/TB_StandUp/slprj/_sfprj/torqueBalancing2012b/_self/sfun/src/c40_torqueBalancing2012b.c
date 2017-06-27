@@ -977,7 +977,7 @@ static void c40_fromBaseToWorldWithImu(SFc40_torqueBalancing2012bInstanceStruct 
     }
   }
 
-  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 13);
+  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 14);
   c40_i61 = 0;
   c40_i62 = 0;
   for (c40_i63 = 0; c40_i63 < 3; c40_i63++) {
@@ -989,7 +989,7 @@ static void c40_fromBaseToWorldWithImu(SFc40_torqueBalancing2012bInstanceStruct 
     c40_i62 += 4;
   }
 
-  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 14);
+  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 15);
   c40_i65 = 0;
   c40_i66 = 0;
   for (c40_i67 = 0; c40_i67 < 3; c40_i67++) {
@@ -1001,7 +1001,7 @@ static void c40_fromBaseToWorldWithImu(SFc40_torqueBalancing2012bInstanceStruct 
     c40_i66 += 4;
   }
 
-  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 17);
+  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 19);
   for (c40_i69 = 0; c40_i69 < 9; c40_i69++) {
     c40_b_a[c40_i69] = c40_wImu_R_imu[c40_i69];
   }
@@ -1051,7 +1051,7 @@ static void c40_fromBaseToWorldWithImu(SFc40_torqueBalancing2012bInstanceStruct 
     }
   }
 
-  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 18);
+  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 20);
   for (c40_i82 = 0; c40_i82 < 9; c40_i82++) {
     c40_b_a[c40_i82] = c40_wImu_R_imu_0[c40_i82];
   }
@@ -1101,7 +1101,7 @@ static void c40_fromBaseToWorldWithImu(SFc40_torqueBalancing2012bInstanceStruct 
     }
   }
 
-  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 20);
+  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 23);
   for (c40_i95 = 0; c40_i95 < 9; c40_i95++) {
     c40_b_wImu_R_link_0[c40_i95] = c40_wImu_R_link_0[c40_i95];
   }
@@ -1111,7 +1111,7 @@ static void c40_fromBaseToWorldWithImu(SFc40_torqueBalancing2012bInstanceStruct 
     c40_rollPitchYaw_link_0[c40_i96] = c40_dv2[c40_i96];
   }
 
-  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 21);
+  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 24);
   for (c40_i97 = 0; c40_i97 < 9; c40_i97++) {
     c40_b_wImu_R_link[c40_i97] = c40_wImu_R_link[c40_i97];
   }
@@ -1121,24 +1121,24 @@ static void c40_fromBaseToWorldWithImu(SFc40_torqueBalancing2012bInstanceStruct 
     c40_rollPitchYaw_link[c40_i98] = c40_dv3[c40_i98];
   }
 
-  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 23);
+  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 26);
   for (c40_i99 = 0; c40_i99 < 3; c40_i99++) {
     c40_rollPitchYawFiltered_link[c40_i99] = c40_rollPitchYaw_link[c40_i99];
   }
 
-  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 25);
+  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 28);
   if (CV_SCRIPT_IF(0, 0, c40_b_CONFIG->YAW_IMU_FILTER)) {
-    _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 26);
+    _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 29);
     c40_rollPitchYawFiltered_link[2] = c40_rollPitchYaw_link_0[2];
   }
 
-  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 28);
+  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 31);
   if (CV_SCRIPT_IF(0, 1, c40_b_CONFIG->PITCH_IMU_FILTER)) {
-    _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 29);
+    _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 32);
     c40_rollPitchYawFiltered_link[1] = c40_rollPitchYaw_link_0[1];
   }
 
-  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 32);
+  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 35);
   c40_rotz(chartInstance, c40_rollPitchYawFiltered_link[2], c40_b_a);
   c40_roty(chartInstance, c40_rollPitchYawFiltered_link[1], c40_b);
   c40_eml_scalar_eg(chartInstance);
@@ -1200,7 +1200,7 @@ static void c40_fromBaseToWorldWithImu(SFc40_torqueBalancing2012bInstanceStruct 
     }
   }
 
-  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 34);
+  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 37);
   for (c40_i116 = 0; c40_i116 < 3; c40_i116++) {
     c40_dv4[c40_i116] = 0.0;
   }
@@ -1226,7 +1226,7 @@ static void c40_fromBaseToWorldWithImu(SFc40_torqueBalancing2012bInstanceStruct 
     c40_i122 += 4;
   }
 
-  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 37);
+  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 40);
   for (c40_i124 = 0; c40_i124 < 3; c40_i124++) {
     c40_dv4[c40_i124] = 0.0;
   }
@@ -1253,7 +1253,7 @@ static void c40_fromBaseToWorldWithImu(SFc40_torqueBalancing2012bInstanceStruct 
     c40_i130 += 4;
   }
 
-  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 40);
+  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 43);
   for (c40_i132 = 0; c40_i132 < 16; c40_i132++) {
     c40_c_a[c40_i132] = c40_wImu_H_link[c40_i132];
   }
@@ -1303,7 +1303,7 @@ static void c40_fromBaseToWorldWithImu(SFc40_torqueBalancing2012bInstanceStruct 
     }
   }
 
-  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 43);
+  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 46);
   for (c40_i145 = 0; c40_i145 < 3; c40_i145++) {
     c40_b_neck[c40_i145] = c40_neck[c40_i145];
   }
@@ -1313,7 +1313,7 @@ static void c40_fromBaseToWorldWithImu(SFc40_torqueBalancing2012bInstanceStruct 
     c40_wImu_H_wImuAssumingNeckToZero[c40_i146] = c40_dv6[c40_i146];
   }
 
-  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 44);
+  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 47);
   for (c40_i147 = 0; c40_i147 < 16; c40_i147++) {
     c40_c_a[c40_i147] = c40_wImu_H_wImuAssumingNeckToZero[c40_i147];
   }
@@ -1363,7 +1363,7 @@ static void c40_fromBaseToWorldWithImu(SFc40_torqueBalancing2012bInstanceStruct 
     }
   }
 
-  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 46);
+  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, 49);
   for (c40_i160 = 0; c40_i160 < 16; c40_i160++) {
     c40_c_a[c40_i160] = c40_wImu_H_link_0[c40_i160];
   }
@@ -1432,7 +1432,7 @@ static void c40_fromBaseToWorldWithImu(SFc40_torqueBalancing2012bInstanceStruct 
   }
 
   c40_d_eml_xtrsm(chartInstance, c40_dv10, c40_w_H_root);
-  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, -46);
+  _SFD_SCRIPT_CALL(0U, chartInstance->c40_sfEvent, -49);
   _SFD_SYMBOL_SCOPE_POP();
 }
 
@@ -2979,7 +2979,7 @@ static void c40_info_helper(c40_ResolvedFunctionInfo c40_info[147])
   c40_info[0].dominantType = "struct";
   c40_info[0].resolved =
     "[E]/home/valerio/git/learnOptimWBC/matlab/Common/TB_StandUp/utilityMatlabFunctions/fromBaseToWorldWithImu.m";
-  c40_info[0].fileTimeLo = 1495631764U;
+  c40_info[0].fileTimeLo = 1498554660U;
   c40_info[0].fileTimeHi = 0U;
   c40_info[0].mFileTimeLo = 0U;
   c40_info[0].mFileTimeHi = 0U;
@@ -5666,9 +5666,9 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
         _SFD_CV_INIT_EML(0,1,1,0,0,0,0,0,0,0,0);
         _SFD_CV_INIT_EML_FCN(0,0,"eML_blk_kernel",0,-1,229);
         _SFD_CV_INIT_SCRIPT(0,1,2,0,0,0,0,0,0,0);
-        _SFD_CV_INIT_SCRIPT_FCN(0,0,"fromBaseToWorldWithImu",0,-1,1610);
-        _SFD_CV_INIT_SCRIPT_IF(0,0,860,884,-1,947);
-        _SFD_CV_INIT_SCRIPT_IF(0,1,948,974,-1,1037);
+        _SFD_CV_INIT_SCRIPT_FCN(0,0,"fromBaseToWorldWithImu",0,-1,1994);
+        _SFD_CV_INIT_SCRIPT_IF(0,0,1057,1081,-1,1144);
+        _SFD_CV_INIT_SCRIPT_IF(0,1,1145,1171,-1,1234);
         _SFD_CV_INIT_SCRIPT(1,1,0,0,0,0,0,0,0,0);
         _SFD_CV_INIT_SCRIPT_FCN(1,0,"rotz",0,-1,165);
         _SFD_CV_INIT_SCRIPT(2,1,0,0,0,0,0,0,0,0);
@@ -5983,10 +5983,10 @@ static void mdlSetWorkWidths_c40_torqueBalancing2012b(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(2274714917U));
-  ssSetChecksum1(S,(1662336581U));
-  ssSetChecksum2(S,(937218894U));
-  ssSetChecksum3(S,(3161659269U));
+  ssSetChecksum0(S,(1973617619U));
+  ssSetChecksum1(S,(3415660132U));
+  ssSetChecksum2(S,(2992048661U));
+  ssSetChecksum3(S,(3390034151U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
   ssSupportsMultipleExecInstances(S,1);

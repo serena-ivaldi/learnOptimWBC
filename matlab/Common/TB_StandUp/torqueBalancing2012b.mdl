@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.3530"
+    ComputedModelVersion    "1.3537"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -31,7 +31,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [69.0, 56.0, 1855.0, 1028.0]
+      Location		      [66.0, 125.0, 1855.0, 1028.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -57,17 +57,17 @@ Model {
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "2355"
 	  Extents		  [1819.0, 908.0]
-	  ZoomFactor		  [0.8]
-	  Offset		  [1188.0833333333323, 302.9666666666659]
+	  ZoomFactor		  [1.0]
+	  Offset		  [604.08333333333189, 1026.7999999999993]
 	}
 	Object {
 	  $ObjectID		  6
 	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "2275"
+	  ViewObjType		  "SimulinkTopLevel"
+	  LoadSaveID		  "0"
 	  Extents		  [1819.0, 908.0]
-	  ZoomFactor		  [1.22]
-	  Offset		  [0.0, -3.7254098360654666]
+	  ZoomFactor		  [1.0]
+	  Offset		  [393.91666666666629, 270.58333333333303]
 	}
 	Object {
 	  $ObjectID		  7
@@ -76,7 +76,7 @@ Model {
 	  LoadSaveID		  "4515"
 	  Extents		  [1819.0, 880.0]
 	  ZoomFactor		  [1.5]
-	  Offset		  [4.6959635416666288, 177.3833333333331]
+	  Offset		  [25.367188135782836, 177.3833333333331]
 	}
 	PropName		"EditorsInfo"
       }
@@ -88,9 +88,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "valerio"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Jun 22 12:19:49 2017"
-  RTWModifiedTimeStamp	  420034529
-  ModelVersionFormat	  "1.%<AutoIncrement:3530>"
+  LastModifiedDate	  "Tue Jun 27 11:26:26 2017"
+  RTWModifiedTimeStamp	  420463539
+  ModelVersionFormat	  "1.%<AutoIncrement:3537>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -1078,7 +1078,7 @@ Model {
   System {
     Name		    "torqueBalancing2012b"
     Location		    [65, 24, 1920, 1080]
-    Open		    off
+    Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -1089,9 +1089,9 @@ Model {
     TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
     TiledPageScale	    1
     ShowPageBoundaries	    off
-    ZoomFactor		    "80"
+    ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "4597"
+    SIDHighWatermark	    "4604"
     Block {
       BlockType		      SubSystem
       Name		      "DesValues"
@@ -1323,7 +1323,7 @@ Model {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "Internal coordinator"
-	    Location		    [55, 14, 1002, 1090]
+	    Location		    [65, 24, 1920, 1080]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -2507,7 +2507,7 @@ Model {
 	      }
 	      System {
 		Name			"w_H_root_link4"
-		Location		[0, 23, 1920, 1076]
+		Location		[65, 24, 1920, 1080]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -12800,7 +12800,7 @@ Model {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "State Machine StandUp"
-	    Location		    [73, 32, 1928, 1088]
+	    Location		    [65, 24, 1920, 1080]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -12812,7 +12812,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "129"
+	    ZoomFactor		    "175"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "jointAngles"
@@ -12975,7 +12975,7 @@ Model {
 	      MaskHideContents	      off
 	      System {
 		Name			"Visualise extrnal wrenches  "
-		Location		[73, 32, 1928, 1088]
+		Location		[65, 24, 1920, 1080]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -13472,7 +13472,7 @@ Model {
 		  Position		  [865, 468, 945, 552]
 		  ZOrder		  678
 		  Floating		  off
-		  Location		  [66, 78, 1921, 1079]
+		  Location		  [66, 81, 1921, 1079]
 		  Open			  off
 		  NumInputPorts		  "3"
 		  List {
@@ -19272,7 +19272,7 @@ Model {
 	      }
 	      System {
 		Name			"w_H_root_link1"
-		Location		[0, 23, 1853, 1076]
+		Location		[65, 24, 1920, 1080]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -19284,7 +19284,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"162"
+		ZoomFactor		"156"
 		Block {
 		  BlockType		  Inport
 		  Name			  "qj"
@@ -20109,7 +20109,7 @@ Model {
 	      }
 	      System {
 		Name			"w_H_root_link3"
-		Location		[0, 23, 1853, 1076]
+		Location		[65, 24, 1920, 1080]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -26261,8 +26261,8 @@ Model {
       MaskHideContents	      off
       System {
 	Name			"Dump and visualize"
-	Location		[65, 24, 1920, 1080]
-	Open			on
+	Location		[164, 103, 2019, 1131]
+	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -29065,7 +29065,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"80"
+	ZoomFactor		"100"
 	Block {
 	  BlockType		  Inport
 	  Name			  "impedances"
@@ -34575,6 +34575,36 @@ Model {
 	  }
 	}
 	Block {
+	  BlockType		  Scope
+	  Name			  "xcom"
+	  SID			  "4602"
+	  Ports			  [1]
+	  Position		  [1135, 1224, 1165, 1256]
+	  ZOrder		  845
+	  Floating		  off
+	  Location		  [643, 559, 1676, 798]
+	  Open			  off
+	  NumInputPorts		  "1"
+	  List {
+	    ListType		    AxesTitles
+	    axes1		    "%<SignalLabel>"
+	  }
+	  List {
+	    ListType		    ScopeGraphics
+	    FigureColor		    "[0.5 0.5 0.5]"
+	    AxesColor		    "[0 0 0]"
+	    AxesTickColor	    "[1 1 1]"
+	    LineColors		    "[1 1 0;1 0 1;0 1 1;1 0 0;0 1 0;0 0 1]"
+	    LineStyles		    "-|-|-|-|-|-"
+	    LineWidths		    "[0.5 0.5 0.5 0.5 0.5 0.5]"
+	    MarkerStyles	    "none|none|none|none|none|none"
+	  }
+	  ShowLegends		  off
+	  DataFormat		  "StructureWithTime"
+	  LimitDataPoints	  off
+	  SampleTime		  "0"
+	}
+	Block {
 	  BlockType		  Outport
 	  Name			  "wHb"
 	  SID			  "4533"
@@ -35250,9 +35280,17 @@ Model {
 	Line {
 	  SrcBlock		  "xCom"
 	  SrcPort		  1
-	  Points		  [147, 0; 0, 10]
-	  DstBlock		  "tau(f)\n"
-	  DstPort		  18
+	  Points		  [60, 0]
+	  Branch {
+	    Points		    [0, 239; -142, 0; 0, -89]
+	    DstBlock		    "xcom"
+	    DstPort		    1
+	  }
+	  Branch {
+	    Points		    [87, 0; 0, 10]
+	    DstBlock		    "tau(f)\n"
+	    DstPort		    18
+	  }
 	}
 	Line {
 	  SrcBlock		  "Arm External Forces"
@@ -35606,7 +35644,7 @@ Model {
       MaskHideContents	      off
       System {
 	Name			"record results"
-	Location		[69, 56, 1924, 1084]
+	Location		[66, 125, 1921, 1153]
 	Open			on
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -35724,6 +35762,66 @@ Model {
 	  localName		  "WBT_modelName"
 	  wbiFile		  "WBT_wbiFilename"
 	  wbiList		  "WBT_wbiList"
+	}
+	Block {
+	  BlockType		  Scope
+	  Name			  "Scope"
+	  SID			  "4603"
+	  Ports			  [1]
+	  Position		  [945, 529, 975, 561]
+	  ZOrder		  837
+	  Floating		  off
+	  Location		  [178, 380, 1244, 759]
+	  Open			  on
+	  NumInputPorts		  "1"
+	  List {
+	    ListType		    AxesTitles
+	    axes1		    "%<SignalLabel>"
+	  }
+	  List {
+	    ListType		    ScopeGraphics
+	    FigureColor		    "[0.5 0.5 0.5]"
+	    AxesColor		    "[0 0 0]"
+	    AxesTickColor	    "[1 1 1]"
+	    LineColors		    "[1 1 0;1 0 1;0 1 1;1 0 0;0 1 0;0 0 1]"
+	    LineStyles		    "-|-|-|-|-|-"
+	    LineWidths		    "[0.5 0.5 0.5 0.5 0.5 0.5]"
+	    MarkerStyles	    "none|none|none|none|none|none"
+	  }
+	  ShowLegends		  off
+	  SaveName		  "ScopeData5"
+	  DataFormat		  "StructureWithTime"
+	  SampleTime		  "0"
+	}
+	Block {
+	  BlockType		  Scope
+	  Name			  "Scope1"
+	  SID			  "4604"
+	  Ports			  [1]
+	  Position		  [965, 664, 995, 696]
+	  ZOrder		  838
+	  Floating		  off
+	  Location		  [390, 429, 1124, 835]
+	  Open			  off
+	  NumInputPorts		  "1"
+	  List {
+	    ListType		    AxesTitles
+	    axes1		    "%<SignalLabel>"
+	  }
+	  List {
+	    ListType		    ScopeGraphics
+	    FigureColor		    "[0.5 0.5 0.5]"
+	    AxesColor		    "[0 0 0]"
+	    AxesTickColor	    "[1 1 1]"
+	    LineColors		    "[1 1 0;1 0 1;0 1 1;1 0 0;0 1 0;0 0 1]"
+	    LineStyles		    "-|-|-|-|-|-"
+	    LineWidths		    "[0.5 0.5 0.5 0.5 0.5 0.5]"
+	    MarkerStyles	    "none|none|none|none|none|none"
+	  }
+	  ShowLegends		  off
+	  SaveName		  "ScopeData6"
+	  DataFormat		  "StructureWithTime"
+	  SampleTime		  "0"
 	}
 	Block {
 	  BlockType		  SubSystem
@@ -36361,6 +36459,30 @@ Model {
 	}
 	Block {
 	  BlockType		  ToWorkspace
+	  Name			  "joint velocity1"
+	  SID			  "4600"
+	  Ports			  [1]
+	  Position		  [1020, 570, 1185, 600]
+	  ZOrder		  835
+	  VariableName		  "left_leg_wrench_sim"
+	  MaxDataPoints		  "inf"
+	  SampleTime		  "-1"
+	  SaveFormat		  "Timeseries"
+	}
+	Block {
+	  BlockType		  ToWorkspace
+	  Name			  "joint velocity2"
+	  SID			  "4601"
+	  Ports			  [1]
+	  Position		  [1020, 612, 1185, 658]
+	  ZOrder		  836
+	  VariableName		  "right_leg_wrench_sim"
+	  MaxDataPoints		  "inf"
+	  SampleTime		  "-1"
+	  SaveFormat		  "Timeseries"
+	}
+	Block {
+	  BlockType		  ToWorkspace
 	  Name			  "joint_position"
 	  SID			  "4539"
 	  Ports			  [1]
@@ -36370,6 +36492,44 @@ Model {
 	  MaxDataPoints		  "inf"
 	  SampleTime		  "-1"
 	  SaveFormat		  "Timeseries"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "left_foot_wrench1"
+	  SID			  "4599"
+	  Ports			  [0, 1]
+	  Position		  [805, 615, 860, 635]
+	  ZOrder		  834
+	  ForegroundColor	  "[0.490196, 0.000000, 0.000000]"
+	  ShowName		  off
+	  LibraryVersion	  "1.381"
+	  SourceBlock		  "WBToolboxLibrary/Utilities/Yarp Read"
+	  SourceType		  "YARP Read"
+	  portName		  "PORTS.WBDT_RIGHTLEG_EE"
+	  signalSize		  "6"
+	  blocking		  off
+	  timestamp		  off
+	  autoconnect		  on
+	  errorOnConnection	  on
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "left_foot_wrench2"
+	  SID			  "4598"
+	  Ports			  [0, 1]
+	  Position		  [805, 575, 860, 595]
+	  ZOrder		  833
+	  ForegroundColor	  "[0.490196, 0.000000, 0.000000]"
+	  ShowName		  off
+	  LibraryVersion	  "1.381"
+	  SourceBlock		  "WBToolboxLibrary/Utilities/Yarp Read"
+	  SourceType		  "YARP Read"
+	  portName		  "PORTS.WBDT_LEFTLEG_EE"
+	  signalSize		  "6"
+	  blocking		  off
+	  timestamp		  off
+	  autoconnect		  on
+	  errorOnConnection	  on
 	}
 	Block {
 	  BlockType		  ToWorkspace
@@ -36412,7 +36572,7 @@ Model {
 	  Name			  "transformation"
 	  SID			  "4538"
 	  Ports			  [1]
-	  Position		  [855, 207, 985, 253]
+	  Position		  [855, 197, 985, 243]
 	  ZOrder		  592
 	  VariableName		  "base_to_world_transf_sim"
 	  MaxDataPoints		  "inf"
@@ -36525,6 +36685,34 @@ Model {
 	  SrcPort		  1
 	  DstBlock		  "torque"
 	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "left_foot_wrench2"
+	  SrcPort		  1
+	  Points		  [54, 0]
+	  Branch {
+	    Points		    [0, -40]
+	    DstBlock		    "Scope"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "joint velocity1"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "left_foot_wrench1"
+	  SrcPort		  1
+	  Points		  [70, 0; 0, 10]
+	  Branch {
+	    Points		    [0, 45]
+	    DstBlock		    "Scope1"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "joint velocity2"
+	    DstPort		    1
+	  }
 	}
       }
     }

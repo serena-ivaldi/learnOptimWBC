@@ -36,6 +36,10 @@ fullPath = which('find_simulatorIcubSim.m');
 path = fileparts(fullPath);
 path = strcat(path,'/',name_simulink_model);
 cd(path)
+
+%% remove the results file from the the TBstandup folder to manage the case where i did not cancel this file properly
+% remove the file with all the data inside
+delete ~/git/learnOptimWBC/matlab/Common/TB_StandUp/simulationResults.mat
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
@@ -144,7 +148,7 @@ dim_of_task_sec{1,1}={[1;1;1]};
 
 switch CONTROLLERTYPE
     case 'BalanceController'
-        disp('UF_RUNTIMEPARAM')
+        disp('BALANCE_CONTROLLER_RUNTIMEPARAM')
         
         %%%;;
         
@@ -187,9 +191,12 @@ switch CONTROLLERTYPE
         generation_of_starting_point = 'test'; % 'test':user defined by user_defined_start_action 'given':is redundant with test  'random': random starting point
         %init_parameters = 6;
        
-        user_defined_start_action =  [0.913076139695994,0.905282671038423,1.16925695886780,1.99897101764829,1.71346167883188,...
+       user_defined_start_action =  [0.913076139695994,0.905282671038423,1.16925695886780,1.99897101764829,1.71346167883188,...
                                         -0.0252589378181975,-0.00171875837190067,0.0130805429422483,-0.0141668463935478,-0.0608148916683415,...
                                         0.468857336154740,0.433709756339607,0.442003448052191,0.482619376729153,0.360000000000000]; 
+%         user_defined_start_action =    [0,0,0,0,0,...
+%                                        1.5,1.5,0.0130805429422483,-0.0141668463935478,-0.0608148916683415,...
+%                                         0.468857336154740,0.433709756339607,0.442003448052191,0.482619376729153,0.360000000000000]; 
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
         niter = 50;  %number of generations
         %cmaes_value_range = [-14 , 14];  % boudn that define the search space

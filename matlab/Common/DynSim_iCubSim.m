@@ -46,7 +46,7 @@ function [t, q, qd] = DynSim_iCubSim(controller,params)
     ts_ddxCoMDes  = timeseries(data_ddxCoMDes,time);
     % save all the releavnt data for the thread
     %% commented to test how much variance i have between each simulation
-    %save('inputData.mat','ts_xCoMDes','ts_dxCoMDes','ts_ddxCoMDes','params');
+    save('inputData.mat','ts_xCoMDes','ts_dxCoMDes','ts_ddxCoMDes','params');
     %% execution of the process and check of success 
     system('gnome-terminal -x sh -c " cd ~/git/learnOptimWBC/matlab/Common/TB_StandUp && ./save_pid.sh &&   ./matlab_link  -nodesktop  -r threadSimulink; bash"');
     % waiting for the thread completion
@@ -103,11 +103,15 @@ function [t, q, qd] = DynSim_iCubSim(controller,params)
     commandkill = strcat('kill -9',{' '},C{1});
      % kill windows hosting the  matlab thread
     system(commandkill{1});
+    % clean yarp
+    [xx,yy]=system('yarp clean  --timeout 1.0');
     %% save data 
     controller.simulation_iterator     = 1;
     controller.simulation_results.tau  =  torque_sim.Data;
     controller.simulation_results.zmp  =  zmp_sim.Data;
     controller.simulation_results.xCoM =  com_pos_sim.Data;
+    controller.simulation_results.LsoleWrench =  left_leg_wrench_sim.Data;
+    controller.simulation_results.RsoleWrench =  right_leg_wrench_sim.Data; 
     q  = q_sim.Data; % row vectors (TODO check if they are in the right order)
     qd = qd_sim.Data;% row vectors
     t  = params.tStart:params.sim_step:params.tEnd;
