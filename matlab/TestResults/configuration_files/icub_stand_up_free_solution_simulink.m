@@ -30,6 +30,9 @@ else
     disp('wholeBodyDynamicsTree already running')
 end
 
+% reset the robot in the starting position
+system('gz world -r');
+
 %% change folder (move to the folder with the simulink scheme)
 name_simulink_model = 'TB_StandUp';
 fullPath = which('find_simulatorIcubSim.m');
@@ -95,9 +98,15 @@ params.tStart   = time_struct.ti;
 params.tEnd     = time_struct.tf;
 params.sim_step =  0.01;%time_struct.step;
 % feet size
-params.footSize  = [0.07 0.03];    % foot_xlength, foot_ylength 
-params.footSizeForOpitmization = [-0.07 0.07;       % xMin, xMax
-                                  -0.03 0.03];      % yMin, yMax   
+params.footSize  = [-0.07  0.12 ;    % xMin, xMax
+                    -0.045 0.05];    % foot_xlength, foot_ylength 
+params.foot.xmin    = params.footSize(1,1);
+params.foot.xmax    = params.footSize(1,2);
+params.foot.ymin    = params.footSize(2,1);
+params.foot.ymax    = params.footSize(2,2);
+
+params.footSizeForOpitmization = [-0.07  0.12 ;    % xMin, xMax
+                                  -0.045 0.05];      % yMin, yMax   
 
 
     %% parameters for controller and fitness (fitnessHumanoidsIcubStandUp)
@@ -111,8 +120,9 @@ params.footSizeForOpitmization = [-0.07 0.07;       % xMin, xMax
                             84.2999649174303	0.761524617074400	0.0867967193079845	-99.2529302018096	-15.8102389048266	0.0632937999425440]'*(pi/180);  
     params.qfinal        = [-10   0  0, -20  30  0  45  , -20  30  0  45  , 25.5   0   0  -18.5  -5.5  0,25.5   0   0  -18.5  -5.5  0]'*(pi/180);   
     params.tswitch       = 1.5;
-
-
+    % if this parameter is true we fix the desired com value(the com value is specify inside the trajectory block in the simulink)
+    % if this parameter if false we optimize the com trajectory even when the robt is sitting on the bench the bench
+    params.fixedcombench = false;
 
 %%  REFERENCE PARAMETERS
 
@@ -153,7 +163,8 @@ switch CONTROLLERTYPE
         %%%;;
         
         %% PRIMARY REFERENCE PARAMETERS (this parameter only works if one of the specific trajectory has runtime parameters)
-        numeric_reference_parameter{1,1}=[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]'; % is not used but just to be compliant with the input structure
+        % IMPORTANT!!!!! this value is used inside main exec to set the parameter that yuo want to test
+        numeric_reference_parameter{1,1}=[0.748774281834381,1.09687173841372,1.36483184164994,1.99216620455900,1.92546202844655,-0.0636699351395518,-0.00371461494356348,0.0146207387013360,-0.0167742878212803,-0.0627561462679218,0.470022984592288,0.425150445837247,0.453825179534190,0.483871810092092,0.362376650443275]'; 
         secondary_numeric_reference_parameter{1,1} = []; % not used
         %% ALPHA PARAMETER (not used)
         %constant alpha
@@ -172,6 +183,17 @@ switch CONTROLLERTYPE
         %% with the empty constraints it means that i compute the constraints directly inside the fitness function and i provide the result through the input of the empty constraints
         constraints_functions{end+1} = 'EmptyConstraints'; 
         constraints_values = [constraints_values,nan];   % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
+        torqueThreshold = 25;
+        %% we do this smal addition to limit the joint below a fixed treshold
+        for iii = 47:92
+            if(abs(constraints_values(iii))>torqueThreshold)
+                if(constraints_values(iii)>0)
+                    constraints_values(iii) = torqueThreshold;
+                elseif(constraints_values(iii)<0)
+                    constraints_values(iii) = -torqueThreshold;
+                end      
+            end
+        end
         constraints_type = ones(1,length(constraints_values)); % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
         activate_constraints_handling = false;
         %% INSTANCE PARAMETER
@@ -192,13 +214,13 @@ switch CONTROLLERTYPE
         %init_parameters = 6;
        
        user_defined_start_action =  [0.913076139695994,0.905282671038423,1.16925695886780,1.99897101764829,1.71346167883188,...
-                                        -0.0252589378181975,-0.00171875837190067,0.0130805429422483,-0.0141668463935478,-0.0608148916683415,...
-                                        0.468857336154740,0.433709756339607,0.442003448052191,0.482619376729153,0.360000000000000]; 
+                                    -0.0252589378181975,-0.00171875837190067,0.0130805429422483,-0.0141668463935478,-0.0608148916683415,...
+                                     0.468857336154740,0.433709756339607,0.442003448052191,0.482619376729153,0.360000000000000]; 
 %         user_defined_start_action =    [0,0,0,0,0,...
 %                                        1.5,1.5,0.0130805429422483,-0.0141668463935478,-0.0608148916683415,...
 %                                         0.468857336154740,0.433709756339607,0.442003448052191,0.482619376729153,0.360000000000000]; 
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
-        niter = 50;  %number of generations
+        niter = 500;  %number of generations
         %cmaes_value_range = [-14 , 14];  % boudn that define the search space
         cmaes_value_range{1} = [ 0, 0, 0, 0, 0, -0.12,-0.12,-0.12,-0.12,-0.12,  0.36,0.36,0.36,0.36,0.36 ];  % lower bound that define the search space
         cmaes_value_range{2} = [ 2, 2, 2, 2, 2,  0.016,0.016,0.016,0.016,0.016, 0.50,0.50,0.50,0.50,0.50];  % upper bound that define the search space

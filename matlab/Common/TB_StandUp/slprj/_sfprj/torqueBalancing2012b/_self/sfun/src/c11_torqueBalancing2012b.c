@@ -75,7 +75,7 @@ static void registerMessagesc11_torqueBalancing2012b
 static void c11_fromBaseToWorldWithImu(SFc11_torqueBalancing2012bInstanceStruct *
   chartInstance, real_T c11_imu_H_link[16], real_T c11_imu_H_link_0[16], real_T
   c11_link_H_root[16], real_T c11_inertial_0[12], real_T c11_inertial[12],
-  real_T c11_neck[3], c11_struct_HZPQIAn1UwxVqJtlH5llbD *c11_b_CONFIG, real_T
+  real_T c11_neck[3], c11_struct_6drkWFoHJIWwAUE1rJmWJH *c11_b_CONFIG, real_T
   c11_w_H_root[16]);
 static void c11_rotz(SFc11_torqueBalancing2012bInstanceStruct *chartInstance,
                      real_T c11_alpha, real_T c11_R[9]);
@@ -108,7 +108,7 @@ static const mxArray *c11_b_sf_marshallOut(void *chartInstanceVoid, void
   *c11_inData);
 static void c11_c_emlrt_marshallIn(SFc11_torqueBalancing2012bInstanceStruct
   *chartInstance, const mxArray *c11_u, const emlrtMsgIdentifier *c11_parentId,
-  c11_struct_HZPQIAn1UwxVqJtlH5llbD *c11_y);
+  c11_struct_6drkWFoHJIWwAUE1rJmWJH *c11_y);
 static real_T c11_d_emlrt_marshallIn(SFc11_torqueBalancing2012bInstanceStruct
   *chartInstance, const mxArray *c11_u, const emlrtMsgIdentifier *c11_parentId);
 static c11_struct_amzdx4J7qaaMzgPI7fQ3WD c11_e_emlrt_marshallIn
@@ -220,7 +220,7 @@ static void initialize_params_c11_torqueBalancing2012b
 {
   const mxArray *c11_m0 = NULL;
   const mxArray *c11_mxField;
-  c11_struct_HZPQIAn1UwxVqJtlH5llbD c11_r0;
+  c11_struct_6drkWFoHJIWwAUE1rJmWJH c11_r0;
   const mxArray *c11_m1 = NULL;
   const mxArray *c11_b_mxField;
   sf_set_error_prefix_string(
@@ -303,6 +303,9 @@ static void initialize_params_c11_torqueBalancing2012b
   c11_mxField = sf_mex_getfield(c11_m0, "JOINTSITING", "CONFIG", 0);
   sf_mex_import_named("CONFIG", sf_mex_dup(c11_mxField), c11_r0.JOINTSITING, 1,
                       0, 0U, 1, 0U, 2, 23, 1);
+  c11_mxField = sf_mex_getfield(c11_m0, "FIXEDCOMBENCH", "CONFIG", 0);
+  sf_mex_import_named("CONFIG", sf_mex_dup(c11_mxField), &c11_r0.FIXEDCOMBENCH,
+                      1, 11, 0U, 0, 0U, 0);
   c11_mxField = sf_mex_getfield(c11_m0, "iCubStandUp", "CONFIG", 0);
   sf_mex_import_named("CONFIG", sf_mex_dup(c11_mxField), &c11_r0.iCubStandUp, 1,
                       11, 0U, 0, 0U, 0);
@@ -417,7 +420,7 @@ static void sf_c11_torqueBalancing2012b(SFc11_torqueBalancing2012bInstanceStruct
   real_T c11_inertial[12];
   int32_T c11_i14;
   real_T c11_neck[3];
-  c11_struct_HZPQIAn1UwxVqJtlH5llbD c11_b_CONFIG;
+  c11_struct_6drkWFoHJIWwAUE1rJmWJH c11_b_CONFIG;
   uint32_T c11_debug_family_var_map[10];
   real_T c11_nargin = 7.0;
   real_T c11_nargout = 1.0;
@@ -434,7 +437,7 @@ static void sf_c11_torqueBalancing2012b(SFc11_torqueBalancing2012bInstanceStruct
   real_T c11_b_inertial[12];
   int32_T c11_i20;
   real_T c11_b_neck[3];
-  c11_struct_HZPQIAn1UwxVqJtlH5llbD c11_c_CONFIG;
+  c11_struct_6drkWFoHJIWwAUE1rJmWJH c11_c_CONFIG;
   real_T c11_dv1[16];
   int32_T c11_i21;
   int32_T c11_i22;
@@ -583,7 +586,7 @@ static void registerMessagesc11_torqueBalancing2012b
 static void c11_fromBaseToWorldWithImu(SFc11_torqueBalancing2012bInstanceStruct *
   chartInstance, real_T c11_imu_H_link[16], real_T c11_imu_H_link_0[16], real_T
   c11_link_H_root[16], real_T c11_inertial_0[12], real_T c11_inertial[12],
-  real_T c11_neck[3], c11_struct_HZPQIAn1UwxVqJtlH5llbD *c11_b_CONFIG, real_T
+  real_T c11_neck[3], c11_struct_6drkWFoHJIWwAUE1rJmWJH *c11_b_CONFIG, real_T
   c11_w_H_root[16])
 {
   uint32_T c11_debug_family_var_map[23];
@@ -2288,7 +2291,7 @@ static const mxArray *c11_b_sf_marshallOut(void *chartInstanceVoid, void
   *c11_inData)
 {
   const mxArray *c11_mxArrayOutData;
-  c11_struct_HZPQIAn1UwxVqJtlH5llbD c11_u;
+  c11_struct_6drkWFoHJIWwAUE1rJmWJH c11_u;
   const mxArray *c11_y = NULL;
   real_T c11_b_u;
   const mxArray *c11_b_y = NULL;
@@ -2347,11 +2350,13 @@ static const mxArray *c11_b_sf_marshallOut(void *chartInstanceVoid, void
   const mxArray *c11_bb_y = NULL;
   boolean_T c11_cb_u;
   const mxArray *c11_cb_y = NULL;
+  boolean_T c11_db_u;
+  const mxArray *c11_db_y = NULL;
   SFc11_torqueBalancing2012bInstanceStruct *chartInstance;
   chartInstance = (SFc11_torqueBalancing2012bInstanceStruct *)chartInstanceVoid;
   c11_mxArrayOutData = NULL;
   c11_mxArrayOutData = NULL;
-  c11_u = *(c11_struct_HZPQIAn1UwxVqJtlH5llbD *)c11_inData;
+  c11_u = *(c11_struct_6drkWFoHJIWwAUE1rJmWJH *)c11_inData;
   c11_y = NULL;
   sf_mex_assign(&c11_y, sf_mex_createstruct("structure", 2, 1, 1), FALSE);
   c11_b_u = c11_u.SIMULATION_TIME;
@@ -2469,34 +2474,39 @@ static const mxArray *c11_b_sf_marshallOut(void *chartInstanceVoid, void
   sf_mex_assign(&c11_ab_y, sf_mex_create("y", c11_ab_u, 0, 0U, 1U, 0U, 2, 23, 1),
                 FALSE);
   sf_mex_addfield(c11_y, c11_ab_y, "JOINTSITING", "JOINTSITING", 0);
-  c11_bb_u = c11_u.iCubStandUp;
+  c11_bb_u = c11_u.FIXEDCOMBENCH;
   c11_bb_y = NULL;
   sf_mex_assign(&c11_bb_y, sf_mex_create("y", &c11_bb_u, 11, 0U, 0U, 0U, 0),
                 FALSE);
-  sf_mex_addfield(c11_y, c11_bb_y, "iCubStandUp", "iCubStandUp", 0);
-  c11_cb_u = c11_u.useExtArmForces;
+  sf_mex_addfield(c11_y, c11_bb_y, "FIXEDCOMBENCH", "FIXEDCOMBENCH", 0);
+  c11_cb_u = c11_u.iCubStandUp;
   c11_cb_y = NULL;
   sf_mex_assign(&c11_cb_y, sf_mex_create("y", &c11_cb_u, 11, 0U, 0U, 0U, 0),
                 FALSE);
-  sf_mex_addfield(c11_y, c11_cb_y, "useExtArmForces", "useExtArmForces", 0);
+  sf_mex_addfield(c11_y, c11_cb_y, "iCubStandUp", "iCubStandUp", 0);
+  c11_db_u = c11_u.useExtArmForces;
+  c11_db_y = NULL;
+  sf_mex_assign(&c11_db_y, sf_mex_create("y", &c11_db_u, 11, 0U, 0U, 0U, 0),
+                FALSE);
+  sf_mex_addfield(c11_y, c11_db_y, "useExtArmForces", "useExtArmForces", 0);
   sf_mex_assign(&c11_mxArrayOutData, c11_y, FALSE);
   return c11_mxArrayOutData;
 }
 
 static void c11_c_emlrt_marshallIn(SFc11_torqueBalancing2012bInstanceStruct
   *chartInstance, const mxArray *c11_u, const emlrtMsgIdentifier *c11_parentId,
-  c11_struct_HZPQIAn1UwxVqJtlH5llbD *c11_y)
+  c11_struct_6drkWFoHJIWwAUE1rJmWJH *c11_y)
 {
   emlrtMsgIdentifier c11_thisId;
-  static const char * c11_fieldNames[21] = { "SIMULATION_TIME", "SCOPES",
+  static const char * c11_fieldNames[22] = { "SIMULATION_TIME", "SCOPES",
     "CHECK_LIMITS", "USE_IMU4EST_BASE", "YAW_IMU_FILTER", "PITCH_IMU_FILTER",
     "CORRECT_NECK_IMU", "ONSOFTCARPET", "USE_QP_SOLVER", "Ts", "ON_GAZEBO",
     "LEFT_RIGHT_FOOT_IN_CONTACT", "SMOOTH_DES_COM", "SMOOTH_DES_Q",
     "smoothingTimeTranDynamics", "DEMO_MOVEMENTS", "TIME_CONTROLLER_SWITCH",
-    "JOINTS", "JOINTSITING", "iCubStandUp", "useExtArmForces" };
+    "JOINTS", "JOINTSITING", "FIXEDCOMBENCH", "iCubStandUp", "useExtArmForces" };
 
   c11_thisId.fParent = c11_parentId;
-  sf_mex_check_struct(c11_parentId, c11_u, 21, c11_fieldNames, 0U, 0);
+  sf_mex_check_struct(c11_parentId, c11_u, 22, c11_fieldNames, 0U, 0);
   c11_thisId.fIdentifier = "SIMULATION_TIME";
   c11_y->SIMULATION_TIME = c11_d_emlrt_marshallIn(chartInstance, sf_mex_dup
     (sf_mex_getfield(c11_u, "SIMULATION_TIME", "SIMULATION_TIME", 0)),
@@ -2561,6 +2571,9 @@ static void c11_c_emlrt_marshallIn(SFc11_torqueBalancing2012bInstanceStruct
   c11_thisId.fIdentifier = "JOINTSITING";
   c11_h_emlrt_marshallIn(chartInstance, sf_mex_dup(sf_mex_getfield(c11_u,
     "JOINTSITING", "JOINTSITING", 0)), &c11_thisId, c11_y->JOINTSITING);
+  c11_thisId.fIdentifier = "FIXEDCOMBENCH";
+  c11_y->FIXEDCOMBENCH = c11_f_emlrt_marshallIn(chartInstance, sf_mex_dup
+    (sf_mex_getfield(c11_u, "FIXEDCOMBENCH", "FIXEDCOMBENCH", 0)), &c11_thisId);
   c11_thisId.fIdentifier = "iCubStandUp";
   c11_y->iCubStandUp = c11_f_emlrt_marshallIn(chartInstance, sf_mex_dup
     (sf_mex_getfield(c11_u, "iCubStandUp", "iCubStandUp", 0)), &c11_thisId);
@@ -2662,7 +2675,7 @@ static void c11_b_sf_marshallIn(void *chartInstanceVoid, const mxArray
   const mxArray *c11_b_CONFIG;
   const char_T *c11_identifier;
   emlrtMsgIdentifier c11_thisId;
-  c11_struct_HZPQIAn1UwxVqJtlH5llbD c11_y;
+  c11_struct_6drkWFoHJIWwAUE1rJmWJH c11_y;
   SFc11_torqueBalancing2012bInstanceStruct *chartInstance;
   chartInstance = (SFc11_torqueBalancing2012bInstanceStruct *)chartInstanceVoid;
   c11_b_CONFIG = sf_mex_dup(c11_mxArrayInData);
@@ -2672,7 +2685,7 @@ static void c11_b_sf_marshallIn(void *chartInstanceVoid, const mxArray
   c11_c_emlrt_marshallIn(chartInstance, sf_mex_dup(c11_b_CONFIG), &c11_thisId,
     &c11_y);
   sf_mex_destroy(&c11_b_CONFIG);
-  *(c11_struct_HZPQIAn1UwxVqJtlH5llbD *)c11_outData = c11_y;
+  *(c11_struct_6drkWFoHJIWwAUE1rJmWJH *)c11_outData = c11_y;
   sf_mex_destroy(&c11_mxArrayInData);
 }
 
@@ -5379,10 +5392,10 @@ extern void utFree(void*);
 
 void sf_c11_torqueBalancing2012b_get_check_sum(mxArray *plhs[])
 {
-  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(44106875U);
-  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(841437657U);
-  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(2368952469U);
-  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(3882389986U);
+  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(3853123732U);
+  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(4225446195U);
+  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(2845734475U);
+  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(1223003812U);
 }
 
 mxArray *sf_c11_torqueBalancing2012b_get_autoinheritance_info(void)
@@ -5394,7 +5407,7 @@ mxArray *sf_c11_torqueBalancing2012b_get_autoinheritance_info(void)
     autoinheritanceFields);
 
   {
-    mxArray *mxChecksum = mxCreateString("YmIalEnk1h9C8xyxCnKh2D");
+    mxArray *mxChecksum = mxCreateString("5NGEe6J8FMNHwSbai8nj5E");
     mxSetField(mxAutoinheritanceInfo,0,"checksum",mxChecksum);
   }
 
@@ -5791,7 +5804,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
 static const char* sf_get_instance_specialization(void)
 {
-  return "mcLsq81jT0i1ePjG1oQidD";
+  return "GVWiF6laSmdXaPaeF1eCR";
 }
 
 static void sf_opaque_initialize_c11_torqueBalancing2012b(void *chartInstanceVar)
@@ -5983,10 +5996,10 @@ static void mdlSetWorkWidths_c11_torqueBalancing2012b(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(1973617619U));
-  ssSetChecksum1(S,(3415660132U));
-  ssSetChecksum2(S,(2992048661U));
-  ssSetChecksum3(S,(3390034151U));
+  ssSetChecksum0(S,(2508711673U));
+  ssSetChecksum1(S,(1986591927U));
+  ssSetChecksum2(S,(3393621003U));
+  ssSetChecksum3(S,(2332823037U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
   ssSupportsMultipleExecInstances(S,1);

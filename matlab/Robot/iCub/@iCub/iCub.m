@@ -604,29 +604,27 @@ classdef iCub < handle
              r_sole_pos   = wbm_forwardKinematics(obj.state.w_R_b,obj.state.x_b,obj.state.q,'r_sole');
              
              [x_l_sole,~] = frame2posRotm(l_sole_pos);
-             [x_r_sole,~] = frame2posRotm(r_sole_pos);
+             [x_r_sole,w_R_rfoot] = frame2posRotm(r_sole_pos);
              
-             
-             shift_mult = params.footSize(1) - 0.03;
-             x_dir = params.footSize(1)*[1,0];
-             y_dir = params.footSize(2)*[0,1];
-             x_shift = shift_mult* [1 0];
-             
+             w_R_rfoot = w_R_rfoot(1:2,1:2);
+             C = params.foot.xmin*[1,0] + params.foot.ymin*[0,1];
+             A = params.foot.xmax*[1,0] + params.foot.ymax*[0,1];
              
              if  params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 1 
                  
-                 obj.support_poly.min =  x_r_sole(1:2)' - x_dir - y_dir + x_shift;
-                 obj.support_poly.max =  x_l_sole(1:2)' + x_dir + y_dir + x_shift;
+                 obj.support_poly.min =  x_r_sole(1:2)' + (w_R_rfoot*C')';  %C
+                 obj.support_poly.max =  x_l_sole(1:2)' + A;  %A''
                  
              elseif params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 0 
                  
-                 obj.support_poly.min =  x_l_sole(1:2)' - x_dir - y_dir + x_shift;
-                 obj.support_poly.max =  x_l_sole(1:2)' + x_dir + y_dir + x_shift;
+                 obj.support_poly.min =  x_l_sole(1:2)' + C;%C'
+                 obj.support_poly.max =  x_l_sole(1:2)' + A;%A'
                  
              elseif params.feet_on_ground(1) == 0 && params.feet_on_ground(2) == 1
-                 
-                 obj.support_poly.min =  x_r_sole(1:2)' - x_dir - y_dir + x_shift;
-                 obj.support_poly.max =  x_r_sole(1:2)' + x_dir + y_dir + x_shift;
+                 % i do not have to do any rotation here becasue the world
+                 % frame is gonna be in the rigth foot
+                 obj.support_poly.min =  x_r_sole(1:2)' +  C;%C
+                 obj.support_poly.max =  x_r_sole(1:2)' +  A';%A
                  
              end
              

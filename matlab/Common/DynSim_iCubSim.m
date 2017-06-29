@@ -109,9 +109,19 @@ function [t, q, qd] = DynSim_iCubSim(controller,params)
     controller.simulation_iterator     = 1;
     controller.simulation_results.tau  =  torque_sim.Data;
     controller.simulation_results.zmp  =  zmp_sim.Data;
-    controller.simulation_results.xCoM =  com_pos_sim.Data;
-    controller.simulation_results.LsoleWrench =  left_leg_wrench_sim.Data;
-    controller.simulation_results.RsoleWrench =  right_leg_wrench_sim.Data; 
+    number_of_dims = ndims(com_pos_sim.Data);
+    if(number_of_dims>2)
+        app_mat = squeeze(com_pos_sim.Data);
+        [row,col] = size(app_mat);
+        if(row<col)
+            app_mat = app_mat';
+        end
+        controller.simulation_results.xCoM =  app_mat;
+    else
+        controller.simulation_results.xCoM =  com_pos_sim.Data;
+    end
+    controller.simulation_results.LsoleWrench =  left_leg_wrench_sim;
+    controller.simulation_results.RsoleWrench =  right_leg_wrench_sim; 
     q  = q_sim.Data; % row vectors (TODO check if they are in the right order)
     qd = qd_sim.Data;% row vectors
     t  = params.tStart:params.sim_step:params.tEnd;

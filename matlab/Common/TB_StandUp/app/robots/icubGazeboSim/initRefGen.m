@@ -12,6 +12,6 @@ CONFIG.TIME_CONTROLLER_SWITCH = params.tswitch;
 %CONFIG.JOINTS = [  70   0  0   -71.0  30.0  0.0  45.0  -71.0  30.0  0.0  45.0   52 0  0 -100 -18 0   52 0  0 -100 -18 0]'*(pi/180);
  CONFIG.JOINTS = params.qfinal; %% final joint position
  CONFIG.JOINTSITING = params.qfinalSitting; 
-
+ CONFIG.FIXEDCOMBENCH = params.fixedcombench;
     
 

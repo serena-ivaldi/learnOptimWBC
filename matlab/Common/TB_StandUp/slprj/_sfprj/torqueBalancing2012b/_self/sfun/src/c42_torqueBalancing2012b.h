@@ -46,10 +46,10 @@ typedef struct {
 
 #endif                                 /*typedef_c42_ResolvedFunctionInfo*/
 
-#ifndef struct_struct_HZPQIAn1UwxVqJtlH5llbD_tag
-#define struct_struct_HZPQIAn1UwxVqJtlH5llbD_tag
+#ifndef struct_struct_6drkWFoHJIWwAUE1rJmWJH_tag
+#define struct_struct_6drkWFoHJIWwAUE1rJmWJH_tag
 
-struct struct_HZPQIAn1UwxVqJtlH5llbD_tag
+struct struct_6drkWFoHJIWwAUE1rJmWJH_tag
 {
   real_T SIMULATION_TIME;
   c42_struct_amzdx4J7qaaMzgPI7fQ3WD SCOPES;
@@ -70,19 +70,20 @@ struct struct_HZPQIAn1UwxVqJtlH5llbD_tag
   real_T TIME_CONTROLLER_SWITCH;
   real_T JOINTS[23];
   real_T JOINTSITING[23];
+  boolean_T FIXEDCOMBENCH;
   boolean_T iCubStandUp;
   boolean_T useExtArmForces;
 };
 
-#endif                                 /*struct_struct_HZPQIAn1UwxVqJtlH5llbD_tag*/
+#endif                                 /*struct_struct_6drkWFoHJIWwAUE1rJmWJH_tag*/
 
-#ifndef typedef_c42_struct_HZPQIAn1UwxVqJtlH5llbD
-#define typedef_c42_struct_HZPQIAn1UwxVqJtlH5llbD
+#ifndef typedef_c42_struct_6drkWFoHJIWwAUE1rJmWJH
+#define typedef_c42_struct_6drkWFoHJIWwAUE1rJmWJH
 
-typedef struct struct_HZPQIAn1UwxVqJtlH5llbD_tag
-  c42_struct_HZPQIAn1UwxVqJtlH5llbD;
+typedef struct struct_6drkWFoHJIWwAUE1rJmWJH_tag
+  c42_struct_6drkWFoHJIWwAUE1rJmWJH;
 
-#endif                                 /*typedef_c42_struct_HZPQIAn1UwxVqJtlH5llbD*/
+#endif                                 /*typedef_c42_struct_6drkWFoHJIWwAUE1rJmWJH*/
 
 #ifndef typedef_SFc42_torqueBalancing2012bInstanceStruct
 #define typedef_SFc42_torqueBalancing2012bInstanceStruct
@@ -96,7 +97,7 @@ typedef struct {
   boolean_T c42_isStable;
   boolean_T c42_doneDoubleBufferReInit;
   uint8_T c42_is_active_c42_torqueBalancing2012b;
-  c42_struct_HZPQIAn1UwxVqJtlH5llbD c42_CONFIG;
+  c42_struct_6drkWFoHJIWwAUE1rJmWJH c42_CONFIG;
 } SFc42_torqueBalancing2012bInstanceStruct;
 
 #endif                                 /*typedef_SFc42_torqueBalancing2012bInstanceStruct*/
