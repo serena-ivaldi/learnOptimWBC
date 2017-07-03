@@ -3,7 +3,7 @@
 %  It integrates the robot state defined in forwardDynamics_SoT.m and the user can set
 %  how many feet are on the ground, decide if activate floating base or not
 
-function [t, q, qd] = DynSim_iCubSim(controller,params)
+function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
     
    %% TODO in the config file i have to define the time and the number of dof 
    %% to provide this information outside simulink
@@ -13,13 +13,13 @@ function [t, q, qd] = DynSim_iCubSim(controller,params)
     WS.ComputeSupportPoly(params);
     %% collecting data from experiments
     time = params.tStart:params.sim_step:params.tEnd;
-    
     timer = 0;
+    consecutive_fails_counter = 0;
+    failed_flag = false;
     %% TODO pass this from outside
     max_timer = 100;
-    consecutive_fails_counter = 0;
-    %% TODO pass this from outside
     max_consecutive_fails_counter = 5;
+    %% ---
     
     controller.simulation_iterator     = 1;
     controller.simulation_results.tau  =  zeros(length(time),WS.ndof);
@@ -93,7 +93,12 @@ function [t, q, qd] = DynSim_iCubSim(controller,params)
         
     end
     %% copy the results from the thread and close the thread
-    load('simulationResults.mat');
+    try
+        load('simulationResults.mat');
+    catch 
+        disp('the results from the simulation are corrupted or not present. Repeat the simulatio with the same parameters')
+        failed_flag = true;
+    end
     % remove the file with all the data inside
     delete ~/git/learnOptimWBC/matlab/Common/TB_StandUp/simulationResults.mat
     % close the bash window of the matlab process
@@ -105,26 +110,35 @@ function [t, q, qd] = DynSim_iCubSim(controller,params)
     system(commandkill{1});
     % clean yarp
     [xx,yy]=system('yarp clean  --timeout 1.0');
-    %% save data 
-    controller.simulation_iterator     = 1;
-    controller.simulation_results.tau  =  torque_sim.Data;
-    controller.simulation_results.zmp  =  zmp_sim.Data;
-    number_of_dims = ndims(com_pos_sim.Data);
-    if(number_of_dims>2)
-        app_mat = squeeze(com_pos_sim.Data);
-        [row,col] = size(app_mat);
-        if(row<col)
-            app_mat = app_mat';
+    % if i do not have any fail i collect the results 
+    if(~failed_flag)
+        %% save data 
+        controller.simulation_iterator     = 1;
+        controller.simulation_results.tau  =  torque_sim.Data;
+        controller.simulation_results.zmp  =  zmp_sim.Data;
+        number_of_dims = ndims(com_pos_sim.Data);
+        if(number_of_dims>2)
+            app_mat = squeeze(com_pos_sim.Data);
+            [row,col] = size(app_mat);
+            if(row<col)
+                app_mat = app_mat';
+            end
+            controller.simulation_results.xCoM =  app_mat;
+        else
+            controller.simulation_results.xCoM =  com_pos_sim.Data;
         end
-        controller.simulation_results.xCoM =  app_mat;
+        controller.simulation_results.LsoleWrench =  left_leg_wrench_sim;
+        controller.simulation_results.RsoleWrench =  right_leg_wrench_sim; 
+        q  = q_sim.Data; % row vectors (TODO check if they are in the right order)
+        qd = qd_sim.Data;% row vectors
+        t  = params.tStart:params.sim_step:params.tEnd;
+        
     else
-        controller.simulation_results.xCoM =  com_pos_sim.Data;
+        % if i have a fail a return empty data
+        q  = [];
+        qd = [];
+        t  = [];
     end
-    controller.simulation_results.LsoleWrench =  left_leg_wrench_sim;
-    controller.simulation_results.RsoleWrench =  right_leg_wrench_sim; 
-    q  = q_sim.Data; % row vectors (TODO check if they are in the right order)
-    qd = qd_sim.Data;% row vectors
-    t  = params.tStart:params.sim_step:params.tEnd;
 end
 
 

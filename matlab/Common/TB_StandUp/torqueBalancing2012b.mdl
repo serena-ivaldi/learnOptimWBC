@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.3545"
+    ComputedModelVersion    "1.3556"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -53,21 +53,21 @@ Model {
 	Dimension		3
 	Object {
 	  $ObjectID		  5
-	  IsActive		  [0]
+	  IsActive		  [1]
 	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "2355"
+	  LoadSaveID		  "2087"
 	  Extents		  [1819.0, 908.0]
-	  ZoomFactor		  [1.0]
-	  Offset		  [1261.0833333333319, 298.79999999999927]
+	  ZoomFactor		  [1.25]
+	  Offset		  [1179.0066749226473, 2280.9238466399079]
 	}
 	Object {
 	  $ObjectID		  6
-	  IsActive		  [1]
+	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "2129"
-	  Extents		  [1819.0, 908.0]
-	  ZoomFactor		  [1.0]
-	  Offset		  [-9.0, 0.0]
+	  LoadSaveID		  "2275"
+	  Extents		  [1897.0, 880.0]
+	  ZoomFactor		  [1.22]
+	  Offset		  [0.0, -3.725409836065694]
 	}
 	Object {
 	  $ObjectID		  7
@@ -88,9 +88,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "valerio"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Jun 29 13:30:54 2017"
-  RTWModifiedTimeStamp	  420643851
-  ModelVersionFormat	  "1.%<AutoIncrement:3545>"
+  LastModifiedDate	  "Sat Jul 01 11:05:41 2017"
+  RTWModifiedTimeStamp	  420807869
+  ModelVersionFormat	  "1.%<AutoIncrement:3556>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -1077,7 +1077,7 @@ Model {
   }
   System {
     Name		    "torqueBalancing2012b"
-    Location		    [65, 24, 1920, 1080]
+    Location		    [197, 262, 2130, 1290]
     Open		    off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -1091,7 +1091,7 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "80"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "4608"
+    SIDHighWatermark	    "4614"
     Block {
       BlockType		      SubSystem
       Name		      "DesValues"
@@ -1111,7 +1111,7 @@ Model {
       System {
 	Name			"DesValues"
 	Location		[65, 24, 1920, 1080]
-	Open			off
+	Open			on
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -1122,7 +1122,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"150"
+	ZoomFactor		"125"
 	Block {
 	  BlockType		  Reference
 	  Name			  "Compare\nTo Zero"
@@ -1290,6 +1290,16 @@ Model {
 	  }
 	}
 	Block {
+	  BlockType		  Display
+	  Name			  "Display"
+	  SID			  "4612"
+	  Ports			  [1]
+	  Position		  [2310, 2500, 2400, 2530]
+	  ZOrder		  721
+	  Decimation		  "1"
+	  Lockdown		  off
+	}
+	Block {
 	  BlockType		  Reference
 	  Name			  "Get Estimate"
 	  SID			  "2692"
@@ -1323,7 +1333,7 @@ Model {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "Internal coordinator"
-	    Location		    [65, 24, 1920, 1080]
+	    Location		    [55, 82, 1988, 1110]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -1870,8 +1880,8 @@ Model {
 	      BlockType		      SubSystem
 	      Name		      "refGen"
 	      SID		      "2129"
-	      Ports		      [0, 2, 1]
-	      Position		      [880, 623, 1085, 707]
+	      Ports		      [1, 2, 1]
+	      Position		      [880, 613, 1085, 697]
 	      ZOrder		      542
 	      MinAlgLoopOccurrences   off
 	      PropExecContextOutsideSubsystem off
@@ -1883,7 +1893,7 @@ Model {
 	      System {
 		Name			"refGen"
 		Location		[65, 24, 1920, 1080]
-		Open			on
+		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
 		ScreenColor		"white"
@@ -1895,6 +1905,14 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
+		Block {
+		  BlockType		  Inport
+		  Name			  "joint_position"
+		  SID			  "4614"
+		  Position		  [535, 133, 565, 147]
+		  ZOrder		  588
+		  IconDisplay		  "Port number"
+		}
 		Block {
 		  BlockType		  EnablePort
 		  Name			  "Enable"
@@ -2192,7 +2210,7 @@ Model {
 		  BlockType		  SubSystem
 		  Name			  "joint reference "
 		  SID			  "4592"
-		  Ports			  [4, 1]
+		  Ports			  [5, 1]
 		  Position		  [685, 63, 890, 217]
 		  ZOrder		  582
 		  LibraryVersion	  "1.32"
@@ -2222,7 +2240,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "29"
+		    SIDHighWatermark	    "30"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "t"
@@ -2242,20 +2260,29 @@ Model {
 		    }
 		    Block {
 		    BlockType		    Inport
+		    Name		    "starting_joint"
+		    SID			    "4592::30"
+		    Position		    [20, 171, 40, 189]
+		    ZOrder		    14
+		    Port		    "3"
+		    IconDisplay		    "Port number"
+		    }
+		    Block {
+		    BlockType		    Inport
 		    Name		    "sitting_joint"
 		    SID			    "4592::26"
-		    Position		    [20, 171, 40, 189]
+		    Position		    [20, 206, 40, 224]
 		    ZOrder		    12
-		    Port		    "3"
+		    Port		    "4"
 		    IconDisplay		    "Port number"
 		    }
 		    Block {
 		    BlockType		    Inport
 		    Name		    "final_joint"
 		    SID			    "4592::27"
-		    Position		    [20, 206, 40, 224]
+		    Position		    [20, 246, 40, 264]
 		    ZOrder		    13
-		    Port		    "4"
+		    Port		    "5"
 		    IconDisplay		    "Port number"
 		    }
 		    Block {
@@ -2272,11 +2299,11 @@ Model {
 		    Name		    " SFunction "
 		    SID			    "4592::18"
 		    Tag			    "Stateflow S-Function torqueBalancing2012b 43"
-		    Ports		    [4, 2]
-		    Position		    [180, 117, 230, 218]
+		    Ports		    [5, 2]
+		    Position		    [180, 120, 230, 240]
 		    ZOrder		    4
 		    FunctionName	    "sf_sfun"
-		    PortCounts		    "[4 2]"
+		    PortCounts		    "[5 2]"
 		    EnableBusSupport	    on
 		    Port {
 		    PortNumber		    2
@@ -2313,16 +2340,22 @@ Model {
 		    DstPort		    2
 		    }
 		    Line {
-		    SrcBlock		    "sitting_joint"
+		    SrcBlock		    "starting_joint"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    3
 		    }
 		    Line {
-		    SrcBlock		    "final_joint"
+		    SrcBlock		    "sitting_joint"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    4
+		    }
+		    Line {
+		    SrcBlock		    "final_joint"
+		    SrcPort		    1
+		    DstBlock		    " SFunction "
+		    DstPort		    5
 		    }
 		    Line {
 		    Name		    "qdes"
@@ -2350,7 +2383,7 @@ Model {
 		  BlockType		  Constant
 		  Name			  "parameters1"
 		  SID			  "4511"
-		  Position		  [510, 192, 630, 228]
+		  Position		  [510, 212, 630, 248]
 		  ZOrder		  560
 		  Value			  "CONFIG.JOINTS"
 		}
@@ -2366,7 +2399,7 @@ Model {
 		  BlockType		  Constant
 		  Name			  "parameters3"
 		  SID			  "4591"
-		  Position		  [510, 142, 630, 178]
+		  Position		  [510, 162, 630, 198]
 		  ZOrder		  581
 		  Value			  "CONFIG.JOINTSITING"
 		}
@@ -2480,20 +2513,21 @@ Model {
 		  SrcPort		  1
 		  Points		  [35, 0]
 		  DstBlock		  "joint reference "
-		  DstPort		  4
+		  DstPort		  5
 		}
 		Line {
 		  SrcBlock		  "parameters3"
 		  SrcPort		  1
+		  Points		  [35, 0]
 		  DstBlock		  "joint reference "
-		  DstPort		  3
+		  DstPort		  4
 		}
 		Line {
 		  SrcBlock		  "parameters2"
 		  SrcPort		  1
 		  Points		  [30, 0]
 		  Branch {
-		    Points		    [0, -195]
+		    Points		    [0, -205]
 		    DstBlock		    "joint reference "
 		    DstPort		    2
 		  }
@@ -2515,6 +2549,12 @@ Model {
 		    DstBlock		    "com reference "
 		    DstPort		    7
 		  }
+		}
+		Line {
+		  SrcBlock		  "joint_position"
+		  SrcPort		  1
+		  DstBlock		  "joint reference "
+		  DstPort		  3
 		}
 	      }
 	    }
@@ -3589,6 +3629,7 @@ Model {
 	    Line {
 	      SrcBlock		      "refGen"
 	      SrcPort		      2
+	      Points		      [95, 0; 0, 10]
 	      DstBlock		      "CoMrefs"
 	      DstPort		      1
 	    }
@@ -3658,15 +3699,23 @@ Model {
 	      Branch {
 		Points			[314, 0]
 		Branch {
-		  Points		  [194, 0]
+		  Points		  [131, 0]
 		  Branch {
-		    Points		    [0, 115]
-		    DstBlock		    "To Workspace"
+		    Points		    [0, -30]
+		    DstBlock		    "refGen"
 		    DstPort		    1
 		  }
 		  Branch {
+		    Points		    [63, 0]
+		    Branch {
+		    Points		    [0, 115]
+		    DstBlock		    "To Workspace"
+		    DstPort		    1
+		    }
+		    Branch {
 		    DstBlock		    "holder\n"
 		    DstPort		    1
+		    }
 		  }
 		}
 		Branch {
@@ -3726,7 +3775,7 @@ Model {
 	    Line {
 	      SrcBlock		      "refGen"
 	      SrcPort		      1
-	      Points		      [95, 0; 0, -50]
+	      Points		      [95, 0; 0, -40]
 	      DstBlock		      "qDes"
 	      DstPort		      1
 	    }
@@ -3945,6 +3994,66 @@ Model {
 	  ZOrder		  492
 	  ShowName		  off
 	  Value			  "CONFIG.SMOOTH_DES_Q"
+	}
+	Block {
+	  BlockType		  Scope
+	  Name			  "Scope"
+	  SID			  "4611"
+	  Ports			  [1]
+	  Position		  [2580, 2784, 2610, 2816]
+	  ZOrder		  720
+	  Floating		  off
+	  Location		  [475, 269, 799, 452]
+	  Open			  off
+	  NumInputPorts		  "1"
+	  List {
+	    ListType		    AxesTitles
+	    axes1		    "%<SignalLabel>"
+	  }
+	  List {
+	    ListType		    ScopeGraphics
+	    FigureColor		    "[0.5 0.5 0.5]"
+	    AxesColor		    "[0 0 0]"
+	    AxesTickColor	    "[1 1 1]"
+	    LineColors		    "[1 1 0;1 0 1;0 1 1;1 0 0;0 1 0;0 0 1]"
+	    LineStyles		    "-|-|-|-|-|-"
+	    LineWidths		    "[0.5 0.5 0.5 0.5 0.5 0.5]"
+	    MarkerStyles	    "none|none|none|none|none|none"
+	  }
+	  ShowLegends		  off
+	  SaveName		  "ScopeData5"
+	  DataFormat		  "StructureWithTime"
+	  SampleTime		  "0"
+	}
+	Block {
+	  BlockType		  Scope
+	  Name			  "Scope1"
+	  SID			  "4613"
+	  Ports			  [1]
+	  Position		  [2475, 2299, 2505, 2331]
+	  ZOrder		  722
+	  Floating		  off
+	  Location		  [66, 53, 1921, 1079]
+	  Open			  off
+	  NumInputPorts		  "1"
+	  List {
+	    ListType		    AxesTitles
+	    axes1		    "%<SignalLabel>"
+	  }
+	  List {
+	    ListType		    ScopeGraphics
+	    FigureColor		    "[0.5 0.5 0.5]"
+	    AxesColor		    "[0 0 0]"
+	    AxesTickColor	    "[1 1 1]"
+	    LineColors		    "[1 1 0;1 0 1;0 1 1;1 0 0;0 1 0;0 0 1]"
+	    LineStyles		    "-|-|-|-|-|-"
+	    LineWidths		    "[0.5 0.5 0.5 0.5 0.5 0.5]"
+	    MarkerStyles	    "none|none|none|none|none|none"
+	  }
+	  ShowLegends		  off
+	  SaveName		  "ScopeData6"
+	  DataFormat		  "StructureWithTime"
+	  SampleTime		  "0"
 	}
 	Block {
 	  BlockType		  SubSystem
@@ -25578,8 +25687,16 @@ Model {
 	Line {
 	  SrcBlock		  "Reshape"
 	  SrcPort		  1
-	  DstBlock		  "desired_x_dx_ddx_CoM"
-	  DstPort		  1
+	  Points		  [29, 0]
+	  Branch {
+	    Points		    [0, -150]
+	    DstBlock		    "Scope1"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "desired_x_dx_ddx_CoM"
+	    DstPort		    1
+	  }
 	}
 	Line {
 	  SrcBlock		  "Read qDes_impednces"
@@ -25604,14 +25721,30 @@ Model {
 	Line {
 	  SrcBlock		  "SMOOTH_DES_COM2"
 	  SrcPort		  1
-	  DstBlock		  "Switch5"
-	  DstPort		  2
+	  Points		  [37, 0]
+	  Branch {
+	    Points		    [0, -55]
+	    DstBlock		    "Display"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "Switch5"
+	    DstPort		    2
+	  }
 	}
 	Line {
 	  SrcBlock		  "Switch5"
 	  SrcPort		  1
-	  DstBlock		  "qDes"
-	  DstPort		  1
+	  Points		  [19, 0]
+	  Branch {
+	    Points		    [0, 53; 104, 0; 0, 177]
+	    DstBlock		    "Scope"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "qDes"
+	    DstPort		    1
+	  }
 	}
 	Line {
 	  SrcBlock		  "Constant"
@@ -26308,8 +26441,8 @@ Model {
       MaskHideContents	      off
       System {
 	Name			"Dump and visualize"
-	Location		[164, 103, 2019, 1131]
-	Open			off
+	Location		[882, 211, 2815, 1239]
+	Open			on
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -29100,8 +29233,8 @@ Model {
       MaskHideContents	      off
       System {
 	Name			"controller_QP"
-	Location		[65, 24, 1920, 1080]
-	Open			on
+	Location		[840, 61, 2773, 1089]
+	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -29112,7 +29245,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"100"
+	ZoomFactor		"60"
 	Block {
 	  BlockType		  Inport
 	  Name			  "impedances"
@@ -37199,7 +37332,7 @@ Stateflow {
     name		    "torqueBalancing2012b"
     created		    "18-Feb-2014 10:14:40"
     isLibrary		    0
-    firstTarget		    525
+    firstTarget		    526
     sfVersion		    76014001.0015
   }
   chart {
@@ -46636,10 +46769,7 @@ Stateflow {
     firstTransition	    500
     firstJunction	    499
     viewObj		    489
-    visible		    1
     machine		    1
-    subviewS {
-    }
     ssIdHighWaterMark	    15
     decomposition	    CLUSTER_CHART
     type		    EML_CHART
@@ -47151,11 +47281,14 @@ Stateflow {
     viewLimits		    [0 156.75 0 153.75]
     screen		    [1 1 1280 1024 1.041050272174191]
     treeNode		    [0 516 0 0]
-    firstTransition	    523
-    firstJunction	    522
+    firstTransition	    524
+    firstJunction	    523
     viewObj		    515
+    visible		    1
     machine		    1
-    ssIdHighWaterMark	    14
+    subviewS {
+    }
+    ssIdHighWaterMark	    15
     decomposition	    CLUSTER_CHART
     type		    EML_CHART
     firstData		    517
@@ -47179,8 +47312,9 @@ Stateflow {
     decomposition	    CLUSTER_STATE
     eml {
       isEML		      1
-      script		      "function qdes  = fcn(t,t_switch,sitting_joint,final_joint)\n%#codegen\n\n    if(t<=t_switch)\n   "
-      "     qdes = sitting_joint;\n    else\n        qdes   =final_joint;\n    end\n     \nend"
+      script		      "function qdes  = fcn(t,t_switch,starting_joint,sitting_joint,final_joint)\n%#codegen\n    if(t =="
+      " 0)\n        qdes = starting_joint;\n    elseif(t > 0 && t<=t_switch)\n        qdes = sitting_joint;\n    else\n"
+      "        qdes =final_joint;\n    end\n     \nend"
       editorLayout	      "100 M4x1[10 5 700 500]"
     }
   }
@@ -47230,9 +47364,31 @@ Stateflow {
   }
   data {
     id			    519
+    ssIdNumber		    15
+    name		    "starting_joint"
+    linkNode		    [515 518 520]
+    scope		    INPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+	isSigned		1
+	wordLength		"16"
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_INHERITED
+    }
+    dataType		    "Inherit: Same as Simulink"
+  }
+  data {
+    id			    520
     ssIdNumber		    8
     name		    "qdes"
-    linkNode		    [515 518 520]
+    linkNode		    [515 519 521]
     scope		    OUTPUT_DATA
     machine		    1
     props {
@@ -47251,10 +47407,10 @@ Stateflow {
     dataType		    "Inherit: Same as Simulink"
   }
   data {
-    id			    520
+    id			    521
     ssIdNumber		    11
     name		    "sitting_joint"
-    linkNode		    [515 519 521]
+    linkNode		    [515 520 522]
     scope		    INPUT_DATA
     machine		    1
     props {
@@ -47273,10 +47429,10 @@ Stateflow {
     dataType		    "Inherit: Same as Simulink"
   }
   data {
-    id			    521
+    id			    522
     ssIdNumber		    12
     name		    "final_joint"
-    linkNode		    [515 520 0]
+    linkNode		    [515 521 0]
     scope		    INPUT_DATA
     machine		    1
     props {
@@ -47295,7 +47451,7 @@ Stateflow {
     dataType		    "Inherit: Same as Simulink"
   }
   junction {
-    id			    522
+    id			    523
     position		    [23.5747 49.5747 7]
     chart		    515
     linkNode		    [515 0 0]
@@ -47304,7 +47460,7 @@ Stateflow {
     type		    CONNECTIVE_JUNCTION
   }
   transition {
-    id			    523
+    id			    524
     labelString		    "{eML_blk_kernel();}"
     labelPosition	    [32.125 19.875 102.544 14.964]
     fontSize		    12
@@ -47312,7 +47468,7 @@ Stateflow {
       intersection	      [0 0 1 0 23.5747 14.625 0 0]
     }
     dst {
-      id		      522
+      id		      523
       intersection	      [1 0 -1 0 23.5747 42.5747 0 0]
     }
     midPoint		    [23.5747 24.9468]
@@ -47328,22 +47484,22 @@ Stateflow {
     ssIdNumber		    2
   }
   instance {
-    id			    524
+    id			    525
     name		    "DesValues/Internal coordinator/refGen/joint reference "
     machine		    1
     chart		    515
   }
   target {
-    id			    525
+    id			    526
     name		    "sfun"
     codeFlags		    ""
     machine		    1
-    linkNode		    [1 0 526]
+    linkNode		    [1 0 527]
   }
   target {
-    id			    526
+    id			    527
     name		    "rtw"
     machine		    1
-    linkNode		    [1 525 0]
+    linkNode		    [1 526 0]
   }
 }

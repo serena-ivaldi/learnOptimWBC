@@ -123,6 +123,7 @@ params.footSizeForOpitmization = [-0.07  0.12 ;    % xMin, xMax
     % if this parameter is true we fix the desired com value(the com value is specify inside the trajectory block in the simulink)
     % if this parameter if false we optimize the com trajectory even when the robt is sitting on the bench the bench
     params.fixedcombench = false;
+    params.final_com     = [0.0167667444901888,-0.0681008604452745,0.503988037442802];
 
 %%  REFERENCE PARAMETERS
 
@@ -197,11 +198,11 @@ switch CONTROLLERTYPE
         end
         constraints_type = ones(1,length(constraints_values)); % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
         %% to activate or disactive the constraints
-        activate_constraints_handling = false;
+        activate_constraints_handling = true;
         %% INSTANCE PARAMETER
         preprocessing = @EmptyPreprocessing;
         run_function = @RobotExperiment;
-        fitness = @fitnessHumanoidsIcubStandUpSearchFreeSolutionSimulink;
+        fitness = @fitnessHumanoidsIcubStandUpOptSolutionSimulink;
         clean_function = @RobotExperimentCleanData;
         
         input{1} = simulator_type{1};  % rbt / v-rep
@@ -214,11 +215,8 @@ switch CONTROLLERTYPE
         %--- Starting value of parameters
         generation_of_starting_point = 'test'; % 'test':user defined by user_defined_start_action 'given':is redundant with test  'random': random starting point
         %init_parameters = 6;
-       
-       %user_defined_start_action =  [0.913076139695994,0.905282671038423,1.16925695886780,1.99897101764829,1.71346167883188,...
-       %                             -0.0252589378181975,-0.00171875837190067,0.0130805429422483,-0.0141668463935478,-0.0608148916683415,...
-       %                              0.468857336154740,0.433709756339607,0.442003448052191,0.482619376729153,0.360000000000000]; 
-     user_defined_start_action =    [0.1,0.15,0.15,0.3,1,...
+      
+        user_defined_start_action =    [0.1,0.15,0.15,0.3,1,...
                                     -0.0306437352589393,-0.010000000000000,0.010940985892679,-0.00159221673089966,-0.0169686741764310,...
                                      0.359414698727300,0.360933321397227,0.362798307585171,0.461495244682503,0.370968566841002]; 
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
@@ -228,7 +226,7 @@ switch CONTROLLERTYPE
         cmaes_value_range{2} = [ 2, 2, 2, 2, 2,  0.016,0.016,0.016,0.016,0.016, 0.50,0.50,0.50,0.50,0.50];  % upper bound that define the search space
         learn_approach = '(1+1)CMAES'; %CMAES (1+1)CMAES
         %--- Parameter for constraints method
-        method_to_use = 'nopenalty';  % adaptive , vanilla , empty
+        method_to_use = 'nopenalty';  % adaptive , vanilla , empty 'nopenalty'
         epsilon = 0.001*ones(1,length(constraints_functions)); %vector with a number of value related to the number of constraints (used only with Aaptive constraints)
         %% FITNESS PARAMETERS
         

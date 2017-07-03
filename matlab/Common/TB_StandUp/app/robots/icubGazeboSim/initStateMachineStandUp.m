@@ -3,7 +3,7 @@ if strcmpi(SM.SM_TYPE, 'STANDUP')
     
     CONFIG.SMOOTH_DES_COM      = 1;    % If equal to one, the desired streamed values 
                                        % of the center of mass are smoothed internally 
-    CONFIG.SMOOTH_DES_Q        = 1;    % If equal to one, the desired streamed values 
+    CONFIG.SMOOTH_DES_Q        = 0;    % If equal to one, the desired streamed values 
                                        % of the postural tasks are smoothed internally    
   
      %% State parameters

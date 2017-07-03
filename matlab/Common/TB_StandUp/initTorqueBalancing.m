@@ -25,6 +25,11 @@
 % and set the environmental variable YARP_ROBOT_NAME = icubGazeboSim.
 % To do this, you can uncomment the 
 
+
+%% for stand alone execution remove comment on this line
+%load('inputData.mat')
+
+
 % setenv('YARP_ROBOT_NAME','iCubGenova01');
 % setenv('YARP_ROBOT_NAME','iCubGenova02');
 %setenv('YARP_ROBOT_NAME','iCubGenova04');
@@ -179,7 +184,7 @@ elseif strcmpi(SM.SM_TYPE, 'STANDUP')
     robotSpecificFSM        = fullfile('app/robots',getenv('YARP_ROBOT_NAME'),'initStateMachineStandUp.m');
     run(robotSpecificFSM);
 end
-
+gain.impedances
 %% Contact constraints: legs and feet
 % feet constraints
 [ConstraintsMatrixFeet,bVectorConstraintsFeet] = constraints(forceFrictionCoefficient,numberOfPoints,torsionalFrictionCoefficient,gain.footSize,fZmin);

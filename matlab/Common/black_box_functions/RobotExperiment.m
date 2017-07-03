@@ -45,13 +45,20 @@ elseif (strcmp(simulator,'icub_matlab'))
     toc
     %toc(controller.current_time) for debugging the time deadline
 elseif (strcmp(simulator,'icub_matlab_sim'))
+    fail_flag = true;
     controller = obj.input_4_run{4}; % structure that contains every information about the specific instance of the problem
     params     = obj.input_4_run{2};
     %% current_parameter_set is used in InitRefGen to test the new trajectory
     controller.UpdateParameters(parameters)
     
     tic
-    [t, q, qd]=DynSim_iCubSim(controller,params);
+    while(fail_flag)
+        [t, q, qd,fail_flag]=DynSim_iCubSim(controller,params);
+        if(fail_flag)
+            %% DEBUG
+            disp('repeating the experiment in robotExperiment.m');
+        end
+    end
     toc
 end
 

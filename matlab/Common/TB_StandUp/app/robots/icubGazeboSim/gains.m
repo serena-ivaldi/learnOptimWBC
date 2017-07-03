@@ -8,10 +8,10 @@ PORTS.LEFT_ARM         = '/wholeBodyDynamicsTree/right_arm/endEffectorWrench:o';
 
 CONFIG.LEFT_RIGHT_FOOT_IN_CONTACT = [1 1];
 
-CONFIG.SMOOTH_DES_COM      = 1;    % If equal to one, the desired streamed values 
+CONFIG.SMOOTH_DES_COM      = 0;    % If equal to one, the desired streamed values 
                                    % of the center of mass are smoothed internally 
 
-CONFIG.SMOOTH_DES_Q        = 0;    % If equal to one, the desired streamed values 
+CONFIG.SMOOTH_DES_Q        = 1;    % If equal to one, the desired streamed values 
                                    % of the postural tasks are smoothed internally 
 
 WBT_wbiList   = 'ROBOT_TORQUE_CONTROL_JOINTS_WITHOUT_PRONOSUP';
@@ -20,7 +20,7 @@ WBT_robotName = 'icubSim';
 dump.left_wrench_port  = '/icubSim/left_foot/analog:o';
 dump.right_wrench_port = '/icubSim/right_foot/analog:o';
 
-references.smoothingTimeMinJerkComDesQDes = 3.0;
+references.smoothingTimeMinJerkComDesQDes = 2.5;    %3;
 sat.torque = 34;
 
 CONFIG.smoothingTimeTranDynamics = 0.05;
@@ -85,7 +85,7 @@ if (sum(CONFIG.LEFT_RIGHT_FOOT_IN_CONTACT) == 1)
     
     scalingImp          = 1.5;
     
-    impTorso            = [20   20   30
+    impTorso            = [20   20   30                     % originally 20;
                             0    0    0]*scalingImp; 
     impArms             = [15   15    15    8   
                             0    0     0    0    ]*scalingImp;
