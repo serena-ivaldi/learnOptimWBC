@@ -1,0 +1,3153 @@
+<sdf version='1.6'>
+  <world name='default'>
+    <light name='sun' type='directional'>
+      <cast_shadows>1</cast_shadows>
+      <pose frame=''>0 0 10 0 -0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.5 -1</direction>
+    </light>
+    <model name='ground_plane'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>50</mu2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+    </model>
+    <gravity>0 0 -9.8</gravity>
+    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+    <atmosphere type='adiabatic'/>
+    <physics name='default_physics' default='0' type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>1</shadows>
+    </scene>
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <latitude_deg>0</latitude_deg>
+      <longitude_deg>0</longitude_deg>
+      <elevation>0</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+    <model name='chair'>
+      <link name='low_part'>
+        <pose frame=''>0 0 0.18 0 -0 0</pose>
+        <inertial>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <collision name='collision_low'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.05 0.75 0.025</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual_low'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.05 0.75 0.025</size>
+            </box>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='high_part'>
+        <pose frame=''>0 0 0.205 0 -0 0</pose>
+        <inertial>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <collision name='collision_high'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.05 0.75 0.025</size>
+            </box>
+          </geometry>
+          <max_contacts>4</max_contacts>
+          <surface>
+            <contact>
+              <ode>
+                <soft_erp>0.2</soft_erp>
+                <soft_cfm>0</soft_cfm>
+                <kp>1.8e+06</kp>
+                <kd>100</kd>
+                <max_vel>100</max_vel>
+                <min_depth>0.0001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0</slip1>
+                <slip2>0</slip2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce>
+              <restitution_coefficient>0</restitution_coefficient>
+              <threshold>100000</threshold>
+            </bounce>
+          </surface>
+        </collision>
+        <visual name='visual_high'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <material>
+            <script>
+              <name>Gazebo/Blue</name>
+              <uri>__default__</uri>
+            </script>
+          </material>
+          <geometry>
+            <box>
+              <size>0.05 0.75 0.025</size>
+            </box>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='sensor_joint' type='fixed'>
+        <parent>low_part</parent>
+        <child>high_part</child>
+        <axis>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+          </limit>
+          <xyz>0 0 0</xyz>
+          <use_parent_model_frame>0</use_parent_model_frame>
+        </axis>
+        <sensor name='chair_ft_sensor' type='force_torque'>
+          <force_torque>
+            <frame>child</frame>
+            <measure_direction>parent_to_child</measure_direction>
+          </force_torque>
+          <always_on>1</always_on>
+          <visualize>1</visualize>
+          <update_rate>100</update_rate>
+          <plugin name='chair_FT_plugin' filename='libgazebo_yarp_forcetorque.so'>
+            <yarpConfigurationFile>model://chair/chair_gazebo_torque.ini</yarpConfigurationFile>
+          </plugin>
+        </sensor>
+      </joint>
+      <joint name='fixed to ground' type='fixed'>
+        <parent>world</parent>
+        <child>low_part</child>
+        <axis>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+          </limit>
+          <xyz>0 0 0.18</xyz>
+          <use_parent_model_frame>0</use_parent_model_frame>
+        </axis>
+      </joint>
+      <pose frame=''>0.104027 -0.081985 0 0 -0 0</pose>
+    </model>
+    <model name='iCub'>
+      <pose frame=''>0.011988 -0.025171 0.371948 0.001609 0.562421 -3.109875</pose>
+      <link name='root_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>4.72</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.01</iyy>
+            <iyz>0</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='root_link_collision'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_root_link.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='root_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_root_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='l_hip_1'>
+        <pose frame=''>0 -0.0681 -0.1199 3e-06 1.57079 3.14159</pose>
+        <inertial>
+          <pose frame=''>0 -0.0782 0 0 -0 0</pose>
+          <mass>0.754</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>2.059e-06</ixy>
+            <ixz>1.451e-06</ixz>
+            <iyy>0.01</iyy>
+            <iyz>1.545e-06</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_hip_1_collision'>
+          <pose frame=''>0 0 0 -0.785403 1.57079 -2.35619</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_l_hip_1.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='l_hip_1_visual'>
+          <pose frame=''>0 0 0 -0.785403 1.57079 -2.35619</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_l_hip_1.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_hip_pitch' type='revolute'>
+        <child>l_hip_1</child>
+        <parent>root_link</parent>
+        <axis>
+          <xyz>3e-06 1 0</xyz>
+          <limit>
+            <lower>-0.767945</lower>
+            <upper>2.30383</upper>
+            <effort>84</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='l_hip_2'>
+        <pose frame=''>0 -0.0681 -0.1199 3.14159 -7e-06 3.14159</pose>
+        <inertial>
+          <pose frame=''>0 0 0.03045 0 -0 0</pose>
+          <mass>0.526</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>-7.4e-08</ixy>
+            <ixz>1.0835e-05</ixz>
+            <iyy>0.01</iyy>
+            <iyz>-6.2e-08</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_hip_2_collision'>
+          <pose frame=''>0 0 0 0.785363 -1.57079 2.35623</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_l_hip_2.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='l_hip_2_visual'>
+          <pose frame=''>0 0 0 0.785363 -1.57079 2.35623</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_l_hip_2.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_hip_roll' type='revolute'>
+        <child>l_hip_2</child>
+        <parent>l_hip_1</parent>
+        <axis>
+          <xyz>-1 3e-06 7e-06</xyz>
+          <limit>
+            <lower>-0.296706</lower>
+            <upper>2.07694</upper>
+            <effort>84</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='l_hip_3'>
+        <pose frame=''>-0 -0.0681 -0.1864 3.14159 -7e-06 3.14159</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.1</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.01</iyy>
+            <iyz>0</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_leg_ft_sensor' type='revolute'>
+        <child>l_hip_3</child>
+        <parent>l_hip_2</parent>
+        <axis>
+          <xyz>0 0 0</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+        <sensor name='left_leg_ft' type='force_torque'>
+          <always_on>1</always_on>
+          <update_rate>100</update_rate>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <plugin name='left_leg_ft_plugin' filename='libgazebo_yarp_forcetorque.so'>
+            <yarpConfigurationFile>model://icub/conf/FT/gazebo_icub_left_leg_ft.ini</yarpConfigurationFile>
+          </plugin>
+        </sensor>
+      </joint>
+      <link name='l_upper_leg'>
+        <pose frame=''>0 -0.0681 -0.1199 1.57079 -7e-06 3.14159</pose>
+        <inertial>
+          <pose frame=''>0.00144 -0.15943 -0.00039 0 -0 0</pose>
+          <mass>2.175</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>-6.726e-05</ixy>
+            <ixz>2.267e-06</ixz>
+            <iyy>0.01</iyy>
+            <iyz>3.63726e-05</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_upper_leg_collision'>
+          <pose frame=''>0 0 0 -2.67797 1.57079 -1.10716</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_l_thigh.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>4</max_contacts>
+          <surface>
+            <contact>
+              <ode>
+                <soft_erp>0.2</soft_erp>
+                <soft_cfm>0</soft_cfm>
+                <kp>1.8e+07</kp>
+                <kd>100</kd>
+                <max_vel>100</max_vel>
+                <min_depth>0.0001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0</slip1>
+                <slip2>0</slip2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce>
+              <restitution_coefficient>0</restitution_coefficient>
+              <threshold>100000</threshold>
+            </bounce>
+          </surface>
+        </collision>
+        <visual name='l_upper_leg_visual'>
+          <pose frame=''>0 0 0 -2.67797 1.57079 -1.10716</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_l_thigh.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_hip_yaw' type='revolute'>
+        <child>l_upper_leg</child>
+        <parent>l_hip_3</parent>
+        <axis>
+          <xyz>7e-06 -6e-06 1</xyz>
+          <limit>
+            <lower>-1.37881</lower>
+            <upper>1.37881</upper>
+            <effort>40</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='l_lower_leg'>
+        <pose frame=''>-2e-06 -0.068099 -0.3435 2.09198 -1.57078 -0.521189</pose>
+        <inertial>
+          <pose frame=''>-0.1071 0.00182 0.00211 0 -0 0</pose>
+          <mass>1.264</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>-0.000185699</ixy>
+            <ixz>-6.3147e-05</ixz>
+            <iyy>0.01</iyy>
+            <iyz>7.86e-07</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_lower_leg_collision'>
+          <pose frame=''>0 0 0 -3.14159 -0 1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_l_shank.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='l_lower_leg_visual'>
+          <pose frame=''>0 0 0 -3.14159 -0 1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_l_shank.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_knee' type='revolute'>
+        <child>l_lower_leg</child>
+        <parent>l_upper_leg</parent>
+        <axis>
+          <xyz>5e-06 1 6e-06</xyz>
+          <limit>
+            <lower>-2.18166</lower>
+            <upper>0.401426</upper>
+            <effort>30</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='l_ankle_1'>
+        <pose frame=''>-4e-06 -0.068097 -0.5565 0.52118 -1.57078 -0.521189</pose>
+        <inertial>
+          <pose frame=''>-0.0054 0.00163 0.0172 0 -0 0</pose>
+          <mass>0.746</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>-7.081e-06</ixy>
+            <ixz>4.1421e-05</ixz>
+            <iyy>0.01</iyy>
+            <iyz>2.0817e-05</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_ankle_1_collision'>
+          <pose frame=''>0 -0 0 1.5708 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_l_ankle_1.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='l_ankle_1_visual'>
+          <pose frame=''>0 -0 0 1.5708 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_l_ankle_1.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_ankle_pitch' type='revolute'>
+        <child>l_ankle_1</child>
+        <parent>l_lower_leg</parent>
+        <axis>
+          <xyz>-9e-06 -1 -6e-06</xyz>
+          <limit>
+            <lower>-0.733038</lower>
+            <upper>0.366519</upper>
+            <effort>24</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='l_ankle_2'>
+        <pose frame=''>-4e-06 -0.068097 -0.5565 3.14159 -7e-06 3.14158</pose>
+        <inertial>
+          <pose frame=''>0 0 0.037 0 -0 0</pose>
+          <mass>0.2675</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.01</iyy>
+            <iyz>0</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_ankle_roll' type='revolute'>
+        <child>l_ankle_2</child>
+        <parent>l_ankle_1</parent>
+        <axis>
+          <xyz>-1 9e-06 7e-06</xyz>
+          <limit>
+            <lower>-0.418879</lower>
+            <upper>0.418879</upper>
+            <effort>11</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='l_foot'>
+        <pose frame=''>-4e-06 -0.068097 -0.5935 3.14159 -7e-06 3.14158</pose>
+        <inertial>
+          <pose frame=''>0.024069 -0.000614 -0.028415 0 -0 0</pose>
+          <mass>0.5935</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>-4.51893e-06</ixy>
+            <ixz>0.000567785</ixz>
+            <iyy>0.01</iyy>
+            <iyz>-6.62361e-07</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_foot_collision'>
+          <pose frame=''>0.03 0 -0.01 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.15 0.07 0.03</size>
+            </box>
+          </geometry>
+          <max_contacts>4</max_contacts>
+          <surface>
+            <contact>
+              <ode>
+                <soft_erp>0.2</soft_erp>
+                <soft_cfm>0</soft_cfm>
+                <kp>1.8e+07</kp>
+                <kd>100</kd>
+                <max_vel>100</max_vel>
+                <min_depth>0.0001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0</slip1>
+                <slip2>0</slip2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce>
+              <restitution_coefficient>0</restitution_coefficient>
+              <threshold>100000</threshold>
+            </bounce>
+          </surface>
+        </collision>
+        <visual name='l_foot_visual'>
+          <pose frame=''>0 -0 -0.037 -0.785403 1.57079 -0.785403</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_l_foot.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_foot_ft_sensor' type='revolute'>
+        <child>l_foot</child>
+        <parent>l_ankle_2</parent>
+        <axis>
+          <xyz>0 0 0</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+        <sensor name='left_foot_ft' type='force_torque'>
+          <always_on>1</always_on>
+          <update_rate>100</update_rate>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <plugin name='left_foot_ft_plugin' filename='libgazebo_yarp_forcetorque.so'>
+            <yarpConfigurationFile>model://icub/conf/FT/gazebo_icub_left_foot_ft.ini</yarpConfigurationFile>
+          </plugin>
+        </sensor>
+      </joint>
+      <link name='r_hip_1'>
+        <pose frame=''>0 0.0681 -0.1199 3.14159 1.57079 -3.14159</pose>
+        <inertial>
+          <pose frame=''>0 -0.0782 0 0 -0 0</pose>
+          <mass>0.754</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.01</iyy>
+            <iyz>0</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_hip_1_collision'>
+          <pose frame=''>0 0 0 1.76819 -1.57079 2.76109</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_r_hip_1.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='r_hip_1_visual'>
+          <pose frame=''>0 0 0 1.76819 -1.57079 2.76109</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_r_hip_1.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_hip_pitch' type='revolute'>
+        <child>r_hip_1</child>
+        <parent>root_link</parent>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-0.767945</lower>
+            <upper>2.30383</upper>
+            <effort>84</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='r_hip_2'>
+        <pose frame=''>0 0.0681 -0.1199 -3.14159 -7e-06 -3.14159</pose>
+        <inertial>
+          <pose frame=''>0 0 0.03045 0 -0 0</pose>
+          <mass>0.526</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.01</iyy>
+            <iyz>0</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_hip_2_collision'>
+          <pose frame=''>0 0 0 -2.35627 -1.57079 2.35627</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_r_hip_2.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='r_hip_2_visual'>
+          <pose frame=''>0 0 0 -2.35627 -1.57079 2.35627</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_r_hip_2.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_hip_roll' type='revolute'>
+        <child>r_hip_2</child>
+        <parent>r_hip_1</parent>
+        <axis>
+          <xyz>1 0 -7e-06</xyz>
+          <limit>
+            <lower>-0.296706</lower>
+            <upper>2.07694</upper>
+            <effort>84</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='r_hip_3'>
+        <pose frame=''>-0 0.0681 -0.1864 -3.14159 -7e-06 -3.14159</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.1</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.01</iyy>
+            <iyz>0</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_leg_ft_sensor' type='revolute'>
+        <child>r_hip_3</child>
+        <parent>r_hip_2</parent>
+        <axis>
+          <xyz>0 0 0</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+        <sensor name='right_leg_ft' type='force_torque'>
+          <always_on>1</always_on>
+          <update_rate>100</update_rate>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <plugin name='right_leg_ft_plugin' filename='libgazebo_yarp_forcetorque.so'>
+            <yarpConfigurationFile>model://icub/conf/FT/gazebo_icub_right_leg_ft.ini</yarpConfigurationFile>
+          </plugin>
+        </sensor>
+      </joint>
+      <link name='r_upper_leg'>
+        <pose frame=''>0 0.0681 -0.1199 1.57079 -7e-06 3.14159</pose>
+        <inertial>
+          <pose frame=''>0.00144 -0.15943 0.00039 0 -0 0</pose>
+          <mass>2.175</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.01</iyy>
+            <iyz>-2.71051e-20</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_upper_leg_collision'>
+          <pose frame=''>0 0 0 1.57087 -1.57079 -7.3e-05</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_r_thigh.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>4</max_contacts>
+          <surface>
+            <contact>
+              <ode>
+                <soft_erp>0.2</soft_erp>
+                <soft_cfm>0</soft_cfm>
+                <kp>1.8e+07</kp>
+                <kd>100</kd>
+                <max_vel>100</max_vel>
+                <min_depth>0.0001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0</slip1>
+                <slip2>0</slip2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce>
+              <restitution_coefficient>0</restitution_coefficient>
+              <threshold>100000</threshold>
+            </bounce>
+          </surface>
+        </collision>
+        <visual name='r_upper_leg_visual'>
+          <pose frame=''>0 0 0 1.57087 -1.57079 -7.3e-05</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_r_thigh.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_hip_yaw' type='revolute'>
+        <child>r_upper_leg</child>
+        <parent>r_hip_3</parent>
+        <axis>
+          <xyz>-7e-06 4e-06 -1</xyz>
+          <limit>
+            <lower>-1.37881</lower>
+            <upper>1.37881</upper>
+            <effort>40</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='r_lower_leg'>
+        <pose frame=''>-2e-06 0.068101 -0.3435 1.89254 -1.57078 -0.321751</pose>
+        <inertial>
+          <pose frame=''>-0.1071 0.00182 -0.00211 0 -0 0</pose>
+          <mass>1.264</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>5.42101e-20</ixy>
+            <ixz>-5.42101e-20</ixz>
+            <iyy>0.01</iyy>
+            <iyz>8.47033e-22</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_lower_leg_collision'>
+          <pose frame=''>0 0 -0 3.14159 -0 1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_r_shank.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='r_lower_leg_visual'>
+          <pose frame=''>0 0 -0 3.14159 -0 1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_r_shank.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_knee' type='revolute'>
+        <child>r_lower_leg</child>
+        <parent>r_upper_leg</parent>
+        <axis>
+          <xyz>3e-06 1 4e-06</xyz>
+          <limit>
+            <lower>-2.18166</lower>
+            <upper>0.401426</upper>
+            <effort>30</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='r_ankle_1'>
+        <pose frame=''>-4e-06 0.068102 -0.5565 -2.81984 -1.57078 -0.321751</pose>
+        <inertial>
+          <pose frame=''>-0.0054 0.00163 -0.0172 0 -0 0</pose>
+          <mass>0.746</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>-1.69407e-21</ixy>
+            <ixz>1.35525e-20</ixz>
+            <iyy>0.01</iyy>
+            <iyz>3.38813e-21</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_ankle_1_collision'>
+          <pose frame=''>0 -0 -0 -1.5708 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_r_ankle_1.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='r_ankle_1_visual'>
+          <pose frame=''>0 -0 -0 -1.5708 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_r_ankle_1.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_ankle_pitch' type='revolute'>
+        <child>r_ankle_1</child>
+        <parent>r_lower_leg</parent>
+        <axis>
+          <xyz>1e-06 -1 -4e-06</xyz>
+          <limit>
+            <lower>-0.733038</lower>
+            <upper>0.366519</upper>
+            <effort>24</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='r_ankle_2'>
+        <pose frame=''>-4e-06 0.068102 -0.5565 3.14159 -1.4e-05 -3.14159</pose>
+        <inertial>
+          <pose frame=''>0 0 0.037 0 -0 0</pose>
+          <mass>0.2675</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.01</iyy>
+            <iyz>0</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_ankle_roll' type='revolute'>
+        <child>r_ankle_2</child>
+        <parent>r_ankle_1</parent>
+        <axis>
+          <xyz>1 3e-06 -1.4e-05</xyz>
+          <limit>
+            <lower>-0.418879</lower>
+            <upper>0.418879</upper>
+            <effort>11</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='r_foot'>
+        <pose frame=''>-5e-06 0.068102 -0.5935 3.14159 -1.4e-05 -3.14159</pose>
+        <inertial>
+          <pose frame=''>0.024069 0.000614 -0.028415 0 -0 0</pose>
+          <mass>0.5935</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>4.51893e-06</ixy>
+            <ixz>0.000567784</ixz>
+            <iyy>0.01</iyy>
+            <iyz>6.62535e-07</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_foot_collision'>
+          <pose frame=''>0.03 0 -0.01 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.15 0.07 0.03</size>
+            </box>
+          </geometry>
+          <max_contacts>4</max_contacts>
+          <surface>
+            <contact>
+              <ode>
+                <soft_erp>0.2</soft_erp>
+                <soft_cfm>0</soft_cfm>
+                <kp>1.8e+07</kp>
+                <kd>100</kd>
+                <max_vel>100</max_vel>
+                <min_depth>0.0001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0</slip1>
+                <slip2>0</slip2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce>
+              <restitution_coefficient>0</restitution_coefficient>
+              <threshold>100000</threshold>
+            </bounce>
+          </surface>
+        </collision>
+        <visual name='r_foot_visual'>
+          <pose frame=''>0 0 -0.037 -2.81983 1.57079 0.321763</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_r_foot.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_foot_ft_sensor' type='revolute'>
+        <child>r_foot</child>
+        <parent>r_ankle_2</parent>
+        <axis>
+          <xyz>0 0 0</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+        <sensor name='right_foot_ft' type='force_torque'>
+          <always_on>1</always_on>
+          <update_rate>100</update_rate>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <plugin name='right_foot_ft_plugin' filename='libgazebo_yarp_forcetorque.so'>
+            <yarpConfigurationFile>model://icub/conf/FT/gazebo_icub_right_foot_ft.ini</yarpConfigurationFile>
+          </plugin>
+        </sensor>
+      </joint>
+      <link name='torso_1'>
+        <pose frame=''>0 0 0 3.14159 -1.57079 -3e-06</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.1</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>-4.263e-05</ixy>
+            <ixz>-3.889e-08</ixz>
+            <iyy>0.01</iyy>
+            <iyz>0</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='torso_1_collision'>
+          <pose frame=''>0 0 0 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_lap_belt_1.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='torso_1_visual'>
+          <pose frame=''>0 0 0 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_lap_belt_1.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='torso_pitch' type='revolute'>
+        <child>torso_1</child>
+        <parent>root_link</parent>
+        <axis>
+          <xyz>-3e-06 -1 0</xyz>
+          <limit>
+            <lower>-0.383972</lower>
+            <upper>1.46608</upper>
+            <effort>36</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='torso_2'>
+        <pose frame=''>0 -0 0.032 -3.14159 4e-06 1.57079</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.1</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>-1.923e-06</ixy>
+            <ixz>5.095e-05</ixz>
+            <iyy>0.01</iyy>
+            <iyz>-3.849e-07</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='torso_roll' type='revolute'>
+        <child>torso_2</child>
+        <parent>torso_1</parent>
+        <axis>
+          <xyz>1 -3e-06 -7e-06</xyz>
+          <limit>
+            <lower>-0.680678</lower>
+            <upper>0.680678</upper>
+            <effort>80</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='chest'>
+        <pose frame=''>-0.0055 0 0.032 1.5708 -7e-06 -3.14159</pose>
+        <inertial>
+          <pose frame=''>0.002229 0.075 -0 0 -0 0</pose>
+          <mass>4.81</mass>
+          <inertia>
+            <ixx>0.07472</ixx>
+            <ixy>-3.6e-06</ixy>
+            <ixz>-4.705e-05</ixz>
+            <iyy>0.08145</iyy>
+            <iyz>0.004567</iyz>
+            <izz>0.01306</izz>
+          </inertia>
+        </inertial>
+        <collision name='chest_collision'>
+          <pose frame=''>-0.0055 -0 -0 -1.10717 -1.57079 2.67798</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_chest.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='chest_visual'>
+          <pose frame=''>-0.0055 -0 -0 -1.10717 -1.57079 2.67798</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_chest.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='torso_yaw' type='revolute'>
+        <child>chest</child>
+        <parent>torso_2</parent>
+        <axis>
+          <xyz>-7e-06 0 -1</xyz>
+          <limit>
+            <lower>-1.02974</lower>
+            <upper>1.02974</upper>
+            <effort>80</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='l_shoulder_1'>
+        <pose frame=''>-0.010749 -0.11026 0.1753 -0.261794 -1.57079 -1e-06</pose>
+        <inertial>
+          <pose frame=''>-5e-06 0.0187 -0.00119 0 -0 0</pose>
+          <mass>0.189</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>9e-09</ixy>
+            <ixz>0</ixz>
+            <iyy>0.01</iyy>
+            <iyz>-1.7e-08</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_shoulder_1_collision'>
+          <pose frame=''>0 0.109285 -0.005211 -0.301063 1.57079 -1.87186</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_l_shoulder_1.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='l_shoulder_1_visual'>
+          <pose frame=''>0 0.109285 -0.005211 -0.301063 1.57079 -1.87186</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_l_shoulder_1.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_shoulder_pitch' type='revolute'>
+        <child>l_shoulder_1</child>
+        <parent>chest</parent>
+        <axis>
+          <xyz>-0.258815 -0.965927 3e-06</xyz>
+          <limit>
+            <lower>-1.65806</lower>
+            <upper>0.0872665</upper>
+            <effort>84</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='l_shoulder_2'>
+        <pose frame=''>-0.010749 -0.11026 0.1753 3.14159 1e-06 -1.83259</pose>
+        <inertial>
+          <pose frame=''>9.4e-05 -0.00627 0.0166 0 -0 0</pose>
+          <mass>0.179</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>4.66e-07</ixy>
+            <ixz>3.65e-07</ixz>
+            <iyy>0.01</iyy>
+            <iyz>-2.0524e-05</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_shoulder_2_collision'>
+          <pose frame=''>-0.001545 -0.005211 -0 -2.14033 1.57079 -0.569533</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_l_shoulder_2.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='l_shoulder_2_visual'>
+          <pose frame=''>-0.001545 -0.005211 -0 -2.14033 1.57079 -0.569533</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_l_shoulder_2.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_shoulder_roll' type='revolute'>
+        <child>l_shoulder_2</child>
+        <parent>l_shoulder_1</parent>
+        <axis>
+          <xyz>-0.965927 0.258815 7e-06</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>2.80649</upper>
+            <effort>84</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='l_shoulder_3'>
+        <pose frame=''>-0.010749 -0.11026 0.1753 3.14159 -7e-06 -3.14159</pose>
+        <inertial>
+          <pose frame=''>0.005594 9.8e-05 0.050135 0 -0 0</pose>
+          <mass>0.156157</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>-5.662e-08</ixy>
+            <ixz>-4.3618e-06</ixz>
+            <iyy>0.01</iyy>
+            <iyz>-7.42844e-07</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_shoulder_yaw' type='revolute'>
+        <child>l_shoulder_3</child>
+        <parent>l_shoulder_2</parent>
+        <axis>
+          <xyz>-7e-06 3e-06 -1</xyz>
+          <limit>
+            <lower>-0.645772</lower>
+            <upper>1.74533</upper>
+            <effort>34</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='l_upper_arm'>
+        <pose frame=''>-0.025749 -0.11026 0.1073 3.14159 -7e-06 -3.14159</pose>
+        <inertial>
+          <pose frame=''>-0.000156 -9.9e-05 0.0298 0 -0 0</pose>
+          <mass>0.727843</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>-1.08e-06</ixy>
+            <ixz>-2.29e-06</ixz>
+            <iyy>0.01</iyy>
+            <iyz>3.57e-06</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_upper_arm_collision'>
+          <pose frame=''>-0.020433 0.000144 -0.068 0 0 -1.309</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_l_arm.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='l_upper_arm_visual'>
+          <pose frame=''>-0.020433 0.000144 -0.068 0 0 -1.309</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_l_arm.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_arm_ft_sensor' type='revolute'>
+        <child>l_upper_arm</child>
+        <parent>l_shoulder_3</parent>
+        <axis>
+          <xyz>0 0 0</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+        <sensor name='left_arm_ft' type='force_torque'>
+          <always_on>1</always_on>
+          <update_rate>100</update_rate>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <plugin name='left_arm_ft_plugin' filename='libgazebo_yarp_forcetorque.so'>
+            <yarpConfigurationFile>model://icub/conf/FT/gazebo_icub_left_arm_ft.ini</yarpConfigurationFile>
+          </plugin>
+        </sensor>
+      </joint>
+      <link name='l_elbow_1'>
+        <pose frame=''>-0.02575 -0.11026 0.02302 3.14159 -7e-06 -3.14159</pose>
+        <inertial>
+          <pose frame=''>-0.0013 0.00371 -0.00105 0 -0 0</pose>
+          <mass>0.1</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>-5.15e-07</ixy>
+            <ixz>-4.08e-07</ixz>
+            <iyy>0.01</iyy>
+            <iyz>-3.71e-07</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_elbow' type='revolute'>
+        <child>l_elbow_1</child>
+        <parent>l_upper_arm</parent>
+        <axis>
+          <xyz>-1e-06 1 3e-06</xyz>
+          <limit>
+            <lower>0.0959931</lower>
+            <upper>1.85005</upper>
+            <effort>20</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='l_forearm'>
+        <pose frame=''>-0.01075 -0.11026 0.02302 -1.5708 3e-06 -1.57079</pose>
+        <inertial>
+          <pose frame=''>0.000347 0.066 0.00476 0 -0 0</pose>
+          <mass>0.525</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>4.337e-06</ixy>
+            <ixz>2.39e-07</ixz>
+            <iyy>0.01</iyy>
+            <iyz>1.9381e-05</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_forearm_collision'>
+          <pose frame=''>-0.000144 -0 0.020433 -2.66395 1.57079 -1.09315</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_l_forearm.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='l_forearm_visual'>
+          <pose frame=''>-0.000144 -0 0.020433 -2.66395 1.57079 -1.09315</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_l_forearm.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_wrist_prosup' type='revolute'>
+        <child>l_forearm</child>
+        <parent>l_elbow_1</parent>
+        <axis>
+          <xyz>-3e-06 3e-06 -1</xyz>
+          <limit>
+            <lower>-0.872665</lower>
+            <upper>0.872665</upper>
+            <effort>0.45</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='l_wrist_1'>
+        <pose frame=''>-0.01075 -0.110259 -0.11428 -2.7153 1.57079 1.99709</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.1</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.01</iyy>
+            <iyz>0</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_wrist_pitch' type='revolute'>
+        <child>l_wrist_1</child>
+        <parent>l_forearm</parent>
+        <axis>
+          <xyz>1 1e-06 -3e-06</xyz>
+          <limit>
+            <lower>-1.13446</lower>
+            <upper>0.174533</upper>
+            <effort>0.65</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='l_hand'>
+        <pose frame=''>-0.01075 -0.110259 -0.11428 -2.7153 1.57079 1.99709</pose>
+        <inertial>
+          <pose frame=''>0.07023 -0.00805 -0.007 0 -0 0</pose>
+          <mass>0.213</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>1.278e-05</ixy>
+            <ixz>4.823e-06</ixz>
+            <iyy>0.01</iyy>
+            <iyz>-1.8188e-05</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_hand_collision'>
+          <pose frame=''>-0 0.020433 -0.000144 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_l_hand.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='l_hand_visual'>
+          <pose frame=''>-0 0.020433 -0.000144 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_l_hand.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_wrist_yaw' type='revolute'>
+        <child>l_hand</child>
+        <parent>l_wrist_1</parent>
+        <axis>
+          <xyz>1e-06 -1 -6e-06</xyz>
+          <limit>
+            <lower>-0.436332</lower>
+            <upper>0.436332</upper>
+            <effort>0.65</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='neck_1'>
+        <pose frame=''>-0.007808 0 0.2253 6e-06 -1.57079 -1e-06</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.1</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.01</iyy>
+            <iyz>0</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='neck_1_collision'>
+          <pose frame=''>-0 0 -0.0055 3.14159 -1.57079 1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_neck_1.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='neck_1_visual'>
+          <pose frame=''>-0 0 -0.0055 3.14159 -1.57079 1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_neck_1.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='neck_pitch' type='revolute'>
+        <child>neck_1</child>
+        <parent>chest</parent>
+        <axis>
+          <xyz>-5e-06 1 0</xyz>
+          <limit>
+            <lower>-0.523599</lower>
+            <upper>0.383972</upper>
+            <effort>20</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+        <physics>
+          <ode>
+            <implicit_spring_damper>1</implicit_spring_damper>
+            <cfm_damping>1</cfm_damping>
+            <limit>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </limit>
+          </ode>
+        </physics>
+      </joint>
+      <link name='neck_2'>
+        <pose frame=''>-0.007808 0 0.2348 -1.5e-05 4e-06 -1.57079</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.1</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.01</iyy>
+            <iyz>0</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='neck_2_collision'>
+          <pose frame=''>-0 0.0055 0.0235 -3.14157 -1.57079 -1.57082</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_neck_2.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='neck_2_visual'>
+          <pose frame=''>-0 0.0055 0.0235 -3.14157 -1.57079 -1.57082</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_neck_2.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='neck_roll' type='revolute'>
+        <child>neck_2</child>
+        <parent>neck_1</parent>
+        <axis>
+          <xyz>-1 -5e-06 1.5e-05</xyz>
+          <limit>
+            <lower>-0.349066</lower>
+            <upper>0.349066</upper>
+            <effort>20</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+        <physics>
+          <ode>
+            <implicit_spring_damper>1</implicit_spring_damper>
+            <cfm_damping>1</cfm_damping>
+            <limit>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </limit>
+          </ode>
+        </physics>
+      </joint>
+      <link name='head'>
+        <pose frame=''>-0.007808 0 0.2348 -1.5708 1.5e-05 8e-06</pose>
+        <inertial>
+          <pose frame=''>0.0185 -0.1108 0 0 -0 0</pose>
+          <mass>3</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.01</iyy>
+            <iyz>0</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='head_collision'>
+          <pose frame=''>0.0045 -0.0235 0 -1.32582 1.57079 -2.89662</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_head.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='head_visual'>
+          <pose frame=''>0.0045 -0.0235 0 -2.89662 1.57079 -2.89662</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_head_without_eyes.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <sensor name='imu_sensor' type='imu'>
+          <always_on>1</always_on>
+          <update_rate>100</update_rate>
+          <visualize>1</visualize>
+          <imu>
+            <angular_velocity/>
+            <linear_acceleration/>
+          </imu>
+          <plugin name='iCub_yarp_gazebo_plugin_IMU' filename='libgazebo_yarp_imu.so'>
+            <yarpConfigurationFile>model://icub/conf/gazebo_icub_inertial.ini</yarpConfigurationFile>
+          </plugin>
+          <pose frame=''>0.0185 -0.1108 0.0066 1.5708 -0 0</pose>
+        </sensor>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='neck_yaw' type='revolute'>
+        <child>head</child>
+        <parent>neck_2</parent>
+        <axis>
+          <xyz>1.5e-05 0 1</xyz>
+          <limit>
+            <lower>-0.767945</lower>
+            <upper>0.767945</upper>
+            <effort>20</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+        <physics>
+          <ode>
+            <implicit_spring_damper>1</implicit_spring_damper>
+            <cfm_damping>1</cfm_damping>
+            <limit>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </limit>
+          </ode>
+        </physics>
+      </joint>
+      <link name='eyes_tilt_link'>
+        <pose frame=''>-0.06281 0 0.3408 1.57079 -0 0</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.01</mass>
+          <inertia>
+            <ixx>0.001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.001</iyy>
+            <iyz>0</iyz>
+            <izz>0.001</izz>
+          </inertia>
+        </inertial>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='left_eye_link'>
+        <pose frame=''>-0.06281 -0.034 0.3408 -3.14159 0 0</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.01</mass>
+          <inertia>
+            <ixx>0.001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.001</iyy>
+            <iyz>0</iyz>
+            <izz>0.001</izz>
+          </inertia>
+        </inertial>
+        <visual name='left_eye_visual'>
+          <pose frame=''>0.055 0.033 -0.14 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_eye.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='right_eye_link'>
+        <pose frame=''>-0.06281 0.034 0.3408 -3.14159 0 0</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.01</mass>
+          <inertia>
+            <ixx>0.001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.001</iyy>
+            <iyz>0</iyz>
+            <izz>0.001</izz>
+          </inertia>
+        </inertial>
+        <visual name='right_eye_visual'>
+          <pose frame=''>0.055 0.033 -0.14 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_eye.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='eyes_tilt' type='revolute'>
+        <child>eyes_tilt_link</child>
+        <parent>head</parent>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-1.5708</lower>
+            <upper>1.5708</upper>
+            <effort>84</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+        <physics>
+          <ode>
+            <implicit_spring_damper>1</implicit_spring_damper>
+            <cfm_damping>1</cfm_damping>
+            <limit>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </limit>
+          </ode>
+        </physics>
+      </joint>
+      <joint name='left_eye' type='revolute'>
+        <child>left_eye_link</child>
+        <parent>eyes_tilt_link</parent>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>-1.5708</lower>
+            <upper>1.5708</upper>
+            <effort>84</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+        <physics>
+          <ode>
+            <implicit_spring_damper>1</implicit_spring_damper>
+            <cfm_damping>1</cfm_damping>
+            <limit>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </limit>
+          </ode>
+        </physics>
+      </joint>
+      <joint name='right_eye' type='revolute'>
+        <child>right_eye_link</child>
+        <parent>eyes_tilt_link</parent>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>-1.5708</lower>
+            <upper>1.5708</upper>
+            <effort>84</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+        <physics>
+          <ode>
+            <implicit_spring_damper>1</implicit_spring_damper>
+            <cfm_damping>1</cfm_damping>
+            <limit>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </limit>
+          </ode>
+        </physics>
+      </joint>
+      <link name='r_shoulder_1'>
+        <pose frame=''>-0.010749 0.11026 0.1753 -2.87979 -1.57079 -1e-06</pose>
+        <inertial>
+          <pose frame=''>5e-06 0.0187 0.00119 0 -0 0</pose>
+          <mass>0.189</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>2.1e-08</ixy>
+            <ixz>-1e-09</ixz>
+            <iyy>0.01</iyy>
+            <iyz>4.22e-06</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_shoulder_1_collision'>
+          <pose frame=''>-0 0.109285 0.005211 3.06003 1.57079 -1.65235</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_r_shoulder_1.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='r_shoulder_1_visual'>
+          <pose frame=''>-0 0.109285 0.005211 3.06003 1.57079 -1.65235</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_r_shoulder_1.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_shoulder_pitch' type='revolute'>
+        <child>r_shoulder_1</child>
+        <parent>chest</parent>
+        <axis>
+          <xyz>0.258817 -0.965926 -3e-06</xyz>
+          <limit>
+            <lower>-1.65806</lower>
+            <upper>0.0872665</upper>
+            <effort>84</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='r_shoulder_2'>
+        <pose frame=''>-0.010749 0.11026 0.1753 7e-06 1e-06 1.83259</pose>
+        <inertial>
+          <pose frame=''>-9.4e-05 -0.00627 -0.0166 0 -0 0</pose>
+          <mass>0.179</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>-4.53e-07</ixy>
+            <ixz>2.03e-07</ixz>
+            <iyy>0.01</iyy>
+            <iyz>2.07e-05</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_shoulder_2_collision'>
+          <pose frame=''>-0.001545 -0.005211 -0 -1.00125 -1.57079 2.57205</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_r_shoulder_2.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='r_shoulder_2_visual'>
+          <pose frame=''>-0.001545 -0.005211 -0 -1.00125 -1.57079 2.57205</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_r_shoulder_2.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_shoulder_roll' type='revolute'>
+        <child>r_shoulder_2</child>
+        <parent>r_shoulder_1</parent>
+        <axis>
+          <xyz>0.965926 0.258817 -7e-06</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>2.80649</upper>
+            <effort>84</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='r_shoulder_3'>
+        <pose frame=''>-0.010749 0.11026 0.1753 3.14159 -7e-06 -3.14159</pose>
+        <inertial>
+          <pose frame=''>0.005539 -2.5e-05 0.04939 0 -0 0</pose>
+          <mass>0.155</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>3.56977e-07</ixy>
+            <ixz>-3.95372e-06</ixz>
+            <iyy>0.01</iyy>
+            <iyz>-6.5128e-06</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_shoulder_yaw' type='revolute'>
+        <child>r_shoulder_3</child>
+        <parent>r_shoulder_2</parent>
+        <axis>
+          <xyz>7e-06 0 1</xyz>
+          <limit>
+            <lower>-0.645772</lower>
+            <upper>1.74533</upper>
+            <effort>34</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='r_upper_arm'>
+        <pose frame=''>-0.025749 0.11026 0.1073 3.14159 -7e-06 -3.14159</pose>
+        <inertial>
+          <pose frame=''>-0.000159 8.3e-05 0.029883 0 -0 0</pose>
+          <mass>0.729</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>-1.08e-06</ixy>
+            <ixz>-2.29e-06</ixz>
+            <iyy>0.01</iyy>
+            <iyz>3.57e-06</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_upper_arm_collision'>
+          <pose frame=''>-0.020433 -0.000144 -0.068 -3.14159 -0 1.309</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_r_arm.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='r_upper_arm_visual'>
+          <pose frame=''>-0.020433 -0.000144 -0.068 -3.14159 -0 1.309</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_r_arm.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_arm_ft_sensor' type='revolute'>
+        <child>r_upper_arm</child>
+        <parent>r_shoulder_3</parent>
+        <axis>
+          <xyz>0 0 0</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+        <sensor name='right_arm_ft' type='force_torque'>
+          <always_on>1</always_on>
+          <update_rate>100</update_rate>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <plugin name='right_arm_ft_plugin' filename='libgazebo_yarp_forcetorque.so'>
+            <yarpConfigurationFile>model://icub/conf/FT/gazebo_icub_right_arm_ft.ini</yarpConfigurationFile>
+          </plugin>
+        </sensor>
+      </joint>
+      <link name='r_elbow_1'>
+        <pose frame=''>-0.02575 0.11026 0.02302 -3e-06 7e-06 4e-06</pose>
+        <inertial>
+          <pose frame=''>0.0013 -0.00371 0.00105 0 -0 0</pose>
+          <mass>0.1</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>-5.02e-07</ixy>
+            <ixz>-3.99e-07</ixz>
+            <iyy>0.01</iyy>
+            <iyz>-3.71e-07</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_elbow' type='revolute'>
+        <child>r_elbow_1</child>
+        <parent>r_upper_arm</parent>
+        <axis>
+          <xyz>-4e-06 1 -3e-06</xyz>
+          <limit>
+            <lower>0.0959931</lower>
+            <upper>1.85005</upper>
+            <effort>20</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='r_forearm'>
+        <pose frame=''>-0.01075 0.11026 0.02302 1.57079 -3e-06 -1.5708</pose>
+        <inertial>
+          <pose frame=''>-0.000347 -0.066 -0.00476 0 -0 0</pose>
+          <mass>0.525</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>5.66e-06</ixy>
+            <ixz>1.4e-06</ixz>
+            <iyy>0.01</iyy>
+            <iyz>1.82e-05</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_forearm_collision'>
+          <pose frame=''>0.000144 -0 -0.020433 -1.74165 1.57079 -0.170863</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_r_forearm.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='r_forearm_visual'>
+          <pose frame=''>0.000144 -0 -0.020433 -1.74165 1.57079 -0.170863</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_r_forearm.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_wrist_prosup' type='revolute'>
+        <child>r_forearm</child>
+        <parent>r_elbow_1</parent>
+        <axis>
+          <xyz>3e-06 3e-06 1</xyz>
+          <limit>
+            <lower>-0.872665</lower>
+            <upper>0.872665</upper>
+            <effort>0.45</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='r_wrist_1'>
+        <pose frame=''>-0.01075 0.11026 -0.11428 0.426292 -1.57079 1.14451</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <mass>0.1</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.01</iyy>
+            <iyz>0</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_wrist_pitch' type='revolute'>
+        <child>r_wrist_1</child>
+        <parent>r_forearm</parent>
+        <axis>
+          <xyz>-1 -4e-06 3e-06</xyz>
+          <limit>
+            <lower>-1.13446</lower>
+            <upper>0.174533</upper>
+            <effort>0.65</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='r_hand'>
+        <pose frame=''>-0.01075 0.11026 -0.11428 -0.720145 1.57079 -2.29094</pose>
+        <inertial>
+          <pose frame=''>0.07023 -0.00805 0.007 0 -0 0</pose>
+          <mass>0.213</mass>
+          <inertia>
+            <ixx>0.01</ixx>
+            <ixy>1.26e-05</ixy>
+            <ixz>-6.08e-06</ixz>
+            <iyy>0.01</iyy>
+            <iyz>1.76e-05</iyz>
+            <izz>0.01</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_hand_collision'>
+          <pose frame=''>0 0.020433 0.000144 0 0 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/collision/icub_simple_collision_r_hand.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='r_hand_visual'>
+          <pose frame=''>0 0.020433 0.000144 0 0 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://icub/meshes/visual/icub_r_hand.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_wrist_yaw' type='revolute'>
+        <child>r_hand</child>
+        <parent>r_wrist_1</parent>
+        <axis>
+          <xyz>4e-06 -1 6e-06</xyz>
+          <limit>
+            <lower>-0.436332</lower>
+            <upper>0.436332</upper>
+            <effort>0.65</effort>
+            <velocity>100</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <plugin name='controlboard_torso' filename='libgazebo_yarp_controlboard.so'>
+        <yarpConfigurationFile>model://icub/conf/gazebo_icub_torso.ini</yarpConfigurationFile>
+        <initialConfiguration>0.0252738314214591 -0.00929752545753182 0.874995161131172</initialConfiguration>
+      </plugin>
+      <plugin name='controlboard_head' filename='libgazebo_yarp_controlboard.so'>
+        <yarpConfigurationFile>model://icub/conf/gazebo_icub_head.ini</yarpConfigurationFile>
+      </plugin>
+      <plugin name='controlboard_left_arm_no_arm' filename='libgazebo_yarp_controlboard.so'>
+        <yarpConfigurationFile>model://icub/conf/gazebo_icub_left_arm_no_hand_for_no_hand_model.ini</yarpConfigurationFile>
+        <initialConfiguration>-0.476442190374587 0.697093519362314 0.0792635668036326	0.753627420759557 0 0 0</initialConfiguration>
+      </plugin>
+      <plugin name='controlboard_right_arm_no_arm' filename='libgazebo_yarp_controlboard.so'>
+        <yarpConfigurationFile>model://icub/conf/gazebo_icub_right_arm_no_hand_for_no_hand_model.ini</yarpConfigurationFile>
+        <initialConfiguration>-0.476442190374587 0.697093519362314 0.0792635668036326	0.753627420759557 0 0 0</initialConfiguration>
+      </plugin>
+      <plugin name='controlboard_left_leg' filename='libgazebo_yarp_controlboard.so'>
+        <yarpConfigurationFile>model://icub/conf/gazebo_icub_left_leg.ini</yarpConfigurationFile>
+        <initialConfiguration>1.07377300558452 0.00340967081980104 -0.000115143133187168 -1.72744282408953 -0.271042811893626	0.00148420804420901</initialConfiguration>
+      </plugin>
+      <plugin name='controlboard_right_leg' filename='libgazebo_yarp_controlboard.so'>
+        <yarpConfigurationFile>model://icub/conf/gazebo_icub_right_leg.ini</yarpConfigurationFile>
+        <initialConfiguration>1.07377300558452 0.00340967081980104 -0.000115143133187168 -1.72744282408953 -0.271042811893626	0.00148420804420901</initialConfiguration>
+      </plugin>
+      <plugin name='apply_external_wrench' filename='libgazebo_yarp_externalwrench.so'>
+        <robotNamefromConfigFile>model://icub/conf/gazebo_icub_robotname.ini</robotNamefromConfigFile>
+      </plugin>
+      <pose frame=''>0 0 0.7 0 -0 0</pose>
+    </model>
+    <state world_name='default'>
+      <sim_time>1002 473000000</sim_time>
+      <real_time>993 797232121</real_time>
+      <wall_time>1496313402 839988478</wall_time>
+      <iterations>1002473</iterations>
+      <model name='chair'>
+        <pose frame=''>0.104026 -0.081985 1e-06 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='high_part'>
+          <pose frame=''>0.104031 -0.081985 0.204994 0 -0 0</pose>
+          <velocity>1.1e-05 8e-06 -1e-06 0 0 -2e-06</velocity>
+          <acceleration>0.000659 0.010191 0.000471 -0.000295 -1.5e-05 -3.3e-05</acceleration>
+          <wrench>0.000659 0.010191 0.000471 0 -0 0</wrench>
+        </link>
+        <link name='low_part'>
+          <pose frame=''>0.104026 -0.081985 0.180001 0 -0 0</pose>
+          <velocity>-2e-06 -1e-06 -0 0 -0 0</velocity>
+          <acceleration>-2e-06 -0.00133 -3.3e-05 7.6e-05 2e-06 -3.4e-05</acceleration>
+          <wrench>-2e-06 -0.00133 -3.3e-05 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='ground_plane'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='iCub'>
+        <pose frame=''>0.041095 -0.024136 0.384398 -0.001806 0.375318 -3.1333</pose>
+        <scale>1 1 1</scale>
+        <link name='chest'>
+          <pose frame=''>0.061245 -0.023998 0.409802 1.55251 0.499831 0.020452</pose>
+          <velocity>-3e-05 -4e-06 4e-05 -8e-06 0.000319 5e-06</velocity>
+          <acceleration>-0.001064 -0.000574 -0.000493 -2.05836 1.44351 -0.260399</acceleration>
+          <wrench>-0.00512 -0.002763 -0.002373 0 -0 0</wrench>
+        </link>
+        <link name='eyes_tilt_link'>
+          <pose frame=''>0.259779 -0.014259 0.652705 1.58954 -0.505546 -3.12133</pose>
+          <velocity>1.3e-05 0 1.3e-05 -7e-06 -2.5e-05 1e-05</velocity>
+          <acceleration>-1.7e-05 9.9e-05 -0.000633 -0.000937 0.003065 0.009011</acceleration>
+          <wrench>-0 1e-06 -6e-06 0 -0 0</wrench>
+        </link>
+        <link name='head'>
+          <pose frame=''>0.160393 -0.018261 0.586618 -1.55206 -0.505531 -3.12132</pose>
+          <velocity>1.8e-05 -1e-06 6e-06 -6e-06 -7.2e-05 1.1e-05</velocity>
+          <acceleration>-5.5e-05 -0.00047 -0.000679 -0.001309 -0.000512 0.009267</acceleration>
+          <wrench>-0.000166 -0.001411 -0.002038 0 -0 0</wrench>
+        </link>
+        <link name='l_ankle_1'>
+          <pose frame=''>0.247065 0.04495 0.041981 1.58253 -1.5158 1.63982</pose>
+          <velocity>2.3e-05 -3.5e-05 5e-06 -0.000442 -5.8e-05 0.000102</velocity>
+          <acceleration>-0.0117 -0.004785 -0.000348 -0.370287 -0.153871 -0.512318</acceleration>
+          <wrench>-0.008728 -0.00357 -0.00026 0 -0 0</wrench>
+        </link>
+        <link name='l_ankle_2'>
+          <pose frame=''>0.247065 0.04495 0.041981 3.14117 0.000652 0.080738</pose>
+          <velocity>9e-06 -2.4e-05 2e-06 0.000245 -2.5e-05 0.000101</velocity>
+          <acceleration>-0.006221 0.008541 -0.001053 0.077502 -0.028819 -0.210187</acceleration>
+          <wrench>-0.001664 0.002285 -0.000282 0 -0 0</wrench>
+        </link>
+        <link name='l_elbow_1'>
+          <pose frame=''>0.153476 0.13041 0.385269 -2.77504 -0.781104 -0.193371</pose>
+          <velocity>3e-06 -0 1.3e-05 5.9e-05 7.4e-05 -0.000153</velocity>
+          <acceleration>0.001357 0.0055 0.002399 0.130431 0.110973 -0.323401</acceleration>
+          <wrench>0.000136 0.00055 0.00024 0 -0 0</wrench>
+        </link>
+        <link name='l_foot'>
+          <pose frame=''>0.247042 0.044933 0.004982 3.14117 0.000652 0.080738</pose>
+          <velocity>-0 -1e-06 3e-06 0.000216 -2.3e-05 4e-06</velocity>
+          <acceleration>-0.001362 -0.002542 -0.000222 0.08966 -0.035911 0.001489</acceleration>
+          <wrench>-0.000808 -0.001509 -0.000132 0 -0 0</wrench>
+        </link>
+        <link name='l_forearm'>
+          <pose frame=''>0.143022 0.132457 0.374708 -2.38625 -0.257337 1.64141</pose>
+          <velocity>3e-06 2e-06 1.4e-05 -0.00015 8e-06 4e-05</velocity>
+          <acceleration>0.002032 -0.000709 0.000527 -0.287026 -0.01992 0.076102</acceleration>
+          <wrench>0.001067 -0.000372 0.000277 0 -0 0</wrench>
+        </link>
+        <link name='l_hand'>
+          <pose frame=''>0.241042 0.163405 0.283683 -1.22392 0.724774 0.305823</pose>
+          <velocity>1e-06 -8e-06 8e-06 -3e-06 -3.8e-05 0.000182</velocity>
+          <acceleration>0.003474 0.010195 0.003155 -0.014031 -0.108371 0.323961</acceleration>
+          <wrench>0.00074 0.002171 0.000672 0 -0 0</wrench>
+        </link>
+        <link name='l_hip_1'>
+          <pose frame=''>0.08443 0.04454 0.272962 0.001719 0.120859 0.009168</pose>
+          <velocity>6.8e-05 -2.4e-05 9.7e-05 2e-05 0.000406 -0.000357</velocity>
+          <acceleration>0.005531 -0.056186 0.005805 -0.206306 -0.003866 -0.119634</acceleration>
+          <wrench>0.00417 -0.042364 0.004377 0 -0 0</wrench>
+        </link>
+        <link name='l_hip_2'>
+          <pose frame=''>0.084428 0.04454 0.272965 -3.06299 -1.44992 -0.005058</pose>
+          <velocity>6.4e-05 -3.2e-05 9.6e-05 0.00027 0.000409 0.001701</velocity>
+          <acceleration>0.009249 0.006894 -0.009641 0.109207 0.007153 2.49204</acceleration>
+          <wrench>0.004865 0.003626 -0.005071 0 -0 0</wrench>
+        </link>
+        <link name='l_hip_3'>
+          <pose frame=''>0.150251 0.04943 0.264991 -3.063 -1.44991 -0.005053</pose>
+          <velocity>3e-05 3.5e-05 6.6e-05 0.000189 0.000434 -2.7e-05</velocity>
+          <acceleration>0.0037 0.015525 -0.001873 -0.020797 0.011431 -0.352114</acceleration>
+          <wrench>0.00037 0.001553 -0.000187 0 -0 0</wrench>
+        </link>
+        <link name='l_lower_leg'>
+          <pose frame=''>0.305788 0.060978 0.246098 -1.76435 -1.28099 0.266447</pose>
+          <velocity>2.8e-05 5.8e-05 -1e-06 -0.000448 6e-06 0.000102</velocity>
+          <acceleration>-0.004214 -0.000133 -0.004153 2.91088 0.45285 0.974111</acceleration>
+          <wrench>-0.005327 -0.000168 -0.00525 0 -0 0</wrench>
+        </link>
+        <link name='l_shoulder_1'>
+          <pose frame=''>0.131231 0.09032 0.53126 1.60841 -1.43069 1.33057</pose>
+          <velocity>8e-06 -2e-06 1.5e-05 -6.7e-05 2.7e-05 4.6e-05</velocity>
+          <acceleration>0.000773 -0.000569 0.000283 0.002372 -0.008915 -0.014095</acceleration>
+          <wrench>0.000146 -0.000108 5.3e-05 0 -0 0</wrench>
+        </link>
+        <link name='l_shoulder_2'>
+          <pose frame=''>0.131231 0.09032 0.531259 -3.13615 -0.265446 1.3664</pose>
+          <velocity>8e-06 -1e-06 1.5e-05 -1.9e-05 1.7e-05 4.6e-05</velocity>
+          <acceleration>0.001301 -0.00025 0.000625 -0.044841 -0.091222 0.144756</acceleration>
+          <wrench>0.000233 -4.5e-05 0.000112 0 -0 0</wrench>
+        </link>
+        <link name='l_shoulder_3'>
+          <pose frame=''>0.131231 0.09032 0.531257 -2.88371 -0.063872 0.053776</pose>
+          <velocity>8e-06 -1e-06 1.4e-05 -9e-06 7.3e-05 -0.000162</velocity>
+          <acceleration>0.001839 -0.001933 0.000587 0.035751 0.079829 -0.34545</acceleration>
+          <wrench>0.000287 -0.000302 9.2e-05 0 -0 0</wrench>
+        </link>
+        <link name='l_upper_arm'>
+          <pose frame=''>0.149437 0.108667 0.466597 -2.88371 -0.063871 0.053776</pose>
+          <velocity>6e-06 -5e-06 1.3e-05 5.8e-05 7.5e-05 -0.000153</velocity>
+          <acceleration>0.002447 -0.00169 0.000743 0.153047 0.07338 -0.32877</acceleration>
+          <wrench>0.001781 -0.00123 0.000541 0 -0 0</wrench>
+        </link>
+        <link name='l_upper_leg'>
+          <pose frame=''>0.084418 0.044542 0.272985 1.14206 -1.43819 0.506185</pose>
+          <velocity>3.5e-05 2.7e-05 9.9e-05 -0.000522 0.000426 0.000202</velocity>
+          <acceleration>0.002172 0.010249 -0.005655 2.70006 -1.13021 -0.666094</acceleration>
+          <wrench>0.004724 0.022292 -0.0123 0 -0 0</wrench>
+        </link>
+        <link name='l_wrist_1'>
+          <pose frame=''>0.241042 0.163405 0.283683 -1.22392 0.724774 0.305823</pose>
+          <velocity>1e-06 -8e-06 8e-06 -4e-06 -2e-05 0.000187</velocity>
+          <acceleration>0.001925 -0.009318 -0.002509 -0.012805 -0.079462 0.361888</acceleration>
+          <wrench>0.000192 -0.000932 -0.000251 0 -0 0</wrench>
+        </link>
+        <link name='left_eye_link'>
+          <pose frame=''>0.258782 0.019721 0.652148 -3.12284 -0.505546 -3.12133</pose>
+          <velocity>1.3e-05 0 1.2e-05 -9e-06 -2.5e-05 8e-06</velocity>
+          <acceleration>-0.000343 7.1e-05 -0.000687 -0.003082 0.002964 0.005522</acceleration>
+          <wrench>-3e-06 1e-06 -7e-06 0 -0 0</wrench>
+        </link>
+        <link name='neck_1'>
+          <pose frame=''>0.155801 -0.018528 0.578311 3.10847 -1.06495 0.0582</pose>
+          <velocity>2e-05 -1e-06 6e-06 5e-06 -7.1e-05 1.1e-05</velocity>
+          <acceleration>-0.000124 -0.001089 -0.000717 0.005018 -0.000811 -0.01559</acceleration>
+          <wrench>-1.2e-05 -0.000109 -7.2e-05 0 -0 0</wrench>
+        </link>
+        <link name='neck_2'>
+          <pose frame=''>0.160392 -0.018261 0.586616 0.505604 0.016374 1.6002</pose>
+          <velocity>1.7e-05 -1e-06 5e-06 -4e-06 -7.3e-05 1.6e-05</velocity>
+          <acceleration>0.000114 -0.000791 -0.000658 -0.010626 -0.00089 -0.00697</acceleration>
+          <wrench>1.1e-05 -7.9e-05 -6.6e-05 0 -0 0</wrench>
+        </link>
+        <link name='r_ankle_1'>
+          <pose frame=''>0.250674 -0.090415 0.041914 1.48202 -1.56947 -1.47634</pose>
+          <velocity>6e-06 2e-06 2.4e-05 5e-06 1.9e-05 1.2e-05</velocity>
+          <acceleration>0.002071 0.020113 0.004777 0.085916 0.050932 -0.020046</acceleration>
+          <wrench>0.001545 0.015004 0.003563 0 -0 0</wrench>
+        </link>
+        <link name='r_ankle_2'>
+          <pose frame=''>0.250674 -0.090415 0.041914 3.14151 0.000119 0.005682</pose>
+          <velocity>1.3e-05 4e-06 6.1e-05 -0.000167 0.000149 1.4e-05</velocity>
+          <acceleration>0.000274 0.009974 0.004226 -0.216398 0.057971 -0.019694</acceleration>
+          <wrench>7.3e-05 0.002668 0.00113 0 -0 0</wrench>
+        </link>
+        <link name='r_elbow_1'>
+          <pose frame=''>0.172772 -0.210521 0.409453 0.787012 0.685977 -2.5245</pose>
+          <velocity>8e-06 -3e-06 1.3e-05 -7.5e-05 0.000165 0.000199</velocity>
+          <acceleration>0.003629 -0.008097 0.004702 -0.182092 0.286427 0.39785</acceleration>
+          <wrench>0.000363 -0.00081 0.00047 0 -0 0</wrench>
+        </link>
+        <link name='r_foot'>
+          <pose frame=''>0.25067 -0.090417 0.004914 3.14151 0.000119 0.005683</pose>
+          <velocity>0 5e-06 7e-05 -5.8e-05 0.000309 -4.5e-05</velocity>
+          <acceleration>0.000406 0.002399 0.0036 0.022375 0.051646 -0.035816</acceleration>
+          <wrench>0.000241 0.001424 0.002136 0 -0 0</wrench>
+        </link>
+        <link name='r_forearm'>
+          <pose frame=''>0.163305 -0.217238 0.39995 0.711652 0.580016 1.62179</pose>
+          <velocity>7e-06 -6e-06 1.4e-05 0.000247 3.2e-05 -2.9e-05</velocity>
+          <acceleration>0.00301 0.003019 -0.003331 0.456343 0.007495 -0.064029</acceleration>
+          <wrench>0.00158 0.001585 -0.001749 0 -0 0</wrench>
+        </link>
+        <link name='r_hand'>
+          <pose frame=''>0.269649 -0.261017 0.324945 -2.28405 0.577914 -0.390522</pose>
+          <velocity>3e-06 1e-05 -1e-06 3.5e-05 -0.000142 -0.000228</velocity>
+          <acceleration>0.006775 -0.008069 0.00385 0.092442 -0.317054 -0.429087</acceleration>
+          <wrench>0.001443 -0.001719 0.00082 0 -0 0</wrench>
+        </link>
+        <link name='r_hip_1'>
+          <pose frame=''>0.085652 -0.091653 0.272732 -3.13994 0.11483 0.009129</pose>
+          <velocity>2.5e-05 -9e-06 9.4e-05 9.5e-05 0.000406 -0.000348</velocity>
+          <acceleration>0.00797 -0.029525 0.001947 -0.114889 0.035543 -0.073877</acceleration>
+          <wrench>0.00601 -0.022262 0.001468 0 -0 0</wrench>
+        </link>
+        <link name='r_hip_2'>
+          <pose frame=''>0.085652 -0.091653 0.272731 -3.13052 -1.45595 -0.00532</pose>
+          <velocity>2.5e-05 -1.2e-05 9.5e-05 0.000101 0.000405 -0.000255</velocity>
+          <acceleration>0.002237 -0.045788 0.010926 -0.147511 0.03534 -0.340767</acceleration>
+          <wrench>0.001177 -0.024085 0.005747 0 -0 0</wrench>
+        </link>
+        <link name='r_hip_3'>
+          <pose frame=''>0.151714 -0.091268 0.265109 -3.13053 -1.45596 -0.005308</pose>
+          <velocity>2.1e-05 -3.1e-05 6.9e-05 0.000122 0.000405 6.2e-05</velocity>
+          <acceleration>0.00244 -0.063066 0.010083 -0.123415 0.034991 0.18952</acceleration>
+          <wrench>0.000244 -0.006307 0.001008 0 -0 0</wrench>
+        </link>
+        <link name='r_lower_leg'>
+          <pose frame=''>0.307772 -0.090361 0.247119 -1.56589 -1.29942 0.000948</pose>
+          <velocity>2e-05 0 3e-06 1e-05 7.7e-05 9e-06</velocity>
+          <acceleration>0.001888 0.007073 -0.000425 0.088157 -0.010187 0.016603</acceleration>
+          <wrench>0.002386 0.008941 -0.000537 0 -0 0</wrench>
+        </link>
+        <link name='r_shoulder_1'>
+          <pose frame=''>0.137673 -0.130078 0.534804 1.45296 -1.46128 -1.1925</pose>
+          <velocity>1e-05 -2e-06 1.6e-05 7.4e-05 1.6e-05 -2.9e-05</velocity>
+          <acceleration>-0.002124 -0.001367 -0.001025 0.068687 -0.113335 -0.020553</acceleration>
+          <wrench>-0.000401 -0.000258 -0.000194 0 -0 0</wrench>
+        </link>
+        <link name='r_shoulder_2'>
+          <pose frame=''>0.137673 -0.130078 0.534802 -0.015444 -0.588275 -1.30108</pose>
+          <velocity>1e-05 -2e-06 1.5e-05 -3.3e-05 -1.2e-05 -2.9e-05</velocity>
+          <acceleration>-0.001736 -0.002337 -0.00068 0.029745 -0.352551 -0.269132</acceleration>
+          <wrench>-0.000311 -0.000418 -0.000122 0 -0 0</wrench>
+        </link>
+        <link name='r_shoulder_3'>
+          <pose frame=''>0.137672 -0.130079 0.5348 2.55901 -0.088209 0.108974</pose>
+          <velocity>9e-06 -2e-06 1.4e-05 -7.3e-05 0.000144 0.000213</velocity>
+          <acceleration>-0.00019 -0.002499 0.000304 -0.211114 0.212681 0.415582</acceleration>
+          <wrench>-2.9e-05 -0.000387 4.7e-05 0 -0 0</wrench>
+        </link>
+        <link name='r_upper_arm'>
+          <pose frame=''>0.161565 -0.165101 0.479557 2.55901 -0.088209 0.108974</pose>
+          <velocity>8e-06 -0 1.1e-05 -7.3e-05 0.000144 0.000213</velocity>
+          <acceleration>0.002139 -0.002112 0.001061 -0.179239 0.234633 0.445029</acceleration>
+          <wrench>0.00156 -0.001539 0.000773 0 -0 0</wrench>
+        </link>
+        <link name='r_upper_leg'>
+          <pose frame=''>0.085649 -0.091655 0.272747 1.58227 -1.45592 -0.005722</pose>
+          <velocity>3.3e-05 6e-06 9.3e-05 4.5e-05 0.0004 -2.7e-05</velocity>
+          <acceleration>0.001388 0.001387 0.000736 0.149584 0.018471 -0.026427</acceleration>
+          <wrench>0.003018 0.003017 0.0016 0 -0 0</wrench>
+        </link>
+        <link name='r_wrist_1'>
+          <pose frame=''>0.269649 -0.261017 0.324945 2.28405 -0.577916 2.75107</pose>
+          <velocity>3e-06 1e-05 -0 3.4e-05 -0.00012 -0.000243</velocity>
+          <acceleration>0.001152 0.016344 -0.013774 0.060467 -0.276656 -0.475768</acceleration>
+          <wrench>0.000115 0.001634 -0.001377 0 -0 0</wrench>
+        </link>
+        <link name='right_eye_link'>
+          <pose frame=''>0.260777 -0.04824 0.653263 -3.12284 -0.505545 -3.12133</pose>
+          <velocity>1.4e-05 0 1.3e-05 -9e-06 -2.5e-05 8e-06</velocity>
+          <acceleration>0.000266 5.4e-05 -0.000604 -0.003463 0.002995 0.005704</acceleration>
+          <wrench>3e-06 1e-06 -6e-06 0 -0 0</wrench>
+        </link>
+        <link name='root_link'>
+          <pose frame=''>0.041095 -0.024136 0.384398 -0.001806 0.375318 -3.1333</pose>
+          <velocity>-3.4e-05 -7e-06 6.6e-05 3.8e-05 -0.000714 -0.000377</velocity>
+          <acceleration>-0.000355 -0.017571 -0.000343 -0.221193 -0.092063 -0.115801</acceleration>
+          <wrench>-0.001675 -0.082935 -0.001619 0 -0 0</wrench>
+        </link>
+        <link name='torso_1'>
+          <pose frame=''>0.041097 -0.024136 0.384407 0.003504 -1.07115 0.005867</pose>
+          <velocity>-3.3e-05 -1e-05 7.1e-05 3.4e-05 0.000312 -0.00038</velocity>
+          <acceleration>-0.000134 -0.020059 -0.000373 3.02523 0.181742 -1.26931</acceleration>
+          <wrench>-1.3e-05 -0.002006 -3.7e-05 0 -0 0</wrench>
+        </link>
+        <link name='torso_2'>
+          <pose frame=''>0.056425 -0.024046 0.412471 2.64183 -0.020506 -1.54975</pose>
+          <velocity>-2.6e-05 -1e-05 5.6e-05 -0.00016 0.00031 -0.000274</velocity>
+          <acceleration>-0.000661 -0.008393 -0.000369 -0.325571 0.207127 -0.171921</acceleration>
+          <wrench>-6.6e-05 -0.000839 -3.7e-05 0 -0 0</wrench>
+        </link>
+      </model>
+      <light name='sun'>
+        <pose frame=''>0 0 10 0 -0 0</pose>
+      </light>
+    </state>
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose frame=''>0.556353 -0.986406 0.863522 0 0.133797 2.1482</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+  </world>
+</sdf>

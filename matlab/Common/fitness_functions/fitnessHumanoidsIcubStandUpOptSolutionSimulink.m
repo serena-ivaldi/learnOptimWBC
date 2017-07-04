@@ -44,12 +44,6 @@ function [fit,failure]  = fitnessHumanoidsIcubStandUpSearchFreeSolutionSimulink(
         fprintf('constraints violation is %f\n', fall_penalty)
         fit = fall_penalty;
         failure = true;
-        %% here i need to assure that im not gonna use the constraints violation in this run
-        %% to do so i need to put all ones in obj.penalty_handling.feasibility_vec
-        %% because is used in (1+1)cmaes.
-        %% to extend this way to manage constraint with fault in other situation i need to ADAPT 
-        %% this approach
-        obj.penalty_handling.feasibility_vec = ones(size(obj.penalty_handling.feasibility_vec));
     %% no fault (robot reached the final position)    
     else    
         for i=1:downsaple:length(t_all)
@@ -86,6 +80,13 @@ function [fit,failure]  = fitnessHumanoidsIcubStandUpSearchFreeSolutionSimulink(
             obj.penalty_handling.EvaluateConstraints(input_vector,evaluate_constraints_index);
             evaluate_constraints_index = evaluate_constraints_index + 1;   
         end 
+        
+        %% for debug 
+        % compute violation 
+        [constraints_violation_cost,penalties,violation_index] = ArtificialConstraintViolations(obj.penalty_handling.constraints_violation,obj.penalty_handling.n_constraint);
+        violation_index
+        %----
+        
         % max effort
         transpose_torque = contr.simulation_results.tau';
         effort = sum((transpose_torque(:).*transpose_torque(:)),1);

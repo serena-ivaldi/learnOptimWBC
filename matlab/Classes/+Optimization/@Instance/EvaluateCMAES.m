@@ -34,13 +34,18 @@ function [performance, succeeded, data2save] = EvaluateCMAES(obj,action,cur_cand
 
             %tic
             % insert fitness function 
-            [performance,varargout] = feval(obj.fitness,obj,output);
+            
             
             %toc
             %% i check the eventula fail
-            if(nargout(obj.fitness) > 0)
-                fail_flag = varargout{1};
+            if(nargout(obj.fitness) > 1)
+                % here i checked 
+                [performance,variable_output] = feval(obj.fitness,obj,output);
+                fail_flag = variable_output(1);
             else
+                % if thr function has no varargout i assume that 
+                % i do not have any fails
+                 [performance] = feval(obj.fitness,obj,output);
                 fail_flag = false;
             end
             %% DO NOT CHANGE THIS PART!
