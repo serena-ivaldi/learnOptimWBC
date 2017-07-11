@@ -41,6 +41,20 @@ function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
         data_ddxCoMDes(index,:)        = ddxCoMDes;
         index = index + 1;
     end
+    
+    %% TODO just for test! i want to see if moving average give better results if it the case i will perform this trajectory post processing
+    %% in the proper way!
+    %sigma       = 5;
+    %sz          = 20;    % length of gaussFilter vector
+    %x           = linspace(-sz / 2, sz / 2, sz);
+    %gaussFilter = exp(-x .^ 2 / (2 * sigma ^ 2));
+    %gaussFilter = gaussFilter / sum (gaussFilter); % normalize
+    
+    %data_xCoMDes    = filter (gaussFilter,1, data_xCoMDes);
+    %data_dxCoMDes   = filter (gaussFilter,1, data_dxCoMDes);
+    %data_ddxCoMDes  =  filter (gaussFilter,1, data_ddxCoMDes);
+                     
+    
     ts_xCoMDes    = timeseries(data_xCoMDes,time);
     ts_dxCoMDes   = timeseries(data_dxCoMDes,time);
     ts_ddxCoMDes  = timeseries(data_ddxCoMDes,time);

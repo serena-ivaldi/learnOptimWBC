@@ -1,4 +1,4 @@
-function [fit,failure]  = fitnessHumanoidsIcubStandUpSearchFreeSolutionSimulink(obj,output)
+function [fit,failure]  = fitnessHumanoidsIcubStandUpOptSolutionSimulink(obj,output)
 % fitness function of the icub standing up we try to optimize the cost
 % of consumption and the error with the final com (for constrained optimization)
     

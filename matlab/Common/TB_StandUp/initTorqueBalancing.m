@@ -27,7 +27,7 @@
 
 
 %% for stand alone execution remove comment on this line
-%load('inputData.mat')
+load('inputData.mat')
 
 
 % setenv('YARP_ROBOT_NAME','iCubGenova01');
