@@ -4,13 +4,13 @@ function fit  = fitnessHumanoidsIcub4(obj,output)
 % time Tswitch after which the goals positions behind the wall change and a
 % fixed distance constraints activate. All that done with minimal torques
 %and under the usual constraints : joints limits, torques limits and colision detection.
-    
+
     t = output{1};
     q = output{2};
-    
+
     %%%;;
     downsaple = 10;
-    L = 1; 
+    L = 1;
     max_effort = 3.5000e+05;
     max_traj_error = 250;
     weight_effort = 1;
@@ -19,14 +19,14 @@ function fit  = fitnessHumanoidsIcub4(obj,output)
     contr = obj.input_4_run{4};
     iCub = contr.GetWholeSystem();
     traj_err= 0;
-    
+
     % switching parameters
     Tswitch = 10; % in seconds
     distance_constraint.epsilon = 0.001;
     distance_constraint.active = false;
     fixedDist = obj.input_4_run{5};
     failure = false;
-    
+
     % i have to uniform the tau with the number of q
     tau_=InterpTorque(contr,obj.input_4_run{3},0.001);
     evaluate_constraints_index = 1;
@@ -34,7 +34,7 @@ function fit  = fitnessHumanoidsIcub4(obj,output)
         q_cur = q(i,:);
         tau_cur = tau_(i,:);
         %compute position of the all control points
-       
+
         ee_r = iCub.offlineFkine(q_cur','r_gripper');
         p1 = iCub.offlineFkine(q_cur','r_wrist_1');
         p2 = iCub.offlineFkine(q_cur','r_elbow_1');
@@ -48,7 +48,7 @@ function fit  = fitnessHumanoidsIcub4(obj,output)
         distance_constraint.p1 = iCub.offlineFkine(q_cur','r_wrist_1');
         distance_constraint.p2 = iCub.offlineFkine(q_cur','l_wrist_1');
         if (~distance_constraint.active) && (t(i) < Tswitch)
-            if ( norm(distance_constraint.p1 - distance_constraint.p2) < fixedDist)     
+            if ( norm(distance_constraint.p1 - distance_constraint.p2) < fixedDist)
                 distance_constraint.active = true;
             end
         end
@@ -62,13 +62,13 @@ function fit  = fitnessHumanoidsIcub4(obj,output)
                         tau_cur(15),tau_cur(15),tau_cur(16),tau_cur(16),tau_cur(17),tau_cur(17),...
                         control_points(1,:),control_points(2,:),control_points(3,:),control_points(4,:),control_points(5,:), ...
                         control_points(6,:),control_points(7,:),control_points(8,:),control_points(9,:), ...
-                        distance_constraint};           
+                        distance_constraint};
 
-        % here i update the value inside the penalty        
+        % here i update the value inside the penalty
         obj.penalty_handling.EvaluateConstraints(input_vector,evaluate_constraints_index);
         evaluate_constraints_index = evaluate_constraints_index + 1;
-        
-        % cartesian position error 
+
+        % cartesian position error
         %% (it is of capital importance to specify the end effector task as the first of the first chain in the subchain structure)
         % here GetTraj(1,1,t(i)) mean i take the reference of the first
         % subchain in the first chain.
@@ -76,7 +76,7 @@ function fit  = fitnessHumanoidsIcub4(obj,output)
         if  t(i) < Tswitch
             attr_pos_r = contr.references.GetTraj(1,1,t(i));
             attr_pos_l = contr.references.GetTraj(1,3,t(i));
-            traj_err = traj_err + norm((ee_r - attr_pos_r),L) + norm((ee_l - attr_pos_l),L);            
+            traj_err = traj_err + norm((ee_r - attr_pos_r),L) + norm((ee_l - attr_pos_l),L);
         elseif distance_constraint.active
             attr_pos_r = contr.references.GetTraj(1,6,t(i));
             attr_pos_l = contr.references.GetTraj(1,7,t(i));
@@ -92,7 +92,7 @@ function fit  = fitnessHumanoidsIcub4(obj,output)
         % max effort
         effort = sum((contr.torques(:).*contr.torques(:)),2);
         effort = sum(effort,1);
-        % saturations 
+        % saturations
         if(effort>max_effort)
            effort = max_effort;
         end

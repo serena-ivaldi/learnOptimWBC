@@ -34,6 +34,7 @@ function fit  = fitnessHumanoidsIcub(obj,output)
         control_points =[ee'; p1'; p2'; p3'; p4'];
         % here i build the input vector to compute the constraints
         % violations
+        % joint postion start at 8, without base (3 cartesion position xb, orientation of the base (quaternion) 4) 
         input_vector = {q_cur(8),q_cur(8),q_cur(9),q_cur(9),q_cur(10),q_cur(10),q_cur(11),q_cur(11),q_cur(12),q_cur(12),q_cur(13),q_cur(13),q_cur(14),q_cur(14),...
                         q_cur(15),q_cur(15),q_cur(16),q_cur(16),q_cur(17),q_cur(17),q_cur(18),q_cur(18),q_cur(19),q_cur(19),q_cur(20),q_cur(20),q_cur(21),q_cur(21),...
                         q_cur(22),q_cur(22),q_cur(23),q_cur(23),q_cur(24),q_cur(24),...
@@ -43,7 +44,7 @@ function fit  = fitnessHumanoidsIcub(obj,output)
                         control_points(1,:),control_points(2,:),control_points(3,:),control_points(4,:),control_points(5,:)};            
 
         % here i update the value inside the penalty        
-        obj.penalty_handling.EvaluateConstraints(input_vector,evaluate_constraints_index);
+        obj.penalty_handling.EvaluateConstraints(input_vector,evaluate_constraints_index); % calls the constraints functions (LinEquality, etc.)
         evaluate_constraints_index = evaluate_constraints_index + 1;
         
         % cartesian position error 
@@ -72,5 +73,6 @@ function fit  = fitnessHumanoidsIcub(obj,output)
     fprintf('traj error is %f\n', traj_err)
     fprintf('effort term is %f\n', effort)
     %---
-    fit = (-traj_err*(weight_traj_err) - effort*(weight_effort))*( 1/(weight_traj_err+weight_effort) );
+    fit = (-traj_err*(weight_traj_err) - effort*(weight_effort))*( 1/(weight_traj_err+weight_effort) ); % normalized, try to reach 0 (intervall is [-1 1])
+                                                                                                        % energy consumption als fitness function is also possible
 end

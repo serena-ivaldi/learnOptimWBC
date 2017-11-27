@@ -36,7 +36,7 @@ function [alpha_,fitness_,torque_,cartesian_position_,joint_position_]=Experimen
             p = [p;T(1:3,4)'];
             J = controller.subchains.sub_chains{1}.jacob0(q{1}(ii,:)); % generalize to multichain
             pd_cur = J*(qd{1}(ii,:))';% generalize to multichain
-            pd = [pd ; pd_cur'];  
+            pd = [pd ; pd_cur'];
         end
     elseif (strcmp(simulator,'icub_matlab'))
         %% compute the joint position and velocity
@@ -45,7 +45,7 @@ function [alpha_,fitness_,torque_,cartesian_position_,joint_position_]=Experimen
         input{2}.active_floating_base = false;
         input{2}.numContacts = sum(input{2}.feet_on_ground,2);
         input{2}.contactLinkNames={'l_sole','r_sole'};
-        % for some reason the icub robot does not work if  i save it in a file 
+        % for some reason the icub robot does not work if  i save it in a file
         % so i have to create it again
         bot2 = iCub(bot1.model_name);
         controller = input{4}; % structure that contains every information about the specific instance of the problem
@@ -58,18 +58,25 @@ function [alpha_,fitness_,torque_,cartesian_position_,joint_position_]=Experimen
         % (if they are optimized)
         controller.UpdateParameters(bestAction.parameters)
 
-        tic
-        [t, q, qd]=DynSim_iCub(controller,input{2});
-        toc
-        %toc(controller.current_time) for debugging the time deadline
-        for ii =1:size(q,1) 
+        if input{2}.mixed_fd_models
+            tic
+            [t, q, qd] = mixDynSimICub(controller, input{2});
+            toc
+        else
+            tic
+            [t, q, qd] = DynSim_iCub(controller, input{2});
+            toc
+            %toc(controller.current_time) % for debugging the time deadline
+        end
+
+        for ii =1:size(q,1)
             cur_q = q(ii,:);
             cur_qd = qd(ii,:);
             p_cur_r = bot1.offlineFkine(cur_q','r_hand'); % generalize to multichain
             p_r = [p_r;p_cur_r'];
             J_r = bot1.offlineJacob0(cur_q','r_hand'); % generalize to multichain
             pd_cur_r = J_r*(cur_qd)';% generalize to multichain
-            pd_r = [pd_r ; pd_cur_r'];  
+            pd_r = [pd_r ; pd_cur_r'];
             p_cur_l = bot1.offlineFkine(cur_q','l_hand'); % generalize to multichain
             p_l = [p_l;p_cur_l'];
             J_l = bot1.offlineJacob0(cur_q','l_hand'); % generalize to multichain
@@ -77,7 +84,7 @@ function [alpha_,fitness_,torque_,cartesian_position_,joint_position_]=Experimen
             pd_l = [pd_l ; pd_cur_l'];
         end
     end
-    %% compute the interpolated torque    
+    %% compute the interpolated torque
     tau_=InterpTorque(controller,time_sym_struct,interpolation_step);
     % copy best action inside the new folder
     fileID = fopen(strcat(complete_path,'/','best_action.txt'),'wt');
@@ -88,15 +95,15 @@ function [alpha_,fitness_,torque_,cartesian_position_,joint_position_]=Experimen
     dim_tit=16;
     dim_lab=14;
     dim_leg=12;
-    %% plot alpha 
+    %% plot alpha
     time = time_struct.ti:time_struct.step:time_struct.tf;
     vec_values = zeros(size(time));
     handle_vec = [];
     for ii = 1:size(controller.alpha,1)
-        for jj = 1:size(controller.alpha,2)         
+        for jj = 1:size(controller.alpha,2)
             i=1;
             for t = time
-                vec_values(i) = controller.alpha{ii,jj}.GetValue(t); 
+                vec_values(i) = controller.alpha{ii,jj}.GetValue(t);
                 i=i+1;
             end
             handle_vec(ii,jj) = figure;
@@ -105,7 +112,7 @@ function [alpha_,fitness_,torque_,cartesian_position_,joint_position_]=Experimen
             xlab = xlabel('t [s]');
             set(xlab,'FontSize',dim_lab,'Interpreter','latex');
             ylab = ylabel(strcat('\alpha_{',num2str(ii),num2str(jj),'}'));
-            set(ylab,'FontSize',dim_lab);      
+            set(ylab,'FontSize',dim_lab);
         end
     end
     % save alpha plot fig and jpg
@@ -133,17 +140,17 @@ function [alpha_,fitness_,torque_,cartesian_position_,joint_position_]=Experimen
                variance(index) = var(listperformance);
                mean(index) = bestAction.hist(1,ww).performance;
                evo(index) = index;
-               index = index + 1; 
+               index = index + 1;
            end
        end
-    elseif(strcmp(learn_approach,'(1+1)CMAES'))  
-      for ww =1:evolutions 
+    elseif(strcmp(learn_approach,'(1+1)CMAES'))
+      for ww =1:evolutions
          if(bestAction.listperformance(ww)> -1 )
             %remove all the failure from the computation of the variance
             variance(index) = 0;
             mean(index)= bestAction.listperformance(ww);
             evo(index) = index;
-            index = index + 1;  
+            index = index + 1;
          end
       end
     end
@@ -274,7 +281,7 @@ function [alpha_,fitness_,torque_,cartesian_position_,joint_position_]=Experimen
         cartesian_position{1} = p;
     elseif (strcmp(simulator,'icub_matlab'))
         cartesian_position_{1} = p_l;
-        cartesian_position_{2} = p_r; 
+        cartesian_position_{2} = p_r;
     end
     joint_position_ = q;
     %% close all the figure

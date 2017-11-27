@@ -4,7 +4,7 @@
 %  how many feet are on the ground, decide if activate floating base or not
 
 % #TODO substitute icub with controller.subchains
-function [t, q, qd] = DynSim_iCub(controller,params)
+function [t, q, qd, Chi] = DynSim_iCub(controller,params)
     WS = controller.GetWholeSystem();
     %% Updating the robot position and define the world link
     WS.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
@@ -35,9 +35,13 @@ function [t, q, qd] = DynSim_iCub(controller,params)
         rethrow(err);
     end
 
+    if (nargout == 4)
+        Chi = chi;
+    end
 end
 
-function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
+function dchi = forwardDynamics(t,chi,controller,param)
+%function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
     %% forwardDynamics_SoT
     %  This is the forward dynamics of the model loaded in the
     %  wholeBodyInterface from the URDF description. The dynamic model is
@@ -91,7 +95,7 @@ function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
 
     % Obtaining the rotation matrix from root link to world frame
     qT         = [x_b;qt_b];
-    [~,R_b]    = frame2posrot(qT);
+    [~,R_b]    = WBM.utilities.tfms.frame2posRotm(qT);
 
 
 
@@ -124,7 +128,7 @@ function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
 
     for i=1:param.numContacts
         Jc(6*(i-1)+1:6*i,:)    = wbm_jacobian(R_b,x_b,qj,param.contactLinkNames{i});
-        dJcNu(6*(i-1)+1:6*i,:) = wbm_djdq(R_b,x_b,qj,dqj,[dx_b;omega_w],param.contactLinkNames{i});
+        dJcNu(6*(i-1)+1:6*i,:) = wbm_dJdq(R_b,x_b,qj,dqj,[dx_b;omega_w],param.contactLinkNames{i});
     end
     %
     % % CoM jacobian
@@ -154,28 +158,32 @@ function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
         % feet current position and orientation
         l_sole   = wbm_forwardKinematics(R_b,x_b,qj,'l_sole');
         r_sole   = wbm_forwardKinematics(R_b,x_b,qj,'r_sole');
-        [x_lfoot,R_b_lfoot]    = frame2posrot(l_sole);
-        [x_rfoot,R_b_rfoot]    = frame2posrot(r_sole);
+        [x_lfoot,R_b_lfoot]    = WBM.utilities.tfms.frame2posRotm(l_sole);
+        [x_rfoot,R_b_rfoot]    = WBM.utilities.tfms.frame2posRotm(r_sole);
 
         % orientation is parametrized with euler angles
-        [~,phi_lfoot]          = parametrization(R_b_lfoot);
-        [~,phi_rfoot]          = parametrization(R_b_rfoot);
+        %[~,phi_lfoot]          = parametrization(R_b_lfoot);
+        %[~,phi_rfoot]          = parametrization(R_b_rfoot);
+        phi_lfoot              = WBM.utilities.tfms.rotm2eul(R_b_lfoot, 'ZYX');
+        phi_rfoot              = WBM.utilities.tfms.rotm2eul(R_b_rfoot, 'ZYX');
 
-        pos_leftFoot           = [x_lfoot; phi_lfoot'];
-        pos_rightFoot          = [x_rfoot; phi_rfoot'];
+        pos_leftFoot           = [x_lfoot; phi_lfoot];
+        pos_rightFoot          = [x_rfoot; phi_rfoot];
 
         % feet original position and orientation
         lsole_ini              = param.lfoot_ini;
         rsole_ini              = param.rfoot_ini;
 
-        [xi_lfoot,R_bi_lfoot]  = frame2posrot(lsole_ini);
-        [xi_rfoot,R_bi_rfoot]  = frame2posrot(rsole_ini);
+        [xi_lfoot,R_bi_lfoot]  = WBM.utilities.tfms.frame2posRotm(lsole_ini);
+        [xi_rfoot,R_bi_rfoot]  = WBM.utilities.tfms.frame2posRotm(rsole_ini);
 
-        [~,phi_rfoot_ini]      = parametrization(R_bi_rfoot);
-        [~,phi_lfoot_ini]      = parametrization(R_bi_lfoot);
+        %[~,phi_rfoot_ini]      = parametrization(R_bi_rfoot);
+        %[~,phi_lfoot_ini]      = parametrization(R_bi_lfoot);
+        phi_rfoot_ini          = WBM.utilities.tfms.rotm2eul(R_bi_rfoot, 'ZYX');
+        phi_lfoot_ini          = WBM.utilities.tfms.rotm2eul(R_bi_lfoot, 'ZYX');
 
-        lfoot_ini_tot          = [xi_lfoot; phi_lfoot_ini'];
-        rfoot_ini_tot          = [xi_rfoot; phi_rfoot_ini'];
+        lfoot_ini_tot          = [xi_lfoot; phi_lfoot_ini];
+        rfoot_ini_tot          = [xi_rfoot; phi_rfoot_ini];
 
         % error between original and current feet position and orientation
         if     param.feet_on_ground(1) == 1 && param.feet_on_ground(2) == 0
@@ -218,7 +226,7 @@ function [dchi,visual_param]=forwardDynamics(t,chi,controller,param)
     [M,h,~] = icub.WholeBodyDynamics(qj,dqj);
     % Need to calculate the quaternions derivative
     omega_b = transpose(R_b)*omega_w; %TODO floating base flag required (parameter of the simulator)
-    dqt_b   = quaternionDerivative(omega_b,qt_b);   %TODO floating base flag required (parameter of the simulator)
+    dqt_b   = WBM.utilities.tfms.dquat(qt_b,omega_b);   %TODO floating base flag required (parameter of the simulator)
 
     dx      = [dx_b;dqt_b;dqj];
     %dNu     = M\(Jc_t*fc + [zeros(6,1); tau]-h);

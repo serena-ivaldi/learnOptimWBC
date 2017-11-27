@@ -68,11 +68,11 @@ classdef iCubWBC < WBM.Interfaces.iCubWBM
 
         function SetWorldFrameiCub(obj, qjInit, dqjInit, dx_bInit, omega_WInit, reference_link)
             %% Updating the robot position
-            obj.mwbm_icub.setState(qjInit, dqjInit, vertcat(dx_bInit, omega_WInit));
+            setState(obj.mwbm_icub, qjInit, dqjInit, vertcat(dx_bInit, omega_WInit));
             % fixing the world reference frame w.r.t. the foot on ground position
-            [x_b0, R_b0] = obj.mwbm_icub.getWorldFrameFromFixLnk(reference_link);
+            [x_b0, R_b0] = getWorldFrameFromFixLnk(obj.mwbm_icub, reference_link);
             % define world frame
-            obj.mwbm_icub.setWorldFrame(R_b0, x_b0);
+            setWorldFrame(obj.mwbm_icub, R_b0, x_b0);
 
             % update position and orientation of the floating base repect of the root base
             obj.x_b = x_b0;
@@ -98,7 +98,7 @@ classdef iCubWBC < WBM.Interfaces.iCubWBM
         %
         % M       mass matrix (inertia)
         % f       generalized bias forces
-        % omega   centrodial momentum
+        % omega   centroidal momentum
         function [M, f, omega] = WholeBodyDynamics(obj, q_j, dq_j)
             [M, f, omega] = wholeBodyDyn(obj, q_j, dq_j);
         end
@@ -107,7 +107,7 @@ classdef iCubWBC < WBM.Interfaces.iCubWBM
         %
         % the hypothesis is that fc is already premultiplied by the Jc (contact jacobian)
         function f = F(obj, q_j, dq_j, f_c, Jc_t)
-            f = generalizedForces(obj, q_j, dq_j, f_c, Jc_t);
+            f = genForces(obj, Jc_t, f_c, q_j, dq_j);
         end
 
         % wrapper-function for the mass-matrix:
@@ -116,20 +116,19 @@ classdef iCubWBC < WBM.Interfaces.iCubWBM
         end
 
         function suppConvHull = computeSupPoly(obj, feet_on_ground, chi)
-        %Compute the support polygone wrt feet_on_ground
-
-            if ( (feet_on_ground(1) == 1) && (feet_on_ground(2) == 1) )
-                %if both feet on the ground the ref frame is l_sole
-                %l_foot
-                [pos_lfoot,~] = obj.offlineFkine(chi, 'r_sole');
+            % Compute the support polygone w.r.t. feet_on_ground:
+            if ( feet_on_ground(1) && feet_on_ground(2) )
+                % if both feet on the ground the ref frame is l_sole
+                % l_foot:
+                [pos_lfoot,~] = offlineFkine(obj, chi, 'r_sole');
 
                 X__lfoot = pos_lfoot(1);    Y_lfoot = pos_lfoot(2);
                 X(1,1) = X__lfoot + 0.12;   Y(1,1) = Y_lfoot + 0.025;
-                X(1,2) = X__lfoot + 0.12;   Y(1,2) = Y_lfoot -0.025;
+                X(1,2) = X__lfoot + 0.12;   Y(1,2) = Y_lfoot - 0.025;
                 X(1,3) = X__lfoot - 0.06;   Y(1,3) = Y_lfoot - 0.025;
                 X(1,4) = X__lfoot - 0.06;   Y(1,4) = Y_lfoot + 0.025;
 
-                %r_foot
+                % r_foot:
                 [pos_rfoot,~] = obj.offlineFkine(chi, 'l_sole');
 
                 X__rfoot = pos_rfoot(1);    Y_rfoot = pos_rfoot(2);
@@ -138,9 +137,9 @@ classdef iCubWBC < WBM.Interfaces.iCubWBM
                 X(1,7) = X__rfoot - 0.06;   Y(1,7) = Y_rfoot - 0.025;
                 X(1,8) = X__rfoot - 0.06;   Y(1,8) = Y_rfoot + 0.025;
             end
-            if ( (feet_on_ground(1) == 0) || (feet_on_ground(2) == 0) )
-                %if only  left foot is on the ground the ref frame is l_sole
-                %if only right foot is on the ground the ref frame is r_sole
+            if ( ~feet_on_ground(1) || ~feet_on_ground(2) )
+                % if only  left foot is on the ground the ref frame is l_sole
+                % if only right foot is on the ground the ref frame is r_sole
                 X(1,1) =  0.12;     Y(1,1) =  0.025;
                 X(1,2) =  0.12;     Y(1,2) = -0.025;
                 X(1,3) = -0.06;     Y(1,3) = -0.025;
@@ -174,7 +173,7 @@ classdef iCubWBC < WBM.Interfaces.iCubWBM
                     torsoInit = [0.0;  0.0;  0.0];
                 end
                 string_search = {'torso_yaw', 'torso_roll', 'torso_pitch'};
-                qjInit = obj.sortJointValue(string_search, qjInit, torsoInit);
+                qjInit = sortJointValue(obj, string_search, qjInit, torsoInit);
             end
 
             if ~isempty( find(SubStrFind('left_arm', list_of_kin_chain), 1) )
@@ -185,7 +184,7 @@ classdef iCubWBC < WBM.Interfaces.iCubWBM
                 end
                 string_search = {'l_shoulder_pitch', 'l_shoulder_roll', 'l_shoulder_yaw', ...
                                  'l_elbow', 'l_wrist_prosup', 'l_wrist_pitch', 'l_wrist_yaw'};
-                qjInit = obj.sortJointValue(string_search,qjInit,leftArmInit);
+                qjInit = sortJointValue(obj, string_search,qjInit,leftArmInit);
             end
 
             if(~isempty(find(SubStrFind('right_arm',list_of_kin_chain),1)))
@@ -196,10 +195,11 @@ classdef iCubWBC < WBM.Interfaces.iCubWBM
                 end
                 string_search = {'r_shoulder_pitch', 'r_shoulder_roll', 'r_shoulder_yaw', ...
                                  'r_elbow','r_wrist_prosup','r_wrist_pitch','r_wrist_yaw'};
-                qjInit = obj.sortJointValue(string_search, qjInit, rightArmInit);
+                qjInit = sortJointValue(obj, string_search, qjInit, rightArmInit);
             end
 
-            if ( ~isempty(find(SubStrFind('l_sole', list_of_kin_chain), 1)) || ~isempty(find(SubStrFind('r_sole', list_of_kin_chain), 1)) )
+            if ( ~isempty(find(SubStrFind('l_sole', list_of_kin_chain), 1)) || ...
+                 ~isempty(find(SubStrFind('r_sole', list_of_kin_chain), 1)) )
                 if ~isempty(varargin)
                     if ~isempty(find(SubStrFind('l_sole',list_of_kin_chain),1))
                         leftLegInit = joints_initial_values{1,find(SubStrFind('l_sole', list_of_kin_chain), 1)};
@@ -208,73 +208,83 @@ classdef iCubWBC < WBM.Interfaces.iCubWBM
                         rightLegInit = joints_initial_values{1,find(SubStrFind('r_sole', list_of_kin_chain), 1)};
                     end
                 else
-                    if feet_on_ground(1) == 1 && feet_on_ground(2) == 1
+                    if ( feet_on_ground(1) && feet_on_ground(2) )
                         % initial conditions for balancing on two feet
-                        leftLegInit  = [  25.5   0.1   0.0  -18.5  -5.5  -0.1];
-                        rightLegInit = [  25.5   0.1   0.0  -18.5  -5.5  -0.1];
-                    elseif feet_on_ground(1) == 1 && feet_on_ground(2) == 0
+                        leftLegInit  = [25.5   0.1   0.0  -18.5  -5.5  -0.1];
+                        rightLegInit = [25.5   0.1   0.0  -18.5  -5.5  -0.1];
+                    elseif feet_on_ground(1)
                         % initial conditions for the robot standing on the left foot
-                        leftLegInit  = [  25.5   15.0   0.0  -18.5  -5.5  -0.1];
-                        rightLegInit = [  25.5   5.0    0.0  -40    -5.5  -0.1];
-                    elseif feet_on_ground(1) == 0 && feet_on_ground(2) == 1
+                        leftLegInit  = [25.5   15.0   0.0  -18.5  -5.5  -0.1];
+                        rightLegInit = [25.5   5.0    0.0  -40    -5.5  -0.1];
+                    elseif feet_on_ground(2)
                         % initial conditions for the robot standing on the right foot
-                        leftLegInit  = [  25.5   5.0    0.0  -40    -5.5  -0.1];
-                        rightLegInit = [  25.5   15.0   0.0  -18.5  -5.5  -0.1];
+                        leftLegInit  = [25.5   5.0    0.0  -40    -5.5  -0.1];
+                        rightLegInit = [25.5   15.0   0.0  -18.5  -5.5  -0.1];
                     end
                 end
                 string_search = {'l_hip_pitch', 'l_hip_roll', 'l_hip_yaw','l_knee', ...
                                  'l_ankle_pitch', 'l_ankle_roll'};
-                qjInit = obj.sortJointValue(string_search,qjInit,leftLegInit);
+                qjInit = sortJointValue(obj, string_search, qjInit, leftLegInit);
+
                 string_search = {'r_hip_pitch', 'r_hip_roll', 'r_hip_yaw', 'r_knee', ...
                                  'r_ankle_pitch', 'r_ankle_roll'};
-
-                qjInit = obj.sortJointValue(string_search, qjInit, rightLegInit);
+                qjInit = sortJointValue(obj, string_search, qjInit, rightLegInit);
             end
             qjInit = qjInit.*(pi/180);
         end
 
         % Same as the method fkine but can be call at anytime. By tag you
         % specify through a string the name of the joint you want
-        function [x,R] = offlineFkine(obj, chi, tag)
-            x_base = chi(1:3,:);  %TODO floating base flag required (parameter of the simulator)
-            qt_b   = chi(4:7,:);  %TODO floating base flag required (parameter of the simulator)
-            q      = chi(8:8+obj.ndof-1,:);
-            [~,R_base] = WBM.utilities.frame2posRotm([x_base; qt_b]);
+        function [x, R] = offlineFkine(obj, chi, tag)
+            n = obj.ndof;
 
-            fkine = obj.mwbm_icub.forwardKinematics(R_base, x_base, q, tag);
+            x_base = chi(1:3,1);  % TODO floating base flag required (parameter of the simulator)
+            qt_b   = chi(4:7,1);  % TODO floating base flag required (parameter of the simulator)
+            q      = chi(8:(n+7),1); % n+7 = 8+n-1
+
+            vqT_b = vertcat(x_base, qt_b);
+            [~,R_base] = WBM.utilities.tfms.frame2posRotm(vqT_b);
+
+            fkine = forwardKinematics(obj.mwbm_icub, R_base, x_base, q, tag);
             % Obtaining the rotation matrix from root link to world frame
-            [x,R] = WBM.utilities.frame2posRotm(fkine);
+            [x, R] = WBM.utilities.tfms.frame2posRotm(fkine);
         end
 
         % Same as the method jacob0 but can be call at anytime. By tag you
         % specify through a string the name of the joint you want
         function jacob0 = offlineJacob0(obj, chi, tag)
-            x_base = chi(1:3,:);  %TODO floating base flag required (parameter of the simulator)
-            qt_b   = chi(4:7,:);  %TODO floating base flag required (parameter of the simulator)
-            q      = chi(8:8+obj.ndof-1,:);
-            [~,R_base] = WBM.utilities.frame2posRotm([x_base; qt_b]);
+            n = obj.ndof;
 
-            jacob0 = obj.mwbm_icub.jacobian(R_base, x_base, q, tag);
+            x_base = chi(1:3,1);  % TODO floating base flag required (parameter of the simulator)
+            qt_b   = chi(4:7,1);  % TODO floating base flag required (parameter of the simulator)
+            q      = chi(8:(n+7),1); % n+7 = 8+n-1
+
+            vqT_b = vertcat(x_base, qt_b);
+            [~,R_base] = WBM.utilities.tfms.frame2posRotm(vqT_b);
+
+            jacob0 = jacobian(obj.mwbm_icub, R_base, x_base, q, tag);
         end
 
         % Create the constraints_values vector need to compute the constraints
-        % Used in AllRUntimeParameters
+        % used in AllRUntimeParameters
         function vector = createConstraintsVector(obj)
-            vector = [];
-            for i = 1:obj.ndof
-                vector = [vector, obj.UBjointLimit(i), obj.LBjointLimit(i)];
-            end
+            n = obj.ndof;
+            vector = zeros(1,4*n);
 
-            for i = 1:obj.ndof
-                vector = [vector, obj.effortLimit(i), -obj.effortLimit(i)];
+            for i = 1:n
+                vector(1,2*i-1) = obj.UBjointLimit(i);
+                vector(1,2*i)   = obj.LBjointLimit(i);
+
+                vector(1,2*(n+i)-1) =  obj.effortLimit(i); % 2*(n+i)-1 = 2*n+2*i-1
+                vector(1,2*(n+i))   = -obj.effortLimit(i);
             end
         end
 
         function qjout = sortJointValue(obj, string_search, q_j, valueVector)
-        %% sortJointValue
-        % Sort the joints values valueVector of the joints listed in the cell of
-        % strings string_search to match the same order in the joint position
-        % vector qj as the order in the urdf file
+            %% sortJointValue
+            % Sort the joints values valueVector of the joints listed in the cell of
+            % strings string_search to match the same order in the joint position
+            % vector qj as the order in the urdf file
             qjout = q_j;
             for i = 1:length(string_search)
                 j = 1;

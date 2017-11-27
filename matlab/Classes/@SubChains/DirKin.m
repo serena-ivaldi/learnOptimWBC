@@ -48,13 +48,14 @@ function [J,J_dot,x,xd,rpy,rpyd]=DirKin(obj,q,qd,ind_subchain,ind_task)
             lnk_name = obj.target_link{ind_subchain}{ind_subchain, ind_task};
 
             if ~strcmp(lnk_name, 'none')
-                % update the link name of MultChainTree-object ...
-                cur_bot.ctrl_link = lnk_name;
+                % change the current link of the mult-chain tree robot
+                % which is controlled by the system ...
+                cur_bot.link = lnk_name;
 
                 % compute the pose (ZYX-position) of the current sub-chain ...
                 fk_tform = cur_bot.fkine(q_t);
                 x   = fk_tform(1:3,4);
-                rpy = WBM.utilities.tform2eul(fk_tform, 'ZYX');
+                rpy = WBM.utilities.tfms.tform2eul(fk_tform, 'ZYX');
             else
                 x   = [];
                 rpy = [];

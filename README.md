@@ -7,19 +7,19 @@ Description
 -----------
 
 
-learnOptimWBC is a Matlab framework to study the combination of learning and prioritized multi-task control for redundant robots. In such settings, a robot has to accomplish a main global task by the simultaneous execution and combination of several different elementary tasks. 
+learnOptimWBC is a Matlab framework to study the combination of learning and prioritized multi-task control for redundant robots. In such settings, a robot has to accomplish a main global task by the simultaneous execution and combination of several different elementary tasks.
 Our framework is specifically used to study multi-task controllers with soft task priorities: our goal is to learn the temporal profile of the task priorities in an automatic way, without the requirement of the expert user manually tuning the task priorities and their evolution in time. We are studying these methods on redundant robots (arms, humanoids). THIS IS WORK IN PROGRESS!
 
 If you are going to use parts of this code, please cite us:
 
-Modugno, V.; Neumann, G.; Rueckert, E.; Oriolo, G.; Peters, J.; Ivaldi, S. (2016) Learning soft task priorities for control of redundant robots. Proc. IEEE International Conf. on Robotics and Automation (ICRA). 
+Modugno, V.; Neumann, G.; Rueckert, E.; Oriolo, G.; Peters, J.; Ivaldi, S. (2016) Learning soft task priorities for control of redundant robots. Proc. IEEE International Conf. on Robotics and Automation (ICRA).
 
 
 
 Installation
 ------------
 
-- Unzip /learnOptimWBC/matlab/Dependecies/robot-9.10.zip somewhere handy (or in place). This operation will create a folder called rvctools, containing the robotics toolbox that we rely upon. Add /rcvtools and its subfolder to the Matlab PATH (you can right-click on the folder name in the Matlab panel list). To install the robotics toolbox run the rvctools/startup_rvc.m (Every time you have to run a script from the Matlab shell you have to change the current Matlab folder using the directory view that is usually on the right side of the Matlab window) from the Matlab shell. 
+- Unzip /learnOptimWBC/matlab/Dependecies/robot-9.10.zip somewhere handy (or in place). This operation will create a folder called rvctools, containing the robotics toolbox that we rely upon. Add /rcvtools and its subfolder to the Matlab PATH (you can right-click on the folder name in the Matlab panel list). To install the robotics toolbox run the rvctools/startup_rvc.m (Every time you have to run a script from the Matlab shell you have to change the current Matlab folder using the directory view that is usually on the right side of the Matlab window) from the Matlab shell.
 
 - You need to compile the mex file for the robotics toolbox. Depending on your Matlab version, you will need an appropriate compiler version.
 For example: Matlab 2013a supports gcc until version 4.4. If you have a newer gcc (probably 4.8 if you have Ubuntu 14.04) then add it to your system:
@@ -30,7 +30,7 @@ Then manually edit the file:
 and update the name of your compiler:
  `CC='gcc-4.4`
  `CXX='g++-4.4`.
-More instructions on how to set up your compiler: 
+More instructions on how to set up your compiler:
 http://fr.mathworks.com/help/matlab/matlab_external/changing-default-compiler.html
 
 
@@ -62,7 +62,7 @@ Code Structure
 - *UsefullFile* is not used.
 
 
-How to add a new controller 
+How to add a new controller
 --------------------
 
 If you want to define a new global controller given a specific robot, you have to define the parameters in AllStaticParameters.m and UF_StaticParameters.m both in /matlab/DesignToolbox
@@ -74,26 +74,26 @@ in AllStaticParameters.m
 - *[bot1]*  : the robot that we want to use. pick the model from /matlab/Robot folder by specifying the Mdl***() functions,
 - *traj_type = {'cartesian_x','cartesian_rpy','joint'}*  : specifies the kind of controllers that we want to use (one for each elementary controller),
 - *control_type = {'regulation','tracking'}*  : defines if we want to reach a point or if we want to follow a trajectory (one for each elementary controller),
-- *type_of_traj = {'none','sampled','func'}*  : for tracking= 'sampled' if we want to generate a sampled trajectory 'func' for closed form trajectory 
+- *type_of_traj = {'none','sampled','func'}*  : for tracking= 'sampled' if we want to generate a sampled trajectory 'func' for closed form trajectory
                                                 for regulation = 'none'  (one for each elementary controller),
 - *geometric_path = {'rectilinear','lemniscate','circular', 'none'}*  : defines the kind of trajectory that we want to follow for a tracking task. 'none' for a 									regulation task (one for each elementary  controller),
-- *time_law = {'exponential','linear','none'}*  : defines the kind of time law that we want to follow for a tracking task. 'none' for a 							       regulation task (one for each elementary controller),       
+- *time_law = {'exponential','linear','none'}*  : defines the kind of time law that we want to follow for a tracking task. 'none' for a 							       regulation task (one for each elementary controller),
 - *geom_parameters{1,i}*  : defines the geometric structure of each task. Look inside the function in /common to know which are the parameters that we 			            specify for each trajectory. In the regulation case is necessary to specify just the arrival point  (one for each elementary controller),
 - *dim_of_task{1,i}*  : is a vector of 0 and 1 that define the dimension that we want to control for each task. 1 = dim active 0 = dim not active (one for each elementary controller),
 - *id *  : the name of the configuration file for the current controller that has to be specified in /matlab/Exe/allruntimeparameters.m if we want to use it for in a simulation.
 
 
 in UF_StaticParameters.m
-- *metric*  : cell array of strings. According to (peters07) we can define different matrix that produces different control structure,      
+- *metric*  : cell array of strings. According to (peters07) we can define different matrix that produces different control structure,
 - *kp*  : row vector that defines the proportional gain (one for each elementary controller).
- 
+
 
 
 How to add a new scenario
 -----------------------
 
 Creating a new scenario is a trial and error procedure. For the obstacles this toolbox provides a global variable called 'G_OB'. The obstacle supported in this library can be 'wall' and 'repulsive point'. The class 'obstacle' contains all the information to properly set up new obstacles.
-The script /matlab/DesignToolbox/DesignScene.m is a sandbox where the user can visualize the scenario with the obstacles, the robot and the trajectories given by the low level controllers that satisfy a tracking task. 
+The script /matlab/DesignToolbox/DesignScene.m is a sandbox where the user can visualize the scenario with the obstacles, the robot and the trajectories given by the low level controllers that satisfy a tracking task.
 As we said the scenario design phase is a time consuming operation but in our knowledge this is a common issue for every simulator where creating a new scenario can be a painful task.
 To start give a look at /matlab/TestResults/scenarios where is possible to find some simple scenarios.
 
@@ -123,11 +123,5 @@ For both MainExec.m and MainOptRobust.m we have to set in /matlab/Exe/AllRuntime
 Only for MainOptRobust.m
 
 - *explorationRate*  : defines the exploration rate of CMA-ES (the optimization algorithm)
-- *niter*  : defines the number of generations of the optimization algorithm 
+- *niter*  : defines the number of generations of the optimization algorithm
 - *fitness*  : defines the fitness that is used to evaluate the quality of the current roll-out.
-      
-
-
-
-
-

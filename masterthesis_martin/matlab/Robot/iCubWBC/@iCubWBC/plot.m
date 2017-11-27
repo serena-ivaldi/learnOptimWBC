@@ -75,7 +75,7 @@ qj      = chi(:,8:8 + obj.ndof - 1 );   % joint positions
 vis_speed = 1;         % this variable is set to change the visualization speed,
 % to make its speed close to the real time in case
 % the simulation time step is changed.
-alpha = 0.3; %patches transparency 
+alpha = 0.3; %patches transparency
 
 n_joint = length(obj.jointList); % number of points to be plotted (virtual joints)
 n_lin = length(obj.linkList); % number of lines to be plotted (virtual links)
@@ -111,9 +111,9 @@ zaxis = 'zdata';
 kin = zeros(size(chi,1),7,n_joint);
 
 for jj=1:n_joint
-    for ii=1:n % at each instance        
+    for ii=1:n % at each instance
         % convert base state to rotation
-        [x_b,R_b]    = frame2posrot(squeeze(qb(ii,:)'));        
+        [x_b,R_b]    = WBM.utilities.tfms.frame2posRotm(squeeze(qb(ii,:)'));
         %wbm_setWorldFrame(R_b,x_b,[0,0,-9.81]'); %is this needed ??????
         kin(ii,:,jj)   = (wbm_forwardKinematics(R_b,x_b,qj(ii,:)',obj.linkList{jj}))';  % forward kinematics for the list of joints/links
     end
@@ -141,21 +141,21 @@ x_b0(1) = plot3(x(1),y(1),z(1),'r*');
 % plot the joints
 
 for jj = 2:n_joint-1
-    
-    [x_btemp,~] = frame2posrot(kin(1,:,jj)');
+
+    [x_btemp,~] = WBM.utilities.tfms.frame2posRotm(kin(1,:,jj)');
     x(jj)       = x_btemp(1);
     y(jj)       = x_btemp(2);
     z(jj)       = x_btemp(3);
-    
+
     col         = 'r.';
     x_b0(jj)    = plot3(x(jj),y(jj),z(jj),col,'MarkerSize', 25);
-    
+
 end
 
 % plot the position of the COM
 jj = n_joint;
 
-[x_btemp,~] = frame2posrot(kin(1,:,jj)');
+[x_btemp,~] = WBM.utilities.tfms.frame2posRotm(kin(1,:,jj)');
 x(jj)   = x_btemp(1);
 y(jj)   = x_btemp(2);
 z(jj)   = x_btemp(3);
@@ -212,7 +212,7 @@ try
     mult_patch(strcmp(obj.linkList,'r_forearm'),:) = [0.01 0.01];
     mult_patch(strcmp(obj.linkList,'r_shoulder_2'),:) = [0.01 0.01];
     mult_patch(strcmp(obj.linkList,'r_shoulder_3'),:) = [0.01 0.01];
-    
+
     mult_patch(strcmp(obj.linkList,'r_shoulder_3'),:) = [0.01 0.01];
     mult_patch(strcmp(obj.linkList,'l_shoulder_2'),:) = [0.01 0.01];
     mult_patch(strcmp(obj.linkList,'l_gripper'),:) = [0.01 0.035];
@@ -229,21 +229,21 @@ end
 
 % plot the lines depicting the links
 for jj=1:n_lin
-    
+
     lin(jj) = line(xaxis,xyzpairs(jj,1:2),yaxis,xyzpairs(jj,3:4),zaxis,xyzpairs(jj,5:6),'erasemode','normal','linewidth',2,'color','blue');
-    
+
     % for the patches (to determine the orientation of the patch to be applied to the links)
     vectlnk  = [xyzpairs(jj,2)-xyzpairs(jj,1),xyzpairs(jj,4)-xyzpairs(jj,3),xyzpairs(jj,6)-xyzpairs(jj,5)];
     orthlnk  = null(vectlnk);
     orthlnk1 = mult_patch(jj,1)*orthlnk(:,1);
     orthlnk2 = mult_patch(jj,2)*orthlnk(:,2);
-    
+
     % offsets in the direction orthogonal to the link
     qq1      =  orthlnk1+orthlnk2;
     qq2      = -orthlnk1+orthlnk2;
     qq3      = -orthlnk1-orthlnk2;
     qq4      =  orthlnk1-orthlnk2;
-    
+
     % vertices for the patch
     xyzpatch.vertices = [xyzpairs(jj,2)+qq1(1) , xyzpairs(jj,4)+qq1(2) , xyzpairs(jj,6)+qq1(3);
         xyzpairs(jj,2)+qq2(1) , xyzpairs(jj,4)+qq2(2) , xyzpairs(jj,6)+qq2(3);
@@ -253,15 +253,15 @@ for jj=1:n_lin
         xyzpairs(jj,1)+qq2(1) , xyzpairs(jj,3)+qq2(2) , xyzpairs(jj,5)+qq2(3);
         xyzpairs(jj,1)+qq3(1) , xyzpairs(jj,3)+qq3(2) , xyzpairs(jj,5)+qq3(3);
         xyzpairs(jj,1)+qq4(1) , xyzpairs(jj,3)+qq4(2) , xyzpairs(jj,5)+qq4(3)];
-    
-    
+
+
     xyzpatch.faces   = [ 1 2 3 4;
         1 4 8 5;
         5 8 7 6;
         7 3 2 6;
         2 6 5 1;
         3 7 8 4];
-    
+
     lnkpatch(jj) = patch('vertices',xyzpatch.vertices,'faces',xyzpatch.faces,'FaceAlpha',alpha);
 end
 
@@ -322,18 +322,18 @@ ii=2;
 movieframenum = 1;
 
 while ii<n+1   % the visualization instance
-    
+
     tic;      % visualizer step timer start (to setting the visualizer speed)
-    
+
     % get the positions for the current instance
     for jj=1:n_joint
-        [x_btemp,~] = frame2posrot(kin(ii,:,jj)');
+        [x_btemp,~] = WBM.utilities.tfms.frame2posRotm(kin(ii,:,jj)');
         x(jj) = x_btemp(1);
         y(jj) = x_btemp(2);
         z(jj) = x_btemp(3);
         set(x_b0(jj),xaxis,x(jj),yaxis,y(jj),zaxis,z(jj));
     end
-    
+
     %	update the joints positions
     for i = 1:n_joint
         row = zeros(1,6);
@@ -345,12 +345,12 @@ while ii<n+1   % the visualization instance
             xyzpairs(i,:) = row;
         end
     end
-    
+
     % update the lines for the links wrt the new joint positions
     for jj=1:n_lin
-        
+
         set(lin(jj),xaxis,xyzpairs(jj,1:2),yaxis,xyzpairs(jj,3:4),zaxis,xyzpairs(jj,5:6));
-        
+
         vectlnk   =  [xyzpairs(jj,2)-xyzpairs(jj,1),xyzpairs(jj,4)-xyzpairs(jj,3),xyzpairs(jj,6)-xyzpairs(jj,5)];
         orthlnk   =  null(vectlnk);
         orthlnk1  =  mult_patch(jj,1)*orthlnk(:,1);
@@ -359,7 +359,7 @@ while ii<n+1   % the visualization instance
         qq2       = -orthlnk1+orthlnk2;
         qq3       = -orthlnk1-orthlnk2;
         qq4       =  orthlnk1-orthlnk2;
-        
+
         xyzpatch.vertices = [xyzpairs(jj,2)+qq1(1) , xyzpairs(jj,4)+qq1(2) , xyzpairs(jj,6)+qq1(3);
             xyzpairs(jj,2)+qq2(1) , xyzpairs(jj,4)+qq2(2) , xyzpairs(jj,6)+qq2(3);
             xyzpairs(jj,2)+qq3(1) , xyzpairs(jj,4)+qq3(2) , xyzpairs(jj,6)+qq3(3);
@@ -368,23 +368,23 @@ while ii<n+1   % the visualization instance
             xyzpairs(jj,1)+qq2(1) , xyzpairs(jj,3)+qq2(2) , xyzpairs(jj,5)+qq2(3);
             xyzpairs(jj,1)+qq3(1) , xyzpairs(jj,3)+qq3(2) , xyzpairs(jj,5)+qq3(3);
             xyzpairs(jj,1)+qq4(1) , xyzpairs(jj,3)+qq4(2) , xyzpairs(jj,5)+qq4(3)];
-        
+
         set(lnkpatch(jj),'vertices',xyzpatch.vertices);
-        
+
     end
-    
+
     % feet patches
     % right foot
     jj=n_lin+1;
-    
+
     orthlnk1 = [0 0.03 0]';
     orthlnk2 = [0 0 0.03]';
-    
+
     qq1 =  orthlnk1+2*orthlnk2;
     qq2 = -orthlnk1+2*orthlnk2;
     qq3 = -orthlnk1-orthlnk2;
     qq4 =  orthlnk1-orthlnk2;
-    
+
     xyzpatch.vertices = [xyzpairs(r_foot_index,2)+qq1(1)      , xyzpairs(r_foot_index,4)+qq1(2) , xyzpairs(r_foot_index,6)+qq1(3);
         xyzpairs(r_foot_index,2)+qq2(1)      , xyzpairs(r_foot_index,4)+qq2(2) , xyzpairs(r_foot_index,6)+qq2(3);
         xyzpairs(r_foot_index,2)+qq3(1)      , xyzpairs(r_foot_index,4)+qq3(2) , xyzpairs(r_foot_index,6)+qq3(3);
@@ -393,20 +393,20 @@ while ii<n+1   % the visualization instance
         xyzpairs(r_foot_index,2)+qq2(1)+0.03 , xyzpairs(r_foot_index,4)+qq2(2) , xyzpairs(r_foot_index,6)+qq2(3);
         xyzpairs(r_foot_index,2)+qq3(1)+0.03 , xyzpairs(r_foot_index,4)+qq3(2) , xyzpairs(r_foot_index,6)+qq3(3);
         xyzpairs(r_foot_index,2)+qq4(1)+0.03 , xyzpairs(r_foot_index,4)+qq4(2) , xyzpairs(r_foot_index,6)+qq4(3)];
-    
+
     set(lnkpatch(jj),'vertices',xyzpatch.vertices);
-    
+
     % left foot
     jj=n_lin+2;
-    
+
     orthlnk1 = [0 0.03 0]';
     orthlnk2 = [0 0 0.03]';
-    
+
     qq1 =  orthlnk1+2*orthlnk2;
     qq2 = -orthlnk1+2*orthlnk2;
     qq3 = -orthlnk1-orthlnk2;
     qq4 =  orthlnk1-orthlnk2;
-    
+
     xyzpatch.vertices = [xyzpairs(l_foot_index,2)+qq1(1)      , xyzpairs(l_foot_index,4)+qq1(2) , xyzpairs(l_foot_index,6)+qq1(3);
         xyzpairs(l_foot_index,2)+qq2(1)      , xyzpairs(l_foot_index,4)+qq2(2) , xyzpairs(l_foot_index,6)+qq2(3);
         xyzpairs(l_foot_index,2)+qq3(1)      , xyzpairs(l_foot_index,4)+qq3(2) , xyzpairs(l_foot_index,6)+qq3(3);
@@ -415,26 +415,30 @@ while ii<n+1   % the visualization instance
         xyzpairs(l_foot_index,2)+qq2(1)+0.03 , xyzpairs(l_foot_index,4)+qq2(2) , xyzpairs(l_foot_index,6)+qq2(3);
         xyzpairs(l_foot_index,2)+qq3(1)+0.03 , xyzpairs(l_foot_index,4)+qq3(2) , xyzpairs(l_foot_index,6)+qq3(3);
         xyzpairs(l_foot_index,2)+qq4(1)+0.03 , xyzpairs(l_foot_index,4)+qq4(2) , xyzpairs(l_foot_index,6)+qq4(3)];
-    
+
     set(lnkpatch(jj),'vertices',xyzpatch.vertices);
-    
+
     % end feet patches
-    
+
     % store axes objects to a vector
     params.plot_objs{1} = [lnkpatch';lin';x_b0'];
-    
-    
+
+
     drawnow;
-    
+
     % to update the visualizer speed to keep it close to real simulation time
-    time_dif = vis_speed*params.sim_step-toc();
-    
-    if time_dif>0
-        
-        pause(time_dif);
+    if ~(params.slowmode)
+        time_dif = vis_speed*params.sim_step-toc();
+
+        if time_dif>0
+
+            pause(time_dif);
+        else
+
+            vis_speed=vis_speed+1;
+        end
     else
-        
-        vis_speed=vis_speed+1;
+        vis_speed = 10;
     end
 
     if params.movie
@@ -444,7 +448,7 @@ while ii<n+1   % the visualization instance
         saveas(gcf, path{1});
         movieframenum = movieframenum + 1;
     end
-    
+
     %slow mode
     %you need to click the figure to get the next frame
     if params.slowmode
@@ -452,13 +456,14 @@ while ii<n+1   % the visualization instance
             convHull = obj.computeSupPoly(params.feet_on_ground,chi(ii-1,:)');
             if ii == 2
                 figCvHull = figure;
+                title('Support Polygon','FontSize',16)
+                axis equal
             end
 
             CoP(1)      = -params.fc{1}(5,ii-1)/params.fc{1}(3,ii-1);
             CoP(2)      =  params.fc{1}(4,ii-1)/params.fc{1}(3,ii-1);
 
             if  params.numContacts == 2
-
                 CoP(3)      = -params.fc{1}(11,ii-1)/params.fc{1}(9,ii-1);
                 CoP(4)      =  params.fc{1}(10,ii-1)/params.fc{1}(9,ii-1);
 
@@ -468,18 +473,31 @@ while ii<n+1   % the visualization instance
                 temp = rot*temp;
                 CoP(3) = temp(1);
                 CoP(4) = temp(2);
-
             end
 
-            convHull.plotConvHull(figCvHull,CoP(1),CoP(2));
-            convHull.plotConvHull(figCvHull,CoP(3),CoP(4));
+%             convHull.plotConvHull(figCvHull,CoP(1),CoP(2));
+%             convHull.plotConvHull(figCvHull,CoP(3),CoP(4));
+            convHull.plotConvHull(figCvHull,qb(ii,1),qb(ii,2)); %plot the projection of the floating base)
         end
         waitforbuttonpress
     end
-    
-    
+
     ii=ii+vis_speed;
+
+    %clear the convex hull figure in order to display the next frame on a
+    %clean figure
+    if params.slowmode
+        if (ii < n +1) %avoid deleting the last frame
+            figure(figCvHull);
+            hold on
+            cla
+            title('Support Polygon','FontSize',16)
+            axis equal
+            hold off
+        end
+    end
 end
+
 
 end
 

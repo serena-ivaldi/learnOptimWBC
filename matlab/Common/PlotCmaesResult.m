@@ -2,7 +2,7 @@ function [t_, q, qd]=PlotCmaesResult(complete_path,input,name_scenario,time_stru
 % conversion from rad to deg
 RAD = 180/pi;
 % for torque
-interpolation_step = 0.001; 
+interpolation_step = 0.001;
 
 % change the computation time more than i consider the execution a fail (useful whn i recompute the solution on another machine)
 %controller.max_time = 1000;
@@ -21,11 +21,11 @@ if(strcmp(simulator,'rbt'))
     torque_saturation = input{7};
     maxtime           = input{8};
     %options         = input{7}; % options
-    
+
     % update of the parameters of activation functions and some reference
     % (if they are optimized)
     controller.UpdateParameters(bestAction.parameters)
-    
+
     tic
     [t, q, qd] = DynSim(time_sym_struct,controller,qinit,qdinit,fixed_step,'TorqueSat',torque_saturation,'maxtime',maxtime);
     toc
@@ -36,7 +36,7 @@ if(strcmp(simulator,'rbt'))
         p = [p;T(1:3,4)'];
         J = controller.subchains.sub_chains{1}.jacob0(q{1}(ii,:)); % generalize to multichain
         pd_cur = J*(qd{1}(ii,:))';% generalize to multichain
-        pd = [pd ; pd_cur'];  
+        pd = [pd ; pd_cur'];
     end
 elseif (strcmp(simulator,'icub_matlab'))
     % due to some change in the code i have to set the floating base
@@ -44,7 +44,7 @@ elseif (strcmp(simulator,'icub_matlab'))
     input{2}.active_floating_base = false;
     input{2}.numContacts = sum(input{2}.feet_on_ground,2);
     input{2}.contactLinkNames={'l_sole','r_sole'};
-    % for some reason the icub robot does not work if  i save it in a file 
+    % for some reason the icub robot does not work if  i save it in a file
     % so i have to create it again
     bot2 = iCub(bot1.model_name);
     controller = input{4}; % structure that contains every information about the specific instance of the problem
@@ -56,10 +56,16 @@ elseif (strcmp(simulator,'icub_matlab'))
     % update of the parameters of activation functions and some reference
     % (if they are optimized)
     controller.UpdateParameters(bestAction.parameters)
-    
-    tic
-    [t, q, qd]=DynSim_iCub(controller,input{2});
-    toc
+
+    if input{2}.mixed_fd_models
+      tic
+      [t, q, qd] = mixDynSimICub(controller, input{2});
+      toc
+    else
+      tic
+      [t, q, qd] = DynSim_iCub(controller, input{2});
+      toc
+    end
     %toc(controller.current_time) for debugging the time deadline
     for ii =1:size(q,1) % generalize to multichain
         cur_q = q(ii,:);
@@ -68,10 +74,10 @@ elseif (strcmp(simulator,'icub_matlab'))
         p = [p;p_cur];
         J = bot1.offlineJacob0(cur_q','r_hand'); % generalize to multichain
         pd_cur = J*(cur_qd)';% generalize to multichain
-        pd = [pd ; pd_cur'];  
+        pd = [pd ; pd_cur'];
     end
 end
-% compute the torque interpolated   
+% compute the torque interpolated
 tau_=InterpTorque(controller,time_sym_struct,interpolation_step);
 % copy best action inside the new folder
 fileID = fopen(strcat(complete_path,'/','best_action.txt'),'wt');
@@ -82,15 +88,15 @@ fclose(fileID);
 dim_tit=16;
 dim_lab=14;
 dim_leg=12;
-% plot alpha 
+% plot alpha
 time = time_struct.ti:time_struct.step:time_struct.tf;
 vec_values = zeros(size(time));
 handle_vec = [];
 for ii = 1:size(controller.alpha,1)
-    for jj = 1:size(controller.alpha,2)         
+    for jj = 1:size(controller.alpha,2)
         i=1;
         for t = time
-            vec_values(i) = controller.alpha{ii,jj}.GetValue(t); 
+            vec_values(i) = controller.alpha{ii,jj}.GetValue(t);
             i=i+1;
         end
         handle_vec(ii,jj) = figure;
@@ -99,7 +105,7 @@ for ii = 1:size(controller.alpha,1)
         xlab = xlabel('t [s]');
         set(xlab,'FontSize',dim_lab,'Interpreter','latex');
         ylab = ylabel(strcat('\alpha_{',num2str(ii),num2str(jj),'}'));
-        set(ylab,'FontSize',dim_lab);      
+        set(ylab,'FontSize',dim_lab);
     end
 end
 % save alpha plot fig and jpg
@@ -127,17 +133,17 @@ if(strcmp(learn_approach,'CMAES'))
            variance(index) = var(listperformance);
            mean(index) = bestAction.hist(1,ww).performance;
            evo(index) = index;
-           index = index + 1; 
+           index = index + 1;
        end
    end
-elseif(strcmp(learn_approach,'(1+1)CMAES'))  
-  for ww =1:evolutions 
+elseif(strcmp(learn_approach,'(1+1)CMAES'))
+  for ww =1:evolutions
      if(bestAction.listperformance(ww)> -1 )
         %remove all the failure from the computation of the variance
         variance(index) = 0;
         mean= bestAction.listperformance(ww);
         evo(index) = index;
-        index = index + 1;  
+        index = index + 1;
      end
   end
 end
@@ -156,7 +162,7 @@ ylab = ylabel('fitness');
  set(ylab,'FontSize',dim_lab,'Interpreter','latex');
 %saveas(handle,strcat(complete_path,'/','fit'),'pdf');
 %saveas(handle,strcat(complete_path,'/','fit'));
-% plot 3d graph 
+% plot 3d graph
 % handle = figure; hold on;
 % text = LoadScenario(name_scenario);
 % eval(text);
@@ -168,12 +174,12 @@ ylab = ylabel('fitness');
 % izy = 1;
 % handle_vector = [];
 % % ee_trajectory
-% name_of_trace {1,izy} = 'end-effector';  
+% name_of_trace {1,izy} = 'end-effector';
 % handle1 = plot3(ee(:,1)',ee(:,2)',ee(:,3)','Color','r','LineWidth',2);
 % handle_vector=[handle_vector,handle1];
 % izy = izy + 1;
 % % elbow_traj
-% name_of_trace{1,izy} = 'elbow';  
+% name_of_trace{1,izy} = 'elbow';
 % handle2 = plot3(elbow(:,1)',elbow(:,2)',elbow(:,3)','Color','g','LineWidth',2);
 % handle_vector=[handle_vector,handle2];
 % leg = legend(handle_vector,name_of_trace);
@@ -198,7 +204,7 @@ ylab=ylabel('cartesian position [m]'); % y-axis label
 set(ylab,'FontSize',dim_lab,'Interpreter','latex');
 %saveas(handle,strcat(complete_path,'/','e_e'),'pdf');
 %saveas(handle,strcat(complete_path,'/','e_e'));
-%plot q 
+%plot q
 handle = figure;
 plot(q{1}*RAD);
 grid on;
@@ -242,7 +248,7 @@ close all;
 
 % figure
 % alpha.PlotBasisFunction();
-% 
+%
 % spani = 0:0.001:range(1,2);
 % i = 1;
 % sigvalue = zeros(1,size(spani,2));

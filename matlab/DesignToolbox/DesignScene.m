@@ -14,7 +14,7 @@ save_now = false;
 
 
 %% plot scene
-% ICUB initialization 
+% ICUB initialization
 list_of_kin_chain = {'trunk','left_arm','right_arm','l_sole','r_sole'};
 joints_initial_values{1,1} = [-10.0  0.0  0.0];
 joints_initial_values{1,2} = [-20.0  30.0  0.0  45.0  0.0 0.0 0.0];
@@ -30,7 +30,7 @@ dx_bInit    = zeros(3,1);
 omega_bInit = zeros(3,1);
 
 % root reference link;
-root_reference_link ='l_sole'; 
+root_reference_link ='l_sole';
 
 plot_bot.SetWorldFrameiCub(qjInit,dqjInit,dx_bInit,omega_bInit,root_reference_link);
 
@@ -149,7 +149,7 @@ if(save_now)
         fileID = fopen(strcat(path,'/scenarios/',name_scenario,'.txt'),'w');
         fprintf(fileID,'%s',rawTextFromStorage);
         fclose(fileID);
-        
+
         disp('DONE!')
     else
         adv = strcat('The file: /',name_scenario,' allready exist');
@@ -162,6 +162,6 @@ if(save_now)
                 disp('DONE!')
         end
     end
-    
-    
+
+
 end
