@@ -1,4 +1,4 @@
-%% this method is only suitable for (1+1)CMAES-vanilla and fmincon-fmincon
+%% this method is only suitable for (1+1)CMAES-vanilla (only for the fitness visualization) and fmincon-fmincon and BO-nopenalty
 %% in this method we rielaborate the fitness value evolution of (1+1)cmaes and fmincon to 
 %% to take into account the difference between function evaluation and generation
 %% in this way we can compare cmaes with (1+1)cmaes and fmincon
@@ -20,17 +20,17 @@ function postprocessing_phase_one_dot_five()
 
     %% global variables
     tresh = 2.5;
-    number_of_experiments = 40;
+    number_of_experiments = 45;
     % one for each entry of the newsubsubfolder variable
     number_of_generations_of_other_methods = [167 167 250 136 150 167];
-    number_of_function_evaluation = 1500;
+    number_of_function_evaluation = 300;
     %%  Load Path
     % parameter
     newfolder = 'benckmark';
     % name fo the method
-    newsubfolder = {'fmincon-fmincon'};
+    newsubfolder = {'BO-nopenalty'};
     % name of the experiment
-    newsubsubfolder = {'f240','f241','g06','g07','g09','HB'}; % 'f240','f241','g06','g07','g09','HB' 'RP_humanoid_bench_lbrsimple','RP_humanoid_bench_lbrsimple_more_constrained'
+    newsubsubfolder = {'g07','g09','HB'}; % 'f240','f241','g06','g07','g09','HB' 'RP_humanoid_bench_lbrsimple','RP_humanoid_bench_lbrsimple_more_constrained'
     % provisory
     allpath=which('FindData.m');
     newglobal_path=fileparts(allpath);
@@ -66,7 +66,7 @@ function postprocessing_phase_one_dot_five()
                 
                 
                  %% updating m3
-                if(strcmp(newsubfolder,'fmincon-fmincon'))
+                if(strcmp(newsubfolder,'fmincon-fmincon') || strcmp(newsubfolder,'BO-nopenalty'))
                     % i have to compute this quantty here for fmincon 
                     % because i do not run on it the phase_one
                     % postprocessing
@@ -104,7 +104,7 @@ function postprocessing_phase_one_dot_five()
                 %% only for fmincon i need to do the padding of the metrics to be compliant with 
                 %% the dimnesion of the other method. i have only one repetition for fmincon-fmincon 
                 %% because it is a deterministic method
-                if(strcmp(newsubfolder,'fmincon-fmincon'))
+                if(strcmp(newsubfolder,'fmincon-fmincon') || strcmp(newsubfolder,'BO-nopenalty'))
                     if(~isempty(m1))
                         m1 = m1*ones(number_of_experiments,1);
                     end

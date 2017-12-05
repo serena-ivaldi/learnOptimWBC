@@ -1,5 +1,5 @@
 %% class BO
-% eci =  expcted constrained improvement 
+% eci =  expected constrained improvement 
 % to maximize
 %% i will try to pass the last constrained y_max and see what happens
 function [ret, x]= eci(obj,x,y_max)       

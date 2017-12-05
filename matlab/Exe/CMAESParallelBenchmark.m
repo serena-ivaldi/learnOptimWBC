@@ -6,16 +6,16 @@ function CMAESParallelBenchmark
     close all
     clc
 
-    matlabpool
+    %matlabpool
     
     %% DATA 1
     robotics_experiment = [0 0 0 0 0 0]; % series of value that say if the current experiment is a robotics experiments or not
-    niter_tot = 1500;  %number of functions evaluations
-    function_2_test ={'g06'};%'g06','g07','g09','f240','f241','HB' RP_humanoid_bench_lbrsimple_more_constrained% 
-    learn_approach = 'BO(1+1)CMAES'; %CMAES (1+1)CMAES  CEM,fmincon    with (1+1)CMAES i have to use vanilla constraints management  (temporary)
-    method_to_use = 'nopenalty';  % adaptive , vanilla ,empty,fmincon
+    niter_tot = 300;  %number of functions evaluations
+    function_2_test ={'g07','g09','HB'};%'g06','g07','g09','f240','f241','HB' RP_humanoid_bench_lbrsimple_more_constrained% 
+    learn_approach = 'BO'; %CMAES BO(1+1)CMAES BO (1+1)CMAES  CEM,fmincon    with (1+1)CMAES i have to use vanilla constraints management  (temporary)
+    method_to_use = 'nopenalty';  % adaptive , vanilla ,empty,fmincon,nopenalty
 
-    repetition_of_the_experiment = 40; % at least 2
+    repetition_of_the_experiment = 1; % at least 2
     threshold = 2.5; % value to identify the beginning of steady state
     % the threshold is express in %, means +/- 2,5% from the steady value
 
@@ -46,6 +46,6 @@ function CMAESParallelBenchmark
         end
     end
     
-    matlabpool close
+    %matlabpool close
 end
     

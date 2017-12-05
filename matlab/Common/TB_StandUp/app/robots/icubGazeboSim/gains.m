@@ -34,15 +34,20 @@ gain.SmoothingTimeGainScheduling = 0.02;
 
 %% PARAMETERS FOR TWO FEET ON GROUND
 if (sum(CONFIG.LEFT_RIGHT_FOOT_IN_CONTACT) == 2)
+    %% no backpack
     gain.PCOM                 = diag([10    10  10]);
     gain.ICOM                 = diag([  0    0   0]);
     gain.DCOM                 = 0*sqrt(gain.PCOM);
+    %% with backpack
+%     gain.PCOM                 = diag([30    10  30]);
+%     gain.ICOM                 = diag([  0    0   0]);
+%     gain.DCOM                 = 0*sqrt(gain.PCOM);
 
     gain.PAngularMomentum     = 10;
     gain.DAngularMomentum     = 2*sqrt(gain.PAngularMomentum);
 
     % Impedances acting in the null space of the desired contact forces 
-
+%% no backpack
     impTorso            = [10   10   20
                             0    0    0];
                         
@@ -54,6 +59,19 @@ if (sum(CONFIG.LEFT_RIGHT_FOOT_IN_CONTACT) == 2)
 
     impRightLeg         = [ 30   30   30    60     10  10
                              0    0    0     0      0   0]; 
+%% backpack
+%     impTorso            = [30   30   30
+%                             0    0    0];
+%                         
+%     impArms             = [10   10    10    8   
+%                             0    0     0    0  ];
+%                         
+%     impLeftLeg          = [ 30   30   30    60     10  10
+%                              0    0    0     0      0   0]; 
+% 
+%     impRightLeg         = [ 30   30   30    60     10  10
+%                              0    0    0     0      0   0]; 
+
                              
     intTorso            = [0   0    0];
     

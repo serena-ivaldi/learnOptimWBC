@@ -51,10 +51,11 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
        y(end + 1)= obj.penalty_handling.feasibility;
        y(end + 1) = performances_new;
        %% TODEBUG
-       BO.Plot(x_candidate);
+       %BO.Plot(x_candidate);
        % update the gaussian process
        disp('update');
-       BO.Update(x_candidate, y)
+       Retrain = true;
+       BO.Update(x_candidate, y,Retrain)
        
        % Keep track of information about iteration 
 %        self.i += 1
@@ -65,12 +66,12 @@ function [mean_performances,bestAction,BestActionPerEachGen,policies,costs,succe
 %                            }
 %        self.res['all']['values'].append(self.Y[-1])
 %        self.res['all']['params'].append(dict(zip(self.keys, self.X[-1]))) 
-       mean_perfomances(ii) = BO.y_max;
+       mean_performances(ii) = BO.y_max;
        if(~isempty(BO.x_max))
             BestActionPerEachGen(ii,:) = BO.x_max;
        end
        %% TODEBUG
-       pause
+       %pause
    end 
    if(~isempty(BO.x_max))
        bestAction.parameters  = BO.x_max;
@@ -100,7 +101,7 @@ function [init_x,init_y]=InitialSample(obj,fnForwardModel,lb,ub,number_init_poin
     init_x = repmat(lb,number_init_points,1) + repmat(ub-lb,number_init_points,1).*rand(number_init_points,length(lb));
     
     %% TODEBUG provisory change (ho sovrascritto init_x )for confrontation with demobayesopt.m
-    init_x = [ 1 1;9 1;1 9;9 9;5 5];
+    %init_x = [ 1 1;9 1;1 9;9 9;5 5];
     % Evaluate target function at all initialization
     % points (random + explore)
     for i=1:number_init_points

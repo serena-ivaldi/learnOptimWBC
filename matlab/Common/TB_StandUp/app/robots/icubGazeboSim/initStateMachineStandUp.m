@@ -24,9 +24,8 @@ if strcmpi(SM.SM_TYPE, 'STANDUP')
      gain.legSize              = [ -0.025  0.05 ;         % xMin, xMax
                                    -0.025  0.025];        % yMin, yMax 
                                        
-     addpath('../../../../utilityMatlabFunctions/')
-     [ConstraintsMatrixLegs,bVectorConstraintsLegs] = constraints...
-     (forceFrictionCoefficient,numberOfPoints,torsionalFrictionCoefficient,gain.legSize,fZmin);
+     %addpath('../../../utilityMatlabFunctions/')
+     %[ConstraintsMatrixLegs,bVectorConstraintsLegs] = constraints(forceFrictionCoefficient,numberOfPoints,torsionalFrictionCoefficient,gain.legSize,fZmin);
 
      gain.PCOM     =    [50   50  50;    % state ==  1  BALANCING ON THE LEGS
                          50   50  50;    % state ==  2  MOVE COM FORWARD
@@ -42,6 +41,8 @@ if strcmpi(SM.SM_TYPE, 'STANDUP')
      gain.PAngularMomentum  = 1 ;
      gain.DAngularMomentum  = 2*sqrt(gain.PAngularMomentum);
 
+     
+%% no back pack   
                          %   TORSO %%      LEFT ARM    %%      RIGHT ARM   %%         LEFT LEG           %%         RIGHT LEG          %% 
      gain.impedances  = [10   30   20, 10   10    10    8, 10   10    10    8, 30   50   30    60    50  50, 30   50   30    60    50  50;   % state ==  1  BALANCING ON THE LEGS
                          10   30   20, 10   10    10    8, 10   10    10    8, 30   50   30    60    50  50, 30   50   30    60    50  50;   % state ==  2  MOVE COM FORWARD
@@ -51,9 +52,21 @@ if strcmpi(SM.SM_TYPE, 'STANDUP')
                          10   30   20, 10   10    10    8, 10   10    10    8, 30   50   30    60    50  50, 30   50   30    60    50  50;   % state ==  6  LOOKING FOR CONTACT
                          10   30   20, 10   10    10    8, 10   10    10    8, 30   50   30    60    50  50, 30   50   30    60    50  50;   % state ==  7  SITTING DOWN
                          10   30   20, 10   10    10    8, 10   10    10    8, 30   50   30    60    50  50, 30   50   30    60    50  50];  % state ==  8  BALANCING ON THE LEGS
-                         
+                      
      gain.impedances(3,:) = gain.impedances(3,:)./2;      
-                     
+
+%% with backpack
+%      gain.impedances  = [30   30   30, 10   10    10    8, 10   10    10    8, 30   50   30    60    50  50, 30   50   30    60    50  50;   % state ==  1  BALANCING ON THE LEGS
+%                          30   30   30, 10   10    10    8, 10   10    10    8, 30   50   30    60    50  50, 30   50   30    60    50  50;   % state ==  2  MOVE COM FORWARD
+%                          30   30   30, 10   10    10    8, 10   10    10    8, 30   50   30    60    50  50, 30   50   30    60    50  50;   % state ==  3  LOOKING FOR CONTACT
+%                          30   30   30, 10   10    10    8, 10   10    10    8, 30   50   30    60    50  50, 30   50   30    60    50  50;   % state ==  4  TWO FEET BALANCING
+%                          30   30   30, 10   10    10    8, 10   10    10    8, 30   50   30    60    50  50, 30   50   30    60    50  50;   % state ==  5  MOVE ARMS FORWARD 
+%                          30   30   30, 10   10    10    8, 10   10    10    8, 30   50   30    60    50  50, 30   50   30    60    50  50;   % state ==  6  LOOKING FOR CONTACT
+%                          30   30   30, 10   10    10    8, 10   10    10    8, 30   50   30    60    50  50, 30   50   30    60    50  50;   % state ==  7  SITTING DOWN
+%                          30   30   30, 10   10    10    8, 10   10    10    8, 30   50   30    60    50  50, 30   50   30    60    50  50];  % state ==  8  BALANCING ON THE LEGS
+%                       
+%      gain.impedances(3,:) = gain.impedances(3,:)./2;   
+
 end
 
 % set this variable to TRUE if you want iCub also sits down after standing up
@@ -62,7 +75,7 @@ sm.alsoSitDown                 = false;
 sm.jointsAndCoMSmoothingTimes = [1;    % state ==  1  BALANCING ON THE LEGS
                                  2.5;  % state ==  2  MOVE COM FORWARD
                                  2;    % state ==  3  TWO FEET BALANCING
-                                 4;    % state ==  4  LIFTING UP  
+                                 2.5;  % state ==  4  LIFTING UP  
                                  2     % state ==  5  MOVE ARMS FORWARD
                                  4     % state ==  6  LOOKING FOR CONTACT
                                  3     % state ==  7  SITTING DOWN
@@ -89,7 +102,7 @@ sm.CoM.standUpDeltaCoM         = [0.0     0.0   0.0;       % state ==  1  THIS R
                                    
 sm.LwrenchThreshold    = [0;    % state ==  1  THIS REFERENCE IS NOT USED
                           75;   % state ==  2  MOVE COM FORWARD
-                          130;  % state ==  3  TWO FEET BALANCING
+                          110;  % state ==  3  TWO FEET BALANCING
                           0;    % state ==  4  THIS REFERENCE IS NOT USED
                           0;    % state ==  5  THIS REFERENCE IS NOT USED
                           140;   % state ==  6  LOOKING FOR CONTACT
@@ -98,7 +111,7 @@ sm.LwrenchThreshold    = [0;    % state ==  1  THIS REFERENCE IS NOT USED
                      
 sm.RwrenchThreshold    = [0     % state ==  1  THIS REFERENCE IS NOT USED
                           75;   % state ==  2  MOVE COM FORWARD
-                          130;  % state ==  3  TWO FEET BALANCING
+                          110;  % state ==  3  TWO FEET BALANCING
                           0;    % state ==  4  THIS REFERENCE IS NOT USED
                           0;    % state ==  5  THIS REFERENCE IS NOT USED
                           140;   % state ==  6  LOOKING FOR CONTACT

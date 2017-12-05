@@ -20,7 +20,10 @@ function [ret, x] = Surrogate(self, x,varargin)
             %self.min_or_max = 'max';
             [ret, x] =  self.eci(x,varargin{1});
             ret = - ret;
-        
+        elseif strcmp(self.kind,'eci1max')
+            %self.min_or_max = 'max';
+            [ret, x] =  self.eci(x,self.y_max);
+            ret = - ret;
         elseif strcmp(self.kind,'ecv')
             %self.min_or_max = 'max';
             [ret, x] =  self.ecv(x);

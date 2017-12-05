@@ -162,9 +162,11 @@ function ParallelBechmarkRoutine(local_path,learn_approach,method_to_use,functio
         niter = niter_tot;
     elseif(strcmp(learn_approach,'BO(1+1)CMAES'))
         niter = niter_tot;
+    elseif(strcmp(learn_approach,'BO'))
+        niter = niter_tot;
     end
     
-    if(strcmp(method_to_use,'nopenalty')) % for 1+1CMAES and BO and BO(1+1)CMAES
+    if(strcmp(method_to_use,'nopenalty')) % for (1+1)CMAES and BO and BO(1+1)CMAES
         constr =Optimization.NoPenalty(search_space_dimension,constraints_functions,constraints_type,constraints_values);
     elseif(strcmp(method_to_use,'vanilla'))
         constr =Optimization.FixPenalty(search_space_dimension,constraints_functions,constraints_type,constraints_values);

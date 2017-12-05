@@ -1,7 +1,7 @@
 % the idea here is that this class is not gonna be owner of the istance (basically the fintess function and the constraints)
 % but is gonna be a proxy to the gaussian process that model fitness and
 % constraints and to the surrogate function.
-%% TODO fix the not psotive define gramiam matrix issue
+%% TODO fix the not positive define gramiam matrix issue
 %% this object just receive from outside the results of the simulations (fitness and constraints)
 %% this class allows for the "lazy update" of the Internal matrixes and the hyperparameters of the GPs
 classdef BayesOpt < handle
@@ -70,7 +70,7 @@ classdef BayesOpt < handle
 
             %% TODO define surrogate functions
             % Surrogate placeholder
-            self.kind = 'ecv';
+            self.kind = 'eci1max';
             self.SetMinMax();
             self.kappa =0.01;
             self.xi = 0;

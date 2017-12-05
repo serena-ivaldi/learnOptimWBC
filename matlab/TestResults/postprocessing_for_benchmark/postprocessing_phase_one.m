@@ -4,15 +4,15 @@ function postprocessing_phase_one()
     clc
 
     %% Global Variables
-    number_of_test = 40;
+    number_of_test = 45;
     threshold = 2.5;
     %%  Load Path
     % parameter
     folder = 'benckmark';
     % name fo the method
-    subfolder = {'CMAES-adaptive'}; % 'CMAES-adaptive' (1+1)CMAES-vanilla CMAES-vanilla fmincon-fmincon
+    subfolder = {'BO-nopenalty'}; % 'CMAES-adaptive' (1+1)CMAES-vanilla CMAES-vanilla fmincon-fmincon
     % name of the experiment
-    subsubfolder = {'g06','g07','g09','f240','f241','HB'};
+    subsubfolder = {'g07','g09','HB'};
     % provisory
     allpath=which('FindData.m');
     global_path=fileparts(allpath);

@@ -7,13 +7,13 @@ function CMAEStest
     clc
 
     %% DATA 1
-    robotics_experiment = [0]; % series of value that say if the current experiment is a robotics experiments or not 1 or 0
+    robotics_experiment = [0 0 0]; % series of value that say if the current experiment is a robotics experiments or not 1 or 0
     niter_tot = 300;  %number of functions evaluations
-    function_2_test ={'g06'};%'robotic_experiments','g06','g07','g09','f240','f241','HB' ,'to_test_withBOGP_stuff'}
-    learn_approach = 'BO(1+1)CMAES'; %CMAES (1+1)CMAES  CEM   BO  BO(1+1)CMAES fmincon     with (1+1)CMAES and BO(1+1)CMAES i have to use nopenalty
+    function_2_test ={'g07'};%,'g09','HB'};%'robotic_experiments','g06','g07','g09','f240','f241','HB' ,'to_test_withBOGP_stuff'}
+    learn_approach = '(1+1)CMAES'; %CMAES (1+1)CMAES  CEM   BO  BO(1+1)CMAES fmincon     with (1+1)CMAES and BO(1+1)CMAES i have to use nopenalty
     method_to_use = 'nopenalty';  % adaptive , vanilla ,empty,fmincon, nopenalty
-
-    repetition_of_the_experiment = 10; % at least 2
+    
+    repetition_of_the_experiment = 45; % at least 2
     threshold = 2.5; % value to identify the beginning of steady state
     % the threshold is express in %, means +/- 2,5% from the steady value
 
@@ -34,7 +34,14 @@ function CMAEStest
     metric5 = zeros(repetition_of_the_experiment,number_of_function_2_test);  % total_performance
     metric6 = [];                                                                % best action  (cell variable)
     metric7 = [];                                                                % best perfomance
-
+    %%  SAVE PATH
+    allpath=which('FindData.m');
+    local_path=fileparts(allpath);
+    local_path = strcat(local_path,'/benckmark');
+    name_folder = strcat(learn_approach,'-',method_to_use);
+    mkdir(local_path,name_folder);
+    local_path = strcat(local_path,'/',name_folder);
+    
     for jj=1:number_of_function_2_test
         %% CONSTRAINTS PARAMETERS
         if(robotics_experiment(jj))
@@ -205,7 +212,7 @@ function CMAEStest
         %     disp('problem solved');
         %% CONSTRAINTS
         % number of candidates per generation for cmaes
-        lambda = 6; % number of candidates used as particles (it determines how many local maxima i want to find)
+        lambda = round(4 + 3 * log(length(cmaes_value_range{1})));
         % to compare the three methods i have to normalize the number of iterations with the
         % number of candidates per generation
         if(strcmp(learn_approach,'CMAES'))
@@ -232,17 +239,17 @@ function CMAEStest
 
         %% DATA 2
 
-        m1 = zeros(repetition_of_the_experiment,1);  % distance from best action
-        m2 = zeros(repetition_of_the_experiment,1);  % constraints violations
-        m3 = zeros(repetition_of_the_experiment,1); % steady state solutions
-        m4 = zeros(repetition_of_the_experiment,1); % execution time
+        all_m1 = zeros(repetition_of_the_experiment,1);  % distance from best action
+        all_m2 = zeros(repetition_of_the_experiment,1);  % constraints violations
+        all_m3 = zeros(repetition_of_the_experiment,1); % steady state solutions
+        all_m4 = zeros(repetition_of_the_experiment,1); % execution time
         %-----------------------------------------------------------------------------------
-        m5 = cell(repetition_of_the_experiment,1);  % total_performance
-        m6 = zeros(repetition_of_the_experiment,search_space_dimension);      % best action
-        m7 = zeros(repetition_of_the_experiment,1);                           % best perfomance
+        all_m5 = cell(repetition_of_the_experiment,1);  % total_performance
+        all_m6 = zeros(repetition_of_the_experiment,search_space_dimension);      % best action
+        all_m7 = zeros(repetition_of_the_experiment,1);                           % best perfomance
 
         %% OPTIMIZATION
-
+        
         for kk = 1:repetition_of_the_experiment
 
             current_experiment=kk;
@@ -268,13 +275,15 @@ function CMAEStest
                 tic
                 [mean_performances,bestAction] = inst.minimize(start_action,niter,threshold);
                 % execution time
-                m4(kk) = toc;
+                m4 = toc;
+                all_m4(kk) = m4;
             else
                 inst =  Optimization.Instance(constr,learn_approach,preprocessing,run_function,fitness,clean_function,input);
                 tic
                 [mean_performances, bestAction] = inst.CMAES(search_space_dimension,start_action,niter,explorationRate,cmaes_value_range);
                 % execution time
-                m4(kk) = toc;
+                m4 = toc;
+                all_m4(kk) = m4;
             end
 
             %% collect all the data from each experiments
@@ -283,16 +292,21 @@ function CMAEStest
             if(iscolumn(mean_performances))
                 mean_performances = mean_performances';
             end
-            m5{kk,:} = mean_performances;
-            m3(kk) = IndetifySteadyState(m5{kk,:},threshold);
+            m5 = mean_performances;
+            all_m5{kk,:} = m5;
+            m3 = IndetifySteadyState(m5,threshold);
+            all_m3(kk) = m3;
             % best results
-            m6(kk,:) = bestAction.parameters;
+            m6 = bestAction.parameters;
+            all_m6(kk,:) = m6;
             if(~robotics_experiment(jj))
                 % distance from benchmark actions
-                m1(kk) = norm(bestAction.parameters - benchmark_x);
+                m1 = norm(bestAction.parameters - benchmark_x);
+                all_m1(kk) = m1;
             end
             % best perfomance
-            m7(kk,1) = bestAction.performance;
+            m7 = bestAction.performance;
+            all_m7(kk,1) = m7;
 
             % violations
             %for ii=1:n_constraints
@@ -300,63 +314,75 @@ function CMAEStest
             %end
             % violations
             [c, ceq] = inst.computeConstr(bestAction.parameters);
-            m2(kk,1) = sum(abs((c > 0).*c)) + sum(abs((ceq ~= 0).*ceq));
+            m2 = sum(abs((c > 0).*c)) + sum(abs((ceq ~= 0).*ceq));
+            all_m2(kk,1) = m2;
             close all
-
+            % saving data 
+            name_local_folder = function_2_test{jj};
+            mkdir(local_path,name_local_folder);
+            sub_local_path = strcat(local_path,'/',name_local_folder);
+            if(strcmp(learn_approach,'fmincon'))
+                name_to_save = strcat(sub_local_path,'/','mn.mat');
+            else
+                name_to_save = strcat(sub_local_path,'/',num2str(current_experiment),'.mat');
+            end
+            save(name_to_save,'m1','m2','m4','m5','m6','m7');
+            % clean variables
+            m1 = [];
+            m2 = [];
+            m3 = [];
+            m4 = [];
+            m5 = [];
+            m6 = [];
+            m7 = [];
         end
         %% data collected at the end of each test function
         try
-            m5 = cell2mat(m5);
+            all_m5 = cell2mat(all_m5);
         catch err
-            m5 = convert2mat(m5);
+            all_m5 = convert2mat(all_m5);
         end
-        all_perfomance_with_constraint_correction{jj} = m5;
+        all_perfomance_with_constraint_correction{jj} = all_m5;
         % compute the mean and variance of overall perfomance with constraints
         % correction
-        prf.average  = mean(m5,1);
-        prf.variance = var(m5);
+        prf.average  = mean(all_m5,1);
+        prf.variance = var(all_m5);
         all_prf{jj} = prf;
         % mean and variance of the best perfomance over all the experiments
-        metric7(:,jj) = -m7;
+        metric7(:,jj) = -all_m7;
         if(~robotics_experiment(jj))
             % the distance from optimal solutions
-            metric1(:,jj) = m1;
+            metric1(:,jj) = all_m1;
         end
         % compute the sum of violations per each test function (i just sum the effective violations)
-        mask = m2 > 0;
-        m2 = m2.*mask;
-        metric2(:,jj) = sum(m2,2);
+        mask = all_m2 > 0;
+        all_m2 = all_m2.*mask;
+        metric2(:,jj) = sum(all_m2,2);
 
         % best action for each repetition of the exepriment
-        metric6{jj} = m6;
+        metric6{jj} = all_m6;
 
         % all steady state
         if(strcmp(learn_approach,'CMAES'))
-            metric3(:,jj)=m3*lambda;
+            metric3(:,jj)=all_m3*lambda;
         else
-            metric3(:,jj)=m3;
+            metric3(:,jj)=all_m3;
         end
 
         % execution time
-        metric4(:,jj) = m4;
-
+        metric4(:,jj) = all_m4;
+ 
         % clean variable
-        m1 = [];
-        m2 = [];
-        m3 = [];
-        m4 = [];
-        m5 = [];
-        m6 = [];
-        m7 = [];
+        all_m1 = [];
+        all_m2 = [];
+        all_m3 = [];
+        all_m4 = [];
+        all_m5 = [];
+        all_m6 = [];
+        all_m7 = [];
 
     end
-    %%  SAVE PATH
-    allpath=which('FindData.m');
-    local_path=fileparts(allpath);
-    local_path = strcat(local_path,'/benckmark');
-    name_folder = strcat(learn_approach,'-',method_to_use);
-    mkdir(local_path,name_folder);
-    local_path = strcat(local_path,'/',name_folder);
+    
 
 
     %% PLOT

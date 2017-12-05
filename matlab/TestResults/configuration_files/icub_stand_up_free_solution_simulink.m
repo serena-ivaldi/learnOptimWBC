@@ -123,7 +123,7 @@ params.footSizeForOpitmization = [-0.07  0.12 ;    % xMin, xMax
     % if this parameter is true we fix the desired com value(the com value is specify inside the trajectory block in the simulink)
     % if this parameter if false we optimize the com trajectory even when the robt is sitting on the bench the bench
     params.fixedcombench = false;
-
+    params.final_com     = [0.0167667444901888,-0.0681008604452745,0.503988037442802];
 %%  REFERENCE PARAMETERS
 
 bot1.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
@@ -165,7 +165,8 @@ switch CONTROLLERTYPE
         %% PRIMARY REFERENCE PARAMETERS (this parameter only works if one of the specific trajectory has runtime parameters)
         % IMPORTANT!!!!! this value is used inside main exec to set the parameter that yuo want to test
         %numeric_reference_parameter{1,1}=[0.739084321133595,0.500132593668041,1.47079613821101,1.85748188735809,2,-0.0306437352589393,0.0160000000000000,-0.0210940985892679,-0.00159221673089966,-0.0169686741764310,0.499414698727300,0.440933321397227,0.422798307585171,0.461495244682503,0.370968566841002]'; % good solution 
-        numeric_reference_parameter{1,1}=[0.0321117504531070,0.174573710297952,0.111878101289337,0.691648418857070,0.929245948833057,-0.0185069181159225,-0.0512829272164755,-0.0292520925430042,0.000433828322593551,-0.0351161906767231,0.396609083020189,0.364167278732247,0.360550072138429,0.438855634809159,0.360000000000000]';
+        %numeric_reference_parameter{1,1}=[0.0321117504531070,0.174573710297952,0.111878101289337,0.691648418857070,0.929245948833057,-0.0185069181159225,-0.0512829272164755,-0.0292520925430042,0.000433828322593551,-0.0351161906767231,0.396609083020189,0.364167278732247,0.360550072138429,0.438855634809159,0.360000000000000]';
+        numeric_reference_parameter{1,1}=[0.0612267450698250,0.107294718230462,0.216547938055742,0.632428302758560,0.819959008231251,-0.0370362659964457,0.0100513502801186,0.00632807861024216,-0.0357373398369293,-0.0372706315168793,0.363898230779988,0.362623972638737,0.371564498890632,0.450808491397871,0.361247446981751]';
         secondary_numeric_reference_parameter{1,1} = []; % not used
         %% ALPHA PARAMETER (not used)
         %constant alpha
@@ -201,7 +202,7 @@ switch CONTROLLERTYPE
         %% INSTANCE PARAMETER
         preprocessing = @EmptyPreprocessing;
         run_function = @RobotExperiment;
-        fitness = @fitnessHumanoidsIcubStandUpSearchFreeSolutionSimulink;
+        fitness =  @fitnessHumanoidsIcubStandUpOptSolutionNoBackwardSimulink;%@fitnessHumanoidsIcubStandUpSearchFreeSolutionSimulink;
         clean_function = @RobotExperimentCleanData;
         
         input{1} = simulator_type{1};  % rbt / v-rep
