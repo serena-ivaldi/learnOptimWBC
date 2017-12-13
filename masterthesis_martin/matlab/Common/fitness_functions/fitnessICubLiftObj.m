@@ -72,8 +72,9 @@ function [fval, tidx_pl] = fitnessICubLiftObj(obj, vargin)
 
     if (fval_go ~= -1)
         % Evaluate moving object to destination:
-        % set the goal positions for the end-effectors (ee) ...
-        % intermediate goal points:
+        %
+        % set the goal positions for the end-effectors (ee):
+        % intermediate goal positions:
         goal_pos(1,1).ee_r = control.references.GetTraj(1, tidx_gp(3,1), 1);
         goal_pos(1,1).ee_l = control.references.GetTraj(1, tidx_gp(4,1), 1);
         % final goal positions (target points):
@@ -203,6 +204,8 @@ function [fval_go, tidx_go, tau_u, fprms] = fitnessGrabObj(obj, noi, t, q_j, cst
         fval_go = -1; % punish value
         return
     end
+    fprintf('Object grabbed successfully.\n');
+
     % compute the fitness value of grabbing the object:
     fval_go = calcFitness(control.torques(:), traj_err, fset);
 end
@@ -238,7 +241,7 @@ function [fval_mo, tidx_mo, cstr_idx] = fitnessMoveObj(obj, noi, t, q_j, tau_u, 
 
     % compute the trajectory error from the current position
     % of the grabbed object until to its destination:
-    itrg_reached = false;
+    itrg_reached = false; % (interm. target)
     vlen = size(q_j,2);
     for i = tidx_go:fset.smp_rate:noi
         ti  = t(i,1);
@@ -327,7 +330,7 @@ function [fval_ro, tidx_ro, fprms] = fitnessReleaseObj(obj, noi, t, q_j, tau_u, 
 
     % compute the trajectory error from the target position of the moved
     % and released object to the final destinations of the end-effectors:
-    itrg_reached = false;
+    itrg_reached = false; % (interm. target)
     vlen = size(q_j,2);
     for i = tidx_mo:fset.smp_rate:noi
         ti  = t(i,1);

@@ -27,8 +27,8 @@ target_link{1} = subchain1;
 
 
 %% Robot
-wf2fixLnk   = true; % set the world frame to a fixed link
-wbm_icub    = initRobotICub_atf(wf2fixLnk);
+wf2fixlnk   = true; % set the world frame to a fixed link
+wbm_icub    = initRobotICub_atf(wf2fixlnk);
 icub_model  = wbm_icub.robot_model;
 icub_config = wbm_icub.robot_config;
 
@@ -36,7 +36,7 @@ strCmt = 'iCub model using the WBM-Library.';
 opt    = struct('name', '', 'manufacturer', '', 'comment', strCmt, ...
                 'ee_links', [], 'plotopt3d', []);
 
-bot1    = iCubWBC(icub_model, icub_config, wf2fixLnk);
+bot1    = iCubWBC(icub_model, icub_config, wf2fixlnk);
 chain_1 = MultChainTreeICub(bot1, 'l_sole', opt);
 
 robots{1} = chain_1;

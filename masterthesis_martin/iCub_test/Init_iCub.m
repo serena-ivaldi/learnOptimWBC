@@ -13,11 +13,11 @@ reference.cur_param_set = numeric_reference_parameter;
 text = LoadScenario(name_scenario);
 eval(text);
 
-%% Controller support object 
+%% Controller support object
 switch CONTROLLERTYPE
     case 'UF'
        % repellers
-       repellers = ContrPart.Repellers(chain_dof,rep_target_link,rep_type,rep_mask,rep_type_of_J_rep,rep_obstacle_ref,single_alpha,J_damp,type_of_rep_strct); 
+       repellers = ContrPart.Repellers(chain_dof,rep_target_link,rep_type,rep_mask,rep_type_of_J_rep,rep_obstacle_ref,single_alpha,J_damp,type_of_rep_strct);
     case 'GHC'
        % constraints
        constraints = ContrPart.Constraints(robots,target_link,constraints_list,constraints_data);
@@ -36,20 +36,20 @@ switch CONTROLLERTYPE
                   number_of_action = chains.GetNumTasks(1) + repellers.GetNumberOfWeightFuncRep(1);
               end
               %---
-              alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,value_range,precomp_sample,numeric_theta,false);       
+              alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,value_range,precomp_sample,numeric_theta,false);
            case 'constant'
               alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,value_range_for_optimization_routine,time_struct);
-           case 'handTuned'  
+           case 'handTuned'
               alphas = Alpha.HandTuneAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),starting_value,ti,transition_interval,time_struct);
            otherwise
               warning('Uexpected alpha functions')
-       end   
+       end
     case 'GHC'
        switch choose_alpha
-          case 'chained'  
+          case 'chained'
             alphas = Alpha.ChainedAlpha.BuildCellArray(chains.GetNumChains(),matrix_value,ti,transition_interval,time_struct);
           case 'RBF'
-            % TODO generalize to multichain  
+            % TODO generalize to multichain
             number_of_action = chains.GetNumTasks(1)*chains.GetNumTasks(1);
             alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,value_range,precomp_sample,numeric_theta,false);
             %%---
@@ -72,7 +72,7 @@ switch CONTROLLERTYPE
         %% Initialization of the WBM:
         %
         % base model parameters:
-        iCub_model = wbmBaseModelParams; 
+        iCub_model = wbmBaseModelParams;
         iCub_model.urdfRobot    = 'icubGazeboSim';
         %iCub_model.urdfLinkName = 'l_sole';
         iCub_model.wf_R_rootLnk = eye(3,3);
@@ -114,9 +114,9 @@ end
 
  %% Constraints
 constr=Optimization.FixPenalty(controller.GetTotalParamNum(),constraints_functions,constraints_type,constraints_values);
-     
+
  %% Instance
-input{5} = controller;      
+input{5} = controller;
 inst = Optimization.Instance(constr,run_function,fitness,clean_function,input);
 
 end
