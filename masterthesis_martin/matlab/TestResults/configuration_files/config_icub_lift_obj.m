@@ -353,6 +353,7 @@ end
 params.tStart   = time_struct.ti;
 params.tEnd     = time_struct.tf;
 params.sim_step = 0.01; %time_struct.step;
+%params.wait     = waitbar(0, 'State integration in progress...');
 params.maxtime  = 100;
 
 params.demo_movements    = 0;
