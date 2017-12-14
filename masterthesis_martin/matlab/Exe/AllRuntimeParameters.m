@@ -1,11 +1,14 @@
-% Configuration script for the lift-object experiment:
+%% Current global configuration parameters for the multi-task controller
+%  of a specified robot:
+
+% Configuration data for the lift-object experiment:
 %
-% This configuration script creates and setup all necessary data types and
-% parameters for the experiment simulation with the iCub humanoid robot of
-% lifting an object (wooden cube) from a deposit table to a shelf.
+% This configuration creates and setup all necessary data types and parameters
+% for the experiment with the iCub humanoid robot of lifting an object (wooden
+% cube) from a deposit table to a shelf.
 %
-% Note: This configuration file works only if the WBM-Library is installed
-%       on the system.
+% Note: This configuration file works only if the WBM-Library is installed on
+%       the system.
 
 %%%;;
 
@@ -23,9 +26,9 @@ time_struct.tf   = 20;    % final time in [s]
 time_struct.step = 0.001; % time step in [s]
 
 % Backup file for the current set parameters:
-% name_dat = 'icub_atf_lift_obj_1.0';
-% path = LoadParameters(name_dat);
-% load(path);
+name_dat = 'icub_atf_lift_obj_1.0';
+path = LoadParameters(name_dat);
+load(path);
 
 %% Robot & simulation scenario:
 %
@@ -140,9 +143,6 @@ dim_of_task{1,3} = ones(ndof,1); % activated joints
 subchain1   = {'r_hand', 'l_hand', 'none', 'r_hand', 'l_hand', 'r_hand', 'l_hand', 'r_hand', 'l_hand', 'r_hand', 'l_hand'}; % Cartesian space and/or joint space
 target_link = {subchain1}; % add the array to the target links of the control system ...
 
-% subchain1   = {'r_hand','r_elbow_1','l_hand','l_elbow_1','none','r_hand','l_hand'}; % space (cartesian or joint space)
-% target_link = {subchain1};
-
 % Parameters for the primary trajectories:
 %
 % Array of trajectory-controller types (one controller for each elementary task):
@@ -232,33 +232,6 @@ type_of_traj_sec    = empty_arr;
 geometric_path_sec  = empty_arr;
 time_law_sec        = {};
 % END of Parameters for the secondary trajectories.
-
-
-% %%  REFERENCE PARAMETERS
-% deg = pi/180;
-% % primary trajectory
-% traj_type      = {'cartesian','cartesian','cartesian','cartesian','joint','cartesian','cartesian'};
-% control_type   = {'x','x','x','x','none','x','x'}; % rpy is also possible instead of x ... (none = control type has no parameters, x ... cartesian)
-% type_of_traj   = {'sampled','sampled','sampled','sampled','sampled','sampled','sampled'}; % computing fixed time steps (func)
-% geometric_path = {'fixed','fixed','fixed','fixed','fixed','fixed','fixed'}; % like the previous but for geometric
-% time_law = {'none','none','none','none','none','none','none'}; % time restriction on every sub-chain (tstart, tfinish)
-
-% %parameters first chains
-% % cartesian coordinates for the trajectory (goal-points of each joint) - elementary tasks
-% geom_parameters{1,1} = [0.3,-0.17,0.68];    %r_e_e_point (goal-point)
-% geom_parameters{1,2} = [0.18,-0.23,0.68];   %[0.21,-0.25,0.68];	%r_elbow_point
-% geom_parameters{1,3} = [0.3,0.0248,0.68];   %l_e_e_point
-% geom_parameters{1,4} = [0.18,0.1038,0.68];  %[0.21,0.1138,0.68];   %l_elbow_point
-% geom_parameters{1,5} = [0 0.785398163397448 0 0 0 0.523598775598299 0 0 0.785398163397448 0 0 0 0.523598775598299 0 0 0 0]; % 17 dof (joint-type), to minimize the torques in the fitness function
-% geom_parameters{1,6} = [0.28,-0.16,0.7463];   %r_end_pt  [0.2512,-0.16,0.76] [0.28,0.0148,0.7463];
-% geom_parameters{1,7} = [0.28,0.0148,0.7463];  %l_end_pt [0.21,0.0148,0.77]
-
-% % dimension of every task (cartesian) ... activate or deactivate the dimensons (1,0,1)
-% dim_of_task{1,1}=[1;1;1]; dim_of_task{1,2}= [1;1;1];
-% dim_of_task{1,3}= [1;1;1]; dim_of_task{1,4}= [1;1;1];
-% dim_of_task{1,5}= ones(bot1.ndof,1); % joint-type (maybe not working in the code)
-% dim_of_task{1,6}= [1;1;1]; dim_of_task{1,7}= [1;1;1];
-
 
 % Static parameters for the specified multi-task controller:
 switch CONTROLLERTYPE
@@ -434,9 +407,6 @@ switch CONTROLLERTYPE
                 numeric_theta(1,j:(i*nb)) = v1*theta(1,i);
                 j = j + nb;
             end
-
-            % a = 14; b = 5; c = 14; d = 5; e = 1; f = 0; g = 0;
-            % numeric_theta = [a a a a a b b b b b c c c c c d d d d d e e e e e f f f f f g g g g g];
         end
 
         % Constant alpha:
@@ -472,15 +442,9 @@ switch CONTROLLERTYPE
         % e.g. if N = M^(-1) so N^(-1/2) = (M^(-1))^(-1/2) = M^(1/2).
         metric = cell(1,nTsk); metric(1,:) = {'M^(1)'};
 
-        % metric = {'M^(1)','M^(1)','M^(1)','M^(1)','M^(1)','M^(1)','M^(1)'};
-
         % Primary task gains:
         kd = repmat(80, 1, nTsk); % one gain value for each task
         kp = repmat(30, 1, nTsk);
-
-        % kd = [80,80,80,80,80,80,80];
-        % kp = [30,30,30,30,30,30,30]; % row vector one for each chain
-
         for i = 1:nChns
             for par = 1:chains.GetNumTasks(i)
                 if strcmp(traj_type{1,i}, 'impedance')
@@ -548,9 +512,6 @@ switch CONTROLLERTYPE
         % Secondary chain:
         regularized_chain_2 = 1;
 
-        % regularizer_chain_1 = [0  0  0  0  0  0  0.001]; % primary chain
-        % regularized_chain_2 = 1;                         % secondary chain
-
         regularizer = cell(1,2);
         regularizer{1,1} = regularizer_chain_1;
         regularizer{1,2} = regularized_chain_2;
@@ -608,7 +569,6 @@ switch CONTROLLERTYPE
         % The fitness function forces the optimizer to learn the
         % desired behavior for the robot.
         fitness = @fitnessICubLiftObj;
-        % fitness = @fitnessHumanoidsICub5;
 
         % Function handle to a specified cleanup function to erase the
         % controller data (torques, time, etc.) of the current experiment:
@@ -646,9 +606,6 @@ switch CONTROLLERTYPE
             user_defined_start_action(1,j:(i*nb)) = v1*theta_st(1,i);
             j = j + nb;
         end
-
-        % a = 5; b = 5; c = 5; d = 5; e = 6; % numeric theta starting points (not working need to be in this case 7 (number of tasks))
-        % user_defined_start_action = [a a a a a b b b b b c c c c c d d d d d e e e e e];
 
         % Parameters for MainOptRobust:
         explorationRate = 0.1; %0.5; %[0 1];
@@ -765,4 +722,4 @@ rawTextFromStorage = fileread(which(mfilename));
 rawTextFromStorage = regexp(rawTextFromStorage,['%%%;;' '(.*?)%%%EOF'], 'match', 'once');
 
 % join the general static parameters with the particular static one ...
-%rawTextFromStorage = strcat(rawTextFromStorage, rawTextFromStoragePart);
+rawTextFromStorage = strcat(rawTextFromStorage, rawTextFromStoragePart);

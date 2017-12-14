@@ -84,8 +84,8 @@ switch CONTROLLERTYPE
         iCub_config.nCstrs        = 2;
         iCub_config.cstrLinkNames = {'l_sole', 'r_sole'};
         iCub_config.dampCoeff     = 0.75;
-        % body positions of the iCub-Robot (in degrees):
-        % (this configuration assumes an iCub-Robot with 25 DoFs.)
+        % body positions of the iCub robot (in degrees):
+        % (this configuration assumes an iCub robot with 25 DoFs.)
         iCub_config.pos_torso    = [-10.0; 0.0; 0.0];
         iCub_config.pos_leftArm  = [-19.7; 29.7; 0.0; 44.9; 0.0];
         iCub_config.pos_leftLeg  = [25.5; 0.1; 0.0; -38.5; -5.5; -0.1];
@@ -100,7 +100,7 @@ switch CONTROLLERTYPE
         iCub_config.initStateParams.omega_b = zeros(3,1);
         iCub_config.initStateParams.dq_j    = zeros(iCub_config.ndof,1);
 
-        % init the mex-WholeBodyModel for the iCub-Robot:
+        % init the mex-WholeBodyModel for the iCub robot:
         wf2FixLnk = true;
         wbm_iCub  = WBM(iCub_model, iCub_config, wf2FixLnk);
 

@@ -118,7 +118,7 @@ classdef UF_iCub < Controllers.AbstractController
             % get the translation p and the base rotation matrix ...
             [p_b, R_b] = WBM.utilities.frame2posRotm(vqT_b);
 
-            %% compute the dynamics for the iCub-Robot:
+            %% compute the dynamics for the iCub robot:
             % the mass matrix:
             M = obj.wbm_iCub.massMatrix(R_b, p_b, q_j);
             % generalized bias forces (Coriolis & g-force):
