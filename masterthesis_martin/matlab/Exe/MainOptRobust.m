@@ -6,7 +6,7 @@ clc
 % main in the configuration files while in CMAESParallelBenchmark.m the
 % optimization method is in the CMAESParallelBenchmark.m itself
 
-parpool
+%parpool
 
 tic
 
@@ -47,4 +47,4 @@ save(new_complete_path_to_file, 'all_results');
 
 toc
 
-parpool close
+%parpool close

@@ -23,9 +23,9 @@ time_struct.tf   = 20;    % final time in [s]
 time_struct.step = 0.001; % time step in [s]
 
 % Backup file for the current set parameters:
-% name_dat = 'icub_atf_lift_obj_1.0';
-% path = LoadParameters(name_dat);
-% load(path);
+name_dat = 'icub_atf_lift_obj_1.0';
+%path = LoadParameters(name_dat);
+%load(path);
 
 %% Robot & simulation scenario:
 %

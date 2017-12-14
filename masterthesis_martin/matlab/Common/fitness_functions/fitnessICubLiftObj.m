@@ -70,34 +70,34 @@ function [fval, tidx_pl] = fitnessICubLiftObj(obj, vargin)
     % Evaluate grabbing object:
     [fval_go, tidx_go, tau_u, fprms] = fitnessGrabObj(obj, noi, t, q_j, cstr_lnk_names, goal_pos(1,1), fprms, fset);
 
-    % if (fval_go ~= -1)
-    %     % Evaluate moving object to destination:
-    %     %
-    %     % set the goal positions for the end-effectors (ee):
-    %     % intermediate goal positions:
-    %     goal_pos(1,1).ee_r = control.references.GetTraj(1, tidx_gp(3,1), 1);
-    %     goal_pos(1,1).ee_l = control.references.GetTraj(1, tidx_gp(4,1), 1);
-    %     % final goal positions (target points):
-    %     goal_pos(2,1).ee_r = control.references.GetTraj(1, tidx_gp(5,1), 1);
-    %     goal_pos(2,1).ee_l = control.references.GetTraj(1, tidx_gp(6,1), 1);
+    if (fval_go ~= -1)
+        % Evaluate moving object to destination:
+        %
+        % set the goal positions for the end-effectors (ee):
+        % intermediate goal positions:
+        goal_pos(1,1).ee_r = control.references.GetTraj(1, tidx_gp(3,1), 1);
+        goal_pos(1,1).ee_l = control.references.GetTraj(1, tidx_gp(4,1), 1);
+        % final goal positions (target points):
+        goal_pos(2,1).ee_r = control.references.GetTraj(1, tidx_gp(5,1), 1);
+        goal_pos(2,1).ee_l = control.references.GetTraj(1, tidx_gp(6,1), 1);
 
-    %     [fval_mo, tidx_mo, cstr_idx] = fitnessMoveObj(obj, noi, t, q_j, tau_u, cstr_lnk_names, tidx_go, goal_pos, fprms, fset);
-    %     fprms.cstr_idx   = cstr_idx;
+        [fval_mo, tidx_mo, cstr_idx] = fitnessMoveObj(obj, noi, t, q_j, tau_u, cstr_lnk_names, tidx_go, goal_pos, fprms, fset);
+        fprms.cstr_idx   = cstr_idx;
 
-    %     % Evaluate releasing object at destination:
-    %     % intermediate ee-targets:
-    %     goal_pos(1,1).ee_r = control.references.GetTraj(1, tidx_gp(7,1), 1);
-    %     goal_pos(1,1).ee_l = control.references.GetTraj(1, tidx_gp(8,1), 1);
-    %     % final end positions for the ee:
-    %     goal_pos(2,1).ee_r = control.references.GetTraj(1, tidx_gp(9,1), 1);
-    %     goal_pos(2,1).ee_l = control.references.GetTraj(1, tidx_gp(10,1), 1);
+        % Evaluate releasing object at destination:
+        % intermediate ee-targets:
+        goal_pos(1,1).ee_r = control.references.GetTraj(1, tidx_gp(7,1), 1);
+        goal_pos(1,1).ee_l = control.references.GetTraj(1, tidx_gp(8,1), 1);
+        % final end positions for the ee:
+        goal_pos(2,1).ee_r = control.references.GetTraj(1, tidx_gp(9,1), 1);
+        goal_pos(2,1).ee_l = control.references.GetTraj(1, tidx_gp(10,1), 1);
 
-    %     [fval_ro,~] = fitnessReleaseObj(obj, icub_wbc, t, q_j, tau_u, cstr_lnk_names, cstr_idx, idx_ee, tidx_mo, goal_pos, fset);
+        [fval_ro,~] = fitnessReleaseObj(obj, icub_wbc, t, q_j, tau_u, cstr_lnk_names, cstr_idx, idx_ee, tidx_mo, goal_pos, fset);
 
-    %     % compute the average fitness value off all steps for lifting the object ...
-    %     fval = (fval_go + fval_mo + fval_ro) / 3;
-    %     return
-    % end
+        % compute the average fitness value off all steps for lifting the object ...
+        fval = (fval_go + fval_mo + fval_ro) / 3;
+        return
+    end
     % else ...
     fval = fval_go;
 
