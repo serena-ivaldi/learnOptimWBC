@@ -18,9 +18,9 @@ function fval = fitnessHumanoidsICub5(obj, vargin)
             t              = vargin{1,1};
             q_j            = vargin{1,2};
             cstr_lnk_names = vargin{1,3};
-            tidx_gp        = vargin{1,4};
+            idx_tp         = vargin{1,4}; % index positions of the target points of the end-effector tasks
 
-            WBM.utilities.chkfun.checkCVecDim(tidx_gp, 4, 'fitnessHumanoidsICub5');
+            WBM.utilities.chkfun.checkCVecDim(idx_tp, 4, 'fitnessHumanoidsICub5');
             if ~iscellstr(cstr_lnk_names)
                 error('fitnessHumanoidsICub5: %s', WBM.wbmErrorMsg.WRONG_DATA_TYPE);
             end
@@ -49,7 +49,7 @@ function fval = fitnessHumanoidsICub5(obj, vargin)
         otherwise
             error('fitnessHumanoidsICub5: %s', WBM.wbmErrorMsg.WRONG_ARR_SIZE);
     end
-    nLnks = size(cstr_lnk_names,1);
+    nCLnks = size(cstr_lnk_names,1); % number of constraint links
 
     % get index positions of the wrist and gripper links:
     idx_wr = find(ismember(cstr_lnk_names, {'r_wrist_1', 'l_wrist_1'}), 2);
@@ -59,8 +59,8 @@ function fval = fitnessHumanoidsICub5(obj, vargin)
     end
 
     % initialize the distance constraint structure ...
-    dist_cstr = struct('active', false, 'epsilon', fset.eps, 'p1', [], 'p2', []);
-    fix_dist  = obj.input_4_run{1,5}; % fixed distance value for the distance constraint.
+    fdist_cstr = struct('active', false, 'epsilon', fset.eps, 'p1', [], 'p2', []);
+    fix_dist   = obj.input_4_run{1,5}; % fixed distance value for the distance constraint.
 
     % get the specified controller (UF or GHC) for the torque function:
     control  = obj.input_4_run{1,4};
@@ -72,21 +72,22 @@ function fval = fitnessHumanoidsICub5(obj, vargin)
     tau_u       = InterpTorque(control, actvty_time, fset.intrpl_step);
 
     % initialize the variables for the constraint values ...
-    lnk_pos   = zeros(3,nLnks);         % positions of the constraint links
-    cstr_vals = cell(1,4*ndof+nLnks+1); % constraint value list
-    cstr_idx  = 1;                      % constraint index (counter)
+    clnk_pos  = zeros(3,nCLnks);         % positions of the constraint links
+    cstr_vals = cell(1,4*ndof+nCLnks+1); % constraint value list
+    cstr_idx  = 1;                       % constraint index (counter)
 
     traj_err = 0;
     failure  = false;
 
-    % get the goal points for the end-effector tasks which are
-    % defined in the specified subchains of the first chain:
+    % get the goal points for the end-effector tasks which are defined
+    % in the specified subchains of the first chain (see 'subchain1' in
+    % the corresponding configuration script):
     % goal positions of the end-effector tasks ...
-    goal_pos.ee_r = control.references.GetTraj(1, tidx_gp(1,1), 1);
-    goal_pos.ee_l = control.references.GetTraj(1, tidx_gp(2,1), 1);
+    goal_pos.ee_r = control.references.GetTraj(1, idx_tp(1,1), 1);
+    goal_pos.ee_l = control.references.GetTraj(1, idx_tp(2,1), 1);
     % fixed endpoints (new goal positions for the 2nd step) ...
-    goal_pos.ep_r = control.references.GetTraj(1, tidx_gp(3,1), 1);
-    goal_pos.ep_l = control.references.GetTraj(1, tidx_gp(4,1), 1);
+    goal_pos.ep_r = control.references.GetTraj(1, idx_tp(3,1), 1);
+    goal_pos.ep_l = control.references.GetTraj(1, idx_tp(4,1), 1);
 
     % 1st step - use the goal positions of the
     % end-effectors as attraction positions:
@@ -103,27 +104,28 @@ function fval = fitnessHumanoidsICub5(obj, vargin)
 
         % compute and set the current Cartesian positions of
         % all controlled constraint links of the experiment:
-        lnk_pos = updateLinkPos(lnk_pos, icub_wbc, qj, cstr_lnk_names, nLnks);
+        clnk_pos = updateCLinkPos(clnk_pos, icub_wbc, qj, cstr_lnk_names, nCLnks);
 
         % set the positions for the fixed distance constraint and try to activate it:
-        dist_cstr.p1 = lnk_pos(1:3,idx_wr(1,1)); % pos. of r_wrist_1
-        dist_cstr.p2 = lnk_pos(1:3,idx_wr(2,1)); % pos. of l_wrist_1
-        if ( ~dist_cstr.active && (ti < fset.tlim) )
-            if (norm(dist_cstr.p1 - dist_cstr.p2) < fix_dist)
+        fdist_cstr.p1 = clnk_pos(1:3,idx_wr(1,1)); % pos. of r_wrist_1
+        fdist_cstr.p2 = clnk_pos(1:3,idx_wr(2,1)); % pos. of l_wrist_1
+        if ( ~fdist_cstr.active && (ti < fset.tlim) )
+            d = WBM.utilities.tfms.edist(fdist_cstr.p1, fdist_cstr.p2);
+            if (d < fix_dist)
                 % enable constraint ...
-                dist_cstr.active = true;
+                fdist_cstr.active = true;
             end
         end
 
         % set the constraint value list for computing the constraint violations ...
-        cstr_vals = setCstrValueList(cstr_vals, qj, tau, ndof, lnk_pos, nLnks, dist_cstr);
+        cstr_vals = setCstrValueList(cstr_vals, qj, tau, ndof, clnk_pos, nCLnks, fdist_cstr);
 
         % add the constraint values to the penalty object and evaluate them for violations:
-        obj.penalty_handling.EvaluateConstraints(cstr_vals, cstr_idx);
+        EvaluateConstraints(obj.penalty_handling, cstr_vals, cstr_idx);
         cstr_idx = cstr_idx + 1;
 
         if ( (ti >= fset.tlim) && ~scnd_step )
-            if dist_cstr.active
+            if fdist_cstr.active
                 % 2nd step - use the fixed endpoints
                 % as attraction positions:
                 attr_pos_r = goal_pos.ep_r;
@@ -135,8 +137,8 @@ function fval = fitnessHumanoidsICub5(obj, vargin)
             end
         end
         % get the current positions of the end-effectors ...
-        pos_ee_r = lnk_pos(1:3,idx_ee(1,1));
-        pos_ee_l = lnk_pos(1:3,idx_ee(2,1));
+        pos_ee_r = clnk_pos(1:3,idx_ee(1,1));
+        pos_ee_l = clnk_pos(1:3,idx_ee(2,1));
 
         % calculate the Cartesian position errors (1-norm)
         % and add them to the total trajectory error:
@@ -174,19 +176,19 @@ end
 
 %% LINK POSITIONS & CONSTRAINT VALUES:
 
-function lnk_pos = updateLinkPos(lnk_pos, icub_wbc, qj, cstr_lnk_names, nLnks)
-    for j = 1:nLnks
-        lnk_name = cstr_lnk_names{j,1};
-        [pos,~]  = icub_wbc.offlineFkine(qj, lnk_name);
-        lnk_pos(1:3,j) = pos;
+function clnk_pos = updateCLinkPos(clnk_pos, icub_wbc, qj, cstr_lnk_names, nCLnks)
+    for j = 1:nCLnks
+        clnk_name = cstr_lnk_names{j,1};
+        [pos,~]   = icub_wbc.offlineFkine(qj, clnk_name);
+        clnk_pos(1:3,j) = pos;
     end
 end
 
-function cstr_vals = setCstrValueList(cstr_vals, qj, tau, ndof, lnk_pos, nLnks, dist_cstr)
+function cstr_vals = setCstrValueList(cstr_vals, qj, tau, ndof, clnk_pos, nCLnks, fdist_cstr)
     persistent nJVals nCstrs jnt_vals; % static variables
     if isempty(nJVals)
         nJVals   = 4*ndof;
-        nCstrs   = nJVals + nLnks + 1;
+        nCstrs   = nJVals + nCLnks + 1;
         jnt_vals = zeros(1,nJVals);
     end
     % joint values to verify the joint positions and torques with
@@ -205,10 +207,10 @@ function cstr_vals = setCstrValueList(cstr_vals, qj, tau, ndof, lnk_pos, nLnks, 
     cstr_vals(1,1:nJVals) = num2cell(jnt_vals);
     % Cartesian positions of the constraint links to compute the
     % distances between obstacles (obstacle avoidance):
-    for i = 1:nLnks
-        cstr_vals{1,nJVals+i} = lnk_pos(1:3,i).';
+    for i = 1:nCLnks
+        cstr_vals{1,nJVals+i} = clnk_pos(1:3,i).';
     end
     % fixed distance constraint between two points
     % (p1, p2) with a specified tolerance:
-    cstr_vals{1,nCstrs} = dist_cstr;
+    cstr_vals{1,nCstrs} = fdist_cstr;
 end

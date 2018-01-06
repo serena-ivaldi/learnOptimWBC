@@ -42,6 +42,10 @@ chain_1 = MultChainTreeICub(bot1, 'l_sole', opt);
 
 robots{1} = chain_1;
 chains = SubChains(target_link,robots,bot1);
+
+% initialize the simulation configuration for the robot:
+bot1.sim_config = initSimConfigICub_atf(icub_model.urdf_robot_name, 'DarkScn');
+
 %%  REFERENCE PARAMETERS
 deg = pi/180;
 % primary trajectory
@@ -166,11 +170,32 @@ elseif strcmp(simulator_type{1},'icub_matlab')
     end
     params.tStart   = time_sym_struct.ti;
     params.tEnd     = time_sym_struct.tf;
-    params.sim_step =  0.01;%time_struct.step;
+    params.sim_step = 0.01; %time_struct.step;
     params.demo_movements = 0;
     params.maxtime = 100;
     params.torque_saturation = 100000;
 
+    % use mixed forward dynamics models:
+    params.mixed_fd_models = false;
+
+    cstr_lnk_names = { 'r_gripper', 'r_wrist_1', 'r_elbow_1', 'r_shoulder_1', 'head', ...
+                       'l_gripper', 'l_wrist_1', 'l_elbow_1', 'l_shoulder_1' };
+
+    % index positions of the target points for the elementary tasks:
+    idx_tp = vertcat(1, 3, 6, 7);
+
+    % settings for the fitness function:
+    fset.smp_rate        = 10;   % sample rate
+    fset.tlim            = 10;   % time limit (in seconds)
+    fset.eps             = 1e-3; % tolerance value epsilon
+    fset.intrpl_step     = 1e-3; % interpolation step
+    fset.max_effort      = 3.5e+5;
+    fset.max_traj_err    = 250;
+    fset.weight_effort   = 1;
+    fset.weight_traj_err = 3;
+
+    % set the input arguments for the fitness function:
+    params.fit_argin = {cstr_lnk_names, idx_tp, fset};
 end
 %% Parameters Dependant on the type of controller
 
@@ -316,7 +341,7 @@ switch CONTROLLERTYPE
         %% INSTANCE PARAMETER
         run_function = @RobotExperiment;
         fitness = @fitnessHumanoidsICub5; % fitness function ...
-        % fitness = @fitnessHumanoidsIcub4; % fitness function ...
+        % fitness = @fitnessHumanoidsIcub4;
         clean_function = @RobotExperimentCleanData;
 
         if strcmp(simulator_type{1},'rbt')

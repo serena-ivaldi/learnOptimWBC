@@ -81,7 +81,7 @@ function [t, q_j, dq_j, stmChi] = mixDynSimICub(controller, params)
         for i = 1:ntsecs
             is = tsect_list{i,2}(1,1); % start index
             ie = tsect_list{i,2}(1,2); % end index
-            if (i == sidx_pl)
+            if (i == sidx_pl) % check section index
                 % switch to fdyn-model with NFB or FPC + payload ...
                 [t(is:ie,1), Chi(is:ie,1:len)] = forwardDynamics(ws, tsect_list{i,1}, params.chiInit, controller, ...
                                                                  fhTrqControl, ode_opt, params.maxtime, argin_fdpl{:});
@@ -96,10 +96,10 @@ function [t, q_j, dq_j, stmChi] = mixDynSimICub(controller, params)
         fprintf(stderr, 'mixDynSimICub: An exception occurred during the integration of the mixed forward dynamics system!\n\n');
         rethrow(exc);
     end
-    q_j = Chi(:,8:(ws.ndof+7));
+    q_j = Chi(:,1:(ws.ndof+7)); % q_j with VQ-transformation
 
     if (nargout > 2)
-        dq_j = Chi(:,(ws.ndof+14):len);
+        dq_j = Chi(:,(ws.ndof+8):len); % dq_j with floating base
 
         if (nargout == 4)
             stmChi = Chi;
@@ -218,8 +218,7 @@ function tau = policyTrqControl(t,~,~,stp, controller, nCtcs, trq_sat)
     tau  = Policy(controller, t, stp.q_j, stp.dq_j, fc_0, Jc_t);
 
     % apply torque saturation (to prevent overload) ...
-    tau(tau >  trq_sat) =  trq_sat;
-    tau(tau < -trq_sat) = -trq_sat;
+    tau = WBM.utilities.mbd.satTrq(tau, trq_sat);
 end
 
 % extended policy torque controller for the fdyn-model with pose correction:
@@ -227,7 +226,5 @@ function tau = policyTrqControlExt(t,~,~,stp,~,Jc_f,~,~,controller, nCtcs, trq_s
     fc_0 = zeros(6*nCtcs,1);
     Jc_t = Jc_f.';
     tau  = Policy(controller, t, stp.q_j, stp.dq_j, fc_0, Jc_t);
-
-    tau(tau >  trq_sat) =  trq_sat;
-    tau(tau < -trq_sat) = -trq_sat;
+    tau  = WBM.utilities.mbd.satTrq(tau, trq_sat);
 end

@@ -10,9 +10,8 @@
 
 function output = RobotExperiment(obj, parameters)
     simulator = obj.input_4_run{1}; % rbt or v-rep
-    output    = cell(1,3);
 
-    if strcmp(simulator,'rbt')
+    if strcmp(simulator, 'rbt')
         qinit             = obj.input_4_run{2}; % initial position
         qdinit            = obj.input_4_run{3}; % initial velocity
         time_sym_struct   = obj.input_4_run{4}; % time struct for simulation with fixed step
@@ -38,13 +37,20 @@ function output = RobotExperiment(obj, parameters)
 
         params = obj.input_4_run{2};
         if params.mixed_fd_models
+            if ~isrow(params.fit_argin)
+                error('RobotExperiment: %s', WBM.wbmErrorMsg.WRONG_ARR_DIM);
+            end
+
             tic
             [t, q] = mixDynSimICub(controller, params);
             toc
 
-            output{1,1} = t;
-            output{1,2} = q;
-            output{1,3} = params.fit_argin;
+            len    = size(params.fit_argin,2) + 2;
+            output = cell(1,len);
+
+            output{1,1}     = t;
+            output{1,2}     = q;
+            output(1,3:len) = params.fit_argin;
             return
         else
             tic
@@ -53,7 +59,7 @@ function output = RobotExperiment(obj, parameters)
             %toc(controller.current_time) % for debugging the time deadline
         end
     end
-
+    output    = cell(1,3);
     output{1} = t;
     output{2} = q;
     output{3} = qd;

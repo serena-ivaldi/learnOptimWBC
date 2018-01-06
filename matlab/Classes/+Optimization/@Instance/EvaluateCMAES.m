@@ -61,7 +61,7 @@ function [performance, succeeded, data2save] = EvaluateCMAES(obj,action,cur_cand
          % here im going to save the average perfomance without correction
          data2save.performance = performance;
          disp('error state during the integration in EvaluateCmaes');
-         %rethrow(err);
+         rethrow(err);
    end
 
 

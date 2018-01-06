@@ -157,12 +157,13 @@ function sim_config = initSimConfigICub_liftObj(urdf_file_name, vb_objects, scn_
     sim_config.axis_limits = [-0.5  0.5  -0.5  0.5  0  1];
     sim_config.axes_views  = {'custom'};
     sim_config.custom_view = [10  20];
+    % sim_config.custom_view = [-90  90]; % view top
 
     % sim_config.axes_pos    = [0.02  0.1  0.96  0.74];
-    % sim_config.custom_view = [0  0];
+    % sim_config.custom_view = [0  0]; % view l. side
 
     if dark_scn
-        sim_config.light_pos = [-0.20  0.15  1.20];
+        sim_config.light_pos = [0.20  -0.15  1.20];
         sim_config.lgd_font_color  = WBM.wbmColor.gray;
         sim_config.lgd_bkgrd_color = 'black';
         sim_config.lgd_edge_color  = WBM.wbmColor.dimgray;

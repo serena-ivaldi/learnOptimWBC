@@ -9,8 +9,15 @@
 % reached with minimal torque values under the common robot constraints, the
 % joints and torques limits.
 %
-function [fval, tidx_pl] = fitnessICubLiftObj(obj, vargin)
+% Note: This is a adapted version of the
+%
+function [fval, tidx_pl] = fitnessICubLiftObj2(obj, vargin)
+    global gbl_plstate;
+    if isempty(gbl_plstate)
+        error('fitnessICubLiftObj2: %s', WBM.wbmErrorMsg.EMPTY_DATA_TYPE);
+    end
     ilen = size(vargin,2);
+
     switch ilen
         case {4, 5}
             t              = vargin{1,1};
@@ -19,7 +26,7 @@ function [fval, tidx_pl] = fitnessICubLiftObj(obj, vargin)
             idx_tp         = vargin{1,4}; % index positions of the target points of the end-effector tasks
 
             if ~iscellstr(cstr_lnk_names)
-                error('fitnessICubLiftObj: %s', WBM.wbmErrorMsg.WRONG_DATA_TYPE);
+                error('fitnessICubLiftObj2: %s', WBM.wbmErrorMsg.WRONG_DATA_TYPE);
             end
             cstr_lnk_names = cstr_lnk_names(:); % make a column array ...
             idx_tp = idx_tp(:);
@@ -28,10 +35,10 @@ function [fval, tidx_pl] = fitnessICubLiftObj(obj, vargin)
             if (ilen == 5)
                 fset = vargin{1,5};
                 if ~isstruct(fset)
-                    error('fitnessICubLiftObj: %s', WBM.wbmErrorMsg.WRONG_DATA_TYPE);
+                    error('fitnessICubLiftObj2: %s', WBM.wbmErrorMsg.WRONG_DATA_TYPE);
                 end
                 if ( (fset.tlim < 1) || (fset.tlim > noi) )
-                    error('fitnessICubLiftObj: %s', WBM.wbmErrorMsg.IDX_OUT_OF_BOUNDS);
+                    error('fitnessICubLiftObj2: %s', WBM.wbmErrorMsg.IDX_OUT_OF_BOUNDS);
                 end
             else
                 % use the default fitness settings ...
@@ -45,10 +52,10 @@ function [fval, tidx_pl] = fitnessICubLiftObj(obj, vargin)
                 fset.weight_traj_err = 3;
             end
         otherwise
-            error('fitnessICubLiftObj: %s', WBM.wbmErrorMsg.WRONG_ARR_SIZE);
+            error('fitnessICubLiftObj2: %s', WBM.wbmErrorMsg.WRONG_ARR_SIZE);
     end
     if (mod(size(idx_tp,1),2) ~= 0)
-        error('fitnessICubLiftObj: %s', WBM.wbmErrorMsg.WRONG_VEC_LEN);
+        error('fitnessICubLiftObj2: %s', WBM.wbmErrorMsg.WRONG_VEC_LEN);
     end
     noi    = size(t,1);              % number of iterations
     nCLnks = size(cstr_lnk_names,1); % number of constraint links
@@ -66,7 +73,7 @@ function [fval, tidx_pl] = fitnessICubLiftObj(obj, vargin)
     idx_ee = find(ismember(cstr_lnk_names, {'l_hand', 'r_hand'}), 2);       % hand palms (ee)
     idx_gr = find(ismember(cstr_lnk_names, {'l_gripper', 'r_gripper'}), 2); % finger tips (gr)
     if ( isempty(idx_gr) || isempty(idx_ee) )
-        error('fitnessICubLiftObj: %s', WBM.wbmErrorMsg.LNK_NOT_IN_LIST);
+        error('fitnessGrabObj: %s', WBM.wbmErrorMsg.LNK_NOT_IN_LIST);
     end
     fprms.idx_ee = idx_ee;
     fprms.idx_gr = idx_gr;
@@ -86,24 +93,31 @@ function [fval, tidx_pl] = fitnessICubLiftObj(obj, vargin)
     goal_pos(1,1).gr_l = control.references.GetTraj(1, idx_tp(3,1), 1);
     goal_pos(1,1).gr_r = control.references.GetTraj(1, idx_tp(4,1), 1);
 
-    % Evaluate grabbing object:
-    [fval_go, tidx_go, tau_u, fprms] = fitnessGrabObj(obj, noi, t, q_j, cstr_lnk_names, ...
-                                                      goal_pos(1,1), fprms, fset);
-
-    if (fval_go ~= -1)
-        % set the final goal positions for the hand palms (ee) and finger tips (gr) ...
-        goal_pos(1,1).ee_l = control.references.GetTraj(1, idx_tp(7,1), 1);
-        goal_pos(1,1).ee_r = control.references.GetTraj(1, idx_tp(8,1), 1);
-        goal_pos(1,1).gr_l = control.references.GetTraj(1, idx_tp(9,1), 1);
-        goal_pos(1,1).gr_r = control.references.GetTraj(1, idx_tp(10,1), 1);
+    fval = -1;
+    if ~gbl_plstate.obj_grabbed
+        % Evaluate grabbing object:
+        [fval_go,~,~,~] = fitnessGrabObj(obj, noi, t, q_j, cstr_lnk_names, ...
+                                         goal_pos(1,1), fprms, fset);
+        fval = fval_go;
+    elseif (gbl_plstate.fval_go ~= -1)
+        tidx_go = gbl_plstate.tidx_go;
+        fval_go = gbl_plstate.fval_go;
 
         % Evaluate moving object to its destination:
-        [fval_mo,~,~] = fitnessMoveObj(obj, noi, t, q_j, tau_u, cstr_lnk_names, ...
+        [fval_mo,~,~] = fitnessMoveObj(obj, noi, t, q_j, cstr_lnk_names, ...
                                        tidx_go, goal_pos, fprms, fset);
 
+        % check the length of both fitness-vectors
+        % and extend them to the same length ...
+        vlen1 = size(fval_go,1);
+        vlen2 = size(fval_mo,1);
+        if (vlen1 < vlen2)
+            fval_go = vertcat(fval_go, zeros(vlen2-vlen1,1));
+        elseif (vlen1 > vlen2)
+            fval_mo = vertcat(fval_mo, zeros(vlen1-vlen2,1));
+        end
+
         fval = (fval_go + fval_mo) * 0.5; % avg. fitness value
-    else
-        fval = fval_go;
     end
 
     if (nargout == 2)
@@ -111,7 +125,7 @@ function [fval, tidx_pl] = fitnessICubLiftObj(obj, vargin)
         tidx_pl = struct('grabbed', tidx_go, 'released', 0); % object will never released (in this case)
     end
 end
-%% END of fitnessICubLiftObj.
+%% END of fitnessICubLiftObj2.
 
 
 %% FITNESS FUNCTIONS, LINK POSITIONS, CONSTRAINT VALUE LIST & PAYLOAD STATE:
@@ -136,6 +150,7 @@ function [fval_go, tidx_go, tau_u, fprms] = fitnessGrabObj(obj, noi, t, q_j, cst
     failure     = false;
     traj_err    = 0;
     tidx_go     = 0;
+    qj_go       = [];
 
     % compute the overall trajectory error until
     % the object is reached and grabbed:
@@ -189,7 +204,8 @@ function [fval_go, tidx_go, tau_u, fprms] = fitnessGrabObj(obj, noi, t, q_j, cst
                      (d_gr_l <= fset.eps) && (d_gr_r <= fset.eps) )
                     % the main and sub-goals are reached ...
                     obj_grabbed = true;
-                    tidx_go     = i; % save current time index
+                    tidx_go     = i;          % save current time index
+                    qj_go       = qj(8:vlen); % save current joint pose
                     fprintf('Object grabbed successfully.\n');
                     break;
                 end
@@ -203,30 +219,33 @@ function [fval_go, tidx_go, tau_u, fprms] = fitnessGrabObj(obj, noi, t, q_j, cst
     fprms.cstr_idx = cstr_idx;
 
     if failure
-        % grabbing the object failed ...
+        % grabbing the object failed:
         fval_go = -1; % punish value
         return
     end
-
     % compute the fitness value of grabbing the object:
     fval_go = calcFitness(control.torques(:), traj_err, fset);
     % actualize the payload state ...
-    setPayloadState(obj_grabbed, tidx_go);
+    setPayloadState(obj_grabbed, tidx_go, qj_go, fval_go);
 end
 
-function [fval_mo, tidx_mo, cstr_idx] = fitnessMoveObj(obj, noi, t, q_j, tau_u, cstr_lnk_names, tidx_go, goal_pos, fprms, fset)
+function [fval_mo, tidx_mo, cstr_idx] = fitnessMoveObj(obj, noi, t, q_j, cstr_lnk_names, tidx_go, goal_pos, fprms, fset)
     control  = fprms.control;
     icub_wbc = fprms.icub_wbc;
     ndof     = fprms.ndof;
     nCLnks   = fprms.nCLnks;
+    nCstrs   = fprms.nCstrs;
     idx_ee   = fprms.idx_ee;
     idx_gr   = fprms.idx_gr;
-    nCstrs   = fprms.nCstrs;
 
     tidx_go = tidx_go + 1;
     if (tidx_go > noi)
         tidx_go = noi;
     end
+
+    % uniformed torques:
+    actvty_time = obj.input_4_run{1,3};
+    tau_u = InterpTorque(control, actvty_time, fset.intrpl_step);
 
     % initialization:
     clnk_pos  = zeros(3,nCLnks);

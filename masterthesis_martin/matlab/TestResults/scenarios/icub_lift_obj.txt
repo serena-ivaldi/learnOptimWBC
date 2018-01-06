@@ -1,4 +1,4 @@
-% Define the obstacles from the specified volume bodies which are defined
+% Define the obstacles from the specified volume bodies that are defined
 % in the environment scenario of the lift-object simulation and add them
 % to the control system of the learnOptimWBC-toolbox:
 tol = 0.002; % tolerance value
@@ -6,7 +6,6 @@ tol = 0.002; % tolerance value
 vb_objects = bot1.sim_config.environment.vb_objects;
 ob_1 = setObstacle(vb_objects(1,1), tol); % deposit table
 ob_2 = setObstacle(vb_objects(2,1), tol); % shelf
-% ob_3 = setObstacle(vb_objects(3,1), tol); % wooden cube (the robot must grab this object, no colission avoidance)
+ob_3 = setObstacle(vb_objects(3,1), tol); % wooden cube (the robot must grab this object)
 
-G_OB = horzcat(ob_1, ob_2);
-% G_OB = horzcat(ob_1, ob_2, ob_3);
+G_OB = horzcat(ob_1, ob_2, ob_3);

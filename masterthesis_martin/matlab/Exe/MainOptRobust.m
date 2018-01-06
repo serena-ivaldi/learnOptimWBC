@@ -6,7 +6,10 @@ clc
 % main in the configuration files while in CMAESParallelBenchmark.m the
 % optimization method is in the CMAESParallelBenchmark.m itself
 
-%parpool
+% cl = parcluster('local');
+% cl.NumWorkers = 4;
+% cl.NumThreads = 1;
+% plobj = parpool(cl);
 
 tic
 
@@ -33,7 +36,7 @@ mkdir(complete_path);
 for iter = 1:number_of_experiment_ripetition
     current_experiment = iter;
     [tau, mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded] = OptimizationRoutine(number_of_experiment_ripetition, n_of_experiment, ...
-     																										     iter, init_parameters, configuration_file_name);
+                                                                                                                 iter, init_parameters, configuration_file_name);
     all_results{1,iter} = BestActionPerEachGen;
 end
 
@@ -47,4 +50,5 @@ save(new_complete_path_to_file, 'all_results');
 
 toc
 
-%parpool close
+% delete(plobj); % shutdown the parallel pool
+% shutdown(cl);  % shutdown the loaded cluster

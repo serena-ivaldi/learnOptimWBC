@@ -4,7 +4,6 @@
 % This configuration is the same as configuration #3, but uses the WBM-Toolbox instead.
 % Note: This configuration file works only if the WBM-Toolbox is installed on the system.
 import WBM.*
-import WBM.utilities.*
 import WBM.RobotModel.iCub_32dof.*
 
 %% GENERAL PARAMETERS
@@ -40,6 +39,10 @@ chain_1 = MultChainTreeICub(bot1, 'l_sole', opt);
 
 robots{1} = chain_1;
 chains = SubChains(target_link,robots,bot1);
+
+% initialize the simulation configuration for the robot:
+bot1.sim_config = initSimConfigICub_32dof(icub_model.urdf_robot_name, 'DarkScn');
+
 %%  REFERENCE PARAMETERS
 deg = pi/180;
 % primary trajectory
@@ -156,6 +159,8 @@ elseif strcmp(simulator_type{1},'icub_matlab')
     params.maxtime = 1000;
     params.torque_saturation = 100000;
 
+    % use mixed forward dynamics models:
+    params.mixed_fd_models = false;
 end
 %% Parameters Dependant on the type of controller
 

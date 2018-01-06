@@ -1,47 +1,43 @@
-function [lnk_traj, trg_pts] = setupTrajectories_liftObj(trg_pos)
-    [nTrg, sz] = size(trg_pos);
+function [lnk_traj, trg_pts] = setupTrajectories_liftObj(traj_conf, trg_conf)
+    [nTraj, sz] = size(traj_conf);
+    if (sz ~= 4)
+        error('setupTrajectories_liftObj: %s', WBM.wbmErrorMsg.WRONG_ARR_DIM);
+    end
+    [nTrg, sz] = size(trg_conf);
     if (sz ~= 3)
-        error('setupTrajectories_liftObj: %s', WBM.wbmErrorMsg.WRONG_MAT_DIM);
+        error('setupTrajectories_liftObj: %s', WBM.wbmErrorMsg.WRONG_ARR_DIM);
     end
 
-    % define and setup the trajectory curves for the left and the right hand:
-    lnk_traj = repmat(WBM.wbmLinkTrajectory, 2, 1);
-    lnk_traj(1,1).urdf_link_name = 'l_hand';
-    lnk_traj(2,1).urdf_link_name = 'r_hand';
+    % define and setup the trajectory curves:
+    lnk_traj = repmat(WBM.wbmLinkTrajectory, nTraj, 1);
+    for i = 1:nTraj
+        lnk_traj(i,1).urdf_link_name = traj_conf{i,1};
+        lnk_traj(i,1).jnt_annot_pos  = traj_conf{i,2};
+        lnk_traj(i,1).ept_marker     = traj_conf{i,3};
 
-    idx_j = 7; % joint index
-    lnk_traj(1,1).jnt_annot_pos = {'left_arm', idx_j};
-    lnk_traj(2,1).jnt_annot_pos = {'right_arm', idx_j};
+        traj_color = traj_conf{i,4};
+        lnk_traj(i,1).line_color = traj_color;
+        lnk_traj(i,1).ept_color  = traj_color;
+    end
 
-    traj_color_l = WBM.wbmColor.forestgreen;
-    traj_color_r = WBM.wbmColor.tomato;
-
-    lnk_traj(1,1).line_color = traj_color_l;
-    lnk_traj(1,1).ept_color  = traj_color_l;
-
-    lnk_traj(2,1).line_color = traj_color_r;
-    lnk_traj(2,1).ept_color  = traj_color_r;
-
-    % define and setup the final target points which the hands have to reach:
-    trg_pts    = repmat(WBM.wbmTargetPoint, nTrg, 1);
-    line_width = 1.5;
-    mkr_size   = 10;
-    mkr_color1 = WBM.wbmColor.turquoise1;
-    mkr_color2 = WBM.wbmColor.deeppink;
-
+    % define and setup the target points which
+    % the controlled links have to reach:
+    mkr_size1   = 10;
+    mkr_size2   = 8;
+    line_width1 = 1.2;
+    line_width2 = 1.6;
+    trg_pts     = repmat(WBM.wbmTargetPoint, nTrg, 1);
     for i = 1:nTrg
-        trg_pts(i,1).pos        = trg_pos(i,1:3).';
-        trg_pts(i,1).mkr_size   = mkr_size;
-        trg_pts(i,1).line_width = line_width;
-    end
+        trg_pts(i,1).pos       = (trg_conf{i,1}).';
+        trg_pts(i,1).marker    = trg_conf{i,2};
+        trg_pts(i,1).mkr_color = trg_conf{i,3};
 
-    if (nTrg == 4)
-        % set the colors of the first 2 target point pairs:
-        % first (intermediate) targets:
-        trg_pts(1,1).mkr_color = mkr_color1;
-        trg_pts(2,1).mkr_color = mkr_color1;
-        % final targets:
-        trg_pts(3,1).mkr_color = mkr_color2;
-        trg_pts(4,1).mkr_color = mkr_color2;
+        if strcmp(trg_pts(i,1).marker, 'o')
+            trg_pts(i,1).mkr_size   = mkr_size1;
+            trg_pts(i,1).line_width = line_width1;
+        else
+            trg_pts(i,1).mkr_size   = mkr_size2;
+            trg_pts(i,1).line_width = line_width2;
+        end
     end
 end

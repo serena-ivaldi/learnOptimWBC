@@ -1,32 +1,36 @@
-% Configuration script for the lift-object experiment:
+% Configuration script for the lift-object experiment - part 2:
 %
 % This configuration script creates and setup all necessary data types and
 % parameters for the experiment simulation with the iCub humanoid robot of
 % lifting an object (wooden cube) from a deposit table.
 %
-% Note: This configuration script does not work completely, since the code
-%       architecture of the learnOptimWBC-toolbox allows only one set of
-%       position constraints to be reached for the given links/tasks and
-%       not several sets with different positions.
+% The second part of this configuration script describes the second step of
+% the experiment, the lifting of the already grasped object from the table.
+% It defines the second and final target points to be reached for the given
+% elementary tasks.
 %
-%       Therefore this script works only correctly, if either the first part
-%       for the grasping-step or the second part for the lifting-step is de-
-%       activated, i.e. the corresponding theta values must be set to 0.
+% The second part of the configuration script continues there where the first
+% part has stopped. It uses the last body pose of the robot, i.e. when the the
+% object is grabbed, as initial joint positions (stored in a global variable).
 %
-%       This configuration file works only if the WBM-Library is installed
-%       on the system.
+% Compared to the order of the target points in the first part, the order of
+% the the target points, as first step, are in this part swapped.
+%
+% All further configured parameters are identical to the first part of
+% this configuration script.
+%
+% Note: This configuration file works only if the WBM-Library is installed
+%       on the system and the first part of this configuration script is
+%       already executed.
 
 %%%;;
 
 import WBM.*
 
-% Global payload state variable for a mixed forward dynamics system
-% to indicate the switchover to another forward dynamics model:
 global gbl_plstate;
-gbl_plstate = struct('obj_grabbed', false, 'obj_released', false, ...
-                     'tidx_go', 0, 'tidx_ro', 0, 'qj_go', [], 'fval_go', []);
-% gbl_plstate = struct('obj_grabbed', true, 'obj_released', false, ...
-%                      'tidx_go', 1, 'tidx_ro', 0, 'qj_go', [], 'fval_go', []);
+if isempty(gbl_plstate)
+    error('config_icub_lift_obj_part2: %s', WBM.wbmErrorMsg.EMPTY_DATA_TYPE);
+end
 
 simulator_type = {'icub_matlab'};
 
@@ -39,7 +43,7 @@ time_struct.tf   = 30;    % final time in [s]
 time_struct.step = 0.001; % time step in [s]
 
 % Backup file for the current set parameters:
-name_dat = 'icub_atf_lift_obj_1.0';
+name_dat = 'icub_atf_lift_obj_part2_1.0';
 %path = LoadParameters(name_dat);
 %load(path);
 
@@ -83,26 +87,19 @@ name_scenario = 'icub_lift_obj';
 %
 % elem. task idx:    1         2          3            4            5            6          7
 % target pos.   :    A         B          C            D            E            F
-subchain1   =   {'l_hand', 'r_hand', 'l_gripper', 'r_gripper', 'l_elbow_1', 'r_elbow_1' , 'none', ...
-                 'l_hand', 'r_hand', 'l_gripper', 'r_gripper', 'l_elbow_1', 'r_elbow_1' }; % Cartesian space and/or joint space
-%                    G         H          I            J            K            L
-%                    8         9         10           11           12           13
-
-% subchain1 = {'l_hand', 'r_hand', 'l_gripper', 'r_gripper', 'l_elbow_1', 'r_elbow_1' , 'none'};
-% subchain1 = {'l_hand', 'r_hand', 'l_gripper', 'r_gripper', 'none'};
-
+subchain1   =   {'l_hand', 'r_hand', 'l_gripper', 'r_gripper', 'l_elbow_1', 'r_elbow_1' , 'none'}; % Cartesian space and/or joint space
 target_link = {subchain1}; % add the array to the target links of the control system ...
 
 nTsk  = size(subchain1,2); % number of tasks
 ip_jt = 7;                 % index position of the joint task
-% ip_jt = 5;
 
 % Target points for the elementary tasks:
 %
 % Cartesian coordinates, elementary target points to be reached, for the left
 % and right trajectory of each joint controlled by the system to achieve the
 % desired learning behavior:
-trg_pts = cell(1,nTsk);
+nTrg    = 13;
+trg_pts = cell(1,nTrg);
 
 % side length of the cube to be grabbed ...
 l_s  = sim_config.environment.vb_objects(3,1).dimension(1,1);
@@ -110,22 +107,6 @@ ls_h = l_s * 0.5; % half side length
 
 % High-level commands:
 % (‡) ... elementary tasks
-%
-%   * GRAB_OBJECT_AT_POS(A,B)
-%       + [C,D] = ESTIM_POS_GRIPPERS(A,B)
-%       + [E,F] = ESTIM_POS_ELBOWS(A,B)
-%
-%       + MOVE_ELBOWS_TO_POS(E,F)
-%           - MOVE_L_ELBOW_TO_POS(E)       (‡)
-%           - MOVE_R_ELBOW_TO_POS(F)       (‡)
-%       + MOVE_HANDS_TO_POS(A,B)
-%           - MOVE_L_HAND_TO_POS(A)        (‡)
-%           - MOVE_R_HAND_TO_POS(B)        (‡)
-%       + MOVE_GRIPPERS_TO_POS(C,D)
-%           - MOVE_L_GRIPPER_TO_POS(C)     (‡)
-%           - MOVE_R_GRIPPER_TO_POS(D)     (‡)
-%
-%   * SET_JOINT_POSITIONS(jnt_pos)         (‡)
 %
 %   * MOVE_OBJECT_TO_POS(G,H)              % move obj. to target pos.
 %       + [I,J] = ESTIM_POS_GRIPPERS(G,H)
@@ -140,36 +121,35 @@ ls_h = l_s * 0.5; % half side length
 %       + MOVE_GRIPPERS_TO_POS(I,J)
 %           - MOVE_L_GRIPPER_TO_POS(I)     (‡)
 %           - MOVE_R_GRIPPER_TO_POS(J)     (‡)
+%
+%   * SET_JOINT_POSITIONS(jnt_pos)         (‡)
 
 sh_h_tbl  = [0  0  0.20]; % height from UE table to UE shelf (UE ... upper edge)
 el2_d_el1 = [0  0  0.08]; % distance from elbow pos. 1 to elbow pos. 2
-g_d_h     = 0.0645;       % distance from hand frame {h} to gripper frame {g}
+g_d_h     = 0.0645;       % distance from hand frame {H} to gripper frame {G}
 
-% GRAB_OBJECT_AT_POS:
-% - MOVE_HANDS_TO_POS:
-trg_pts{1,1} = [0.20   ls_h  (0.50+ls_h)]; % move l_hand to targ. pos. A
-trg_pts{1,2} = [0.20  -ls_h  (0.50+ls_h)]; % move r_hand to targ. pos. B
-% - MOVE_GRIPPERS_TO_POS:
-trg_pts{1,3} = [(0.20+g_d_h)   ls_h  (0.50+ls_h)]; % move l_gripper to sub-targ. pos. C
-trg_pts{1,4} = [(0.20+g_d_h)  -ls_h  (0.50+ls_h)]; % move r_gripper to sub-targ. pos. D
-% - MOVE_ELBOWS_TO_POS:
-trg_pts{1,5} = [0.10   0.13  0.63]; % move l_elbow_1 to sub-targ. pos. E
-trg_pts{1,6} = [0.13  -0.17  0.63]; % move r_elbow_1 to sub-targ. pos. F
+trg_pts{1,8}  = [0.20   ls_h  (0.50+ls_h)]; % targ. pos. A (l_hand)
+trg_pts{1,9}  = [0.20  -ls_h  (0.50+ls_h)]; % targ. pos. B (r_hand)
 
-% SET_JOINT_POSITIONS:
-trg_pts{1,7} = repmat(0.5, 1, ndof); % joint positions to minimize the torques in the fitness function.
-% trg_pts{1,5} = repmat(0.5, 1, ndof);
+trg_pts{1,10} = [(0.20+g_d_h)   ls_h  (0.50+ls_h)]; % sub-targ. pos. C (l_gripper)
+trg_pts{1,11} = [(0.20+g_d_h)  -ls_h  (0.50+ls_h)]; % sub-targ. pos. D (r_gripper)
+
+trg_pts{1,12} = [0.10   0.13  0.63]; % sub-targ. pos. E (l_elbow_1)
+trg_pts{1,13} = [0.13  -0.17  0.63]; % sub-targ. pos. F (r_elbow_1)
 
 % MOVE_OBJECT_TO_POS (final target points):
 % - MOVE_HANDS_TO_POS:
-trg_pts{1,8}  = trg_pts{1,1} + sh_h_tbl;  % move l_hand to final pos. G
-trg_pts{1,9}  = trg_pts{1,2} + sh_h_tbl;  % move r_hand to final pos. H
+trg_pts{1,1} = trg_pts{1,8} + sh_h_tbl;   % move l_hand to final pos. G
+trg_pts{1,2} = trg_pts{1,9} + sh_h_tbl;   % move r_hand to final pos. H
 % - MOVE_GRIPPERS_TO_POS:
-trg_pts{1,10} = trg_pts{1,3} + sh_h_tbl;  % move l_gripper to sub-targ. pos. I
-trg_pts{1,11} = trg_pts{1,4} + sh_h_tbl;  % move r_gripper to sub-targ. pos. J
+trg_pts{1,3} = trg_pts{1,10} + sh_h_tbl;  % move l_gripper to sub-targ. pos. I
+trg_pts{1,4} = trg_pts{1,11} + sh_h_tbl;  % move r_gripper to sub-targ. pos. J
 % - MOVE_ELBOWS_TO_POS:
-trg_pts{1,12} = trg_pts{1,5} + el2_d_el1; % move l_elbow_1 to sub-targ. pos. K
-trg_pts{1,13} = trg_pts{1,6} + el2_d_el1; % move r_elbow_1 to sub-targ. pos. L
+trg_pts{1,5} = trg_pts{1,12} + el2_d_el1; % move l_elbow_1 to sub-targ. pos. K
+trg_pts{1,6} = trg_pts{1,13} + el2_d_el1; % move l_elbow_1 to sub-targ. pos. L
+
+% SET_JOINT_POSITIONS:
+trg_pts{1,7} = repmat(0.5, 1, ndof); % joint positions to minimize the torques in the fitness function.
 
 %% Reference parameters:
 
@@ -182,7 +162,7 @@ geom_parameters = trg_pts;
 %    - 1 ... dimension/joint active
 %    - 0 ... dimension/joint not active
 dim_of_task = cell(1,nTsk);
-%            dimension:  x  y  z
+%        dimension:  x  y  z
 dim_of_task(1,:)     = {[1; 1; 1]};  % activated dimensions
 dim_of_task{1,ip_jt} = ones(ndof,1); % activated joints
 
@@ -255,15 +235,12 @@ traj_conf = { subchain1{1,2}, {'left_arm',  idx_j}, 'o', WBM.wbmColor.forestgree
 trg_color1 = WBM.wbmColor.turquoise1;
 trg_color2 = WBM.wbmColor.orangered;
 trg_color3 = WBM.wbmColor.deeppink;
-trg_conf = { trg_pts{1,2}, '+', trg_color1; trg_pts{1,1}, '+', trg_color1; ...   % first targets for the hands (at object)
-             trg_pts{1,4}, 'o', trg_color2; trg_pts{1,3}, 'o', trg_color2; ...   % 1st sub-targets for the grippers (at object)
-             trg_pts{1,6}, 'o', trg_color2; trg_pts{1,5}, 'o', trg_color2; ...   % 1st sub-targets for the elbows
-             trg_pts{1,9}, '+', trg_color3; trg_pts{1,8}, '+', trg_color3; ...   % final targets for the hands (goal position of obj.)
-             trg_pts{1,11}, 'o', trg_color2; trg_pts{1,10}, 'o', trg_color2; ... % 2nd sub-targets for the grippers
-             trg_pts{1,13}, 'o', trg_color2; trg_pts{1,12}, 'o', trg_color2; };  % 2nd sub-targets for the elbows
-
-% trg_conf = { trg_pts{1,2}, '+', trg_color3; trg_pts{1,1}, '+', trg_color3; ...
-%              trg_pts{1,4}, 'o', trg_color2; trg_pts{1,3}, 'o', trg_color2; };
+trg_conf = { trg_pts{1,9}, '+', trg_color1; trg_pts{1,8}, '+', trg_color1; ...   % first targets for the hands (at object)
+             trg_pts{1,11}, 'o', trg_color2; trg_pts{1,10}, 'o', trg_color2; ... % 1st sub-targets for the grippers (at object)
+             trg_pts{1,13}, 'o', trg_color2; trg_pts{1,12}, 'o', trg_color2; ... % 1st sub-targets for the elbows
+             trg_pts{1,2}, '+', trg_color3; trg_pts{1,1}, '+', trg_color3; ...   % final targets for the hands (goal position of obj.)
+             trg_pts{1,4}, 'o', trg_color2; trg_pts{1,3}, 'o', trg_color2; ...   % 2nd sub-targets for the grippers
+             trg_pts{1,6}, 'o', trg_color2; trg_pts{1,5}, 'o', trg_color2; };    % 2nd sub-targets for the elbows
 
 % create and setup the trajectory and target point objects for the hands
 % and other links and add them to the simulation configuration structure:
@@ -364,23 +341,12 @@ end
 % robot will fall down onto the ground) ...
 params.active_floating_base = false;
 
-% setup the initial body pose (joint positions) ...
-params.qjInit = InitializeState(bot1, list_of_kin_chain, params.feet_on_ground, joints_initial_values);
-
-% special initialization (direct coordinates in joint space),
-% i.e. to simulate that the object is already grabbed ...
-% params.qjInit = vertcat(0.000306538410521390, 1.48545790636447, 0.965139521949186, 0.519272065537346, -0.308698523857037, 0.777660970642602, ...
-%                         0.806265900705644, -0.348192373542131, 1.08676227465339, 1.21493777377343, 0.849693769907642, -0.670115697765184, ...
-%                         0.191954643266296, 1.18836007657384, -0.346779186660574, 0.307505236736724, 0.0622921720016784); % for 17-DoF (works well)
-
-% params.qjInit = vertcat(0.000743032436796784, 0.483505561076664, 0.483505130390210, 0.483505090995381, 1.48590762243836, 0.966287578484464, ...
-%                         0.519825860791593, 0.483505073115889, 0.483505081848021, 0.483505145402124, -0.307745282627135, 0.777661637630826, ...
-%                         0.805176160499207, 0.483505103059566, -0.347796114998517, 0.483505075636575, 0.483505036434137, 0.483505090878814, ...
-%                         0.483505091968368, 1.08646333690640, 1.21570797363058, 0.850318308887626, 0.483505092462746, 0.483505092350754, ...
-%                         0.483505090529302, -0.670597439794760, 0.191690222834047, 1.18907369480943, 0.483505091095043, -0.345356114103543, ...
-%                         0.307598082795097, 0.0620674035615882); % for 32-DoF
-%                         % Note: The given policy torque controller of the learnOptimWBC-toolbox
-%                         %       works incorrect with the iCub-model of 32 DoF.
+% set the body pose (joint positions) to the last pose of the
+% previous part, i.e. when the object is already grabbed ...
+if isempty(gbl_plstate.qj_go)
+    error('config_icub_lift_obj_part2: %s', WBM.wbmErrorMsg.EMPTY_VECTOR);
+end
+params.qjInit = gbl_plstate.qj_go;
 
 params.dqjInit     = zeros(bot1.ndof,1); % initial angular joint velocities
 params.dx_bInit    = zeros(3,1);         % initial linear base velocity (Cartesian velocity)
@@ -398,7 +364,7 @@ params.tStart   = time_struct.ti;
 params.tEnd     = time_struct.tf;
 params.sim_step = 0.01; % if sim_step > time_struct.step, the simulation will run faster
 %params.sim_step = time_struct.step;
-params.maxtime  = 1000; %500; %150; %100;
+params.maxtime  = 150; %500; %150; %100;
 %params.wait     = waitbar(0, 'State integration in progress...');
 
 params.demo_movements    = false;
@@ -443,8 +409,8 @@ idx_tp(ip_jt) = []; % remove index of the joint task
 
 % Settings for the fitness function:
 fset.smp_rate        = 10;   % sample rate
-fset.tlim            = 30; %50; %20; %10;  % time limit (in seconds)
-fset.eps             = 1e-2; %1e-3 % tolerance value epsilon
+fset.tlim            = 30;   % time limit (in seconds)
+fset.eps             = 1e-2; %1e-3; % tolerance value epsilon
 fset.intrpl_step     = 1e-3; % interpolation step
 fset.max_effort      = 3.5e+5;
 fset.max_traj_err    = 250;
@@ -526,15 +492,8 @@ switch CONTROLLERTYPE
         else
             numeric_theta = zeros(1,nb*nTsk);
 
-            theta = [8, 8, 14, 14, 6, 6, 1, 0, 0, 0, 0, 0, 0];   % only grabbing (second part (lifiting) deactivated)
-            % theta = [0, 0, 0, 0, 0, 0, 1, 8, 8, 12, 12, 6, 6];   % only lifting (first part (grabbing) deactivated)
-            % theta = [6, 6, 12, 12, 5, 5, 1, 5, 5, 10, 10, 4, 4]; % grabbing & lifting
-            % theta = [8, 8, 14, 14, 6, 6, 1, 8, 8, 14, 14, 6, 6];
-
             % theta = [8, 8, 14, 14, 6, 6, 0.8];
-
-            % theta = [12, 12, 14, 14, 3];
-            % theta = [7, 7, 14, 14, 1.4];
+            theta = [8, 8, 14, 14, 6, 6, 1];
 
             j = 1;
             for i = 1:nTsk
@@ -660,10 +619,9 @@ switch CONTROLLERTYPE
         %
         constraints_values     = createConstraintsVector(bot1);
         distConstraints_values = ones(1,nCLnks) * 0.03; % distances for the collision constraints
-        nICs = length(constraints_values);     % number of inequality constraints
-        nDCs = length(distConstraints_values); % number of distance constraints
+        nICs  = length(constraints_values);     % number of inequality constraints
+        nDCs  = length(distConstraints_values); % number of distance constraints
         nFDCs = 0; % number of fixed distance constraints (depends on the given fitness function)
-        % nFDCs = 3;
 
         nCVals = nICs + nDCs + nFDCs; % total number of constraint values
 
@@ -719,7 +677,7 @@ switch CONTROLLERTYPE
         % optimization method (CMA-ES) - only for MainOptRobust:
         % The fitness function forces the optimizer to learn the
         % desired behavior for the robot.
-        fitness = @fitnessICubLiftObj;
+        fitness = @fitnessICubLiftObj2;
 
         % Function handle to a specified cleanup function to erase the
         % controller data (torques, time, etc.) of the current experiment:
@@ -836,8 +794,8 @@ switch CONTROLLERTYPE
             numeric_theta = numeric_theta_opt;
         else
             numeric_theta = zeros(1,nb*nTsk);
-            %        A  B   C   D  E  F     G  H  I  J  K  L
-            theta = [8, 8, 14, 14, 6, 6, 1, 0, 0, 0, 0, 0, 0];
+            %        A  B   C   D  E  F
+            theta = [8, 8, 14, 14, 6, 6, 1];
 
             j = 1;
             for i = 1:nTsk

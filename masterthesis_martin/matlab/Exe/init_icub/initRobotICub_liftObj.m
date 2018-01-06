@@ -23,7 +23,8 @@ function [icub_model, icub_config, ndof] = initRobotICub_liftObj()
     % Setup the body of the iCub robot with the initial body (joint) positions (in degrees):
     [icub_config.body, jnt_names_body] = WBM.RobotModel.iCub_arms_torso_free.setupBodyICub_atf();
     icub_config.jpos_torso     = [0; 0; 0];
-    icub_config.jpos_left_arm  = [0; 0; 0; 5; 0; 0; 0];
+    % icub_config.jpos_left_arm  = [0; 0; 0; 5; 0; 0; 0];
+    icub_config.jpos_left_arm  = [0; 0; 0; 70; 0; 0; 0];
     icub_config.jpos_left_leg  = [25.5; 0.1; 0; -18.5; -5.5; -0.1];
     icub_config.jpos_right_arm = icub_config.jpos_left_arm;
     icub_config.jpos_right_leg = icub_config.jpos_left_leg;
