@@ -380,7 +380,7 @@ params.qjInit = InitializeState(bot1, list_of_kin_chain, params.feet_on_ground, 
 %                         0.483505090529302, -0.670597439794760, 0.191690222834047, 1.18907369480943, 0.483505091095043, -0.345356114103543, ...
 %                         0.307598082795097, 0.0620674035615882); % for 32-DoF
 %                         % Note: The given policy torque controller of the learnOptimWBC-toolbox
-%                         %       works incorrect with the iCub-model of 32 DoF.
+%                         %       works incorrect when the iCub-model with 32 DoF is used.
 
 params.dqjInit     = zeros(bot1.ndof,1); % initial angular joint velocities
 params.dx_bInit    = zeros(3,1);         % initial linear base velocity (Cartesian velocity)
