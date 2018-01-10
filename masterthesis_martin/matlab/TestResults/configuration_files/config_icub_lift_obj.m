@@ -526,8 +526,9 @@ switch CONTROLLERTYPE
         else
             numeric_theta = zeros(1,nb*nTsk);
 
-            theta = [8, 8, 14, 14, 6, 6, 1, 0, 0, 0, 0, 0, 0];   % only grabbing (second part (lifiting) deactivated)
+            theta = [8, 8, 14, 14, 6, 6, 1, 0, 0, 0, 0, 0, 0];   % only grabbing (second part (lifting) deactivated)
             % theta = [0, 0, 0, 0, 0, 0, 1, 8, 8, 12, 12, 6, 6];   % only lifting (first part (grabbing) deactivated)
+                                                                   % note: the special initialization for the body pose must be set.
             % theta = [6, 6, 12, 12, 5, 5, 1, 5, 5, 10, 10, 4, 4]; % grabbing & lifting
             % theta = [8, 8, 14, 14, 6, 6, 1, 8, 8, 14, 14, 6, 6];
 
