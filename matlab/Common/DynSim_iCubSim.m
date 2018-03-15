@@ -5,14 +5,13 @@
 
 function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
     
-   %% TODO in the config file i have to define the time and the number of dof 
-   %% to provide this information outside simulink
-    WS = controller.GetWholeSystem();
-    %% Updating the robot position and define the world link
-    WS.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
-    WS.ComputeSupportPoly(params);
-    %% collecting data from experiments
-    time = params.tStart:params.sim_step:params.tEnd;
+    cd(params.simulink_schemes_global)
+
+
+    %% with this function i store all the data that are necessary for the execution of the experiments
+    params.messenger.Pack(controller,params)
+    
+    %% launch the experiment and check if the process hang 
     timer = 0;
     consecutive_fails_counter = 0;
     failed_flag = false;
@@ -20,59 +19,24 @@ function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
     max_timer = 100;
     max_consecutive_fails_counter = 5;
     %% ---
-    
-    controller.simulation_iterator     = 1;
-    controller.simulation_results.tau  =  zeros(length(time),WS.ndof);
-    controller.simulation_results.zmp  =  zeros(length(time),2);
-    controller.simulation_results.xCoM =  zeros(length(time),3);
-    controller.simulation_results.Cop  =  zeros(length(time),4);
-    controller.simulation_results.fc   =  cell(length(time),1);
-    
-    
-    % precompute as time series desidered com and its derivatives
-    data_xCoMDes    =  zeros(length(time),3);
-    data_dxCoMDes   =  zeros(length(time),3);
-    data_ddxCoMDes  =  zeros(length(time),3);
-    index = 1;
-    for ti=time
-        [xCoMDes,dxCoMDes,ddxCoMDes]   = controller.references.GetTraj(1,1,ti);
-        data_xCoMDes(index,:)          = xCoMDes;
-        data_dxCoMDes(index,:)         = dxCoMDes;
-        data_ddxCoMDes(index,:)        = ddxCoMDes;
-        index = index + 1;
-    end
-    
-    %% TODO just for test! i want to see if moving average give better results if it the case i will perform this trajectory post processing
-    %% in the proper way!
-    %sigma       = 5;
-    %sz          = 20;    % length of gaussFilter vector
-    %x           = linspace(-sz / 2, sz / 2, sz);
-    %gaussFilter = exp(-x .^ 2 / (2 * sigma ^ 2));
-    %gaussFilter = gaussFilter / sum (gaussFilter); % normalize
-    
-    %data_xCoMDes    = filter (gaussFilter,1, data_xCoMDes);
-    %data_dxCoMDes   = filter (gaussFilter,1, data_dxCoMDes);
-    %data_ddxCoMDes  =  filter (gaussFilter,1, data_ddxCoMDes);
-                     
-    
-    ts_xCoMDes    = timeseries(data_xCoMDes,time);
-    ts_dxCoMDes   = timeseries(data_dxCoMDes,time);
-    ts_ddxCoMDes  = timeseries(data_ddxCoMDes,time);
-    % save all the releavnt data for the thread
-    %% commented to test how much variance i have between each simulation
-    save('inputData.mat','ts_xCoMDes','ts_dxCoMDes','ts_ddxCoMDes','params');
+    % for spacing strings
+    s=' ';
     %% execution of the process and check of success 
-    system('gnome-terminal -x sh -c " cd ~/git/learnOptimWBC/matlab/Common/TB_StandUp && ./save_pid.sh &&   ./matlab_link  -nodesktop  -r threadSimulink; bash"');
+    run_command = ['gnome-terminal -x sh -c " cd' s params.simulink_schemes_global s '&& ./save_pid.sh && ./matlab_link -nodesktop -r threadSimulink; bash"'];
+    system(run_command);
+    %system('gnome-terminal -x sh -c " cd ~/git/learnOptimWBC/matlab/Common/TB_StandUp && ./save_pid.sh &&   ./matlab_link  -nodesktop  -r threadSimulink; bash"');
     % waiting for the thread completion
-    fid=fopen('~/git/learnOptimWBC/matlab/Common/TB_StandUp/simulationResults.mat');
+    simulation_result_path = [params.simulink_schemes_global '/simulationResults.mat'];
+    fid=fopen(simulation_result_path);
     while(fid == -1)
         pause(5)
-        fid=fopen('~/git/learnOptimWBC/matlab/Common/TB_StandUp/simulationResults.mat');
+        fid=fopen(simulation_result_path);
         timer = timer + 5;
         % if the process get stuck i can close it and open a new one 
         if (timer>=max_timer)
             % close the bash window of the matlab process
-            fileID = fopen('~/git/learnOptimWBC/matlab/Common/TB_StandUp/pid.txt');
+            pid_path = [params.simulink_schemes_global '/pid.txt'];
+            fileID = fopen(pid_path);
             C = textscan(fileID,'%s');
             fclose(fileID);
             commandkill = strcat('kill -9',{' '},C{1});
@@ -80,12 +44,17 @@ function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
             system('gz world -r');
             pause(3);
             % create a new process with the same value
-            system('gnome-terminal -x sh -c " cd ~/git/learnOptimWBC/matlab/Common/TB_StandUp && ./save_pid.sh && ./matlab_link -nodesktop -r threadSimulink; bash"');
+            run_command = ['gnome-terminal -x sh -c " cd' s params.simulink_schemes_global s '&& ./save_pid.sh && ./matlab_link -nodesktop -r threadSimulink; bash"'];
+            system(run_command);
             timer = 0;
             consecutive_fails_counter = consecutive_fails_counter + 1;
             disp('thread got stuck i had to restart it')
             if(consecutive_fails_counter >= max_consecutive_fails_counter)
-                        system('pkill -f wholeBodyDynamicsTree ')
+                        if(strcmp(params.codyco,'old'))
+                            system('pkill -f wholeBodyDynamicsTree ')
+                        else
+                            system('pkill -f yarprobotinterf')
+                        end
                         pause(3)
                         system('pkill -f gazebo')
                         pause(3)
@@ -95,9 +64,20 @@ function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
                         pause(3)
                         system('gnome-terminal -x sh -c "yarpserver; bash"');
                         pause(3)
-                        system('gnome-terminal -x sh -c "cd ~/git/learnOptimWBC/matlab/TestResults/scenarios/ && gazebo -slibgazebo_yarp_clock.so sit_icub_to_optimize_0_1.world; bash"');
+                        scenario_path = which('FindData.m');
+                        scenario_path = fileparts(scenario_path);
+                        scenario_path = strcat(scenario_path,'/scenarios');
+                        command_gazebo = ['gnome-terminal -x sh -c "cd' s scenario_path s '&& gazebo -slibgazebo_yarp_clock.so'];
+                        command_gazebo = [command_gazebo,s,params.scenario_name '; bash"'];
+                        system(command_gazebo)
                         pause(3)
-                        system('gnome-terminal -x sh -c "wholeBodyDynamicsTree --autoconnect --robot icubSim; bash"');
+                        % this is a temporary switch. the old codyco branch it will be
+                        % deleted in the future
+                        if(strcmp(params.codyco,'old'))
+                            system('gnome-terminal -x sh -c "wholeBodyDynamicsTree --autoconnect --robot icubSim; bash"');
+                        else
+                            system('gnome-terminal -- sh -c "yarprobotinterface --config launch-wholebodydynamics.xml; bash"')
+                        end
                         pause(3)
                         disp('too many consecutive fails i restart all the programs')
                         consecutive_fails_counter = 0;
@@ -106,17 +86,31 @@ function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
         end
         
     end
-    %% copy the results from the thread and close the thread
+    %% copy the results from the thread 
     try
-        load('simulationResults.mat');
+        %% with this function i collect the results from the simulink experiment 
+        %% and i store them in  controller.simulation_results and [q,qd,t]
+        [q,qd,t]=params.messenger.Unpack(controller,params);    
     catch 
-        disp('the results from the simulation are corrupted or not present. Repeat the simulatio with the same parameters')
+        disp('the results from the simulation are corrupted or not present. Repeat the simulation with the same parameters')
         failed_flag = true;
     end
+    % if i have a fail a return empty data 
+    if(failed_flag)
+       
+        q  = [];
+        qd = [];
+        t  = [];
+    end
+    
+    %% cleaning files and processes 
     % remove the file with all the data inside
-    delete ~/git/learnOptimWBC/matlab/Common/TB_StandUp/simulationResults.mat
+    delete(simulation_result_path)
+    %inputData has to be saved in common/simulink_executable
+    %delete('inputData.mat')
     % close the bash window of the matlab process
-    fileID = fopen('~/git/learnOptimWBC/matlab/Common/TB_StandUp/pid.txt');
+    pid_path = [params.simulink_schemes_global '/pid.txt'];
+    fileID = fopen(pid_path);
     C = textscan(fileID,'%s');
     fclose(fileID);
     commandkill = strcat('kill -9',{' '},C{1});
@@ -124,35 +118,7 @@ function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
     system(commandkill{1});
     % clean yarp
     [xx,yy]=system('yarp clean  --timeout 1.0');
-    % if i do not have any fail i collect the results 
-    if(~failed_flag)
-        %% save data 
-        controller.simulation_iterator     = 1;
-        controller.simulation_results.tau  =  torque_sim.Data;
-        controller.simulation_results.zmp  =  zmp_sim.Data;
-        number_of_dims = ndims(com_pos_sim.Data);
-        if(number_of_dims>2)
-            app_mat = squeeze(com_pos_sim.Data);
-            [row,col] = size(app_mat);
-            if(row<col)
-                app_mat = app_mat';
-            end
-            controller.simulation_results.xCoM =  app_mat;
-        else
-            controller.simulation_results.xCoM =  com_pos_sim.Data;
-        end
-        controller.simulation_results.LsoleWrench =  left_leg_wrench_sim;
-        controller.simulation_results.RsoleWrench =  right_leg_wrench_sim; 
-        q  = q_sim.Data; % row vectors (TODO check if they are in the right order)
-        qd = qd_sim.Data;% row vectors
-        t  = params.tStart:params.sim_step:params.tEnd;
-        
-    else
-        % if i have a fail a return empty data
-        q  = [];
-        qd = [];
-        t  = [];
-    end
+    
 end
 
 

@@ -1,48 +1,24 @@
 %configuration file for the icub sitting stand up simulation
 %%%;;
+%% prepare the system for the simulink executable (every function that use simulink has to use SimulinkInitializationExperiment(...) !)
 
-% here i open all the program that are necessary for the simulation
-% execution and i create a symbolic link to matlab
-% create symbolic link of matlab executable in TB_standUp 
-system('cd ~/git/learnOptimWBC/matlab/Common/TB_StandUp && sh create_symbolic_link.sh')
-% check if yarpserver is running
-[a,pid]=system('pgrep yarpserver');
-if(strcmp('',pid))
-    system('gnome-terminal -x sh -c "yarpserver; bash"')
-    pause(15)
-else
-    disp('yarpserver already running')
-end
-% check if gazebo is running
-[a,pid]=system('pgrep gazebo');
-if(strcmp('',pid))
-    system('gnome-terminal -x sh -c "cd ~/git/learnOptimWBC/matlab/TestResults/scenarios/ && gazebo -slibgazebo_yarp_clock.so sit_icub_to_optimize_0_1.world; bash"');
-    pause(15)
-else
-    disp('gazebo already running')
-end
-% check if gazebo is running
-[a,pid]=system('pgrep wholeBody');
-if(strcmp('',pid))
-    system('gnome-terminal -x sh -c "wholeBodyDynamicsTree --autoconnect --robot icubSim; bash"')
-    pause(15)
-else
-    disp('wholeBodyDynamicsTree already running')
-end
+% params is shipped inside the simulink-thread through the 'input' cell
+% vector. input variables has renamed as 'input_for_run' inside the instance object
+name_simulink_folder  = 'TB_StandUp';
+name_simulink_schemes = 'torqueBalancing2012b';
+scenario_name         = 'sit_icub_to_optimize_0_1.world';
+% just temporary until codyco is updated on every machine
+codyco                = 'old'; % old or new depending on your codyco installation (2017 codyco version = old 2018 codyco version = new)
+% here i build the class that is responsible of the communication among
+% matlab processes
+messenger             = Messaging.TB_StandUpMessage();
 
-% reset the robot in the starting position
-system('gz world -r');
-
-%% change folder (move to the folder with the simulink scheme)
-name_simulink_model = 'TB_StandUp';
-fullPath = which('find_simulatorIcubSim.m');
-path = fileparts(fullPath);
-path = strcat(path,'/',name_simulink_model);
-cd(path)
-
-%% remove the results file from the the TBstandup folder to manage the case where i did not cancel this file properly
-% remove the file with all the data inside
-delete ~/git/learnOptimWBC/matlab/Common/TB_StandUp/simulationResults.mat
+%% not change this part!
+params.name_simulink_schemes = name_simulink_schemes;
+params.codyco                = codyco;
+params.messenger             = messenger;
+params.scenario_name         = scenario_name;
+[params.simulink_schemes_global,params.path_to_local_simscheme] = SimulinkInitializationExperiment(name_simulink_folder,scenario_name,codyco);
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti = 0;
@@ -121,7 +97,7 @@ params.footSizeForOpitmization = [-0.07  0.12 ;    % xMin, xMax
     params.qfinal        = [-10   0  0, -20  30  0  45  , -20  30  0  45  , 25.5   0   0  -18.5  -5.5  0,25.5   0   0  -18.5  -5.5  0]'*(pi/180);   
     params.tswitch       = 1.5;
     % if this parameter is true we fix the desired com value(the com value is specify inside the trajectory block in the simulink)
-    % if this parameter if false we optimize the com trajectory even when the robt is sitting on the bench the bench
+    % if this parameter if false we optinputimize the com trajectory even when the robt is sitting on the bench the bench
     params.fixedcombench = false;
     params.final_com     = [0.0167667444901888,-0.0681008604452745,0.503988037442802];
 
@@ -208,7 +184,7 @@ switch CONTROLLERTYPE
         input{2} = params;
         input{3} = time_sym_struct;
         input{4} = [];                 % here i have to insert the controller i will do that in init()
-       
+        
         
         %% CMAES PARAMETER
         %--- Starting value of parameters
