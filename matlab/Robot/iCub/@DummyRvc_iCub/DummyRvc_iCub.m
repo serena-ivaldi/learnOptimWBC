@@ -1,4 +1,4 @@
-% this class is an iterface between the icub robot class and the subchain_class
+% this class is an interface between the icub robot class and the subchain_class
 % we need icub both in DummyRvc_iCub and subchain because we need to compute the overall dynamic and the single kinematic values for each kinematic chain 
 classdef DummyRvc_iCub < handle
 

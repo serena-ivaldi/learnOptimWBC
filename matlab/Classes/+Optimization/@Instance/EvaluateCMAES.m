@@ -37,13 +37,13 @@ function [performance, succeeded, data2save] = EvaluateCMAES(obj,action,cur_cand
             
             
             %toc
-            %% i check the eventula fail
+            %% i check the eventual fail
             if(nargout(obj.fitness) > 1)
                 % here i checked 
                 [performance,variable_output] = feval(obj.fitness,obj,output);
                 fail_flag = variable_output(1);
             else
-                % if thr function has no varargout i assume that 
+                % if the function has no varargout i assume that 
                 % i do not have any fails
                  [performance] = feval(obj.fitness,obj,output);
                 fail_flag = false;
@@ -60,7 +60,7 @@ function [performance, succeeded, data2save] = EvaluateCMAES(obj,action,cur_cand
                     obj.penalty_handling.feasibility_vec = ones(size(obj.penalty_handling.feasibility_vec));
                end
                if(cur_candidates_index < 0)
-                  % here im going to save the average perfomance without correction
+                  % here im going to save the average performance without correction
                   data2save.performance = performance;
                   % perfomance with correction
                   performance = performance - obj.penalty_handling.fitness_penalties(1);

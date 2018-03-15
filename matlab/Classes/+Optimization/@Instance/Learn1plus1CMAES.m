@@ -67,7 +67,7 @@ Problem.f = 'FeasibleSolutionObj';
 %    mean(1, :) = new_xmin';
 % end
 [performances(1), succeeded(1), data2save] = fnForwardModel(obj,mean(1, :),1,1);
-%% paramter to collect 1
+%% parameter to collect 1
 costs(1) = - performances(1);
 
 fprintf('Mean %d: %e %d\n', 1 , performances(1), succeeded(1));
@@ -84,7 +84,7 @@ for k = 1:(nIterations - 1)
     offsprings = mean(k,:) + sigma(k) *(A{k} * z')';
     % DEBUG
     if(isnan(offsprings))
-       disp('somethings wrong took place');
+       disp('somethings wrong happened while creating offsprings');
     end
     %
     offsprings(1, offsprings(1,:) > maxAction) = maxAction(offsprings(1,:) > maxAction);
@@ -92,7 +92,7 @@ for k = 1:(nIterations - 1)
     
     %% DEBUG
     if(isnan(offsprings))
-       disp('stop it, offsprings is nan');
+       disp('stop it, offsprings is nan. I mean, *you* do stop the code from running, now.');
     end
     %%    
     %evaluate offsprings
@@ -111,7 +111,7 @@ for k = 1:(nIterations - 1)
     if(~isempty(violated_constrained)) % some constraints are violated
        v = V{k};
        for j = violated_constrained
-         v(j,:) = (1-c_c)*V{k}(j,:) + c_c*(A{k}*z')';                                           %only if the constraints is violated udpate exponentially fading record vj 
+         v(j,:) = (1-c_c)*V{k}(j,:) + c_c*(A{k}*z')';  %only if the constraints is violated, udpate exponentially fading record vj 
        end
        V{k+1} = v;
        index = 1;
@@ -132,7 +132,7 @@ for k = 1:(nIterations - 1)
        end
        A{k+1} = A{k} - (beta)/length(violated_constrained) * value;                                                             % update A if constraint violation is true
        sigma(k+1) = sigma(k);                                                                                                                              % no update sigma
-    else % all the constraints are satisfacted
+    else % all the constraints are satisfied
        if(performances_new > performances(k))
           P_succ = (1-c_p)*P_succ + c_p; 
        else
@@ -167,7 +167,7 @@ for k = 1:(nIterations - 1)
     bestAction.hist(k).performance = performances(k + 1);
     bestAction.hist(k).parameters = mean(k + 1, :);
     
-    fprintf('perfomance %d: %e %d\n', k + 1, performances(k + 1), succeeded(k));
+    fprintf('performance %d: %e %d\n', k + 1, performances(k + 1), succeeded(k));
 
 end
 G_data2save.A = A;

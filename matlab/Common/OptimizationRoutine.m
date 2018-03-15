@@ -32,7 +32,7 @@ function [tau, mean_performances, bestAction, BestActionPerEachGen, policies, co
         [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded] = inst.CMAES(controller.GetTotalParamNum(),start_action,niter,...
                                                                                                        explorationRate,cmaes_value_range);
      exec_time = toc
-     % analisys of the optimization result for building repertoire
+     % analysis of the optimization result for building repertoire
      %[index, search_params ] = flann_build_index(BestActionPerEachGen.policy, struct('algorithm','kmeans','branching',32,'iterations',3,'checks',120)); 
      
      %% collecting results

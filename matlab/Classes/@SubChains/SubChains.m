@@ -1,5 +1,5 @@
 
-% SubChains became really usefull when i have DIFERRENT kinematic chains
+% SubChains become really useful when i have DIFFERENT kinematic chains
 
 % TODO: to manage different kinematic the idea is to create an extended
 % dynamic matrix to simulate the system as a unique object
