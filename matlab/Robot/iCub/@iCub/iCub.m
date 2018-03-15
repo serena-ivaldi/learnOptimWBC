@@ -240,7 +240,7 @@ classdef iCub < handle
                 % i launch the measure scheme to read the starting joint
                 % position of the robot
                 options = simset('SrcWorkspace','current');
-                sim('scheme_Measure',[],options);
+                sim('./scheme_measure/scheme_Measure',[],options);
                 
                 length_vector=[3,4,4,6,6];
                 limb_list = {'torso','leftArm','rigthArm','leftLeg','rightLeg'};
