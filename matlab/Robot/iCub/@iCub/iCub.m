@@ -206,8 +206,9 @@ classdef iCub < handle
             obj.lightDir = iDynTree.Direction();     
             obj.lightDir.fromMatlab([-0.5 0 -0.5]/sqrt(2));    
         end
-                         
-        function qjInit = InitializeStateicubGazeboSim(obj,feet_on_ground)
+        
+        %% TODO i have toupdate each conf file by changing feet_on_ground with params
+        function qjInit = InitializeStateicubGazeboSim(obj,params)
             if(strcmp( obj.model_name ,'modelMatlab'))
                 %% Initial joints position [deg]
                 % lifted arm      [ -20  30  0  45  0]
@@ -216,19 +217,19 @@ classdef iCub < handle
                 rightArmInit = [  -30  30  0  45  0]';
                 torsoInit    = [   0   0  0]';  %[60 0 0]'
 
-                if sum(feet_on_ground) >= 2
+                if sum(params.feet_on_ground) >= 2
                     % initial conditions for balancing on two feet
                      leftLegInit  = [  0   0   0     0     0  0]'; % 25.5   0   0  -18.5  -5.5  0
                      rightLegInit = [  0   0   0     0     0  0]';
     %                leftLegInit  = [  100   0   0  -90  -5.5  0]';
     %                rightLegInit = [  100   0   0  -90  -5.5  0]';
-                elseif feet_on_ground(1) == 1 && feet_on_ground(2) == 0
+                elseif params.feet_on_ground(1) == 1 && params.feet_on_ground(2) == 0
 
                     % initial conditions for the robot standing on the left foot
                     leftLegInit  = [  25.5   15   0  -18.5  -5.5  0]';
                     rightLegInit = [  25.5    5   0  -40    -5.5  0]';
 
-                elseif feet_on_ground(1) == 0 && feet_on_ground(2) == 1
+                elseif params.feet_on_ground(1) == 0 && params.feet_on_ground(2) == 1
 
                     % initial conditions for the robot standing on the right foot
                     leftLegInit  = [  25.5    5   0  -40    -5.5  0]';

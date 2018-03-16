@@ -57,7 +57,8 @@ simulator_type = {'icub_matlab_sim'};
 params.init_contact_state = [1 1]; 
 params.feet_on_ground = params.init_contact_state;         %either 0 or 1; [left,right] (in the simulator)
 params.numContacts = sum(params.feet_on_ground,2);
-params.qjInit      = bot1.InitializeStateicubGazeboSim(params.feet_on_ground);
+%% TODO change params.feet_on_ground with params in every conf file in InitializeStateicubGazeboSim()
+params.qjInit      = bot1.InitializeStateicubGazeboSim(params);
 % i need to add +2 to the joitn velocity values because of the difference
 % joints state between the matlba icub and gazebo icub (look at icub class for more information) 
 params.dqjInit     = zeros(bot1.ndof + 2 ,1);
