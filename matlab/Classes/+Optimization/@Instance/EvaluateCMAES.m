@@ -87,7 +87,7 @@ function [performance, succeeded, data2save] = EvaluateCMAES(obj,action,cur_cand
          data2save.performance = performance;
          disp('error state during the integration in EvaluateCmaes');
          %rethrow(err);
-   end
+    end
 
 
 end
