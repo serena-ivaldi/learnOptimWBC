@@ -1,10 +1,17 @@
 ROBOT_DOF              = 23;
 CONFIG.ON_GAZEBO       = true;
 PORTS.IMU              = '/icubSim/inertial';
-PORTS.WBDT_LEFTLEG_EE  = '/wholeBodyDynamicsTree/left_leg/cartesianEndEffectorWrench:o';
-PORTS.WBDT_RIGHTLEG_EE = '/wholeBodyDynamicsTree/right_leg/cartesianEndEffectorWrench:o';
-PORTS.RIGHT_ARM        = '/wholeBodyDynamicsTree/left_arm/endEffectorWrench:o';
-PORTS.LEFT_ARM         = '/wholeBodyDynamicsTree/right_arm/endEffectorWrench:o';
+if(strcmp(params.codyco,'old'))
+    PORTS.WBDT_LEFTLEG_EE  = '/wholeBodyDynamicsTree/left_leg/cartesianEndEffectorWrench:o';
+    PORTS.WBDT_RIGHTLEG_EE = '/wholeBodyDynamicsTree/right_leg/cartesianEndEffectorWrench:o';
+    PORTS.RIGHT_ARM        = '/wholeBodyDynamicsTree/left_arm/endEffectorWrench:o';
+    PORTS.LEFT_ARM         = '/wholeBodyDynamicsTree/right_arm/endEffectorWrench:o';
+else
+    PORTS.WBDT_LEFTLEG_EE  = '/wholeBodyDynamics/left_leg/cartesianEndEffectorWrench:o';
+    PORTS.WBDT_RIGHTLEG_EE = '/wholeBodyDynamics/right_leg/cartesianEndEffectorWrench:o';
+    PORTS.RIGHT_ARM        = '/wholeBodyDynamics/left_arm/endEffectorWrench:o';
+    PORTS.LEFT_ARM         = '/wholeBodyDynamics/right_arm/endEffectorWrench:o';
+end
 
 CONFIG.LEFT_RIGHT_FOOT_IN_CONTACT = [1 1];
 
