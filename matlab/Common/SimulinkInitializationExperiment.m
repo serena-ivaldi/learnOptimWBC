@@ -38,8 +38,13 @@ function [simulink_schemes_global,local_path]=SimulinkInitializationExperiment(n
     else
         disp('gazebo already running')
     end
-    % check if gazebo is running
-    [a,pid]=system('pgrep wholeBody');
+      % check if gazebo is running
+    if(strcmp(codyco,'old'))
+        [a,pid]=system('pgrep wholeBody');
+    else
+        [a,pid]=system('pgrep yarprobotinterf');
+    end
+    
     if(strcmp('',pid))
         % this is a temporary switch. the old codyco branch it will be
         % deleted in the future
