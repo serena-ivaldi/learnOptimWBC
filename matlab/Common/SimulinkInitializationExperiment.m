@@ -13,11 +13,14 @@ function [simulink_schemes_global,local_path]=SimulinkInitializationExperiment(n
     % create symbolic link of matlab executable in TB_standUp
     
     %system('cd ~/git/learnOptimWBC/matlab/Common/TB_StandUp && sh create_symbolic_link.sh')
-    system('sh create_symbolic_link.sh')
+    matlab_path = matlabroot;
+    matlab_path = [matlab_path '/bin/matlab'];
+    command_symbolic_link = ['ln -s' s matlab_path s 'matlab_link && chmod 777 matlab_link'];
+    system(command_symbolic_link)
     % check if yarpserver is running
     [a,pid]=system('pgrep yarpserver');
     if(strcmp('',pid))
-        system('gnome-terminal -x sh -c "yarpserver; bash"')
+        system('gnome-terminal -- sh -c "yarpserver; bash"')
         pause(15)
     else
         disp('yarpserver already running')
@@ -28,7 +31,7 @@ function [simulink_schemes_global,local_path]=SimulinkInitializationExperiment(n
         scenario_path = which('FindData.m');
         scenario_path = fileparts(scenario_path);
         scenario_path = strcat(scenario_path,'/scenarios');
-        command_gazebo = ['gnome-terminal -x sh -c "cd' s scenario_path s '&& gazebo -slibgazebo_yarp_clock.so'];
+        command_gazebo = ['gnome-terminal -- sh -c "cd' s scenario_path s '&& gazebo -slibgazebo_yarp_clock.so'];
         command_gazebo = [command_gazebo,s,scenario_name '; bash"'];
         system(command_gazebo)
         pause(15)
@@ -41,7 +44,7 @@ function [simulink_schemes_global,local_path]=SimulinkInitializationExperiment(n
         % this is a temporary switch. the old codyco branch it will be
         % deleted in the future
         if(strcmp(codyco,'old'))
-            system('gnome-terminal -x sh -c "wholeBodyDynamicsTree --autoconnect --robot icubSim; bash"')
+            system('gnome-terminal -- sh -c "wholeBodyDynamicsTree --autoconnect --robot icubSim; bash"')
         else
             system('gnome-terminal -- sh -c "yarprobotinterface --config launch-wholebodydynamics.xml; bash"')
         end

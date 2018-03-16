@@ -1,0 +1,7 @@
+in order to update mexwholebody model you need to change the mexwholebodymodel folder in 
+
+path/to/codyco-superbuild/main
+
+with the one that is here and than follow the instruction  about the installation process inside the README_TO_UPDATE contained in that folder
+
+otherwise you can just udpate your current version of mexwholebodymodel by following the instruction inside the README_TO_UPDATE contained in that folder

@@ -44,7 +44,7 @@ function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
             system('gz world -r');
             pause(3);
             % create a new process with the same value
-            run_command = ['gnome-terminal -x sh -c " cd' s params.simulink_schemes_global s '&& ./save_pid.sh && ./matlab_link -nodesktop -r threadSimulink; bash"'];
+            run_command = ['gnome-terminal -- sh -c " cd' s params.simulink_schemes_global s '&& ./save_pid.sh && ./matlab_link -nodesktop -r threadSimulink; bash"'];
             system(run_command);
             timer = 0;
             consecutive_fails_counter = consecutive_fails_counter + 1;
@@ -62,19 +62,19 @@ function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
                         pause(3)
                         clear simulator
                         pause(3)
-                        system('gnome-terminal -x sh -c "yarpserver; bash"');
+                        system('gnome-terminal -- sh -c "yarpserver; bash"');
                         pause(3)
                         scenario_path = which('FindData.m');
                         scenario_path = fileparts(scenario_path);
                         scenario_path = strcat(scenario_path,'/scenarios');
-                        command_gazebo = ['gnome-terminal -x sh -c "cd' s scenario_path s '&& gazebo -slibgazebo_yarp_clock.so'];
+                        command_gazebo = ['gnome-terminal -- sh -c "cd' s scenario_path s '&& gazebo -slibgazebo_yarp_clock.so'];
                         command_gazebo = [command_gazebo,s,params.scenario_name '; bash"'];
                         system(command_gazebo)
                         pause(3)
                         % this is a temporary switch. the old codyco branch it will be
                         % deleted in the future
                         if(strcmp(params.codyco,'old'))
-                            system('gnome-terminal -x sh -c "wholeBodyDynamicsTree --autoconnect --robot icubSim; bash"');
+                            system('gnome-terminal -- sh -c "wholeBodyDynamicsTree --autoconnect --robot icubSim; bash"');
                         else
                             system('gnome-terminal -- sh -c "yarprobotinterface --config launch-wholebodydynamics.xml; bash"')
                         end

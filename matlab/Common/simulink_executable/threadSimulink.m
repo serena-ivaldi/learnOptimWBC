@@ -7,9 +7,9 @@ load('inputData.mat')
 
 s=' ';
 if(strcmp(params.codyco,'old'))
-    command_cleaning = ['gnome-terminal -x sh -c "cd' s simulink_schemes_global s '&& ./cleanwholebodytree.sh; bash"'];
+    command_cleaning = ['gnome-terminal -- sh -c "cd' s simulink_schemes_global s '&& ./cleanwholebodytree.sh; bash"'];
 else
-    command_cleaning = ['gnome-terminal -x sh -c "cd' s simulink_schemes_global s '&& ./cleanwholebody.sh; bash"'];
+    command_cleaning = ['gnome-terminal -- sh -c "cd' s simulink_schemes_global s '&& ./cleanwholebody.sh; bash"'];
 end
 
 system(command_cleaning)
