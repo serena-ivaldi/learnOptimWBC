@@ -48,7 +48,7 @@ classdef TB_StandUpMessage < Messaging.AbstractMessage
           save(obj.input2simulink,'ts_xCoMDes','ts_dxCoMDes','ts_ddxCoMDes','params');          
       end
       
-      function [t, q, qd] = Unpack(obj,controller,params)
+      function [q, qd,t] = Unpack(obj,controller,params)
           %% this line has to be present in every unpack function  
           load(obj.outputfromsimulink)
           %% save data 
