@@ -26,7 +26,7 @@ time_struct.tf = 4.5;
 time_struct.step = 0.01;
 
 %% TASK PARAMETERS
-name_dat = 'iCub_stand_up_sim_1.0'; % this is the name to give to the folder where im going to save the results
+name_dat = 'iCub_standing_sim_1.0'; % this is the name to give to the folder where im going to save the results
 %path=LoadParameters(name_dat);
 %load(path);
 %% TYPE OF CONTROLLER
@@ -34,7 +34,7 @@ CONTROLLERTYPE ='BalanceController';   % GHC or UF
 %%
 
 %SUBCHAIN PARAMETERS
-subchain1 =  {'com'};
+subchain1 =  {'com' 'swing_foot' 'posture'};
 target_link{1} = subchain1;
 
 
@@ -84,25 +84,9 @@ params.foot.ymax    = params.footSize(2,2);
 
 params.footSizeForOpitmization = [-0.07  0.12 ;    % xMin, xMax
                                   -0.045 0.05];      % yMin, yMax   
+%% PARAMETERS FOR FITNESS FUCTION
 
-
-    %% parameters for controller and fitness (fitnessHumanoidsIcubStandUp)
-    %xComfinal = [-0.120249695321353,-0.0680999719842103,0.369603821651986]';
-    % standing_pose: -10   0  0, -20  30  0  45  0, -20  30  0  45  0, 25.5   0   0  -18.5  -5.5  0, 25.5   0   0  -18.5  -5.5  0
-    % sitting_pose: 10   0  0, -20  30  0  45  0, -20  30  0  45  0,  90    0   0  -90    -5.5  0,  90    0   0   -90   -5.5  0
-    params.qfinalSitting = [60.0000001093867 0.618804962651733 0.399999267875981... 70
-                            -67.2000001361580 34.0999961120969 4.79796140019389 43.1917772138638...
-                            -67.2000001361580 34.0999961120969 4.79796140019389 43.1917772138638...
-                            84.2999649174303	0.761524617074400	0.0867967193079845	-99.2529302018096	-15.8102389048266	0.0632937999425440...
-                            84.2999649174303	0.761524617074400	0.0867967193079845	-99.2529302018096	-15.8102389048266	0.0632937999425440]'*(pi/180);  
-    params.qfinal        = [-10   0  0, -20  30  0  45  , -20  30  0  45  , 25.5   0   0  -18.5  -5.5  0,25.5   0   0  -18.5  -5.5  0]'*(pi/180);   
-    params.tswitch       = 1.5;
-    % if this parameter is true we fix the desired com value(the com value is specify inside the trajectory block in the simulink)
-    % if this parameter if false we optinputimize the com trajectory even when the robt is sitting on the bench the bench
-    params.fixedcombench = false;
-    params.final_com     = [0.0167667444901888,-0.0681008604452745,0.503988037442802];
-
-%%  REFERENCE PARAMETERS
+%%  REFERENCE PARAMETERS (not used here)
 
 bot1.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
 
@@ -111,12 +95,10 @@ deg = pi/180;
 traj_type = {'cartesian'};
 control_type = {'x'};
 type_of_traj = {'func'};
-geometric_path = {'AdHocBalance'};
+geometric_path = {'linear'};
 time_law = {'none'};
 %parameters first chains
-geom_parameters{1,1} =  [5, 5 ,     2 ,...
-                        -0.0254627184564190	-0.0679301926936281	0.308024116757686,...
-                        0.0167667444901888,-0.0681008604452745,0.503988037442802];  
+geom_parameters{1,1} =  [pi/2 0 -pi/2];  
 dim_of_task{1,1}=[1;1;1]; 
 
 % secondary trajectory (Not used)
@@ -144,10 +126,12 @@ switch CONTROLLERTYPE
         % IMPORTANT!!!!! this value is used inside main exec to set the parameter that yuo want to test
         numeric_reference_parameter{1,1}=[0.385243701380465,0.812996966251098,0.725403083276668,0.919054324170722,1.44884212316731,-0.0375859449315661,-0.0141420455958836,0.00889677104501083,-0.0138436722679563,-0.0347847461961691,0.382693082842123,0.366609543042157,0.464354478552660,0.489918636980728,0.395451837082262]';
         secondary_numeric_reference_parameter{1,1} = []; % not used
-        %% ALPHA PARAMETER (not used)
+        %% ALPHA PARAMETER
         %constant alpha
-        choose_alpha = 'empty';  % RBF , constant, handTuned, empty, constantState
-        value1 = 0*ones(chains.GetNumTasks(1));
+        choose_alpha = 'constantState';  % RBF , constant, handTuned, empty, constantState
+        number_of_state = 1;
+        number_of_tasks = chains.GetNumTasks(1);
+        value1 = 0*ones(chains.GetNumTasks(1),number_of_state);
         values{1} = value1;
         
         % this is a trick that was used for providing bound to the optimization procedure for parametric reference.
@@ -181,7 +165,7 @@ switch CONTROLLERTYPE
         %% INSTANCE PARAMETER
         preprocessing = @EmptyPreprocessing;
         run_function = @RobotExperiment;
-        fitness = @fitnessHumanoidsIcubStandUpOptSolutionNoBackwardSimulink;
+        fitness = @fitnessHumanoidsiCubTorqueWalking;
         clean_function = @RobotExperimentCleanData;
         
         input{1} = simulator_type{1};  % rbt / v-rep
