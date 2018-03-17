@@ -4,14 +4,14 @@
 
 % params is shipped inside the simulink-thread through the 'input' cell
 % vector. input variables has renamed as 'input_for_run' inside the instance object
-name_simulink_folder  = 'TB_StandUp';
-name_simulink_schemes = 'torqueBalancing2012b';
+name_simulink_folder  = 'torqueWalking';
+name_simulink_schemes = 'torqueWalkingR2017a';
 scenario_name         = 'sit_icub_to_optimize_0_1.world';
 % just temporary until codyco is updated on every machine
-codyco                = 'old'; % old or new depending on your codyco installation (2017 codyco version = old 2018 codyco version = new)
+codyco                = 'new'; % old or new depending on your codyco installation (2017 codyco version = old 2018 codyco version = new)
 % here i build the class that is responsible of the communication among
 % matlab processes
-messenger             = Messaging.TB_StandUpMessage();
+messenger             = Messaging.torqueWalkingMessage();
 
 %% not change this part!
 params.name_simulink_schemes = name_simulink_schemes;
