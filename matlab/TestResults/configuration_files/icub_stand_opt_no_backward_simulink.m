@@ -146,11 +146,14 @@ switch CONTROLLERTYPE
         secondary_numeric_reference_parameter{1,1} = []; % not used
         %% ALPHA PARAMETER (not used)
         %constant alpha
-        choose_alpha = 'constant';  % RBF , constant, handTuned
+        choose_alpha = 'empty';  % RBF , constant, handTuned, empty
         value1 = 0*ones(chains.GetNumTasks(1));
         values{1} = value1;
-        value_range_for_optimization_routine = [-0.5 , 1.5]; % this is a trick that im using to provide bound to the optimization procedure for parametric reference
-        %% CONTROLLER PARAMETER
+        
+        % this is a trick that was used for providing bound to the optimization procedure for parametric reference.
+        % it is to be not used anymore for the trajectory case
+        %value_range_for_optimization_routine = [-0.5 , 1.5]; 
+        %% CONTROLLER PARAMETER (not used)
         combine_rule = {'sum'}; % sum or projector (with sum reppelers are removed)
         %% CONSTRAINTS PARAMETERS
         constraints_values = bot1.createConstraintsVector;
@@ -197,7 +200,6 @@ switch CONTROLLERTYPE
                                        0.393392500273063,0.373428273663188,0.463322910737024,0.481471759199476,0.395496648477922]; 
         explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
         niter = 500;  %number of generations
-        %cmaes_value_range = [-14 , 14];  % boudn that define the search space
         cmaes_value_range{1} = [ 0, 0, 0, 0, 0, -0.12,-0.12,-0.12,-0.12,-0.12,  0.36,0.36,0.36,0.36,0.36 ];  % lower bound that define the search space
         cmaes_value_range{2} = [ 2, 2, 2, 2, 2,  0.016,0.016,0.016,0.016,0.016, 0.50,0.50,0.50,0.50,0.50];  % upper bound that define the search space
         learn_approach = '(1+1)CMAES'; %CMAES (1+1)CMAES

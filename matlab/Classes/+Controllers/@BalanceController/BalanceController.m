@@ -157,22 +157,22 @@ classdef  BalanceController < Controllers.AbstractController
       % for repellers 
       % and then i update the parameter that govern the reference
       function UpdateParameters(obj,parameters)
-       %disp('im in update parameters')  
-       %% in this controller i remove the update of the activation fuction 
-       %% because we do not have any of them in place
-       disp('im in update parameter inside balance controller')
-       parameters
-%          for i=1:size(obj.alpha,1) 
-%              index = 1;
-%              for j=1:size(obj.alpha,2)  
-%                  n_param = obj.alpha{i,j}.GetParamNum();
-%                  app_param = parameters(index:index+n_param - 1);
-%                  obj.alpha{i,j}.ComputeNumValue(app_param')
-%                  index = index+n_param;
-%              end
-%          end
-         % update parameters of the references (if there are some)
+         %disp('im in update parameters')  
+         %% in this controller i remove the update of the activation fuction 
+         %% because we do not have any of them in place
+         disp('im in update parameter inside balance controller')
+         parameters
          index = 1;
+         for i=1:size(obj.alpha,1) 
+             index = 1;
+             for j=1:size(obj.alpha,2)  
+                 n_param = obj.alpha{i,j}.GetParamNum();
+                 app_param = parameters(index:index+n_param - 1);
+                 obj.alpha{i,j}.ComputeNumValue(app_param')
+                 index = index+n_param;
+             end
+         end
+         % update parameters of the references (if there are some)
          for i=1:size(obj.references.parameter_dim,1) 
              for j=1:size(obj.references.parameter_dim,2)  
                  n_param = obj.references.parameter_dim{i,j};
@@ -191,11 +191,11 @@ classdef  BalanceController < Controllers.AbstractController
       function n_param=GetTotalParamNum(obj)
           
           n_param = 0;
-%           for i=1:1:size(obj.alpha,1) 
-%              for j=1:size(obj.alpha,2) 
-%                  n_param = n_param + obj.alpha{i,j}.GetParamNum();
-%              end
-%           end
+          for i=1:1:size(obj.alpha,1) 
+             for j=1:size(obj.alpha,2) 
+                 n_param = n_param + obj.alpha{i,j}.GetParamNum();
+             end
+          end
           for i=1:1:size(obj.references.parameter_dim,1) 
              n_param = n_param + obj.references.GetNumParam(i);
           end

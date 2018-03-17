@@ -22,7 +22,7 @@ function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
     % for spacing strings
     s=' ';
     %% execution of the process and check of success 
-    run_command = ['gnome-terminal -x sh -c " cd' s params.simulink_schemes_global s '&& ./save_pid.sh && ./matlab_link -nodesktop -r threadSimulink; bash"'];
+    run_command = ['gnome-terminal -- sh -c " cd' s params.simulink_schemes_global s '&& ./save_pid.sh && ./matlab_link -nodesktop -r threadSimulink; bash"'];
     system(run_command);
     %system('gnome-terminal -x sh -c " cd ~/git/learnOptimWBC/matlab/Common/TB_StandUp && ./save_pid.sh &&   ./matlab_link  -nodesktop  -r threadSimulink; bash"');
     % waiting for the thread completion
