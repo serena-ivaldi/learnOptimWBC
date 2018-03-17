@@ -6,7 +6,7 @@
 % vector. input variables has renamed as 'input_for_run' inside the instance object
 name_simulink_folder  = 'torqueWalking';
 name_simulink_schemes = 'torqueWalkingR2017a';
-scenario_name         = 'sit_icub_to_optimize_0_1.world';
+scenario_name         = 'standing_icub_to_optimize.world';
 % just temporary until codyco is updated on every machine
 codyco                = 'new'; % old or new depending on your codyco installation (2017 codyco version = old 2018 codyco version = new)
 % here i build the class that is responsible of the communication among
