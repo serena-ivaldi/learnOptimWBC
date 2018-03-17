@@ -64,7 +64,9 @@ switch CONTROLLERTYPE
                 %---
                 alphas = Alpha.RBF.BuildCellArray(chains.GetNumChains(),number_of_action,time_struct,number_of_basis,redundancy,value_range,precomp_sample,numeric_theta,optim);
             case 'constant'
-                alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,value_range_for_optimization_routine,time_struct);
+                alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumTasks(1),values,value_range_for_optimization_routine,time_struct);
+            case 'empty'
+                alphas = Alpha.EmptyAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,[],time_struct);
             case 'handTuned'
                 alphas = Alpha.HandTuneAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),starting_value,ti,transition_interval,time_struct);
             otherwise
@@ -93,7 +95,7 @@ switch CONTROLLERTYPE
     case 'UF'
         controller = Controllers.UF(chains,reference,secondary_refs,alphas,repellers,metric,Param,Param_secondary,combine_rule,regularizer);
     case 'BalanceController'
-            controller = Controllers.BalanceController(chains,reference,[],[],[],[],[],[],[],[],params);
+            controller = Controllers.BalanceController(chains,reference,[],alphas,[],[],[],[],[],[],params);
     case 'GHC'
         delta_t = time_sym_struct.tf*time_struct.step;
         controller = Controllers.GHC(chains,reference,alphas,constraints,Kp,Kd,regularization,epsilon,delta_t);
