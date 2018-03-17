@@ -1,4 +1,4 @@
-% QPBALANCINGMPC this function configures a quadratic programming solver
+% QPBALANCING this function configures a quadratic programming solver
 %                (namely, qpOASES) which is used for optimizing the contact
 %                forces together with internal toruqes while the robot is
 %                performing a balancing tasks. The optimization procedure is
@@ -7,7 +7,7 @@
 % USAGE: please note that this function has been designed for being inserted 
 %        in a Simulink model by means of S-function block.
 %
-% FORMAT: [] = QPBalancingMPC(block)        
+% FORMAT: [] = QPBalancing(block)        
 %
 % INPUT:  - tau_0 = [n * 1] initial joint torques 
 %         - feetInContact = [2 * 1] feet contact status (0 not active, 1 active)
@@ -33,7 +33,7 @@
 %
 
 %% --- Initialization ---
-function QPBalancingMPC(block)
+function QPBalancing(block)
 
     setup(block);
     

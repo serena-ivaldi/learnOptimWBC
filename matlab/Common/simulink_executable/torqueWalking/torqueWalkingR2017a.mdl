@@ -1,12 +1,12 @@
 Model {
-  Name			  "torqueWalking"
+  Name			  "torqueWalkingR2017a"
   Version		  8.9
   SavedCharacterEncoding  "UTF-8"
   GraphicalInterface {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.627"
+    ComputedModelVersion    "1.629"
     NumModelReferences	    0
     NumTestPointedSignals   0
     NumProvidedFunctions    0
@@ -64,54 +64,9 @@ Model {
       }
       Array {
 	Type			"Simulink.EditorInfo"
-	Dimension		7
+	Dimension		5
 	Object {
 	  $ObjectID		  5
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "5513"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [1.0]
-	  Offset		  [888.3996769323428, 327.67778258662656]
-	}
-	Object {
-	  $ObjectID		  6
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4420"
-	  Extents		  [619.0, 558.0]
-	  ZoomFactor		  [1.0]
-	  Offset		  [712.57244988207526, -47.097169811320725]
-	}
-	Object {
-	  $ObjectID		  7
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4229"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [1.5]
-	  Offset		  [-173.7919320594479, 141.75371549893845]
-	}
-	Object {
-	  $ObjectID		  8
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4333"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [1.14]
-	  Offset		  [1026.4641584429824, 624.15789473684208]
-	}
-	Object {
-	  $ObjectID		  9
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4161"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [1.0]
-	  Offset		  [1278.1271661698397, -136.13345018790426]
-	}
-	Object {
-	  $ObjectID		  10
 	  IsActive		  [1]
 	  ViewObjType		  "SimulinkTopLevel"
 	  LoadSaveID		  "0"
@@ -120,19 +75,46 @@ Model {
 	  Offset		  [-498.19575471698113, -119.06037735849054]
 	}
 	Object {
-	  $ObjectID		  11
+	  $ObjectID		  6
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4091"
+	  LoadSaveID		  "5513"
 	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [0.8]
-	  Offset		  [-218.15729284545364, 177.75]
+	  ZoomFactor		  [1.0]
+	  Offset		  [888.3996769323428, 327.67778258662656]
+	}
+	Object {
+	  $ObjectID		  7
+	  IsActive		  [0]
+	  ViewObjType		  "SimulinkSubsys"
+	  LoadSaveID		  "4420"
+	  Extents		  [619.0, 558.0]
+	  ZoomFactor		  [1.0]
+	  Offset		  [712.57244988207526, -47.097169811320725]
+	}
+	Object {
+	  $ObjectID		  8
+	  IsActive		  [0]
+	  ViewObjType		  "SimulinkSubsys"
+	  LoadSaveID		  "4161"
+	  Extents		  [1275.0, 558.0]
+	  ZoomFactor		  [1.0]
+	  Offset		  [1278.1271661698397, -136.13345018790426]
+	}
+	Object {
+	  $ObjectID		  9
+	  IsActive		  [0]
+	  ViewObjType		  "SimulinkSubsys"
+	  LoadSaveID		  "4333"
+	  Extents		  [1275.0, 558.0]
+	  ZoomFactor		  [1.14]
+	  Offset		  [1026.4641584429824, 624.15789473684208]
 	}
 	PropName		"EditorsInfo"
       }
       Object {
 	$PropName		"DockComponentsInfo"
-	$ObjectID		12
+	$ObjectID		10
 	$ClassName		"Simulink.DockComponentInfo"
 	Type			"GLUE2:PropertyInspector"
 	ID			"Property Inspector"
@@ -162,9 +144,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "mcharbonneau"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sat Mar 17 12:13:16 2018"
-  RTWModifiedTimeStamp	  443189503
-  ModelVersionFormat	  "1.%<AutoIncrement:627>"
+  LastModifiedDate	  "Sat Mar 17 15:54:35 2018"
+  RTWModifiedTimeStamp	  443202870
+  ModelVersionFormat	  "1.%<AutoIncrement:629>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -214,14 +196,14 @@ Model {
   TryForcingSFcnDF	  off
   Object {
     $PropName		    "DataLoggingOverride"
-    $ObjectID		    13
+    $ObjectID		    11
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
-    model_		    "torqueWalking"
+    model_		    "torqueWalkingR2017a"
     overrideMode_	    [0.0]
     Array {
       Type		      "Cell"
       Dimension		      1
-      Cell		      "torqueWalking"
+      Cell		      "torqueWalkingR2017a"
       PropName		      "logAsSpecifiedByModels_"
     }
     Array {
@@ -259,7 +241,7 @@ Model {
     Type		    "Handle"
     Dimension		    1
     Simulink.ConfigSet {
-      $ObjectID		      14
+      $ObjectID		      12
       Version		      "1.17.0"
       DisabledProps	      []
       Description	      ""
@@ -267,7 +249,7 @@ Model {
 	Type			"Handle"
 	Dimension		9
 	Simulink.SolverCC {
-	  $ObjectID		  15
+	  $ObjectID		  13
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  ""
@@ -307,7 +289,7 @@ Model {
 	  SampleTimeProperty	  []
 	}
 	Simulink.DataIOCC {
-	  $ObjectID		  16
+	  $ObjectID		  14
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  ""
@@ -348,7 +330,7 @@ Model {
 	  LoggingIntervals	  "[-inf, inf]"
 	}
 	Simulink.OptimizationCC {
-	  $ObjectID		  17
+	  $ObjectID		  15
 	  Version		  "1.17.0"
 	  Array {
 	    Type		    "Cell"
@@ -409,7 +391,7 @@ Model {
 	  BusAssignmentInplaceUpdate on
 	}
 	Simulink.DebuggingCC {
-	  $ObjectID		  18
+	  $ObjectID		  16
 	  Version		  "1.17.0"
 	  Array {
 	    Type		    "Cell"
@@ -519,7 +501,7 @@ Model {
 	  UnitDatabase		  ""
 	}
 	Simulink.HardwareCC {
-	  $ObjectID		  19
+	  $ObjectID		  17
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  ""
@@ -567,7 +549,7 @@ Model {
 	  UseSimulinkCoderFeatures on
 	}
 	Simulink.ModelReferenceCC {
-	  $ObjectID		  20
+	  $ObjectID		  18
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  ""
@@ -586,7 +568,7 @@ Model {
 	  SupportModelReferenceSimTargetCustomCode off
 	}
 	Simulink.SFSimCC {
-	  $ObjectID		  21
+	  $ObjectID		  19
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  ""
@@ -616,7 +598,7 @@ Model {
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
-	  $ObjectID		  22
+	  $ObjectID		  20
 	  Version		  "1.17.0"
 	  Array {
 	    Type		    "Cell"
@@ -699,7 +681,7 @@ Model {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
-	      $ObjectID		      23
+	      $ObjectID		      21
 	      Version		      "1.17.0"
 	      Array {
 		Type			"Cell"
@@ -786,7 +768,7 @@ Model {
 	    }
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
-	      $ObjectID		      24
+	      $ObjectID		      22
 	      Version		      "1.17.0"
 	      Array {
 		Type			"Cell"
@@ -882,7 +864,7 @@ Model {
 	  }
 	}
 	SlCovCC.ConfigComp {
-	  $ObjectID		  25
+	  $ObjectID		  23
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  "Simulink Coverage Configuration Component"
@@ -932,11 +914,11 @@ Model {
   }
   Simulink.ConfigSet {
     $PropName		    "ActiveConfigurationSet"
-    $ObjectID		    14
+    $ObjectID		    12
   }
   Object {
     $PropName		    "DataTransfer"
-    $ObjectID		    26
+    $ObjectID		    24
     $ClassName		    "Simulink.GlobalDataTransfer"
     DefaultTransitionBetweenSyncTasks "Ensure deterministic transfer (maximum delay)"
     DefaultTransitionBetweenAsyncTasks "Ensure data integrity only"
@@ -1291,7 +1273,7 @@ Model {
     }
   }
   System {
-    Name		    "torqueWalking"
+    Name		    "torqueWalkingR2017a"
     Location		    [53, 27, 1366, 768]
     Open		    on
     PortBlocksUseCompactNotation off
@@ -1321,7 +1303,7 @@ Model {
       System {
 	Name			"Balancing Controller (Reactive QP control)"
 	Location		[53, 27, 1366, 768]
-	Open			on
+	Open			off
 	PortBlocksUseCompactNotation off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1333,7 +1315,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"80"
+	ZoomFactor		"72"
 	Block {
 	  BlockType		  Inport
 	  Name			  "s"
@@ -1655,7 +1637,7 @@ Model {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
 	      SID		      "4109::90"
-	      Tag		      "Stateflow S-Function torqueWalking 2"
+	      Tag		      "Stateflow S-Function torqueWalkingR2017a 2"
 	      Ports		      [15, 7]
 	      Position		      [180, 85, 230, 405]
 	      ZOrder		      80
@@ -2000,6 +1982,7 @@ Model {
 	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/wholeBodyStates/Get Estimate"
 	      SourceType	      "Get Estimate"
+	      SourceProductName	      "Whole Body Toolbox"
 	      ContentPreviewEnabled   off
 	      estimateType	      "Joints Acceleration"
 	      robotName		      "WBT_robotName"
@@ -2154,12 +2137,13 @@ Model {
 	  Name			  "Get Estimate"
 	  SID			  "4110"
 	  Ports			  [0, 1]
-	  Position		  [270, 57, 350, 93]
+	  Position		  [270, 67, 350, 103]
 	  ZOrder		  54
 	  BackgroundColor	  "[0.827500, 0.576500, 0.603900]"
 	  LibraryVersion	  "1.383"
 	  SourceBlock		  "WBToolboxLibrary/wholeBodyStates/Get Estimate"
 	  SourceType		  "Get Estimate"
+	  SourceProductName	  "Whole Body Toolbox"
 	  ContentPreviewEnabled	  off
 	  estimateType		  "Joints Torque"
 	  robotName		  "WBT_robotName"
@@ -2237,7 +2221,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "150"
+	    ZoomFactor		    "125"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "tau_0"
@@ -2316,7 +2300,7 @@ Model {
 	      Ports		      [8, 4]
 	      Position		      [110, 21, 260, 329]
 	      ZOrder		      390
-	      FunctionName	      "QPBalancingMPC"
+	      FunctionName	      "QPBalancing"
 	      Parameters	      "ROBOT_DOF, Sat, Config"
 	    }
 	    Block {
@@ -2456,12 +2440,13 @@ Model {
 	  Name			  "holder\n"
 	  SID			  "4159"
 	  Ports			  [1, 1]
-	  Position		  [435, 57, 490, 93]
+	  Position		  [435, 67, 490, 103]
 	  ZOrder		  55
 	  BackgroundColor	  "[0.537255, 0.721569, 1.000000]"
 	  LibraryVersion	  "1.383"
 	  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 	  SourceType		  "Holder"
+	  SourceProductName	  "Whole Body Toolbox"
 	  ContentPreviewEnabled	  off
 	}
 	Block {
@@ -2483,7 +2468,6 @@ Model {
 	  ZOrder		  2
 	  SrcBlock		  "holder\n"
 	  SrcPort		  1
-	  Points		  [45, 0; 0, 10]
 	  DstBlock		  "QPSolver (Reactive QP control)"
 	  DstPort		  1
 	}
@@ -2491,7 +2475,6 @@ Model {
 	  ZOrder		  3
 	  SrcBlock		  "Balancing Controller Function"
 	  SrcPort		  3
-	  Points		  [0, 0]
 	  DstBlock		  "QPSolver (Reactive QP control)"
 	  DstPort		  5
 	}
@@ -2499,7 +2482,6 @@ Model {
 	  ZOrder		  4
 	  SrcBlock		  "Balancing Controller Function"
 	  SrcPort		  6
-	  Points		  [0, 0]
 	  DstBlock		  "QPSolver (Reactive QP control)"
 	  DstPort		  8
 	}
@@ -2507,7 +2489,6 @@ Model {
 	  ZOrder		  5
 	  SrcBlock		  "Balancing Controller Function"
 	  SrcPort		  2
-	  Points		  [0, 0]
 	  DstBlock		  "QPSolver (Reactive QP control)"
 	  DstPort		  4
 	}
@@ -2515,7 +2496,6 @@ Model {
 	  ZOrder		  6
 	  SrcBlock		  "Balancing Controller Function"
 	  SrcPort		  4
-	  Points		  [0, 0]
 	  DstBlock		  "QPSolver (Reactive QP control)"
 	  DstPort		  6
 	}
@@ -2523,7 +2503,6 @@ Model {
 	  ZOrder		  7
 	  SrcBlock		  "Balancing Controller Function"
 	  SrcPort		  5
-	  Points		  [0, 0]
 	  DstBlock		  "QPSolver (Reactive QP control)"
 	  DstPort		  7
 	}
@@ -2531,7 +2510,6 @@ Model {
 	  ZOrder		  8
 	  SrcBlock		  "w_H_r_sole"
 	  SrcPort		  1
-	  Points		  [95, 0]
 	  DstBlock		  "Balancing Controller Function"
 	  DstPort		  15
 	}
@@ -2539,7 +2517,6 @@ Model {
 	  ZOrder		  9
 	  SrcBlock		  "w_H_l_sole"
 	  SrcPort		  1
-	  Points		  [95, 0]
 	  DstBlock		  "Balancing Controller Function"
 	  DstPort		  14
 	}
@@ -2547,7 +2524,6 @@ Model {
 	  ZOrder		  10
 	  SrcBlock		  "      "
 	  SrcPort		  1
-	  Points		  [50, 0]
 	  DstBlock		  "Balancing Controller Function"
 	  DstPort		  13
 	}
@@ -2555,7 +2531,6 @@ Model {
 	  ZOrder		  11
 	  SrcBlock		  "   "
 	  SrcPort		  1
-	  Points		  [60, 0]
 	  DstBlock		  "Balancing Controller Function"
 	  DstPort		  12
 	}
@@ -2563,7 +2538,6 @@ Model {
 	  ZOrder		  12
 	  SrcBlock		  "JDot_nu"
 	  SrcPort		  1
-	  Points		  [100, 0]
 	  DstBlock		  "Balancing Controller Function"
 	  DstPort		  11
 	}
@@ -2571,7 +2545,6 @@ Model {
 	  ZOrder		  13
 	  SrcBlock		  "acc_task_star"
 	  SrcPort		  1
-	  Points		  [100, 0]
 	  DstBlock		  "Balancing Controller Function"
 	  DstPort		  10
 	}
@@ -2579,7 +2552,6 @@ Model {
 	  ZOrder		  14
 	  SrcBlock		  "s_sDot_sDDot_des"
 	  SrcPort		  1
-	  Points		  [100, 0]
 	  DstBlock		  "Balancing Controller Function"
 	  DstPort		  9
 	}
@@ -2594,7 +2566,6 @@ Model {
 	  ZOrder		  16
 	  SrcBlock		  "s"
 	  SrcPort		  1
-	  Points		  [100, 0]
 	  DstBlock		  "Balancing Controller Function"
 	  DstPort		  7
 	}
@@ -2602,7 +2573,6 @@ Model {
 	  ZOrder		  17
 	  SrcBlock		  "dampings"
 	  SrcPort		  1
-	  Points		  [100, 0]
 	  DstBlock		  "Balancing Controller Function"
 	  DstPort		  6
 	}
@@ -2610,7 +2580,6 @@ Model {
 	  ZOrder		  18
 	  SrcBlock		  "impedances"
 	  SrcPort		  1
-	  Points		  [100, 0]
 	  DstBlock		  "Balancing Controller Function"
 	  DstPort		  5
 	}
@@ -2618,7 +2587,6 @@ Model {
 	  ZOrder		  19
 	  SrcBlock		  "J"
 	  SrcPort		  1
-	  Points		  [100, 0]
 	  DstBlock		  "Balancing Controller Function"
 	  DstPort		  4
 	}
@@ -2626,7 +2594,6 @@ Model {
 	  ZOrder		  20
 	  SrcBlock		  "h"
 	  SrcPort		  1
-	  Points		  [100, 0]
 	  DstBlock		  "Balancing Controller Function"
 	  DstPort		  3
 	}
@@ -2634,7 +2601,6 @@ Model {
 	  ZOrder		  21
 	  SrcBlock		  "M"
 	  SrcPort		  1
-	  Points		  [100, 0]
 	  DstBlock		  "Balancing Controller Function"
 	  DstPort		  2
 	}
@@ -2645,7 +2611,7 @@ Model {
 	  Points		  [28, 0]
 	  Branch {
 	    ZOrder		    57
-	    Points		    [0, 60]
+	    Points		    [0, 50]
 	    DstBlock		    "Goto4"
 	    DstPort		    1
 	  }
@@ -2659,7 +2625,6 @@ Model {
 	  ZOrder		  28
 	  SrcBlock		  "             "
 	  SrcPort		  1
-	  Points		  [35, 0]
 	  DstBlock		  "Balancing Controller Function"
 	  DstPort		  8
 	}
@@ -2684,7 +2649,6 @@ Model {
 	  ZOrder		  39
 	  SrcBlock		  "Balancing Controller Function"
 	  SrcPort		  1
-	  Points		  [0, 0]
 	  DstBlock		  "QPSolver (Reactive QP control)"
 	  DstPort		  3
 	}
@@ -2701,7 +2665,6 @@ Model {
 	  }
 	  Branch {
 	    ZOrder		    43
-	    Points		    [62, 0]
 	    DstBlock		    "Balancing Controller Function"
 	    DstPort		    1
 	  }
@@ -3086,6 +3049,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.COM"
 		  robotName		  "WBT_robotName"
@@ -3103,6 +3067,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.LEFT_FOOT"
 		  robotName		  "WBT_robotName"
@@ -3120,6 +3085,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.LEFT_HAND"
 		  robotName		  "WBT_robotName"
@@ -3137,6 +3103,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.RIGHT_FOOT"
 		  robotName		  "WBT_robotName"
@@ -3154,6 +3121,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.RIGHT_HAND"
 		  robotName		  "WBT_robotName"
@@ -3171,6 +3139,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.ROT_TASK_LINK"
 		  robotName		  "WBT_robotName"
@@ -3188,6 +3157,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.COM"
 		  robotName		  "WBT_robotName"
@@ -3205,6 +3175,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.LEFT_FOOT"
 		  robotName		  "WBT_robotName"
@@ -3222,6 +3193,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.LEFT_HAND"
 		  robotName		  "WBT_robotName"
@@ -3239,6 +3211,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.RIGHT_FOOT"
 		  robotName		  "WBT_robotName"
@@ -3256,6 +3229,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.RIGHT_HAND"
 		  robotName		  "WBT_robotName"
@@ -3273,6 +3247,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.ROT_TASK_LINK"
 		  robotName		  "WBT_robotName"
@@ -3926,7 +3901,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "6165::23"
-		    Tag			    "Stateflow S-Function torqueWalking 20"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 20"
 		    Ports		    [1, 2]
 		    Position		    [180, 100, 230, 160]
 		    ZOrder		    13
@@ -4022,6 +3997,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Dynamics/Get Bias Forces"
 		  SourceType		  "Get Generalized Bias Forces"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  robotName		  "WBT_robotName"
 		  localName		  "WBT_modelName"
@@ -4039,6 +4015,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Dynamics/Mass Matrix"
 		  SourceType		  "Mass Matrix"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  robotName		  "WBT_robotName"
 		  localName		  "WBT_modelName"
@@ -4595,7 +4572,7 @@ Model {
 	  System {
 	    Name		    "Initial Conditions"
 	    Location		    [53, 27, 1366, 768]
-	    Open		    on
+	    Open		    off
 	    PortBlocksUseCompactNotation off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -4607,7 +4584,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "150"
+	    ZoomFactor		    "125"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "feetInContact"
@@ -4636,6 +4613,7 @@ Model {
 	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/holder\n"
 	      SourceType	      "Holder"
+	      SourceProductName	      "Whole Body Toolbox"
 	      ContentPreviewEnabled   off
 	    }
 	    Block {
@@ -4649,6 +4627,7 @@ Model {
 	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/holder\n"
 	      SourceType	      "Holder"
+	      SourceProductName	      "Whole Body Toolbox"
 	      ContentPreviewEnabled   off
 	    }
 	    Block {
@@ -4736,6 +4715,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		  SourceType		  "Forward Kinematics"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.LEFT_FOOT"
 		  robotName		  "WBT_robotName"
@@ -4753,6 +4733,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		  SourceType		  "Forward Kinematics"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.RIGHT_FOOT"
 		  robotName		  "WBT_robotName"
@@ -4770,6 +4751,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		  SourceType		  "Forward Kinematics"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "'root_link'"
 		  robotName		  "WBT_robotName"
@@ -5064,7 +5046,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "5626::3747"
-		    Tag			    "Stateflow S-Function torqueWalking 1"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 1"
 		    Ports		    [4, 2]
 		    Position		    [180, 102, 230, 203]
 		    ZOrder		    116
@@ -5199,6 +5181,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		    SourceType		    "Jacobian"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.LEFT_FOOT"
 		    robotName		    "WBT_robotName"
@@ -5216,6 +5199,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		    SourceType		    "Jacobian"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.RIGHT_FOOT"
 		    robotName		    "WBT_robotName"
@@ -5964,7 +5948,7 @@ Model {
 		  BlockType		  S-Function
 		  Name			  " SFunction "
 		  SID			  "4279::80"
-		  Tag			  "Stateflow S-Function torqueWalking 3"
+		  Tag			  "Stateflow S-Function torqueWalkingR2017a 3"
 		  Ports			  [19, 2]
 		  Position		  [180, 90, 230, 490]
 		  ZOrder		  70
@@ -6407,7 +6391,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4288::95"
-		    Tag			    "Stateflow S-Function torqueWalking 4"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 4"
 		    Ports		    [12, 7]
 		    Position		    [180, 100, 230, 360]
 		    ZOrder		    86
@@ -6791,6 +6775,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.COM"
 		    robotName		    "WBT_robotName"
@@ -6808,6 +6793,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.LEFT_FOOT"
 		    robotName		    "WBT_robotName"
@@ -6825,6 +6811,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.LEFT_HAND"
 		    robotName		    "WBT_robotName"
@@ -6842,6 +6829,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.RIGHT_FOOT"
 		    robotName		    "WBT_robotName"
@@ -6859,6 +6847,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.RIGHT_HAND"
 		    robotName		    "WBT_robotName"
@@ -6876,6 +6865,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.ROT_TASK_LINK"
 		    robotName		    "WBT_robotName"
@@ -7443,6 +7433,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.COM"
 		  robotName		  "WBT_robotName"
@@ -7460,6 +7451,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.LEFT_FOOT"
 		  robotName		  "WBT_robotName"
@@ -7477,6 +7469,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.LEFT_FOOT"
 		  robotName		  "WBT_robotName"
@@ -7494,6 +7487,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.RIGHT_FOOT"
 		  robotName		  "WBT_robotName"
@@ -7511,6 +7505,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.RIGHT_FOOT"
 		  robotName		  "WBT_robotName"
@@ -7528,6 +7523,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.ROT_TASK_LINK"
 		  robotName		  "WBT_robotName"
@@ -7545,6 +7541,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.COM"
 		  robotName		  "WBT_robotName"
@@ -7562,6 +7559,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.LEFT_FOOT"
 		  robotName		  "WBT_robotName"
@@ -7579,6 +7577,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.LEFT_HAND"
 		  robotName		  "WBT_robotName"
@@ -7596,6 +7595,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.RIGHT_FOOT"
 		  robotName		  "WBT_robotName"
@@ -7613,6 +7613,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.RIGHT_HAND"
 		  robotName		  "WBT_robotName"
@@ -7630,6 +7631,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.ROT_TASK_LINK"
 		  robotName		  "WBT_robotName"
@@ -8390,7 +8392,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4342::65"
-		    Tag			    "Stateflow S-Function torqueWalking 5"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 5"
 		    Ports		    [8, 5]
 		    Position		    [180, 100, 230, 280]
 		    ZOrder		    56
@@ -8822,7 +8824,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4356::66"
-		    Tag			    "Stateflow S-Function torqueWalking 16"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 16"
 		    Ports		    [2, 2]
 		    Position		    [180, 100, 230, 160]
 		    ZOrder		    52
@@ -9062,7 +9064,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4363::65"
-		    Tag			    "Stateflow S-Function torqueWalking 18"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 18"
 		    Ports		    [1, 2]
 		    Position		    [180, 100, 230, 160]
 		    ZOrder		    51
@@ -9175,7 +9177,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4364::65"
-		    Tag			    "Stateflow S-Function torqueWalking 15"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 15"
 		    Ports		    [1, 2]
 		    Position		    [180, 100, 230, 160]
 		    ZOrder		    51
@@ -9851,6 +9853,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
+		  SourceProductName	  "Whole Body Toolbox"
 		  yarp2WBIOption	  "From WBI to YARP"
 		  robotName		  "WBT_robotName"
 		  localName		  "WBT_modelName"
@@ -9887,6 +9890,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
+		  SourceProductName	  "Whole Body Toolbox"
 		  yarp2WBIOption	  "From WBI to YARP"
 		  robotName		  "WBT_robotName"
 		  localName		  "WBT_modelName"
@@ -9923,6 +9927,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
+		  SourceProductName	  "Whole Body Toolbox"
 		  yarp2WBIOption	  "From WBI to YARP"
 		  robotName		  "WBT_robotName"
 		  localName		  "WBT_modelName"
@@ -9959,6 +9964,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
+		  SourceProductName	  "Whole Body Toolbox"
 		  yarp2WBIOption	  "From WBI to YARP"
 		  robotName		  "WBT_robotName"
 		  localName		  "WBT_modelName"
@@ -9995,6 +10001,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
+		  SourceProductName	  "Whole Body Toolbox"
 		  yarp2WBIOption	  "From WBI to YARP"
 		  robotName		  "WBT_robotName"
 		  localName		  "WBT_modelName"
@@ -10031,6 +10038,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
+		  SourceProductName	  "Whole Body Toolbox"
 		  yarp2WBIOption	  "From WBI to YARP"
 		  robotName		  "WBT_robotName"
 		  localName		  "WBT_modelName"
@@ -10067,6 +10075,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
+		  SourceProductName	  "Whole Body Toolbox"
 		  yarp2WBIOption	  "From WBI to YARP"
 		  robotName		  "WBT_robotName"
 		  localName		  "WBT_modelName"
@@ -12044,7 +12053,7 @@ Model {
 	  Variant		  off
 	  System {
 	    Name		    "Task Accelerations"
-	    Location		    [709, 27, 1366, 768]
+	    Location		    [53, 27, 1366, 768]
 	    Open		    on
 	    PortBlocksUseCompactNotation off
 	    ModelBrowserVisibility  off
@@ -12468,7 +12477,7 @@ Model {
 		  BlockType		  S-Function
 		  Name			  " SFunction "
 		  SID			  "4438::80"
-		  Tag			  "Stateflow S-Function torqueWalking 6"
+		  Tag			  "Stateflow S-Function torqueWalkingR2017a 6"
 		  Ports			  [19, 2]
 		  Position		  [180, 90, 230, 490]
 		  ZOrder		  70
@@ -12911,7 +12920,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4447::95"
-		    Tag			    "Stateflow S-Function torqueWalking 7"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 7"
 		    Ports		    [12, 7]
 		    Position		    [180, 100, 230, 360]
 		    ZOrder		    86
@@ -13295,6 +13304,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.COM"
 		    robotName		    "WBT_robotName"
@@ -13312,6 +13322,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.LEFT_FOOT"
 		    robotName		    "WBT_robotName"
@@ -13329,6 +13340,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.LEFT_FOOT"
 		    robotName		    "WBT_robotName"
@@ -13346,6 +13358,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.RIGHT_FOOT"
 		    robotName		    "WBT_robotName"
@@ -13363,6 +13376,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.RIGHT_FOOT"
 		    robotName		    "WBT_robotName"
@@ -13380,6 +13394,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.ROT_TASK_LINK"
 		    robotName		    "WBT_robotName"
@@ -14959,7 +14974,7 @@ Model {
 		  BlockType		  S-Function
 		  Name			  " SFunction "
 		  SID			  "4534::73"
-		  Tag			  "Stateflow S-Function torqueWalking 8"
+		  Tag			  "Stateflow S-Function torqueWalkingR2017a 8"
 		  Ports			  [1, 16]
 		  Position		  [180, 95, 230, 435]
 		  ZOrder		  63
@@ -15429,6 +15444,7 @@ Model {
 	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 	      SourceType	      "Minimum Jerk Trajectory Generator"
+	      SourceProductName	      "Whole Body Toolbox"
 	      externalSettlingTime    on
 	      settlingTime	      "3"
 	      sampleTime	      "Config.t_step"
@@ -17967,7 +17983,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4570::81"
-		    Tag			    "Stateflow S-Function torqueWalking 9"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 9"
 		    Ports		    [16, 6]
 		    Position		    [180, 100, 230, 440]
 		    ZOrder		    71
@@ -19087,7 +19103,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4571::83"
-		    Tag			    "Stateflow S-Function torqueWalking 12"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 12"
 		    Ports		    [10, 6]
 		    Position		    [180, 105, 230, 325]
 		    ZOrder		    73
@@ -19386,6 +19402,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    }
 		    Block {
@@ -19400,6 +19417,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    }
 		    Block {
@@ -19414,6 +19432,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    }
 		    Block {
@@ -19428,6 +19447,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    }
 		    Block {
@@ -19442,6 +19462,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    }
 		    Block {
@@ -20231,7 +20252,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "5315::49"
-		    Tag			    "Stateflow S-Function torqueWalking 17"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 17"
 		    Ports		    [1, 7]
 		    Position		    [180, 105, 230, 265]
 		    ZOrder		    40
@@ -20491,6 +20512,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 		  SourceType		  "Minimum Jerk Trajectory Generator"
+		  SourceProductName	  "Whole Body Toolbox"
 		  externalSettlingTime	  on
 		  settlingTime		  "3"
 		  sampleTime		  "Config.t_step"
@@ -20509,6 +20531,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 		  SourceType		  "Minimum Jerk Trajectory Generator"
+		  SourceProductName	  "Whole Body Toolbox"
 		  externalSettlingTime	  on
 		  settlingTime		  "3"
 		  sampleTime		  "Config.t_step"
@@ -20527,6 +20550,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 		  SourceType		  "Minimum Jerk Trajectory Generator"
+		  SourceProductName	  "Whole Body Toolbox"
 		  externalSettlingTime	  on
 		  settlingTime		  "3"
 		  sampleTime		  "Config.t_step"
@@ -20545,6 +20569,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 		  SourceType		  "Minimum Jerk Trajectory Generator"
+		  SourceProductName	  "Whole Body Toolbox"
 		  externalSettlingTime	  on
 		  settlingTime		  "3"
 		  sampleTime		  "Config.t_step"
@@ -20563,6 +20588,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 		  SourceType		  "Minimum Jerk Trajectory Generator"
+		  SourceProductName	  "Whole Body Toolbox"
 		  externalSettlingTime	  on
 		  settlingTime		  "3"
 		  sampleTime		  "Config.t_step"
@@ -20581,6 +20607,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 		  SourceType		  "Minimum Jerk Trajectory Generator"
+		  SourceProductName	  "Whole Body Toolbox"
 		  externalSettlingTime	  on
 		  settlingTime		  "3"
 		  sampleTime		  "Config.t_step"
@@ -21541,6 +21568,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.IMU"
 		    robotName		    "WBT_robotName"
@@ -21558,6 +21586,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.BASE_LINK"
 		    robotName		    "WBT_robotName"
@@ -21612,6 +21641,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/Yarp Read"
 		    SourceType		    "YARP Read"
+		    SourceProductName	    "Whole Body Toolbox"
 		    portName		    "Ports.NECK_POS"
 		    signalSize		    "6"
 		    blocking		    off
@@ -21738,7 +21768,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4716::3738"
-		    Tag			    "Stateflow S-Function torqueWalking 11"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 11"
 		    Ports		    [6, 2]
 		    Position		    [180, 102, 230, 243]
 		    ZOrder		    138
@@ -21847,6 +21877,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    }
 		    Block {
@@ -21861,6 +21892,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    }
 		    Block {
@@ -22201,6 +22233,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		  SourceType		  "Forward Kinematics"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.LEFT_FOOT"
 		  robotName		  "WBT_robotName"
@@ -22278,6 +22311,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.IMU"
 		    robotName		    "WBT_robotName"
@@ -22295,6 +22329,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.BASE_LINK"
 		    robotName		    "WBT_robotName"
@@ -22349,6 +22384,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/Yarp Read"
 		    SourceType		    "YARP Read"
+		    SourceProductName	    "Whole Body Toolbox"
 		    portName		    "Ports.NECK_POS"
 		    signalSize		    "6"
 		    blocking		    off
@@ -22475,7 +22511,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "5431::3738"
-		    Tag			    "Stateflow S-Function torqueWalking 13"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 13"
 		    Ports		    [6, 2]
 		    Position		    [180, 102, 230, 243]
 		    ZOrder		    138
@@ -22584,6 +22620,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    }
 		    Block {
@@ -22598,6 +22635,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    }
 		    Block {
@@ -22938,6 +22976,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		  SourceType		  "Forward Kinematics"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.RIGHT_FOOT"
 		  robotName		  "WBT_robotName"
@@ -23262,7 +23301,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4760::3747"
-		    Tag			    "Stateflow S-Function torqueWalking 14"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 14"
 		    Ports		    [4, 2]
 		    Position		    [180, 102, 230, 203]
 		    ZOrder		    116
@@ -23397,6 +23436,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		    SourceType		    "Jacobian"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.LEFT_FOOT"
 		    robotName		    "WBT_robotName"
@@ -23414,6 +23454,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		    SourceType		    "Jacobian"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.RIGHT_FOOT"
 		    robotName		    "WBT_robotName"
@@ -23499,6 +23540,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyStates/Get Estimate"
 		  SourceType		  "Get Estimate"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  estimateType		  "Joints Velocity"
 		  robotName		  "WBT_robotName"
@@ -23613,6 +23655,7 @@ Model {
 	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/wholeBodyStates/Get Estimate"
 	      SourceType	      "Get Estimate"
+	      SourceProductName	      "Whole Body Toolbox"
 	      ContentPreviewEnabled   off
 	      estimateType	      "Joints Position"
 	      robotName		      "WBT_robotName"
@@ -23685,6 +23728,7 @@ Model {
 	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/Yarp Read"
 	      SourceType	      "YARP Read"
+	      SourceProductName	      "Whole Body Toolbox"
 	      portName		      "Ports.IMU"
 	      signalSize	      "12"
 	      blocking		      off
@@ -23912,7 +23956,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4671::100"
-		    Tag			    "Stateflow S-Function torqueWalking 10"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 10"
 		    Ports		    [12, 11]
 		    Position		    [180, 85, 230, 345]
 		    ZOrder		    87
@@ -24261,6 +24305,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		}
 		Block {
@@ -24275,6 +24320,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		}
 		Block {
@@ -24289,6 +24335,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		}
 		Block {
@@ -24303,6 +24350,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		}
 		Block {
@@ -24317,6 +24365,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		}
 		Block {
@@ -24331,6 +24380,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		}
 		Block {
@@ -24345,6 +24395,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
+		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		}
 		Block {
@@ -24358,6 +24409,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Yarp Read"
 		  SourceType		  "YARP Read"
+		  SourceProductName	  "Whole Body Toolbox"
 		  portName		  "Ports.LEFT_FOOT_EXT_WRENCH"
 		  signalSize		  "6"
 		  blocking		  off
@@ -24376,6 +24428,7 @@ Model {
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Yarp Read"
 		  SourceType		  "YARP Read"
+		  SourceProductName	  "Whole Body Toolbox"
 		  portName		  "Ports.RIGHT_FOOT_EXT_WRENCH"
 		  signalSize		  "6"
 		  blocking		  off
@@ -24435,6 +24488,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.COM"
 		    robotName		    "WBT_robotName"
@@ -24452,6 +24506,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.LEFT_HAND"
 		    robotName		    "WBT_robotName"
@@ -24469,6 +24524,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.LEFT_FOOT"
 		    robotName		    "WBT_robotName"
@@ -24486,6 +24542,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.RIGHT_HAND"
 		    robotName		    "WBT_robotName"
@@ -24503,6 +24560,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.RIGHT_FOOT"
 		    robotName		    "WBT_robotName"
@@ -24520,6 +24578,7 @@ Model {
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
+		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.ROT_TASK_LINK"
 		    robotName		    "WBT_robotName"
@@ -25773,6 +25832,7 @@ Model {
       LibraryVersion	      "1.383"
       SourceBlock	      "WBToolboxLibrary/wholeBodyActuators/Set References"
       SourceType	      "Set References"
+      SourceProductName	      "Whole Body Toolbox"
       ContentPreviewEnabled   off
       controlType	      "Torque"
       fullOrSubControl	      "Full"
@@ -25797,7 +25857,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		27
+	$ObjectID		25
 	$ClassName		"Simulink.Mask"
 	Display			"disp('VISUALIZE AND DUMP DATA')"
       }
@@ -26168,7 +26228,7 @@ Model {
 		  BlockType		  S-Function
 		  Name			  " SFunction "
 		  SID			  "6679::19"
-		  Tag			  "Stateflow S-Function torqueWalking 19"
+		  Tag			  "Stateflow S-Function torqueWalkingR2017a 19"
 		  Ports			  [6, 2]
 		  Position		  [180, 107, 230, 248]
 		  ZOrder		  10
@@ -28020,6 +28080,7 @@ Model {
 	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/holder\n"
 	      SourceType	      "Holder"
+	      SourceProductName	      "Whole Body Toolbox"
 	      ContentPreviewEnabled   off
 	    }
 	    Block {
@@ -28113,6 +28174,7 @@ Model {
 	      FixedWidth	      off
 	      HorizontalAlignment     "left"
 	      VerticalAlignment	      "top"
+	      ZOrder		      -1
 	    }
 	  }
 	}
@@ -28435,6 +28497,7 @@ Model {
 	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
+	      SourceProductName	      "Whole Body Toolbox"
 	      yarp2WBIOption	      "From WBI to YARP"
 	      robotName		      "WBT_robotName"
 	      localName		      "WBT_modelName"
@@ -28471,6 +28534,7 @@ Model {
 	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
+	      SourceProductName	      "Whole Body Toolbox"
 	      yarp2WBIOption	      "From WBI to YARP"
 	      robotName		      "WBT_robotName"
 	      localName		      "WBT_modelName"
@@ -28507,6 +28571,7 @@ Model {
 	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
+	      SourceProductName	      "Whole Body Toolbox"
 	      yarp2WBIOption	      "From WBI to YARP"
 	      robotName		      "WBT_robotName"
 	      localName		      "WBT_modelName"
@@ -28918,6 +28983,7 @@ Model {
 	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/Yarp Read"
 	      SourceType	      "YARP Read"
+	      SourceProductName	      "Whole Body Toolbox"
 	      portName		      "Ports.LEFT_FOOT_EXT_WRENCH"
 	      signalSize	      "6"
 	      blocking		      off
@@ -28941,6 +29007,7 @@ Model {
 	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/Yarp Read"
 	      SourceType	      "YARP Read"
+	      SourceProductName	      "Whole Body Toolbox"
 	      portName		      "Ports.RIGHT_FOOT_EXT_WRENCH"
 	      signalSize	      "6"
 	      blocking		      off
@@ -30270,6 +30337,7 @@ Model {
 	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
+	      SourceProductName	      "Whole Body Toolbox"
 	      yarp2WBIOption	      "From WBI to YARP"
 	      robotName		      "WBT_robotName"
 	      localName		      "WBT_modelName"
@@ -30306,6 +30374,7 @@ Model {
 	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
+	      SourceProductName	      "Whole Body Toolbox"
 	      yarp2WBIOption	      "From WBI to YARP"
 	      robotName		      "WBT_robotName"
 	      localName		      "WBT_modelName"
@@ -31188,6 +31257,7 @@ Model {
 	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
+	      SourceProductName	      "Whole Body Toolbox"
 	      yarp2WBIOption	      "From WBI to YARP"
 	      robotName		      "WBT_robotName"
 	      localName		      "WBT_modelName"
@@ -31224,6 +31294,7 @@ Model {
 	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
+	      SourceProductName	      "Whole Body Toolbox"
 	      yarp2WBIOption	      "From WBI to YARP"
 	      robotName		      "WBT_robotName"
 	      localName		      "WBT_modelName"
@@ -31260,6 +31331,7 @@ Model {
 	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
+	      SourceProductName	      "Whole Body Toolbox"
 	      yarp2WBIOption	      "From WBI to YARP"
 	      robotName		      "WBT_robotName"
 	      localName		      "WBT_modelName"
@@ -31296,6 +31368,7 @@ Model {
 	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
+	      SourceProductName	      "Whole Body Toolbox"
 	      yarp2WBIOption	      "From WBI to YARP"
 	      robotName		      "WBT_robotName"
 	      localName		      "WBT_modelName"
@@ -32429,7 +32502,7 @@ Model {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
 	      SID		      "6684::19"
-	      Tag		      "Stateflow S-Function torqueWalking 21"
+	      Tag		      "Stateflow S-Function torqueWalkingR2017a 21"
 	      Ports		      [3, 4]
 	      Position		      [180, 122, 230, 223]
 	      ZOrder		      10
@@ -34466,7 +34539,7 @@ Model {
 		  BlockType		  S-Function
 		  Name			  " SFunction "
 		  SID			  "6705::26"
-		  Tag			  "Stateflow S-Function torqueWalking 22"
+		  Tag			  "Stateflow S-Function torqueWalkingR2017a 22"
 		  Ports			  [9, 2]
 		  Position		  [180, 105, 230, 305]
 		  ZOrder		  12
@@ -35658,7 +35731,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		28
+	$ObjectID		26
 	$ClassName		"Simulink.Mask"
 	Display			"disp('SYNCHRONIZER')"
       }
@@ -35723,6 +35796,7 @@ Model {
 	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/Simulator Synchronizer"
 	      SourceType	      "Simulator Synchronizer"
+	      SourceProductName	      "Whole Body Toolbox"
 	      period		      "Config.t_step"
 	      serverPortName	      "'/clock/rpc'"
 	      clientPortName	      "'/WBT_synchronizer/rpc:o'"
@@ -35800,6 +35874,7 @@ Model {
 	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/Real Time Synchronizer"
 	      SourceType	      "Real Time Synchronizer"
+	      SourceProductName	      "Whole Body Toolbox"
 	      period		      "Config.t_step"
 	    }
 	  }
@@ -36076,7 +36151,7 @@ Model {
 Stateflow {
   machine {
     id			    1
-    name		    "torqueWalking"
+    name		    "torqueWalkingR2017a"
     created		    "29-Nov-2017 15:01:26"
     isLibrary		    0
     sfVersion		    80000011
@@ -36350,10 +36425,10 @@ Stateflow {
       "tar, ...\n                                 JDot_nu, ConstraintsMatrix_feet, biasVectorConstraint_feet, ...\n    "
       "                             w_H_l_sole, w_H_r_sole, Sat, Config, weights)\n                          \n\n    [H"
       "essian,gradient,ConstraintMatrix_equality,biasVectorConstraint_equality, ...\n     ConstraintMatrix_inequality,b"
-      "iasVectorConstraint_inequality] = ...\n         balancingControllerMPC(feetInContact, M, h, J, impedances, ...\n"
-      "                                dampings, s, sDot, s_sDot_sDDot_des, acc_task_star, ...\n                       "
-      "         JDot_nu, ConstraintsMatrix_feet, biasVectorConstraint_feet, ...\n                                w_H_l_"
-      "sole, w_H_r_sole, Sat, Config, weights);                         \nend\n\n"
+      "iasVectorConstraint_inequality] = ...\n         balancingController(feetInContact, M, h, J, impedances, ...\n   "
+      "                             dampings, s, sDot, s_sDot_sDDot_des, acc_task_star, ...\n                          "
+      "      JDot_nu, ConstraintsMatrix_feet, biasVectorConstraint_feet, ...\n                                w_H_l_sol"
+      "e, w_H_r_sole, Sat, Config, weights);                         \nend\n\n"
       editorLayout	      "100 M4x1[10 5 700 500]"
     }
   }
