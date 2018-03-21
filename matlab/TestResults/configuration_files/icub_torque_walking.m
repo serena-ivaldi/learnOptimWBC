@@ -34,7 +34,7 @@ CONTROLLERTYPE ='BalanceController';   % GHC or UF
 %%
 
 %SUBCHAIN PARAMETERS
-subchain1 =  {'com' 'swing_foot' 'posture'};
+subchain1 =  {'weightRotTask' 'weightLeftFoot' 'weightRightFoot' 'weightPostural' 'weightTau'}; %weightCoM is not included since it is set to be a constant value of 1
 target_link{1} = subchain1;
 
 
