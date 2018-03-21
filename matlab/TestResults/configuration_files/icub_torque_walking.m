@@ -84,7 +84,8 @@ params.foot.ymax    = params.footSize(2,2);
 
 params.footSizeForOpitmization = [-0.07  0.12 ;    % xMin, xMax
                                   -0.045 0.05];      % yMin, yMax   
-%% PARAMETERS FOR FITNESS FUCTION
+%% PARAMETERS FOR FITNESS FUNCTION
+%to be done
 
 %%  REFERENCE PARAMETERS (not used here)
 
@@ -178,13 +179,14 @@ switch CONTROLLERTYPE
         generation_of_starting_point = 'test'; % 'test':user defined by user_defined_start_action 'given':is redundant with test  'random': random starting point
         %init_parameters = 6;
       
-        user_defined_start_action =   [0.334864347662051,0.769247868133844,0.574316421814835,0.951772057698620,1.47859968547875,...
-                                      -0.0421739842002086,-0.0144987143004585,-0.00446705976414447,-0.0103957572854113,-0.0301487995300616,...
-                                       0.393392500273063,0.373428273663188,0.463322910737024,0.481471759199476,0.395496648477922]; 
-        explorationRate = 0.1; %0.1; %0.5; %0.1;%[0, 1]
+        user_defined_start_action = [1, 1, 1, 0.001, 0.0001];
+        %user_defined_start_action =   [0.334864347662051,0.769247868133844,0.574316421814835,0.951772057698620,1.47859968547875,...
+        %                              -0.0421739842002086,-0.0144987143004585,-0.00446705976414447,-0.0103957572854113,-0.0301487995300616,...
+        %                               0.393392500273063,0.373428273663188,0.463322910737024,0.481471759199476,0.395496648477922]; 
+        explorationRate = 0.1; %0.5; %Value in the range [0, 1]
         niter = 500;  %number of generations
-        cmaes_value_range{1} = [ 0, 0, 0, 0, 0, -0.12,-0.12,-0.12,-0.12,-0.12,  0.36,0.36,0.36,0.36,0.36 ];  % lower bound that define the search space
-        cmaes_value_range{2} = [ 2, 2, 2, 2, 2,  0.016,0.016,0.016,0.016,0.016, 0.50,0.50,0.50,0.50,0.50];  % upper bound that define the search space
+        cmaes_value_range{1} = [0, 0, 0, 0, 0]; %[ 0, 0, 0, 0, 0, -0.12,-0.12,-0.12,-0.12,-0.12,  0.36,0.36,0.36,0.36,0.36 ];  % lower bound that define the search space
+        cmaes_value_range{2} = [1, 1, 1, 1, 1];%[ 2, 2, 2, 2, 2,  0.016,0.016,0.016,0.016,0.016, 0.50,0.50,0.50,0.50,0.50];  % upper bound that define the search space
         learn_approach = '(1+1)CMAES'; %CMAES (1+1)CMAES
         %--- Parameter for constraints method
         method_to_use = 'nopenalty';  % adaptive , vanilla , empty 'nopenalty'

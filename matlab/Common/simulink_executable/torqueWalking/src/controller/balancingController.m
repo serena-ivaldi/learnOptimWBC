@@ -100,24 +100,26 @@ function [Hessian,gradient,ConstraintMatrix_equality,biasVectorConstraint_equali
     %with the following format:
     %weights = [weightCoM; weightRotTask; weightStanceFoot; weightSwingFoot; weightPostural; weight_tau]
     if feetInContact(1) > 0.1 && feetInContact(2) > 0.1 %Both feet in contact
-        weightLeftFoot  = weights(3);
-        weightRightFoot = weights(3);
+        weightLeftFoot  = weights(2);
+        weightRightFoot = weights(2);
     elseif feetInContact(1) > 0.1 && feetInContact(2) < 0.1 %Only left foot in contact
-        weightLeftFoot  = weights(3);
-        weightRightFoot = weights(4);
-    elseif feetInContact(1) < 0.1 && feetInContact(2) > 0.1 %Only right foot in contact
-        weightLeftFoot  = weights(4);
+        weightLeftFoot  = weights(2);
         weightRightFoot = weights(3);
+    elseif feetInContact(1) < 0.1 && feetInContact(2) > 0.1 %Only right foot in contact
+        weightLeftFoot  = weights(3);
+        weightRightFoot = weights(2);
     else %Both feet in the air
-        weightLeftFoot  = weights(4);
-        weightRightFoot = weights(4);
+        weightLeftFoot  = weights(3);
+        weightRightFoot = weights(3);
     end
-    Sat.weightTasks = diag([ones(3,1) * weights(1); %weightCoM;
-                            ones(3,1) * weights(2); %weightRotTask;
+    Sat.weightTasks = diag([ones(3,1) * 1; %weightCoM, constant 1;
+                            ones(3,1) * weights(1); %weightRotTask;
                             ones(6,1) * weightLeftFoot;
                             ones(6,1) * weightRightFoot;
                             ones(6,1) * Sat.weightLeftHand;
                             ones(6,1) * Sat.weightRightHand]);
+    Sat.weightPostural = weights(4);
+    Sat.weight_tau     = weights(5);
                              
     % Dimension of the joint space
     ROBOT_DOF = size(s,1);  

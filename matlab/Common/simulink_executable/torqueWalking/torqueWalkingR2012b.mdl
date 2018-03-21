@@ -5,7 +5,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.628"
+    ComputedModelVersion    "1.630"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -49,54 +49,9 @@ Model {
       }
       Array {
 	Type			"Simulink.EditorInfo"
-	Dimension		7
+	Dimension		5
 	Object {
 	  $ObjectID		  5
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "5513"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [1.0]
-	  Offset		  [888.3996769323428, 327.67778258662656]
-	}
-	Object {
-	  $ObjectID		  6
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4420"
-	  Extents		  [619.0, 558.0]
-	  ZoomFactor		  [1.0]
-	  Offset		  [712.57244988207526, -47.097169811320725]
-	}
-	Object {
-	  $ObjectID		  7
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4229"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [1.5]
-	  Offset		  [-173.7919320594479, 141.75371549893845]
-	}
-	Object {
-	  $ObjectID		  8
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4333"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [1.14]
-	  Offset		  [1026.4641584429824, 624.15789473684208]
-	}
-	Object {
-	  $ObjectID		  9
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4161"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [1.0]
-	  Offset		  [1278.1271661698397, -136.13345018790426]
-	}
-	Object {
-	  $ObjectID		  10
 	  IsActive		  [1]
 	  ViewObjType		  "SimulinkTopLevel"
 	  LoadSaveID		  "0"
@@ -105,13 +60,40 @@ Model {
 	  Offset		  [-498.19575471698113, -119.06037735849054]
 	}
 	Object {
-	  $ObjectID		  11
+	  $ObjectID		  6
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4091"
+	  LoadSaveID		  "5513"
 	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [0.8]
-	  Offset		  [-218.15729284545364, 177.75]
+	  ZoomFactor		  [1.0]
+	  Offset		  [888.3996769323428, 327.67778258662656]
+	}
+	Object {
+	  $ObjectID		  7
+	  IsActive		  [0]
+	  ViewObjType		  "SimulinkSubsys"
+	  LoadSaveID		  "4420"
+	  Extents		  [619.0, 558.0]
+	  ZoomFactor		  [1.0]
+	  Offset		  [712.57244988207526, -47.097169811320725]
+	}
+	Object {
+	  $ObjectID		  8
+	  IsActive		  [0]
+	  ViewObjType		  "SimulinkSubsys"
+	  LoadSaveID		  "4161"
+	  Extents		  [1275.0, 558.0]
+	  ZoomFactor		  [1.0]
+	  Offset		  [1278.1271661698397, -136.13345018790426]
+	}
+	Object {
+	  $ObjectID		  9
+	  IsActive		  [0]
+	  ViewObjType		  "SimulinkSubsys"
+	  LoadSaveID		  "4333"
+	  Extents		  [1275.0, 558.0]
+	  ZoomFactor		  [1.14]
+	  Offset		  [1026.4641584429824, 624.15789473684208]
 	}
 	PropName		"EditorsInfo"
       }
@@ -123,9 +105,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "mcharbonneau"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sat Mar 17 12:20:36 2018"
-  RTWModifiedTimeStamp	  443190035
-  ModelVersionFormat	  "1.%<AutoIncrement:628>"
+  LastModifiedDate	  "Sat Mar 17 15:55:01 2018"
+  RTWModifiedTimeStamp	  443202900
+  ModelVersionFormat	  "1.%<AutoIncrement:630>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -160,7 +142,7 @@ Model {
   TryForcingSFcnDF	  off
   Object {
     $PropName		    "DataLoggingOverride"
-    $ObjectID		    13
+    $ObjectID		    11
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
     model_		    "torqueWalkingR2012b"
     overrideMode_	    [0.0]
@@ -218,13 +200,13 @@ Model {
     Type		    "Handle"
     Dimension		    1
     Simulink.ConfigSet {
-      $ObjectID		      14
+      $ObjectID		      12
       Version		      "1.12.1"
       Array {
 	Type			"Handle"
 	Dimension		8
 	Simulink.SolverCC {
-	  $ObjectID		  15
+	  $ObjectID		  13
 	  Version		  "1.12.1"
 	  StartTime		  "0.0"
 	  StopTime		  "Config.t_end"
@@ -259,7 +241,7 @@ Model {
 	  InsertRTBMode		  "Whenever possible"
 	}
 	Simulink.DataIOCC {
-	  $ObjectID		  16
+	  $ObjectID		  14
 	  Version		  "1.12.1"
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
@@ -291,7 +273,7 @@ Model {
 	  Refine		  "1"
 	}
 	Simulink.OptimizationCC {
-	  $ObjectID		  17
+	  $ObjectID		  15
 	  Version		  "1.12.1"
 	  Array {
 	    Type		    "Cell"
@@ -343,7 +325,7 @@ Model {
 	  AccelVerboseBuild	  off
 	}
 	Simulink.DebuggingCC {
-	  $ObjectID		  18
+	  $ObjectID		  16
 	  Version		  "1.12.1"
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
@@ -430,7 +412,7 @@ Model {
 	  ModelReferenceCSMismatchMessage "none"
 	}
 	Simulink.HardwareCC {
-	  $ObjectID		  19
+	  $ObjectID		  17
 	  Version		  "1.12.1"
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
@@ -466,7 +448,7 @@ Model {
 	  ProdEqTarget		  on
 	}
 	Simulink.ModelReferenceCC {
-	  $ObjectID		  20
+	  $ObjectID		  18
 	  Version		  "1.12.1"
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
 	  CheckModelReferenceTargetMessage "error"
@@ -481,7 +463,7 @@ Model {
 	  SupportModelReferenceSimTargetCustomCode off
 	}
 	Simulink.SFSimCC {
-	  $ObjectID		  21
+	  $ObjectID		  19
 	  Version		  "1.12.1"
 	  SFSimEcho		  on
 	  SimCtrlC		  on
@@ -492,7 +474,7 @@ Model {
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
-	  $ObjectID		  22
+	  $ObjectID		  20
 	  Version		  "1.12.1"
 	  Array {
 	    Type		    "Cell"
@@ -556,7 +538,7 @@ Model {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
-	      $ObjectID		      23
+	      $ObjectID		      21
 	      Version		      "1.12.1"
 	      Array {
 		Type			"Cell"
@@ -629,7 +611,7 @@ Model {
 	    }
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
-	      $ObjectID		      24
+	      $ObjectID		      22
 	      Version		      "1.12.1"
 	      Array {
 		Type			"Cell"
@@ -716,11 +698,11 @@ Model {
   }
   Simulink.ConfigSet {
     $PropName		    "ActiveConfigurationSet"
-    $ObjectID		    14
+    $ObjectID		    12
   }
   Object {
     $PropName		    "DataTransfer"
-    $ObjectID		    26
+    $ObjectID		    24
     $ClassName		    "Simulink.GlobalDataTransfer"
     DefaultTransitionBetweenSyncTasks "Ensure deterministic transfer (maximum delay)"
     DefaultTransitionBetweenAsyncTasks "Ensure data integrity only"
@@ -1098,7 +1080,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"80"
+	ZoomFactor		"72"
 	Block {
 	  BlockType		  Inport
 	  Name			  "s"
@@ -1258,7 +1240,7 @@ Model {
 	  Variant		  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    27
+	    $ObjectID		    25
 	    $ClassName		    "Simulink.Mask"
 	    Type		    "Stateflow"
 	    Description		    "Embedded MATLAB block"
@@ -1904,7 +1886,7 @@ Model {
 	  Name			  "Get Estimate"
 	  SID			  "4110"
 	  Ports			  [0, 1]
-	  Position		  [270, 57, 350, 93]
+	  Position		  [270, 67, 350, 103]
 	  ZOrder		  54
 	  BackgroundColor	  "[0.827500, 0.576500, 0.603900]"
 	  LibraryVersion	  "1.383"
@@ -1985,7 +1967,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "150"
+	    ZoomFactor		    "125"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "tau_0"
@@ -2064,7 +2046,7 @@ Model {
 	      Ports		      [8, 4]
 	      Position		      [110, 21, 260, 329]
 	      ZOrder		      390
-	      FunctionName	      "QPBalancingMPC"
+	      FunctionName	      "QPBalancing"
 	      Parameters	      "ROBOT_DOF, Sat, Config"
 	    }
 	    Block {
@@ -2198,7 +2180,7 @@ Model {
 	  Name			  "holder\n"
 	  SID			  "4159"
 	  Ports			  [1, 1]
-	  Position		  [435, 57, 490, 93]
+	  Position		  [435, 67, 490, 103]
 	  ZOrder		  55
 	  BackgroundColor	  "[0.537255, 0.721569, 1.000000]"
 	  LibraryVersion	  "1.383"
@@ -2222,7 +2204,6 @@ Model {
 	Line {
 	  SrcBlock		  "holder\n"
 	  SrcPort		  1
-	  Points		  [45, 0; 0, 10]
 	  DstBlock		  "QPSolver (Reactive QP control)"
 	  DstPort		  1
 	}
@@ -2345,7 +2326,7 @@ Model {
 	  SrcPort		  1
 	  Points		  [28, 0]
 	  Branch {
-	    Points		    [0, 60]
+	    Points		    [0, 50]
 	    DstBlock		    "Goto4"
 	    DstPort		    1
 	  }
@@ -3493,7 +3474,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    28
+		    $ObjectID		    26
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -4177,7 +4158,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "150"
+	    ZoomFactor		    "125"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "feetInContact"
@@ -4555,7 +4536,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    29
+		    $ObjectID		    27
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -5307,7 +5288,7 @@ Model {
 	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		30
+		$ObjectID		28
 		$ClassName		"Simulink.Mask"
 		Type			"Stateflow"
 		Description		"Embedded MATLAB block"
@@ -5806,7 +5787,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    31
+		    $ObjectID		    29
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -7679,7 +7660,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    32
+		    $ObjectID		    30
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -8166,7 +8147,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    33
+		    $ObjectID		    31
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -8426,7 +8407,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    34
+		    $ObjectID		    32
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -8552,7 +8533,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    35
+		    $ObjectID		    33
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -11184,7 +11165,7 @@ Model {
 	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		36
+		$ObjectID		34
 		$ClassName		"Simulink.Mask"
 		Type			"Stateflow"
 		Description		"Embedded MATLAB block"
@@ -11683,7 +11664,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    37
+		    $ObjectID		    35
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -13652,7 +13633,7 @@ Model {
 	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		38
+		$ObjectID		36
 		$ClassName		"Simulink.Mask"
 		Type			"Stateflow"
 		Description		"Embedded MATLAB block"
@@ -16404,7 +16385,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    39
+		    $ObjectID		    37
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -17515,7 +17496,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    40
+		    $ObjectID		    38
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -18655,7 +18636,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    41
+		    $ObjectID		    39
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -20025,7 +20006,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    42
+		    $ObjectID		    40
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -20742,7 +20723,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    43
+		    $ObjectID		    41
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -21510,7 +21491,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    44
+		    $ObjectID		    42
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -22085,7 +22066,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    45
+		    $ObjectID		    43
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -23979,7 +23960,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		46
+	$ObjectID		44
 	$ClassName		"Simulink.Mask"
 	Display			"disp('VISUALIZE AND DUMP DATA')"
       }
@@ -24212,7 +24193,7 @@ Model {
 	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		47
+		$ObjectID		45
 		$ClassName		"Simulink.Mask"
 		Type			"Stateflow"
 		Description		"Embedded MATLAB block"
@@ -29636,7 +29617,7 @@ Model {
 	  Variant		  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    48
+	    $ObjectID		    46
 	    $ClassName		    "Simulink.Mask"
 	    Type		    "Stateflow"
 	    Description		    "Embedded MATLAB block"
@@ -31551,7 +31532,7 @@ Model {
 	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		49
+		$ObjectID		47
 		$ClassName		"Simulink.Mask"
 		Type			"Stateflow"
 		Description		"Embedded MATLAB block"
@@ -32732,7 +32713,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		50
+	$ObjectID		48
 	$ClassName		"Simulink.Mask"
 	Display			"disp('SYNCHRONIZER')"
       }
@@ -33380,10 +33361,10 @@ Stateflow {
       "tar, ...\n                                 JDot_nu, ConstraintsMatrix_feet, biasVectorConstraint_feet, ...\n    "
       "                             w_H_l_sole, w_H_r_sole, Sat, Config, weights)\n                          \n\n    [H"
       "essian,gradient,ConstraintMatrix_equality,biasVectorConstraint_equality, ...\n     ConstraintMatrix_inequality,b"
-      "iasVectorConstraint_inequality] = ...\n         balancingControllerMPC(feetInContact, M, h, J, impedances, ...\n"
-      "                                dampings, s, sDot, s_sDot_sDDot_des, acc_task_star, ...\n                       "
-      "         JDot_nu, ConstraintsMatrix_feet, biasVectorConstraint_feet, ...\n                                w_H_l_"
-      "sole, w_H_r_sole, Sat, Config, weights);                         \nend\n\n"
+      "iasVectorConstraint_inequality] = ...\n         balancingController(feetInContact, M, h, J, impedances, ...\n   "
+      "                             dampings, s, sDot, s_sDot_sDDot_des, acc_task_star, ...\n                          "
+      "      JDot_nu, ConstraintsMatrix_feet, biasVectorConstraint_feet, ...\n                                w_H_l_sol"
+      "e, w_H_r_sole, Sat, Config, weights);                         \nend\n\n"
       editorLayout	      "100 M4x1[10 5 700 500]"
     }
   }

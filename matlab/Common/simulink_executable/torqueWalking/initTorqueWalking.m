@@ -17,11 +17,6 @@ clc
 clear all  %#ok<CLALL>
 close all
 
-%% For learnOptimWBC
-%Read input weights from a .mat file containing the following variable:
-%weights = [weightCoM; weightRotTask; weightLeftFoot; weightRightFoot; weightPostural; weight_tau]
-load('inputWeights.mat');
-
 % NOTE: if you are simulating the robot with Gazebo, remember that you have
 % to launch Gazebo as follow:
 % 
@@ -37,11 +32,8 @@ setenv('YARP_ROBOT_NAME','icubGazeboSim');
 %
 %    - 'EXAMPLE_STATEMACHINE' = the robot balances and performs simple movements using 
 %                               a state machine.
-% 
-%    - 'MPC_WALKING' = the model is connected to an MPC controller which
-%                      streams references and contact status for walking.
 %
-DEMO_TYPE = 'EXAMPLE_STATEMACHINE';
+DEMO_TYPE = 'WALKING_IN_PLACE';
 
 % Simulation time
 Config.t_end = inf; % [s]
@@ -89,18 +81,11 @@ Config.t_step = 0.01; % [s]
 configRobotFCN = fullfile('app/robots', getenv('YARP_ROBOT_NAME'),'configRobot.m');
 run(configRobotFCN);
 
-if strcmp(DEMO_TYPE, 'EXAMPLE_STATEMACHINE')
+if strcmp(DEMO_TYPE, 'WALKING_IN_PLACE')
     
     % Run configuration script for internal coordinator
-    stateMachineExampleFCN = fullfile('app/robots', getenv('YARP_ROBOT_NAME'),'initStateMachineExample.m');
-    run(stateMachineExampleFCN);
-end
-
-if strcmp(DEMO_TYPE,'MPC_WALKING')
-    
-    % Run configuration script for walking with MPC
-    stateMachineWalkingFCN = fullfile('app/robots', getenv('YARP_ROBOT_NAME'),'initStateMachineWalking.m');
-    run(stateMachineWalkingFCN);
+    stateMachineWalkingInPlaceFCN = fullfile('app/robots', getenv('YARP_ROBOT_NAME'),'initStateMachineWalkingInPlace.m');
+    run(stateMachineWalkingInPlaceFCN);
 end
 
 % Compute the constraint matrix and bias vector for friction and unilateral
@@ -108,7 +93,6 @@ end
 [ConstraintMatrix_feet, biasVectorConstraint_feet] = constraints ...
     (forceFrictionCoefficient, numberOfPoints, torsionalFrictionCoefficient, Config.footSize, fZmin);
 
-disp('Initialize torqueWalkingMPC')
+disp('Initialize torqueWalking')
 disp(['Selected robot: ',getenv('YARP_ROBOT_NAME')])
 disp(['Selected demo: ', DEMO_TYPE])
-
