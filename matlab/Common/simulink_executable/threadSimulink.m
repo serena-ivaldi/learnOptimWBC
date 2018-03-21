@@ -5,6 +5,13 @@ cd(simulink_schemes_global)
 %inputData has to be saved in common/simulink_executable
 load('inputData.mat')
 
+%% DEBUG
+% simulink_schemes_global
+% params.path_to_local_simscheme
+% params.name_simulink_schemes
+% pause
+
+%%
 s=' ';
 if(strcmp(params.codyco,'old'))
     command_cleaning = ['gnome-terminal -- sh -c "cd' s simulink_schemes_global s '&& ./cleanwholebodytree.sh; bash"'];

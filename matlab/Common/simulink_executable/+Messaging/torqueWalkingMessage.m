@@ -1,6 +1,7 @@
 classdef torqueWalkingMessage < Messaging.AbstractMessage
     
    methods
+       %% important!! params has always to be saved for make the code it works 
       function Pack(obj,controller,params)
 %           WS = controller.GetWholeSystem();
 %           %% Updating the robot position and define the world link
@@ -34,7 +35,8 @@ classdef torqueWalkingMessage < Messaging.AbstractMessage
 %           ts_ddxCoMDes  = timeseries(data_ddxCoMDes,time);
 %           % save all the releavnt data for the thread
 %           %% inputData.mat has to be saved in common/simulink_executable
-%           save(obj.input2simulink,'ts_xCoMDes','ts_dxCoMDes','ts_ddxCoMDes','params');          
+%           save(obj.input2simulink,'ts_xCoMDes','ts_dxCoMDes','ts_ddxCoMDes','params');      
+            save(obj.input2simulink,'params');
       end
       
       function [q, qd,t] = Unpack(obj,controller,params)

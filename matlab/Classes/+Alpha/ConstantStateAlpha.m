@@ -2,7 +2,7 @@ classdef ConstantStateAlpha < Alpha.AbstractAlpha
    
    properties
       time_struct                % time struct is not used but i could be used in the future 
-      constant_value_in_state    % array of values (one for each state) associated to one task
+      sample                     % array of values (one for each state) associated to one task ( row = task column = states)
       range                      % necessary because i call it inside instance cmaes (it seems to be not used anymore)
       param    
    end
@@ -30,7 +30,7 @@ classdef ConstantStateAlpha < Alpha.AbstractAlpha
       end
       % function that give the number of parameters necessary for the alpha function
       function r = GetParamNum(obj)
-         r = length(obj.constant_value_in_state);
+         r = length(obj.sample(1,:));
       end   
    end
    
@@ -43,7 +43,7 @@ classdef ConstantStateAlpha < Alpha.AbstractAlpha
          %for i=1:n_subchain
              ii = 1;
              for j =1:n_task
-               alphas{ii,j} = Alpha.ConstantAlpha(values(j,:),value_range,time_struct);
+               alphas{ii,j} = Alpha.ConstantStateAlpha(values(j,:),value_range,time_struct);
              end
          %end
          

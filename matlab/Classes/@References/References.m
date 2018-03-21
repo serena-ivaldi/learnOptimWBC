@@ -7,7 +7,7 @@ classdef  References < handle
       %
       % @type char 
       target_link                   %  
-      type;                         % cartesian_x,cartesian_rpy, joint vector or empty 
+      type;                         % cartesian_x,cartesian_rpy, joint vector or none 
       control_type;                 % tracking,regulation vector
       traj;                         % circular, rectilinear, point-point_quintic, point-point_trapezoidal vector
       geom_parameters;              % vector of parameters that define the properties of every trajectories (both functional and sampled)
@@ -70,7 +70,15 @@ classdef  References < handle
                obj.parameter_dim{i,j} = 0;
                obj.cur_param_set{i,j} = [];
                obj.n_of_parameter_per_regressor{i,j} = [];
-               obj.SetTraj(i,j)
+               if(strcmp(obj.type{i,j},'none'))
+                   obj.trajectories{i,j}.p        = [];
+                   obj.trajectories{i,j}.pd       = [];
+                   obj.trajectories{i,j}.pdd      = [];
+                   obj.trajectories{i,j}.time     = [];
+                   obj.time_law_and_derivatives.s = [];
+               else
+                   obj.SetTraj(i,j)
+               end
              end
           end    
       end

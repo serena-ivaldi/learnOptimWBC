@@ -23,7 +23,7 @@ n_of_experiment = 201;    % number that we use to distinguish between the same s
 init_parameters = 6;      % initial value for the optimization  (the scale is 0-14, so 6=0.5)
 number_of_experiment_ripetition = 1;  % number of  optimization (for robustness assesement)
 current_experiment=0;
-configuration_file_name = 'icub_stand_opt_no_backward_simulink'; 
+configuration_file_name = 'icub_torque_walking'; 
 all_results = cell(number_of_experiment_ripetition,1);
 
 % create folder to contain all the experiment with a provisional name 

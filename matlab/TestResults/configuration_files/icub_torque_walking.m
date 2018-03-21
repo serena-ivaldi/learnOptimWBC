@@ -92,17 +92,16 @@ bot1.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega
 
 deg = pi/180;
 % primary trajectory
-traj_type = {'cartesian'};
+traj_type = {'none' 'none' 'none' 'none' 'none' 'none'};
 control_type = {'x'};
 type_of_traj = {'func'};
 geometric_path = {'linear'};
 time_law = {'none'};
 %parameters first chains
-geom_parameters{1,1} =  [pi/2 0 -pi/2];  
-dim_of_task{1,1}=[1;1;1]; 
-
+geom_parameters{1,1} =  [pi/2 0 -pi/2]; 
+dim_of_task{1,1}=[1;1;1];
 % secondary trajectory (Not used)
-traj_type_sec = {'none'};
+traj_type_sec = {'none' 'none' 'none' 'none' 'none' 'none'};
 control_type_sec = {'rpy'};
 type_of_traj_sec = {'func'};
 geometric_path_sec = {'fixed'};
@@ -131,8 +130,8 @@ switch CONTROLLERTYPE
         choose_alpha = 'constantState';  % RBF , constant, handTuned, empty, constantState
         number_of_state = 1;
         number_of_tasks = chains.GetNumTasks(1);
-        value1 = 0*ones(chains.GetNumTasks(1),number_of_state);
-        values{1} = value1;
+        values = ones(chains.GetNumTasks(1),number_of_state);
+        
         
         % this is a trick that was used for providing bound to the optimization procedure for parametric reference.
         % it is to be not used anymore for the trajectory case
