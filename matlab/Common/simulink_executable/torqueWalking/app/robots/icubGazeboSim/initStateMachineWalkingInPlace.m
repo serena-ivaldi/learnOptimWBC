@@ -82,29 +82,26 @@ Sat.nuDDot_max = 10000;
 
 % Weight matrix for the cartesian tasks
 %% For learnOptimWBC
-%Read input weights from a .mat file containing the following variable:
-%weights = [weightRotTask; weightStanceFoot; weightSwingFoot; weightPostural; weight_tau]; 
-%weightCoM is not included since it is set to be a constant value of 1
-% weightCoM       = ones(3,1) * 1;
-% weightRotTask   = ones(3,1) * 1;
-% weightLeftFoot  = ones(6,1) * 1;
-% weightRightFoot = ones(6,1) * 1;
-load('../../../inputWeights.mat');
-Sat.weightLeftHand  = 0; %put to 0 if you don't want to let hands move freely
-Sat.weightRightHand = 0; %put to 0 if you don't want to let hands move freely
-Sat.weightTasks = diag([ones(3,1) * 1; %weightCoM, constant;
-                        ones(3,1) * weights(1); %weightRotTask;
-                        ones(6,1) * weights(2); %weightLeftFoot;
-                        ones(6,1) * weights(3); %weightRightFoot;
-                        ones(6,1) * Sat.weightLeftHand; %constant, 0
-                        ones(6,1) * Sat.weightRightHand]); %constant, 0
+%weightRotTask; weightStanceFoot; weightSwingFoot; weightPostural; weight_tau; were obtained from inputData.mat 
+Sat.weightCoM        = 1; %weightCoM is not included since it is set to be a constant value of 1
+Sat.weightRotTask    = weightRotTask;
+Sat.weightStanceFoot = weightStanceFoot;
+Sat.weightSwingFoot  = weightSwingFoot;
+Sat.weightLeftHand   = 0; %put to 0 if you don't want to let hands move freely
+Sat.weightRightHand  = 0; %put to 0 if you don't want to let hands move freely
+Sat.weightTasks      = zeros(3 + 3 + 6*4); %Matrix of all the weights, of the shape
+% Sat.weightTasks = diag([ones(3,1) * 1; %weightCoM, constant;
+%                         ones(3,1) * weightRotTask; %weights(1); %
+%                         ones(6,1) * weightStanceFoot; %weights(2); %
+%                         ones(6,1) * weightSwingFoot; %weights(3); %
+%                         ones(6,1) * Sat.weightLeftHand; %constant, 0
+%                         ones(6,1) * Sat.weightRightHand]); %constant, 0
 
 % Weight for the postural minimization task
-Sat.weightPostural = weights(4); %weightPostural; %0.001;
+Sat.weightPostural = weightPostural; %0.001; weights(4); %
 
 % Weight for the joint minimization task
-Sat.weight_tau = weights(5); %weight_tau; %0.1*Sat.weightPostural;
-
+Sat.weight_tau = weight_tau; %0.1*Sat.weightPostural; weights(5); %
 
 % Numerical tolerance for assuming a foot on contact
 Sat.toll_feetInContact = 0.1;

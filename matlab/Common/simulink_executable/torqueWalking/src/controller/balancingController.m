@@ -91,35 +91,31 @@
 %% --- Initialization ---
 function [Hessian,gradient,ConstraintMatrix_equality,biasVectorConstraint_equality, ...
           ConstraintMatrix_inequality,biasVectorConstraint_inequality] = ...
-          balancingControllerMPC(feetInContact, M, h, J, impedances, ...
+          balancingController(feetInContact, M, h, J, impedances, ...
                                  dampings, s, sDot, s_sDot_sDDot_des, acc_task_star, ...
                                  JDot_nu, ConstraintsMatrix_feet, biasVectorConstraint_feet, ...
-                                 w_H_l_sole, w_H_r_sole, Sat, Config, weights) 
+                                 w_H_l_sole, w_H_r_sole, Sat, Config) 
     
-    %weights is a vector of the weights used for the weighted tasks QP,
-    %with the following format:
-    %weights = [weightCoM; weightRotTask; weightStanceFoot; weightSwingFoot; weightPostural; weight_tau]
+    
     if feetInContact(1) > 0.1 && feetInContact(2) > 0.1 %Both feet in contact
-        weightLeftFoot  = weights(2);
-        weightRightFoot = weights(2);
+        weightLeftFoot  = Sat.weightStanceFoot; %weights(2);
+        weightRightFoot = Sat.weightStanceFoot; %weights(2);
     elseif feetInContact(1) > 0.1 && feetInContact(2) < 0.1 %Only left foot in contact
-        weightLeftFoot  = weights(2);
-        weightRightFoot = weights(3);
+        weightLeftFoot  = Sat.weightStanceFoot; %weights(2);
+        weightRightFoot = Sat.weightSwingFoot; %weights(3);
     elseif feetInContact(1) < 0.1 && feetInContact(2) > 0.1 %Only right foot in contact
-        weightLeftFoot  = weights(3);
-        weightRightFoot = weights(2);
+        weightLeftFoot  = Sat.weightSwingFoot; %weights(3);
+        weightRightFoot = Sat.weightStanceFoot; %weights(2);
     else %Both feet in the air
-        weightLeftFoot  = weights(3);
-        weightRightFoot = weights(3);
+        weightLeftFoot  = Sat.weightSwingFoot; %weights(3);
+        weightRightFoot = Sat.weightSwingFoot; %weights(3);
     end
     Sat.weightTasks = diag([ones(3,1) * 1; %weightCoM, constant 1;
-                            ones(3,1) * weights(1); %weightRotTask;
+                            ones(3,1) * Sat.weightRotTask;
                             ones(6,1) * weightLeftFoot;
                             ones(6,1) * weightRightFoot;
                             ones(6,1) * Sat.weightLeftHand;
                             ones(6,1) * Sat.weightRightHand]);
-    Sat.weightPostural = weights(4);
-    Sat.weight_tau     = weights(5);
                              
     % Dimension of the joint space
     ROBOT_DOF = size(s,1);  

@@ -13,9 +13,13 @@
 %
 
 %% --- Initialization ---
-clc
-clear all  %#ok<CLALL>
-close all
+
+%% for stand alone execution remove comment on the following lines
+% clc
+% clear all  %#ok<CLALL>
+% close all
+% load('inputData.mat')
+%%
 
 % NOTE: if you are simulating the robot with Gazebo, remember that you have
 % to launch Gazebo as follow:
@@ -36,7 +40,7 @@ setenv('YARP_ROBOT_NAME','icubGazeboSim');
 DEMO_TYPE = 'WALKING_IN_PLACE';
 
 % Simulation time
-Config.t_end = inf; % [s]
+Config.t_end = params.tEnd; %20; %inf; % [s]
 
 % VISUALIZATION SETUP
 %
