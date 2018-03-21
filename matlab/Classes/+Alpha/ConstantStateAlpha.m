@@ -24,10 +24,11 @@ classdef ConstantStateAlpha < Alpha.AbstractAlpha
       function val = GetValue(obj,state)
          val = obj.sample(state);
       end   
-      %function that compute the value of the alpha function given parameters
+      %function that compute update the value to test
       function ComputeNumValue(obj,theta)
-          
+          obj.sample = theta;
       end
+            
       % function that give the number of parameters necessary for the alpha function
       function r = GetParamNum(obj)
          r = length(obj.sample(1,:));
