@@ -30,7 +30,7 @@ classdef torqueWalkingMessage < Messaging.AbstractMessage
           controller.simulation_results.time        = time;
           s  = s_sim.Data;
           sd = sd_sim.Data;
-          t  = time; %params.tStart:params.sim_step:params.tEnd; 
+          t  = params.tStart:params.sim_step:params.tEnd; 
           
       end
       
