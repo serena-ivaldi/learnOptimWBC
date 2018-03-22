@@ -19,7 +19,7 @@
 % clear all  %#ok<CLALL>
 % close all
 % load('inputData.mat')
-%%
+%
 
 % NOTE: if you are simulating the robot with Gazebo, remember that you have
 % to launch Gazebo as follow:
