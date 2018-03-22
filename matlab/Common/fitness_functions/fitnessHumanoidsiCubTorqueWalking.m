@@ -1,12 +1,94 @@
 function [fit,failure]  = fitnessHumanoidsiCubTorqueWalking(obj,output)
-% fitness function of the icub standing up we try to optimize the cost
-% of consumption and the error with the final com (for constrained optimization)
-% here i consider one more features: i penalize the solution if i have
-% backward movement of the com
+% fitness function of the icub controlled with the torqueWalking controller
+% we try to optimize:
+% (minimize) error of desired task values (and posture error if desired)
+% (minimize) joint torques 
+% (maximize) distance between ZMP and bounds of the support polygon
+% (minimize) joint torques
+% (penalize) unfeasible optimization with the QP (exit flag = -2, in this case the simulation will end before the final simulation time is reached)
+% (penalize) failure, such as the robot falling (in this case, the simulation will end before the final simulation time is reached)
+% (constrain) QP could not be solved (exit flag ~= 0)
+% (constrain) joint limits
+% (constrain) torque limits
+
+    fall_penalty        = -1;  %in this case, I set a very negative penalty because in the unconstrained case i have no lower bound
     
-%     t_all  = output{1};
-%     q_all  = output{2};
-%     qd_all = output{3};
+    max_torques         = 3.1000e+05;
+    max_task_error      = 100;
+    max_exitFlagQP      =  0.3700;
+    
+    weight_torques      = -1;  %minimize
+    weight_task_err     = -1.3;%minimize
+    weight_exitFlagQP   = -1;  %minimize
+    weight_zmp_distance = 1;   %maximize
+    sum_weights = abs(weight_torques) + abs(weight_task_err) + abs(weight_exitFlagQP) + weight_zmp_distance;
+
+    param       = obj.input_4_run{2};
+    controller  = obj.input_4_run{4};
+    
+    task_errors = controller.simulation_results.task_errors; %6 tasks
+    joint_error = controller.simulation_results.joint_error;
+    tau_norm    = controller.simulation_results.tau;
+    exitFlagQP  = controller.simulation_results.exitFlagQP;
+    zmp         = controller.simulation_results.zmp;
+    pose_CoM    = controller.simulation_results.pose_CoM;
+    pose_lFoot  = controller.simulation_results.pose_lFoot;
+    pose_rFoot  = controller.simulation_results.pose_rFoot;
+    time        = controller.simulation_results.time;
+
+    t_all  = output{1};
+    q_all  = output{2};
+    qd_all = output{3};
+    
+    %% check to see if the robot has fallen or the QP was unfeasible during the current rollout
+    if length(time) < length(t_all) %robot fault (falling robot)
+        disp('robot has fallen');
+        fprintf('constraints violation is %f\n', fall_penalty);
+        fit = fall_penalty;
+        failure = true; 
+        
+    else  % no fault (robot reached the final time)  
+        %fitness function computation 
+        %task rmse errors
+        task_rmse = sqrt(mean(task_errors.^2, 1));
+        %posture rmse errors
+        joint_rmse = sqrt(mean(joint_error.^2, 1));
+        % TO DO: compute support polygon bounds and distance between ZMP and bounds
+        %check constraint computation
+%             balance      = CheckBalance(res.zmp,iCub.support_poly);
+        
+        %count the unsuccessful QP exit flags
+        exitFlagQP_sum = sum(exitFlagQP(exitFlagQP~=0));
+        
+        %mean torque
+        mean_tau = mean(tau_norm);
+        
+        
+        % saturations
+        if(mean_tau > max_torques)
+            mean_tau = max_torques;
+        end
+        
+        if(task_rmse > max_task_error)
+            task_rmse = max_task_error;
+        end
+        
+        if(exitFlagQP_sum > max_exitFlagQP)
+            exitFlagQP_sum = max_exitFlagQP;
+        end
+        
+        task_rmse      = task_rmse/max_task_error;
+        mean_tau       = mean_tau/max_torques;
+        exitFlagQP_sum = exitFlagQP_sum/max_exitFlagQP;
+       
+        %Note: the optimization procedure searches to maximize the fitness
+        fit = (weight_task_err * sum(task_rmse) + weight_torques * mean_tau + weight_exitFlagQP * exitFlagQP_sum) / sum_weights;
+        failure = false; 
+    end
+end
+    
+
+
 %      
 %     %%%;;
 %     downsaple           = 1;
@@ -134,6 +216,5 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalking(obj,output)
 %         fprintf('candidate fit is %f\n', fit)
 %         %---
 %      
-%         failure = false; 
-    end
-end
+%     end
+
