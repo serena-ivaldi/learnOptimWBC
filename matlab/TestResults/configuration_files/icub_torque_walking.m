@@ -25,6 +25,10 @@ time_struct.ti = 0;
 time_struct.tf = 4.5;
 time_struct.step = 0.01;
 
+% parameters used in DynSim_iCubSim for detecting whether the process got stuck
+params.max_timer = 100; %maximum time expected for a successful run of threadSimulink
+params.max_consecutive_fails_counter = 5; %number of failed runs of threadSimulink, after which all programs are killed and restarted
+
 %% TASK PARAMETERS
 name_dat = 'iCub_standing_sim_1.0'; % this is the name to give to the folder where im going to save the results
 %path=LoadParameters(name_dat);
@@ -34,7 +38,7 @@ CONTROLLERTYPE ='BalanceController';   % GHC or UF
 %%
 
 %SUBCHAIN PARAMETERS
-subchain1 =  {'weightRotTask' 'weightLeftFoot' 'weightRightFoot' 'weightPostural' 'weightTau'}; %weightCoM is not included since it is set to be a constant value of 1
+subchain1 =  {'weightRotTask' 'weightStanceFoot' 'weightSwingFoot' 'weightPostural' 'weightTau'}; %weightCoM is not included since it is set to be a constant value of 1
 target_link{1} = subchain1;
 
 
@@ -185,8 +189,8 @@ switch CONTROLLERTYPE
         %                               0.393392500273063,0.373428273663188,0.463322910737024,0.481471759199476,0.395496648477922]; 
         explorationRate = 0.1; %0.5; %Value in the range [0, 1]
         niter = 500;  %number of generations
-        cmaes_value_range{1} = [0, 0, 0, 0, 0]; %[ 0, 0, 0, 0, 0, -0.12,-0.12,-0.12,-0.12,-0.12,  0.36,0.36,0.36,0.36,0.36 ];  % lower bound that define the search space
-        cmaes_value_range{2} = [1, 1, 1, 1, 1];%[ 2, 2, 2, 2, 2,  0.016,0.016,0.016,0.016,0.016, 0.50,0.50,0.50,0.50,0.50];  % upper bound that define the search space
+        cmaes_value_range{1} = [0.2, 0.2, 0.2, 0, 0]; % lower bound that defines the search space
+        cmaes_value_range{2} = [1, 1, 1, 0.1, 0.001]; % upper bound that defines the search space
         learn_approach = '(1+1)CMAES'; %CMAES (1+1)CMAES
         %--- Parameter for constraints method
         method_to_use = 'nopenalty';  % adaptive , vanilla , empty 'nopenalty'
