@@ -70,7 +70,7 @@ Problem.f = 'FeasibleSolutionObj';
 %% parameter to collect 1
 costs(1) = - performances(1);
 
-fprintf('Mean %d: %e %d\n', 1 , performances(1), succeeded(1));
+fprintf('Mean of the starting point %d: %e %d\n', 1 , performances(1), succeeded(1));
 for k = 1:(nIterations - 1)
     if settings.plotState
         fprintf('iteration %d\n',k);

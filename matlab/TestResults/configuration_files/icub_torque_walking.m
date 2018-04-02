@@ -142,18 +142,30 @@ switch CONTROLLERTYPE
         % it is to be not used anymore for the trajectory case
         %value_range_for_optimization_routine = [-0.5 , 1.5]; 
         %% CONTROLLER PARAMETER (not used)
-        combine_rule = {'sum'}; % sum or projector (with sum reppelers are removed)
+        combine_rule = {'sum'}; % sum or projector (with sum repellers are removed)
         %% CONSTRAINTS PARAMETERS
+        %the function "createConstraintsVector" can be found in 'matlab/Robots/iCub/@iCub/icub.m'
+        %it creates a vector containing the upper and lower joint limits and torque limits, in the following order:
+        %[ joint1_upper_limit, joint1_lower_limit, ... jointN_upper_limit, jointN_lower_limit, ...
+        %  tau1_upper_limit,   tau1_lower_limit,   ... tauN_upper_limit,   tauN_lower_limit]
+        %where the limit values were previously obtained from the URDF 
         constraints_values = bot1.createConstraintsVector;
         for k = 1:2:length(constraints_values)
-            constraints_functions{k} = 'LinInequality';
-            constraints_functions{k+1} = 'LinInequality2';
+            constraints_functions{k} = 'LinInequality'; %upper bound joint/torque limit
+            constraints_functions{k+1} = 'LinInequality2'; %lower bound joint/torque limit
         end
-        %% with the empty constraints it means that i compute the constraints directly inside the fitness function and i provide the result through the input of the empty constraints
-        constraints_functions{end+1} = 'EmptyConstraints'; 
-        constraints_values = [constraints_values,nan];   % vector that contains some constant that are used by the function in constraints_functions to compute the constraints_violation
-        torqueThreshold = 25;
+        
+        %%Constraint: QP exit flag must be 0
+        constraints_functions{end+1} = 'LinEquality'; 
+        constraints_values = [constraints_values, 0];
+        
+        %Constraint: check balance, ZMP must remain within support polygon
+        % with the empty constraints it means that i compute the constraints directly inside the fitness function and i provide the result through the input of the empty constraints
+        %constraints_functions{end+1} = 'EmptyConstraints';
+        %constraints_values = [constraints_values,nan];   % vector that contains some constants that are used by the function in constraints_functions to compute the constraints_violation
+       
         %% we do this small addition to limit the joint below a fixed treshold
+        torqueThreshold = 60;
         for iii = 47:92
             if(abs(constraints_values(iii))>torqueThreshold)
                 if(constraints_values(iii)>0)
@@ -163,9 +175,11 @@ switch CONTROLLERTYPE
                 end      
             end
         end
-        constraints_type = ones(1,length(constraints_values)); % vector that specifies if the constraints is a equality or an inequality. 1 disequality 0 equality
-        %% to activate or disactive the constraints
+        constraints_type = ones(1,length(constraints_values)); % vector that specifies if the constraints is an equality or an inequality: 1 inequality; 0 equality
+        
+        %% to activate or disactivate the constraints
         activate_constraints_handling = true;
+        
         %% INSTANCE PARAMETER
         preprocessing = @EmptyPreprocessing;
         run_function = @RobotExperiment;

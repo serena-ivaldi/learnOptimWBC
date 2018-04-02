@@ -1,7 +1,7 @@
 classdef torqueWalkingMessage < Messaging.AbstractMessage
     
    methods
-       %% important!! params has always to be saved for make the code it works 
+       %% important!! params must always be saved to make the code work
        function Pack(obj,controller,params)
            weightRotTask    = controller.alpha{1,1}.sample;
            weightStanceFoot = controller.alpha{1,2}.sample;
@@ -20,13 +20,13 @@ classdef torqueWalkingMessage < Messaging.AbstractMessage
           %% save data 
 %           controller.simulation_iterator            = 1;
           controller.simulation_results.task_errors = task_errors.Data;
-          controller.simulation_results.joint_error = joint_error.Data;
-          controller.simulation_results.tau         = tau_norm.Data;
+          controller.simulation_results.joint_error = joint_error.Data(:,:)';
+          controller.simulation_results.torques     = torques.Data; %this is a timeseries of the vector of joint torques
           controller.simulation_results.exitFlagQP  = exitFlagQP.Data;
           controller.simulation_results.zmp         = ZMP.Data;
-          controller.simulation_results.pose_CoM    = pose_CoM.Data;
-          controller.simulation_results.pose_lFoot  = pose_lFoot.Data;
-          controller.simulation_results.pose_rFoot  = pose_rFoot.Data;
+          controller.simulation_results.pose_CoM    = pose_CoM.Data(:,:)';
+          controller.simulation_results.pose_lFoot  = pose_lFoot.Data(:,:)';
+          controller.simulation_results.pose_rFoot  = pose_rFoot.Data(:,:)';
           controller.simulation_results.time        = time;
           s  = s_sim.Data;
           sd = sd_sim.Data;
@@ -38,7 +38,7 @@ classdef torqueWalkingMessage < Messaging.AbstractMessage
  
         task_errors          = results.get('task_errors');
         joint_error          = results.get('joint_error');
-        tau_norm             = results.get('tau_norm');
+        torques              = results.get('torques');
         exitFlagQP           = results.get('exitFlagQP');
         ZMP                  = results.get('ZMP');
         pose_CoM             = results.get('pose_CoM');
@@ -49,7 +49,7 @@ classdef torqueWalkingMessage < Messaging.AbstractMessage
         time                 = results.get('tout');
         
         %% simulationResults.mat has to be saved in common/simulink_executable
-        save(obj.outputfromsimulink, 'task_errors', 'joint_error', 'tau_norm', 'exitFlagQP', ...
+        save(obj.outputfromsimulink, 'task_errors', 'joint_error', 'torques', 'exitFlagQP', ...
              'pose_CoM', 'ZMP', 'pose_rFoot', 'pose_lFoot', 's_sim', 'sd_sim', 'time');
       end
    end
