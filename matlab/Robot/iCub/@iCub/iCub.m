@@ -3,11 +3,11 @@ classdef iCub < handle
     properties
         %% Structural Parameters
         model_name
-        %active_floating_base         % switch to control if the icub has %or not a floating base i want to use param for this variable
-        ndof                          % dependant on the model used for the simulaztion
+        %active_floating_base         % switch to control if the icub has %or not a floating base; I want to use param for this variable
+        ndof                          % dependent on the model used for the simulation
         %list_of_kin_chain             % string matching URDF name of the link (frame)
         %dim_of_kin_chain
-        %access_index;                 % vector of index used for accesing the infromation stored in the structural parameters
+        %access_index;                 % vector of index used for accessing the information stored in the structural parameters
         %% Whole body dynamic parameters and state
         init_state          % w_R_b,x_b,q,qd,dx_b,w_omega_b
         state               % w_R_b,x_b,q,qd,dx_b,w_omega_b
@@ -15,14 +15,14 @@ classdef iCub < handle
         %% kinematic information
         contact_jacobians
         support_poly
-        %% URDF parameter   (only for urdf model for the IcubGazeboSim model i wil not consider this value)
-        jointList           % the list of all the joints in the same order than the urdf
-        linkList            % the list of all the links in the same order than the urdf
-        revoluteJointList   % the list of all the not fixed joints in the same order than the urdf
-        UBjointLimit        % Upper limit boundarie of all the revolute joints
-        LBjointLimit        % Lower limit boundarie of all the revolute joints
-        effortLimit         % Limit efforts of all the revolute joints
-        %% Enanched visualization field
+        %% URDF parameter   (only for urdf model for the iCubGazeboSim model; I wil not consider this value)
+        jointList           % the list of all the joints, in the same order than the urdf
+        linkList            % the list of all the links, in the same order than the urdf
+        revoluteJointList   % the list of all the not fixed joints, in the same order than the urdf
+        UBjointLimit        % Upper limit boundaries of all the revolute joints
+        LBjointLimit        % Lower limit boundaries of all the revolute joints
+        effortLimit         % Limit of efforts (torques) of all the revolute joints
+        %% Enhanced visualization field
         modelName   
         mdlLdr           
         consideredJoints
@@ -207,10 +207,10 @@ classdef iCub < handle
             obj.lightDir.fromMatlab([-0.5 0 -0.5]/sqrt(2));    
         end
         
-        %% TODO i have toupdate each conf file by changing feet_on_ground with params
+        %% TODO update each conf file by changing feet_on_ground with params
         function qjInit = InitializeStateicubGazeboSim(obj,params)
             if(strcmp( obj.model_name ,'modelMatlab'))
-                %% Initial joints position [deg]
+                %% Initial joint positions [deg]
                 % lifted arm      [ -20  30  0  45  0]
                 % stretched arm   [  20  30  0  45  0]
                 leftArmInit  = [  -30  30  0  45  0]'; 
@@ -238,8 +238,8 @@ classdef iCub < handle
                 % joints configuration [rad]
                 qjInit    = [torsoInit;leftArmInit;rightArmInit;leftLegInit;rightLegInit]*(pi/180);
             elseif(strcmp( obj.model_name ,'modelSimulink'))
-                % i launch the measure scheme to read the starting joint
-                % position of the robot
+                % launch the measure scheme to read the starting joint
+                % positions of the robot
                 options = simset('SrcWorkspace','current');
                 sim('./scheme_measure/scheme_Measure',[],options);
                 
@@ -249,9 +249,9 @@ classdef iCub < handle
                 index= 1;
                 for i=1:length(length_vector)
                     if(strcmp(limb_list(i),'leftArm') || strcmp(limb_list(i),'rigthArm'))
-                        % i need to add a zero at the end of the arm joint
-                        % values because the matlab model consider the
-                        % prosup dof while the gazebo model ignores it 
+                        % I need to add a zero at the end of the arm joint
+                        % values because the matlab model considers the
+                        % prosup dof, while the gazebo model ignores it 
                         qjInit = [qjInit,first_value_joints(1,index:index + length_vector(i)  - 1 ),0];
                     else
                         qjInit = [qjInit,first_value_joints(1,index:index + length_vector(i) - 1)];
@@ -264,19 +264,19 @@ classdef iCub < handle
             obj.init_state.qi = qjInit;
         end
         
-         % This function initialize and allow to use different limbs of the
+        % This function initializes and allows to use different limbs of the
         % robot according to the current URDF
         % The possible values of kin_chain are
         % 'trunk','left_arm','right_arm','l_sole','r_sole'
         % return qjInit in degres
-        % If no initial joints values are passed through varargin the
-        % function automatically set iCub to the default position
+        % If no initial joint values are passed through varargin the
+        % function automatically sets iCub to the default position
         function qjInit = InitializeStateUrdf(obj, list_of_kin_chain, feet_on_ground, varargin)
             qjInit = zeros(obj.ndof,1);
             if (~isempty(varargin))
                 joints_initial_values  = varargin{1};
                 if ~(length(joints_initial_values) == length(list_of_kin_chain))
-                    error('joints_initial_values is malformed, should be the same lenght as list_of_kin_chain');
+                    error('joints_initial_values is malformed, should be the same length as list_of_kin_chain');
                 end
             end
             
@@ -288,7 +288,7 @@ classdef iCub < handle
                 end
                 % here the hyp is that i can assign the starting position
                 % by following the order specified in the string_search
-                % variables than i will apply each value in the right
+                % variables, then i will apply each value in the right
                 % positions through sortJointValue function. the idea is
                 % that the joint vector is in the same order of joints in
                 % in the xml file
@@ -365,8 +365,8 @@ classdef iCub < handle
             q   = chi(8:8+obj.ndof-1,:);
             % linear and angular velocity
             dx_b    = chi(obj.ndof+8:obj.ndof+10,:);    % floating base linear velocity
-            w_omega_b = chi(obj.ndof+11:obj.ndof+13,:);   % floating base angular velocity
-            qd     = chi(obj.ndof+14:2*obj.ndof+13,:); % joint velocity
+            w_omega_b = chi(obj.ndof+11:obj.ndof+13,:); % floating base angular velocity
+            qd     = chi(obj.ndof+14:2*obj.ndof+13,:);  % joint velocity
             Nu      = [dx_b;w_omega_b;qd];               % velocity vector
             % Obtaining the rotation matrix from root link to world                 
             [~,w_R_b]    = frame2posRotm(base_pose);
@@ -392,7 +392,7 @@ classdef iCub < handle
             % define world frame
             wbm_setWorldFrame(w_R_b0,x_b0,[0 0 -9.81]');
                       
-            % update position and orientation of the floating base repect of the root base
+            % update position and orientation of the floating base with respect to the root base
             obj.state.q = qjInit;
             obj.state.qd = dqjInit;
             obj.state.x_b = x_b0;
@@ -517,7 +517,7 @@ classdef iCub < handle
                 dJcNu_sym(6*(i-1)+1:6*i,:) = wbm_dJdq(obj.state.w_R_b,obj.state.x_b,q,qd,[obj.state.dx_b;obj.state.w_omega_b],contact.names{i});
             end
             % i had to put this correction because for some reason the
-            % r_sole does not work properly and give me a non zero element
+            % r_sole does not work properly and gives me a non zero element
             % for the r_sole
             dJcNu_sym(9) = 0;
             obj.contact_jacobians.Jc = Jc;
@@ -525,7 +525,7 @@ classdef iCub < handle
             contact_jacobians = obj.contact_jacobians;
         end
         
-        % Same as the method fkine but can be call at anytime. By tag you
+        % Same as the method fkine but can be called anytime. By tag you
         % specify through a string the name of the joint you want
         function  [x,R] = offlineFkine(rob,chi,tag)
         import WBM.utilities.frame2posRotm;    
@@ -537,7 +537,7 @@ classdef iCub < handle
             % Obtaining the rotation matrix from root link to world frame
             [x,R]    = frame2posrot(fkine);
         end
-        % Same as the method jacob0 but can be call at anytime. By tag you
+        % Same as the method jacob0 but can be called anytime. By tag you
         % specify through a string the name of the joint you want
         function  jacob0 = offlineJacob0(rob,chi,tag)
             x_base  = chi(1:3,:);  %TODO floating base flag required (parameter of the simulator)
@@ -636,7 +636,7 @@ classdef iCub < handle
         end
 
         
-        % Create the constraints_values vector need to compute the constraints
+        % Create the constraints_values vector needed to compute the constraints
         % Used in AllRUntimeParameters
         function vector = createConstraintsVector(obj)
             vector = [];
