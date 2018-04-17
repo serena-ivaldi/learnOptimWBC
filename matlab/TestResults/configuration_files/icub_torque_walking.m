@@ -79,15 +79,17 @@ params.tStart   = time_struct.ti;
 params.tEnd     = time_struct.tf;
 params.sim_step =  0.01;%time_struct.step;
 % feet size
-params.footSize  = [-0.07  0.12 ;    % xMin, xMax
-                    -0.045 0.05];    % foot_xlength, foot_ylength 
+
+% Size of the foot             
+params.footSize     = [-0.05  0.10;     % xMin, xMax
+                       -0.025 0.025];   % yMin, yMax 
 params.foot.xmin    = params.footSize(1,1);
 params.foot.xmax    = params.footSize(1,2);
 params.foot.ymin    = params.footSize(2,1);
 params.foot.ymax    = params.footSize(2,2);
 
-params.footSizeForOpitmization = [-0.07  0.12 ;    % xMin, xMax
-                                  -0.045 0.05];      % yMin, yMax   
+params.footSizeForOptimization = params.footSize;  %[-0.07  0.12 ;    % xMin, xMax
+                                                   %-0.045 0.05];      % yMin, yMax   
 %% PARAMETERS FOR FITNESS FUNCTION
 %to be done
 

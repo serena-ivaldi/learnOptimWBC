@@ -271,6 +271,6 @@ torsionalFrictionCoefficient = 1/75;
 fZmin                        = 10; % Min vertical force [N]
 
 % Size of the foot
-Config.footSize              = [-0.05  0.10;     % xMin, xMax
-                                -0.025 0.025];   % yMin, yMax 
+Config.footSize              = params.footSize;  %[-0.05  0.10;     % xMin, xMax
+                                                 % -0.025 0.025];   % yMin, yMax 
                             
