@@ -16,9 +16,9 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalking(obj,output)
     max_torques     = 3.1000e+05; %! these parameters will need to be scaled with the length of the simulation
     max_task_error  = 0.01;
     
-    weight_torques  = -1;  %minimize
-    weight_task_err = -1.3;%minimize
-    weight_zmp_dist = 1;   %maximize
+    weight_task_err = -2;     %minimize
+    weight_torques  = -1;     %minimize
+    weight_zmp_dist = -0.01;  %maximize (minimize a negative measure of distance)
     sum_weights     = abs(weight_torques) + abs(weight_task_err) + weight_zmp_dist;
 
     param           = obj.input_4_run{2};
@@ -29,7 +29,7 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalking(obj,output)
     torques         = controller.simulation_results.torques;         %[nsamples x nDOF]
     exitFlagQP      = controller.simulation_results.exitFlagQP;      %[nsamples x 1]
     zmp             = controller.simulation_results.zmp;             %[nsamples x 3]
-    support_polygon = controller.simulation_results.support_polygon; %[nsamples x 2 x 2]
+    support_polygon = controller.simulation_results.support_polygon; %[2 x 2 x nsamples]
     feet_in_contact = controller.simulation_results.feet_in_contact; %[nsamples x 2]
     pose_CoM        = controller.simulation_results.pose_CoM;        %[nsamples x 3]
     pose_lFoot      = controller.simulation_results.pose_lFoot;      %[nsamples x 3]
@@ -42,6 +42,7 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalking(obj,output)
     
     downsample      = 1;
     evaluate_constraints_index = 1;
+    sum_balance = 0; 
 
     
     % check to see if the robot has fallen/was about to fall or the QP was unfeasible during the current rollout
@@ -54,26 +55,31 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalking(obj,output)
     else  % no fault (robot reached the final time)  
         for i=1:downsample:length(time)
             
-            res.torques    = torques(i,:); %contr.simulation_results.torques(i,:);
+            res.torques    = torques(i,:);
             res.exitFlagQP = exitFlagQP(i,:); 
             q              = q_all(i,:);
-%             res.xCoM = contr.simulation_results.xCoM(i,:);
-%             res.zmp  = contr.simulation_results.zmp(i,:);
-            res.feet_in_contact = feet_in_contact(i,:);
-%             params.feet_in_contact = feet_in_contact(i,:);
-%             obj.ComputeSupportPoly(params);
-
+            res.zmp        = zmp(i,:);
+            
+            res.support_polygon.min      = support_polygon(:,1,i);
+            res.support_polygon.max      = support_polygon(:,2,i);
+            res.support_polygon.center   = (res.support_polygon.min + res.support_polygon.max)/2;
+            res.support_polygon.height   = res.support_polygon.max(1) - res.support_polygon.min(1);
+            res.support_polygon.width    = res.support_polygon.max(2) - res.support_polygon.min(2); 
+            res.support_polygon.max_dist = norm(res.support_polygon.max - res.support_polygon.center);
+            
+            balance     = CheckBalance(res.zmp,res.support_polygon);
+            
+            %sum of distances between ZMP and support polygon boundary
+            sum_balance = sum_balance + balance;
+            
             %constraint computation
-            
-%             balance      = CheckBalance(res.zmp,iCub.support_poly);
-            
             input_vector = {q(1),q(1),q(2),q(2),q(3),q(3),q(4),q(4),q(5),q(5),q(6),q(6),q(7),q(7),q(8),q(8),q(9),q(9),q(10),q(10),q(11),q(11),q(12),q(12),...
                 q(13),q(13),q(14),q(14),q(15),q(15),q(16),q(16),q(17),q(17),q(18),q(18),q(19),q(19),q(20),q(20),q(21),q(21),q(22),q(22),q(23),q(23),...
                 res.torques(1),res.torques(1),res.torques(2),res.torques(2),res.torques(3),res.torques(3),res.torques(4),res.torques(4),res.torques(5),res.torques(5),res.torques(6),res.torques(6),res.torques(7),res.torques(7),...
                 res.torques(8),res.torques(8),res.torques(9),res.torques(9),res.torques(10),res.torques(10),res.torques(11),res.torques(11),res.torques(12),res.torques(12),...
                 res.torques(13),res.torques(13),res.torques(14),res.torques(14),res.torques(15),res.torques(15),res.torques(16),res.torques(16),res.torques(17),res.torques(17),res.torques(18),res.torques(18),res.torques(19),res.torques(19),...
                 res.torques(20),res.torques(20),res.torques(21),res.torques(21),res.torques(22),res.torques(22),res.torques(23),res.torques(23),...
-                res.exitFlagQP}; %balance
+                res.exitFlagQP, balance};
                        
             % here I update the value inside the penalty object
             obj.penalty_handling.EvaluateConstraints(input_vector,evaluate_constraints_index);
@@ -91,15 +97,10 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalking(obj,output)
         
         %sum of task errors
         sum_task_error = sum((task_errors(:).*task_errors(:)),1); %sqrt(mean(task_errors.^2, 1));
-        %sum of postural errors
-%         sum_joint_error = sum((joint_error(:).*joint_error(:)),1); %sqrt(mean(joint_error.^2, 1));
+
         %sum of joint torques
         sum_torques = sum((torques(:).*torques(:)),1);
         
-        % TO DO: compute support polygon bounds and distance between ZMP and bounds
-        %check constraint computation
-        %    balance      = CheckBalance(res.zmp,iCub.support_poly);
-
         % saturations
         if(sum_torques > max_torques)
             sum_torques = max_torques;
@@ -113,11 +114,12 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalking(obj,output)
         sum_torques        = sum_torques/max_torques;
         
         %Note: the optimization procedure searches to maximize the fitness
-        fit = (weight_task_err * sum(sum_task_error) + weight_torques * sum_torques) / sum_weights;
+        fit = (weight_task_err * sum(sum_task_error) + weight_torques * sum_torques + weight_zmp_dist * sum_balance) / sum_weights;
         
         %%DEBUG
         fprintf('sum of task errors is %f\n', sum_task_error)
         fprintf('sum of torques is %f\n', sum_torques)
+        fprintf('sum of balance is %f\n', sum_balance)
         fprintf('candidate fit is %f\n', fit)
         %---
         

@@ -163,8 +163,8 @@ switch CONTROLLERTYPE
         
         %Constraint: check balance, ZMP must remain within support polygon
         % with the empty constraints it means that i compute the constraints directly inside the fitness function and i provide the result through the input of the empty constraints
-        %constraints_functions{end+1} = 'EmptyConstraints';
-        %constraints_values = [constraints_values,nan];   % vector that contains some constants that are used by the function in constraints_functions to compute the constraints_violation
+        constraints_functions{end+1} = 'EmptyConstraints';
+        constraints_values = [constraints_values,nan];   % vector that contains some constants that are used by the function in constraints_functions to compute the constraints_violation
        
         %% we do this small addition to limit the joint below a fixed treshold
         torqueThreshold = 60;

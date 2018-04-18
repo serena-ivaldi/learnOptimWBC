@@ -25,7 +25,7 @@ classdef torqueWalkingMessage < Messaging.AbstractMessage
           controller.simulation_results.exitFlagQP      = exitFlagQP.Data;
           controller.simulation_results.zmp             = ZMP.Data;
           controller.simulation_results.pose_CoM        = pose_CoM.Data(:,:)';
-          controller.simulation_results.support_polygon = permute(support_polygon.Data, [3 1 2]); %this is a matrix of the size (nsamples, 2,2)
+          controller.simulation_results.support_polygon = support_polygon.Data; %this is a matrix of the size (2,2,nsamples)
           controller.simulation_results.feet_in_contact = feet_in_contact.Data(:,:)';
           controller.simulation_results.pose_lFoot      = pose_lFoot.Data(:,:)';
           controller.simulation_results.pose_rFoot      = pose_rFoot.Data(:,:)';
