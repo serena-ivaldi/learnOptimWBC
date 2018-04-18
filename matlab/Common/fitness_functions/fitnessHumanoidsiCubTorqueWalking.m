@@ -11,38 +11,40 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalking(obj,output)
 % (constrain) joint limits
 % (constrain) torque limits
 
-    fall_penalty        = -1;  %in this case, I set a very negative penalty because in the unconstrained case i have no lower bound
+    fall_penalty    = -1;  %in this case, I set a very negative penalty because in the unconstrained case i have no lower bound
     
-    max_torques         = 3.1000e+05; %! these parameters will need to be scaled with the length of the simulation
-    max_task_error      = 0.01;
+    max_torques     = 3.1000e+05; %! these parameters will need to be scaled with the length of the simulation
+    max_task_error  = 0.01;
     
-    weight_torques      = -1;  %minimize
-    weight_task_err     = -1.3;%minimize
-    weight_zmp_distance = 1;   %maximize
-    sum_weights = abs(weight_torques) + abs(weight_task_err) + weight_zmp_distance;
+    weight_torques  = -1;  %minimize
+    weight_task_err = -1.3;%minimize
+    weight_zmp_dist = 1;   %maximize
+    sum_weights     = abs(weight_torques) + abs(weight_task_err) + weight_zmp_dist;
 
-    param       = obj.input_4_run{2};
-    controller  = obj.input_4_run{4};
+    param           = obj.input_4_run{2};
+    controller      = obj.input_4_run{4};
     
-    task_errors = controller.simulation_results.task_errors; %6 tasks
-    joint_error = controller.simulation_results.joint_error;
-    torques     = controller.simulation_results.torques;
-    exitFlagQP  = controller.simulation_results.exitFlagQP;
-    zmp         = controller.simulation_results.zmp;
-    pose_CoM    = controller.simulation_results.pose_CoM;
-    pose_lFoot  = controller.simulation_results.pose_lFoot;
-    pose_rFoot  = controller.simulation_results.pose_rFoot;
-    time        = controller.simulation_results.time;
+    task_errors     = controller.simulation_results.task_errors;     %[nsamples x 12] matrix, [CoMx, CoMy, CoMz, OriRot, lFootx,lFooty,lFootz,lFootRot,rFootx, rFooty, rFootz, rFootRot]
+    joint_error     = controller.simulation_results.joint_error;     %[nsamples x nDOF]
+    torques         = controller.simulation_results.torques;         %[nsamples x nDOF]
+    exitFlagQP      = controller.simulation_results.exitFlagQP;      %[nsamples x 1]
+    zmp             = controller.simulation_results.zmp;             %[nsamples x 3]
+    support_polygon = controller.simulation_results.support_polygon; %[nsamples x 2 x 2]
+    feet_in_contact = controller.simulation_results.feet_in_contact; %[nsamples x 2]
+    pose_CoM        = controller.simulation_results.pose_CoM;        %[nsamples x 3]
+    pose_lFoot      = controller.simulation_results.pose_lFoot;      %[nsamples x 3]
+    pose_rFoot      = controller.simulation_results.pose_rFoot;      %[nsamples x 3]
+    time            = controller.simulation_results.time;            %[nsamples x 1]
 
-    t_all  = output{1};
-    q_all  = output{2};
-    qd_all = output{3};
+    t_all           = output{1};
+    q_all           = output{2};
+    qd_all          = output{3};
     
-    downsample = 1;
+    downsample      = 1;
     evaluate_constraints_index = 1;
 
     
-    % check to see if the robot has fallen or the QP was unfeasible during the current rollout
+    % check to see if the robot has fallen/was about to fall or the QP was unfeasible during the current rollout
     if length(time) < length(t_all) %robot fault (falling robot)
         disp('robot has fallen');
         fprintf('constraints violation is %f\n', fall_penalty);
@@ -52,12 +54,14 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalking(obj,output)
     else  % no fault (robot reached the final time)  
         for i=1:downsample:length(time)
             
-            res.torques = torques(i,:); %contr.simulation_results.torques(i,:);
+            res.torques    = torques(i,:); %contr.simulation_results.torques(i,:);
             res.exitFlagQP = exitFlagQP(i,:); 
-            q           = q_all(i,:);
+            q              = q_all(i,:);
 %             res.xCoM = contr.simulation_results.xCoM(i,:);
 %             res.zmp  = contr.simulation_results.zmp(i,:);
-            
+            res.feet_in_contact = feet_in_contact(i,:);
+%             params.feet_in_contact = feet_in_contact(i,:);
+%             obj.ComputeSupportPoly(params);
 
             %constraint computation
             
@@ -88,7 +92,7 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalking(obj,output)
         %sum of task errors
         sum_task_error = sum((task_errors(:).*task_errors(:)),1); %sqrt(mean(task_errors.^2, 1));
         %sum of postural errors
-        sum_joint_error = sum((joint_error(:).*joint_error(:)),1); %sqrt(mean(joint_error.^2, 1));
+%         sum_joint_error = sum((joint_error(:).*joint_error(:)),1); %sqrt(mean(joint_error.^2, 1));
         %sum of joint torques
         sum_torques = sum((torques(:).*torques(:)),1);
         
@@ -105,8 +109,8 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalking(obj,output)
             sum_task_error = max_task_error;
         end
               
-        sum_task_error      = sum_task_error/max_task_error;
-        sum_torques       = sum_torques/max_torques;
+        sum_task_error     = sum_task_error/max_task_error;
+        sum_torques        = sum_torques/max_torques;
         
         %Note: the optimization procedure searches to maximize the fitness
         fit = (weight_task_err * sum(sum_task_error) + weight_torques * sum_torques) / sum_weights;
