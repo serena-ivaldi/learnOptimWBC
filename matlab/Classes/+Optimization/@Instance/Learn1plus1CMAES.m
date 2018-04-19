@@ -1,5 +1,13 @@
 function [performances,bestAction,BestActionPerEachGen,policies,costs,succeeded,G_data2save] = Learn1plus1CMAES(obj,settings)
 
+% The following lines are added in order to
+% allow to interrupt the optimization loop after the current iteration 
+% by pressing a key when Figure 1 is active
+global KEY_IS_PRESSED
+KEY_IS_PRESSED = 0;
+set(gcf, 'KeyPressFcn', @myKeyPressFcn)
+% % 
+
 nIterations = settings.nIterations;
 explorationRate = settings.explorationRate;
 
@@ -70,7 +78,11 @@ Problem.f = 'FeasibleSolutionObj';
 %% parameter to collect 1
 costs(1) = - performances(1);
 
+
+%% Optimization loop 
+
 fprintf('Mean of the starting point %d: %e %d\n', 1 , performances(1), succeeded(1));
+    
 for k = 1:(nIterations - 1)
     if settings.plotState
         fprintf('iteration %d\n',k);
@@ -168,8 +180,13 @@ for k = 1:(nIterations - 1)
     bestAction.hist(k).parameters = mean(k + 1, :);
     
     fprintf('performance %d: %e %d\n', k + 1, performances(k + 1), succeeded(k));
+    
+    if KEY_IS_PRESSED
+        break;
+    end
 
 end
+
 G_data2save.A = A;
 G_data2save.C = [];
 G_data2save.performance = [0];
@@ -196,4 +213,12 @@ else
 end
     [performance, succeeded, data2save] = settings.fnForwardModel(obj_, actionFull, curr_candidate ,isMean);
 
+end
+
+function myKeyPressFcn(hObject, event)
+%This function allows to interrupt the optimization loop after the current iteration 
+%by pressing a key when Figure 1 is active
+    global KEY_IS_PRESSED
+    KEY_IS_PRESSED  = 1;
+    disp('A key was pressed, the optimization loop will be ended after this iteration');
 end
