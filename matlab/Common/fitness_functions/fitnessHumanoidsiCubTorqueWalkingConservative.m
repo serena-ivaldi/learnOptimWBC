@@ -11,18 +11,18 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalking(obj,output)
 % (constrain) joint limits
 % (constrain) torque limits
 
+    params          = obj.input_4_run{2};
+    controller      = obj.input_4_run{4};
+
     fall_penalty    = -1;  %in this case, I set a very negative penalty because in the unconstrained case i have no lower bound
     
-    max_torques     = 3.1000e+05; %! these parameters will need to be scaled with the length of the simulation
-    max_task_error  = 0.01;
+    max_torques     = 6.000e+04 * params.tEnd; %! these parameters need to be scaled with the length of the simulation
+    max_task_error  = 0.1 * params.tEnd;
     
     weight_task_err = -2;     %minimize
     weight_torques  = -1;     %minimize
-    weight_zmp_dist = -0.01;  %maximize (minimize a negative measure of distance)
+    weight_zmp_dist = -1;     %maximize (minimize a negative measure of distance)
     sum_weights     = abs(weight_torques) + abs(weight_task_err) + weight_zmp_dist;
-
-    param           = obj.input_4_run{2};
-    controller      = obj.input_4_run{4};
     
     task_errors     = controller.simulation_results.task_errors;     %[nsamples x 12] matrix, [CoMx, CoMy, CoMz, OriRot, lFootx,lFooty,lFootz,lFootRot,rFootx, rFooty, rFootz, rFootRot]
     joint_error     = controller.simulation_results.joint_error;     %[nsamples x nDOF]
@@ -58,7 +58,7 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalking(obj,output)
             res.torques    = torques(i,:);
             res.exitFlagQP = exitFlagQP(i,:); 
             q              = q_all(i,:);
-            res.zmp        = zmp(i,:);
+            res.zmp        = zmp(i,:)';
             
             res.support_polygon.min      = support_polygon(:,1,i);
             res.support_polygon.max      = support_polygon(:,2,i);
@@ -67,7 +67,7 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalking(obj,output)
             res.support_polygon.width    = res.support_polygon.max(2) - res.support_polygon.min(2); 
             res.support_polygon.max_dist = norm(res.support_polygon.max - res.support_polygon.center);
             
-            balance     = CheckBalance(res.zmp,res.support_polygon);
+            balance     = CheckBalance(res.zmp,res.support_polygon)
             
             %sum of distances between ZMP and support polygon boundary
             sum_balance = sum_balance + balance;
@@ -112,6 +112,7 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalking(obj,output)
               
         sum_task_error     = sum_task_error/max_task_error;
         sum_torques        = sum_torques/max_torques;
+        sum_balance        = sum_balance/length(time);
         
         %Note: the optimization procedure searches to maximize the fitness
         fit = (weight_task_err * sum(sum_task_error) + weight_torques * sum_torques + weight_zmp_dist * sum_balance) / sum_weights;
