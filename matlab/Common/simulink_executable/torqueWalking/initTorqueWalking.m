@@ -74,7 +74,7 @@ addpath(genpath('./src'));
 addpath(genpath('./library'));
 
 % Simulation step (fixed step integrator)
-Config.t_step = 0.01; % [s]
+Config.t_step = params.sim_step; %0.01; % [s]
 
 %% STARTUP PROCEDURE
 %

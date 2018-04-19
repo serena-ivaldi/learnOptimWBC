@@ -21,12 +21,12 @@ params.scenario_name         = scenario_name;
 [params.simulink_schemes_global,params.path_to_local_simscheme] = SimulinkInitializationExperiment(name_simulink_folder,scenario_name,codyco);
 %% GENERAL PARAMETERS
 % for other strucutures
-time_struct.ti = 0;
-time_struct.tf = 4.5;
-time_struct.step = 0.01;
+time_struct.ti   = 0;    %initial time
+time_struct.tf   = 60;   %final time
+time_struct.step = 0.01; %time step (fixed step integrator)
 
 % parameters used in DynSim_iCubSim for detecting whether the process got stuck
-params.max_timer = 100; %maximum time expected for a successful run of threadSimulink
+params.max_timer = time_struct.tf*2 + 100; %maximum time expected for a successful run of threadSimulink
 params.max_consecutive_fails_counter = 5; %number of failed runs of threadSimulink, after which all programs are killed and restarted
 
 %% TASK PARAMETERS
@@ -51,12 +51,11 @@ chains = SubChains(target_link,robots,bot1);
 %% SCENARIO
 name_scenario = 'Icub_stand_up';
 
-%% RBT SIMULATOR PARAMETERS
+%% ROBOT SIMULATOR PARAMETERS
 time_sym_struct = time_struct;
-time_sym_struct.step = 0.01;
-% TODO generalize for multichain
 
 simulator_type = {'icub_matlab_sim'};
+
 %% TODO for now im not gonna use the structure that i used for the matlab simulator. Im going to use only init_contact_state
 params.init_contact_state = [1 1]; 
 params.feet_on_ground = params.init_contact_state;         %either 0 or 1; [left,right] (in the simulator)
@@ -77,8 +76,8 @@ else
 end
 params.tStart   = time_struct.ti;
 params.tEnd     = time_struct.tf;
-params.sim_step =  0.01;%time_struct.step;
-% feet size
+params.sim_step = time_struct.step;
+
 
 % Size of the foot             
 params.footSize     = [-0.05  0.10;     % xMin, xMax
@@ -90,10 +89,10 @@ params.foot.ymax    = params.footSize(2,2);
 
 params.footSizeForOptimization = params.footSize;  %[-0.07  0.12 ;    % xMin, xMax
                                                    %-0.045 0.05];      % yMin, yMax   
-%% PARAMETERS FOR FITNESS FUNCTION
-%to be done
 
-%%  REFERENCE PARAMETERS (not used here)
+%% PARAMETERS FOR CONTROLLER AND FITNESS FUNCTION (fitnessHumanoidsiCubTorqueWalking)
+
+%  REFERENCE PARAMETERS (not used here)
 
 bot1.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega_bInit,params.root_reference_link);
 
@@ -120,17 +119,13 @@ dim_of_task_sec{1,1}={[1;1;1]};
 
 %% Parameters Dependant on the type of controller
 
-%%%EOF
-
 switch CONTROLLERTYPE
     case 'BalanceController'
         disp('BALANCE_CONTROLLER_RUNTIMEPARAM')
         
-        %%%;;
-        
         %% PRIMARY REFERENCE PARAMETERS (this parameter only works if one of the specific trajectory has runtime parameters)
-        % IMPORTANT!!!!! this value is used inside main exec to set the parameter that yuo want to test
-        numeric_reference_parameter{1,1}=[0.385243701380465,0.812996966251098,0.725403083276668,0.919054324170722,1.44884212316731,-0.0375859449315661,-0.0141420455958836,0.00889677104501083,-0.0138436722679563,-0.0347847461961691,0.382693082842123,0.366609543042157,0.464354478552660,0.489918636980728,0.395451837082262]';
+        % IMPORTANT!!!!! this value is used inside main exec to set the parameter that you want to test
+        numeric_reference_parameter{1,1}=[1, 1, 1, 0.001, 0.0001]';
         secondary_numeric_reference_parameter{1,1} = []; % not used
         %% ALPHA PARAMETER
         %constant alpha
@@ -153,7 +148,7 @@ switch CONTROLLERTYPE
         %where the limit values were previously obtained from the URDF 
         constraints_values = bot1.createConstraintsVector;
         for k = 1:2:length(constraints_values)
-            constraints_functions{k} = 'LinInequality'; %upper bound joint/torque limit
+            constraints_functions{k}   = 'LinInequality'; %upper bound joint/torque limit
             constraints_functions{k+1} = 'LinInequality2'; %lower bound joint/torque limit
         end
         
@@ -185,7 +180,7 @@ switch CONTROLLERTYPE
         %% INSTANCE PARAMETER
         preprocessing = @EmptyPreprocessing;
         run_function = @RobotExperiment;
-        fitness = @fitnessHumanoidsiCubTorqueWalking;
+        fitness = @fitnessHumanoidsiCubTorqueWalkingGlobal; %Conservative; %@fitnessHumanoidsiCubTorqueWalkingGlobal, @fitnessHumanoidsiCubTorqueWalkingHybrid
         clean_function = @RobotExperimentCleanData;
         
         input{1} = simulator_type{1};  % rbt / v-rep
@@ -199,14 +194,11 @@ switch CONTROLLERTYPE
         generation_of_starting_point = 'test'; % 'test':user defined by user_defined_start_action 'given':is redundant with test  'random': random starting point
         %init_parameters = 6;
       
-        user_defined_start_action = [1, 1, 1, 0.001, 0.0001];
-        %user_defined_start_action =   [0.334864347662051,0.769247868133844,0.574316421814835,0.951772057698620,1.47859968547875,...
-        %                              -0.0421739842002086,-0.0144987143004585,-0.00446705976414447,-0.0103957572854113,-0.0301487995300616,...
-        %                               0.393392500273063,0.373428273663188,0.463322910737024,0.481471759199476,0.395496648477922]; 
+        user_defined_start_action = [1, 1, 1, 0.001, 0.0001]; 
         explorationRate = 0.1; %0.5; %Value in the range [0, 1]
         niter = 500;  %number of generations
-        cmaes_value_range{1} = [0.2, 0.2, 0.2, 0, 0]; % lower bound that defines the search space
-        cmaes_value_range{2} = [1, 1, 1, 0.1, 0.001]; % upper bound that defines the search space
+        cmaes_value_range{1} = [0.2, 0.2, 0.2, 0.0, 0    ]; % lower bound that defines the search space
+        cmaes_value_range{2} = [1.0, 1.0, 1.0, 0.1, 0.001]; % upper bound that defines the search space
         learn_approach = '(1+1)CMAES'; %CMAES (1+1)CMAES
         %--- Parameter for constraints method
         method_to_use = 'nopenalty';  % adaptive , vanilla , empty 'nopenalty'
