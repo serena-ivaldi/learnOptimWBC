@@ -50,7 +50,11 @@ function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
                         if(strcmp(params.codyco,'old'))
                             system('pkill -f wholeBodyDynamicsTree ')
                         else
-                            system('pkill -f yarprobotinterf')
+                            %A human may need to press ctrl-c 4 times
+                            system('pkill -f yarprobotinterf'); 
+                            system('pkill -f yarprobotinterf');
+                            system('pkill -f yarprobotinterf');
+                            system('pkill -f yarprobotinterf');
                         end
                         pause(3)
                         system('pkill -f gazebo')
@@ -84,16 +88,54 @@ function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
     end
     %% copy the results from the thread 
     try
-        %% with this function I collect the results from the simulink experiment 
+        %% with this function I collect the results from the simulink experiment
         %% and store them in controller.simulation_results and [q,qd,t]
-        [q,qd,t]=params.messenger.Unpack(controller,params);    
-    catch 
+        [q,qd,t]=params.messenger.Unpack(controller,params);        
+    catch
         disp('the results from the simulation are corrupted or not present. Repeat the simulation with the same parameters')
         failed_flag = true;
     end
+    
+    if size(q,1) <= 1
+        % if there was no error, but the simulation did not run 
+        % due to early termination that occurred right at initial time,
+        % gazebo was unable to replace the robot in its original position,
+        % therefore gazebo and yarprobotinterface need to be restarted
+        % and the simulation repeated
+        failed_flag = true;
+        %% DEBUG
+        disp('Something went wrong; restarting gazebo and repeating the simulation with the same parameters');
+        if(strcmp(params.codyco,'old'))
+            system('pkill -f wholeBodyDynamicsTree ');
+        else
+            %A human may need to press ctrl-c 4 times
+            system('pkill -f yarprobotinterf');
+            system('pkill -f yarprobotinterf');
+            system('pkill -f yarprobotinterf');
+            system('pkill -f yarprobotinterf');
+        end
+        pause(3)
+        system('pkill -f gazebo');
+        pause(3)
+        [xx,yy] = system('yarp clean  --timeout 1.0');
+        scenario_path = which('FindData.m');
+        scenario_path = fileparts(scenario_path);
+        scenario_path = strcat(scenario_path,'/scenarios');
+        command_gazebo = ['gnome-terminal -- sh -c "cd' s scenario_path s '&& gazebo -slibgazebo_yarp_clock.so'];
+        command_gazebo = [command_gazebo,s,params.scenario_name '; bash"'];
+        system(command_gazebo);
+        pause(3)
+        % this is a temporary switch for the old codyco branch; it will be deleted in the future
+        if(strcmp(params.codyco,'old'))
+            system('gnome-terminal -- sh -c "wholeBodyDynamicsTree --autoconnect --robot icubSim; bash"');
+        else
+            system('gnome-terminal -- sh -c "yarprobotinterface --config launch-wholebodydynamics.xml; bash"');
+        end
+        pause(3)
+    end
+    
     % if I have a fail, return empty data 
-    if(failed_flag)
-       
+    if(failed_flag)  
         q  = [];
         qd = [];
         t  = [];
