@@ -196,9 +196,9 @@ switch CONTROLLERTYPE
       
         user_defined_start_action = [1, 1, 1, 0.001, 0.0001]; 
         explorationRate = 0.1; %0.5; %Value in the range [0, 1]
-        niter = 500;  %number of generations
-        cmaes_value_range{1} = [0.2, 0.2, 0.2, 0.0, 0    ]; % lower bound that defines the search space
-        cmaes_value_range{2} = [1.0, 1.0, 1.0, 0.1, 0.001]; % upper bound that defines the search space
+        niter = 50; %500;  %number of generations
+        cmaes_value_range{1} = [0.0, 0.0, 0.0, 0.0, 1e-6 ]; % lower bound that defines the search space
+        cmaes_value_range{2} = [2.0, 2.0, 2.0, 2.0, 0.001]; % upper bound that defines the search space
         learn_approach = '(1+1)CMAES'; %CMAES (1+1)CMAES
         %--- Parameter for constraints method
         method_to_use = 'nopenalty';  % adaptive , vanilla , empty 'nopenalty'

@@ -89,7 +89,7 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalkingGlobal(obj,output)
         %Note: the optimization procedure searches to maximize the fitness
         %Here we want to minimize the norm of task errors at end of
         %simulation
-        fit = - norm(task_errors(end,:));
+        fit = - norm(task_errors(end,:)) / 100;
         
         %%DEBUG
         fprintf('candidate fit is %f\n', fit)
