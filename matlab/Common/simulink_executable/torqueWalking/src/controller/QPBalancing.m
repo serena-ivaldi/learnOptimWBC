@@ -203,8 +203,13 @@ function QPBalancing(block)
             % constraint matrix (contains both equality and inequality
             % constraints). Inequality constraints are reduced to the left
             % foot contact only.
-            A    = [ConstraintMatrix_inequality(:,1:6), zeros(length(biasVectorConstraint_inequality),ROBOT_DOF);
+            if Config.QP_USE_STRICT_TASK_PRIORITIES 
+                A    = [ConstraintMatrix_inequality(:,1:6), zeros(length(biasVectorConstraint_inequality),ROBOT_DOF);
                     ConstraintMatrix_equality(:,[1:6,13:end])];
+            else
+                A    = [ConstraintMatrix_inequality(:,1:6), zeros(length(biasVectorConstraint_inequality),ROBOT_DOF)];
+            end
+
               
         % CASE 2: right foot in contact
         
@@ -221,11 +226,14 @@ function QPBalancing(block)
             % constraint matrix (contains both equality and inequality
             % constraints). Inequality constraints are reduced to the right
             % foot contact only.
-            A    = [ConstraintMatrix_inequality(:,7:end), zeros(length(biasVectorConstraint_inequality),ROBOT_DOF);
+            if Config.QP_USE_STRICT_TASK_PRIORITIES
+                A    = [ConstraintMatrix_inequality(:,7:end), zeros(length(biasVectorConstraint_inequality),ROBOT_DOF);
                     ConstraintMatrix_equality(:,7:end)];
+            else
+                A    = [ConstraintMatrix_inequality(:,7:end), zeros(length(biasVectorConstraint_inequality),ROBOT_DOF)];
+            end
                     
         % CASE 3: both feet in contact
-        
         else
             
             % In this case, 
@@ -239,28 +247,45 @@ function QPBalancing(block)
 
             % constraint matrix (contains both equality and inequality
             % constraints).
-            A    =  [ConstraintMatrix_inequality, zeros(length(biasVectorConstraint_inequality),ROBOT_DOF);
-                     ConstraintMatrix_equality];    
+            if Config.QP_USE_STRICT_TASK_PRIORITIES
+                A    =  [ConstraintMatrix_inequality, zeros(length(biasVectorConstraint_inequality),ROBOT_DOF);
+                    ConstraintMatrix_equality];
+            else
+                A    =  [ConstraintMatrix_inequality, zeros(length(biasVectorConstraint_inequality),ROBOT_DOF)];
+            end
+            
         end
         
-        % to avoid the equality constraints to be unfeasible for numerical 
-        % errors, a small tolerance is added to the bias vectors
-%         eps      = [0.0001*ones(3,1); 0.0001*ones(3,1); ...
-%                     0.0001*ones(3,1); 0.0001*ones(3,1); ...
-%                     0.0001*ones(3,1); 0.0001*ones(3,1)];
-        eps = zeros(size(biasVectorConstraint_equality,1),1);
-        for i = 1:6:size(biasVectorConstraint_equality,1)
-            eps(i:i+5, 1) = [0.0001*ones(3,1); 0.0001*ones(3,1)];
+        %Constraints
+        if Config.QP_USE_STRICT_TASK_PRIORITIES
+            
+            % to avoid the equality constraints to be unfeasible for numerical
+            % errors, a small tolerance is added to the bias vectors
+            eps      = [0.0001*ones(3,1); 0.0001*ones(3,1); ...
+                0.0001*ones(3,1); 0.0001*ones(3,1); ...
+                0.0001*ones(3,1); 0.0001*ones(3,1)];
+            
+            for i = 1:6:size(biasVectorConstraint_equality,1)
+                eps(i:i+5, 1) = [0.0001*ones(3,1); 0.0001*ones(3,1)];
+            end
+            
+            % upper bound constraints
+            ubA  = [ biasVectorConstraint_inequality;
+                    (biasVectorConstraint_equality+eps)];
+            
+            % lower bound constraints. Note that equality constraints are
+            % expressed in the form of: b_eq < A*x < b_eq
+            lbA  = [-1e14*ones(length(biasVectorConstraint_inequality),1);
+                    (biasVectorConstraint_equality-eps)];
+        
+        else
+            % upper bound constraints
+            ubA  = biasVectorConstraint_inequality;
+            
+            % lower bound constraints. Note that equality constraints are
+            % expressed in the form of: b_eq < A*x < b_eq
+            lbA  = -1e14*ones(length(biasVectorConstraint_inequality),1);
         end
-                
-        % upper bound constraints    
-        ubA  = [biasVectorConstraint_inequality;
-                (biasVectorConstraint_equality+eps)];
-                
-        % lower bound constraints. Note that equality constraints are
-        % expressed in the form of: b_eq < A*x < b_eq
-        lbA  = [-1e14*ones(length(biasVectorConstraint_inequality),1);
-                 (biasVectorConstraint_equality-eps)];
             
         % Use continuity constraint. In case this option is selected, an
         % additional constraint is applied to the optimization procedure.

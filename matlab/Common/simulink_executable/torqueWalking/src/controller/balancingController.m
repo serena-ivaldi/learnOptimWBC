@@ -94,7 +94,7 @@ function [Hessian,gradient,ConstraintMatrix_equality,biasVectorConstraint_equali
           balancingController(feetInContact, M, h, J, impedances, ...
                                  dampings, s, sDot, s_sDot_sDDot_des, acc_task_star, ...
                                  JDot_nu, ConstraintsMatrix_feet, biasVectorConstraint_feet, ...
-                                 w_H_l_sole, w_H_r_sole, Sat, Config) 
+                                 w_H_l_sole, w_H_r_sole, Sat, Config, ROBOT_DOF) 
     
     
     if feetInContact(1) > 0.1 && feetInContact(2) > 0.1 %Both feet in contact
@@ -110,22 +110,24 @@ function [Hessian,gradient,ConstraintMatrix_equality,biasVectorConstraint_equali
         weightLeftFoot  = Sat.weightSwingFoot; %weights(3);
         weightRightFoot = Sat.weightSwingFoot; %weights(3);
     end
-    Sat.weightTasks = diag([ones(3,1) * 1; %weightCoM, constant 1;
+    
+    %Sat.
+    weightTasks = diag([ones(3,1) * 1; %weightCoM, constant 1;
                             ones(3,1) * Sat.weightRotTask;
                             ones(6,1) * weightLeftFoot;
-                            ones(6,1) * weightRightFoot;
-                            ones(6,1) * Sat.weightLeftHand;
-                            ones(6,1) * Sat.weightRightHand]);
+                            ones(6,1) * weightRightFoot]);
+%                             ones(6,1) * Sat.weightLeftHand;
+%                             ones(6,1) * Sat.weightRightHand]);
                              
-    % Dimension of the joint space
-    ROBOT_DOF = size(s,1);  
+%     % Dimension of the joint space
+%     ROBOT_DOF = size(s,1);  
     
     % Separating constraints from the Jacobian J. Structure of J:
     %
     %    J = [J_leftFoot; J_rightFoot; J_CoM; J_rot_task]
     %
     J_c = [J(1:6, :)*feetInContact(1);
-           J(7:12,:)*feetInContact(2)];
+              J(7:12,:)*feetInContact(2)];
     
     % Computing desired joint accelerations
     sDDot_star =  s_sDot_sDDot_des(:,3) ...
@@ -163,18 +165,62 @@ function [Hessian,gradient,ConstraintMatrix_equality,biasVectorConstraint_equali
         ConstraintMatrix_equality     = J_invM_B;
         biasVectorConstraint_equality = acc_task_star_strict - JDot_nu_strict + J_invM_h;
         
-    else %use soft constraints
+    else %use soft tasks
         
         % Multiplier of u in the equality constraint equation and bias terms
         J_invM_B  = J*invM*B;
         J_invM_h  = J*invM*h;
         
-        Hessian  =   transpose(J_invM_B) * transpose(Sat.weightTasks) * Sat.weightTasks * J_invM_B ...
+        %decompose cartesian tasks
+        J_invM_B_CoM = J_invM_B(1:3, :);
+        J_invM_h_CoM = J_invM_h(1:3, :);
+        JDot_nu_CoM  = JDot_nu(1:3);
+        acc_task_star_CoM = acc_task_star(1:3);
+        
+        J_invM_B_RotTask = J_invM_B(4:6, :);
+        J_invM_h_RotTask = J_invM_h(4:6, :);
+        JDot_nu_RotTask  = JDot_nu(4:6);
+        acc_task_star_RotTask = acc_task_star(4:6);
+        
+        J_invM_B_lfoot = J_invM_B(7:12,:);
+        J_invM_h_lfoot = J_invM_h(7:12,:);
+        JDot_nu_lfoot  = JDot_nu(7:12);
+        acc_task_star_lfoot = acc_task_star(7:12);
+        
+        J_invM_B_rfoot = J_invM_B(13:18,:);
+        J_invM_h_rfoot = J_invM_h(13:18,:);
+        JDot_nu_rfoot  = JDot_nu(13:18);
+        acc_task_star_rfoot = acc_task_star(13:18);
+        
+        J_invM_B_lhand = J_invM_B(19:21,:);
+        J_invM_h_lhand = J_invM_h(19:21,:);
+        JDot_nu_lhand = JDot_nu(19:21);
+        acc_task_star_lhand = acc_task_star(19:21);
+        
+        J_invM_B_rhand = J_invM_B(25:27,:);
+        J_invM_h_rhand = J_invM_h(25:27,:);
+        JDot_nu_rhand = JDot_nu(25:27);
+        acc_task_star_rhand = acc_task_star(25:27);
+        %
+
+        
+        Hessian  =   Sat.weightCoM * transpose(J_invM_B_CoM) * J_invM_B_CoM ...
+                   + Sat.weightRotTask * transpose(J_invM_B_RotTask) * J_invM_B_RotTask ...
+                   + weightLeftFoot * transpose(J_invM_B_lfoot) * J_invM_B_lfoot ...
+                   + weightRightFoot * transpose(J_invM_B_rfoot) * J_invM_B_rfoot ...
+                   + Sat.weightLeftHand * transpose(J_invM_B_lhand) * J_invM_B_lhand ...
+                   + Sat.weightRightHand * transpose(J_invM_B_rhand) * J_invM_B_rhand ...
                    + Sat.weightPostural  * transpose(St_invM_B) * St_invM_B ...
                    + Sat.weight_tau      * transpose(S_tau) * S_tau;
-                              
-        gradient =   transpose(J_invM_B) * transpose(Sat.weightTasks) * (JDot_nu  - acc_task_star - J_invM_h) ...
-                   - Sat.weightPostural  * transpose(St_invM_B)*(St_invM_h + sDDot_star);
+               
+        gradient =   Sat.weightCoM * transpose(J_invM_B_CoM) * (JDot_nu_CoM - J_invM_h_CoM - acc_task_star_CoM) ...
+                   + Sat.weightRotTask * transpose(J_invM_B_RotTask) * (JDot_nu_RotTask - J_invM_h_RotTask - acc_task_star_RotTask) ...
+                   + weightLeftFoot * transpose(J_invM_B_lfoot) * (JDot_nu_lfoot - J_invM_h_lfoot - acc_task_star_lfoot) ...
+                   + weightRightFoot * transpose(J_invM_B_rfoot) * (JDot_nu_rfoot - J_invM_h_rfoot - acc_task_star_rfoot) ...
+                   + Sat.weightLeftHand * transpose(J_invM_B_lhand) * (JDot_nu_lhand - J_invM_h_lhand - acc_task_star_lhand) ...
+                   + Sat.weightRightHand * transpose(J_invM_B_rhand) * (JDot_nu_rhand - J_invM_h_rhand - acc_task_star_rhand) ...
+                   + Sat.weightPostural  * transpose(St_invM_B)*( - St_invM_h - sDDot_star);      
+
         
         % Equality constraints - basically, nothing
         ConstraintMatrix_equality     = zeros(size(J_invM_B));
