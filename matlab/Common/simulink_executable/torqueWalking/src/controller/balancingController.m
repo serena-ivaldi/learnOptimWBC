@@ -95,39 +95,27 @@ function [Hessian,gradient,ConstraintMatrix_equality,biasVectorConstraint_equali
                                  dampings, s, sDot, s_sDot_sDDot_des, acc_task_star, ...
                                  JDot_nu, ConstraintsMatrix_feet, biasVectorConstraint_feet, ...
                                  w_H_l_sole, w_H_r_sole, Sat, Config, ROBOT_DOF) 
-    
-    
-    if feetInContact(1) > 0.1 && feetInContact(2) > 0.1 %Both feet in contact
-        weightLeftFoot  = Sat.weightStanceFoot; %weights(2);
-        weightRightFoot = Sat.weightStanceFoot; %weights(2);
-    elseif feetInContact(1) > 0.1 && feetInContact(2) < 0.1 %Only left foot in contact
-        weightLeftFoot  = Sat.weightStanceFoot; %weights(2);
-        weightRightFoot = Sat.weightSwingFoot; %weights(3);
-    elseif feetInContact(1) < 0.1 && feetInContact(2) > 0.1 %Only right foot in contact
-        weightLeftFoot  = Sat.weightSwingFoot; %weights(3);
-        weightRightFoot = Sat.weightStanceFoot; %weights(2);
-    else %Both feet in the air
-        weightLeftFoot  = Sat.weightSwingFoot; %weights(3);
-        weightRightFoot = Sat.weightSwingFoot; %weights(3);
+        
+    % adjust weights for the feet tasks depending on whether the foot
+    % is in contact with the ground or not
+    if feetInContact(1) > 0.1
+        weightLeftFoot  = Sat.weightStanceFoot;
+    else
+        weightLeftFoot  = Sat.weightSwingFoot;
+    end
+    if feetInContact(2) > 0.1
+        weightRightFoot  = Sat.weightStanceFoot;
+    else
+        weightRightFoot  = Sat.weightSwingFoot;
     end
     
-    %Sat.
-    weightTasks = diag([ones(3,1) * 1; %weightCoM, constant 1;
-                            ones(3,1) * Sat.weightRotTask;
-                            ones(6,1) * weightLeftFoot;
-                            ones(6,1) * weightRightFoot]);
-%                             ones(6,1) * Sat.weightLeftHand;
-%                             ones(6,1) * Sat.weightRightHand]);
-                             
-%     % Dimension of the joint space
-%     ROBOT_DOF = size(s,1);  
-    
+
     % Separating constraints from the Jacobian J. Structure of J:
     %
     %    J = [J_leftFoot; J_rightFoot; J_CoM; J_rot_task]
     %
     J_c = [J(1:6, :)*feetInContact(1);
-              J(7:12,:)*feetInContact(2)];
+           J(7:12,:)*feetInContact(2)];
     
     % Computing desired joint accelerations
     sDDot_star =  s_sDot_sDDot_des(:,3) ...
@@ -171,7 +159,7 @@ function [Hessian,gradient,ConstraintMatrix_equality,biasVectorConstraint_equali
         J_invM_B  = J*invM*B;
         J_invM_h  = J*invM*h;
         
-        %decompose cartesian tasks
+        % decompose cartesian tasks
         J_invM_B_CoM = J_invM_B(1:3, :);
         J_invM_h_CoM = J_invM_h(1:3, :);
         JDot_nu_CoM  = JDot_nu(1:3);
@@ -203,25 +191,23 @@ function [Hessian,gradient,ConstraintMatrix_equality,biasVectorConstraint_equali
         acc_task_star_rhand = acc_task_star(25:27);
         %
 
-        
-        Hessian  =   Sat.weightCoM * transpose(J_invM_B_CoM) * J_invM_B_CoM ...
-                   + Sat.weightRotTask * transpose(J_invM_B_RotTask) * J_invM_B_RotTask ...
-                   + weightLeftFoot * transpose(J_invM_B_lfoot) * J_invM_B_lfoot ...
-                   + weightRightFoot * transpose(J_invM_B_rfoot) * J_invM_B_rfoot ...
-                   + Sat.weightLeftHand * transpose(J_invM_B_lhand) * J_invM_B_lhand ...
-                   + Sat.weightRightHand * transpose(J_invM_B_rhand) * J_invM_B_rhand ...
+        Hessian  =   Sat.weightCoM       * transpose(J_invM_B_CoM)    * J_invM_B_CoM ...
+                   + Sat.weightRotTask   * transpose(J_invM_B_RotTask)* J_invM_B_RotTask ...
+                   + weightLeftFoot      * transpose(J_invM_B_lfoot)  * J_invM_B_lfoot ...
+                   + weightRightFoot     * transpose(J_invM_B_rfoot)  * J_invM_B_rfoot ...
+                   + Sat.weightLeftHand  * transpose(J_invM_B_lhand)  * J_invM_B_lhand ...
+                   + Sat.weightRightHand * transpose(J_invM_B_rhand)  * J_invM_B_rhand ...
                    + Sat.weightPostural  * transpose(St_invM_B) * St_invM_B ...
                    + Sat.weight_tau      * transpose(S_tau) * S_tau;
                
-        gradient =   Sat.weightCoM * transpose(J_invM_B_CoM) * (JDot_nu_CoM - J_invM_h_CoM - acc_task_star_CoM) ...
-                   + Sat.weightRotTask * transpose(J_invM_B_RotTask) * (JDot_nu_RotTask - J_invM_h_RotTask - acc_task_star_RotTask) ...
-                   + weightLeftFoot * transpose(J_invM_B_lfoot) * (JDot_nu_lfoot - J_invM_h_lfoot - acc_task_star_lfoot) ...
-                   + weightRightFoot * transpose(J_invM_B_rfoot) * (JDot_nu_rfoot - J_invM_h_rfoot - acc_task_star_rfoot) ...
-                   + Sat.weightLeftHand * transpose(J_invM_B_lhand) * (JDot_nu_lhand - J_invM_h_lhand - acc_task_star_lhand) ...
+        gradient =   Sat.weightCoM       * transpose(J_invM_B_CoM) * (JDot_nu_CoM - J_invM_h_CoM - acc_task_star_CoM) ...
+                   + Sat.weightRotTask   * transpose(J_invM_B_RotTask) * (JDot_nu_RotTask - J_invM_h_RotTask - acc_task_star_RotTask) ...
+                   + weightLeftFoot      * transpose(J_invM_B_lfoot) * (JDot_nu_lfoot - J_invM_h_lfoot - acc_task_star_lfoot) ...
+                   + weightRightFoot     * transpose(J_invM_B_rfoot) * (JDot_nu_rfoot - J_invM_h_rfoot - acc_task_star_rfoot) ...
+                   + Sat.weightLeftHand  * transpose(J_invM_B_lhand) * (JDot_nu_lhand - J_invM_h_lhand - acc_task_star_lhand) ...
                    + Sat.weightRightHand * transpose(J_invM_B_rhand) * (JDot_nu_rhand - J_invM_h_rhand - acc_task_star_rhand) ...
                    + Sat.weightPostural  * transpose(St_invM_B)*( - St_invM_h - sDDot_star);      
 
-        
         % Equality constraints - basically, nothing
         ConstraintMatrix_equality     = zeros(size(J_invM_B));
         biasVectorConstraint_equality = zeros(size(acc_task_star));    
