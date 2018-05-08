@@ -207,7 +207,11 @@ function QPInverseKinematics(block)
         %% ------------------------------------------------------------- %%
         %% QP optimization procedure using qpOASES 
         %% ------------------------------------------------------------- %%
-        [nuDot,~,exitFlagQP,~,~,~] = qpOASES(H,g,A,[],[],lbA,ubA);     
+        if norm(A) < 1e-4 %when using soft task priorities, constraints are null
+            [nuDot,~,exitFlagQP,~,~,~] = qpOASES(H,g,[],[],[],[],[]);
+        else
+            [nuDot,~,exitFlagQP,~,~,~] = qpOASES(H,g,A,[],[],lbA,ubA);     
+        end
     
         % in case of QP errors, do not move! this implies to send zero
         % accelerations as reference
