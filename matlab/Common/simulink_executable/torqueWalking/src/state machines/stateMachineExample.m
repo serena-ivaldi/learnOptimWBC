@@ -41,7 +41,7 @@
 
 %% --- Initialization ---
 function [state, references_CoM, references_LFoot, references_RFoot, references_rot_task, references_LHand, references_RHand, feetInContact, references_s, w_H_b] = stateMachineExample ...
-             (s_0, w_H_CoM_0, w_H_LFoot_0, w_H_RFoot_0, w_H_rot_task_0, w_H_LHand_0, w_H_RHand_0, t, LFoot_H_b, RFoot_H_b, LFoot_wrench, RFoot_wrench, Config)
+             (s_0, w_H_CoM_0, w_H_LFoot_0, w_H_RFoot_0, w_H_rot_task, w_H_rot_task_0, w_H_LHand_0, w_H_RHand_0, t, LFoot_H_b, RFoot_H_b, LFoot_wrench, RFoot_wrench, Config)
           
      persistent currentState t_switch w_H_fixed_link stance_foot
      
@@ -68,11 +68,22 @@ function [state, references_CoM, references_LFoot, references_RFoot, references_
                             w_H_RFoot_0(1:3,1:3),    zeros(3,2)];
      references_rot_task = [w_H_rot_task_0(1:3,1:3), zeros(3,2)];
      
-     %We want to hands to be at a constant position
-     references_LHand    = [w_H_LHand_0(1:3,4),      zeros(3,4);
-                            w_H_LHand_0(1:3,1:3),    zeros(3,2)];
-     references_RHand    = [w_H_RHand_0(1:3,4),      zeros(3,4);
-                            w_H_RHand_0(1:3,1:3),    zeros(3,2)];
+     %We want to hands to be at a constant position with respect to the
+     %rot_task frame (because with respect to the world just does not make
+     %sense)
+     %initial position of the hand with respect to the neck -- we want to
+     %keep this distance constant
+     rot_task_H_LHand_0 = transpose(w_H_rot_task_0) *  w_H_LHand_0;
+     rot_task_H_RHand_0 = transpose(w_H_rot_task_0) *  w_H_RHand_0;
+     %Desired position of the hand with respect to the world is obtained by
+     %taking into account the current rot_task frame position
+     w_H_LHand_des = w_H_rot_task * rot_task_H_LHand_0;
+     w_H_RHand_des = w_H_rot_task * rot_task_H_RHand_0;
+     
+     references_LHand    = [w_H_LHand_des(1:3,4),     zeros(3,4);
+                                          w_H_LHand_des(1:3, 1:3), zeros(3,2)];
+     references_RHand    = [w_H_RHand_des(1:3,4),      zeros(3,4);
+                                          w_H_RHand_des(1:3,1:3),    zeros(3,2)];
     
      % Feet in contact
      feetInContact = [1,1];

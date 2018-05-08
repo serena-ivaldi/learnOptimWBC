@@ -87,15 +87,8 @@ Sat.weightCoM        = 1; %weightCoM is not included since it is set to be a con
 Sat.weightRotTask    = weightRotTask;
 Sat.weightStanceFoot = weightStanceFoot;
 Sat.weightSwingFoot  = weightSwingFoot;
-Sat.weightLeftHand   = 0; %put to 0 if you don't want to let hands move freely
-Sat.weightRightHand  = 0; %put to 0 if you don't want to let hands move freely
-Sat.weightTasks      = zeros(3 + 3 + 6*4); %Matrix of all the weights, of the shape
-% Sat.weightTasks = diag([ones(3,1) * 1; %weightCoM, constant;
-%                         ones(3,1) * weightRotTask; %weights(1); %
-%                         ones(6,1) * weightStanceFoot; %weights(2); %
-%                         ones(6,1) * weightSwingFoot; %weights(3); %
-%                         ones(6,1) * Sat.weightLeftHand; %constant, 0
-%                         ones(6,1) * Sat.weightRightHand]); %constant, 0
+Sat.weightLeftHand   = 0; %set to 0 if you don't want to let hands move freely
+Sat.weightRightHand  = 0; %set to 0 if you don't want to let hands move freely
 
 % Weight for the postural minimization task
 Sat.weightPostural = weightPostural; %0.001; weights(4); %
@@ -230,7 +223,7 @@ Gains.Kp_rot_task = [20, 20, 20; ...  % state = 1 two feet balancing
 Gains.Kd_rot_task =  2*sqrt(Gains.Kp_rot_task); 
 
 % Hand position and velocity gains
-Gains.Kp_LHand = 0*[50, 50, 50, 30, 30, 30; ... % state = 1 two feet balancing
+Gains.Kp_LHand = 0.001*[50, 50, 50, 30, 30, 30; ... % state = 1 two feet balancing
                   50, 50, 50, 30, 30, 30; ... % state = 2 move CoM on left foot
                   50, 50, 50, 30, 30, 30; ... % state = 3 left foot balancing
                   50, 50, 50, 30, 30, 30; ... % state = 4 prepare for switching
@@ -238,7 +231,7 @@ Gains.Kp_LHand = 0*[50, 50, 50, 30, 30, 30; ... % state = 1 two feet balancing
               
 Gains.Kd_LHand = 2*sqrt(Gains.Kp_LHand);
 
-Gains.Kp_RHand = 0*[50, 50, 50, 30, 30, 30; ... % state = 1 two feet balancing
+Gains.Kp_RHand = 0.001*[50, 50, 50, 30, 30, 30; ... % state = 1 two feet balancing
                   50, 50, 50, 30, 30, 30; ... % state = 2 move CoM on left foot
                   50, 50, 50, 30, 30, 30; ... % state = 3 left foot balancing
                   50, 50, 50, 30, 30, 30; ... % state = 4 prepare for switching
