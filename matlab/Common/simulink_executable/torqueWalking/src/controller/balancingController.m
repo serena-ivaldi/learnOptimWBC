@@ -132,8 +132,8 @@ function [Hessian,gradient,ConstraintMatrix_equality,biasVectorConstraint_equali
     St_invM_h = St*invM*h;
     
     % Hessian matrix for minimizing also joint torques
-    S_tau     = [zeros(ROBOT_DOF,12) eye(ROBOT_DOF)];
-    
+    S_tau  = [zeros(ROBOT_DOF,12) eye(ROBOT_DOF)];
+        
     % Hessian matrix and gradient for QP solver
     if Config.QP_USE_STRICT_TASK_PRIORITIES
         
@@ -159,54 +159,54 @@ function [Hessian,gradient,ConstraintMatrix_equality,biasVectorConstraint_equali
         J_invM_B  = J*invM*B;
         J_invM_h  = J*invM*h;
         
-        % decompose cartesian tasks
-        J_invM_B_CoM = J_invM_B(1:3, :);
-        J_invM_h_CoM = J_invM_h(1:3, :);
-        JDot_nu_CoM  = JDot_nu(1:3);
-        acc_task_star_CoM = acc_task_star(1:3);
+        % decompose cartesian tasks        
+        J_invM_B_lfoot = J_invM_B(1:6,:);
+        J_invM_h_lfoot = J_invM_h(1:6,:);
+        JDot_nu_lfoot  = JDot_nu(1:6);
+        acc_task_star_lfoot = acc_task_star(1:6);
         
-        J_invM_B_RotTask = J_invM_B(4:6, :);
-        J_invM_h_RotTask = J_invM_h(4:6, :);
-        JDot_nu_RotTask  = JDot_nu(4:6);
-        acc_task_star_RotTask = acc_task_star(4:6);
+        J_invM_B_rfoot = J_invM_B(7:12,:);
+        J_invM_h_rfoot = J_invM_h(7:12,:);
+        JDot_nu_rfoot  = JDot_nu(7:12);
+        acc_task_star_rfoot = acc_task_star(7:12);
         
-        J_invM_B_lfoot = J_invM_B(7:12,:);
-        J_invM_h_lfoot = J_invM_h(7:12,:);
-        JDot_nu_lfoot  = JDot_nu(7:12);
-        acc_task_star_lfoot = acc_task_star(7:12);
+        J_invM_B_CoM = J_invM_B(13:15, :);
+        J_invM_h_CoM = J_invM_h(13:15, :);
+        JDot_nu_CoM  = JDot_nu(13:15);
+        acc_task_star_CoM = acc_task_star(13:15);
         
-        J_invM_B_rfoot = J_invM_B(13:18,:);
-        J_invM_h_rfoot = J_invM_h(13:18,:);
-        JDot_nu_rfoot  = JDot_nu(13:18);
-        acc_task_star_rfoot = acc_task_star(13:18);
+        J_invM_B_RotTask = J_invM_B(16:18, :);
+        J_invM_h_RotTask = J_invM_h(16:18, :);
+        JDot_nu_RotTask  = JDot_nu(16:18);
+        acc_task_star_RotTask = acc_task_star(16:18);
         
-        J_invM_B_lhand = J_invM_B(19:21,:);
-        J_invM_h_lhand = J_invM_h(19:21,:);
-        JDot_nu_lhand = JDot_nu(19:21);
-        acc_task_star_lhand = acc_task_star(19:21);
+        J_invM_B_lhand = J_invM_B(19:24,:); %19:21 if only position; 19:24 if position + orientation
+        J_invM_h_lhand = J_invM_h(19:24,:);
+        JDot_nu_lhand  = JDot_nu(19:24);
+        acc_task_star_lhand = acc_task_star(19:24);
         
-        J_invM_B_rhand = J_invM_B(25:27,:);
-        J_invM_h_rhand = J_invM_h(25:27,:);
-        JDot_nu_rhand = JDot_nu(25:27);
-        acc_task_star_rhand = acc_task_star(25:27);
+        J_invM_B_rhand = J_invM_B(25:30,:); %25:27 if only position; 25:30 if position + orientation
+        J_invM_h_rhand = J_invM_h(25:30,:);
+        JDot_nu_rhand  = JDot_nu(25:30);
+        acc_task_star_rhand = acc_task_star(25:30);
         %
 
-        Hessian  =   Sat.weightCoM       * transpose(J_invM_B_CoM)    * J_invM_B_CoM ...
-                   + Sat.weightRotTask   * transpose(J_invM_B_RotTask)* J_invM_B_RotTask ...
-                   + weightLeftFoot      * transpose(J_invM_B_lfoot)  * J_invM_B_lfoot ...
+        Hessian  =   weightLeftFoot      * transpose(J_invM_B_lfoot)  * J_invM_B_lfoot ...
                    + weightRightFoot     * transpose(J_invM_B_rfoot)  * J_invM_B_rfoot ...
+                   + Sat.weightCoM       * transpose(J_invM_B_CoM)    * J_invM_B_CoM ...
+                   + Sat.weightRotTask   * transpose(J_invM_B_RotTask)* J_invM_B_RotTask ...
                    + Sat.weightLeftHand  * transpose(J_invM_B_lhand)  * J_invM_B_lhand ...
                    + Sat.weightRightHand * transpose(J_invM_B_rhand)  * J_invM_B_rhand ...
-                   + Sat.weightPostural  * transpose(St_invM_B) * St_invM_B ...
-                   + Sat.weight_tau      * transpose(S_tau) * S_tau;
+                   + Sat.weightPostural  * transpose(St_invM_B)       * St_invM_B ...
+                   + Sat.weight_tau      * transpose(S_tau)           * S_tau;
                
-        gradient =   Sat.weightCoM       * transpose(J_invM_B_CoM) * (JDot_nu_CoM - J_invM_h_CoM - acc_task_star_CoM) ...
+        gradient =   weightLeftFoot      * transpose(J_invM_B_lfoot)   * (JDot_nu_lfoot - J_invM_h_lfoot - acc_task_star_lfoot) ...
+                   + weightRightFoot     * transpose(J_invM_B_rfoot)   * (JDot_nu_rfoot - J_invM_h_rfoot - acc_task_star_rfoot) ...
+                   + Sat.weightCoM       * transpose(J_invM_B_CoM)     * (JDot_nu_CoM - J_invM_h_CoM - acc_task_star_CoM) ...
                    + Sat.weightRotTask   * transpose(J_invM_B_RotTask) * (JDot_nu_RotTask - J_invM_h_RotTask - acc_task_star_RotTask) ...
-                   + weightLeftFoot      * transpose(J_invM_B_lfoot) * (JDot_nu_lfoot - J_invM_h_lfoot - acc_task_star_lfoot) ...
-                   + weightRightFoot     * transpose(J_invM_B_rfoot) * (JDot_nu_rfoot - J_invM_h_rfoot - acc_task_star_rfoot) ...
-                   + Sat.weightLeftHand  * transpose(J_invM_B_lhand) * (JDot_nu_lhand - J_invM_h_lhand - acc_task_star_lhand) ...
-                   + Sat.weightRightHand * transpose(J_invM_B_rhand) * (JDot_nu_rhand - J_invM_h_rhand - acc_task_star_rhand) ...
-                   + Sat.weightPostural  * transpose(St_invM_B)*( - St_invM_h - sDDot_star);      
+                   + Sat.weightLeftHand  * transpose(J_invM_B_lhand)   * (JDot_nu_lhand - J_invM_h_lhand - acc_task_star_lhand) ...
+                   + Sat.weightRightHand * transpose(J_invM_B_rhand)   * (JDot_nu_rhand - J_invM_h_rhand - acc_task_star_rhand) ...
+                   + Sat.weightPostural  * transpose(St_invM_B)        * (- St_invM_h - sDDot_star);      
 
         % Equality constraints - basically, nothing
         ConstraintMatrix_equality     = zeros(size(J_invM_B));

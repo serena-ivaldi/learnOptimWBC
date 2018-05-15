@@ -5,7 +5,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.714"
+    ComputedModelVersion    "1.743"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -48,24 +48,24 @@ Model {
       }
       Array {
 	Type			"Simulink.EditorInfo"
-	Dimension		10
+	Dimension		6
 	Object {
 	  $ObjectID		  5
-	  IsActive		  [0]
+	  IsActive		  [1]
 	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "6977"
+	  LoadSaveID		  "4420"
 	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [1.0495049504950495]
-	  Offset		  [177.23872346698113, 80.660377358490564]
+	  ZoomFactor		  [0.5]
+	  Offset		  [60.1626766913289, 395.15221928653409]
 	}
 	Object {
 	  $ObjectID		  6
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4439"
+	  LoadSaveID		  "4129"
 	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [1.25]
-	  Offset		  [31.033333333333644, 648.65296406776974]
+	  ZoomFactor		  [1.0]
+	  Offset		  [662.04802476819214, 156.3083860984691]
 	}
 	Object {
 	  $ObjectID		  7
@@ -74,70 +74,34 @@ Model {
 	  LoadSaveID		  "4258"
 	  Extents		  [1275.0, 558.0]
 	  ZoomFactor		  [0.48094373865698731]
-	  Offset		  [-1514.219861514176, -225.10943396226412]
+	  Offset		  [-1514.2688679245282, -225.10943396226412]
 	}
 	Object {
 	  $ObjectID		  8
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4678"
-	  Extents		  [1275.0, 623.0]
-	  ZoomFactor		  [0.6]
-	  Offset		  [-257.88825172634768, -47.131848397037288]
+	  LoadSaveID		  "4176"
+	  Extents		  [1275.0, 558.0]
+	  ZoomFactor		  [1.25]
+	  Offset		  [112.60000000000002, 232.60000000000002]
 	}
 	Object {
 	  $ObjectID		  9
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4184"
+	  LoadSaveID		  "4343"
 	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [0.8]
-	  Offset		  [501.86848958333303, 508.5643164376113]
+	  ZoomFactor		  [2.0]
+	  Offset		  [-81.158675078864377, -27.16876971608832]
 	}
 	Object {
 	  $ObjectID		  10
 	  IsActive		  [0]
-	  ViewObjType		  "SimulinkTopLevel"
-	  LoadSaveID		  "0"
+	  ViewObjType		  "SimulinkSubsys"
+	  LoadSaveID		  "5513"
 	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [0.71526099074824856]
-	  Offset		  [-498.78305366282973, -119.56153912561473]
-	}
-	Object {
-	  $ObjectID		  11
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4129"
-	  Extents		  [1275.0, 623.0]
-	  ZoomFactor		  [1.0]
-	  Offset		  [211.40619555470823, 228.05848805350468]
-	}
-	Object {
-	  $ObjectID		  12
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4524"
-	  Extents		  [1275.0, 623.0]
-	  ZoomFactor		  [1.0]
-	  Offset		  [613.33949835458225, 310.993976842033]
-	}
-	Object {
-	  $ObjectID		  13
-	  IsActive		  [1]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4161"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [1.25]
-	  Offset		  [896.09813577251271, 538.437900450607]
-	}
-	Object {
-	  $ObjectID		  14
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4343"
-	  Extents		  [1275.0, 623.0]
-	  ZoomFactor		  [2.0]
-	  Offset		  [-81.158675078864377, -27.168769716088335]
+	  ZoomFactor		  [0.4720812182741117]
+	  Offset		  [-529.45754716981128, -518.20377358490566]
 	}
 	PropName		"EditorsInfo"
       }
@@ -149,9 +113,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "mcharbonneau"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue May 08 21:58:27 2018"
-  RTWModifiedTimeStamp	  447717505
-  ModelVersionFormat	  "1.%<AutoIncrement:714>"
+  LastModifiedDate	  "Tue May 15 17:53:10 2018"
+  RTWModifiedTimeStamp	  448307589
+  ModelVersionFormat	  "1.%<AutoIncrement:743>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -186,7 +150,7 @@ Model {
   TryForcingSFcnDF	  off
   Object {
     $PropName		    "DataLoggingOverride"
-    $ObjectID		    16
+    $ObjectID		    12
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
     model_		    "torqueWalkingR2012b"
     overrideMode_	    [0.0]
@@ -244,13 +208,13 @@ Model {
     Type		    "Handle"
     Dimension		    1
     Simulink.ConfigSet {
-      $ObjectID		      17
+      $ObjectID		      13
       Version		      "1.12.1"
       Array {
 	Type			"Handle"
 	Dimension		8
 	Simulink.SolverCC {
-	  $ObjectID		  18
+	  $ObjectID		  14
 	  Version		  "1.12.1"
 	  StartTime		  "0.0"
 	  StopTime		  "Config.t_end"
@@ -285,7 +249,7 @@ Model {
 	  InsertRTBMode		  "Whenever possible"
 	}
 	Simulink.DataIOCC {
-	  $ObjectID		  19
+	  $ObjectID		  15
 	  Version		  "1.12.1"
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
@@ -317,7 +281,7 @@ Model {
 	  Refine		  "1"
 	}
 	Simulink.OptimizationCC {
-	  $ObjectID		  20
+	  $ObjectID		  16
 	  Version		  "1.12.1"
 	  Array {
 	    Type		    "Cell"
@@ -369,7 +333,7 @@ Model {
 	  AccelVerboseBuild	  off
 	}
 	Simulink.DebuggingCC {
-	  $ObjectID		  21
+	  $ObjectID		  17
 	  Version		  "1.12.1"
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
@@ -456,7 +420,7 @@ Model {
 	  ModelReferenceCSMismatchMessage "none"
 	}
 	Simulink.HardwareCC {
-	  $ObjectID		  22
+	  $ObjectID		  18
 	  Version		  "1.12.1"
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
@@ -492,7 +456,7 @@ Model {
 	  ProdEqTarget		  on
 	}
 	Simulink.ModelReferenceCC {
-	  $ObjectID		  23
+	  $ObjectID		  19
 	  Version		  "1.12.1"
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
 	  CheckModelReferenceTargetMessage "error"
@@ -507,7 +471,7 @@ Model {
 	  SupportModelReferenceSimTargetCustomCode off
 	}
 	Simulink.SFSimCC {
-	  $ObjectID		  24
+	  $ObjectID		  20
 	  Version		  "1.12.1"
 	  SFSimEcho		  on
 	  SimCtrlC		  on
@@ -518,7 +482,7 @@ Model {
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
-	  $ObjectID		  25
+	  $ObjectID		  21
 	  Version		  "1.12.1"
 	  Array {
 	    Type		    "Cell"
@@ -582,7 +546,7 @@ Model {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
-	      $ObjectID		      26
+	      $ObjectID		      22
 	      Version		      "1.12.1"
 	      Array {
 		Type			"Cell"
@@ -655,7 +619,7 @@ Model {
 	    }
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
-	      $ObjectID		      27
+	      $ObjectID		      23
 	      Version		      "1.12.1"
 	      Array {
 		Type			"Cell"
@@ -743,11 +707,11 @@ Model {
   }
   Simulink.ConfigSet {
     $PropName		    "ActiveConfigurationSet"
-    $ObjectID		    17
+    $ObjectID		    13
   }
   Object {
     $PropName		    "DataTransfer"
-    $ObjectID		    29
+    $ObjectID		    25
     $ClassName		    "Simulink.GlobalDataTransfer"
     DefaultTransitionBetweenSyncTasks "Ensure deterministic transfer (maximum delay)"
     DefaultTransitionBetweenAsyncTasks "Ensure data integrity only"
@@ -1108,7 +1072,7 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "72"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "7073"
+    SIDHighWatermark	    "7085"
     Block {
       BlockType		      SubSystem
       Name		      "Balancing Controller (Reactive QP control)"
@@ -1133,7 +1097,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"72"
+	ZoomFactor		"100"
 	Block {
 	  BlockType		  Inport
 	  Name			  "s"
@@ -1293,7 +1257,7 @@ Model {
 	  Variant		  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    30
+	    $ObjectID		    26
 	    $ClassName		    "Simulink.Mask"
 	    Type		    "Stateflow"
 	    Description		    "Embedded MATLAB block"
@@ -1318,7 +1282,7 @@ Model {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
-	    SIDHighWatermark	    "7073"
+	    SIDHighWatermark	    "7085"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "feetInContact"
@@ -2484,7 +2448,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"125"
+	ZoomFactor		"80"
 	Block {
 	  BlockType		  Inport
 	  Name			  "s"
@@ -2661,7 +2625,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "100"
+	    ZoomFactor		    "125"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "nu"
@@ -3527,7 +3491,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    31
+		    $ObjectID		    27
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -3552,7 +3516,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7073"
+		    SIDHighWatermark	    "7085"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "M"
@@ -4579,7 +4543,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    32
+		    $ObjectID		    28
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -4604,7 +4568,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7073"
+		    SIDHighWatermark	    "7085"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "J_LeftFoot"
@@ -5076,7 +5040,7 @@ Model {
 	  Name			  "Inverse Kinematics"
 	  SID			  "4258"
 	  Ports			  [18, 1, 1]
-	  Position		  [1550, 459, 1805, 926]
+	  Position		  [1550, 458, 1805, 927]
 	  ZOrder		  102
 	  BackgroundColor	  "[0.584314, 0.341176, 1.000000]"
 	  RequestExecContextInheritance	off
@@ -5100,7 +5064,7 @@ Model {
 	      BlockType		      Inport
 	      Name		      "pos_vel_acc_CoM_des"
 	      SID		      "4259"
-	      Position		      [-375, -12, -345, 2]
+	      Position		      [-375, 68, -345, 82]
 	      ZOrder		      104
 	      IconDisplay	      "Port number"
 	    }
@@ -5108,7 +5072,7 @@ Model {
 	      BlockType		      Inport
 	      Name		      "pose_vel_acc_LFoot_des"
 	      SID		      "4260"
-	      Position		      [-375, 28, -345, 42]
+	      Position		      [-375, -12, -345, 2]
 	      ZOrder		      108
 	      Port		      "2"
 	      IconDisplay	      "Port number"
@@ -5117,7 +5081,7 @@ Model {
 	      BlockType		      Inport
 	      Name		      "pose_vel_acc_RFoot_des"
 	      SID		      "4261"
-	      Position		      [-375, 68, -345, 82]
+	      Position		      [-375, 28, -345, 42]
 	      ZOrder		      109
 	      Port		      "3"
 	      IconDisplay	      "Port number"
@@ -5153,7 +5117,7 @@ Model {
 	      BlockType		      Inport
 	      Name		      "Kp_Kd_CoM"
 	      SID		      "4263"
-	      Position		      [-375, 468, -345, 482]
+	      Position		      [-375, 548, -345, 562]
 	      ZOrder		      107
 	      Port		      "7"
 	      IconDisplay	      "Port number"
@@ -5162,7 +5126,7 @@ Model {
 	      BlockType		      Inport
 	      Name		      "Kp_Kd_LFoot"
 	      SID		      "4264"
-	      Position		      [-375, 508, -345, 522]
+	      Position		      [-375, 468, -345, 482]
 	      ZOrder		      112
 	      Port		      "8"
 	      IconDisplay	      "Port number"
@@ -5171,7 +5135,7 @@ Model {
 	      BlockType		      Inport
 	      Name		      "Kp_Kd_RFoot"
 	      SID		      "4265"
-	      Position		      [-375, 548, -345, 562]
+	      Position		      [-375, 508, -345, 522]
 	      ZOrder		      111
 	      Port		      "9"
 	      IconDisplay	      "Port number"
@@ -5206,9 +5170,9 @@ Model {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "feetInContact"
-	      SID		      "4268"
-	      Position		      [-375, 733, -345, 747]
-	      ZOrder		      100
+	      SID		      "7078"
+	      Position		      [-375, 708, -345, 722]
+	      ZOrder		      959
 	      Port		      "13"
 	      IconDisplay	      "Port number"
 	    }
@@ -5331,7 +5295,7 @@ Model {
 	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		33
+		$ObjectID		29
 		$ClassName		"Simulink.Mask"
 		Type			"Stateflow"
 		Description		"Embedded MATLAB block"
@@ -5356,30 +5320,30 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"7073"
-		Block {
-		  BlockType		  Inport
-		  Name			  "pos_vel_acc_CoM_des"
-		  SID			  "4279::1"
-		  Position		  [20, 101, 40, 119]
-		  ZOrder		  -1
-		  IconDisplay		  "Port number"
-		}
+		SIDHighWatermark	"7085"
 		Block {
 		  BlockType		  Inport
 		  Name			  "pose_vel_acc_LFoot_des"
 		  SID			  "4279::22"
-		  Position		  [20, 136, 40, 154]
+		  Position		  [20, 101, 40, 119]
 		  ZOrder		  13
-		  Port			  "2"
 		  IconDisplay		  "Port number"
 		}
 		Block {
 		  BlockType		  Inport
 		  Name			  "pose_vel_acc_RFoot_des"
 		  SID			  "4279::23"
-		  Position		  [20, 171, 40, 189]
+		  Position		  [20, 136, 40, 154]
 		  ZOrder		  14
+		  Port			  "2"
+		  IconDisplay		  "Port number"
+		}
+		Block {
+		  BlockType		  Inport
+		  Name			  "pos_vel_acc_CoM_des"
+		  SID			  "4279::1"
+		  Position		  [20, 171, 40, 189]
+		  ZOrder		  -1
 		  Port			  "3"
 		  IconDisplay		  "Port number"
 		}
@@ -5412,28 +5376,28 @@ Model {
 		}
 		Block {
 		  BlockType		  Inport
-		  Name			  "pos_vel_CoM"
-		  SID			  "4279::25"
-		  Position		  [20, 316, 40, 334]
-		  ZOrder		  16
-		  Port			  "7"
-		  IconDisplay		  "Port number"
-		}
-		Block {
-		  BlockType		  Inport
 		  Name			  "pose_vel_LFoot"
 		  SID			  "4279::28"
-		  Position		  [20, 351, 40, 369]
+		  Position		  [20, 316, 40, 334]
 		  ZOrder		  18
-		  Port			  "8"
+		  Port			  "7"
 		  IconDisplay		  "Port number"
 		}
 		Block {
 		  BlockType		  Inport
 		  Name			  "pose_vel_RFoot"
 		  SID			  "4279::29"
-		  Position		  [20, 386, 40, 404]
+		  Position		  [20, 351, 40, 369]
 		  ZOrder		  19
+		  Port			  "8"
+		  IconDisplay		  "Port number"
+		}
+		Block {
+		  BlockType		  Inport
+		  Name			  "pos_vel_CoM"
+		  SID			  "4279::25"
+		  Position		  [20, 386, 40, 404]
+		  ZOrder		  16
 		  Port			  "9"
 		  IconDisplay		  "Port number"
 		}
@@ -5466,28 +5430,28 @@ Model {
 		}
 		Block {
 		  BlockType		  Inport
-		  Name			  "Kp_Kd_CoM"
-		  SID			  "4279::31"
-		  Position		  [20, 531, 40, 549]
-		  ZOrder		  21
-		  Port			  "13"
-		  IconDisplay		  "Port number"
-		}
-		Block {
-		  BlockType		  Inport
 		  Name			  "Kp_Kd_LFoot"
 		  SID			  "4279::32"
-		  Position		  [20, 566, 40, 584]
+		  Position		  [20, 531, 40, 549]
 		  ZOrder		  22
-		  Port			  "14"
+		  Port			  "13"
 		  IconDisplay		  "Port number"
 		}
 		Block {
 		  BlockType		  Inport
 		  Name			  "Kp_Kd_RFoot"
 		  SID			  "4279::33"
-		  Position		  [20, 606, 40, 624]
+		  Position		  [20, 566, 40, 584]
 		  ZOrder		  23
+		  Port			  "14"
+		  IconDisplay		  "Port number"
+		}
+		Block {
+		  BlockType		  Inport
+		  Name			  "Kp_Kd_CoM"
+		  SID			  "4279::31"
+		  Position		  [20, 606, 40, 624]
+		  ZOrder		  21
 		  Port			  "15"
 		  IconDisplay		  "Port number"
 		}
@@ -5570,19 +5534,19 @@ Model {
 		  IconDisplay		  "Port number"
 		}
 		Line {
-		  SrcBlock		  "pos_vel_acc_CoM_des"
+		  SrcBlock		  "pose_vel_acc_LFoot_des"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  1
 		}
 		Line {
-		  SrcBlock		  "pose_vel_acc_LFoot_des"
+		  SrcBlock		  "pose_vel_acc_RFoot_des"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  2
 		}
 		Line {
-		  SrcBlock		  "pose_vel_acc_RFoot_des"
+		  SrcBlock		  "pos_vel_acc_CoM_des"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  3
@@ -5606,19 +5570,19 @@ Model {
 		  DstPort		  6
 		}
 		Line {
-		  SrcBlock		  "pos_vel_CoM"
+		  SrcBlock		  "pose_vel_LFoot"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  7
 		}
 		Line {
-		  SrcBlock		  "pose_vel_LFoot"
+		  SrcBlock		  "pose_vel_RFoot"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  8
 		}
 		Line {
-		  SrcBlock		  "pose_vel_RFoot"
+		  SrcBlock		  "pos_vel_CoM"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  9
@@ -5642,19 +5606,19 @@ Model {
 		  DstPort		  12
 		}
 		Line {
-		  SrcBlock		  "Kp_Kd_CoM"
+		  SrcBlock		  "Kp_Kd_LFoot"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  13
 		}
 		Line {
-		  SrcBlock		  "Kp_Kd_LFoot"
+		  SrcBlock		  "Kp_Kd_RFoot"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  14
 		}
 		Line {
-		  SrcBlock		  "Kp_Kd_RFoot"
+		  SrcBlock		  "Kp_Kd_CoM"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  15
@@ -5734,12 +5698,12 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"67"
+		ZoomFactor		"100"
 		Block {
 		  BlockType		  Inport
 		  Name			  "J_LFoot"
 		  SID			  "4281"
-		  Position		  [125, -2, 155, 12]
+		  Position		  [125, -67, 155, -53]
 		  ZOrder		  117
 		  IconDisplay		  "Port number"
 		}
@@ -5747,7 +5711,7 @@ Model {
 		  BlockType		  Inport
 		  Name			  "J_RFoot"
 		  SID			  "4282"
-		  Position		  [125, 63, 155, 77]
+		  Position		  [125, -2, 155, 12]
 		  ZOrder		  118
 		  Port			  "2"
 		  IconDisplay		  "Port number"
@@ -5756,7 +5720,7 @@ Model {
 		  BlockType		  Inport
 		  Name			  "J_CoM"
 		  SID			  "4283"
-		  Position		  [125, -67, 155, -53]
+		  Position		  [125, 63, 155, 77]
 		  ZOrder		  119
 		  Port			  "3"
 		  IconDisplay		  "Port number"
@@ -5830,7 +5794,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    34
+		    $ObjectID		    30
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -5856,30 +5820,30 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7073"
-		    Block {
-		    BlockType		    Inport
-		    Name		    "vel_CoM"
-		    SID			    "4288::37"
-		    Position		    [20, 101, 40, 119]
-		    ZOrder		    28
-		    IconDisplay		    "Port number"
-		    }
+		    SIDHighWatermark	    "7085"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "vel_LFoot"
 		    SID			    "4288::38"
-		    Position		    [20, 136, 40, 154]
+		    Position		    [20, 101, 40, 119]
 		    ZOrder		    29
-		    Port		    "2"
 		    IconDisplay		    "Port number"
 		    }
 		    Block {
 		    BlockType		    Inport
 		    Name		    "vel_RFoot"
 		    SID			    "4288::39"
-		    Position		    [20, 171, 40, 189]
+		    Position		    [20, 136, 40, 154]
 		    ZOrder		    30
+		    Port		    "2"
+		    IconDisplay		    "Port number"
+		    }
+		    Block {
+		    BlockType		    Inport
+		    Name		    "vel_CoM"
+		    SID			    "4288::37"
+		    Position		    [20, 171, 40, 189]
+		    ZOrder		    28
 		    Port		    "3"
 		    IconDisplay		    "Port number"
 		    }
@@ -5912,28 +5876,28 @@ Model {
 		    }
 		    Block {
 		    BlockType		    Inport
-		    Name		    "w_H_CoM"
-		    SID			    "4288::49"
-		    Position		    [20, 316, 40, 334]
-		    ZOrder		    40
-		    Port		    "7"
-		    IconDisplay		    "Port number"
-		    }
-		    Block {
-		    BlockType		    Inport
 		    Name		    "w_H_l_sole"
 		    SID			    "4288::50"
-		    Position		    [20, 351, 40, 369]
+		    Position		    [20, 316, 40, 334]
 		    ZOrder		    41
-		    Port		    "8"
+		    Port		    "7"
 		    IconDisplay		    "Port number"
 		    }
 		    Block {
 		    BlockType		    Inport
 		    Name		    "w_H_r_sole"
 		    SID			    "4288::51"
-		    Position		    [20, 386, 40, 404]
+		    Position		    [20, 351, 40, 369]
 		    ZOrder		    42
+		    Port		    "8"
+		    IconDisplay		    "Port number"
+		    }
+		    Block {
+		    BlockType		    Inport
+		    Name		    "w_H_CoM"
+		    SID			    "4288::49"
+		    Position		    [20, 386, 40, 404]
+		    ZOrder		    40
 		    Port		    "9"
 		    IconDisplay		    "Port number"
 		    }
@@ -5987,15 +5951,15 @@ Model {
 		    EnableBusSupport	    on
 		    Port {
 		    PortNumber		    2
-		    Name		    "pos_vel_CoM"
-		    }
-		    Port {
-		    PortNumber		    3
 		    Name		    "pose_vel_LFoot"
 		    }
 		    Port {
-		    PortNumber		    4
+		    PortNumber		    3
 		    Name		    "pose_vel_RFoot"
+		    }
+		    Port {
+		    PortNumber		    4
+		    Name		    "pos_vel_CoM"
 		    }
 		    Port {
 		    PortNumber		    5
@@ -6019,27 +5983,27 @@ Model {
 		    }
 		    Block {
 		    BlockType		    Outport
-		    Name		    "pos_vel_CoM"
-		    SID			    "4288::41"
-		    Position		    [460, 101, 480, 119]
-		    ZOrder		    32
-		    IconDisplay		    "Port number"
-		    }
-		    Block {
-		    BlockType		    Outport
 		    Name		    "pose_vel_LFoot"
 		    SID			    "4288::42"
-		    Position		    [460, 136, 480, 154]
+		    Position		    [460, 101, 480, 119]
 		    ZOrder		    33
-		    Port		    "2"
 		    IconDisplay		    "Port number"
 		    }
 		    Block {
 		    BlockType		    Outport
 		    Name		    "pose_vel_RFoot"
 		    SID			    "4288::43"
-		    Position		    [460, 171, 480, 189]
+		    Position		    [460, 136, 480, 154]
 		    ZOrder		    34
+		    Port		    "2"
+		    IconDisplay		    "Port number"
+		    }
+		    Block {
+		    BlockType		    Outport
+		    Name		    "pos_vel_CoM"
+		    SID			    "4288::41"
+		    Position		    [460, 171, 480, 189]
+		    ZOrder		    32
 		    Port		    "3"
 		    IconDisplay		    "Port number"
 		    }
@@ -6071,19 +6035,19 @@ Model {
 		    IconDisplay		    "Port number"
 		    }
 		    Line {
-		    SrcBlock		    "vel_CoM"
+		    SrcBlock		    "vel_LFoot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    1
 		    }
 		    Line {
-		    SrcBlock		    "vel_LFoot"
+		    SrcBlock		    "vel_RFoot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    2
 		    }
 		    Line {
-		    SrcBlock		    "vel_RFoot"
+		    SrcBlock		    "vel_CoM"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    3
@@ -6107,19 +6071,19 @@ Model {
 		    DstPort		    6
 		    }
 		    Line {
-		    SrcBlock		    "w_H_CoM"
+		    SrcBlock		    "w_H_l_sole"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    7
 		    }
 		    Line {
-		    SrcBlock		    "w_H_l_sole"
+		    SrcBlock		    "w_H_r_sole"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    8
 		    }
 		    Line {
-		    SrcBlock		    "w_H_r_sole"
+		    SrcBlock		    "w_H_CoM"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    9
@@ -6143,18 +6107,10 @@ Model {
 		    DstPort		    12
 		    }
 		    Line {
-		    Name		    "pos_vel_CoM"
-		    Labels		    [0, 0]
-		    SrcBlock		    " SFunction "
-		    SrcPort		    2
-		    DstBlock		    "pos_vel_CoM"
-		    DstPort		    1
-		    }
-		    Line {
 		    Name		    "pose_vel_LFoot"
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
-		    SrcPort		    3
+		    SrcPort		    2
 		    DstBlock		    "pose_vel_LFoot"
 		    DstPort		    1
 		    }
@@ -6162,8 +6118,16 @@ Model {
 		    Name		    "pose_vel_RFoot"
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
-		    SrcPort		    4
+		    SrcPort		    3
 		    DstBlock		    "pose_vel_RFoot"
+		    DstPort		    1
+		    }
+		    Line {
+		    Name		    "pos_vel_CoM"
+		    Labels		    [0, 0]
+		    SrcBlock		    " SFunction "
+		    SrcPort		    4
+		    DstBlock		    "pos_vel_CoM"
 		    DstPort		    1
 		    }
 		    Line {
@@ -6215,7 +6179,7 @@ Model {
 		  Name			  "Product"
 		  SID			  "4289"
 		  Ports			  [2, 1]
-		  Position		  [270, -73, 325, -22]
+		  Position		  [270, 57, 325, 108]
 		  ZOrder		  132
 		  ShowName		  off
 		  Multiplication	  "Matrix(*)"
@@ -6229,7 +6193,7 @@ Model {
 		  Name			  "Product1"
 		  SID			  "4290"
 		  Ports			  [2, 1]
-		  Position		  [270, -8, 325, 43]
+		  Position		  [270, -73, 325, -22]
 		  ZOrder		  133
 		  ShowName		  off
 		  Multiplication	  "Matrix(*)"
@@ -6243,7 +6207,7 @@ Model {
 		  Name			  "Product2"
 		  SID			  "4291"
 		  Ports			  [2, 1]
-		  Position		  [270, 57, 325, 108]
+		  Position		  [270, -8, 325, 43]
 		  ZOrder		  134
 		  ShowName		  off
 		  Multiplication	  "Matrix(*)"
@@ -6317,12 +6281,12 @@ Model {
 		    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
-		    ZoomFactor		    "80"
+		    ZoomFactor		    "100"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "s"
 		    SID			    "4294"
-		    Position		    [650, 358, 680, 372]
+		    Position		    [650, 448, 680, 462]
 		    ZOrder		    581
 		    IconDisplay		    "Port number"
 		    }
@@ -6340,7 +6304,7 @@ Model {
 		    Name		    "CoM"
 		    SID			    "4296"
 		    Ports		    [2, 1]
-		    Position		    [795, 320, 960, 380]
+		    Position		    [795, 630, 960, 690]
 		    ZOrder		    583
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
@@ -6356,7 +6320,7 @@ Model {
 		    Name		    "LFoot"
 		    SID			    "4297"
 		    Ports		    [2, 1]
-		    Position		    [795, 415, 960, 475]
+		    Position		    [795, 410, 960, 470]
 		    ZOrder		    584
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
@@ -6372,7 +6336,7 @@ Model {
 		    Name		    "LFoot1"
 		    SID			    "6628"
 		    Ports		    [2, 1]
-		    Position		    [795, 740, 960, 800]
+		    Position		    [795, 855, 960, 915]
 		    ZOrder		    591
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
@@ -6404,7 +6368,7 @@ Model {
 		    Name		    "RFoot1"
 		    SID			    "6629"
 		    Ports		    [2, 1]
-		    Position		    [795, 845, 960, 905]
+		    Position		    [795, 960, 960, 1020]
 		    ZOrder		    592
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
@@ -6420,7 +6384,7 @@ Model {
 		    Name		    "rotational task"
 		    SID			    "4299"
 		    Ports		    [2, 1]
-		    Position		    [795, 625, 960, 685]
+		    Position		    [795, 740, 960, 800]
 		    ZOrder		    586
 		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
@@ -6433,19 +6397,10 @@ Model {
 		    }
 		    Block {
 		    BlockType		    Outport
-		    Name		    "w_H_CoM"
-		    SID			    "4300"
-		    Position		    [1020, 343, 1050, 357]
-		    ZOrder		    587
-		    IconDisplay		    "Port number"
-		    }
-		    Block {
-		    BlockType		    Outport
 		    Name		    "w_H_l_sole"
 		    SID			    "4301"
-		    Position		    [1020, 438, 1050, 452]
+		    Position		    [1020, 433, 1050, 447]
 		    ZOrder		    588
-		    Port		    "2"
 		    IconDisplay		    "Port number"
 		    }
 		    Block {
@@ -6454,6 +6409,15 @@ Model {
 		    SID			    "4302"
 		    Position		    [1020, 543, 1050, 557]
 		    ZOrder		    589
+		    Port		    "2"
+		    IconDisplay		    "Port number"
+		    }
+		    Block {
+		    BlockType		    Outport
+		    Name		    "w_H_CoM"
+		    SID			    "4300"
+		    Position		    [1020, 653, 1050, 667]
+		    ZOrder		    587
 		    Port		    "3"
 		    IconDisplay		    "Port number"
 		    }
@@ -6461,7 +6425,7 @@ Model {
 		    BlockType		    Outport
 		    Name		    "w_H_rot_task"
 		    SID			    "4303"
-		    Position		    [1020, 648, 1050, 662]
+		    Position		    [1020, 763, 1050, 777]
 		    ZOrder		    590
 		    Port		    "4"
 		    IconDisplay		    "Port number"
@@ -6470,7 +6434,7 @@ Model {
 		    BlockType		    Outport
 		    Name		    "w_H_l_hand"
 		    SID			    "6630"
-		    Position		    [1020, 763, 1050, 777]
+		    Position		    [1020, 878, 1050, 892]
 		    ZOrder		    593
 		    Port		    "5"
 		    IconDisplay		    "Port number"
@@ -6479,7 +6443,7 @@ Model {
 		    BlockType		    Outport
 		    Name		    "w_H_r_hand"
 		    SID			    "6631"
-		    Position		    [1020, 868, 1050, 882]
+		    Position		    [1020, 983, 1050, 997]
 		    ZOrder		    594
 		    Port		    "6"
 		    IconDisplay		    "Port number"
@@ -6489,11 +6453,11 @@ Model {
 		    SrcPort		    1
 		    Points		    [79, 0]
 		    Branch {
-		    Points		    [0, 95]
+		    Points		    [0, 110]
 		    Branch {
-		    Points		    [0, 105]
+		    Points		    [0, 110]
 		    Branch {
-		    Points		    [0, 105]
+		    Points		    [0, 110]
 		    Branch {
 		    DstBlock		    "rotational task"
 		    DstPort		    2
@@ -6509,6 +6473,11 @@ Model {
 		    DstBlock		    "LFoot1"
 		    DstPort		    2
 		    }
+		    }
+		    }
+		    Branch {
+		    DstBlock		    "CoM"
+		    DstPort		    2
 		    }
 		    }
 		    Branch {
@@ -6521,17 +6490,14 @@ Model {
 		    DstPort		    2
 		    }
 		    }
-		    Branch {
-		    DstBlock		    "CoM"
-		    DstPort		    2
-		    }
-		    }
 		    Line {
 		    SrcBlock		    "w_H_b"
 		    SrcPort		    1
 		    Points		    [48, 0]
 		    Branch {
-		    Points		    [0, 105]
+		    Points		    [0, 110]
+		    Branch {
+		    Points		    [0, 110]
 		    Branch {
 		    Points		    [0, 115]
 		    Branch {
@@ -6550,16 +6516,14 @@ Model {
 		    }
 		    }
 		    Branch {
-		    Points		    [0, -105]
-		    Branch {
-		    Points		    [0, -95]
 		    DstBlock		    "CoM"
 		    DstPort		    1
 		    }
+		    }
 		    Branch {
+		    Points		    [0, -110]
 		    DstBlock		    "LFoot"
 		    DstPort		    1
-		    }
 		    }
 		    Branch {
 		    DstBlock		    "RFoot"
@@ -6612,27 +6576,27 @@ Model {
 		}
 		Block {
 		  BlockType		  Outport
-		  Name			  "pos_vel_CoM"
-		  SID			  "4304"
-		  Position		  [955, -17, 985, -3]
-		  ZOrder		  127
-		  IconDisplay		  "Port number"
-		}
-		Block {
-		  BlockType		  Outport
 		  Name			  "pose_vel_LFoot"
 		  SID			  "4305"
-		  Position		  [955, 113, 985, 127]
+		  Position		  [955, -17, 985, -3]
 		  ZOrder		  128
-		  Port			  "2"
 		  IconDisplay		  "Port number"
 		}
 		Block {
 		  BlockType		  Outport
 		  Name			  "pose_vel_RFoot"
 		  SID			  "4306"
-		  Position		  [955, 243, 985, 257]
+		  Position		  [955, 113, 985, 127]
 		  ZOrder		  129
+		  Port			  "2"
+		  IconDisplay		  "Port number"
+		}
+		Block {
+		  BlockType		  Outport
+		  Name			  "pos_vel_CoM"
+		  SID			  "4304"
+		  Position		  [955, 243, 985, 257]
+		  ZOrder		  127
 		  Port			  "3"
 		  IconDisplay		  "Port number"
 		}
@@ -6665,19 +6629,19 @@ Model {
 		}
 		Line {
 		  SrcBlock		  "Compose Task Pose and Velocity"
-		  SrcPort		  3
+		  SrcPort		  2
 		  DstBlock		  "pose_vel_RFoot"
 		  DstPort		  1
 		}
 		Line {
 		  SrcBlock		  "Compose Task Pose and Velocity"
-		  SrcPort		  2
+		  SrcPort		  1
 		  DstBlock		  "pose_vel_LFoot"
 		  DstPort		  1
 		}
 		Line {
 		  SrcBlock		  "Compose Task Pose and Velocity"
-		  SrcPort		  1
+		  SrcPort		  3
 		  DstBlock		  "pos_vel_CoM"
 		  DstPort		  1
 		}
@@ -6706,20 +6670,20 @@ Model {
 		    Branch {
 		    Points		    [0, -65]
 		    Branch {
+		    DstBlock		    "Product"
+		    DstPort		    2
+		    }
+		    Branch {
 		    Points		    [0, -65]
 		    Branch {
+		    Points		    [0, -65]
 		    DstBlock		    "Product1"
 		    DstPort		    2
 		    }
 		    Branch {
-		    Points		    [0, -65]
-		    DstBlock		    "Product"
-		    DstPort		    2
-		    }
-		    }
-		    Branch {
 		    DstBlock		    "Product2"
 		    DstPort		    2
+		    }
 		    }
 		    }
 		    Branch {
@@ -6739,19 +6703,19 @@ Model {
 		  SrcBlock		  "Product"
 		  SrcPort		  1
 		  DstBlock		  "Compose Task Pose and Velocity"
-		  DstPort		  1
+		  DstPort		  3
 		}
 		Line {
 		  SrcBlock		  "Product1"
 		  SrcPort		  1
 		  DstBlock		  "Compose Task Pose and Velocity"
-		  DstPort		  2
+		  DstPort		  1
 		}
 		Line {
 		  SrcBlock		  "Product2"
 		  SrcPort		  1
 		  DstBlock		  "Compose Task Pose and Velocity"
-		  DstPort		  3
+		  DstPort		  2
 		}
 		Line {
 		  SrcBlock		  "Product3"
@@ -6773,6 +6737,12 @@ Model {
 		}
 		Line {
 		  SrcBlock		  "Task position and orientation"
+		  SrcPort		  3
+		  DstBlock		  "Compose Task Pose and Velocity"
+		  DstPort		  9
+		}
+		Line {
+		  SrcBlock		  "Task position and orientation"
 		  SrcPort		  1
 		  DstBlock		  "Compose Task Pose and Velocity"
 		  DstPort		  7
@@ -6782,12 +6752,6 @@ Model {
 		  SrcPort		  2
 		  DstBlock		  "Compose Task Pose and Velocity"
 		  DstPort		  8
-		}
-		Line {
-		  SrcBlock		  "Task position and orientation"
-		  SrcPort		  3
-		  DstBlock		  "Compose Task Pose and Velocity"
-		  DstPort		  9
 		}
 		Line {
 		  SrcBlock		  "Task position and orientation"
@@ -6870,15 +6834,6 @@ Model {
 	      MaskHideContents	      off
 	    }
 	    Block {
-	      BlockType		      Constant
-	      Name		      "Constant3"
-	      SID		      "4228"
-	      Position		      [-380, 707, -345, 723]
-	      ZOrder		      958
-	      ShowName		      off
-	      Value		      "[0,0]"
-	    }
-	    Block {
 	      BlockType		      SubSystem
 	      Name		      "Jacobians and JDot_nu"
 	      SID		      "4308"
@@ -6901,12 +6856,12 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"68"
+		ZoomFactor		"100"
 		Block {
 		  BlockType		  Inport
 		  Name			  "s"
 		  SID			  "4309"
-		  Position		  [575, 638, 605, 652]
+		  Position		  [575, 548, 605, 562]
 		  ZOrder		  104
 		  IconDisplay		  "Port number"
 		}
@@ -6914,7 +6869,7 @@ Model {
 		  BlockType		  Inport
 		  Name			  "w_H_b"
 		  SID			  "4310"
-		  Position		  [575, 528, 605, 542]
+		  Position		  [575, 588, 605, 602]
 		  ZOrder		  111
 		  Port			  "2"
 		  IconDisplay		  "Port number"
@@ -6923,7 +6878,7 @@ Model {
 		  BlockType		  Inport
 		  Name			  "nu_b"
 		  SID			  "4311"
-		  Position		  [1055, 578, 1085, 592]
+		  Position		  [1055, 1033, 1085, 1047]
 		  ZOrder		  109
 		  Port			  "3"
 		  IconDisplay		  "Port number"
@@ -6932,7 +6887,7 @@ Model {
 		  BlockType		  Inport
 		  Name			  "sDot"
 		  SID			  "4312"
-		  Position		  [1055, 448, 1085, 462]
+		  Position		  [1055, 928, 1085, 942]
 		  ZOrder		  110
 		  Port			  "4"
 		  IconDisplay		  "Port number"
@@ -6942,7 +6897,7 @@ Model {
 		  Name			  "DotJ Nu CoM"
 		  SID			  "4313"
 		  Ports			  [4, 1]
-		  Position		  [1160, 370, 1325, 465]
+		  Position		  [1160, 850, 1325, 945]
 		  ZOrder		  112
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
@@ -6958,7 +6913,7 @@ Model {
 		  Name			  "DotJ Nu LFoot"
 		  SID			  "4316"
 		  Ports			  [4, 1]
-		  Position		  [1160, 655, 1325, 750]
+		  Position		  [1160, 585, 1325, 680]
 		  ZOrder		  116
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
@@ -6974,7 +6929,7 @@ Model {
 		  Name			  "DotJ Nu LHand"
 		  SID			  "6638"
 		  Ports			  [4, 1]
-		  Position		  [1160, 905, 1325, 1000]
+		  Position		  [1160, 1110, 1325, 1205]
 		  ZOrder		  129
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
@@ -6990,7 +6945,7 @@ Model {
 		  Name			  "DotJ Nu RHand"
 		  SID			  "6639"
 		  Ports			  [4, 1]
-		  Position		  [1160, 1035, 1325, 1130]
+		  Position		  [1160, 1240, 1325, 1335]
 		  ZOrder		  128
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
@@ -7006,7 +6961,7 @@ Model {
 		  Name			  "DotJ Nu Rfoot"
 		  SID			  "4314"
 		  Ports			  [4, 1]
-		  Position		  [1160, 785, 1325, 880]
+		  Position		  [1160, 720, 1325, 815]
 		  ZOrder		  114
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
@@ -7022,7 +6977,7 @@ Model {
 		  Name			  "DotJ Nu rotational task"
 		  SID			  "4315"
 		  Ports			  [4, 1]
-		  Position		  [1160, 525, 1325, 620]
+		  Position		  [1160, 980, 1325, 1075]
 		  ZOrder		  115
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
@@ -7038,7 +6993,7 @@ Model {
 		  Name			  "Jacobian CoM"
 		  SID			  "4317"
 		  Ports			  [2, 1]
-		  Position		  [735, 430, 895, 485]
+		  Position		  [735, 765, 895, 820]
 		  ZOrder		  113
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
@@ -7070,7 +7025,7 @@ Model {
 		  Name			  "Jacobian LFoot1"
 		  SID			  "6634"
 		  Ports			  [2, 1]
-		  Position		  [735, 840, 895, 895]
+		  Position		  [735, 925, 895, 980]
 		  ZOrder		  126
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
@@ -7086,7 +7041,7 @@ Model {
 		  Name			  "Jacobian RFoot"
 		  SID			  "4319"
 		  Ports			  [2, 1]
-		  Position		  [735, 695, 895, 750]
+		  Position		  [735, 685, 895, 740]
 		  ZOrder		  119
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
@@ -7102,7 +7057,7 @@ Model {
 		  Name			  "Jacobian RFoot1"
 		  SID			  "6635"
 		  Ports			  [2, 1]
-		  Position		  [735, 930, 895, 985]
+		  Position		  [735, 1005, 895, 1060]
 		  ZOrder		  127
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
@@ -7118,7 +7073,7 @@ Model {
 		  Name			  "Jacobian rotational task"
 		  SID			  "4320"
 		  Ports			  [2, 1]
-		  Position		  [735, 520, 895, 575]
+		  Position		  [735, 845, 895, 900]
 		  ZOrder		  117
 		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
@@ -7141,7 +7096,7 @@ Model {
 		  BlockType		  Outport
 		  Name			  "J_RFoot"
 		  SID			  "4322"
-		  Position		  [925, 718, 955, 732]
+		  Position		  [925, 708, 955, 722]
 		  ZOrder		  108
 		  Port			  "2"
 		  IconDisplay		  "Port number"
@@ -7150,7 +7105,7 @@ Model {
 		  BlockType		  Outport
 		  Name			  "J_CoM"
 		  SID			  "4323"
-		  Position		  [925, 453, 955, 467]
+		  Position		  [925, 788, 955, 802]
 		  ZOrder		  105
 		  Port			  "3"
 		  IconDisplay		  "Port number"
@@ -7159,7 +7114,7 @@ Model {
 		  BlockType		  Outport
 		  Name			  "J_rot_task"
 		  SID			  "4324"
-		  Position		  [925, 543, 955, 557]
+		  Position		  [925, 868, 955, 882]
 		  ZOrder		  106
 		  Port			  "4"
 		  IconDisplay		  "Port number"
@@ -7168,7 +7123,7 @@ Model {
 		  BlockType		  Outport
 		  Name			  "J_LHand"
 		  SID			  "6636"
-		  Position		  [925, 863, 955, 877]
+		  Position		  [925, 948, 955, 962]
 		  ZOrder		  124
 		  Port			  "5"
 		  IconDisplay		  "Port number"
@@ -7177,7 +7132,7 @@ Model {
 		  BlockType		  Outport
 		  Name			  "J_RHand"
 		  SID			  "6637"
-		  Position		  [925, 953, 955, 967]
+		  Position		  [925, 1028, 955, 1042]
 		  ZOrder		  125
 		  Port			  "6"
 		  IconDisplay		  "Port number"
@@ -7186,7 +7141,7 @@ Model {
 		  BlockType		  Outport
 		  Name			  "JDot_nu_LFoot"
 		  SID			  "4325"
-		  Position		  [1385, 698, 1415, 712]
+		  Position		  [1385, 628, 1415, 642]
 		  ZOrder		  122
 		  Port			  "7"
 		  IconDisplay		  "Port number"
@@ -7195,7 +7150,7 @@ Model {
 		  BlockType		  Outport
 		  Name			  "JDot_nu_RFoot"
 		  SID			  "4326"
-		  Position		  [1385, 828, 1415, 842]
+		  Position		  [1385, 763, 1415, 777]
 		  ZOrder		  123
 		  Port			  "8"
 		  IconDisplay		  "Port number"
@@ -7204,7 +7159,7 @@ Model {
 		  BlockType		  Outport
 		  Name			  "JDot_nu_CoM"
 		  SID			  "4327"
-		  Position		  [1370, 413, 1400, 427]
+		  Position		  [1385, 893, 1415, 907]
 		  ZOrder		  120
 		  Port			  "9"
 		  IconDisplay		  "Port number"
@@ -7213,7 +7168,7 @@ Model {
 		  BlockType		  Outport
 		  Name			  "JDot_nu_rot_task"
 		  SID			  "4328"
-		  Position		  [1385, 568, 1415, 582]
+		  Position		  [1385, 1023, 1415, 1037]
 		  ZOrder		  121
 		  Port			  "10"
 		  IconDisplay		  "Port number"
@@ -7222,7 +7177,7 @@ Model {
 		  BlockType		  Outport
 		  Name			  "JDot_nu_LHand"
 		  SID			  "6640"
-		  Position		  [1385, 948, 1415, 962]
+		  Position		  [1385, 1153, 1415, 1167]
 		  ZOrder		  130
 		  Port			  "11"
 		  IconDisplay		  "Port number"
@@ -7231,7 +7186,7 @@ Model {
 		  BlockType		  Outport
 		  Name			  "JDot_nu_RHand"
 		  SID			  "6641"
-		  Position		  [1385, 1078, 1415, 1092]
+		  Position		  [1385, 1283, 1415, 1297]
 		  ZOrder		  131
 		  Port			  "12"
 		  IconDisplay		  "Port number"
@@ -7265,18 +7220,32 @@ Model {
 		  SrcPort		  1
 		  Points		  [56, 0]
 		  Branch {
-		    Points		    [0, 85]
+		    Points		    [0, 25]
 		    Branch {
-		    Points		    [0, 90]
+		    Points		    [0, 80]
 		    Branch {
-		    Points		    [0, 145]
+		    Points		    [0, 80]
 		    Branch {
-		    Points		    [0, 90]
+		    Points		    [0, 80]
+		    Branch {
+		    DstBlock		    "Jacobian rotational task"
+		    DstPort		    1
+		    }
+		    Branch {
+		    Points		    [0, 80]
+		    Branch {
+		    Points		    [0, 80]
 		    DstBlock		    "Jacobian RFoot1"
 		    DstPort		    1
 		    }
 		    Branch {
 		    DstBlock		    "Jacobian LFoot1"
+		    DstPort		    1
+		    }
+		    }
+		    }
+		    Branch {
+		    DstBlock		    "Jacobian CoM"
 		    DstPort		    1
 		    }
 		    }
@@ -7291,17 +7260,19 @@ Model {
 		    }
 		  }
 		  Branch {
-		    Points		    [0, -90]
+		    Points		    [331, 0]
 		    Branch {
-		    Points		    [0, -65; 331, 0]
+		    Points		    [0, 135]
 		    Branch {
-		    Points		    [0, 155]
+		    Points		    [0, 130]
+		    Branch {
+		    DstBlock		    "DotJ Nu CoM"
+		    DstPort		    1
+		    }
 		    Branch {
 		    Points		    [0, 130]
 		    Branch {
 		    Points		    [0, 130]
-		    Branch {
-		    Points		    [0, 120]
 		    Branch {
 		    DstBlock		    "DotJ Nu LHand"
 		    DstPort		    1
@@ -7309,16 +7280,6 @@ Model {
 		    Branch {
 		    Points		    [0, 130]
 		    DstBlock		    "DotJ Nu RHand"
-		    DstPort		    1
-		    }
-		    }
-		    Branch {
-		    DstBlock		    "DotJ Nu Rfoot"
-		    DstPort		    1
-		    }
-		    }
-		    Branch {
-		    DstBlock		    "DotJ Nu LFoot"
 		    DstPort		    1
 		    }
 		    }
@@ -7327,19 +7288,16 @@ Model {
 		    DstPort		    1
 		    }
 		    }
-		    Branch {
-		    DstBlock		    "DotJ Nu CoM"
-		    DstPort		    1
-		    }
 		    }
 		    Branch {
-		    DstBlock		    "Jacobian CoM"
+		    DstBlock		    "DotJ Nu Rfoot"
 		    DstPort		    1
 		    }
-		  }
-		  Branch {
-		    DstBlock		    "Jacobian rotational task"
+		    }
+		    Branch {
+		    DstBlock		    "DotJ Nu LFoot"
 		    DstPort		    1
+		    }
 		  }
 		}
 		Line {
@@ -7347,13 +7305,21 @@ Model {
 		  SrcPort		  1
 		  Points		  [37, 0]
 		  Branch {
-		    Points		    [0, 155]
+		    Points		    [0, -130]
 		    Branch {
+		    Points		    [0, -135]
+		    DstBlock		    "DotJ Nu LFoot"
+		    DstPort		    4
+		    }
+		    Branch {
+		    DstBlock		    "DotJ Nu Rfoot"
+		    DstPort		    4
+		    }
+		  }
+		  Branch {
 		    Points		    [0, 130]
 		    Branch {
 		    Points		    [0, 130]
-		    Branch {
-		    Points		    [0, 120]
 		    Branch {
 		    Points		    [0, 130]
 		    DstBlock		    "DotJ Nu RHand"
@@ -7361,16 +7327,6 @@ Model {
 		    }
 		    Branch {
 		    DstBlock		    "DotJ Nu LHand"
-		    DstPort		    4
-		    }
-		    }
-		    Branch {
-		    DstBlock		    "DotJ Nu Rfoot"
-		    DstPort		    4
-		    }
-		    }
-		    Branch {
-		    DstBlock		    "DotJ Nu LFoot"
 		    DstPort		    4
 		    }
 		    }
@@ -7387,18 +7343,9 @@ Model {
 		Line {
 		  SrcBlock		  "nu_b"
 		  SrcPort		  1
-		  Points		  [16, 0]
+		  Points		  [17, 0]
 		  Branch {
-		    Points		    [0, -155]
-		    DstBlock		    "DotJ Nu CoM"
-		    DstPort		    3
-		  }
-		  Branch {
-		    Points		    [0, 130; 1, 0]
-		    Branch {
 		    Points		    [0, 130]
-		    Branch {
-		    Points		    [0, 120]
 		    Branch {
 		    DstBlock		    "DotJ Nu LHand"
 		    DstPort		    3
@@ -7408,6 +7355,15 @@ Model {
 		    DstBlock		    "DotJ Nu RHand"
 		    DstPort		    3
 		    }
+		  }
+		  Branch {
+		    Points		    [0, -130]
+		    Branch {
+		    Points		    [0, -130]
+		    Branch {
+		    Points		    [0, -135]
+		    DstBlock		    "DotJ Nu LFoot"
+		    DstPort		    3
 		    }
 		    Branch {
 		    DstBlock		    "DotJ Nu Rfoot"
@@ -7415,7 +7371,7 @@ Model {
 		    }
 		    }
 		    Branch {
-		    DstBlock		    "DotJ Nu LFoot"
+		    DstBlock		    "DotJ Nu CoM"
 		    DstPort		    3
 		    }
 		  }
@@ -7431,11 +7387,19 @@ Model {
 		  Branch {
 		    Points		    [0, 90]
 		    Branch {
-		    Points		    [0, 85]
+		    Points		    [0, 80]
 		    Branch {
-		    Points		    [0, 60]
+		    Points		    [0, 80]
 		    Branch {
-		    Points		    [0, 90]
+		    Points		    [0, 80]
+		    Branch {
+		    DstBlock		    "Jacobian rotational task"
+		    DstPort		    2
+		    }
+		    Branch {
+		    Points		    [0, 80]
+		    Branch {
+		    Points		    [0, 80]
 		    DstBlock		    "Jacobian RFoot1"
 		    DstPort		    2
 		    }
@@ -7444,10 +7408,36 @@ Model {
 		    DstPort		    2
 		    }
 		    }
+		    }
 		    Branch {
-		    Points		    [341, 0]
+		    DstBlock		    "Jacobian CoM"
+		    DstPort		    2
+		    }
+		    }
 		    Branch {
-		    Points		    [0, 120]
+		    DstBlock		    "Jacobian RFoot"
+		    DstPort		    2
+		    }
+		    }
+		    Branch {
+		    DstBlock		    "Jacobian LFoot"
+		    DstPort		    2
+		    }
+		  }
+		  Branch {
+		    Points		    [341, 0; 0, 65]
+		    Branch {
+		    Points		    [0, 135]
+		    Branch {
+		    Points		    [0, 130]
+		    Branch {
+		    DstBlock		    "DotJ Nu CoM"
+		    DstPort		    2
+		    }
+		    Branch {
+		    Points		    [0, 130]
+		    Branch {
+		    Points		    [0, 130]
 		    Branch {
 		    DstBlock		    "DotJ Nu LHand"
 		    DstPort		    2
@@ -7459,50 +7449,20 @@ Model {
 		    }
 		    }
 		    Branch {
+		    DstBlock		    "DotJ Nu rotational task"
+		    DstPort		    2
+		    }
+		    }
+		    }
+		    Branch {
 		    DstBlock		    "DotJ Nu Rfoot"
 		    DstPort		    2
 		    }
-		    Branch {
-		    Points		    [0, -130]
+		    }
 		    Branch {
 		    DstBlock		    "DotJ Nu LFoot"
 		    DstPort		    2
 		    }
-		    Branch {
-		    Points		    [0, -130]
-		    Branch {
-		    DstBlock		    "DotJ Nu rotational task"
-		    DstPort		    2
-		    }
-		    Branch {
-		    Points		    [0, -155]
-		    DstBlock		    "DotJ Nu CoM"
-		    DstPort		    2
-		    }
-		    }
-		    }
-		    }
-		    }
-		    Branch {
-		    DstBlock		    "Jacobian RFoot"
-		    DstPort		    2
-		    }
-		  }
-		  Branch {
-		    Points		    [0, -85]
-		    Branch {
-		    Points		    [0, -90]
-		    DstBlock		    "Jacobian CoM"
-		    DstPort		    2
-		    }
-		    Branch {
-		    DstBlock		    "Jacobian rotational task"
-		    DstPort		    2
-		    }
-		  }
-		  Branch {
-		    DstBlock		    "Jacobian LFoot"
-		    DstPort		    2
 		  }
 		}
 		Line {
@@ -7625,12 +7585,12 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"109"
+		ZoomFactor		"100"
 		Block {
 		  BlockType		  Inport
 		  Name			  "q_0"
 		  SID			  "4334"
-		  Position		  [1745, 894, 1775, 906]
+		  Position		  [1745, 889, 1775, 901]
 		  ZOrder		  666
 		  IconDisplay		  "Port number"
 		}
@@ -7638,7 +7598,7 @@ Model {
 		  BlockType		  Inport
 		  Name			  "nu_0"
 		  SID			  "4335"
-		  Position		  [1745, 854, 1775, 866]
+		  Position		  [1745, 849, 1775, 861]
 		  ZOrder		  667
 		  Port			  "2"
 		  IconDisplay		  "Port number"
@@ -7721,7 +7681,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    35
+		    $ObjectID		    31
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -7747,7 +7707,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7073"
+		    SIDHighWatermark	    "7085"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "s"
@@ -8017,11 +7977,27 @@ Model {
 		  MaskHideContents	  off
 		}
 		Block {
+		  BlockType		  Reference
+		  Name			  "DoFs converter1"
+		  SID			  "7074"
+		  Ports			  [1, 5]
+		  Position		  [1990, 1008, 2085, 1102]
+		  ZOrder		  709
+		  LibraryVersion	  "1.383"
+		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
+		  SourceType		  "DoFs converter"
+		  yarp2WBIOption	  "From WBI to YARP"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
+		}
+		Block {
 		  BlockType		  SubSystem
 		  Name			  "QP Solver (inverse kinematics)"
 		  SID			  "4343"
 		  Ports			  [4, 2]
-		  Position		  [1505, 722, 1670, 1113]
+		  Position		  [1505, 717, 1670, 1113]
 		  ZOrder		  677
 		  RequestExecContextInheritance	off
 		  Variant		  off
@@ -8147,6 +8123,63 @@ Model {
 		  MaskHideContents	  off
 		}
 		Block {
+		  BlockType		  Scope
+		  Name			  "QP output"
+		  SID			  "7076"
+		  Ports			  [6]
+		  Position		  [2120, 1010, 2225, 1120]
+		  ZOrder		  711
+		  NumInputPorts		  "6"
+		  Open			  off
+		  TimeRange		  14
+		  TickLabels		  OneTimeTick
+		  ShowLegends		  on
+		  LimitDataPoints	  off
+		  MaxDataPoints		  5000
+		  SaveToWorkspace	  off
+		  SaveName		  ScopeData1
+		  YMin			  "-0.16835~-0.01382~-0.00545~-0.54834~-0.44991~-1.00000"
+		  YMax			  "0.09227~0.00494~0.01312~0.27362~0.25517~1.00000"
+		  SampleInput		  off
+		  SampleTime		  -1
+		  ZoomMode		  on
+		  Grid			  on
+		  DataFormat		  StructureWithTime
+		  Decimation		  1
+		  List {
+		    ListType		    AxesTitles
+		    axes1		    "Torso"
+		    axes2		    "Left Arm"
+		    axes3		    "Right Arm"
+		    axes4		    "Left Leg"
+		    axes5		    "Right Leg"
+		    axes6		    "State"
+		  }
+		  List {
+		    ListType		    ScopeGraphics
+		    FigureColor		    "[0.156862745098039 0.156862745098039 0.156862745098039]"
+		    AxesColor		    "[0 0 0]"
+		    AxesTickColor	    "[0.686274509803922 0.686274509803922 0.686274509803922]"
+		    LineColors		    "[1 1 0;1 0 1;0 1 1;1 0 0;0 1 0;0 0 1]"
+		    LineStyles		    "-|-|-|-|-|-"
+		    LineWidths		    "[0.5 0.5 0.5 0.5 0.5 0.5]"
+		    MarkerStyles	    "none|none|none|none|none|none"
+		  }
+		  Location		  [61 111 1362 767]
+		}
+		Block {
+		  BlockType		  Selector
+		  Name			  "Selector1"
+		  SID			  "7075"
+		  Ports			  [1, 1]
+		  Position		  [1905, 1045, 1945, 1065]
+		  ZOrder		  710
+		  InputPortWidth	  "ROBOT_DOF+6"
+		  IndexOptions		  "Index vector (dialog)"
+		  Indices		  "[7:29]"
+		  OutputSizes		  "1"
+		}
+		Block {
 		  BlockType		  Selector
 		  Name			  "Selector3"
 		  SID			  "4351"
@@ -8164,7 +8197,7 @@ Model {
 		  Name			  "inverse kinematics integration"
 		  SID			  "4352"
 		  Ports			  [3, 3]
-		  Position		  [1820, 803, 1980, 917]
+		  Position		  [1820, 798, 1980, 912]
 		  ZOrder		  675
 		  RequestExecContextInheritance	off
 		  Variant		  off
@@ -8225,7 +8258,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    36
+		    $ObjectID		    32
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -8250,7 +8283,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7073"
+		    SIDHighWatermark	    "7085"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "pose_b"
@@ -8485,7 +8518,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    37
+		    $ObjectID		    33
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -8511,7 +8544,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7073"
+		    SIDHighWatermark	    "7085"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "w_H_b_0"
@@ -8611,7 +8644,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    38
+		    $ObjectID		    34
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -8637,7 +8670,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7073"
+		    SIDHighWatermark	    "7085"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "pose_b"
@@ -8955,7 +8988,7 @@ Model {
 		  BlockType		  Outport
 		  Name			  "s_sDot_sDDot_des"
 		  SID			  "4370"
-		  Position		  [2075, 893, 2105, 907]
+		  Position		  [2075, 888, 2105, 902]
 		  ZOrder		  669
 		  IconDisplay		  "Port number"
 		}
@@ -8981,7 +9014,7 @@ Model {
 		  BlockType		  Outport
 		  Name			  "q"
 		  SID			  "4373"
-		  Position		  [2075, 853, 2105, 867]
+		  Position		  [2075, 848, 2105, 862]
 		  ZOrder		  670
 		  Port			  "4"
 		  IconDisplay		  "Port number"
@@ -8990,7 +9023,7 @@ Model {
 		  BlockType		  Outport
 		  Name			  "nu"
 		  SID			  "4374"
-		  Position		  [2075, 813, 2105, 827]
+		  Position		  [2075, 808, 2105, 822]
 		  ZOrder		  671
 		  Port			  "5"
 		  IconDisplay		  "Port number"
@@ -9012,12 +9045,17 @@ Model {
 		  SrcPort		  1
 		  Points		  [19, 0]
 		  Branch {
-		    Points		    [0, -50]
-		    DstBlock		    "nuDot"
+		    Points		    [0, 240]
+		    DstBlock		    "Selector1"
 		    DstPort		    1
 		  }
 		  Branch {
 		    DstBlock		    "inverse kinematics integration"
+		    DstPort		    1
+		  }
+		  Branch {
+		    Points		    [0, -45]
+		    DstBlock		    "nuDot"
 		    DstPort		    1
 		  }
 		}
@@ -9078,7 +9116,7 @@ Model {
 		    DstPort		    1
 		  }
 		  Branch {
-		    Points		    [0, -190]
+		    Points		    [0, -185]
 		    DstBlock		    "Selector3"
 		    DstPort		    1
 		  }
@@ -9093,8 +9131,16 @@ Model {
 		Line {
 		  SrcBlock		  "QP Solver (inverse kinematics)"
 		  SrcPort		  2
-		  DstBlock		  "ExitFlagQP"
-		  DstPort		  1
+		  Points		  [7, 0]
+		  Branch {
+		    Points		    [0, 114; 421, 0; 0, -14]
+		    DstBlock		    "QP output"
+		    DstPort		    6
+		  }
+		  Branch {
+		    DstBlock		    "ExitFlagQP"
+		    DstPort		    1
+		  }
 		}
 		Line {
 		  SrcBlock		  "inverse kinematics integration"
@@ -9105,7 +9151,7 @@ Model {
 		    DstPort		    1
 		  }
 		  Branch {
-		    Points		    [0, -178; -936, 0; 0, 138]
+		    Points		    [0, -173; -936, 0; 0, 138]
 		    DstBlock		    "Compute QP Hessian, gradient and constraints "
 		    DstPort		    2
 		  }
@@ -9133,6 +9179,42 @@ Model {
 		  SrcPort		  1
 		  DstBlock		  "Compute QP Hessian, gradient and constraints "
 		  DstPort		  9
+		}
+		Line {
+		  SrcBlock		  "Selector1"
+		  SrcPort		  1
+		  DstBlock		  "DoFs converter1"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "DoFs converter1"
+		  SrcPort		  1
+		  DstBlock		  "QP output"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "DoFs converter1"
+		  SrcPort		  2
+		  DstBlock		  "QP output"
+		  DstPort		  2
+		}
+		Line {
+		  SrcBlock		  "DoFs converter1"
+		  SrcPort		  3
+		  DstBlock		  "QP output"
+		  DstPort		  3
+		}
+		Line {
+		  SrcBlock		  "DoFs converter1"
+		  SrcPort		  4
+		  DstBlock		  "QP output"
+		  DstPort		  4
+		}
+		Line {
+		  SrcBlock		  "DoFs converter1"
+		  SrcPort		  5
+		  DstBlock		  "QP output"
+		  DstPort		  5
 		}
 	      }
 	      RTWSystemCode	      "Auto"
@@ -9243,7 +9325,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"100"
+		ZoomFactor		"80"
 		Block {
 		  BlockType		  Inport
 		  Name			  "s_sDot_sDDot_ref"
@@ -10542,25 +10624,25 @@ Model {
 	      SrcBlock		      "Kp_Kd_CoM"
 	      SrcPort		      1
 	      DstBlock		      "Compute tasks accelerations"
-	      DstPort		      13
+	      DstPort		      15
 	    }
 	    Line {
 	      SrcBlock		      "Kp_Kd_LFoot"
 	      SrcPort		      1
 	      DstBlock		      "Compute tasks accelerations"
-	      DstPort		      14
+	      DstPort		      13
 	    }
 	    Line {
 	      SrcBlock		      "pose_vel_acc_LFoot_des"
 	      SrcPort		      1
 	      DstBlock		      "Compute tasks accelerations"
-	      DstPort		      2
+	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "Kp_Kd_RFoot"
 	      SrcPort		      1
 	      DstBlock		      "Compute tasks accelerations"
-	      DstPort		      15
+	      DstPort		      14
 	    }
 	    Line {
 	      SrcBlock		      "orient_vel_acc_rot_task_des"
@@ -10572,7 +10654,7 @@ Model {
 	      SrcBlock		      "pose_vel_acc_RFoot_des"
 	      SrcPort		      1
 	      DstBlock		      "Compute tasks accelerations"
-	      DstPort		      3
+	      DstPort		      2
 	    }
 	    Line {
 	      SrcBlock		      "Kp_Kd_rot_task"
@@ -10584,7 +10666,13 @@ Model {
 	      SrcBlock		      "pos_vel_acc_CoM_des"
 	      SrcPort		      1
 	      DstBlock		      "Compute tasks accelerations"
-	      DstPort		      1
+	      DstPort		      3
+	    }
+	    Line {
+	      SrcBlock		      "ComputeTasksPoseAndVelocity"
+	      SrcPort		      3
+	      DstBlock		      "Compute tasks accelerations"
+	      DstPort		      9
 	    }
 	    Line {
 	      SrcBlock		      "ComputeTasksPoseAndVelocity"
@@ -10597,12 +10685,6 @@ Model {
 	      SrcPort		      2
 	      DstBlock		      "Compute tasks accelerations"
 	      DstPort		      8
-	    }
-	    Line {
-	      SrcBlock		      "ComputeTasksPoseAndVelocity"
-	      SrcPort		      3
-	      DstBlock		      "Compute tasks accelerations"
-	      DstPort		      9
 	    }
 	    Line {
 	      SrcBlock		      "ComputeTasksPoseAndVelocity"
@@ -10769,7 +10851,7 @@ Model {
 	    Line {
 	      SrcBlock		      "QP-Based Inverse Kinematics"
 	      SrcPort		      5
-	      Points		      [9, 0; 0, 340; -1064, 0]
+	      Points		      [47, 0; 0, 340; -1102, 0]
 	      Branch {
 		Points			[0, -370]
 		DstBlock		"ComputeTasksPoseAndVelocity"
@@ -10871,12 +10953,6 @@ Model {
 		DstBlock		"Jacobians and JDot_nu"
 		DstPort			1
 	      }
-	    }
-	    Line {
-	      SrcBlock		      "Constant3"
-	      SrcPort		      1
-	      DstBlock		      "Compute tasks accelerations"
-	      DstPort		      19
 	    }
 	    Line {
 	      SrcBlock		      "ON_GAZEBO\n8"
@@ -10988,9 +11064,16 @@ Model {
 	    Line {
 	      SrcBlock		      "feetInContact"
 	      SrcPort		      1
-	      Points		      [68, 0; 0, 18; 391, 0; 0, -283]
-	      DstBlock		      "QP-Based Inverse Kinematics"
-	      DstPort		      9
+	      Points		      [29, 0]
+	      Branch {
+		Points			[0, 40; 374, 0; 0, -280]
+		DstBlock		"QP-Based Inverse Kinematics"
+		DstPort			9
+	      }
+	      Branch {
+		DstBlock		"Compute tasks accelerations"
+		DstPort			19
+	      }
 	    }
 	  }
 	  RTWSystemCode		  "Auto"
@@ -11043,7 +11126,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "100"
+	    ZoomFactor		    "50"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "s"
@@ -11256,7 +11339,7 @@ Model {
 	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		39
+		$ObjectID		35
 		$ClassName		"Simulink.Mask"
 		Type			"Stateflow"
 		Description		"Embedded MATLAB block"
@@ -11281,7 +11364,7 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"7073"
+		SIDHighWatermark	"7085"
 		Block {
 		  BlockType		  Inport
 		  Name			  "pos_vel_acc_CoM_des"
@@ -11755,7 +11838,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    40
+		    $ObjectID		    36
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -11781,7 +11864,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7073"
+		    SIDHighWatermark	    "7085"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "vel_CoM"
@@ -13041,13 +13124,13 @@ Model {
 	      SrcPort		      1
 	      Points		      [75, 0]
 	      Branch {
+		DstBlock		"Compute tasks accelerations"
+		DstPort			2
+	      }
+	      Branch {
 		Points			[0, 25]
 		DstBlock		"Goto1"
 		DstPort			1
-	      }
-	      Branch {
-		DstBlock		"Compute tasks accelerations"
-		DstPort			2
 	      }
 	    }
 	    Line {
@@ -13558,18 +13641,22 @@ Model {
 	  SrcPort		  1
 	  Points		  [43, 0]
 	  Branch {
+	    Points		    [0, 9]
+	    Branch {
+	      Points		      [135, 0; 0, -9]
+	      DstBlock		      "Inverse Kinematics"
+	      DstPort		      16
+	    }
+	    Branch {
+	      Points		      [0, 92; 618, 0; 0, -231]
+	      DstBlock		      "Switch"
+	      DstPort		      3
+	    }
+	  }
+	  Branch {
 	    Points		    [0, -25]
 	    DstBlock		    "Initial Conditions"
 	    DstPort		    2
-	  }
-	  Branch {
-	    DstBlock		    "Inverse Kinematics"
-	    DstPort		    16
-	  }
-	  Branch {
-	    Points		    [0, 101; 618, 0; 0, -231]
-	    DstBlock		    "Switch"
-	    DstPort		    3
 	  }
 	}
 	Line {
@@ -13795,7 +13882,7 @@ Model {
 	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		41
+		$ObjectID		37
 		$ClassName		"Simulink.Mask"
 		Type			"Stateflow"
 		Description		"Embedded MATLAB block"
@@ -13820,7 +13907,7 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"7073"
+		SIDHighWatermark	"7085"
 		Block {
 		  BlockType		  Inport
 		  Name			  "state"
@@ -16547,7 +16634,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    42
+		    $ObjectID		    38
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -16573,7 +16660,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7073"
+		    SIDHighWatermark	    "7085"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "w_R_LFoot_des"
@@ -17658,7 +17745,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    43
+		    $ObjectID		    39
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -17684,7 +17771,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7073"
+		    SIDHighWatermark	    "7085"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "omega_LFoot"
@@ -18798,7 +18885,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    44
+		    $ObjectID		    40
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -18823,7 +18910,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7073"
+		    SIDHighWatermark	    "7085"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "state"
@@ -20168,7 +20255,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    45
+		    $ObjectID		    41
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -20194,7 +20281,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7073"
+		    SIDHighWatermark	    "7085"
 		    SIDPrevWatermark	    "9"
 		    Block {
 		    BlockType		    Inport
@@ -20885,7 +20972,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    46
+		    $ObjectID		    42
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -20911,7 +20998,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7073"
+		    SIDHighWatermark	    "7085"
 		    SIDPrevWatermark	    "9"
 		    Block {
 		    BlockType		    Inport
@@ -21662,7 +21749,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    47
+		    $ObjectID		    43
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -21687,7 +21774,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7073"
+		    SIDHighWatermark	    "7085"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "J_LeftFoot"
@@ -22255,7 +22342,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    48
+		    $ObjectID		    44
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -22280,7 +22367,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7073"
+		    SIDHighWatermark	    "7085"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "s_0"
@@ -24198,7 +24285,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		49
+	$ObjectID		45
 	$ClassName		"Simulink.Mask"
 	Display			"disp('DATA FOR LEARNOPTIM_WBC')"
       }
@@ -24216,7 +24303,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"92"
+	ZoomFactor		"100"
 	Block {
 	  BlockType		  From
 	  Name			  "From1"
@@ -24586,7 +24673,7 @@ Model {
 	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		50
+		$ObjectID		46
 		$ClassName		"Simulink.Mask"
 		Type			"Stateflow"
 		Description		"Embedded MATLAB block"
@@ -24611,7 +24698,7 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"7073"
+		SIDHighWatermark	"7085"
 		Block {
 		  BlockType		  Inport
 		  Name			  "f_lFoot"
@@ -24800,7 +24887,7 @@ Model {
 	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		51
+		$ObjectID		47
 		$ClassName		"Simulink.Mask"
 		Type			"Stateflow"
 		Description		"Embedded MATLAB block"
@@ -24825,7 +24912,7 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"7073"
+		SIDHighWatermark	"7085"
 		Block {
 		  BlockType		  Inport
 		  Name			  "pose_lFoot"
@@ -26780,7 +26867,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		52
+	$ObjectID		48
 	$ClassName		"Simulink.Mask"
 	Display			"disp('VISUALIZE AND DUMP DATA \\n EARLY TERMINATION')"
       }
@@ -26798,7 +26885,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"100"
+	ZoomFactor		"47"
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "Cartesian Tasks"
@@ -29392,7 +29479,7 @@ Model {
 		LineWidths		"[0.5 0.5 0.5 0.5 0.5 0.5]"
 		MarkerStyles		"none|none|none|none|none|none"
 	      }
-	      Location		      [91 168 1362 767]
+	      Location		      [76 168 1367 767]
 	    }
 	    Block {
 	      BlockType		      Sum
@@ -29541,8 +29628,8 @@ Model {
 	      MaxDataPoints	      5000
 	      SaveToWorkspace	      on
 	      SaveName		      LFoot_forces_DATA
-	      YMin		      "-37.72039~-203.78162~-268.43907~0.75"
-	      YMax		      "39.18948~286.65248~261.20659~3.25"
+	      YMin		      "-50.07887~-43.2078~-95.51139~0.5"
+	      YMax		      "334.43483~337.62979~79.1216~5.5"
 	      SampleInput	      off
 	      SampleTime	      -1
 	      ZoomMode		      on
@@ -29584,8 +29671,8 @@ Model {
 	      MaxDataPoints	      5000
 	      SaveToWorkspace	      on
 	      SaveName		      RFoot_forces_DATA
-	      YMin		      "-186.2003~-68.01121~-196.68783~0.75"
-	      YMax		      "344.2728~340.26999~180.95626~3.25"
+	      YMin		      "-62.88808~-76.64301~-196.75357~0.5"
+	      YMax		      "151.14735~342.95523~125.50999~5.5"
 	      SampleInput	      off
 	      SampleTime	      -1
 	      ZoomMode		      on
@@ -29609,7 +29696,7 @@ Model {
 		LineWidths		"[0.5 0.5 0.5 0.5 0.5 0.5]"
 		MarkerStyles		"none|none|none|none|none|none"
 	      }
-	      Location		      [66 78 1921 1079]
+	      Location		      [59 111 1362 767]
 	    }
 	    Block {
 	      BlockType		      Scope
@@ -29672,8 +29759,8 @@ Model {
 	      MaxDataPoints	      5000
 	      SaveToWorkspace	      on
 	      SaveName		      LFoot_moments_DATA
-	      YMin		      "-58.62138~-58.62138~-58.62138~-58.62138"
-	      YMax		      "275.46472~275.46472~275.46472~275.46472"
+	      YMin		      "-7.05587~-8.99127~-14.1598~0.5"
+	      YMax		      "8.48162~7.11363~17.47181~5.5"
 	      SampleInput	      off
 	      SampleTime	      -1
 	      ZoomMode		      on
@@ -29697,7 +29784,7 @@ Model {
 		LineWidths		"[0.5 0.5 0.5 0.5 0.5 0.5]"
 		MarkerStyles		"none|none|none|none|none|none"
 	      }
-	      Location		      [66 78 1367 767]
+	      Location		      [61 111 1362 767]
 	    }
 	    Block {
 	      BlockType		      Scope
@@ -29715,8 +29802,8 @@ Model {
 	      MaxDataPoints	      5000
 	      SaveToWorkspace	      on
 	      SaveName		      RFoot_moments_DATA
-	      YMin		      "-6.21205~-16.39624~-13.7146~0.75"
-	      YMax		      "15.93196~11.36113~26.56923~3.25"
+	      YMin		      "-3.70848~-4.31254~-7.21108~0.625"
+	      YMax		      "4.52341~3.56092~8.80515~4.375"
 	      SampleInput	      off
 	      SampleTime	      -1
 	      ZoomMode		      on
@@ -31459,7 +31546,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "60"
+	    ZoomFactor		    "97"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "s"
@@ -31892,8 +31979,8 @@ Model {
 	      MaxDataPoints	      5000
 	      SaveToWorkspace	      on
 	      SaveName		      feetInContact_DATA
-	      YMin		      "0.9~0.5"
-	      YMax		      "1.1~5.5"
+	      YMin		      "-0.125~0.75"
+	      YMax		      "1.125~3.25"
 	      SampleInput	      off
 	      SampleTime	      -1
 	      ZoomMode		      on
@@ -31915,7 +32002,7 @@ Model {
 		LineWidths		"[0.5 0.5 0.5 0.5 0.5 0.5]"
 		MarkerStyles		"none|none|none|none|none|none"
 	      }
-	      Location		      [54 111 1367 767]
+	      Location		      [58 111 1363 767]
 	    }
 	    Block {
 	      BlockType		      Scope
@@ -32434,7 +32521,7 @@ Model {
 	  Name			  "Mux1"
 	  SID			  "7012"
 	  Ports			  [2, 1]
-	  Position		  [1155, 696, 1160, 734]
+	  Position		  [1155, 706, 1160, 744]
 	  ZOrder		  1071
 	  ShowName		  off
 	  Inputs		  "2"
@@ -33939,8 +34026,8 @@ Model {
 	  MaxDataPoints		  5000
 	  SaveToWorkspace	  off
 	  SaveName		  ScopeData1
-	  YMin			  "-0.06888~-0.18471"
-	  YMax			  "0.11876~0.0483"
+	  YMin			  "-0.06886~-0.18459"
+	  YMax			  "0.11876~0.04829"
 	  SampleInput		  off
 	  SampleTime		  -1
 	  ZoomMode		  on
@@ -33962,7 +34049,7 @@ Model {
 	    LineWidths		    "[0.5 0.5 0.5 0.5 0.5 0.5]"
 	    MarkerStyles	    "none|none|none|none|none|none"
 	  }
-	  Location		  [398 179 1711 837]
+	  Location		  [59 111 1362 767]
 	}
 	Block {
 	  BlockType		  Reference
@@ -34058,7 +34145,7 @@ Model {
 	  Name			  "zmp_y"
 	  SID			  "7008"
 	  Ports			  [1, 1]
-	  Position		  [1075, 695, 1100, 715]
+	  Position		  [1075, 705, 1100, 725]
 	  ZOrder		  1068
 	  NumberOfDimensions	  "2"
 	  InputPortWidth	  "6"
@@ -34501,7 +34588,7 @@ Model {
 	  Branch {
 	    Points		    [0, 65; 274, 0]
 	    Branch {
-	      Points		      [0, 50]
+	      Points		      [0, 60]
 	      DstBlock		      "zmp_y"
 	      DstPort		      1
 	    }
@@ -34552,7 +34639,7 @@ Model {
 	Line {
 	  SrcBlock		  "Mux1"
 	  SrcPort		  1
-	  Points		  [19, 0; 0, -35]
+	  Points		  [19, 0; 0, -45]
 	  DstBlock		  "SP vs ZMP"
 	  DstPort		  2
 	}
@@ -34571,7 +34658,7 @@ Model {
 	Line {
 	  SrcBlock		  "support_polygon_y"
 	  SrcPort		  1
-	  Points		  [122, 0; 0, -20]
+	  Points		  [135, 0]
 	  DstBlock		  "Mux1"
 	  DstPort		  2
 	}
@@ -34598,7 +34685,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		53
+	$ObjectID		49
 	$ClassName		"Simulink.Mask"
 	Display			"disp('SYNCHRONIZER')"
       }
@@ -35956,11 +36043,11 @@ Stateflow {
     decomposition	    CLUSTER_STATE
     eml {
       isEML		      1
-      script		      "function acc_task_star = setTasksAccelerationsFCN(pos_vel_acc_CoM_des, pose_vel_acc_LFoot_des, po"
-      "se_vel_acc_RFoot_des, orient_vel_acc_rot_task_des, pose_vel_acc_LHand_des,pose_vel_acc_RHand_des, ...\n         "
-      "                                         pos_vel_CoM, pose_vel_LFoot, pose_vel_RFoot, orient_vel_rot_task, pose_"
-      "vel_LHand, pose_vel_RHand, ...\n                                                  Kp_Kd_CoM, Kp_Kd_LFoot, Kp_Kd_"
-      "RFoot, Kp_Kd_rot_task, Kp_Kd_LHand, Kp_Kd_RHand,...\n                                                  feetInCon"
+      script		      "function acc_task_star = setTasksAccelerationsFCN(pose_vel_acc_LFoot_des, pose_vel_acc_RFoot_des,"
+      " pos_vel_acc_CoM_des, orient_vel_acc_rot_task_des, pose_vel_acc_LHand_des,pose_vel_acc_RHand_des, ...\n         "
+      "                                         pose_vel_LFoot, pose_vel_RFoot, pos_vel_CoM, orient_vel_rot_task, pose_"
+      "vel_LHand, pose_vel_RHand, ...\n                                                  Kp_Kd_LFoot, Kp_Kd_RFoot, Kp_K"
+      "d_CoM, Kp_Kd_rot_task, Kp_Kd_LHand, Kp_Kd_RHand,...\n                                                  feetInCon"
       "tact, Sat) \n\n    acc_task_star = setTasksAccelerations(pos_vel_acc_CoM_des, pose_vel_acc_LFoot_des, pose_vel_a"
       "cc_RFoot_des, orient_vel_acc_rot_task_des, pose_vel_acc_LHand_des,pose_vel_acc_RHand_des, ...\n                 "
       "                         pos_vel_CoM, pose_vel_LFoot, pose_vel_RFoot, orient_vel_rot_task, pose_vel_LHand, pose_"
@@ -35972,45 +36059,6 @@ Stateflow {
   }
   data {
     id			    44
-    ssIdNumber		    4
-    name		    "pos_vel_acc_CoM_des"
-    scope		    INPUT_DATA
-    machine		    1
-    props {
-      array {
-	size			"-1"
-      }
-      type {
-	method			SF_INHERITED_TYPE
-	primitive		SF_DOUBLE_TYPE
-      }
-      complexity	      SF_COMPLEX_INHERITED
-    }
-    dataType		    "Inherit: Same as Simulink"
-    linkNode		    [42 0 45]
-  }
-  data {
-    id			    45
-    ssIdNumber		    5
-    name		    "acc_task_star"
-    scope		    OUTPUT_DATA
-    machine		    1
-    props {
-      array {
-	size			"-1"
-      }
-      type {
-	method			SF_INHERITED_TYPE
-	primitive		SF_DOUBLE_TYPE
-      }
-      complexity	      SF_COMPLEX_INHERITED
-      frame		      SF_FRAME_NO
-    }
-    dataType		    "Inherit: Same as Simulink"
-    linkNode		    [42 44 46]
-  }
-  data {
-    id			    46
     ssIdNumber		    6
     name		    "pose_vel_acc_LFoot_des"
     scope		    INPUT_DATA
@@ -36029,10 +36077,10 @@ Stateflow {
       frame		      SF_FRAME_INHERITED
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [42 45 47]
+    linkNode		    [42 0 45]
   }
   data {
-    id			    47
+    id			    45
     ssIdNumber		    7
     name		    "pose_vel_acc_RFoot_des"
     scope		    INPUT_DATA
@@ -36049,6 +36097,45 @@ Stateflow {
       }
       complexity	      SF_COMPLEX_INHERITED
       frame		      SF_FRAME_INHERITED
+    }
+    dataType		    "Inherit: Same as Simulink"
+    linkNode		    [42 44 46]
+  }
+  data {
+    id			    46
+    ssIdNumber		    4
+    name		    "pos_vel_acc_CoM_des"
+    scope		    INPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+      }
+      complexity	      SF_COMPLEX_INHERITED
+    }
+    dataType		    "Inherit: Same as Simulink"
+    linkNode		    [42 45 47]
+  }
+  data {
+    id			    47
+    ssIdNumber		    5
+    name		    "acc_task_star"
+    scope		    OUTPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_NO
     }
     dataType		    "Inherit: Same as Simulink"
     linkNode		    [42 46 48]
@@ -36121,8 +36208,8 @@ Stateflow {
   }
   data {
     id			    51
-    ssIdNumber		    9
-    name		    "pos_vel_CoM"
+    ssIdNumber		    12
+    name		    "pose_vel_LFoot"
     scope		    INPUT_DATA
     machine		    1
     props {
@@ -36143,8 +36230,8 @@ Stateflow {
   }
   data {
     id			    52
-    ssIdNumber		    12
-    name		    "pose_vel_LFoot"
+    ssIdNumber		    13
+    name		    "pose_vel_RFoot"
     scope		    INPUT_DATA
     machine		    1
     props {
@@ -36165,8 +36252,8 @@ Stateflow {
   }
   data {
     id			    53
-    ssIdNumber		    13
-    name		    "pose_vel_RFoot"
+    ssIdNumber		    9
+    name		    "pos_vel_CoM"
     scope		    INPUT_DATA
     machine		    1
     props {
@@ -36253,8 +36340,8 @@ Stateflow {
   }
   data {
     id			    57
-    ssIdNumber		    15
-    name		    "Kp_Kd_CoM"
+    ssIdNumber		    16
+    name		    "Kp_Kd_LFoot"
     scope		    INPUT_DATA
     machine		    1
     props {
@@ -36275,8 +36362,8 @@ Stateflow {
   }
   data {
     id			    58
-    ssIdNumber		    16
-    name		    "Kp_Kd_LFoot"
+    ssIdNumber		    17
+    name		    "Kp_Kd_RFoot"
     scope		    INPUT_DATA
     machine		    1
     props {
@@ -36297,8 +36384,8 @@ Stateflow {
   }
   data {
     id			    59
-    ssIdNumber		    17
-    name		    "Kp_Kd_RFoot"
+    ssIdNumber		    15
+    name		    "Kp_Kd_CoM"
     scope		    INPUT_DATA
     machine		    1
     props {
@@ -36501,9 +36588,9 @@ Stateflow {
     decomposition	    CLUSTER_STATE
     eml {
       isEML		      1
-      script		      "function [pos_vel_CoM, pose_vel_LFoot, pose_vel_RFoot, orient_vel_rot_task, pose_vel_LHand, pose_"
-      "vel_RHand] = ...\n             composeTaskPoseAndVelocityFCN(vel_CoM, vel_LFoot, vel_RFoot, vel_rot_task, vel_LH"
-      "and, vel_RHand, ...\n                                           w_H_CoM, w_H_l_sole, w_H_r_sole, w_H_rot_task, w"
+      script		      "function [pose_vel_LFoot, pose_vel_RFoot, pos_vel_CoM, orient_vel_rot_task, pose_vel_LHand, pose_"
+      "vel_RHand] = ...\n             composeTaskPoseAndVelocityFCN(vel_LFoot, vel_RFoot, vel_CoM, vel_rot_task, vel_LH"
+      "and, vel_RHand, ...\n                                           w_H_l_sole, w_H_r_sole, w_H_CoM, w_H_rot_task, w"
       "_H_l_hand, w_H_r_hand)\n                                                                                        "
       "                                      \n    [pos_vel_CoM, pose_vel_LFoot, pose_vel_RFoot, orient_vel_rot_task, p"
       "ose_vel_LHand, pose_vel_RHand] = ...\n        composeTaskPoseAndVelocity(vel_CoM, vel_LFoot, vel_RFoot, vel_rot_"
@@ -36514,8 +36601,8 @@ Stateflow {
   }
   data {
     id			    70
-    ssIdNumber		    20
-    name		    "vel_CoM"
+    ssIdNumber		    21
+    name		    "vel_LFoot"
     scope		    INPUT_DATA
     machine		    1
     props {
@@ -36536,8 +36623,8 @@ Stateflow {
   }
   data {
     id			    71
-    ssIdNumber		    21
-    name		    "vel_LFoot"
+    ssIdNumber		    22
+    name		    "vel_RFoot"
     scope		    INPUT_DATA
     machine		    1
     props {
@@ -36558,9 +36645,9 @@ Stateflow {
   }
   data {
     id			    72
-    ssIdNumber		    22
-    name		    "vel_RFoot"
-    scope		    INPUT_DATA
+    ssIdNumber		    25
+    name		    "pose_vel_LFoot"
+    scope		    OUTPUT_DATA
     machine		    1
     props {
       array {
@@ -36573,16 +36660,16 @@ Stateflow {
 	wordLength		"16"
       }
       complexity	      SF_COMPLEX_INHERITED
-      frame		      SF_FRAME_INHERITED
+      frame		      SF_FRAME_NO
     }
     dataType		    "Inherit: Same as Simulink"
     linkNode		    [68 71 73]
   }
   data {
     id			    73
-    ssIdNumber		    23
-    name		    "vel_rot_task"
-    scope		    INPUT_DATA
+    ssIdNumber		    26
+    name		    "pose_vel_RFoot"
+    scope		    OUTPUT_DATA
     machine		    1
     props {
       array {
@@ -36595,15 +36682,15 @@ Stateflow {
 	wordLength		"16"
       }
       complexity	      SF_COMPLEX_INHERITED
-      frame		      SF_FRAME_INHERITED
+      frame		      SF_FRAME_NO
     }
     dataType		    "Inherit: Same as Simulink"
     linkNode		    [68 72 74]
   }
   data {
     id			    74
-    ssIdNumber		    36
-    name		    "vel_LHand"
+    ssIdNumber		    20
+    name		    "vel_CoM"
     scope		    INPUT_DATA
     machine		    1
     props {
@@ -36624,8 +36711,8 @@ Stateflow {
   }
   data {
     id			    75
-    ssIdNumber		    37
-    name		    "vel_RHand"
+    ssIdNumber		    23
+    name		    "vel_rot_task"
     scope		    INPUT_DATA
     machine		    1
     props {
@@ -36646,96 +36733,8 @@ Stateflow {
   }
   data {
     id			    76
-    ssIdNumber		    24
-    name		    "pos_vel_CoM"
-    scope		    OUTPUT_DATA
-    machine		    1
-    props {
-      array {
-	size			"-1"
-      }
-      type {
-	method			SF_INHERITED_TYPE
-	primitive		SF_DOUBLE_TYPE
-	isSigned		1
-	wordLength		"16"
-      }
-      complexity	      SF_COMPLEX_INHERITED
-      frame		      SF_FRAME_NO
-    }
-    dataType		    "Inherit: Same as Simulink"
-    linkNode		    [68 75 77]
-  }
-  data {
-    id			    77
-    ssIdNumber		    25
-    name		    "pose_vel_LFoot"
-    scope		    OUTPUT_DATA
-    machine		    1
-    props {
-      array {
-	size			"-1"
-      }
-      type {
-	method			SF_INHERITED_TYPE
-	primitive		SF_DOUBLE_TYPE
-	isSigned		1
-	wordLength		"16"
-      }
-      complexity	      SF_COMPLEX_INHERITED
-      frame		      SF_FRAME_NO
-    }
-    dataType		    "Inherit: Same as Simulink"
-    linkNode		    [68 76 78]
-  }
-  data {
-    id			    78
-    ssIdNumber		    26
-    name		    "pose_vel_RFoot"
-    scope		    OUTPUT_DATA
-    machine		    1
-    props {
-      array {
-	size			"-1"
-      }
-      type {
-	method			SF_INHERITED_TYPE
-	primitive		SF_DOUBLE_TYPE
-	isSigned		1
-	wordLength		"16"
-      }
-      complexity	      SF_COMPLEX_INHERITED
-      frame		      SF_FRAME_NO
-    }
-    dataType		    "Inherit: Same as Simulink"
-    linkNode		    [68 77 79]
-  }
-  data {
-    id			    79
-    ssIdNumber		    27
-    name		    "orient_vel_rot_task"
-    scope		    OUTPUT_DATA
-    machine		    1
-    props {
-      array {
-	size			"-1"
-      }
-      type {
-	method			SF_INHERITED_TYPE
-	primitive		SF_DOUBLE_TYPE
-	isSigned		1
-	wordLength		"16"
-      }
-      complexity	      SF_COMPLEX_INHERITED
-      frame		      SF_FRAME_NO
-    }
-    dataType		    "Inherit: Same as Simulink"
-    linkNode		    [68 78 80]
-  }
-  data {
-    id			    80
-    ssIdNumber		    32
-    name		    "w_H_CoM"
+    ssIdNumber		    36
+    name		    "vel_LHand"
     scope		    INPUT_DATA
     machine		    1
     props {
@@ -36752,10 +36751,32 @@ Stateflow {
       frame		      SF_FRAME_INHERITED
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [68 79 81]
+    linkNode		    [68 75 77]
   }
   data {
-    id			    81
+    id			    77
+    ssIdNumber		    37
+    name		    "vel_RHand"
+    scope		    INPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+	isSigned		1
+	wordLength		"16"
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_INHERITED
+    }
+    dataType		    "Inherit: Same as Simulink"
+    linkNode		    [68 76 78]
+  }
+  data {
+    id			    78
     ssIdNumber		    33
     name		    "w_H_l_sole"
     scope		    INPUT_DATA
@@ -36774,12 +36795,78 @@ Stateflow {
       frame		      SF_FRAME_INHERITED
     }
     dataType		    "Inherit: Same as Simulink"
+    linkNode		    [68 77 79]
+  }
+  data {
+    id			    79
+    ssIdNumber		    34
+    name		    "w_H_r_sole"
+    scope		    INPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+	isSigned		1
+	wordLength		"16"
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_INHERITED
+    }
+    dataType		    "Inherit: Same as Simulink"
+    linkNode		    [68 78 80]
+  }
+  data {
+    id			    80
+    ssIdNumber		    24
+    name		    "pos_vel_CoM"
+    scope		    OUTPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+	isSigned		1
+	wordLength		"16"
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_NO
+    }
+    dataType		    "Inherit: Same as Simulink"
+    linkNode		    [68 79 81]
+  }
+  data {
+    id			    81
+    ssIdNumber		    27
+    name		    "orient_vel_rot_task"
+    scope		    OUTPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+	isSigned		1
+	wordLength		"16"
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_NO
+    }
+    dataType		    "Inherit: Same as Simulink"
     linkNode		    [68 80 82]
   }
   data {
     id			    82
-    ssIdNumber		    34
-    name		    "w_H_r_sole"
+    ssIdNumber		    32
+    name		    "w_H_CoM"
     scope		    INPUT_DATA
     machine		    1
     props {

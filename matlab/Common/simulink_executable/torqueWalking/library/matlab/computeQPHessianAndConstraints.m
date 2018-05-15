@@ -98,6 +98,7 @@ function [Hessian, gradient, ConstraintMatrix, biasVectorConstraint] = ...
          %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
          %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
          
+         
      else  %use soft tasks priorities
          % In the case of soft task priorities, the inverse kinematics
          % problem is formulated as
@@ -134,25 +135,25 @@ function [Hessian, gradient, ConstraintMatrix, biasVectorConstraint] = ...
          
          % sum of task weights for the Hessian
          sum_task_weights = Sat.weightPostural + Sat.weightCoM  + Sat.weightRotTask + weightLeftFoot + weightRightFoot ...
-             + Sat.weightLeftHand + Sat.weightRightHand;
+                          + Sat.weightLeftHand + Sat.weightRightHand;
          
          % compute Hessian matrix
-         Hessian = eye(size(nu)) * sum_task_weights;
+         Hessian = eye(size(s,1) +6) * sum_task_weights;
          
          % compute gradient
          gradient =  Sat.weightPostural  * [k*nu(1:6); -sDDot_star] ...
-                   + Sat.weightCoM       * pinv(J( 1: 3, :)) * (JDot_nu( 1: 3) - acc_task_star( 1: 3)) ...
-                   + Sat.weightRotTask   * pinv(J( 4: 6, :)) * (JDot_nu( 4: 6) - acc_task_star( 4: 6)) ...
-                   + weightLeftFoot      * pinv(J( 7:12, :)) * (JDot_nu( 7:12) - acc_task_star( 7:12)) ...
-                   + weightRightFoot     * pinv(J(13:18, :)) * (JDot_nu(13:18) - acc_task_star(13:18)) ...
-                   + Sat.weightLeftHand  * pinv(J(19:24, :)) * (JDot_nu(19:24) - acc_task_star(19:24)) ...
-                   + Sat.weightRightHand * pinv(J(25:30, :)) * (JDot_nu(25:30) - acc_task_star(25:30));
+                   + weightLeftFoot      * pinv(J( 1: 6, :), Sat.pinvDamp_nu_b) * (JDot_nu( 1: 6) - acc_task_star( 1: 6)) ...
+                   + weightRightFoot     * pinv(J( 7:12, :), Sat.pinvDamp_nu_b) * (JDot_nu( 7:12) - acc_task_star( 7:12)) ...
+                   + Sat.weightCoM       * pinv(J(13:15, :), Sat.pinvDamp_nu_b) * (JDot_nu(13:15) - acc_task_star(13:15)) ...
+                   + Sat.weightRotTask   * pinv(J(16:18, :), Sat.pinvDamp_nu_b) * (JDot_nu(16:18) - acc_task_star(16:18)) ...
+                   + Sat.weightLeftHand  * pinv(J(19:24, :), Sat.pinvDamp_nu_b) * (JDot_nu(19:24) - acc_task_star(19:24)) ...
+                   + Sat.weightRightHand * pinv(J(25:30, :), Sat.pinvDamp_nu_b) * (JDot_nu(25:30) - acc_task_star(25:30));
          
-         % equality constraint matrix is null
-         ConstraintMatrix =  zeros(size(J(1:18,:)));
+         % inequality constraint matrix
+         ConstraintMatrix = 0*J(1:18,:);
          
-         % bias vector for constraints is null
-         biasVectorConstraint = zeros(size(acc_task_star(1:18))); 
+         % bias vector for constraints
+         biasVectorConstraint = 0*(acc_task_star(1:18) -JDot_nu(1:18));
+         
      end
-     
 end

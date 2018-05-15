@@ -169,15 +169,22 @@ function QPInverseKinematics(block)
         H    = (Hessian + transpose(Hessian))*0.5;
         g    = gradient;
         
-        % to avoid the equality constraints to be unfeasible for numerical errors,
-        % a small tolerance is added to the bias vectors
-        eps = zeros(size(biasVectorConstraint,1),1);
-        for i = 1:6:size(biasVectorConstraint,1)
-            eps(i:i+5, 1) = [0.001*ones(3,1); 0.1*ones(3,1)];              
+        
+        if Config.QP_USE_STRICT_TASK_PRIORITIES
+            % to avoid the equality constraints to be unfeasible for numerical errors,
+            % a small tolerance is added to the bias vectors
+            eps = zeros(size(biasVectorConstraint,1),1);
+            for i = 1:6:size(biasVectorConstraint,1)
+                eps(i:i+5, 1) = [0.001*ones(3,1); 0.1*ones(3,1)];
+            end
+            
+            ubA  = biasVectorConstraint+eps;
+            lbA  = biasVectorConstraint-eps;
+            
+        else
+            ubA  = biasVectorConstraint;
+            lbA  = biasVectorConstraint;
         end
-                    
-        ubA  = biasVectorConstraint+eps;
-        lbA  = biasVectorConstraint-eps;
         
         % Use continuity constraint. In case this option is selected, an
         % additional constraint is applied to the optimization procedure.
@@ -207,12 +214,9 @@ function QPInverseKinematics(block)
         %% ------------------------------------------------------------- %%
         %% QP optimization procedure using qpOASES 
         %% ------------------------------------------------------------- %%
-        if norm(A) < 1e-4 %when using soft task priorities, constraints are null
-            [nuDot,~,exitFlagQP,~,~,~] = qpOASES(H,g,[],[],[],[],[]);
-        else
-            [nuDot,~,exitFlagQP,~,~,~] = qpOASES(H,g,A,[],[],lbA,ubA);     
-        end
-    
+        [nuDot,~,exitFlagQP,~,~,~] = qpOASES(H,g,A,[],[],lbA,ubA);
+
+        
         % in case of QP errors, do not move! this implies to send zero
         % accelerations as reference
         if exitFlagQP ~= 0
