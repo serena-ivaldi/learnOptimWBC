@@ -1,6 +1,6 @@
-%configuration file for the icub sitting stand up simulation
+%configuration file for the icub torque walking simulation
 %%%;;
-%% prepare the system for the simulink executable (every function that use simulink has to use SimulinkInitializationExperiment(...) !)
+%% prepare the system for the simulink executable (every function that uses simulink has to use SimulinkInitializationExperiment(...) !)
 
 % params is shipped inside the simulink-thread through the 'input' cell
 % vector. input variables has renamed as 'input_for_run' inside the instance object
@@ -26,7 +26,7 @@ time_struct.tf   = 60;   %final time
 time_struct.step = 0.01; %time step (fixed step integrator)
 
 % parameters used in DynSim_iCubSim for detecting whether the process got stuck
-params.max_timer = time_struct.tf*2 + 100; %maximum time expected for a successful run of threadSimulink
+params.max_timer = time_struct.tf * 2 + 100; %maximum time expected for a successful run of threadSimulink
 params.max_consecutive_fails_counter = 5; %number of failed runs of threadSimulink, after which all programs are killed and restarted
 
 %% TASK PARAMETERS
@@ -38,7 +38,9 @@ CONTROLLERTYPE ='BalanceController';   % GHC or UF
 %%
 
 %SUBCHAIN PARAMETERS
-subchain1 =  {'weightRotTask' 'weightStanceFoot' 'weightSwingFoot' 'weightPostural' 'weightTau'}; %weightCoM is not included since it is set to be a constant value of 1
+%weightCoM is not included since it is set to be a constant value of 1
+%Assume hands are symmetric: use the same weight for left/right hands
+subchain1 =  {'weightStanceFoot' 'weightSwingFoot' 'weightHand' 'weightRotTask' 'weightPostural' 'weightTau' }; %need as many entries as variables to learn 
 target_link{1} = subchain1;
 
 
@@ -98,7 +100,7 @@ bot1.SetWorldFrameiCub(params.qjInit,params.dqjInit,params.dx_bInit,params.omega
 
 deg = pi/180;
 % primary trajectory
-traj_type = {'none' 'none' 'none' 'none' 'none' 'none'};
+traj_type = {'none' 'none' 'none' 'none' 'none' 'none' 'none'}; %need as many entries as variables to learn
 control_type = {'x'};
 type_of_traj = {'func'};
 geometric_path = {'linear'};
@@ -107,7 +109,7 @@ time_law = {'none'};
 geom_parameters{1,1} =  [pi/2 0 -pi/2]; 
 dim_of_task{1,1}=[1;1;1];
 % secondary trajectory (Not used)
-traj_type_sec = {'none' 'none' 'none' 'none' 'none' 'none'};
+traj_type_sec = {'none' 'none' 'none' 'none' 'none' 'none' 'none'}; %need as many entries as variables to learn
 control_type_sec = {'rpy'};
 type_of_traj_sec = {'func'};
 geometric_path_sec = {'fixed'};
@@ -125,7 +127,7 @@ switch CONTROLLERTYPE
         
         %% PRIMARY REFERENCE PARAMETERS (this parameter only works if one of the specific trajectory has runtime parameters)
         % IMPORTANT!!!!! this value is used inside main exec to set the parameter that you want to test
-        numeric_reference_parameter{1,1}=[1, 1, 1, 0.001, 0.0001]';
+        numeric_reference_parameter{1,1}=[1, 1, 0.01, 0.01, 0.001, 0.0001]';
         secondary_numeric_reference_parameter{1,1} = []; % not used
         %% ALPHA PARAMETER
         %constant alpha
@@ -194,11 +196,11 @@ switch CONTROLLERTYPE
         generation_of_starting_point = 'test'; % 'test':user defined by user_defined_start_action 'given':is redundant with test  'random': random starting point
         %init_parameters = 6;
       
-        user_defined_start_action = [1, 1, 1, 0.001, 0.0001]; 
+        user_defined_start_action = [1, 1, 0.01, 0.01, 0.001, 0.0001]; 
         explorationRate = 0.1; %0.5; %Value in the range [0, 1]
         niter = 50; %500;  %number of generations
-        cmaes_value_range{1} = [0.0, 0.0, 0.0, 0.0, 1e-6 ]; % lower bound that defines the search space
-        cmaes_value_range{2} = [2.0, 2.0, 2.0, 2.0, 0.001]; % upper bound that defines the search space
+        cmaes_value_range{1} = [1e-4, 1e-4, 0.0, 0.0, 1e-6, 1e-10]; % lower bound that defines the search space
+        cmaes_value_range{2} = [ 2.0,  2.0, 2.0, 2.0,  1.0, 1e-01]; % upper bound that defines the search space
         learn_approach = '(1+1)CMAES'; %CMAES (1+1)CMAES
         %--- Parameter for constraints method
         method_to_use = 'nopenalty';  % adaptive , vanilla , empty 'nopenalty'

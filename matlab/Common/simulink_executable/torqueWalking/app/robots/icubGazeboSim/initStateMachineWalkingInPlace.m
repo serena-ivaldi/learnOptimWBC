@@ -33,7 +33,7 @@ Config.USE_INVERSE_KINEMATICS = true;
 
 % If true, the QP problem will be defined with strict task priorities; if false,
 % with soft task priorities between tasks and posture
-Config.QP_USE_STRICT_TASK_PRIORITIES = false;
+Config.QP_USE_STRICT_TASK_PRIORITIES = false; %true;
 
 % If true, the output of QP solver will be forced to be continuous
 Config.QP_USE_CONTINUITY_CONSTRAINTS = false;
@@ -87,14 +87,14 @@ Sat.weightCoM        = 1; %weightCoM is not included since it is set to be a con
 Sat.weightRotTask    = weightRotTask;
 Sat.weightStanceFoot = weightStanceFoot;
 Sat.weightSwingFoot  = weightSwingFoot;
-Sat.weightLeftHand   = 0; %set to 0 if you don't want to let hands move freely
-Sat.weightRightHand  = 0; %set to 0 if you don't want to let hands move freely
+Sat.weightLeftHand   = weightHand; %set to 0 if you don't want to let hands move freely
+Sat.weightRightHand  = weightHand; %set to 0 if you don't want to let hands move freely
 
 % Weight for the postural minimization task
-Sat.weightPostural = weightPostural; %0.001; weights(4); %
+Sat.weightPostural = weightPostural; %0.001;
 
 % Weight for the joint minimization task
-Sat.weight_tau = weight_tau; %0.1*Sat.weightPostural; weights(5); %
+Sat.weight_tau = weight_tau; %0.1*Sat.weightPostural;
 
 % Numerical tolerance for assuming a foot on contact
 Sat.toll_feetInContact = 0.1;
@@ -241,13 +241,13 @@ Gains.Kd_RHand = 2*sqrt(Gains.Kp_RHand);
 
 % Joint position and velocity gains    
                     % torso      % left arm       % right arm      % left leg               % right leg                                   
-Gains.impedances = [20  20  20,  10  10  10  8,  10  10  10  8,  30  30  30  60  10  10,  30  30  30  60  10  10;  ... % state = 1 two feet balancing          
-                    20  20  20,  10  10  10  8,  10  10  10  8,  30  30  30  60  10  10,  30  30  30  60  10  10;  ... % state = 2 left foot balancing
-                    20  20  20,  10  10  10  8,  10  10  10  8,  30  30  30  60  10  10,  30  30  30  60  10  10;  ... % state = 3 left foot balancing
-                    20  20  20,  10  10  10  8,  10  10  10  8,  30  30  30  60  10  10,  30  30  30  60  10  10;  ... % state = 4 prepare for switching
-                    20  20  20,  10  10  10  8,  10  10  10  8,  30  30  30  60  10  10,  30  30  30  60  10  10]; ... % state = 5 two feet balancing
+Gains.impedances = [20  20  20,  10  10  10  8,  10  10  20  8,  30  30  30  60  10  10,  30  30  30  60  10  10;  ... % state = 1 two feet balancing          
+                    20  20  20,  10  10  10  8,  10  10  20  8,  30  30  30  60  10  10,  30  30  30  60  10  10;  ... % state = 2 left foot balancing
+                    20  20  20,  10  10  10  8,  10  10  20  8,  30  30  30  60  10  10,  30  30  30  60  10  10;  ... % state = 3 left foot balancing
+                    20  20  20,  10  10  10  8,  10  10  20  8,  30  30  30  60  10  10,  30  30  30  60  10  10;  ... % state = 4 prepare for switching
+                    20  20  20,  10  10  10  8,  10  10  20  8,  30  30  30  60  10  10,  30  30  30  60  10  10]; ... % state = 5 two feet balancing
                 
-Gains.dampings   = 0 * sqrt(Gains.impedances); %zeros(size(Gains.impedances));
+Gains.dampings   = 2 * sqrt(Gains.impedances); %zeros(size(Gains.impedances));
 
 % Joints position and velocity gains for inverse kinematics
 Gains.ikin_impedances = Gains.impedances(1,:);

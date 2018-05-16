@@ -3,15 +3,16 @@ classdef torqueWalkingMessage < Messaging.AbstractMessage
    methods
        %% important!! params must always be saved to make the code work
        function Pack(obj,controller,params)
-           weightRotTask    = controller.alpha{1,1}.sample;
-           weightStanceFoot = controller.alpha{1,2}.sample;
-           weightSwingFoot  = controller.alpha{1,3}.sample;
-           weightPostural   = controller.alpha{1,4}.sample;
-           weight_tau       = controller.alpha{1,5}.sample;
+           weightStanceFoot = controller.alpha{1,1}.sample;
+           weightSwingFoot  = controller.alpha{1,2}.sample;
+           weightHand       = controller.alpha{1,3}.sample;
+           weightRotTask    = controller.alpha{1,4}.sample;
+           weightPostural   = controller.alpha{1,5}.sample;
+           weight_tau       = controller.alpha{1,6}.sample;
    
           % save all the relevant data for the thread
           %% inputData.mat has to be saved in common/simulink_executable      
-            save(obj.input2simulink,'weightRotTask','weightStanceFoot','weightSwingFoot', 'weightPostural', 'weight_tau', 'params');
+            save(obj.input2simulink,'weightStanceFoot','weightSwingFoot', 'weightHand', 'weightRotTask', 'weightPostural', 'weight_tau', 'params');
       end
       
       function [s, sd, t] = Unpack(obj,controller,params)
