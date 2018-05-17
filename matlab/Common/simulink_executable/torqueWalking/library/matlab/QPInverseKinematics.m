@@ -170,21 +170,21 @@ function QPInverseKinematics(block)
         g    = gradient;
         
         
+        % to avoid the equality constraints to be unfeasible for numerical errors,
+        % a small tolerance is added to the bias vectors
         if Config.QP_USE_STRICT_TASK_PRIORITIES
-            % to avoid the equality constraints to be unfeasible for numerical errors,
-            % a small tolerance is added to the bias vectors
-            eps = zeros(size(biasVectorConstraint,1),1);
-            for i = 1:6:size(biasVectorConstraint,1)
-                eps(i:i+5, 1) = [0.001*ones(3,1); 0.1*ones(3,1)];
-            end
-            
-            ubA  = biasVectorConstraint+eps;
-            lbA  = biasVectorConstraint-eps;
-            
+            tolerance = 0.0001;
         else
-            ubA  = biasVectorConstraint;
-            lbA  = biasVectorConstraint;
+            tolerance = 0.1;
         end
+        
+        eps = zeros(size(biasVectorConstraint,1),1);
+        for i = 1:6:size(biasVectorConstraint,1)
+            eps(i:i+5, 1) = [tolerance*ones(3,1); 0.1*ones(3,1)];
+        end
+        
+        ubA  = biasVectorConstraint+eps;
+        lbA  = biasVectorConstraint-eps;
         
         % Use continuity constraint. In case this option is selected, an
         % additional constraint is applied to the optimization procedure.

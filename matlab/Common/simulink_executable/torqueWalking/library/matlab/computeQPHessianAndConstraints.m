@@ -46,7 +46,7 @@ function [Hessian, gradient, ConstraintMatrix, biasVectorConstraint] = ...
      % compute desired joint acceleration for postural task
      sDDot_star =  s_sDot_sDDot_ref(:,3) ...
                   -diag(impedances)*(s -s_sDot_sDDot_ref(:,1)) ...
-                  -diag(dampings)*(sDot -s_sDot_sDDot_ref(:,2));                      
+                  -diag(dampings)*(sDot -s_sDot_sDDot_ref(:,2));
 
      % to ensure the convergence of the base accelerations to zero, a feedback
      % term on base velocities is considered. the parameter k is a positive gain.
@@ -133,9 +133,19 @@ function [Hessian, gradient, ConstraintMatrix, biasVectorConstraint] = ...
              weightRightFoot  = Sat.weightSwingFoot;
          end
          
+         % Separating constraints from the Jacobian J. Structure of J:
+         %
+         %    J = [J_leftFoot; J_rightFoot; J_CoM; J_rot_task]
+         %
+         J_c = [J(1:6, :)*feetInContact(1);
+                J(7:12,:)*feetInContact(2)];
+         
+         J_cDot_nu = [JDot_nu(1:6 )*feetInContact(1);
+                      JDot_nu(7:12)*feetInContact(2)];
+         
          % sum of task weights for the Hessian
          sum_task_weights = Sat.weightPostural + Sat.weightCoM  + Sat.weightRotTask + weightLeftFoot + weightRightFoot ...
-                          + Sat.weightLeftHand + Sat.weightRightHand;
+             + Sat.weightLeftHand + Sat.weightRightHand;
          
          % compute Hessian matrix
          Hessian = eye(size(s,1) +6) * sum_task_weights;
@@ -147,13 +157,14 @@ function [Hessian, gradient, ConstraintMatrix, biasVectorConstraint] = ...
                    + Sat.weightCoM       * pinv(J(13:15, :), Sat.pinvDamp_nu_b) * (JDot_nu(13:15) - acc_task_star(13:15)) ...
                    + Sat.weightRotTask   * pinv(J(16:18, :), Sat.pinvDamp_nu_b) * (JDot_nu(16:18) - acc_task_star(16:18)) ...
                    + Sat.weightLeftHand  * pinv(J(19:24, :), Sat.pinvDamp_nu_b) * (JDot_nu(19:24) - acc_task_star(19:24)) ...
-                   + Sat.weightRightHand * pinv(J(25:30, :), Sat.pinvDamp_nu_b) * (JDot_nu(25:30) - acc_task_star(25:30));
-         
-         % inequality constraint matrix
-         ConstraintMatrix = 0*J(1:18,:);
+                   + Sat.weightRightHand * pinv(J(25:30, :), Sat.pinvDamp_nu_b) * (JDot_nu(25:30) - acc_task_star(25:30));        
+               
+         % inequality constraint matrix 
+         % (J_c can be used to constrain contact foot/feet acceleration to 0
+         ConstraintMatrix = 0 * (J_c);
          
          % bias vector for constraints
-         biasVectorConstraint = 0*(acc_task_star(1:18) -JDot_nu(1:18));
+         biasVectorConstraint = 0 * (0 - J_cDot_nu);
          
      end
 end
