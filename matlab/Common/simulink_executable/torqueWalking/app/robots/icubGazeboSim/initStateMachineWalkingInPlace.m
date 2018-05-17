@@ -1,5 +1,5 @@
 % INITSTATEMACHINEEXAMPLE initializes the robot configuration for running
-%                        'EXAMPLE_STATEMACHINE' demo. 
+%                        'WALKING_IN_PLACE' demo. 
 %
 % USAGE: please note that this function is automatically executed when
 %        running the Simulink model.
@@ -52,15 +52,18 @@ Config.FILTER_IMU_YAW = false;
 Config.FILTER_IMU_PITCH = false;
 
 % True if left foot is initially in contact with the ground (if false,
-% right foot is assumed to be in contact) (EXAMPLE_STATEMACHINE DEMO ONLY)
+% right foot is assumed to be in contact) (WALKING_IN_PLACE DEMO ONLY)
 Config.LFoot_in_contact_at0 = true; %false;
 
-% If true, the robot will just balance on two feet (EXAMPLE_STATEMACHINE DEMO ONLY)
+% If true, the robot will just balance on two feet (WALKING_IN_PLACE DEMO ONLY)
 Config.ONLY_BALANCING = false;
 
-% If Config.ONLY_BALANCING = false, this is the time the robot will balance
-% before it starts moving (EXAMPLE_STATEMACHINE DEMO ONLY)
+% If Config.ONLY_BALANCING = false, (WALKING_IN_PLACE DEMO ONLY)
+% the robot will balance before it starts moving 
+% for the time Config.t_balancing
 Config.t_balancing = 2;
+% and the movements will need the following precision
+Config.precision_threshold = 0.02;
 
 % If true, simulation is stopped when qpOASES outputs a "-2" error (QP is unfeasible)
 Config.CHECK_QP_ERROR = true;
@@ -247,7 +250,7 @@ Gains.impedances = [20  20  20,  10  10  10  8,  10  10  20  8,  30  30  30  60 
                     20  20  20,  10  10  10  8,  10  10  20  8,  30  30  30  60  10  10,  30  30  30  60  10  10;  ... % state = 4 prepare for switching
                     20  20  20,  10  10  10  8,  10  10  20  8,  30  30  30  60  10  10,  30  30  30  60  10  10]; ... % state = 5 two feet balancing
                 
-Gains.dampings   = 2 * sqrt(Gains.impedances); %zeros(size(Gains.impedances));
+Gains.dampings   = 0 * sqrt(Gains.impedances); %zeros(size(Gains.impedances));
 
 % Joints position and velocity gains for inverse kinematics
 Gains.ikin_impedances = Gains.impedances(1,:);
