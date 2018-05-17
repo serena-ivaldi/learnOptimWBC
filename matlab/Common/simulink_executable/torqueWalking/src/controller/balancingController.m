@@ -112,10 +112,13 @@ function [Hessian,gradient,ConstraintMatrix_equality,biasVectorConstraint_equali
 
     % Separating constraints from the Jacobian J. Structure of J:
     %
-    %    J = [J_leftFoot; J_rightFoot; J_CoM; J_rot_task]
+    %    J = [J_leftFoot; J_rightFoot; J_CoM; J_rot_task; J_leftHand; J_rightFoot]
     %
     J_c = [J(1:6, :)*feetInContact(1);
            J(7:12,:)*feetInContact(2)];
+       
+    J_cDot_nu = [JDot_nu(1:6 )*feetInContact(1);
+                JDot_nu(7:12)*feetInContact(2)];   
     
     % Computing desired joint accelerations
     sDDot_star =  s_sDot_sDDot_des(:,3) ...
@@ -206,11 +209,14 @@ function [Hessian,gradient,ConstraintMatrix_equality,biasVectorConstraint_equali
                    + Sat.weightRotTask   * transpose(J_invM_B_RotTask) * (JDot_nu_RotTask - J_invM_h_RotTask - acc_task_star_RotTask) ...
                    + Sat.weightLeftHand  * transpose(J_invM_B_lhand)   * (JDot_nu_lhand - J_invM_h_lhand - acc_task_star_lhand) ...
                    + Sat.weightRightHand * transpose(J_invM_B_rhand)   * (JDot_nu_rhand - J_invM_h_rhand - acc_task_star_rhand) ...
-                   + Sat.weightPostural  * transpose(St_invM_B)        * (- St_invM_h - sDDot_star);      
+                   + Sat.weightPostural  * transpose(St_invM_B)        * (- St_invM_h - sDDot_star);        
+        
+        % Equality constraints
+        % constrain the foot/feet in contact with the ground
+        % to have acceleration = 0
+        ConstraintMatrix_equality     = 0 *(J_c * invM * B);
+        biasVectorConstraint_equality = 0 *(J_c * invM * h - J_cDot_nu);
 
-        % Equality constraints - basically, nothing
-        ConstraintMatrix_equality     = zeros(size(J_invM_B));
-        biasVectorConstraint_equality = zeros(size(acc_task_star));    
     end
     
     % Inequality constraints
