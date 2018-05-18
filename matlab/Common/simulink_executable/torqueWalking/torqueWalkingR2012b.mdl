@@ -5,7 +5,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.797"
+    ComputedModelVersion    "1.799"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -20,6 +20,7 @@ Model {
   FPTRunName		  "Run 1"
   MaxMDLFileLineLength	  120
   InitFcn		  "cd(fileparts(which(bdroot)));\ninitTorqueWalking;"
+  StopFcn		  "disp_early_termination"
   Object {
     $PropName		    "BdWindowsInfo"
     $ObjectID		    1
@@ -48,9 +49,18 @@ Model {
       }
       Array {
 	Type			"Simulink.EditorInfo"
-	Dimension		6
+	Dimension		5
 	Object {
 	  $ObjectID		  5
+	  IsActive		  [1]
+	  ViewObjType		  "SimulinkTopLevel"
+	  LoadSaveID		  "0"
+	  Extents		  [1275.0, 558.0]
+	  ZoomFactor		  [0.71592060335447072]
+	  Offset		  [-527.96187106918239, -118.86079664570229]
+	}
+	Object {
+	  $ObjectID		  6
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "4420"
@@ -59,7 +69,7 @@ Model {
 	  Offset		  [-306.797243514151, -354.51698113207544]
 	}
 	Object {
-	  $ObjectID		  6
+	  $ObjectID		  7
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "4091"
@@ -68,7 +78,7 @@ Model {
 	  Offset		  [-230.09433962264154, 22.452830188679229]
 	}
 	Object {
-	  $ObjectID		  7
+	  $ObjectID		  8
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "4258"
@@ -77,31 +87,13 @@ Model {
 	  Offset		  [-1514.2688679245282, -225.10943396226412]
 	}
 	Object {
-	  $ObjectID		  8
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4176"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [1.25]
-	  Offset		  [112.60000000000002, 232.60000000000002]
-	}
-	Object {
 	  $ObjectID		  9
-	  IsActive		  [1]
-	  ViewObjType		  "SimulinkTopLevel"
-	  LoadSaveID		  "0"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [0.71548274323816119]
-	  Offset		  [-528.50681466442688, -119.32581518031088]
-	}
-	Object {
-	  $ObjectID		  10
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4470"
+	  LoadSaveID		  "4664"
 	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [0.8]
-	  Offset		  [350.015625, 403.5]
+	  ZoomFactor		  [0.92]
+	  Offset		  [-257.60869565217394, -55.434782608695642]
 	}
 	PropName		"EditorsInfo"
       }
@@ -113,9 +105,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "mcharbonneau"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu May 17 17:49:17 2018"
-  RTWModifiedTimeStamp	  448480156
-  ModelVersionFormat	  "1.%<AutoIncrement:797>"
+  LastModifiedDate	  "Fri May 18 10:08:21 2018"
+  RTWModifiedTimeStamp	  448538899
+  ModelVersionFormat	  "1.%<AutoIncrement:799>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -150,7 +142,7 @@ Model {
   TryForcingSFcnDF	  off
   Object {
     $PropName		    "DataLoggingOverride"
-    $ObjectID		    12
+    $ObjectID		    11
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
     model_		    "torqueWalkingR2012b"
     overrideMode_	    [0.0]
@@ -208,13 +200,13 @@ Model {
     Type		    "Handle"
     Dimension		    1
     Simulink.ConfigSet {
-      $ObjectID		      13
+      $ObjectID		      12
       Version		      "1.12.1"
       Array {
 	Type			"Handle"
 	Dimension		8
 	Simulink.SolverCC {
-	  $ObjectID		  14
+	  $ObjectID		  13
 	  Version		  "1.12.1"
 	  StartTime		  "0.0"
 	  StopTime		  "Config.t_end"
@@ -249,7 +241,7 @@ Model {
 	  InsertRTBMode		  "Whenever possible"
 	}
 	Simulink.DataIOCC {
-	  $ObjectID		  15
+	  $ObjectID		  14
 	  Version		  "1.12.1"
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
@@ -281,7 +273,7 @@ Model {
 	  Refine		  "1"
 	}
 	Simulink.OptimizationCC {
-	  $ObjectID		  16
+	  $ObjectID		  15
 	  Version		  "1.12.1"
 	  Array {
 	    Type		    "Cell"
@@ -333,7 +325,7 @@ Model {
 	  AccelVerboseBuild	  off
 	}
 	Simulink.DebuggingCC {
-	  $ObjectID		  17
+	  $ObjectID		  16
 	  Version		  "1.12.1"
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
@@ -420,7 +412,7 @@ Model {
 	  ModelReferenceCSMismatchMessage "none"
 	}
 	Simulink.HardwareCC {
-	  $ObjectID		  18
+	  $ObjectID		  17
 	  Version		  "1.12.1"
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
@@ -456,7 +448,7 @@ Model {
 	  ProdEqTarget		  on
 	}
 	Simulink.ModelReferenceCC {
-	  $ObjectID		  19
+	  $ObjectID		  18
 	  Version		  "1.12.1"
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
 	  CheckModelReferenceTargetMessage "error"
@@ -471,7 +463,7 @@ Model {
 	  SupportModelReferenceSimTargetCustomCode off
 	}
 	Simulink.SFSimCC {
-	  $ObjectID		  20
+	  $ObjectID		  19
 	  Version		  "1.12.1"
 	  SFSimEcho		  on
 	  SimCtrlC		  on
@@ -482,7 +474,7 @@ Model {
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
-	  $ObjectID		  21
+	  $ObjectID		  20
 	  Version		  "1.12.1"
 	  Array {
 	    Type		    "Cell"
@@ -546,7 +538,7 @@ Model {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
-	      $ObjectID		      22
+	      $ObjectID		      21
 	      Version		      "1.12.1"
 	      Array {
 		Type			"Cell"
@@ -619,7 +611,7 @@ Model {
 	    }
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
-	      $ObjectID		      23
+	      $ObjectID		      22
 	      Version		      "1.12.1"
 	      Array {
 		Type			"Cell"
@@ -707,11 +699,11 @@ Model {
   }
   Simulink.ConfigSet {
     $PropName		    "ActiveConfigurationSet"
-    $ObjectID		    13
+    $ObjectID		    12
   }
   Object {
     $PropName		    "DataTransfer"
-    $ObjectID		    25
+    $ObjectID		    24
     $ClassName		    "Simulink.GlobalDataTransfer"
     DefaultTransitionBetweenSyncTasks "Ensure deterministic transfer (maximum delay)"
     DefaultTransitionBetweenAsyncTasks "Ensure data integrity only"
@@ -1072,7 +1064,7 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "72"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "7090"
+    SIDHighWatermark	    "7096"
     Block {
       BlockType		      SubSystem
       Name		      "Balancing Controller (Reactive QP control)"
@@ -1257,7 +1249,7 @@ Model {
 	  Variant		  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    26
+	    $ObjectID		    25
 	    $ClassName		    "Simulink.Mask"
 	    Type		    "Stateflow"
 	    Description		    "Embedded MATLAB block"
@@ -1282,7 +1274,7 @@ Model {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
-	    SIDHighWatermark	    "7090"
+	    SIDHighWatermark	    "7096"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "feetInContact"
@@ -3491,7 +3483,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    27
+		    $ObjectID		    26
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -3516,7 +3508,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7090"
+		    SIDHighWatermark	    "7096"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "M"
@@ -4543,7 +4535,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    28
+		    $ObjectID		    27
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -4568,7 +4560,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7090"
+		    SIDHighWatermark	    "7096"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "J_LeftFoot"
@@ -5295,7 +5287,7 @@ Model {
 	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		29
+		$ObjectID		28
 		$ClassName		"Simulink.Mask"
 		Type			"Stateflow"
 		Description		"Embedded MATLAB block"
@@ -5320,7 +5312,7 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"7090"
+		SIDHighWatermark	"7096"
 		Block {
 		  BlockType		  Inport
 		  Name			  "pose_vel_acc_LFoot_des"
@@ -5794,7 +5786,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    30
+		    $ObjectID		    29
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -5820,7 +5812,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7090"
+		    SIDHighWatermark	    "7096"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "vel_LFoot"
@@ -7681,7 +7673,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    31
+		    $ObjectID		    30
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -7707,7 +7699,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7090"
+		    SIDHighWatermark	    "7096"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "s"
@@ -8258,7 +8250,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    32
+		    $ObjectID		    31
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -8283,7 +8275,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7090"
+		    SIDHighWatermark	    "7096"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "pose_b"
@@ -8518,7 +8510,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    33
+		    $ObjectID		    32
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -8544,7 +8536,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7090"
+		    SIDHighWatermark	    "7096"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "w_H_b_0"
@@ -8644,7 +8636,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    34
+		    $ObjectID		    33
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -8670,7 +8662,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7090"
+		    SIDHighWatermark	    "7096"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "pose_b"
@@ -11339,7 +11331,7 @@ Model {
 	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		35
+		$ObjectID		34
 		$ClassName		"Simulink.Mask"
 		Type			"Stateflow"
 		Description		"Embedded MATLAB block"
@@ -11364,7 +11356,7 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"7090"
+		SIDHighWatermark	"7096"
 		Block {
 		  BlockType		  Inport
 		  Name			  "pos_vel_acc_CoM_des"
@@ -11838,7 +11830,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    36
+		    $ObjectID		    35
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -11864,7 +11856,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7090"
+		    SIDHighWatermark	    "7096"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "vel_CoM"
@@ -13882,7 +13874,7 @@ Model {
 	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		37
+		$ObjectID		36
 		$ClassName		"Simulink.Mask"
 		Type			"Stateflow"
 		Description		"Embedded MATLAB block"
@@ -13907,7 +13899,7 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"7090"
+		SIDHighWatermark	"7096"
 		Block {
 		  BlockType		  Inport
 		  Name			  "state"
@@ -16634,7 +16626,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    38
+		    $ObjectID		    37
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -16660,7 +16652,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7090"
+		    SIDHighWatermark	    "7096"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "w_R_LFoot_des"
@@ -17745,7 +17737,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    39
+		    $ObjectID		    38
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -17771,7 +17763,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7090"
+		    SIDHighWatermark	    "7096"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "omega_LFoot"
@@ -18885,7 +18877,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    40
+		    $ObjectID		    39
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -18910,7 +18902,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7090"
+		    SIDHighWatermark	    "7096"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "state"
@@ -20255,7 +20247,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    41
+		    $ObjectID		    40
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -20281,7 +20273,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7090"
+		    SIDHighWatermark	    "7096"
 		    SIDPrevWatermark	    "9"
 		    Block {
 		    BlockType		    Inport
@@ -20972,7 +20964,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    42
+		    $ObjectID		    41
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -20998,7 +20990,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7090"
+		    SIDHighWatermark	    "7096"
 		    SIDPrevWatermark	    "9"
 		    Block {
 		    BlockType		    Inport
@@ -21749,7 +21741,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    43
+		    $ObjectID		    42
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -21774,7 +21766,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7090"
+		    SIDHighWatermark	    "7096"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "J_LeftFoot"
@@ -22342,7 +22334,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    44
+		    $ObjectID		    43
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -22367,7 +22359,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7090"
+		    SIDHighWatermark	    "7096"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "s_0"
@@ -24321,7 +24313,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		45
+	$ObjectID		44
 	$ClassName		"Simulink.Mask"
 	Display			"disp('DATA FOR LEARNOPTIM_WBC')"
       }
@@ -24728,7 +24720,7 @@ Model {
 	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		46
+		$ObjectID		45
 		$ClassName		"Simulink.Mask"
 		Type			"Stateflow"
 		Description		"Embedded MATLAB block"
@@ -24753,7 +24745,7 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"7090"
+		SIDHighWatermark	"7096"
 		Block {
 		  BlockType		  Inport
 		  Name			  "f_lFoot"
@@ -24942,7 +24934,7 @@ Model {
 	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		47
+		$ObjectID		46
 		$ClassName		"Simulink.Mask"
 		Type			"Stateflow"
 		Description		"Embedded MATLAB block"
@@ -24967,7 +24959,7 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"7090"
+		SIDHighWatermark	"7096"
 		Block {
 		  BlockType		  Inport
 		  Name			  "pose_lFoot"
@@ -26951,7 +26943,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		48
+	$ObjectID		47
 	$ClassName		"Simulink.Mask"
 	Display			"disp('VISUALIZE AND DUMP DATA \\n EARLY TERMINATION')"
       }
@@ -28607,7 +28599,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "250"
+	    ZoomFactor		    "125"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "F_l_foot"
@@ -28717,6 +28709,19 @@ Model {
 	      SaturateOnIntegerOverflow	off
 	    }
 	    Block {
+	      BlockType		      ToWorkspace
+	      Name		      "To Workspace"
+	      SID		      "7092"
+	      Ports		      [1]
+	      Position		      [240, 65, 355, 95]
+	      ZOrder		      932
+	      VariableName	      "no_force_on_feet"
+	      MaxDataPoints	      "1"
+	      SaveFormat	      "Timeseries"
+	      FixptAsFi		      on
+	      SampleTime	      "-1"
+	    }
+	    Block {
 	      BlockType		      Selector
 	      Name		      "select_pose5"
 	      SID		      "6802"
@@ -28776,8 +28781,16 @@ Model {
 	    Line {
 	      SrcBlock		      "Switch1"
 	      SrcPort		      1
-	      DstBlock		      "Stop Simulation"
-	      DstPort		      1
+	      Points		      [6, 0]
+	      Branch {
+		Points			[0, 75]
+		DstBlock		"To Workspace"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"Stop Simulation"
+		DstPort			1
+	      }
 	    }
 	    Line {
 	      SrcBlock		      "Constant4"
@@ -28842,7 +28855,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "250"
+	    ZoomFactor		    "200"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "exitFlagQP"
@@ -28919,6 +28932,19 @@ Model {
 	      InputSameDT	      off
 	      SaturateOnIntegerOverflow	off
 	    }
+	    Block {
+	      BlockType		      ToWorkspace
+	      Name		      "To Workspace"
+	      SID		      "7091"
+	      Ports		      [1]
+	      Position		      [235, -75, 350, -45]
+	      ZOrder		      784
+	      VariableName	      "exitFlagQP_unsuccessful"
+	      MaxDataPoints	      "1"
+	      SaveFormat	      "Timeseries"
+	      FixptAsFi		      on
+	      SampleTime	      "-1"
+	    }
 	    Line {
 	      SrcBlock		      "exitFlagQP"
 	      SrcPort		      1
@@ -28930,12 +28956,6 @@ Model {
 	      SrcPort		      1
 	      DstBlock		      "Switch"
 	      DstPort		      2
-	    }
-	    Line {
-	      SrcBlock		      "Switch"
-	      SrcPort		      1
-	      DstBlock		      "Stop Simulation"
-	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "Constant"
@@ -28954,6 +28974,20 @@ Model {
 	      SrcPort		      1
 	      DstBlock		      "Switch"
 	      DstPort		      3
+	    }
+	    Line {
+	      SrcBlock		      "Switch"
+	      SrcPort		      1
+	      Points		      [3, 0]
+	      Branch {
+		Points			[0, -55]
+		DstBlock		"To Workspace"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"Stop Simulation"
+		DstPort			1
+	      }
 	    }
 	  }
 	  RTWSystemCode		  "Auto"
@@ -29103,6 +29137,19 @@ Model {
 	      SaturateOnIntegerOverflow	off
 	    }
 	    Block {
+	      BlockType		      ToWorkspace
+	      Name		      "To Workspace"
+	      SID		      "7093"
+	      Ports		      [1]
+	      Position		      [320, 70, 435, 100]
+	      ZOrder		      941
+	      VariableName	      "ZMP_out_of_bounds"
+	      MaxDataPoints	      "1"
+	      SaveFormat	      "Timeseries"
+	      FixptAsFi		      on
+	      SampleTime	      "-1"
+	    }
+	    Block {
 	      BlockType		      Selector
 	      Name		      "select_pose1"
 	      SID		      "7040"
@@ -29145,8 +29192,16 @@ Model {
 	    Line {
 	      SrcBlock		      "Switch1"
 	      SrcPort		      1
-	      DstBlock		      "Stop Simulation"
-	      DstPort		      1
+	      Points		      [5, 0]
+	      Branch {
+		Points			[0, 80]
+		DstBlock		"To Workspace"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"Stop Simulation"
+		DstPort			1
+	      }
 	    }
 	    Line {
 	      SrcBlock		      "Sum of\nElements"
@@ -34769,7 +34824,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		49
+	$ObjectID		48
 	$ClassName		"Simulink.Mask"
 	Display			"disp('SYNCHRONIZER')"
       }

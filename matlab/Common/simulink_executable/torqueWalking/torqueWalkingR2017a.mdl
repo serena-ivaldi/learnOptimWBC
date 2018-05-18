@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.796"
+    ComputedModelVersion    "1.798"
     NumModelReferences	    0
     NumTestPointedSignals   0
     NumProvidedFunctions    0
@@ -34,6 +34,7 @@ Model {
   FPTRunName		  "Run 1"
   MaxMDLFileLineLength	  120
   InitFcn		  "cd(fileparts(which(bdroot)));\ninitTorqueWalking;"
+  StopFcn		  "disp_early_termination"
   LastSavedArchitecture	  "glnxa64"
   Object {
     $PropName		    "BdWindowsInfo"
@@ -63,9 +64,18 @@ Model {
       }
       Array {
 	Type			"Simulink.EditorInfo"
-	Dimension		6
+	Dimension		5
 	Object {
 	  $ObjectID		  5
+	  IsActive		  [1]
+	  ViewObjType		  "SimulinkTopLevel"
+	  LoadSaveID		  "0"
+	  Extents		  [1275.0, 558.0]
+	  ZoomFactor		  [0.71592060335447072]
+	  Offset		  [-527.96187106918239, -118.86079664570229]
+	}
+	Object {
+	  $ObjectID		  6
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "4420"
@@ -74,7 +84,7 @@ Model {
 	  Offset		  [-306.797243514151, -354.51698113207544]
 	}
 	Object {
-	  $ObjectID		  6
+	  $ObjectID		  7
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "4091"
@@ -83,7 +93,7 @@ Model {
 	  Offset		  [-230.09433962264154, 22.452830188679229]
 	}
 	Object {
-	  $ObjectID		  7
+	  $ObjectID		  8
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "4258"
@@ -92,37 +102,19 @@ Model {
 	  Offset		  [-1514.2688679245282, -225.10943396226412]
 	}
 	Object {
-	  $ObjectID		  8
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4176"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [1.25]
-	  Offset		  [112.60000000000002, 232.60000000000002]
-	}
-	Object {
 	  $ObjectID		  9
-	  IsActive		  [1]
+	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "4664"
 	  Extents		  [1275.0, 558.0]
 	  ZoomFactor		  [0.92]
-	  Offset		  [0.0, 0.0]
-	}
-	Object {
-	  $ObjectID		  10
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4470"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [0.8]
-	  Offset		  [350.015625, 403.5]
+	  Offset		  [-257.60869565217394, -55.434782608695642]
 	}
 	PropName		"EditorsInfo"
       }
       Object {
 	$PropName		"DockComponentsInfo"
-	$ObjectID		11
+	$ObjectID		10
 	$ClassName		"Simulink.DockComponentInfo"
 	Type			"GLUE2:PropertyInspector"
 	ID			"Property Inspector"
@@ -152,9 +144,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "mcharbonneau"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu May 17 17:47:37 2018"
-  RTWModifiedTimeStamp	  448480056
-  ModelVersionFormat	  "1.%<AutoIncrement:796>"
+  LastModifiedDate	  "Fri May 18 10:07:37 2018"
+  RTWModifiedTimeStamp	  448538809
+  ModelVersionFormat	  "1.%<AutoIncrement:798>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -204,7 +196,7 @@ Model {
   TryForcingSFcnDF	  off
   Object {
     $PropName		    "DataLoggingOverride"
-    $ObjectID		    12
+    $ObjectID		    11
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
     model_		    "torqueWalkingR2017a"
     overrideMode_	    [0.0]
@@ -249,7 +241,7 @@ Model {
     Type		    "Handle"
     Dimension		    1
     Simulink.ConfigSet {
-      $ObjectID		      13
+      $ObjectID		      12
       Version		      "1.17.0"
       DisabledProps	      []
       Description	      ""
@@ -257,7 +249,7 @@ Model {
 	Type			"Handle"
 	Dimension		9
 	Simulink.SolverCC {
-	  $ObjectID		  14
+	  $ObjectID		  13
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  ""
@@ -297,7 +289,7 @@ Model {
 	  SampleTimeProperty	  []
 	}
 	Simulink.DataIOCC {
-	  $ObjectID		  15
+	  $ObjectID		  14
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  ""
@@ -338,7 +330,7 @@ Model {
 	  LoggingIntervals	  "[-inf, inf]"
 	}
 	Simulink.OptimizationCC {
-	  $ObjectID		  16
+	  $ObjectID		  15
 	  Version		  "1.17.0"
 	  Array {
 	    Type		    "Cell"
@@ -399,7 +391,7 @@ Model {
 	  BusAssignmentInplaceUpdate on
 	}
 	Simulink.DebuggingCC {
-	  $ObjectID		  17
+	  $ObjectID		  16
 	  Version		  "1.17.0"
 	  Array {
 	    Type		    "Cell"
@@ -509,7 +501,7 @@ Model {
 	  UnitDatabase		  ""
 	}
 	Simulink.HardwareCC {
-	  $ObjectID		  18
+	  $ObjectID		  17
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  ""
@@ -557,7 +549,7 @@ Model {
 	  UseSimulinkCoderFeatures on
 	}
 	Simulink.ModelReferenceCC {
-	  $ObjectID		  19
+	  $ObjectID		  18
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  ""
@@ -576,7 +568,7 @@ Model {
 	  SupportModelReferenceSimTargetCustomCode off
 	}
 	Simulink.SFSimCC {
-	  $ObjectID		  20
+	  $ObjectID		  19
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  ""
@@ -606,7 +598,7 @@ Model {
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
-	  $ObjectID		  21
+	  $ObjectID		  20
 	  Version		  "1.17.0"
 	  Array {
 	    Type		    "Cell"
@@ -689,7 +681,7 @@ Model {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
-	      $ObjectID		      22
+	      $ObjectID		      21
 	      Version		      "1.17.0"
 	      Array {
 		Type			"Cell"
@@ -776,7 +768,7 @@ Model {
 	    }
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
-	      $ObjectID		      23
+	      $ObjectID		      22
 	      Version		      "1.17.0"
 	      Array {
 		Type			"Cell"
@@ -872,7 +864,7 @@ Model {
 	  }
 	}
 	SlCovCC.ConfigComp {
-	  $ObjectID		  24
+	  $ObjectID		  23
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  "Simulink Coverage Configuration Component"
@@ -922,11 +914,11 @@ Model {
   }
   Simulink.ConfigSet {
     $PropName		    "ActiveConfigurationSet"
-    $ObjectID		    13
+    $ObjectID		    12
   }
   Object {
     $PropName		    "DataTransfer"
-    $ObjectID		    25
+    $ObjectID		    24
     $ClassName		    "Simulink.GlobalDataTransfer"
     DefaultTransitionBetweenSyncTasks "Ensure deterministic transfer (maximum delay)"
     DefaultTransitionBetweenAsyncTasks "Ensure data integrity only"
@@ -1292,7 +1284,7 @@ Model {
   System {
     Name		    "torqueWalkingR2017a"
     Location		    [53, 27, 1366, 768]
-    Open		    off
+    Open		    on
     PortBlocksUseCompactNotation off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -1306,7 +1298,7 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "72"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "7090"
+    SIDHighWatermark	    "7096"
     Block {
       BlockType		      SubSystem
       Name		      "Balancing Controller (Reactive QP control)"
@@ -2907,7 +2899,7 @@ Model {
 	  System {
 	    Name		    "Compute Dynamic and Kinematic Quantities"
 	    Location		    [53, 27, 1366, 768]
-	    Open		    on
+	    Open		    off
 	    PortBlocksUseCompactNotation off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -26305,7 +26297,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		26
+	$ObjectID		25
 	$ClassName		"Simulink.Mask"
 	Display			"disp('DATA FOR LEARNOPTIM_WBC')"
 	RunInitForIconRedraw	"off"
@@ -29036,7 +29028,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		27
+	$ObjectID		26
 	$ClassName		"Simulink.Mask"
 	Display			"disp('VISUALIZE AND DUMP DATA \\n EARLY TERMINATION')"
       }
@@ -29069,7 +29061,7 @@ Model {
 	  System {
 	    Name		    "Cartesian Tasks"
 	    Location		    [53, 27, 1366, 768]
-	    Open		    on
+	    Open		    off
 	    PortBlocksUseCompactNotation off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -30887,7 +30879,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "250"
+	    ZoomFactor		    "125"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "F_l_foot"
@@ -31003,6 +30995,20 @@ Model {
 	      SaturateOnIntegerOverflow	off
 	    }
 	    Block {
+	      BlockType		      ToWorkspace
+	      Name		      "To Workspace"
+	      SID		      "7092"
+	      Ports		      [1]
+	      Position		      [240, 65, 355, 95]
+	      ZOrder		      932
+	      VariableName	      "no_force_on_feet"
+	      MaxDataPoints	      "1"
+	      SaveFormat	      "Timeseries"
+	      Save2DSignal	      "3-D array (concatenate along third dimension)"
+	      FixptAsFi		      on
+	      SampleTime	      "-1"
+	    }
+	    Block {
 	      BlockType		      Selector
 	      Name		      "select_pose5"
 	      SID		      "6802"
@@ -31065,11 +31071,21 @@ Model {
 	      DstPort		      2
 	    }
 	    Line {
-	      ZOrder		      90
+	      ZOrder		      125
 	      SrcBlock		      "Switch1"
 	      SrcPort		      1
-	      DstBlock		      "Stop Simulation"
-	      DstPort		      1
+	      Points		      [6, 0]
+	      Branch {
+		ZOrder			127
+		Points			[0, 75]
+		DstBlock		"To Workspace"
+		DstPort			1
+	      }
+	      Branch {
+		ZOrder			126
+		DstBlock		"Stop Simulation"
+		DstPort			1
+	      }
 	    }
 	    Line {
 	      ZOrder		      92
@@ -31137,7 +31153,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "250"
+	    ZoomFactor		    "200"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "exitFlagQP"
@@ -31214,6 +31230,20 @@ Model {
 	      InputSameDT	      off
 	      SaturateOnIntegerOverflow	off
 	    }
+	    Block {
+	      BlockType		      ToWorkspace
+	      Name		      "To Workspace"
+	      SID		      "7091"
+	      Ports		      [1]
+	      Position		      [235, -75, 350, -45]
+	      ZOrder		      784
+	      VariableName	      "exitFlagQP_unsuccessful"
+	      MaxDataPoints	      "1"
+	      SaveFormat	      "Timeseries"
+	      Save2DSignal	      "3-D array (concatenate along third dimension)"
+	      FixptAsFi		      on
+	      SampleTime	      "-1"
+	    }
 	    Line {
 	      ZOrder		      1
 	      SrcBlock		      "exitFlagQP"
@@ -31227,13 +31257,6 @@ Model {
 	      SrcPort		      1
 	      DstBlock		      "Switch"
 	      DstPort		      2
-	    }
-	    Line {
-	      ZOrder		      3
-	      SrcBlock		      "Switch"
-	      SrcPort		      1
-	      DstBlock		      "Stop Simulation"
-	      DstPort		      1
 	    }
 	    Line {
 	      ZOrder		      4
@@ -31255,6 +31278,23 @@ Model {
 	      SrcPort		      1
 	      DstBlock		      "Switch"
 	      DstPort		      3
+	    }
+	    Line {
+	      ZOrder		      21
+	      SrcBlock		      "Switch"
+	      SrcPort		      1
+	      Points		      [3, 0]
+	      Branch {
+		ZOrder			23
+		Points			[0, -55]
+		DstBlock		"To Workspace"
+		DstPort			1
+	      }
+	      Branch {
+		ZOrder			22
+		DstBlock		"Stop Simulation"
+		DstPort			1
+	      }
 	    }
 	  }
 	}
@@ -31401,6 +31441,20 @@ Model {
 	      SaturateOnIntegerOverflow	off
 	    }
 	    Block {
+	      BlockType		      ToWorkspace
+	      Name		      "To Workspace"
+	      SID		      "7093"
+	      Ports		      [1]
+	      Position		      [320, 70, 435, 100]
+	      ZOrder		      941
+	      VariableName	      "ZMP_out_of_bounds"
+	      MaxDataPoints	      "1"
+	      SaveFormat	      "Timeseries"
+	      Save2DSignal	      "3-D array (concatenate along third dimension)"
+	      FixptAsFi		      on
+	      SampleTime	      "-1"
+	    }
+	    Block {
 	      BlockType		      Selector
 	      Name		      "select_pose1"
 	      SID		      "7040"
@@ -31446,8 +31500,18 @@ Model {
 	      ZOrder		      33
 	      SrcBlock		      "Switch1"
 	      SrcPort		      1
-	      DstBlock		      "Stop Simulation"
-	      DstPort		      1
+	      Points		      [5, 0]
+	      Branch {
+		ZOrder			53
+		Points			[0, 80]
+		DstBlock		"To Workspace"
+		DstPort			1
+	      }
+	      Branch {
+		ZOrder			52
+		DstBlock		"Stop Simulation"
+		DstPort			1
+	      }
 	    }
 	    Line {
 	      ZOrder		      34
@@ -37974,7 +38038,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		28
+	$ObjectID		27
 	$ClassName		"Simulink.Mask"
 	Display			"disp('SYNCHRONIZER')"
       }
@@ -43232,9 +43296,6 @@ Stateflow {
     screen		    [1 1 3600 1200 1.180555555555556]
     treeNode		    [0 211 0 0]
     viewObj		    210
-    visible		    1
-    subviewS {
-    }
     ssIdHighWaterMark	    53
     decomposition	    CLUSTER_CHART
     type		    EML_CHART
