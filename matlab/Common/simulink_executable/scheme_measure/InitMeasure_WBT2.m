@@ -96,7 +96,7 @@ CONFIG.Ts                = 0.01;  % Controller period [s]
 CONFIG.ON_GAZEBO         = false;
 baseToWorldRotationPort  = ['/' WBT_modelName '/floatingBaseRotationMatrix:i'];
 
-run(strcat('app/robots/',getenv('YARP_ROBOT_NAME'),'/gains.m')); 
+run(strcat('app/robots/',getenv('YARP_ROBOT_NAME'),'/gains_WBT2.m')); 
 addpath('./utilityMatlabFunctions/')
 
 %% iCub stand up demo parameters

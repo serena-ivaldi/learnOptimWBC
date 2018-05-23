@@ -5,7 +5,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.799"
+    ComputedModelVersion    "1.817"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -49,15 +49,15 @@ Model {
       }
       Array {
 	Type			"Simulink.EditorInfo"
-	Dimension		5
+	Dimension		12
 	Object {
 	  $ObjectID		  5
-	  IsActive		  [1]
-	  ViewObjType		  "SimulinkTopLevel"
-	  LoadSaveID		  "0"
+	  IsActive		  [0]
+	  ViewObjType		  "SimulinkSubsys"
+	  LoadSaveID		  "6907"
 	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [0.71592060335447072]
-	  Offset		  [-527.96187106918239, -118.86079664570229]
+	  ZoomFactor		  [1.5511457503255526]
+	  Offset		  [128.63847609262234, -70.86704340417]
 	}
 	Object {
 	  $ObjectID		  6
@@ -72,10 +72,10 @@ Model {
 	  $ObjectID		  7
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4091"
+	  LoadSaveID		  "6977"
 	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [0.71621621621621623]
-	  Offset		  [-230.09433962264154, 22.452830188679229]
+	  ZoomFactor		  [1.1699779249448123]
+	  Offset		  [135.24291387369135, 45.26037757167461]
 	}
 	Object {
 	  $ObjectID		  8
@@ -83,8 +83,8 @@ Model {
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "4258"
 	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [0.48094373865698731]
-	  Offset		  [-1514.2688679245282, -225.10943396226412]
+	  ZoomFactor		  [0.4835766423357663]
+	  Offset		  [-1506.8938679245284, -224.95094339622653]
 	}
 	Object {
 	  $ObjectID		  9
@@ -92,8 +92,71 @@ Model {
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "4664"
 	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [0.92]
-	  Offset		  [-257.60869565217394, -55.434782608695642]
+	  ZoomFactor		  [1.0]
+	  Offset		  [-227.17391304347831, 57.826086956521749]
+	}
+	Object {
+	  $ObjectID		  10
+	  IsActive		  [0]
+	  ViewObjType		  "SimulinkSubsys"
+	  LoadSaveID		  "5419"
+	  Extents		  [1275.0, 558.0]
+	  ZoomFactor		  [0.85071818787475006]
+	  Offset		  [428.14487895950276, -105.95819341419411]
+	}
+	Object {
+	  $ObjectID		  11
+	  IsActive		  [0]
+	  ViewObjType		  "SimulinkSubsys"
+	  LoadSaveID		  "7100"
+	  Extents		  [1275.0, 558.0]
+	  ZoomFactor		  [2.5]
+	  Offset		  [-68.516666666666708, -68.050000000000011]
+	}
+	Object {
+	  $ObjectID		  12
+	  IsActive		  [0]
+	  ViewObjType		  "SimulinkSubsys"
+	  LoadSaveID		  "4771"
+	  Extents		  [1275.0, 558.0]
+	  ZoomFactor		  [0.8]
+	  Offset		  [228.11603773584898, 110.81886792452826]
+	}
+	Object {
+	  $ObjectID		  13
+	  IsActive		  [0]
+	  ViewObjType		  "SimulinkSubsys"
+	  LoadSaveID		  "4129"
+	  Extents		  [1275.0, 558.0]
+	  ZoomFactor		  [1.0]
+	  Offset		  [297.00000000000023, 232.00000000000011]
+	}
+	Object {
+	  $ObjectID		  14
+	  IsActive		  [0]
+	  ViewObjType		  "SimulinkSubsys"
+	  LoadSaveID		  "4470"
+	  Extents		  [1275.0, 558.0]
+	  ZoomFactor		  [0.8]
+	  Offset		  [395.765625, 401.0]
+	}
+	Object {
+	  $ObjectID		  15
+	  IsActive		  [1]
+	  ViewObjType		  "SimulinkTopLevel"
+	  LoadSaveID		  "0"
+	  Extents		  [1275.0, 558.0]
+	  ZoomFactor		  [0.71524966261808365]
+	  Offset		  [-528.79716981132083, -119.57358490566037]
+	}
+	Object {
+	  $ObjectID		  16
+	  IsActive		  [0]
+	  ViewObjType		  "SimulinkSubsys"
+	  LoadSaveID		  "7022"
+	  Extents		  [1275.0, 558.0]
+	  ZoomFactor		  [1.25]
+	  Offset		  [-649.8, -164.13333333333333]
 	}
 	PropName		"EditorsInfo"
       }
@@ -105,9 +168,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "mcharbonneau"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri May 18 10:08:21 2018"
-  RTWModifiedTimeStamp	  448538899
-  ModelVersionFormat	  "1.%<AutoIncrement:799>"
+  LastModifiedDate	  "Tue May 22 18:46:41 2018"
+  RTWModifiedTimeStamp	  448915600
+  ModelVersionFormat	  "1.%<AutoIncrement:817>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -142,7 +205,7 @@ Model {
   TryForcingSFcnDF	  off
   Object {
     $PropName		    "DataLoggingOverride"
-    $ObjectID		    11
+    $ObjectID		    18
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
     model_		    "torqueWalkingR2012b"
     overrideMode_	    [0.0]
@@ -200,13 +263,13 @@ Model {
     Type		    "Handle"
     Dimension		    1
     Simulink.ConfigSet {
-      $ObjectID		      12
+      $ObjectID		      19
       Version		      "1.12.1"
       Array {
 	Type			"Handle"
 	Dimension		8
 	Simulink.SolverCC {
-	  $ObjectID		  13
+	  $ObjectID		  20
 	  Version		  "1.12.1"
 	  StartTime		  "0.0"
 	  StopTime		  "Config.t_end"
@@ -241,7 +304,7 @@ Model {
 	  InsertRTBMode		  "Whenever possible"
 	}
 	Simulink.DataIOCC {
-	  $ObjectID		  14
+	  $ObjectID		  21
 	  Version		  "1.12.1"
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
@@ -273,7 +336,7 @@ Model {
 	  Refine		  "1"
 	}
 	Simulink.OptimizationCC {
-	  $ObjectID		  15
+	  $ObjectID		  22
 	  Version		  "1.12.1"
 	  Array {
 	    Type		    "Cell"
@@ -325,7 +388,7 @@ Model {
 	  AccelVerboseBuild	  off
 	}
 	Simulink.DebuggingCC {
-	  $ObjectID		  16
+	  $ObjectID		  23
 	  Version		  "1.12.1"
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
@@ -412,7 +475,7 @@ Model {
 	  ModelReferenceCSMismatchMessage "none"
 	}
 	Simulink.HardwareCC {
-	  $ObjectID		  17
+	  $ObjectID		  24
 	  Version		  "1.12.1"
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
@@ -448,7 +511,7 @@ Model {
 	  ProdEqTarget		  on
 	}
 	Simulink.ModelReferenceCC {
-	  $ObjectID		  18
+	  $ObjectID		  25
 	  Version		  "1.12.1"
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
 	  CheckModelReferenceTargetMessage "error"
@@ -463,7 +526,7 @@ Model {
 	  SupportModelReferenceSimTargetCustomCode off
 	}
 	Simulink.SFSimCC {
-	  $ObjectID		  19
+	  $ObjectID		  26
 	  Version		  "1.12.1"
 	  SFSimEcho		  on
 	  SimCtrlC		  on
@@ -474,7 +537,7 @@ Model {
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
-	  $ObjectID		  20
+	  $ObjectID		  27
 	  Version		  "1.12.1"
 	  Array {
 	    Type		    "Cell"
@@ -538,7 +601,7 @@ Model {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
-	      $ObjectID		      21
+	      $ObjectID		      28
 	      Version		      "1.12.1"
 	      Array {
 		Type			"Cell"
@@ -611,7 +674,7 @@ Model {
 	    }
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
-	      $ObjectID		      22
+	      $ObjectID		      29
 	      Version		      "1.12.1"
 	      Array {
 		Type			"Cell"
@@ -699,11 +762,11 @@ Model {
   }
   Simulink.ConfigSet {
     $PropName		    "ActiveConfigurationSet"
-    $ObjectID		    12
+    $ObjectID		    19
   }
   Object {
     $PropName		    "DataTransfer"
-    $ObjectID		    24
+    $ObjectID		    31
     $ClassName		    "Simulink.GlobalDataTransfer"
     DefaultTransitionBetweenSyncTasks "Ensure deterministic transfer (maximum delay)"
     DefaultTransitionBetweenAsyncTasks "Ensure data integrity only"
@@ -889,6 +952,15 @@ Model {
       DisplayMFileStacktrace  on
     }
     Block {
+      BlockType		      Memory
+      X0		      "0"
+      InheritSampleTime	      off
+      LinearizeMemory	      off
+      LinearizeAsDelay	      off
+      StateMustResolveToSignalObject off
+      RTWStateStorageClass    "Auto"
+    }
+    Block {
       BlockType		      Mux
       Inputs		      "4"
       DisplayOption	      "none"
@@ -1064,7 +1136,7 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "72"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "7096"
+    SIDHighWatermark	    "7120"
     Block {
       BlockType		      SubSystem
       Name		      "Balancing Controller (Reactive QP control)"
@@ -1249,7 +1321,7 @@ Model {
 	  Variant		  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    25
+	    $ObjectID		    32
 	    $ClassName		    "Simulink.Mask"
 	    Type		    "Stateflow"
 	    Description		    "Embedded MATLAB block"
@@ -1274,7 +1346,7 @@ Model {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
-	    SIDHighWatermark	    "7096"
+	    SIDHighWatermark	    "7120"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "feetInContact"
@@ -1677,10 +1749,10 @@ Model {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "Compute joint torques (motor reflected inertia)"
-	  SID			  "6167"
+	  SID			  "7104"
 	  Ports			  [1, 1]
-	  Position		  [925, 109, 1070, 151]
-	  ZOrder		  916
+	  Position		  [880, 109, 1025, 151]
+	  ZOrder		  918
 	  RequestExecContextInheritance	off
 	  Variant		  off
 	  System {
@@ -1697,11 +1769,11 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "208"
+	    ZoomFactor		    "100"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "invGamma*tau_motors"
-	      SID		      "6168"
+	      SID		      "7105"
 	      Position		      [-330, 68, -300, 82]
 	      ZOrder		      591
 	      IconDisplay	      "Port number"
@@ -1709,7 +1781,7 @@ Model {
 	    Block {
 	      BlockType		      Constant
 	      Name		      " "
-	      SID		      "6169"
+	      SID		      "7106"
 	      Position		      [25, 44, 240, 56]
 	      ZOrder		      607
 	      Value		      "Config.USE_MOTOR_REFLECTED_INERTIA"
@@ -1717,7 +1789,7 @@ Model {
 	    Block {
 	      BlockType		      Sum
 	      Name		      "Add"
-	      SID		      "6170"
+	      SID		      "7107"
 	      Ports		      [2, 1]
 	      Position		      [-30, -143, 15, 148]
 	      ZOrder		      602
@@ -1729,7 +1801,7 @@ Model {
 	    Block {
 	      BlockType		      Gain
 	      Name		      "Gain"
-	      SID		      "6171"
+	      SID		      "7108"
 	      Position		      [-150, -85, -60, -55]
 	      ZOrder		      596
 	      Gain		      "Config.K_ff"
@@ -1739,25 +1811,21 @@ Model {
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "Get Estimate"
-	      SID		      "6172"
+	      Name		      "Get Measurement"
+	      SID		      "7116"
 	      Ports		      [0, 1]
-	      Position		      [-355, -46, -270, -24]
-	      ZOrder		      595
+	      Position		      [-375, -49, -255, -21]
+	      ZOrder		      608
 	      BackgroundColor	      "[0.925500, 0.870600, 0.133300]"
-	      LibraryVersion	      "1.383"
-	      SourceBlock	      "WBToolboxLibrary/wholeBodyStates/Get Estimate"
-	      SourceType	      "Get Estimate"
-	      estimateType	      "Joints Acceleration"
-	      robotName		      "WBT_robotName"
-	      localName		      "WBT_modelName"
-	      wbiFile		      "WBT_wbiFilename"
-	      wbiList		      "WBT_wbiList"
+	      LibraryVersion	      "1.497"
+	      SourceBlock	      "WBToolboxLibrary/wholeBodyStates/Get Measurement"
+	      SourceType	      "Get Measurement"
+	      measuredType	      "Joints Acceleration"
 	    }
 	    Block {
 	      BlockType		      Constant
 	      Name		      "Motors Inertia"
-	      SID		      "6173"
+	      SID		      "7110"
 	      Position		      [-450, -98, -375, -82]
 	      ZOrder		      601
 	      Value		      "Config.I_m"
@@ -1765,7 +1833,7 @@ Model {
 	    Block {
 	      BlockType		      Product
 	      Name		      "Product"
-	      SID		      "6174"
+	      SID		      "7111"
 	      Ports		      [2, 1]
 	      Position		      [-230, -146, -190, 1]
 	      ZOrder		      597
@@ -1778,7 +1846,7 @@ Model {
 	    Block {
 	      BlockType		      Product
 	      Name		      "Product1"
-	      SID		      "6175"
+	      SID		      "7112"
 	      Ports		      [2, 1]
 	      Position		      [-330, -151, -295, -69]
 	      ZOrder		      600
@@ -1791,7 +1859,7 @@ Model {
 	    Block {
 	      BlockType		      Switch
 	      Name		      "Switch"
-	      SID		      "6176"
+	      SID		      "7113"
 	      Position		      [255, -15, 340, 115]
 	      ZOrder		      606
 	      Criteria		      "u2 > Threshold"
@@ -1801,7 +1869,7 @@ Model {
 	    Block {
 	      BlockType		      Constant
 	      Name		      "Transmission ratio"
-	      SID		      "6177"
+	      SID		      "7114"
 	      Position		      [-450, -138, -370, -122]
 	      ZOrder		      598
 	      Value		      "Config.invGamma"
@@ -1809,7 +1877,7 @@ Model {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "tau_joints"
-	      SID		      "6178"
+	      SID		      "7115"
 	      Position		      [375, 43, 405, 57]
 	      ZOrder		      592
 	      IconDisplay	      "Port number"
@@ -1821,7 +1889,7 @@ Model {
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Get Estimate"
+	      SrcBlock		      "Get Measurement"
 	      SrcPort		      1
 	      DstBlock		      "Product"
 	      DstPort		      2
@@ -1892,26 +1960,23 @@ Model {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "Get Estimate"
-	  SID			  "4110"
+	  Name			  "Get Measurement"
+	  SID			  "7100"
 	  Ports			  [0, 1]
-	  Position		  [270, 67, 350, 103]
-	  ZOrder		  54
+	  Position		  [225, 71, 345, 99]
+	  ZOrder		  917
 	  BackgroundColor	  "[0.827500, 0.576500, 0.603900]"
-	  LibraryVersion	  "1.383"
-	  SourceBlock		  "WBToolboxLibrary/wholeBodyStates/Get Estimate"
-	  SourceType		  "Get Estimate"
-	  estimateType		  "Joints Torque"
-	  robotName		  "WBT_robotName"
-	  localName		  "WBT_modelName"
-	  wbiFile		  "WBT_wbiFilename"
-	  wbiList		  "WBT_wbiList"
+	  ShowName		  off
+	  LibraryVersion	  "1.497"
+	  SourceBlock		  "WBToolboxLibrary/wholeBodyStates/Get Measurement"
+	  SourceType		  "Get Measurement"
+	  measuredType		  "Joints Torque"
 	}
 	Block {
 	  BlockType		  Goto
 	  Name			  "Goto"
 	  SID			  "5647"
-	  Position		  [1310, 180, 1350, 210]
+	  Position		  [1185, 180, 1225, 210]
 	  ZOrder		  699
 	  GotoTag		  "tau_des"
 	  TagVisibility		  "global"
@@ -1976,7 +2041,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "125"
+	    ZoomFactor		    "163"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "tau_0"
@@ -2178,7 +2243,7 @@ Model {
 	  Name			  "Saturation"
 	  SID			  "4128"
 	  Ports			  [1, 1]
-	  Position		  [1155, 114, 1190, 146]
+	  Position		  [1055, 114, 1090, 146]
 	  ZOrder		  546
 	  InputPortMap		  "u0"
 	  UpperLimit		  "Sat.tau_max"
@@ -2192,7 +2257,7 @@ Model {
 	  Position		  [435, 67, 490, 103]
 	  ZOrder		  55
 	  BackgroundColor	  "[0.537255, 0.721569, 1.000000]"
-	  LibraryVersion	  "1.383"
+	  LibraryVersion	  "1.497"
 	  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 	  SourceType		  "Holder"
 	}
@@ -2200,15 +2265,9 @@ Model {
 	  BlockType		  Outport
 	  Name			  "tau"
 	  SID			  "4160"
-	  Position		  [1315, 123, 1345, 137]
+	  Position		  [1190, 123, 1220, 137]
 	  ZOrder		  20
 	  IconDisplay		  "Port number"
-	}
-	Line {
-	  SrcBlock		  "QPSolver (Reactive QP control)"
-	  SrcPort		  1
-	  DstBlock		  "Compute joint torques (motor reflected inertia)"
-	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "holder\n"
@@ -2313,9 +2372,9 @@ Model {
 	  DstPort		  2
 	}
 	Line {
-	  SrcBlock		  "Get Estimate"
+	  SrcBlock		  "Get Measurement"
 	  SrcPort		  1
-	  Points		  [28, 0]
+	  Points		  [33, 0]
 	  Branch {
 	    Points		    [0, 50]
 	    DstBlock		    "Goto4"
@@ -2335,7 +2394,7 @@ Model {
 	Line {
 	  SrcBlock		  "Saturation"
 	  SrcPort		  1
-	  Points		  [41, 0]
+	  Points		  [16, 0]
 	  Branch {
 	    DstBlock		    "tau"
 	    DstPort		    1
@@ -2385,9 +2444,9 @@ Model {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "Compute joint torques (motor reflected inertia)"
+	  SrcBlock		  "QPSolver (Reactive QP control)"
 	  SrcPort		  1
-	  DstBlock		  "Saturation"
+	  DstBlock		  "Compute joint torques (motor reflected inertia)"
 	  DstPort		  1
 	}
 	Line {
@@ -2408,6 +2467,12 @@ Model {
 	  DstBlock		  "Balancing Controller Function"
 	  DstPort		  11
 	}
+	Line {
+	  SrcBlock		  "Compute joint torques (motor reflected inertia)"
+	  SrcPort		  1
+	  DstBlock		  "Saturation"
+	  DstPort		  1
+	}
       }
       RTWSystemCode	      "Auto"
       MinAlgLoopOccurrences   off
@@ -2415,6 +2480,25 @@ Model {
       FunctionWithSeparateData off
       Opaque		      off
       MaskHideContents	      off
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "Configuration"
+      SID		      "7103"
+      Ports		      []
+      Position		      [-175, -100, -100, -70]
+      ZOrder		      1016
+      LibraryVersion	      "1.497"
+      SourceBlock	      "WBToolboxLibrary/Utilities/Configuration"
+      SourceType	      ""
+      ConfigSource	      "Workspace"
+      ConfigObject	      "'WBTConfigRobot'"
+      RobotName		      "'icub'"
+      UrdfFile		      "'model.urdf'"
+      ControlledJoints	      "{'l_elbow','l_shoulder_pitch','torso_roll'}"
+      ControlBoardsNames      "{'left_arm','right_arm','torso'}"
+      LocalName		      "'WBT'"
+      GravityVector	      "[0,0,-9.81]"
     }
     Block {
       BlockType		      SubSystem
@@ -2617,7 +2701,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "125"
+	    ZoomFactor		    "99"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "nu"
@@ -2717,7 +2801,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"80"
+		ZoomFactor		"68"
 		Block {
 		  BlockType		  Inport
 		  Name			  "s"
@@ -2760,14 +2844,10 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1475, 330, 1640, 425]
 		  ZOrder		  112
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  frameName		  "Frames.COM"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -2776,14 +2856,10 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1475, 615, 1640, 710]
 		  ZOrder		  116
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  frameName		  "Frames.LEFT_FOOT"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -2792,14 +2868,10 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1475, 870, 1640, 965]
 		  ZOrder		  129
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  frameName		  "Frames.LEFT_HAND"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -2808,14 +2880,10 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1475, 745, 1640, 840]
 		  ZOrder		  114
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  frameName		  "Frames.RIGHT_FOOT"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -2824,14 +2892,10 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1475, 1000, 1640, 1095]
 		  ZOrder		  128
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  frameName		  "Frames.RIGHT_HAND"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -2840,14 +2904,10 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1475, 485, 1640, 580]
 		  ZOrder		  115
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  frameName		  "Frames.ROT_TASK_LINK"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -2856,14 +2916,10 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [1050, 390, 1210, 445]
 		  ZOrder		  113
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  frameName		  "Frames.COM"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -2872,14 +2928,10 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [1050, 565, 1210, 620]
 		  ZOrder		  118
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  frameName		  "Frames.LEFT_FOOT"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -2888,14 +2940,10 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [1050, 800, 1210, 855]
 		  ZOrder		  126
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  frameName		  "Frames.LEFT_HAND"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -2904,14 +2952,10 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [1050, 655, 1210, 710]
 		  ZOrder		  119
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  frameName		  "Frames.RIGHT_FOOT"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -2920,14 +2964,10 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [1050, 890, 1210, 945]
 		  ZOrder		  127
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  frameName		  "Frames.RIGHT_HAND"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -2936,14 +2976,10 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [1050, 480, 1210, 535]
 		  ZOrder		  117
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  frameName		  "Frames.ROT_TASK_LINK"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Outport
@@ -3447,7 +3483,7 @@ Model {
 		  Variant		  off
 		  System {
 		    Name		    "Add motors reflected inertias"
-		    Location		    [65, 24, 1920, 1080]
+		    Location		    [53, 27, 1366, 768]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -3459,7 +3495,7 @@ Model {
 		    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
-		    ZoomFactor		    "400"
+		    ZoomFactor		    "305"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "M"
@@ -3483,7 +3519,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    26
+		    $ObjectID		    33
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -3508,7 +3544,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7096"
+		    SIDHighWatermark	    "7120"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "M"
@@ -3628,14 +3664,9 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [875, 437, 1015, 538]
 		  ZOrder		  154
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Dynamics/Get Bias Forces"
 		  SourceType		  "Get Generalized Bias Forces"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
-		  explicitGravity	  off
 		}
 		Block {
 		  BlockType		  Reference
@@ -3644,13 +3675,9 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [875, 579, 1015, 646]
 		  ZOrder		  156
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Dynamics/Mass Matrix"
 		  SourceType		  "Mass Matrix"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Outport
@@ -4183,7 +4210,7 @@ Model {
 	      Position		      [195, 366, 240, 384]
 	      ZOrder		      761
 	      BackgroundColor	      "[0.537255, 0.721569, 1.000000]"
-	      LibraryVersion	      "1.383"
+	      LibraryVersion	      "1.497"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/holder\n"
 	      SourceType	      "Holder"
 	    }
@@ -4195,7 +4222,7 @@ Model {
 	      Position		      [-135, 176, -90, 194]
 	      ZOrder		      757
 	      BackgroundColor	      "[0.537255, 0.721569, 1.000000]"
-	      LibraryVersion	      "1.383"
+	      LibraryVersion	      "1.497"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/holder\n"
 	      SourceType	      "Holder"
 	    }
@@ -4280,14 +4307,10 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [200, 235, 365, 295]
 		  ZOrder		  752
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		  SourceType		  "Forward Kinematics"
 		  frameName		  "Frames.LEFT_FOOT"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -4296,14 +4319,10 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [200, 155, 365, 215]
 		  ZOrder		  921
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		  SourceType		  "Forward Kinematics"
 		  frameName		  "Frames.RIGHT_FOOT"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -4312,14 +4331,10 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [200, 325, 365, 385]
 		  ZOrder		  750
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		  SourceType		  "Forward Kinematics"
 		  frameName		  "'root_link'"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Outport
@@ -4535,7 +4550,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    27
+		    $ObjectID		    34
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -4560,7 +4575,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7096"
+		    SIDHighWatermark	    "7120"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "J_LeftFoot"
@@ -4738,14 +4753,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [745, 475, 905, 530]
 		    ZOrder		    687
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		    SourceType		    "Jacobian"
 		    frameName		    "Frames.LEFT_FOOT"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -4754,14 +4765,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [745, 565, 905, 620]
 		    ZOrder		    688
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		    SourceType		    "Jacobian"
 		    frameName		    "Frames.RIGHT_FOOT"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -5287,7 +5294,7 @@ Model {
 	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		28
+		$ObjectID		35
 		$ClassName		"Simulink.Mask"
 		Type			"Stateflow"
 		Description		"Embedded MATLAB block"
@@ -5312,7 +5319,7 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"7096"
+		SIDHighWatermark	"7120"
 		Block {
 		  BlockType		  Inport
 		  Name			  "pose_vel_acc_LFoot_des"
@@ -5690,7 +5697,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"100"
+		ZoomFactor		"67"
 		Block {
 		  BlockType		  Inport
 		  Name			  "J_LFoot"
@@ -5786,7 +5793,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    29
+		    $ObjectID		    36
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -5812,7 +5819,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7096"
+		    SIDHighWatermark	    "7120"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "vel_LFoot"
@@ -6273,7 +6280,7 @@ Model {
 		    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
-		    ZoomFactor		    "100"
+		    ZoomFactor		    "85"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "s"
@@ -6298,14 +6305,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 630, 960, 690]
 		    ZOrder		    583
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.COM"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -6314,14 +6317,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 410, 960, 470]
 		    ZOrder		    584
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.LEFT_FOOT"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -6330,14 +6329,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 855, 960, 915]
 		    ZOrder		    591
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.LEFT_HAND"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -6346,14 +6341,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 520, 960, 580]
 		    ZOrder		    585
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.RIGHT_FOOT"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -6362,14 +6353,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 960, 960, 1020]
 		    ZOrder		    592
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.RIGHT_HAND"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -6378,14 +6365,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 740, 960, 800]
 		    ZOrder		    586
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.ROT_TASK_LINK"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -6848,7 +6831,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"100"
+		ZoomFactor		"66"
 		Block {
 		  BlockType		  Inport
 		  Name			  "s"
@@ -6891,14 +6874,10 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1160, 850, 1325, 945]
 		  ZOrder		  112
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  frameName		  "Frames.COM"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -6907,14 +6886,10 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1160, 585, 1325, 680]
 		  ZOrder		  116
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  frameName		  "Frames.LEFT_FOOT"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -6923,14 +6898,10 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1160, 1110, 1325, 1205]
 		  ZOrder		  129
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  frameName		  "Frames.LEFT_FOOT"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -6939,14 +6910,10 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1160, 1240, 1325, 1335]
 		  ZOrder		  128
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  frameName		  "Frames.RIGHT_FOOT"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -6955,14 +6922,10 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1160, 720, 1325, 815]
 		  ZOrder		  114
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  frameName		  "Frames.RIGHT_FOOT"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -6971,14 +6934,10 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1160, 980, 1325, 1075]
 		  ZOrder		  115
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  frameName		  "Frames.ROT_TASK_LINK"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -6987,14 +6946,10 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [735, 765, 895, 820]
 		  ZOrder		  113
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  frameName		  "Frames.COM"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -7003,14 +6958,10 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [735, 605, 895, 660]
 		  ZOrder		  118
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  frameName		  "Frames.LEFT_FOOT"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -7019,14 +6970,10 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [735, 925, 895, 980]
 		  ZOrder		  126
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  frameName		  "Frames.LEFT_HAND"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -7035,14 +6982,10 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [735, 685, 895, 740]
 		  ZOrder		  119
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  frameName		  "Frames.RIGHT_FOOT"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -7051,14 +6994,10 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [735, 1005, 895, 1060]
 		  ZOrder		  127
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  frameName		  "Frames.RIGHT_HAND"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -7067,14 +7006,10 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [735, 845, 895, 900]
 		  ZOrder		  117
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  frameName		  "Frames.ROT_TASK_LINK"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Outport
@@ -7673,7 +7608,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    30
+		    $ObjectID		    37
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -7699,7 +7634,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7096"
+		    SIDHighWatermark	    "7120"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "s"
@@ -7975,14 +7910,10 @@ Model {
 		  Ports			  [1, 5]
 		  Position		  [1990, 1008, 2085, 1102]
 		  ZOrder		  709
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
-		  yarp2WBIOption	  "From WBI to YARP"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
+		  yarp2WBIOption	  "From YARP to WBI"
 		}
 		Block {
 		  BlockType		  SubSystem
@@ -8207,7 +8138,7 @@ Model {
 		    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
-		    ZoomFactor		    "125"
+		    ZoomFactor		    "79"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "nuDot"
@@ -8250,7 +8181,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    31
+		    $ObjectID		    38
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -8275,7 +8206,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7096"
+		    SIDHighWatermark	    "7120"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "pose_b"
@@ -8510,7 +8441,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    32
+		    $ObjectID		    39
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -8536,7 +8467,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7096"
+		    SIDHighWatermark	    "7120"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "w_H_b_0"
@@ -8636,7 +8567,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    33
+		    $ObjectID		    40
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -8662,7 +8593,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7096"
+		    SIDHighWatermark	    "7120"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "pose_b"
@@ -9317,7 +9248,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"80"
+		ZoomFactor		"61"
 		Block {
 		  BlockType		  Inport
 		  Name			  "s_sDot_sDDot_ref"
@@ -9366,16 +9297,12 @@ Model {
 		  Name			  "DoFs converter"
 		  SID			  "4388"
 		  Ports			  [1, 5]
-		  Position		  [1265, 513, 1360, 607]
+		  Position		  [1270, 513, 1365, 607]
 		  ZOrder		  754
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
-		  yarp2WBIOption	  "From WBI to YARP"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
+		  yarp2WBIOption	  "From YARP to WBI"
 		  Port {
 		    PortNumber		    1
 		    Name		    "torso"
@@ -9402,16 +9329,12 @@ Model {
 		  Name			  "DoFs converter1"
 		  SID			  "4389"
 		  Ports			  [1, 5]
-		  Position		  [1265, 658, 1360, 752]
+		  Position		  [1270, 658, 1365, 752]
 		  ZOrder		  756
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
-		  yarp2WBIOption	  "From WBI to YARP"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
+		  yarp2WBIOption	  "From YARP to WBI"
 		  Port {
 		    PortNumber		    1
 		    Name		    "torso"
@@ -9438,16 +9361,12 @@ Model {
 		  Name			  "DoFs converter2"
 		  SID			  "4390"
 		  Ports			  [1, 5]
-		  Position		  [1265, 803, 1360, 897]
+		  Position		  [1270, 803, 1365, 897]
 		  ZOrder		  759
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
-		  yarp2WBIOption	  "From WBI to YARP"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
+		  yarp2WBIOption	  "From YARP to WBI"
 		  Port {
 		    PortNumber		    1
 		    Name		    "torso"
@@ -9474,16 +9393,12 @@ Model {
 		  Name			  "DoFs converter3"
 		  SID			  "4391"
 		  Ports			  [1, 5]
-		  Position		  [1260, 68, 1355, 162]
+		  Position		  [1265, 68, 1360, 162]
 		  ZOrder		  763
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
-		  yarp2WBIOption	  "From WBI to YARP"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
+		  yarp2WBIOption	  "From YARP to WBI"
 		  Port {
 		    PortNumber		    1
 		    Name		    "torso"
@@ -9510,16 +9425,12 @@ Model {
 		  Name			  "DoFs converter4"
 		  SID			  "4392"
 		  Ports			  [1, 5]
-		  Position		  [1260, 213, 1355, 307]
+		  Position		  [1265, 213, 1360, 307]
 		  ZOrder		  765
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
-		  yarp2WBIOption	  "From WBI to YARP"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
+		  yarp2WBIOption	  "From YARP to WBI"
 		  Port {
 		    PortNumber		    1
 		    Name		    "torso"
@@ -9546,16 +9457,12 @@ Model {
 		  Name			  "DoFs converter5"
 		  SID			  "4393"
 		  Ports			  [1, 5]
-		  Position		  [1260, 358, 1355, 452]
+		  Position		  [1265, 358, 1360, 452]
 		  ZOrder		  768
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
-		  yarp2WBIOption	  "From WBI to YARP"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
+		  yarp2WBIOption	  "From YARP to WBI"
 		  Port {
 		    PortNumber		    1
 		    Name		    "torso"
@@ -9582,16 +9489,12 @@ Model {
 		  Name			  "DoFs converter6"
 		  SID			  "4394"
 		  Ports			  [1, 5]
-		  Position		  [1855, 283, 1950, 377]
+		  Position		  [1860, 283, 1955, 377]
 		  ZOrder		  785
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
-		  yarp2WBIOption	  "From WBI to YARP"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
+		  yarp2WBIOption	  "From YARP to WBI"
 		  Port {
 		    PortNumber		    1
 		    Name		    "torso"
@@ -11331,7 +11234,7 @@ Model {
 	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		34
+		$ObjectID		41
 		$ClassName		"Simulink.Mask"
 		Type			"Stateflow"
 		Description		"Embedded MATLAB block"
@@ -11356,7 +11259,7 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"7096"
+		SIDHighWatermark	"7120"
 		Block {
 		  BlockType		  Inport
 		  Name			  "pos_vel_acc_CoM_des"
@@ -11734,7 +11637,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"125"
+		ZoomFactor		"64"
 		Block {
 		  BlockType		  Inport
 		  Name			  "J_LFoot"
@@ -11830,7 +11733,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    35
+		    $ObjectID		    42
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -11856,7 +11759,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7096"
+		    SIDHighWatermark	    "7120"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "vel_CoM"
@@ -12317,7 +12220,7 @@ Model {
 		    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
-		    ZoomFactor		    "100"
+		    ZoomFactor		    "91"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "s"
@@ -12342,14 +12245,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 320, 960, 380]
 		    ZOrder		    583
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.COM"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -12358,14 +12257,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 415, 960, 475]
 		    ZOrder		    584
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.LEFT_FOOT"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -12374,14 +12269,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 720, 960, 780]
 		    ZOrder		    591
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.LEFT_FOOT"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -12390,14 +12281,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 520, 960, 580]
 		    ZOrder		    585
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.RIGHT_FOOT"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -12406,14 +12293,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 825, 960, 885]
 		    ZOrder		    592
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.RIGHT_FOOT"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -12422,14 +12305,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 625, 960, 685]
 		    ZOrder		    586
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.ROT_TASK_LINK"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -13814,7 +13693,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"100"
+	ZoomFactor		"91"
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "Gain Scheduling"
@@ -13839,7 +13718,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "53"
+	    ZoomFactor		    "80"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "state"
@@ -13874,7 +13753,7 @@ Model {
 	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		36
+		$ObjectID		43
 		$ClassName		"Simulink.Mask"
 		Type			"Stateflow"
 		Description		"Embedded MATLAB block"
@@ -13899,7 +13778,7 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"7096"
+		SIDHighWatermark	"7120"
 		Block {
 		  BlockType		  Inport
 		  Name			  "state"
@@ -14375,7 +14254,7 @@ Model {
 	      Ports		      [2, 1]
 	      Position		      [15, 325, 120, 385]
 	      ZOrder		      671
-	      LibraryVersion	      "1.383"
+	      LibraryVersion	      "1.497"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 	      SourceType	      "Minimum Jerk Trajectory Generator"
 	      externalSettlingTime    on
@@ -14833,7 +14712,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "100"
+	    ZoomFactor		    "96"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "state"
@@ -14928,7 +14807,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"100"
+		ZoomFactor		"65"
 		Block {
 		  BlockType		  Inport
 		  Name			  "smooth_references_CoM"
@@ -16040,7 +15919,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"125"
+		ZoomFactor		"53"
 		Block {
 		  BlockType		  Inport
 		  Name			  "w_R_LFoot_des"
@@ -16117,7 +15996,7 @@ Model {
 		    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
-		    ZoomFactor		    "100"
+		    ZoomFactor		    "87"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "omegaDot_LFoot"
@@ -16512,7 +16391,7 @@ Model {
 		    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
-		    ZoomFactor		    "100"
+		    ZoomFactor		    "74"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "w_R_LFoot_des"
@@ -16626,7 +16505,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    37
+		    $ObjectID		    44
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -16652,7 +16531,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7096"
+		    SIDHighWatermark	    "7120"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "w_R_LFoot_des"
@@ -17737,7 +17616,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    38
+		    $ObjectID		    45
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -17763,7 +17642,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7096"
+		    SIDHighWatermark	    "7120"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "omega_LFoot"
@@ -18150,7 +18029,7 @@ Model {
 		    ZOrder		    780
 		    BackgroundColor	    "[0.537255, 0.721569, 1.000000]"
 		    ShowName		    off
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
 		    }
@@ -18163,7 +18042,7 @@ Model {
 		    ZOrder		    781
 		    BackgroundColor	    "[0.537255, 0.721569, 1.000000]"
 		    ShowName		    off
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
 		    }
@@ -18176,7 +18055,7 @@ Model {
 		    ZOrder		    782
 		    BackgroundColor	    "[0.537255, 0.721569, 1.000000]"
 		    ShowName		    off
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
 		    }
@@ -18189,7 +18068,7 @@ Model {
 		    ZOrder		    800
 		    BackgroundColor	    "[0.537255, 0.721569, 1.000000]"
 		    ShowName		    off
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
 		    }
@@ -18202,7 +18081,7 @@ Model {
 		    ZOrder		    801
 		    BackgroundColor	    "[0.537255, 0.721569, 1.000000]"
 		    ShowName		    off
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
 		    }
@@ -18799,7 +18678,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"100"
+		ZoomFactor		"104"
 		Block {
 		  BlockType		  Inport
 		  Name			  "pos_CoM_des"
@@ -18877,7 +18756,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    39
+		    $ObjectID		    46
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -18902,7 +18781,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7096"
+		    SIDHighWatermark	    "7120"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "state"
@@ -19177,7 +19056,7 @@ Model {
 		  Ports			  [2, 3]
 		  Position		  [235, 143, 390, 197]
 		  ZOrder		  689
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 		  SourceType		  "Minimum Jerk Trajectory Generator"
 		  externalSettlingTime	  on
@@ -19195,7 +19074,7 @@ Model {
 		  Ports			  [2, 3]
 		  Position		  [235, 383, 390, 437]
 		  ZOrder		  788
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 		  SourceType		  "Minimum Jerk Trajectory Generator"
 		  externalSettlingTime	  on
@@ -19213,7 +19092,7 @@ Model {
 		  Ports			  [2, 3]
 		  Position		  [235, 223, 390, 277]
 		  ZOrder		  696
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 		  SourceType		  "Minimum Jerk Trajectory Generator"
 		  externalSettlingTime	  on
@@ -19231,7 +19110,7 @@ Model {
 		  Ports			  [2, 3]
 		  Position		  [235, 303, 390, 357]
 		  ZOrder		  697
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 		  SourceType		  "Minimum Jerk Trajectory Generator"
 		  externalSettlingTime	  on
@@ -19249,7 +19128,7 @@ Model {
 		  Ports			  [2, 3]
 		  Position		  [235, 463, 390, 517]
 		  ZOrder		  779
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 		  SourceType		  "Minimum Jerk Trajectory Generator"
 		  externalSettlingTime	  on
@@ -19267,7 +19146,7 @@ Model {
 		  Ports			  [2, 3]
 		  Position		  [235, 543, 390, 597]
 		  ZOrder		  780
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 		  SourceType		  "Minimum Jerk Trajectory Generator"
 		  externalSettlingTime	  on
@@ -20006,7 +19885,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "100"
+	    ZoomFactor		    "80"
 	    Block {
 	      BlockType		      SubSystem
 	      Name		      "Compute Feet to Base Link Transforms"
@@ -20030,7 +19909,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"100"
+		ZoomFactor		"126"
 		Block {
 		  BlockType		  Inport
 		  Name			  "s"
@@ -20076,7 +19955,7 @@ Model {
 		  Variant		  off
 		  System {
 		    Name		    "LFoot to base link transform "
-		    Location		    [65, 24, 1920, 1080]
+		    Location		    [53, 27, 1366, 768]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -20088,7 +19967,7 @@ Model {
 		    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
-		    ZoomFactor		    "122"
+		    ZoomFactor		    "85"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "s"
@@ -20131,14 +20010,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [575, 25, 740, 85]
 		    ZOrder		    729
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.IMU"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -20147,14 +20022,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [575, 190, 740, 250]
 		    ZOrder		    737
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.BASE_LINK"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Product
@@ -20200,11 +20071,12 @@ Model {
 		    Position		    [980, 308, 1055, 332]
 		    ZOrder		    742
 		    ForegroundColor	    "[0.490196, 0.000000, 0.000000]"
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/Yarp Read"
 		    SourceType		    "YARP Read"
 		    portName		    "Ports.NECK_POS"
 		    signalSize		    "6"
+		    timeout		    "0.5"
 		    blocking		    off
 		    timestamp		    off
 		    autoconnect		    on
@@ -20247,7 +20119,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    40
+		    $ObjectID		    47
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -20273,7 +20145,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7096"
+		    SIDHighWatermark	    "7120"
 		    SIDPrevWatermark	    "9"
 		    Block {
 		    BlockType		    Inport
@@ -20443,7 +20315,7 @@ Model {
 		    ZOrder		    739
 		    BackgroundColor	    "[0.537255, 0.721569, 1.000000]"
 		    ShowName		    off
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
 		    }
@@ -20456,7 +20328,7 @@ Model {
 		    ZOrder		    740
 		    BackgroundColor	    "[0.537255, 0.721569, 1.000000]"
 		    ShowName		    off
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
 		    }
@@ -20773,14 +20645,10 @@ Model {
 		  Position		  [235, 72, 400, 123]
 		  ZOrder		  724
 		  NamePlacement		  "alternate"
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		  SourceType		  "Forward Kinematics"
 		  frameName		  "Frames.LEFT_FOOT"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  SubSystem
@@ -20793,7 +20661,7 @@ Model {
 		  Variant		  off
 		  System {
 		    Name		    "RFoot to base link transform"
-		    Location		    [65, 24, 1920, 1080]
+		    Location		    [53, 27, 1366, 768]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -20805,7 +20673,7 @@ Model {
 		    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
-		    ZoomFactor		    "122"
+		    ZoomFactor		    "85"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "s"
@@ -20848,14 +20716,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [575, 25, 740, 85]
 		    ZOrder		    729
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.IMU"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -20864,14 +20728,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [575, 190, 740, 250]
 		    ZOrder		    737
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.BASE_LINK"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Product
@@ -20917,11 +20777,12 @@ Model {
 		    Position		    [980, 308, 1055, 332]
 		    ZOrder		    742
 		    ForegroundColor	    "[0.490196, 0.000000, 0.000000]"
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/Yarp Read"
 		    SourceType		    "YARP Read"
 		    portName		    "Ports.NECK_POS"
 		    signalSize		    "6"
+		    timeout		    "0.5"
 		    blocking		    off
 		    timestamp		    off
 		    autoconnect		    on
@@ -20964,7 +20825,7 @@ Model {
 		    Variant		    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    41
+		    $ObjectID		    48
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -20990,7 +20851,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7096"
+		    SIDHighWatermark	    "7120"
 		    SIDPrevWatermark	    "9"
 		    Block {
 		    BlockType		    Inport
@@ -21160,7 +21021,7 @@ Model {
 		    ZOrder		    739
 		    BackgroundColor	    "[0.537255, 0.721569, 1.000000]"
 		    ShowName		    off
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
 		    }
@@ -21173,7 +21034,7 @@ Model {
 		    ZOrder		    740
 		    BackgroundColor	    "[0.537255, 0.721569, 1.000000]"
 		    ShowName		    off
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
 		    }
@@ -21490,14 +21351,10 @@ Model {
 		  Position		  [235, 242, 400, 293]
 		  ZOrder		  747
 		  NamePlacement		  "alternate"
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		  SourceType		  "Forward Kinematics"
 		  frameName		  "Frames.RIGHT_FOOT"
-		  robotName		  "WBT_robotName"
-		  localName		  "WBT_modelName"
-		  wbiFile		  "WBT_wbiFilename"
-		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Switch
@@ -21741,7 +21598,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    42
+		    $ObjectID		    49
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -21766,7 +21623,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7096"
+		    SIDHighWatermark	    "7120"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "J_LeftFoot"
@@ -21944,14 +21801,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [745, 475, 905, 530]
 		    ZOrder		    687
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		    SourceType		    "Jacobian"
 		    frameName		    "Frames.LEFT_FOOT"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -21960,14 +21813,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [745, 565, 905, 620]
 		    ZOrder		    688
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		    SourceType		    "Jacobian"
 		    frameName		    "Frames.RIGHT_FOOT"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -22128,39 +21977,31 @@ Model {
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "Get Estimate"
-	      SID		      "4556"
+	      Name		      "Get Measurement"
+	      SID		      "7098"
 	      Ports		      [0, 1]
-	      Position		      [-920, 97, -840, 133]
-	      ZOrder		      881
+	      Position		      [-940, 101, -820, 129]
+	      ZOrder		      924
 	      BackgroundColor	      "[0.513700, 0.851000, 0.670600]"
 	      ShowName		      off
-	      LibraryVersion	      "1.383"
-	      SourceBlock	      "WBToolboxLibrary/wholeBodyStates/Get Estimate"
-	      SourceType	      "Get Estimate"
-	      estimateType	      "Joints Position"
-	      robotName		      "WBT_robotName"
-	      localName		      "WBT_modelName"
-	      wbiFile		      "WBT_wbiFilename"
-	      wbiList		      "WBT_wbiList"
+	      LibraryVersion	      "1.497"
+	      SourceBlock	      "WBToolboxLibrary/wholeBodyStates/Get Measurement"
+	      SourceType	      "Get Measurement"
+	      measuredType	      "Joints Position"
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "Get Estimate1"
-	      SID		      "4768"
+	      Name		      "Get Measurement1"
+	      SID		      "7099"
 	      Ports		      [0, 1]
-	      Position		      [-920, -33, -840, 3]
-	      ZOrder		      922
+	      Position		      [-940, -29, -820, -1]
+	      ZOrder		      925
 	      BackgroundColor	      "[0.513700, 0.674500, 1.000000]"
 	      ShowName		      off
-	      LibraryVersion	      "1.383"
-	      SourceBlock	      "WBToolboxLibrary/wholeBodyStates/Get Estimate"
-	      SourceType	      "Get Estimate"
-	      estimateType	      "Joints Velocity"
-	      robotName		      "WBT_robotName"
-	      localName		      "WBT_modelName"
-	      wbiFile		      "WBT_wbiFilename"
-	      wbiList		      "WBT_wbiList"
+	      LibraryVersion	      "1.497"
+	      SourceBlock	      "WBToolboxLibrary/wholeBodyStates/Get Measurement"
+	      SourceType	      "Get Measurement"
+	      measuredType	      "Joints Velocity"
 	    }
 	    Block {
 	      BlockType		      Goto
@@ -22240,11 +22081,12 @@ Model {
 	      Position		      [-925, 317, -835, 333]
 	      ZOrder		      883
 	      ForegroundColor	      "[0.490196, 0.000000, 0.000000]"
-	      LibraryVersion	      "1.383"
+	      LibraryVersion	      "1.497"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/Yarp Read"
 	      SourceType	      "YARP Read"
 	      portName		      "Ports.IMU"
 	      signalSize	      "12"
+	      timeout		      "0.5"
 	      blocking		      off
 	      timestamp		      off
 	      autoconnect	      on
@@ -22274,7 +22116,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"92"
+		ZoomFactor		"100"
 		Block {
 		  BlockType		  Inport
 		  Name			  "s"
@@ -22334,7 +22176,7 @@ Model {
 		  Variant		  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    43
+		    $ObjectID		    50
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "Stateflow"
 		    Description		    "Embedded MATLAB block"
@@ -22359,7 +22201,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "7096"
+		    SIDHighWatermark	    "7120"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "s_0"
@@ -22852,7 +22694,7 @@ Model {
 		  ZOrder		  742
 		  BackgroundColor	  "[0.537255, 0.721569, 1.000000]"
 		  ShowName		  off
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
 		}
@@ -22865,7 +22707,7 @@ Model {
 		  ZOrder		  743
 		  BackgroundColor	  "[0.537255, 0.721569, 1.000000]"
 		  ShowName		  off
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
 		}
@@ -22878,7 +22720,7 @@ Model {
 		  ZOrder		  744
 		  BackgroundColor	  "[0.537255, 0.721569, 1.000000]"
 		  ShowName		  off
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
 		}
@@ -22891,7 +22733,7 @@ Model {
 		  ZOrder		  745
 		  BackgroundColor	  "[0.537255, 0.721569, 1.000000]"
 		  ShowName		  off
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
 		}
@@ -22904,7 +22746,7 @@ Model {
 		  ZOrder		  746
 		  BackgroundColor	  "[0.537255, 0.721569, 1.000000]"
 		  ShowName		  off
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
 		}
@@ -22917,7 +22759,7 @@ Model {
 		  ZOrder		  918
 		  BackgroundColor	  "[0.537255, 0.721569, 1.000000]"
 		  ShowName		  off
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
 		}
@@ -22930,7 +22772,7 @@ Model {
 		  ZOrder		  919
 		  BackgroundColor	  "[0.537255, 0.721569, 1.000000]"
 		  ShowName		  off
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
 		}
@@ -22942,11 +22784,12 @@ Model {
 		  Position		  [270, 413, 360, 427]
 		  ZOrder		  916
 		  ForegroundColor	  "[0.490196, 0.000000, 0.000000]"
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Yarp Read"
 		  SourceType		  "YARP Read"
 		  portName		  "Ports.LEFT_FOOT_EXT_WRENCH"
 		  signalSize		  "6"
+		  timeout		  "0.5"
 		  blocking		  off
 		  timestamp		  off
 		  autoconnect		  on
@@ -22960,11 +22803,12 @@ Model {
 		  Position		  [270, 448, 360, 462]
 		  ZOrder		  917
 		  ForegroundColor	  "[0.490196, 0.000000, 0.000000]"
-		  LibraryVersion	  "1.383"
+		  LibraryVersion	  "1.497"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Yarp Read"
 		  SourceType		  "YARP Read"
 		  portName		  "Ports.RIGHT_FOOT_EXT_WRENCH"
 		  signalSize		  "6"
+		  timeout		  "0.5"
 		  blocking		  off
 		  timestamp		  off
 		  autoconnect		  on
@@ -23018,14 +22862,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [530, 295, 695, 355]
 		    ZOrder		    745
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.COM"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -23034,14 +22874,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [530, 480, 695, 540]
 		    ZOrder		    753
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.LEFT_HAND"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -23050,14 +22886,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [530, 115, 695, 175]
 		    ZOrder		    746
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.LEFT_FOOT"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -23066,14 +22898,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [530, 570, 695, 630]
 		    ZOrder		    754
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.RIGHT_HAND"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -23082,14 +22910,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [530, 205, 695, 265]
 		    ZOrder		    747
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.RIGHT_FOOT"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -23098,14 +22922,10 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [530, 385, 695, 445]
 		    ZOrder		    748
-		    LibraryVersion	    "1.383"
+		    LibraryVersion	    "1.497"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    frameName		    "Frames.ROT_TASK_LINK"
-		    robotName		    "WBT_robotName"
-		    localName		    "WBT_modelName"
-		    wbiFile		    "WBT_wbiFilename"
-		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -23719,9 +23539,9 @@ Model {
 	      IconDisplay	      "Port number"
 	    }
 	    Line {
-	      SrcBlock		      "Get Estimate"
+	      SrcBlock		      "Get Measurement"
 	      SrcPort		      1
-	      Points		      [54, 0]
+	      Points		      [34, 0]
 	      Branch {
 		Points			[0, -85; 513, 0]
 		Branch {
@@ -23911,9 +23731,9 @@ Model {
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Get Estimate1"
+	      SrcBlock		      "Get Measurement1"
 	      SrcPort		      1
-	      Points		      [539, 0]
+	      Points		      [519, 0]
 	      Branch {
 		Points			[0, -195]
 		DstBlock		"Goto6"
@@ -24289,16 +24109,11 @@ Model {
       ZOrder		      563
       BackgroundColor	      "[0.827500, 0.576500, 0.603900]"
       ShowName		      off
-      LibraryVersion	      "1.383"
+      LibraryVersion	      "1.497"
       SourceBlock	      "WBToolboxLibrary/wholeBodyActuators/Set References"
       SourceType	      "Set References"
       controlType	      "Torque"
-      fullOrSubControl	      "Full"
-      controlledJoints	      "''"
-      robotName		      "WBT_robotName"
-      localName		      "WBT_modelName"
-      wbiFile		      "WBT_wbiFilename"
-      wbiList		      "WBT_wbiList"
+      refSpeed		      "50"
     }
     Block {
       BlockType		      SubSystem
@@ -24313,7 +24128,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		44
+	$ObjectID		51
 	$ClassName		"Simulink.Mask"
 	Display			"disp('DATA FOR LEARNOPTIM_WBC')"
       }
@@ -24331,7 +24146,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"100"
+	ZoomFactor		"92"
 	Block {
 	  BlockType		  From
 	  Name			  "From1"
@@ -24522,7 +24337,7 @@ Model {
 	  BlockType		  From
 	  Name			  "From9"
 	  SID			  "7002"
-	  Position		  [845, 266, 885, 284]
+	  Position		  [845, 261, 885, 279]
 	  ZOrder		  1053
 	  ShowName		  off
 	  GotoTag		  "f_RFoot"
@@ -24541,7 +24356,7 @@ Model {
 	  Name			  "Selector1"
 	  SID			  "6974"
 	  Ports			  [1, 1]
-	  Position		  [970, 408, 995, 422]
+	  Position		  [970, 383, 995, 397]
 	  ZOrder		  1050
 	  ShowName		  off
 	  NumberOfDimensions	  "2"
@@ -24555,7 +24370,7 @@ Model {
 	  Name			  "Selector14"
 	  SID			  "6975"
 	  Ports			  [1, 1]
-	  Position		  [970, 338, 995, 352]
+	  Position		  [970, 323, 995, 337]
 	  ZOrder		  1049
 	  ShowName		  off
 	  NumberOfDimensions	  "2"
@@ -24612,7 +24427,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "105"
+	    ZoomFactor		    "117"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "f_Lfoot"
@@ -24698,18 +24513,26 @@ Model {
 	      BlockType		      Goto
 	      Name		      "Goto5"
 	      SID		      "7016"
-	      Position		      [1020, 155, 1145, 175]
+	      Position		      [1020, 160, 1145, 180]
 	      ZOrder		      1067
 	      ShowName		      off
 	      GotoTag		      "ZMP"
 	      TagVisibility	      "global"
 	    }
 	    Block {
+	      BlockType		      Memory
+	      Name		      "Memory"
+	      SID		      "7120"
+	      Position		      [970, 290, 1000, 320]
+	      ZOrder		      1073
+	      X0		      "zeros(2,3)"
+	    }
+	    Block {
 	      BlockType		      SubSystem
 	      Name		      "compute ZMP"
 	      SID		      "6993"
-	      Ports		      [7, 1]
-	      Position		      [720, 94, 885, 346]
+	      Ports		      [8, 2]
+	      Position		      [720, 101, 885, 374]
 	      ZOrder		      485
 	      LibraryVersion	      "1.32"
 	      ErrorFcn		      "Stateflow.Translate.translate"
@@ -24720,7 +24543,7 @@ Model {
 	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		45
+		$ObjectID		52
 		$ClassName		"Simulink.Mask"
 		Type			"Stateflow"
 		Description		"Embedded MATLAB block"
@@ -24745,7 +24568,7 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"7096"
+		SIDHighWatermark	"7120"
 		Block {
 		  BlockType		  Inport
 		  Name			  "f_lFoot"
@@ -24809,6 +24632,15 @@ Model {
 		  IconDisplay		  "Port number"
 		}
 		Block {
+		  BlockType		  Inport
+		  Name			  "ZMP_previous"
+		  SID			  "6993::37"
+		  Position		  [20, 351, 40, 369]
+		  ZOrder		  22
+		  Port			  "8"
+		  IconDisplay		  "Port number"
+		}
+		Block {
 		  BlockType		  Demux
 		  Name			  " Demux "
 		  SID			  "6993::27"
@@ -24822,16 +24654,20 @@ Model {
 		  Name			  " SFunction "
 		  SID			  "6993::26"
 		  Tag			  "Stateflow S-Function torqueWalkingR2012b 19"
-		  Ports			  [7, 2]
-		  Position		  [180, 105, 230, 265]
+		  Ports			  [8, 3]
+		  Position		  [180, 105, 230, 285]
 		  ZOrder		  12
 		  FunctionName		  "sf_sfun"
-		  PortCounts		  "[7 2]"
+		  PortCounts		  "[8 3]"
 		  SFunctionDeploymentMode off
 		  EnableBusSupport	  on
 		  Port {
 		    PortNumber		    2
-		    Name		    "ZMP"
+		    Name		    "ZMP_mean"
+		  }
+		  Port {
+		    PortNumber		    3
+		    Name		    "ZMP_buffer"
 		  }
 		}
 		Block {
@@ -24843,10 +24679,19 @@ Model {
 		}
 		Block {
 		  BlockType		  Outport
-		  Name			  "ZMP"
+		  Name			  "ZMP_mean"
 		  SID			  "6993::5"
 		  Position		  [460, 101, 480, 119]
 		  ZOrder		  -5
+		  IconDisplay		  "Port number"
+		}
+		Block {
+		  BlockType		  Outport
+		  Name			  "ZMP_buffer"
+		  SID			  "6993::38"
+		  Position		  [460, 136, 480, 154]
+		  ZOrder		  23
+		  Port			  "2"
 		  IconDisplay		  "Port number"
 		}
 		Line {
@@ -24892,11 +24737,25 @@ Model {
 		  DstPort		  7
 		}
 		Line {
-		  Name			  "ZMP"
+		  SrcBlock		  "ZMP_previous"
+		  SrcPort		  1
+		  DstBlock		  " SFunction "
+		  DstPort		  8
+		}
+		Line {
+		  Name			  "ZMP_mean"
 		  Labels		  [0, 0]
 		  SrcBlock		  " SFunction "
 		  SrcPort		  2
-		  DstBlock		  "ZMP"
+		  DstBlock		  "ZMP_mean"
+		  DstPort		  1
+		}
+		Line {
+		  Name			  "ZMP_buffer"
+		  Labels		  [0, 0]
+		  SrcBlock		  " SFunction "
+		  SrcPort		  3
+		  DstBlock		  "ZMP_buffer"
 		  DstPort		  1
 		}
 		Line {
@@ -24934,7 +24793,7 @@ Model {
 	      Variant		      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		46
+		$ObjectID		53
 		$ClassName		"Simulink.Mask"
 		Type			"Stateflow"
 		Description		"Embedded MATLAB block"
@@ -24959,7 +24818,7 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"7096"
+		SIDHighWatermark	"7120"
 		Block {
 		  BlockType		  Inport
 		  Name			  "pose_lFoot"
@@ -25094,7 +24953,7 @@ Model {
 	      BlockType		      Outport
 	      Name		      "zmp"
 	      SID		      "6998"
-	      Position		      [985, 213, 1015, 227]
+	      Position		      [970, 213, 1000, 227]
 	      ZOrder		      488
 	      IconDisplay	      "Port number"
 	    }
@@ -25140,12 +24999,12 @@ Model {
 	      SrcPort		      1
 	      Points		      [57, 0]
 	      Branch {
-		DstBlock		"zmp"
+		DstBlock		"Goto5"
 		DstPort			1
 	      }
 	      Branch {
-		Points			[0, -55]
-		DstBlock		"Goto5"
+		Points			[0, 50]
+		DstBlock		"zmp"
 		DstPort			1
 	      }
 	    }
@@ -25206,6 +25065,19 @@ Model {
 	      SrcPort		      1
 	      DstBlock		      "supportPolygon"
 	      DstPort		      4
+	    }
+	    Line {
+	      SrcBlock		      "Memory"
+	      SrcPort		      1
+	      Points		      [21, 0; 0, 90; -321, 0]
+	      DstBlock		      "compute ZMP"
+	      DstPort		      8
+	    }
+	    Line {
+	      SrcBlock		      "compute ZMP"
+	      SrcPort		      2
+	      DstBlock		      "Memory"
+	      DstPort		      1
 	    }
 	  }
 	  RTWSystemCode		  "Auto"
@@ -25316,7 +25188,7 @@ Model {
 	  Name			  "select_pose"
 	  SID			  "6999"
 	  Ports			  [1, 1]
-	  Position		  [970, 303, 995, 317]
+	  Position		  [970, 293, 995, 307]
 	  ZOrder		  1047
 	  ShowName		  off
 	  NumberOfDimensions	  "2"
@@ -25330,7 +25202,7 @@ Model {
 	  Name			  "select_pose1"
 	  SID			  "7000"
 	  Ports			  [1, 1]
-	  Position		  [970, 373, 995, 387]
+	  Position		  [970, 353, 995, 367]
 	  ZOrder		  1048
 	  ShowName		  off
 	  NumberOfDimensions	  "2"
@@ -25416,7 +25288,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "83"
+	    ZoomFactor		    "84"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "pos_vel_CoM"
@@ -26011,7 +25883,7 @@ Model {
 	      Variant		      off
 	      System {
 		Name			"Rotation Error Rotational Task"
-		Location		[65, 24, 1920, 1080]
+		Location		[53, 27, 1366, 768]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -26023,7 +25895,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"223"
+		ZoomFactor		"155"
 		Block {
 		  BlockType		  Inport
 		  Name			  "w_R_rot_task"
@@ -26748,9 +26620,9 @@ Model {
 	  SrcPort		  1
 	  Points		  [27, 0]
 	  Branch {
-	    Points		    [0, 240]
+	    Points		    [0, 230]
 	    Branch {
-	      Points		      [0, 35]
+	      Points		      [0, 30]
 	      DstBlock		      "Selector14"
 	      DstPort		      1
 	    }
@@ -26873,9 +26745,9 @@ Model {
 	  SrcPort		  1
 	  Points		  [2, 0]
 	  Branch {
-	    Points		    [0, 265]
+	    Points		    [0, 245]
 	    Branch {
-	      Points		      [0, 35]
+	      Points		      [0, 30]
 	      DstBlock		      "Selector1"
 	      DstPort		      1
 	    }
@@ -26898,7 +26770,6 @@ Model {
 	Line {
 	  SrcBlock		  "From9"
 	  SrcPort		  1
-	  Points		  [110, 0]
 	  DstBlock		  "ZMP, support polygon"
 	  DstPort		  2
 	}
@@ -26943,7 +26814,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		47
+	$ObjectID		54
 	$ClassName		"Simulink.Mask"
 	Display			"disp('VISUALIZE AND DUMP DATA \\n EARLY TERMINATION')"
       }
@@ -26961,7 +26832,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"80"
+	ZoomFactor		"125"
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "Cartesian Tasks"
@@ -27091,8 +26962,8 @@ Model {
 	      MaxDataPoints	      5000
 	      SaveToWorkspace	      on
 	      SaveName		      forKin_CoM_DATA
-	      YMin		      "-0.22134~-0.21729~-0.00986~0.5"
-	      YMax		      "0.60585~0.59423~0.01226~5.5"
+	      YMin		      "-0.22272~-0.21605~-0.00908~0.5"
+	      YMax		      "0.60642~0.59404~0.00713~5.5"
 	      SampleInput	      off
 	      SampleTime	      -1
 	      ZoomMode		      on
@@ -27300,8 +27171,8 @@ Model {
 	      MaxDataPoints	      5000
 	      SaveToWorkspace	      on
 	      SaveName		      forKin_RFoot_DATA
-	      YMin		      "-0.16101~-0.15882~-0.00115~0.5"
-	      YMax		      "0.03981~0.0433~0.00043~5.5"
+	      YMin		      "-0.15981~-0.15605~-0.00872~0.5"
+	      YMax		      "0.03971~0.04287~0.01421~5.5"
 	      SampleInput	      off
 	      SampleTime	      -1
 	      ZoomMode		      on
@@ -29021,7 +28892,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "150"
+	    ZoomFactor		    "125"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "ZMP"
@@ -29476,16 +29347,12 @@ Model {
 	      Name		      "DoFs converter"
 	      SID		      "4141"
 	      Ports		      [1, 5]
-	      Position		      [710, 288, 805, 382]
+	      Position		      [715, 288, 810, 382]
 	      ZOrder		      706
-	      LibraryVersion	      "1.383"
+	      LibraryVersion	      "1.497"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
-	      yarp2WBIOption	      "From WBI to YARP"
-	      robotName		      "WBT_robotName"
-	      localName		      "WBT_modelName"
-	      wbiFile		      "WBT_wbiFilename"
-	      wbiList		      "WBT_wbiList"
+	      yarp2WBIOption	      "From YARP to WBI"
 	      Port {
 		PortNumber		1
 		Name			"torso"
@@ -29512,16 +29379,12 @@ Model {
 	      Name		      "DoFs converter1"
 	      SID		      "4142"
 	      Ports		      [1, 5]
-	      Position		      [710, 433, 805, 527]
+	      Position		      [715, 433, 810, 527]
 	      ZOrder		      708
-	      LibraryVersion	      "1.383"
+	      LibraryVersion	      "1.497"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
-	      yarp2WBIOption	      "From WBI to YARP"
-	      robotName		      "WBT_robotName"
-	      localName		      "WBT_modelName"
-	      wbiFile		      "WBT_wbiFilename"
-	      wbiList		      "WBT_wbiList"
+	      yarp2WBIOption	      "From YARP to WBI"
 	      Port {
 		PortNumber		1
 		Name			"torso"
@@ -29548,16 +29411,12 @@ Model {
 	      Name		      "DoFs converter2"
 	      SID		      "4143"
 	      Ports		      [1, 5]
-	      Position		      [710, 578, 805, 672]
+	      Position		      [715, 578, 810, 672]
 	      ZOrder		      712
-	      LibraryVersion	      "1.383"
+	      LibraryVersion	      "1.497"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
-	      yarp2WBIOption	      "From WBI to YARP"
-	      robotName		      "WBT_robotName"
-	      localName		      "WBT_modelName"
-	      wbiFile		      "WBT_wbiFilename"
-	      wbiList		      "WBT_wbiList"
+	      yarp2WBIOption	      "From YARP to WBI"
 	      Port {
 		PortNumber		1
 		Name			"torso"
@@ -30833,7 +30692,7 @@ Model {
 	  Variant		  off
 	  System {
 	    Name		    "Gain Scheduling"
-	    Location		    [65, 24, 1920, 1080]
+	    Location		    [53, 27, 1366, 768]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -30845,7 +30704,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "167"
+	    ZoomFactor		    "100"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "Kp_CoM"
@@ -30957,16 +30816,12 @@ Model {
 	      Name		      "DoFs converter1"
 	      SID		      "5876"
 	      Ports		      [1, 5]
-	      Position		      [1020, 483, 1115, 577]
+	      Position		      [1025, 483, 1120, 577]
 	      ZOrder		      779
-	      LibraryVersion	      "1.383"
+	      LibraryVersion	      "1.497"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
-	      yarp2WBIOption	      "From WBI to YARP"
-	      robotName		      "WBT_robotName"
-	      localName		      "WBT_modelName"
-	      wbiFile		      "WBT_wbiFilename"
-	      wbiList		      "WBT_wbiList"
+	      yarp2WBIOption	      "From YARP to WBI"
 	      Port {
 		PortNumber		1
 		Name			"torso"
@@ -30993,16 +30848,12 @@ Model {
 	      Name		      "DoFs converter4"
 	      SID		      "5874"
 	      Ports		      [1, 5]
-	      Position		      [1020, 303, 1115, 397]
+	      Position		      [1025, 303, 1120, 397]
 	      ZOrder		      777
-	      LibraryVersion	      "1.383"
+	      LibraryVersion	      "1.497"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
-	      yarp2WBIOption	      "From WBI to YARP"
-	      robotName		      "WBT_robotName"
-	      localName		      "WBT_modelName"
-	      wbiFile		      "WBT_wbiFilename"
-	      wbiList		      "WBT_wbiList"
+	      yarp2WBIOption	      "From YARP to WBI"
 	      Port {
 		PortNumber		1
 		Name			"torso"
@@ -31685,7 +31536,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "97"
+	    ZoomFactor		    "80"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "s"
@@ -31752,16 +31603,12 @@ Model {
 	      Name		      "DoFs converter"
 	      SID		      "4778"
 	      Ports		      [1, 5]
-	      Position		      [750, 228, 845, 322]
+	      Position		      [755, 228, 850, 322]
 	      ZOrder		      736
-	      LibraryVersion	      "1.383"
+	      LibraryVersion	      "1.497"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
-	      yarp2WBIOption	      "From WBI to YARP"
-	      robotName		      "WBT_robotName"
-	      localName		      "WBT_modelName"
-	      wbiFile		      "WBT_wbiFilename"
-	      wbiList		      "WBT_wbiList"
+	      yarp2WBIOption	      "From YARP to WBI"
 	      Port {
 		PortNumber		1
 		Name			"torso"
@@ -31788,16 +31635,12 @@ Model {
 	      Name		      "DoFs converter1"
 	      SID		      "4779"
 	      Ports		      [1, 5]
-	      Position		      [750, 373, 845, 467]
+	      Position		      [755, 373, 850, 467]
 	      ZOrder		      738
-	      LibraryVersion	      "1.383"
+	      LibraryVersion	      "1.497"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
-	      yarp2WBIOption	      "From WBI to YARP"
-	      robotName		      "WBT_robotName"
-	      localName		      "WBT_modelName"
-	      wbiFile		      "WBT_wbiFilename"
-	      wbiList		      "WBT_wbiList"
+	      yarp2WBIOption	      "From YARP to WBI"
 	      Port {
 		PortNumber		1
 		Name			"torso"
@@ -31824,16 +31667,12 @@ Model {
 	      Name		      "DoFs converter2"
 	      SID		      "4780"
 	      Ports		      [1, 5]
-	      Position		      [750, 518, 845, 612]
+	      Position		      [755, 518, 850, 612]
 	      ZOrder		      742
-	      LibraryVersion	      "1.383"
+	      LibraryVersion	      "1.497"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
-	      yarp2WBIOption	      "From WBI to YARP"
-	      robotName		      "WBT_robotName"
-	      localName		      "WBT_modelName"
-	      wbiFile		      "WBT_wbiFilename"
-	      wbiList		      "WBT_wbiList"
+	      yarp2WBIOption	      "From YARP to WBI"
 	      Port {
 		PortNumber		1
 		Name			"torso"
@@ -31860,16 +31699,12 @@ Model {
 	      Name		      "DoFs converter3"
 	      SID		      "4781"
 	      Ports		      [1, 5]
-	      Position		      [1330, 143, 1425, 237]
+	      Position		      [1335, 143, 1430, 237]
 	      ZOrder		      748
-	      LibraryVersion	      "1.383"
+	      LibraryVersion	      "1.497"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
-	      yarp2WBIOption	      "From WBI to YARP"
-	      robotName		      "WBT_robotName"
-	      localName		      "WBT_modelName"
-	      wbiFile		      "WBT_wbiFilename"
-	      wbiList		      "WBT_wbiList"
+	      yarp2WBIOption	      "From YARP to WBI"
 	      Port {
 		PortNumber		1
 		Name			"torso"
@@ -34165,8 +34000,8 @@ Model {
 	  MaxDataPoints		  5000
 	  SaveToWorkspace	  off
 	  SaveName		  ScopeData1
-	  YMin			  "-0.07444~-0.1845"
-	  YMax			  "0.11943~0.04889"
+	  YMin			  "-0.08725~-0.18491"
+	  YMax			  "0.23161~0.04899"
 	  SampleInput		  off
 	  SampleTime		  -1
 	  ZoomMode		  on
@@ -34199,11 +34034,12 @@ Model {
 	  ZOrder		  929
 	  ForegroundColor	  "[0.490196, 0.000000, 0.000000]"
 	  ShowName		  off
-	  LibraryVersion	  "1.383"
+	  LibraryVersion	  "1.497"
 	  SourceBlock		  "WBToolboxLibrary/Utilities/Yarp Read"
 	  SourceType		  "YARP Read"
 	  portName		  "Ports.LEFT_FOOT_EXT_WRENCH"
 	  signalSize		  "6"
+	  timeout		  "0.5"
 	  blocking		  off
 	  timestamp		  off
 	  autoconnect		  on
@@ -34218,11 +34054,12 @@ Model {
 	  ZOrder		  930
 	  ForegroundColor	  "[0.490196, 0.000000, 0.000000]"
 	  ShowName		  off
-	  LibraryVersion	  "1.383"
+	  LibraryVersion	  "1.497"
 	  SourceBlock		  "WBToolboxLibrary/Utilities/Yarp Read"
 	  SourceType		  "YARP Read"
 	  portName		  "Ports.RIGHT_FOOT_EXT_WRENCH"
 	  signalSize		  "6"
+	  timeout		  "0.5"
 	  blocking		  off
 	  timestamp		  off
 	  autoconnect		  on
@@ -34824,7 +34661,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		48
+	$ObjectID		55
 	$ClassName		"Simulink.Mask"
 	Display			"disp('SYNCHRONIZER')"
       }
@@ -34884,7 +34721,7 @@ Model {
 	      ZOrder		      539
 	      ForegroundColor	      "[0.490196, 0.000000, 0.000000]"
 	      ShowName		      off
-	      LibraryVersion	      "1.383"
+	      LibraryVersion	      "1.497"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/Simulator Synchronizer"
 	      SourceType	      "Simulator Synchronizer"
 	      period		      "Config.t_step"
@@ -34966,7 +34803,7 @@ Model {
 	      ForegroundColor	      "[0.916667, 0.916667, 0.916667]"
 	      BackgroundColor	      "gray"
 	      ShowName		      off
-	      LibraryVersion	      "1.383"
+	      LibraryVersion	      "1.497"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/Real Time Synchronizer"
 	      SourceType	      "Real Time Synchronizer"
 	      period		      "Config.t_step"
@@ -35222,7 +35059,7 @@ Stateflow {
     created		    "29-Nov-2017 15:01:26"
     isLibrary		    0
     sfVersion		    76014001.0011
-    firstTarget		    365
+    firstTarget		    367
   }
   chart {
     id			    2
@@ -42003,7 +41840,7 @@ Stateflow {
     screen		    [1 1 1280 1024 1.041050272174191]
     treeNode		    [0 334 0 0]
     viewObj		    333
-    ssIdHighWaterMark	    18
+    ssIdHighWaterMark	    20
     decomposition	    CLUSTER_CHART
     type		    EML_CHART
     chartFileNumber	    19
@@ -42012,8 +41849,8 @@ Stateflow {
       name		      "ZMP"
     }
     firstData		    335
-    firstTransition	    344
-    firstJunction	    343
+    firstTransition	    346
+    firstJunction	    345
   }
   state {
     id			    334
@@ -42029,16 +41866,17 @@ Stateflow {
     decomposition	    CLUSTER_STATE
     eml {
       isEML		      1
-      script		      "function ZMP = ZMP(f_lFoot, f_rFoot, pose_lFoot, orient_lFoot, pose_rFoot, orient_rFoot, feetInCo"
-      "ntact)\n\nfz_lFoot   = f_lFoot(3);\ntaux_lFoot = f_lFoot(4);\ntauy_lFoot = f_lFoot(5);\nfz_rFoot   = f_rFoot(3);"
-      "\ntaux_rFoot = f_rFoot(4);\ntauy_rFoot = f_rFoot(5);\n\nif feetInContact(1) > 0.1 && feetInContact(2) > 0.1 %Bot"
-      "h feet on ground\n    cop_lFoot  = orient_lFoot(1:2,1:2) * [-tauy_lFoot; taux_lFoot] / fz_lFoot + pose_lFoot(1:2"
-      ");\n    cop_rFoot  = orient_rFoot(1:2,1:2) * [-tauy_rFoot; taux_rFoot] / fz_rFoot + pose_rFoot(1:2);\n    ZMP   "
-      "    = (fz_lFoot * cop_lFoot + fz_rFoot * cop_rFoot) / (fz_lFoot + fz_rFoot);\n    \nelseif feetInContact(1) > 0."
-      "1 %Left foot on ground\n    cop_lFoot  = orient_lFoot(1:2,1:2) * [-tauy_lFoot; taux_lFoot] / fz_lFoot + pose_lFo"
-      "ot(1:2);\n    ZMP       = (fz_lFoot * cop_lFoot) / (fz_lFoot);\n    \nelseif feetInContact(2) > 0.1 %Right foot "
-      "on ground\n    cop_rFoot  = orient_rFoot(1:2,1:2) * [-tauy_rFoot; taux_rFoot] / fz_rFoot + pose_rFoot(1:2);\n   "
-      " ZMP       = (fz_rFoot * cop_rFoot) / (fz_rFoot);\n    \nelse\n    ZMP = zeros(2,1);\nend\n    \n\n\n\n\n"
+      script		      "function [ZMP_mean, ZMP_buffer] = ZMP(f_lFoot, f_rFoot, pose_lFoot, orient_lFoot, pose_rFoot, ori"
+      "ent_rFoot, feetInContact, ZMP_previous)\n\nfz_lFoot   = f_lFoot(3);\ntaux_lFoot = f_lFoot(4);\ntauy_lFoot = f_lF"
+      "oot(5);\nfz_rFoot   = f_rFoot(3);\ntaux_rFoot = f_rFoot(4);\ntauy_rFoot = f_rFoot(5);\n\nif feetInContact(1) > 0"
+      ".1 && feetInContact(2) > 0.1 %Both feet on ground\n    cop_lFoot  = orient_lFoot(1:2,1:2) * [-tauy_lFoot; taux_l"
+      "Foot] / fz_lFoot + pose_lFoot(1:2);\n    cop_rFoot  = orient_rFoot(1:2,1:2) * [-tauy_rFoot; taux_rFoot] / fz_rFo"
+      "ot + pose_rFoot(1:2);\n    ZMP       = (fz_lFoot * cop_lFoot + fz_rFoot * cop_rFoot) / (fz_lFoot + fz_rFoot);\n "
+      "   \nelseif feetInContact(1) > 0.1 %Left foot on ground\n    cop_lFoot  = orient_lFoot(1:2,1:2) * [-tauy_lFoot; "
+      "taux_lFoot] / fz_lFoot + pose_lFoot(1:2);\n    ZMP       = (fz_lFoot * cop_lFoot) / (fz_lFoot);\n    \nelseif fe"
+      "etInContact(2) > 0.1 %Right foot on ground\n    cop_rFoot  = orient_rFoot(1:2,1:2) * [-tauy_rFoot; taux_rFoot] /"
+      " fz_rFoot + pose_rFoot(1:2);\n    ZMP       = (fz_rFoot * cop_rFoot) / (fz_rFoot);\n    \nelse\n    ZMP = zeros("
+      "2,1);\nend\n\nZMP_buffer = [ZMP_previous(:,2:end) ZMP];\n\nZMP_mean = mean(ZMP_buffer,2);\n    \n\n\n\n\n"
       editorLayout	      "100 M4x1[10 5 700 500]"
     }
   }
@@ -42089,7 +41927,7 @@ Stateflow {
   data {
     id			    337
     ssIdNumber		    5
-    name		    "ZMP"
+    name		    "ZMP_mean"
     scope		    OUTPUT_DATA
     machine		    1
     props {
@@ -42214,10 +42052,54 @@ Stateflow {
       frame		      SF_FRAME_INHERITED
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [333 341 0]
+    linkNode		    [333 341 343]
+  }
+  data {
+    id			    343
+    ssIdNumber		    19
+    name		    "ZMP_previous"
+    scope		    INPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+	isSigned		1
+	wordLength		"16"
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_INHERITED
+    }
+    dataType		    "Inherit: Same as Simulink"
+    linkNode		    [333 342 344]
+  }
+  data {
+    id			    344
+    ssIdNumber		    20
+    name		    "ZMP_buffer"
+    scope		    OUTPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+	isSigned		1
+	wordLength		"16"
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_NO
+    }
+    dataType		    "Inherit: Same as Simulink"
+    linkNode		    [333 343 0]
   }
   junction {
-    id			    343
+    id			    345
     position		    [23.5747 49.5747 7]
     chart		    333
     subviewer		    333
@@ -42226,7 +42108,7 @@ Stateflow {
     linkNode		    [333 0 0]
   }
   transition {
-    id			    344
+    id			    346
     labelString		    "{eML_blk_kernel();}"
     labelPosition	    [28.125 13.875 102.544 14.964]
     fontSize		    12
@@ -42234,7 +42116,7 @@ Stateflow {
       intersection	      [0 0 1 0 23.5747 14.625 0 0]
     }
     dst {
-      id		      343
+      id		      345
       intersection	      [1 0 -1 0 23.5747 42.5747 0 0]
     }
     midPoint		    [23.5747 24.9468]
@@ -42250,21 +42132,21 @@ Stateflow {
     linkNode		    [333 0 0]
   }
   instance {
-    id			    345
+    id			    347
     machine		    1
     name		    "Subsystem/ZMP, support polygon/compute ZMP"
     chart		    333
   }
   chart {
-    id			    346
+    id			    348
     machine		    1
     name		    "Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Mass Matrix and Bias Forces/Add motors"
     " reflected inertias/Add motor reflected inertias"
     windowPosition	    [422 539.941 189 413]
     viewLimits		    [0 156.75 0 153.75]
     screen		    [1 1 3600 1200 1.180555555555556]
-    treeNode		    [0 347 0 0]
-    viewObj		    346
+    treeNode		    [0 349 0 0]
+    viewObj		    348
     ssIdHighWaterMark	    6
     decomposition	    CLUSTER_CHART
     type		    EML_CHART
@@ -42273,19 +42155,19 @@ Stateflow {
     eml {
       name		      "addMotorsInertiaFCN"
     }
-    firstData		    348
-    firstTransition	    352
-    firstJunction	    351
+    firstData		    350
+    firstTransition	    354
+    firstJunction	    353
   }
   state {
-    id			    347
+    id			    349
     labelString		    "eML_blk_kernel()"
     position		    [18 64.5 118 66]
     fontSize		    12
-    chart		    346
-    treeNode		    [346 0 0 0]
+    chart		    348
+    treeNode		    [348 0 0 0]
     superState		    SUBCHART
-    subviewer		    346
+    subviewer		    348
     ssIdNumber		    1
     type		    FUNC_STATE
     decomposition	    CLUSTER_STATE
@@ -42297,7 +42179,7 @@ Stateflow {
     }
   }
   data {
-    id			    348
+    id			    350
     ssIdNumber		    4
     name		    "M"
     scope		    INPUT_DATA
@@ -42313,10 +42195,10 @@ Stateflow {
       complexity	      SF_COMPLEX_INHERITED
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [346 0 349]
+    linkNode		    [348 0 351]
   }
   data {
-    id			    349
+    id			    351
     ssIdNumber		    5
     name		    "M_with_inertia"
     scope		    OUTPUT_DATA
@@ -42333,10 +42215,10 @@ Stateflow {
       frame		      SF_FRAME_NO
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [346 348 350]
+    linkNode		    [348 350 352]
   }
   data {
-    id			    350
+    id			    352
     ssIdNumber		    6
     name		    "Config"
     scope		    PARAMETER_DATA
@@ -42355,19 +42237,19 @@ Stateflow {
       frame		      SF_FRAME_INHERITED
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [346 349 0]
+    linkNode		    [348 351 0]
   }
   junction {
-    id			    351
+    id			    353
     position		    [23.5747 49.5747 7]
-    chart		    346
-    subviewer		    346
+    chart		    348
+    subviewer		    348
     ssIdNumber		    3
     type		    CONNECTIVE_JUNCTION
-    linkNode		    [346 0 0]
+    linkNode		    [348 0 0]
   }
   transition {
-    id			    352
+    id			    354
     labelString		    "{eML_blk_kernel();}"
     labelPosition	    [28.125 13.875 102.544 14.964]
     fontSize		    12
@@ -42375,37 +42257,37 @@ Stateflow {
       intersection	      [0 0 1 0 23.5747 14.625 0 0]
     }
     dst {
-      id		      351
+      id		      353
       intersection	      [1 0 -1 0 23.5747 42.5747 0 0]
     }
     midPoint		    [23.5747 24.9468]
-    chart		    346
+    chart		    348
     dataLimits		    [21.175 25.975 14.625 42.575]
-    subviewer		    346
+    subviewer		    348
     drawStyle		    SMART
     slide {
       sticky		      BOTH_STICK
     }
     executionOrder	    1
     ssIdNumber		    2
-    linkNode		    [346 0 0]
+    linkNode		    [348 0 0]
   }
   instance {
-    id			    353
+    id			    355
     machine		    1
     name		    "Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Mass Matrix and Bias Forces/Add motors"
     " reflected inertias/Add motor reflected inertias"
-    chart		    346
+    chart		    348
   }
   chart {
-    id			    354
+    id			    356
     machine		    1
     name		    "Subsystem/ZMP, support polygon/supportPolygon"
     windowPosition	    [422 539.941 189 413]
     viewLimits		    [0 156.75 0 153.75]
     screen		    [1 1 3600 1200 1.180555555555556]
-    treeNode		    [0 355 0 0]
-    viewObj		    354
+    treeNode		    [0 357 0 0]
+    viewObj		    356
     ssIdHighWaterMark	    12
     decomposition	    CLUSTER_CHART
     type		    EML_CHART
@@ -42414,19 +42296,19 @@ Stateflow {
     eml {
       name		      "supportPolygon"
     }
-    firstData		    356
-    firstTransition	    363
-    firstJunction	    362
+    firstData		    358
+    firstTransition	    365
+    firstJunction	    364
   }
   state {
-    id			    355
+    id			    357
     labelString		    "eML_blk_kernel()"
     position		    [18 64.5 118 66]
     fontSize		    12
-    chart		    354
-    treeNode		    [354 0 0 0]
+    chart		    356
+    treeNode		    [356 0 0 0]
     superState		    SUBCHART
-    subviewer		    354
+    subviewer		    356
     ssIdNumber		    1
     type		    FUNC_STATE
     decomposition	    CLUSTER_STATE
@@ -42457,7 +42339,7 @@ Stateflow {
     }
   }
   data {
-    id			    356
+    id			    358
     ssIdNumber		    6
     name		    "pose_lFoot"
     scope		    INPUT_DATA
@@ -42476,10 +42358,10 @@ Stateflow {
       frame		      SF_FRAME_INHERITED
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [354 0 357]
+    linkNode		    [356 0 359]
   }
   data {
-    id			    357
+    id			    359
     ssIdNumber		    7
     name		    "pose_rFoot"
     scope		    INPUT_DATA
@@ -42498,10 +42380,10 @@ Stateflow {
       frame		      SF_FRAME_INHERITED
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [354 356 358]
+    linkNode		    [356 358 360]
   }
   data {
-    id			    358
+    id			    360
     ssIdNumber		    4
     name		    "feet_in_contact"
     scope		    INPUT_DATA
@@ -42517,10 +42399,10 @@ Stateflow {
       complexity	      SF_COMPLEX_INHERITED
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [354 357 359]
+    linkNode		    [356 359 361]
   }
   data {
-    id			    359
+    id			    361
     ssIdNumber		    12
     name		    "state"
     scope		    INPUT_DATA
@@ -42539,10 +42421,10 @@ Stateflow {
       frame		      SF_FRAME_INHERITED
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [354 358 360]
+    linkNode		    [356 360 362]
   }
   data {
-    id			    360
+    id			    362
     ssIdNumber		    5
     name		    "supportPolygon"
     scope		    OUTPUT_DATA
@@ -42559,10 +42441,10 @@ Stateflow {
       frame		      SF_FRAME_NO
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [354 359 361]
+    linkNode		    [356 361 363]
   }
   data {
-    id			    361
+    id			    363
     ssIdNumber		    8
     name		    "Config"
     scope		    PARAMETER_DATA
@@ -42581,19 +42463,19 @@ Stateflow {
       frame		      SF_FRAME_INHERITED
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [354 360 0]
+    linkNode		    [356 362 0]
   }
   junction {
-    id			    362
+    id			    364
     position		    [23.5747 49.5747 7]
-    chart		    354
-    subviewer		    354
+    chart		    356
+    subviewer		    356
     ssIdNumber		    3
     type		    CONNECTIVE_JUNCTION
-    linkNode		    [354 0 0]
+    linkNode		    [356 0 0]
   }
   transition {
-    id			    363
+    id			    365
     labelString		    "{eML_blk_kernel();}"
     labelPosition	    [28.125 13.875 102.544 14.964]
     fontSize		    12
@@ -42601,29 +42483,29 @@ Stateflow {
       intersection	      [0 0 1 0 23.5747 14.625 0 0]
     }
     dst {
-      id		      362
+      id		      364
       intersection	      [1 0 -1 0 23.5747 42.5747 0 0]
     }
     midPoint		    [23.5747 24.9468]
-    chart		    354
+    chart		    356
     dataLimits		    [21.175 25.975 14.625 42.575]
-    subviewer		    354
+    subviewer		    356
     drawStyle		    SMART
     slide {
       sticky		      BOTH_STICK
     }
     executionOrder	    1
     ssIdNumber		    2
-    linkNode		    [354 0 0]
+    linkNode		    [356 0 0]
   }
   instance {
-    id			    364
+    id			    366
     machine		    1
     name		    "Subsystem/ZMP, support polygon/supportPolygon"
-    chart		    354
+    chart		    356
   }
   target {
-    id			    365
+    id			    367
     machine		    1
     name		    "sfun"
     description		    "Default Simulink S-Function Target."

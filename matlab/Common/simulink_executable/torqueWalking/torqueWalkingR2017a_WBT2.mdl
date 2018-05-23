@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.818"
+    ComputedModelVersion    "1.798"
     NumModelReferences	    0
     NumTestPointedSignals   0
     NumProvidedFunctions    0
@@ -34,7 +34,7 @@ Model {
   FPTRunName		  "Run 1"
   MaxMDLFileLineLength	  120
   InitFcn		  "cd(fileparts(which(bdroot)));\ninitTorqueWalking;"
-  StopFcn		  "cd(fileparts(which(bdroot)));\ndisp_early_termination"
+  StopFcn		  "disp_early_termination"
   LastSavedArchitecture	  "glnxa64"
   Object {
     $PropName		    "BdWindowsInfo"
@@ -64,15 +64,15 @@ Model {
       }
       Array {
 	Type			"Simulink.EditorInfo"
-	Dimension		12
+	Dimension		5
 	Object {
 	  $ObjectID		  5
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "6907"
+	  IsActive		  [1]
+	  ViewObjType		  "SimulinkTopLevel"
+	  LoadSaveID		  "0"
 	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [1.5511457503255526]
-	  Offset		  [128.63847609262234, -70.86704340417]
+	  ZoomFactor		  [0.71592060335447072]
+	  Offset		  [-527.96187106918239, -118.86079664570229]
 	}
 	Object {
 	  $ObjectID		  6
@@ -87,10 +87,10 @@ Model {
 	  $ObjectID		  7
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "6977"
+	  LoadSaveID		  "4091"
 	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [1.1699779249448123]
-	  Offset		  [135.24291387369135, 45.26037757167461]
+	  ZoomFactor		  [0.71621621621621623]
+	  Offset		  [-230.09433962264154, 22.452830188679229]
 	}
 	Object {
 	  $ObjectID		  8
@@ -98,8 +98,8 @@ Model {
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "4258"
 	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [0.4835766423357663]
-	  Offset		  [-1506.8938679245284, -224.95094339622653]
+	  ZoomFactor		  [0.48094373865698731]
+	  Offset		  [-1514.2688679245282, -225.10943396226412]
 	}
 	Object {
 	  $ObjectID		  9
@@ -107,77 +107,14 @@ Model {
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "4664"
 	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [1.0]
-	  Offset		  [-227.17391304347831, 57.826086956521749]
-	}
-	Object {
-	  $ObjectID		  10
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "5419"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [0.85071818787475006]
-	  Offset		  [428.14487895950276, -105.95819341419411]
-	}
-	Object {
-	  $ObjectID		  11
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "7100"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [2.5]
-	  Offset		  [-68.516666666666708, -68.050000000000011]
-	}
-	Object {
-	  $ObjectID		  12
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4771"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [0.8]
-	  Offset		  [228.11603773584898, 110.81886792452826]
-	}
-	Object {
-	  $ObjectID		  13
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4129"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [1.0]
-	  Offset		  [265.58333333333371, 368.08333333333348]
-	}
-	Object {
-	  $ObjectID		  14
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4470"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [0.8]
-	  Offset		  [395.765625, 401.0]
-	}
-	Object {
-	  $ObjectID		  15
-	  IsActive		  [1]
-	  ViewObjType		  "SimulinkTopLevel"
-	  LoadSaveID		  "0"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [0.71524966261808365]
-	  Offset		  [-528.79716981132083, -119.57358490566037]
-	}
-	Object {
-	  $ObjectID		  16
-	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "7022"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [1.25]
-	  Offset		  [-649.8, -164.13333333333333]
+	  ZoomFactor		  [0.92]
+	  Offset		  [-257.60869565217394, -55.434782608695642]
 	}
 	PropName		"EditorsInfo"
       }
       Object {
 	$PropName		"DockComponentsInfo"
-	$ObjectID		17
+	$ObjectID		10
 	$ClassName		"Simulink.DockComponentInfo"
 	Type			"GLUE2:PropertyInspector"
 	ID			"Property Inspector"
@@ -207,9 +144,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "mcharbonneau"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed May 23 14:08:12 2018"
-  RTWModifiedTimeStamp	  448983937
-  ModelVersionFormat	  "1.%<AutoIncrement:818>"
+  LastModifiedDate	  "Fri May 18 10:07:37 2018"
+  RTWModifiedTimeStamp	  448538809
+  ModelVersionFormat	  "1.%<AutoIncrement:798>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -259,7 +196,7 @@ Model {
   TryForcingSFcnDF	  off
   Object {
     $PropName		    "DataLoggingOverride"
-    $ObjectID		    18
+    $ObjectID		    11
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
     model_		    "torqueWalkingR2017a"
     overrideMode_	    [0.0]
@@ -304,7 +241,7 @@ Model {
     Type		    "Handle"
     Dimension		    1
     Simulink.ConfigSet {
-      $ObjectID		      19
+      $ObjectID		      12
       Version		      "1.17.0"
       DisabledProps	      []
       Description	      ""
@@ -312,7 +249,7 @@ Model {
 	Type			"Handle"
 	Dimension		9
 	Simulink.SolverCC {
-	  $ObjectID		  20
+	  $ObjectID		  13
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  ""
@@ -352,7 +289,7 @@ Model {
 	  SampleTimeProperty	  []
 	}
 	Simulink.DataIOCC {
-	  $ObjectID		  21
+	  $ObjectID		  14
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  ""
@@ -393,7 +330,7 @@ Model {
 	  LoggingIntervals	  "[-inf, inf]"
 	}
 	Simulink.OptimizationCC {
-	  $ObjectID		  22
+	  $ObjectID		  15
 	  Version		  "1.17.0"
 	  Array {
 	    Type		    "Cell"
@@ -454,7 +391,7 @@ Model {
 	  BusAssignmentInplaceUpdate on
 	}
 	Simulink.DebuggingCC {
-	  $ObjectID		  23
+	  $ObjectID		  16
 	  Version		  "1.17.0"
 	  Array {
 	    Type		    "Cell"
@@ -564,7 +501,7 @@ Model {
 	  UnitDatabase		  ""
 	}
 	Simulink.HardwareCC {
-	  $ObjectID		  24
+	  $ObjectID		  17
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  ""
@@ -612,7 +549,7 @@ Model {
 	  UseSimulinkCoderFeatures on
 	}
 	Simulink.ModelReferenceCC {
-	  $ObjectID		  25
+	  $ObjectID		  18
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  ""
@@ -631,7 +568,7 @@ Model {
 	  SupportModelReferenceSimTargetCustomCode off
 	}
 	Simulink.SFSimCC {
-	  $ObjectID		  26
+	  $ObjectID		  19
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  ""
@@ -661,7 +598,7 @@ Model {
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
-	  $ObjectID		  27
+	  $ObjectID		  20
 	  Version		  "1.17.0"
 	  Array {
 	    Type		    "Cell"
@@ -744,7 +681,7 @@ Model {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
-	      $ObjectID		      28
+	      $ObjectID		      21
 	      Version		      "1.17.0"
 	      Array {
 		Type			"Cell"
@@ -831,7 +768,7 @@ Model {
 	    }
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
-	      $ObjectID		      29
+	      $ObjectID		      22
 	      Version		      "1.17.0"
 	      Array {
 		Type			"Cell"
@@ -927,7 +864,7 @@ Model {
 	  }
 	}
 	SlCovCC.ConfigComp {
-	  $ObjectID		  30
+	  $ObjectID		  23
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  "Simulink Coverage Configuration Component"
@@ -977,11 +914,11 @@ Model {
   }
   Simulink.ConfigSet {
     $PropName		    "ActiveConfigurationSet"
-    $ObjectID		    19
+    $ObjectID		    12
   }
   Object {
     $PropName		    "DataTransfer"
-    $ObjectID		    31
+    $ObjectID		    24
     $ClassName		    "Simulink.GlobalDataTransfer"
     DefaultTransitionBetweenSyncTasks "Ensure deterministic transfer (maximum delay)"
     DefaultTransitionBetweenAsyncTasks "Ensure data integrity only"
@@ -1168,15 +1105,6 @@ Model {
     Block {
       BlockType		      M-S-Function
       DisplayMFileStacktrace  on
-    }
-    Block {
-      BlockType		      Memory
-      X0		      "0"
-      InheritSampleTime	      off
-      LinearizeMemory	      off
-      LinearizeAsDelay	      off
-      StateMustResolveToSignalObject off
-      RTWStateStorageClass    "Auto"
     }
     Block {
       BlockType		      Mux
@@ -1370,7 +1298,7 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "72"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "7120"
+    SIDHighWatermark	    "7096"
     Block {
       BlockType		      SubSystem
       Name		      "Balancing Controller (Reactive QP control)"
@@ -1384,7 +1312,7 @@ Model {
       System {
 	Name			"Balancing Controller (Reactive QP control)"
 	Location		[53, 27, 1366, 768]
-	Open			off
+	Open			on
 	PortBlocksUseCompactNotation off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1991,10 +1919,10 @@ Model {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "Compute joint torques (motor reflected inertia)"
-	  SID			  "7104"
+	  SID			  "6167"
 	  Ports			  [1, 1]
-	  Position		  [880, 109, 1025, 151]
-	  ZOrder		  918
+	  Position		  [925, 109, 1070, 151]
+	  ZOrder		  916
 	  RequestExecContextInheritance	off
 	  Variant		  off
 	  System {
@@ -2012,11 +1940,11 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "100"
+	    ZoomFactor		    "208"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "invGamma*tau_motors"
-	      SID		      "7105"
+	      SID		      "6168"
 	      Position		      [-330, 68, -300, 82]
 	      ZOrder		      591
 	      IconDisplay	      "Port number"
@@ -2024,7 +1952,7 @@ Model {
 	    Block {
 	      BlockType		      Constant
 	      Name		      " "
-	      SID		      "7106"
+	      SID		      "6169"
 	      Position		      [25, 44, 240, 56]
 	      ZOrder		      607
 	      Value		      "Config.USE_MOTOR_REFLECTED_INERTIA"
@@ -2032,7 +1960,7 @@ Model {
 	    Block {
 	      BlockType		      Sum
 	      Name		      "Add"
-	      SID		      "7107"
+	      SID		      "6170"
 	      Ports		      [2, 1]
 	      Position		      [-30, -143, 15, 148]
 	      ZOrder		      602
@@ -2044,7 +1972,7 @@ Model {
 	    Block {
 	      BlockType		      Gain
 	      Name		      "Gain"
-	      SID		      "7108"
+	      SID		      "6171"
 	      Position		      [-150, -85, -60, -55]
 	      ZOrder		      596
 	      Gain		      "Config.K_ff"
@@ -2054,23 +1982,27 @@ Model {
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "Get Measurement"
-	      SID		      "7116"
+	      Name		      "Get Estimate"
+	      SID		      "6172"
 	      Ports		      [0, 1]
-	      Position		      [-375, -49, -255, -21]
-	      ZOrder		      608
+	      Position		      [-355, -46, -270, -24]
+	      ZOrder		      595
 	      BackgroundColor	      "[0.925500, 0.870600, 0.133300]"
-	      LibraryVersion	      "1.497"
-	      SourceBlock	      "WBToolboxLibrary/wholeBodyStates/Get Measurement"
-	      SourceType	      "Get Measurement"
+	      LibraryVersion	      "1.383"
+	      SourceBlock	      "WBToolboxLibrary/wholeBodyStates/Get Estimate"
+	      SourceType	      "Get Estimate"
 	      SourceProductName	      "Whole Body Toolbox"
 	      ContentPreviewEnabled   off
-	      measuredType	      "Joints Acceleration"
+	      estimateType	      "Joints Acceleration"
+	      robotName		      "WBT_robotName"
+	      localName		      "WBT_modelName"
+	      wbiFile		      "WBT_wbiFilename"
+	      wbiList		      "WBT_wbiList"
 	    }
 	    Block {
 	      BlockType		      Constant
 	      Name		      "Motors Inertia"
-	      SID		      "7110"
+	      SID		      "6173"
 	      Position		      [-450, -98, -375, -82]
 	      ZOrder		      601
 	      Value		      "Config.I_m"
@@ -2078,7 +2010,7 @@ Model {
 	    Block {
 	      BlockType		      Product
 	      Name		      "Product"
-	      SID		      "7111"
+	      SID		      "6174"
 	      Ports		      [2, 1]
 	      Position		      [-230, -146, -190, 1]
 	      ZOrder		      597
@@ -2091,7 +2023,7 @@ Model {
 	    Block {
 	      BlockType		      Product
 	      Name		      "Product1"
-	      SID		      "7112"
+	      SID		      "6175"
 	      Ports		      [2, 1]
 	      Position		      [-330, -151, -295, -69]
 	      ZOrder		      600
@@ -2104,7 +2036,7 @@ Model {
 	    Block {
 	      BlockType		      Switch
 	      Name		      "Switch"
-	      SID		      "7113"
+	      SID		      "6176"
 	      Position		      [255, -15, 340, 115]
 	      ZOrder		      606
 	      Criteria		      "u2 > Threshold"
@@ -2114,7 +2046,7 @@ Model {
 	    Block {
 	      BlockType		      Constant
 	      Name		      "Transmission ratio"
-	      SID		      "7114"
+	      SID		      "6177"
 	      Position		      [-450, -138, -370, -122]
 	      ZOrder		      598
 	      Value		      "Config.invGamma"
@@ -2122,7 +2054,7 @@ Model {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "tau_joints"
-	      SID		      "7115"
+	      SID		      "6178"
 	      Position		      [375, 43, 405, 57]
 	      ZOrder		      592
 	      IconDisplay	      "Port number"
@@ -2135,8 +2067,8 @@ Model {
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      13
-	      SrcBlock		      "Get Measurement"
+	      ZOrder		      2
+	      SrcBlock		      "Get Estimate"
 	      SrcPort		      1
 	      DstBlock		      "Product"
 	      DstPort		      2
@@ -2211,25 +2143,28 @@ Model {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "Get Measurement"
-	  SID			  "7100"
+	  Name			  "Get Estimate"
+	  SID			  "4110"
 	  Ports			  [0, 1]
-	  Position		  [225, 71, 345, 99]
-	  ZOrder		  917
+	  Position		  [270, 67, 350, 103]
+	  ZOrder		  54
 	  BackgroundColor	  "[0.827500, 0.576500, 0.603900]"
-	  ShowName		  off
-	  LibraryVersion	  "1.497"
-	  SourceBlock		  "WBToolboxLibrary/wholeBodyStates/Get Measurement"
-	  SourceType		  "Get Measurement"
+	  LibraryVersion	  "1.383"
+	  SourceBlock		  "WBToolboxLibrary/wholeBodyStates/Get Estimate"
+	  SourceType		  "Get Estimate"
 	  SourceProductName	  "Whole Body Toolbox"
 	  ContentPreviewEnabled	  off
-	  measuredType		  "Joints Torque"
+	  estimateType		  "Joints Torque"
+	  robotName		  "WBT_robotName"
+	  localName		  "WBT_modelName"
+	  wbiFile		  "WBT_wbiFilename"
+	  wbiList		  "WBT_wbiList"
 	}
 	Block {
 	  BlockType		  Goto
 	  Name			  "Goto"
 	  SID			  "5647"
-	  Position		  [1185, 180, 1225, 210]
+	  Position		  [1310, 180, 1350, 210]
 	  ZOrder		  699
 	  GotoTag		  "tau_des"
 	  TagVisibility		  "global"
@@ -2295,7 +2230,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "163"
+	    ZoomFactor		    "125"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "tau_0"
@@ -2503,7 +2438,7 @@ Model {
 	  Name			  "Saturation"
 	  SID			  "4128"
 	  Ports			  [1, 1]
-	  Position		  [1055, 114, 1090, 146]
+	  Position		  [1155, 114, 1190, 146]
 	  ZOrder		  546
 	  InputPortMap		  "u0"
 	  UpperLimit		  "Sat.tau_max"
@@ -2517,7 +2452,7 @@ Model {
 	  Position		  [435, 67, 490, 103]
 	  ZOrder		  55
 	  BackgroundColor	  "[0.537255, 0.721569, 1.000000]"
-	  LibraryVersion	  "1.497"
+	  LibraryVersion	  "1.383"
 	  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 	  SourceType		  "Holder"
 	  SourceProductName	  "Whole Body Toolbox"
@@ -2527,9 +2462,16 @@ Model {
 	  BlockType		  Outport
 	  Name			  "tau"
 	  SID			  "4160"
-	  Position		  [1190, 123, 1220, 137]
+	  Position		  [1315, 123, 1345, 137]
 	  ZOrder		  20
 	  IconDisplay		  "Port number"
+	}
+	Line {
+	  ZOrder		  1
+	  SrcBlock		  "QPSolver (Reactive QP control)"
+	  SrcPort		  1
+	  DstBlock		  "Compute joint torques (motor reflected inertia)"
+	  DstPort		  1
 	}
 	Line {
 	  ZOrder		  2
@@ -2651,10 +2593,10 @@ Model {
 	  DstPort		  2
 	}
 	Line {
-	  ZOrder		  107
-	  SrcBlock		  "Get Measurement"
+	  ZOrder		  25
+	  SrcBlock		  "Get Estimate"
 	  SrcPort		  1
-	  Points		  [33, 0]
+	  Points		  [28, 0]
 	  Branch {
 	    ZOrder		    57
 	    Points		    [0, 50]
@@ -2678,7 +2620,7 @@ Model {
 	  ZOrder		  29
 	  SrcBlock		  "Saturation"
 	  SrcPort		  1
-	  Points		  [16, 0]
+	  Points		  [41, 0]
 	  Branch {
 	    ZOrder		    75
 	    DstBlock		    "tau"
@@ -2737,10 +2679,10 @@ Model {
 	  DstPort		  1
 	}
 	Line {
-	  ZOrder		  108
-	  SrcBlock		  "QPSolver (Reactive QP control)"
+	  ZOrder		  74
+	  SrcBlock		  "Compute joint torques (motor reflected inertia)"
 	  SrcPort		  1
-	  DstBlock		  "Compute joint torques (motor reflected inertia)"
+	  DstBlock		  "Saturation"
 	  DstPort		  1
 	}
 	Line {
@@ -2764,29 +2706,7 @@ Model {
 	  DstBlock		  "Balancing Controller Function"
 	  DstPort		  11
 	}
-	Line {
-	  ZOrder		  125
-	  SrcBlock		  "Compute joint torques (motor reflected inertia)"
-	  SrcPort		  1
-	  DstBlock		  "Saturation"
-	  DstPort		  1
-	}
       }
-    }
-    Block {
-      BlockType		      Reference
-      Name		      "Configuration"
-      SID		      "7103"
-      Ports		      []
-      Position		      [-175, -100, -100, -70]
-      ZOrder		      1016
-      LibraryVersion	      "1.497"
-      SourceBlock	      "WBToolboxLibrary/Utilities/Configuration"
-      SourceType	      ""
-      SourceProductName	      "Whole Body Toolbox"
-      ContentPreviewEnabled   off
-      ConfigSource	      "Workspace"
-      ConfigObject	      "'WBTConfigRobot'"
     }
     Block {
       BlockType		      SubSystem
@@ -2991,7 +2911,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "99"
+	    ZoomFactor		    "125"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "nu"
@@ -3092,7 +3012,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"68"
+		ZoomFactor		"80"
 		Block {
 		  BlockType		  Inport
 		  Name			  "s"
@@ -3135,12 +3055,16 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1475, 330, 1640, 425]
 		  ZOrder		  112
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.COM"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -3149,12 +3073,16 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1475, 615, 1640, 710]
 		  ZOrder		  116
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.LEFT_FOOT"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -3163,12 +3091,16 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1475, 870, 1640, 965]
 		  ZOrder		  129
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.LEFT_HAND"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -3177,12 +3109,16 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1475, 745, 1640, 840]
 		  ZOrder		  114
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.RIGHT_FOOT"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -3191,12 +3127,16 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1475, 1000, 1640, 1095]
 		  ZOrder		  128
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.RIGHT_HAND"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -3205,12 +3145,16 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1475, 485, 1640, 580]
 		  ZOrder		  115
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.ROT_TASK_LINK"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -3219,12 +3163,16 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [1050, 390, 1210, 445]
 		  ZOrder		  113
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.COM"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -3233,12 +3181,16 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [1050, 565, 1210, 620]
 		  ZOrder		  118
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.LEFT_FOOT"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -3247,12 +3199,16 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [1050, 800, 1210, 855]
 		  ZOrder		  126
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.LEFT_HAND"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -3261,12 +3217,16 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [1050, 655, 1210, 710]
 		  ZOrder		  119
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.RIGHT_FOOT"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -3275,12 +3235,16 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [1050, 890, 1210, 945]
 		  ZOrder		  127
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.RIGHT_HAND"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -3289,12 +3253,16 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [1050, 480, 1210, 535]
 		  ZOrder		  117
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.ROT_TASK_LINK"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Outport
@@ -3869,7 +3837,7 @@ Model {
 		  Variant		  off
 		  System {
 		    Name		    "Add motors reflected inertias"
-		    Location		    [53, 27, 1366, 768]
+		    Location		    [65, 24, 1920, 1080]
 		    Open		    off
 		    PortBlocksUseCompactNotation off
 		    ModelBrowserVisibility  off
@@ -3882,7 +3850,7 @@ Model {
 		    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
-		    ZoomFactor		    "305"
+		    ZoomFactor		    "400"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "M"
@@ -4035,11 +4003,16 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [875, 437, 1015, 538]
 		  ZOrder		  154
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Dynamics/Get Bias Forces"
 		  SourceType		  "Get Generalized Bias Forces"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
+		  explicitGravity	  off
 		}
 		Block {
 		  BlockType		  Reference
@@ -4048,11 +4021,15 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [875, 579, 1015, 646]
 		  ZOrder		  156
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Dynamics/Mass Matrix"
 		  SourceType		  "Mass Matrix"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Outport
@@ -4632,7 +4609,7 @@ Model {
 	      Position		      [195, 366, 240, 384]
 	      ZOrder		      761
 	      BackgroundColor	      "[0.537255, 0.721569, 1.000000]"
-	      LibraryVersion	      "1.497"
+	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/holder\n"
 	      SourceType	      "Holder"
 	      SourceProductName	      "Whole Body Toolbox"
@@ -4646,7 +4623,7 @@ Model {
 	      Position		      [-135, 176, -90, 194]
 	      ZOrder		      757
 	      BackgroundColor	      "[0.537255, 0.721569, 1.000000]"
-	      LibraryVersion	      "1.497"
+	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/holder\n"
 	      SourceType	      "Holder"
 	      SourceProductName	      "Whole Body Toolbox"
@@ -4734,12 +4711,16 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [200, 235, 365, 295]
 		  ZOrder		  752
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		  SourceType		  "Forward Kinematics"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.LEFT_FOOT"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -4748,12 +4729,16 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [200, 155, 365, 215]
 		  ZOrder		  921
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		  SourceType		  "Forward Kinematics"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.RIGHT_FOOT"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -4762,12 +4747,16 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [200, 325, 365, 385]
 		  ZOrder		  750
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		  SourceType		  "Forward Kinematics"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "'root_link'"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Outport
@@ -5188,12 +5177,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [745, 475, 905, 530]
 		    ZOrder		    687
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		    SourceType		    "Jacobian"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.LEFT_FOOT"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -5202,12 +5195,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [745, 565, 905, 620]
 		    ZOrder		    688
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		    SourceType		    "Jacobian"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.RIGHT_FOOT"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -6162,7 +6159,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"67"
+		ZoomFactor		"100"
 		Block {
 		  BlockType		  Inport
 		  Name			  "J_LFoot"
@@ -6749,7 +6746,7 @@ Model {
 		    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
-		    ZoomFactor		    "85"
+		    ZoomFactor		    "100"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "s"
@@ -6774,12 +6771,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 630, 960, 690]
 		    ZOrder		    583
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.COM"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -6788,12 +6789,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 410, 960, 470]
 		    ZOrder		    584
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.LEFT_FOOT"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -6802,12 +6807,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 855, 960, 915]
 		    ZOrder		    591
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.LEFT_HAND"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -6816,12 +6825,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 520, 960, 580]
 		    ZOrder		    585
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.RIGHT_FOOT"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -6830,12 +6843,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 960, 960, 1020]
 		    ZOrder		    592
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.RIGHT_HAND"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -6844,12 +6861,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 740, 960, 800]
 		    ZOrder		    586
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.ROT_TASK_LINK"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -7365,7 +7386,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"66"
+		ZoomFactor		"100"
 		Block {
 		  BlockType		  Inport
 		  Name			  "s"
@@ -7408,12 +7429,16 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1160, 850, 1325, 945]
 		  ZOrder		  112
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.COM"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -7422,12 +7447,16 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1160, 585, 1325, 680]
 		  ZOrder		  116
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.LEFT_FOOT"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -7436,12 +7465,16 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1160, 1110, 1325, 1205]
 		  ZOrder		  129
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.LEFT_FOOT"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -7450,12 +7483,16 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1160, 1240, 1325, 1335]
 		  ZOrder		  128
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.RIGHT_FOOT"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -7464,12 +7501,16 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1160, 720, 1325, 815]
 		  ZOrder		  114
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.RIGHT_FOOT"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -7478,12 +7519,16 @@ Model {
 		  Ports			  [4, 1]
 		  Position		  [1160, 980, 1325, 1075]
 		  ZOrder		  115
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
 		  SourceType		  "DotJ Nu"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.ROT_TASK_LINK"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -7492,12 +7537,16 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [735, 765, 895, 820]
 		  ZOrder		  113
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.COM"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -7506,12 +7555,16 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [735, 605, 895, 660]
 		  ZOrder		  118
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.LEFT_FOOT"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -7520,12 +7573,16 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [735, 925, 895, 980]
 		  ZOrder		  126
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.LEFT_HAND"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -7534,12 +7591,16 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [735, 685, 895, 740]
 		  ZOrder		  119
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.RIGHT_FOOT"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -7548,12 +7609,16 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [735, 1005, 895, 1060]
 		  ZOrder		  127
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.RIGHT_HAND"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Reference
@@ -7562,12 +7627,16 @@ Model {
 		  Ports			  [2, 1]
 		  Position		  [735, 845, 895, 900]
 		  ZOrder		  117
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		  SourceType		  "Jacobian"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.ROT_TASK_LINK"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Outport
@@ -8539,11 +8608,15 @@ Model {
 		  Ports			  [1, 5]
 		  Position		  [1990, 1008, 2085, 1102]
 		  ZOrder		  709
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
 		  SourceProductName	  "Whole Body Toolbox"
-		  yarp2WBIOption	  "From YARP to WBI"
+		  yarp2WBIOption	  "From WBI to YARP"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  SubSystem
@@ -8819,7 +8892,7 @@ Model {
 		    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
-		    ZoomFactor		    "79"
+		    ZoomFactor		    "125"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "nuDot"
@@ -9816,28 +9889,28 @@ Model {
 		  DstPort		  1
 		}
 		Line {
-		  ZOrder		  128
+		  ZOrder		  89
 		  SrcBlock		  "DoFs converter1"
 		  SrcPort		  2
 		  DstBlock		  "QP output"
 		  DstPort		  2
 		}
 		Line {
-		  ZOrder		  129
+		  ZOrder		  90
 		  SrcBlock		  "DoFs converter1"
 		  SrcPort		  3
 		  DstBlock		  "QP output"
 		  DstPort		  3
 		}
 		Line {
-		  ZOrder		  127
+		  ZOrder		  91
 		  SrcBlock		  "DoFs converter1"
 		  SrcPort		  4
 		  DstBlock		  "QP output"
 		  DstPort		  4
 		}
 		Line {
-		  ZOrder		  126
+		  ZOrder		  92
 		  SrcBlock		  "DoFs converter1"
 		  SrcPort		  5
 		  DstBlock		  "QP output"
@@ -9947,7 +10020,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"61"
+		ZoomFactor		"80"
 		Block {
 		  BlockType		  Inport
 		  Name			  "s_sDot_sDDot_ref"
@@ -9996,13 +10069,17 @@ Model {
 		  Name			  "DoFs converter"
 		  SID			  "4388"
 		  Ports			  [1, 5]
-		  Position		  [1270, 513, 1365, 607]
+		  Position		  [1265, 513, 1360, 607]
 		  ZOrder		  754
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
 		  SourceProductName	  "Whole Body Toolbox"
-		  yarp2WBIOption	  "From YARP to WBI"
+		  yarp2WBIOption	  "From WBI to YARP"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		  Port {
 		    PortNumber		    1
 		    Name		    "torso"
@@ -10029,13 +10106,17 @@ Model {
 		  Name			  "DoFs converter1"
 		  SID			  "4389"
 		  Ports			  [1, 5]
-		  Position		  [1270, 658, 1365, 752]
+		  Position		  [1265, 658, 1360, 752]
 		  ZOrder		  756
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
 		  SourceProductName	  "Whole Body Toolbox"
-		  yarp2WBIOption	  "From YARP to WBI"
+		  yarp2WBIOption	  "From WBI to YARP"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		  Port {
 		    PortNumber		    1
 		    Name		    "torso"
@@ -10062,13 +10143,17 @@ Model {
 		  Name			  "DoFs converter2"
 		  SID			  "4390"
 		  Ports			  [1, 5]
-		  Position		  [1270, 803, 1365, 897]
+		  Position		  [1265, 803, 1360, 897]
 		  ZOrder		  759
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
 		  SourceProductName	  "Whole Body Toolbox"
-		  yarp2WBIOption	  "From YARP to WBI"
+		  yarp2WBIOption	  "From WBI to YARP"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		  Port {
 		    PortNumber		    1
 		    Name		    "torso"
@@ -10095,13 +10180,17 @@ Model {
 		  Name			  "DoFs converter3"
 		  SID			  "4391"
 		  Ports			  [1, 5]
-		  Position		  [1265, 68, 1360, 162]
+		  Position		  [1260, 68, 1355, 162]
 		  ZOrder		  763
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
 		  SourceProductName	  "Whole Body Toolbox"
-		  yarp2WBIOption	  "From YARP to WBI"
+		  yarp2WBIOption	  "From WBI to YARP"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		  Port {
 		    PortNumber		    1
 		    Name		    "torso"
@@ -10128,13 +10217,17 @@ Model {
 		  Name			  "DoFs converter4"
 		  SID			  "4392"
 		  Ports			  [1, 5]
-		  Position		  [1265, 213, 1360, 307]
+		  Position		  [1260, 213, 1355, 307]
 		  ZOrder		  765
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
 		  SourceProductName	  "Whole Body Toolbox"
-		  yarp2WBIOption	  "From YARP to WBI"
+		  yarp2WBIOption	  "From WBI to YARP"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		  Port {
 		    PortNumber		    1
 		    Name		    "torso"
@@ -10161,13 +10254,17 @@ Model {
 		  Name			  "DoFs converter5"
 		  SID			  "4393"
 		  Ports			  [1, 5]
-		  Position		  [1265, 358, 1360, 452]
+		  Position		  [1260, 358, 1355, 452]
 		  ZOrder		  768
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
 		  SourceProductName	  "Whole Body Toolbox"
-		  yarp2WBIOption	  "From YARP to WBI"
+		  yarp2WBIOption	  "From WBI to YARP"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		  Port {
 		    PortNumber		    1
 		    Name		    "torso"
@@ -10194,13 +10291,17 @@ Model {
 		  Name			  "DoFs converter6"
 		  SID			  "4394"
 		  Ports			  [1, 5]
-		  Position		  [1860, 283, 1955, 377]
+		  Position		  [1855, 283, 1950, 377]
 		  ZOrder		  785
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/DoFs converter"
 		  SourceType		  "DoFs converter"
 		  SourceProductName	  "Whole Body Toolbox"
-		  yarp2WBIOption	  "From YARP to WBI"
+		  yarp2WBIOption	  "From WBI to YARP"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		  Port {
 		    PortNumber		    1
 		    Name		    "torso"
@@ -11101,7 +11202,7 @@ Model {
 		}
 		Line {
 		  Name			  "left_arm"
-		  ZOrder		  111
+		  ZOrder		  1
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter1"
 		  SrcPort		  2
@@ -11110,7 +11211,7 @@ Model {
 		}
 		Line {
 		  Name			  "right_leg"
-		  ZOrder		  103
+		  ZOrder		  2
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter"
 		  SrcPort		  5
@@ -11128,7 +11229,7 @@ Model {
 		}
 		Line {
 		  Name			  "left_leg"
-		  ZOrder		  97
+		  ZOrder		  4
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter"
 		  SrcPort		  4
@@ -11137,7 +11238,7 @@ Model {
 		}
 		Line {
 		  Name			  "left_arm"
-		  ZOrder		  100
+		  ZOrder		  5
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter"
 		  SrcPort		  2
@@ -11155,7 +11256,7 @@ Model {
 		}
 		Line {
 		  Name			  "left_leg"
-		  ZOrder		  99
+		  ZOrder		  7
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter1"
 		  SrcPort		  4
@@ -11164,7 +11265,7 @@ Model {
 		}
 		Line {
 		  Name			  "right_arm"
-		  ZOrder		  101
+		  ZOrder		  8
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter1"
 		  SrcPort		  3
@@ -11173,7 +11274,7 @@ Model {
 		}
 		Line {
 		  Name			  "right_arm"
-		  ZOrder		  107
+		  ZOrder		  9
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter"
 		  SrcPort		  3
@@ -11182,7 +11283,7 @@ Model {
 		}
 		Line {
 		  Name			  "left_arm"
-		  ZOrder		  102
+		  ZOrder		  10
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter2"
 		  SrcPort		  2
@@ -11200,7 +11301,7 @@ Model {
 		}
 		Line {
 		  Name			  "right_leg"
-		  ZOrder		  104
+		  ZOrder		  12
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter1"
 		  SrcPort		  5
@@ -11209,7 +11310,7 @@ Model {
 		}
 		Line {
 		  Name			  "left_leg"
-		  ZOrder		  96
+		  ZOrder		  13
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter2"
 		  SrcPort		  4
@@ -11225,7 +11326,7 @@ Model {
 		}
 		Line {
 		  Name			  "right_arm"
-		  ZOrder		  110
+		  ZOrder		  15
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter2"
 		  SrcPort		  3
@@ -11267,7 +11368,7 @@ Model {
 		}
 		Line {
 		  Name			  "left_arm"
-		  ZOrder		  93
+		  ZOrder		  22
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter4"
 		  SrcPort		  2
@@ -11276,7 +11377,7 @@ Model {
 		}
 		Line {
 		  Name			  "right_leg"
-		  ZOrder		  91
+		  ZOrder		  23
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter3"
 		  SrcPort		  5
@@ -11294,7 +11395,7 @@ Model {
 		}
 		Line {
 		  Name			  "left_leg"
-		  ZOrder		  88
+		  ZOrder		  25
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter3"
 		  SrcPort		  4
@@ -11303,7 +11404,7 @@ Model {
 		}
 		Line {
 		  Name			  "left_arm"
-		  ZOrder		  90
+		  ZOrder		  26
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter3"
 		  SrcPort		  2
@@ -11338,7 +11439,7 @@ Model {
 		}
 		Line {
 		  Name			  "left_leg"
-		  ZOrder		  92
+		  ZOrder		  31
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter4"
 		  SrcPort		  4
@@ -11347,7 +11448,7 @@ Model {
 		}
 		Line {
 		  Name			  "right_arm"
-		  ZOrder		  94
+		  ZOrder		  32
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter4"
 		  SrcPort		  3
@@ -11356,7 +11457,7 @@ Model {
 		}
 		Line {
 		  Name			  "right_arm"
-		  ZOrder		  89
+		  ZOrder		  33
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter3"
 		  SrcPort		  3
@@ -11365,7 +11466,7 @@ Model {
 		}
 		Line {
 		  Name			  "left_arm"
-		  ZOrder		  106
+		  ZOrder		  34
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter5"
 		  SrcPort		  2
@@ -11400,7 +11501,7 @@ Model {
 		}
 		Line {
 		  Name			  "right_leg"
-		  ZOrder		  95
+		  ZOrder		  39
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter4"
 		  SrcPort		  5
@@ -11409,7 +11510,7 @@ Model {
 		}
 		Line {
 		  Name			  "left_leg"
-		  ZOrder		  108
+		  ZOrder		  40
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter5"
 		  SrcPort		  4
@@ -11425,7 +11526,7 @@ Model {
 		}
 		Line {
 		  Name			  "right_arm"
-		  ZOrder		  98
+		  ZOrder		  42
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter5"
 		  SrcPort		  3
@@ -11467,7 +11568,7 @@ Model {
 		}
 		Line {
 		  Name			  "right leg"
-		  ZOrder		  105
+		  ZOrder		  49
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter5"
 		  SrcPort		  5
@@ -11476,7 +11577,7 @@ Model {
 		}
 		Line {
 		  Name			  "right leg"
-		  ZOrder		  109
+		  ZOrder		  50
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter2"
 		  SrcPort		  5
@@ -11520,7 +11621,7 @@ Model {
 		}
 		Line {
 		  Name			  "right_leg"
-		  ZOrder		  112
+		  ZOrder		  56
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter6"
 		  SrcPort		  5
@@ -11538,7 +11639,7 @@ Model {
 		}
 		Line {
 		  Name			  "left_leg"
-		  ZOrder		  115
+		  ZOrder		  58
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter6"
 		  SrcPort		  4
@@ -11547,7 +11648,7 @@ Model {
 		}
 		Line {
 		  Name			  "right_arm"
-		  ZOrder		  114
+		  ZOrder		  59
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter6"
 		  SrcPort		  3
@@ -11556,7 +11657,7 @@ Model {
 		}
 		Line {
 		  Name			  "left_arm"
-		  ZOrder		  113
+		  ZOrder		  60
 		  Labels		  [1, 1]
 		  SrcBlock		  "DoFs converter6"
 		  SrcPort		  2
@@ -12819,7 +12920,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"64"
+		ZoomFactor		"125"
 		Block {
 		  BlockType		  Inport
 		  Name			  "J_LFoot"
@@ -13406,7 +13507,7 @@ Model {
 		    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
-		    ZoomFactor		    "91"
+		    ZoomFactor		    "100"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "s"
@@ -13431,12 +13532,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 320, 960, 380]
 		    ZOrder		    583
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.COM"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -13445,12 +13550,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 415, 960, 475]
 		    ZOrder		    584
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.LEFT_FOOT"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -13459,12 +13568,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 720, 960, 780]
 		    ZOrder		    591
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.LEFT_FOOT"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -13473,12 +13586,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 520, 960, 580]
 		    ZOrder		    585
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.RIGHT_FOOT"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -13487,12 +13604,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 825, 960, 885]
 		    ZOrder		    592
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.RIGHT_FOOT"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -13501,12 +13622,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [795, 625, 960, 685]
 		    ZOrder		    586
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.ROT_TASK_LINK"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -15068,7 +15193,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"91"
+	ZoomFactor		"100"
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "Gain Scheduling"
@@ -15094,7 +15219,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "80"
+	    ZoomFactor		    "53"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "state"
@@ -15632,7 +15757,7 @@ Model {
 	      Ports		      [2, 1]
 	      Position		      [15, 325, 120, 385]
 	      ZOrder		      671
-	      LibraryVersion	      "1.497"
+	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 	      SourceType	      "Minimum Jerk Trajectory Generator"
 	      SourceProductName	      "Whole Body Toolbox"
@@ -16138,7 +16263,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "96"
+	    ZoomFactor		    "100"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "state"
@@ -16234,7 +16359,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"65"
+		ZoomFactor		"100"
 		Block {
 		  BlockType		  Inport
 		  Name			  "smooth_references_CoM"
@@ -17401,7 +17526,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"53"
+		ZoomFactor		"125"
 		Block {
 		  BlockType		  Inport
 		  Name			  "w_R_LFoot_des"
@@ -17479,7 +17604,7 @@ Model {
 		    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
-		    ZoomFactor		    "87"
+		    ZoomFactor		    "100"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "omegaDot_LFoot"
@@ -17889,7 +18014,7 @@ Model {
 		    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
-		    ZoomFactor		    "74"
+		    ZoomFactor		    "100"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "w_R_LFoot_des"
@@ -19590,7 +19715,7 @@ Model {
 		    ZOrder		    780
 		    BackgroundColor	    "[0.537255, 0.721569, 1.000000]"
 		    ShowName		    off
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
 		    SourceProductName	    "Whole Body Toolbox"
@@ -19605,7 +19730,7 @@ Model {
 		    ZOrder		    781
 		    BackgroundColor	    "[0.537255, 0.721569, 1.000000]"
 		    ShowName		    off
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
 		    SourceProductName	    "Whole Body Toolbox"
@@ -19620,7 +19745,7 @@ Model {
 		    ZOrder		    782
 		    BackgroundColor	    "[0.537255, 0.721569, 1.000000]"
 		    ShowName		    off
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
 		    SourceProductName	    "Whole Body Toolbox"
@@ -19635,7 +19760,7 @@ Model {
 		    ZOrder		    800
 		    BackgroundColor	    "[0.537255, 0.721569, 1.000000]"
 		    ShowName		    off
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
 		    SourceProductName	    "Whole Body Toolbox"
@@ -19650,7 +19775,7 @@ Model {
 		    ZOrder		    801
 		    BackgroundColor	    "[0.537255, 0.721569, 1.000000]"
 		    ShowName		    off
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
 		    SourceProductName	    "Whole Body Toolbox"
@@ -20329,7 +20454,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"104"
+		ZoomFactor		"100"
 		Block {
 		  BlockType		  Inport
 		  Name			  "pos_CoM_des"
@@ -20700,7 +20825,7 @@ Model {
 		  Ports			  [2, 3]
 		  Position		  [235, 143, 390, 197]
 		  ZOrder		  689
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 		  SourceType		  "Minimum Jerk Trajectory Generator"
 		  SourceProductName	  "Whole Body Toolbox"
@@ -20719,7 +20844,7 @@ Model {
 		  Ports			  [2, 3]
 		  Position		  [235, 383, 390, 437]
 		  ZOrder		  788
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 		  SourceType		  "Minimum Jerk Trajectory Generator"
 		  SourceProductName	  "Whole Body Toolbox"
@@ -20738,7 +20863,7 @@ Model {
 		  Ports			  [2, 3]
 		  Position		  [235, 223, 390, 277]
 		  ZOrder		  696
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 		  SourceType		  "Minimum Jerk Trajectory Generator"
 		  SourceProductName	  "Whole Body Toolbox"
@@ -20757,7 +20882,7 @@ Model {
 		  Ports			  [2, 3]
 		  Position		  [235, 303, 390, 357]
 		  ZOrder		  697
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 		  SourceType		  "Minimum Jerk Trajectory Generator"
 		  SourceProductName	  "Whole Body Toolbox"
@@ -20776,7 +20901,7 @@ Model {
 		  Ports			  [2, 3]
 		  Position		  [235, 463, 390, 517]
 		  ZOrder		  779
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 		  SourceType		  "Minimum Jerk Trajectory Generator"
 		  SourceProductName	  "Whole Body Toolbox"
@@ -20795,7 +20920,7 @@ Model {
 		  Ports			  [2, 3]
 		  Position		  [235, 543, 390, 597]
 		  ZOrder		  780
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
 		  SourceType		  "Minimum Jerk Trajectory Generator"
 		  SourceProductName	  "Whole Body Toolbox"
@@ -21629,7 +21754,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "80"
+	    ZoomFactor		    "100"
 	    Block {
 	      BlockType		      SubSystem
 	      Name		      "Compute Feet to Base Link Transforms"
@@ -21654,7 +21779,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"126"
+		ZoomFactor		"100"
 		Block {
 		  BlockType		  Inport
 		  Name			  "s"
@@ -21700,7 +21825,7 @@ Model {
 		  Variant		  off
 		  System {
 		    Name		    "LFoot to base link transform "
-		    Location		    [53, 27, 1366, 768]
+		    Location		    [65, 24, 1920, 1080]
 		    Open		    off
 		    PortBlocksUseCompactNotation off
 		    ModelBrowserVisibility  off
@@ -21713,7 +21838,7 @@ Model {
 		    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
-		    ZoomFactor		    "85"
+		    ZoomFactor		    "122"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "s"
@@ -21756,12 +21881,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [575, 25, 740, 85]
 		    ZOrder		    729
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.IMU"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -21770,12 +21899,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [575, 190, 740, 250]
 		    ZOrder		    737
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.BASE_LINK"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Product
@@ -21821,13 +21954,12 @@ Model {
 		    Position		    [980, 308, 1055, 332]
 		    ZOrder		    742
 		    ForegroundColor	    "[0.490196, 0.000000, 0.000000]"
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/Yarp Read"
 		    SourceType		    "YARP Read"
 		    SourceProductName	    "Whole Body Toolbox"
 		    portName		    "Ports.NECK_POS"
 		    signalSize		    "6"
-		    timeout		    "0.5"
 		    blocking		    off
 		    timestamp		    off
 		    autoconnect		    on
@@ -22058,7 +22190,7 @@ Model {
 		    ZOrder		    739
 		    BackgroundColor	    "[0.537255, 0.721569, 1.000000]"
 		    ShowName		    off
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
 		    SourceProductName	    "Whole Body Toolbox"
@@ -22073,7 +22205,7 @@ Model {
 		    ZOrder		    740
 		    BackgroundColor	    "[0.537255, 0.721569, 1.000000]"
 		    ShowName		    off
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
 		    SourceProductName	    "Whole Body Toolbox"
@@ -22414,12 +22546,16 @@ Model {
 		  Position		  [235, 72, 400, 123]
 		  ZOrder		  724
 		  NamePlacement		  "alternate"
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		  SourceType		  "Forward Kinematics"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.LEFT_FOOT"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  SubSystem
@@ -22432,8 +22568,8 @@ Model {
 		  Variant		  off
 		  System {
 		    Name		    "RFoot to base link transform"
-		    Location		    [53, 27, 1366, 768]
-		    Open		    on
+		    Location		    [65, 24, 1920, 1080]
+		    Open		    off
 		    PortBlocksUseCompactNotation off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -22445,7 +22581,7 @@ Model {
 		    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
-		    ZoomFactor		    "85"
+		    ZoomFactor		    "122"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "s"
@@ -22488,12 +22624,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [575, 25, 740, 85]
 		    ZOrder		    729
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.IMU"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -22502,12 +22642,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [575, 190, 740, 250]
 		    ZOrder		    737
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.BASE_LINK"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Product
@@ -22553,13 +22697,12 @@ Model {
 		    Position		    [980, 308, 1055, 332]
 		    ZOrder		    742
 		    ForegroundColor	    "[0.490196, 0.000000, 0.000000]"
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/Yarp Read"
 		    SourceType		    "YARP Read"
 		    SourceProductName	    "Whole Body Toolbox"
 		    portName		    "Ports.NECK_POS"
 		    signalSize		    "6"
-		    timeout		    "0.5"
 		    blocking		    off
 		    timestamp		    off
 		    autoconnect		    on
@@ -22790,7 +22933,7 @@ Model {
 		    ZOrder		    739
 		    BackgroundColor	    "[0.537255, 0.721569, 1.000000]"
 		    ShowName		    off
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
 		    SourceProductName	    "Whole Body Toolbox"
@@ -22805,7 +22948,7 @@ Model {
 		    ZOrder		    740
 		    BackgroundColor	    "[0.537255, 0.721569, 1.000000]"
 		    ShowName		    off
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/Utilities/holder\n"
 		    SourceType		    "Holder"
 		    SourceProductName	    "Whole Body Toolbox"
@@ -23146,12 +23289,16 @@ Model {
 		  Position		  [235, 242, 400, 293]
 		  ZOrder		  747
 		  NamePlacement		  "alternate"
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		  SourceType		  "Forward Kinematics"
 		  SourceProductName	  "Whole Body Toolbox"
 		  ContentPreviewEnabled	  off
 		  frameName		  "Frames.RIGHT_FOOT"
+		  robotName		  "WBT_robotName"
+		  localName		  "WBT_modelName"
+		  wbiFile		  "WBT_wbiFilename"
+		  wbiList		  "WBT_wbiList"
 		}
 		Block {
 		  BlockType		  Switch
@@ -23611,12 +23758,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [745, 475, 905, 530]
 		    ZOrder		    687
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		    SourceType		    "Jacobian"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.LEFT_FOOT"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -23625,12 +23776,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [745, 565, 905, 620]
 		    ZOrder		    688
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
 		    SourceType		    "Jacobian"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.RIGHT_FOOT"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -23797,35 +23952,43 @@ Model {
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "Get Measurement"
-	      SID		      "7098"
+	      Name		      "Get Estimate"
+	      SID		      "4556"
 	      Ports		      [0, 1]
-	      Position		      [-940, 101, -820, 129]
-	      ZOrder		      924
+	      Position		      [-920, 97, -840, 133]
+	      ZOrder		      881
 	      BackgroundColor	      "[0.513700, 0.851000, 0.670600]"
 	      ShowName		      off
-	      LibraryVersion	      "1.497"
-	      SourceBlock	      "WBToolboxLibrary/wholeBodyStates/Get Measurement"
-	      SourceType	      "Get Measurement"
+	      LibraryVersion	      "1.383"
+	      SourceBlock	      "WBToolboxLibrary/wholeBodyStates/Get Estimate"
+	      SourceType	      "Get Estimate"
 	      SourceProductName	      "Whole Body Toolbox"
 	      ContentPreviewEnabled   off
-	      measuredType	      "Joints Position"
+	      estimateType	      "Joints Position"
+	      robotName		      "WBT_robotName"
+	      localName		      "WBT_modelName"
+	      wbiFile		      "WBT_wbiFilename"
+	      wbiList		      "WBT_wbiList"
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "Get Measurement1"
-	      SID		      "7099"
+	      Name		      "Get Estimate1"
+	      SID		      "4768"
 	      Ports		      [0, 1]
-	      Position		      [-940, -29, -820, -1]
-	      ZOrder		      925
+	      Position		      [-920, -33, -840, 3]
+	      ZOrder		      922
 	      BackgroundColor	      "[0.513700, 0.674500, 1.000000]"
 	      ShowName		      off
-	      LibraryVersion	      "1.497"
-	      SourceBlock	      "WBToolboxLibrary/wholeBodyStates/Get Measurement"
-	      SourceType	      "Get Measurement"
+	      LibraryVersion	      "1.383"
+	      SourceBlock	      "WBToolboxLibrary/wholeBodyStates/Get Estimate"
+	      SourceType	      "Get Estimate"
 	      SourceProductName	      "Whole Body Toolbox"
 	      ContentPreviewEnabled   off
-	      measuredType	      "Joints Velocity"
+	      estimateType	      "Joints Velocity"
+	      robotName		      "WBT_robotName"
+	      localName		      "WBT_modelName"
+	      wbiFile		      "WBT_wbiFilename"
+	      wbiList		      "WBT_wbiList"
 	    }
 	    Block {
 	      BlockType		      Goto
@@ -23905,13 +24068,12 @@ Model {
 	      Position		      [-925, 317, -835, 333]
 	      ZOrder		      883
 	      ForegroundColor	      "[0.490196, 0.000000, 0.000000]"
-	      LibraryVersion	      "1.497"
+	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/Yarp Read"
 	      SourceType	      "YARP Read"
 	      SourceProductName	      "Whole Body Toolbox"
 	      portName		      "Ports.IMU"
 	      signalSize	      "12"
-	      timeout		      "0.5"
 	      blocking		      off
 	      timestamp		      off
 	      autoconnect	      on
@@ -23942,7 +24104,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"100"
+		ZoomFactor		"92"
 		Block {
 		  BlockType		  Inport
 		  Name			  "s"
@@ -24531,7 +24693,7 @@ Model {
 		  ZOrder		  742
 		  BackgroundColor	  "[0.537255, 0.721569, 1.000000]"
 		  ShowName		  off
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
 		  SourceProductName	  "Whole Body Toolbox"
@@ -24546,7 +24708,7 @@ Model {
 		  ZOrder		  743
 		  BackgroundColor	  "[0.537255, 0.721569, 1.000000]"
 		  ShowName		  off
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
 		  SourceProductName	  "Whole Body Toolbox"
@@ -24561,7 +24723,7 @@ Model {
 		  ZOrder		  744
 		  BackgroundColor	  "[0.537255, 0.721569, 1.000000]"
 		  ShowName		  off
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
 		  SourceProductName	  "Whole Body Toolbox"
@@ -24576,7 +24738,7 @@ Model {
 		  ZOrder		  745
 		  BackgroundColor	  "[0.537255, 0.721569, 1.000000]"
 		  ShowName		  off
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
 		  SourceProductName	  "Whole Body Toolbox"
@@ -24591,7 +24753,7 @@ Model {
 		  ZOrder		  746
 		  BackgroundColor	  "[0.537255, 0.721569, 1.000000]"
 		  ShowName		  off
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
 		  SourceProductName	  "Whole Body Toolbox"
@@ -24606,7 +24768,7 @@ Model {
 		  ZOrder		  918
 		  BackgroundColor	  "[0.537255, 0.721569, 1.000000]"
 		  ShowName		  off
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
 		  SourceProductName	  "Whole Body Toolbox"
@@ -24621,7 +24783,7 @@ Model {
 		  ZOrder		  919
 		  BackgroundColor	  "[0.537255, 0.721569, 1.000000]"
 		  ShowName		  off
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/holder\n"
 		  SourceType		  "Holder"
 		  SourceProductName	  "Whole Body Toolbox"
@@ -24635,13 +24797,12 @@ Model {
 		  Position		  [270, 413, 360, 427]
 		  ZOrder		  916
 		  ForegroundColor	  "[0.490196, 0.000000, 0.000000]"
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Yarp Read"
 		  SourceType		  "YARP Read"
 		  SourceProductName	  "Whole Body Toolbox"
 		  portName		  "Ports.LEFT_FOOT_EXT_WRENCH"
 		  signalSize		  "6"
-		  timeout		  "0.5"
 		  blocking		  off
 		  timestamp		  off
 		  autoconnect		  on
@@ -24655,13 +24816,12 @@ Model {
 		  Position		  [270, 448, 360, 462]
 		  ZOrder		  917
 		  ForegroundColor	  "[0.490196, 0.000000, 0.000000]"
-		  LibraryVersion	  "1.497"
+		  LibraryVersion	  "1.383"
 		  SourceBlock		  "WBToolboxLibrary/Utilities/Yarp Read"
 		  SourceType		  "YARP Read"
 		  SourceProductName	  "Whole Body Toolbox"
 		  portName		  "Ports.RIGHT_FOOT_EXT_WRENCH"
 		  signalSize		  "6"
-		  timeout		  "0.5"
 		  blocking		  off
 		  timestamp		  off
 		  autoconnect		  on
@@ -24716,12 +24876,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [530, 295, 695, 355]
 		    ZOrder		    745
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.COM"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -24730,12 +24894,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [530, 480, 695, 540]
 		    ZOrder		    753
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.LEFT_HAND"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -24744,12 +24912,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [530, 115, 695, 175]
 		    ZOrder		    746
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.LEFT_FOOT"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -24758,12 +24930,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [530, 570, 695, 630]
 		    ZOrder		    754
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.RIGHT_HAND"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -24772,12 +24948,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [530, 205, 695, 265]
 		    ZOrder		    747
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.RIGHT_FOOT"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Reference
@@ -24786,12 +24966,16 @@ Model {
 		    Ports		    [2, 1]
 		    Position		    [530, 385, 695, 445]
 		    ZOrder		    748
-		    LibraryVersion	    "1.497"
+		    LibraryVersion	    "1.383"
 		    SourceBlock		    "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
 		    SourceType		    "Forward Kinematics"
 		    SourceProductName	    "Whole Body Toolbox"
 		    ContentPreviewEnabled   off
 		    frameName		    "Frames.ROT_TASK_LINK"
+		    robotName		    "WBT_robotName"
+		    localName		    "WBT_modelName"
+		    wbiFile		    "WBT_wbiFilename"
+		    wbiList		    "WBT_wbiList"
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -25458,10 +25642,10 @@ Model {
 	      IconDisplay	      "Port number"
 	    }
 	    Line {
-	      ZOrder		      527
-	      SrcBlock		      "Get Measurement"
+	      ZOrder		      179
+	      SrcBlock		      "Get Estimate"
 	      SrcPort		      1
-	      Points		      [34, 0]
+	      Points		      [54, 0]
 	      Branch {
 		ZOrder			461
 		Points			[0, -85; 513, 0]
@@ -25689,10 +25873,10 @@ Model {
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      528
-	      SrcBlock		      "Get Measurement1"
+	      ZOrder		      505
+	      SrcBlock		      "Get Estimate1"
 	      SrcPort		      1
-	      Points		      [519, 0]
+	      Points		      [539, 0]
 	      Branch {
 		ZOrder			507
 		Points			[0, -195]
@@ -26087,13 +26271,18 @@ Model {
       ZOrder		      563
       BackgroundColor	      "[0.827500, 0.576500, 0.603900]"
       ShowName		      off
-      LibraryVersion	      "1.497"
+      LibraryVersion	      "1.383"
       SourceBlock	      "WBToolboxLibrary/wholeBodyActuators/Set References"
       SourceType	      "Set References"
       SourceProductName	      "Whole Body Toolbox"
       ContentPreviewEnabled   off
       controlType	      "Torque"
-      refSpeed		      "50"
+      fullOrSubControl	      "Full"
+      controlledJoints	      "''"
+      robotName		      "WBT_robotName"
+      localName		      "WBT_modelName"
+      wbiFile		      "WBT_wbiFilename"
+      wbiList		      "WBT_wbiList"
     }
     Block {
       BlockType		      SubSystem
@@ -26108,7 +26297,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		32
+	$ObjectID		25
 	$ClassName		"Simulink.Mask"
 	Display			"disp('DATA FOR LEARNOPTIM_WBC')"
 	RunInitForIconRedraw	"off"
@@ -26128,7 +26317,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"92"
+	ZoomFactor		"100"
 	Block {
 	  BlockType		  From
 	  Name			  "From1"
@@ -26319,7 +26508,7 @@ Model {
 	  BlockType		  From
 	  Name			  "From9"
 	  SID			  "7002"
-	  Position		  [845, 261, 885, 279]
+	  Position		  [845, 266, 885, 284]
 	  ZOrder		  1053
 	  ShowName		  off
 	  GotoTag		  "f_RFoot"
@@ -26338,7 +26527,7 @@ Model {
 	  Name			  "Selector1"
 	  SID			  "6974"
 	  Ports			  [1, 1]
-	  Position		  [970, 383, 995, 397]
+	  Position		  [970, 408, 995, 422]
 	  ZOrder		  1050
 	  ShowName		  off
 	  NumberOfDimensions	  "2"
@@ -26352,7 +26541,7 @@ Model {
 	  Name			  "Selector14"
 	  SID			  "6975"
 	  Ports			  [1, 1]
-	  Position		  [970, 323, 995, 337]
+	  Position		  [970, 338, 995, 352]
 	  ZOrder		  1049
 	  ShowName		  off
 	  NumberOfDimensions	  "2"
@@ -26398,7 +26587,7 @@ Model {
 	  System {
 	    Name		    "ZMP, support polygon"
 	    Location		    [53, 27, 1366, 768]
-	    Open		    on
+	    Open		    off
 	    PortBlocksUseCompactNotation off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -26410,7 +26599,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "117"
+	    ZoomFactor		    "105"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "f_Lfoot"
@@ -26496,26 +26685,18 @@ Model {
 	      BlockType		      Goto
 	      Name		      "Goto5"
 	      SID		      "7016"
-	      Position		      [1020, 160, 1145, 180]
+	      Position		      [1020, 155, 1145, 175]
 	      ZOrder		      1067
 	      ShowName		      off
 	      GotoTag		      "ZMP"
 	      TagVisibility	      "global"
 	    }
 	    Block {
-	      BlockType		      Memory
-	      Name		      "Memory"
-	      SID		      "7120"
-	      Position		      [970, 290, 1000, 320]
-	      ZOrder		      1073
-	      X0		      "zeros(2,3)"
-	    }
-	    Block {
 	      BlockType		      SubSystem
 	      Name		      "compute ZMP"
 	      SID		      "6993"
-	      Ports		      [8, 2]
-	      Position		      [720, 101, 885, 374]
+	      Ports		      [7, 1]
+	      Position		      [720, 94, 885, 346]
 	      ZOrder		      485
 	      LibraryVersion	      "1.32"
 	      ErrorFcn		      "Stateflow.Translate.translate"
@@ -26540,7 +26721,7 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"38"
+		SIDHighWatermark	"36"
 		Block {
 		  BlockType		  Inport
 		  Name			  "f_lFoot"
@@ -26604,15 +26785,6 @@ Model {
 		  IconDisplay		  "Port number"
 		}
 		Block {
-		  BlockType		  Inport
-		  Name			  "ZMP_previous"
-		  SID			  "6993::37"
-		  Position		  [20, 351, 40, 369]
-		  ZOrder		  22
-		  Port			  "8"
-		  IconDisplay		  "Port number"
-		}
-		Block {
 		  BlockType		  Demux
 		  Name			  " Demux "
 		  SID			  "6993::27"
@@ -26626,21 +26798,17 @@ Model {
 		  Name			  " SFunction "
 		  SID			  "6993::26"
 		  Tag			  "Stateflow S-Function torqueWalkingR2017a 19"
-		  Ports			  [8, 3]
-		  Position		  [180, 105, 230, 285]
+		  Ports			  [7, 2]
+		  Position		  [180, 105, 230, 265]
 		  ZOrder		  12
 		  FunctionName		  "sf_sfun"
-		  PortCounts		  "[8 3]"
+		  PortCounts		  "[7 2]"
 		  SFunctionDeploymentMode off
 		  EnableBusSupport	  on
 		  SFcnIsStateOwnerBlock	  off
 		  Port {
 		    PortNumber		    2
-		    Name		    "ZMP_mean"
-		  }
-		  Port {
-		    PortNumber		    3
-		    Name		    "ZMP_buffer"
+		    Name		    "ZMP"
 		  }
 		}
 		Block {
@@ -26652,104 +26820,79 @@ Model {
 		}
 		Block {
 		  BlockType		  Outport
-		  Name			  "ZMP_mean"
+		  Name			  "ZMP"
 		  SID			  "6993::5"
 		  Position		  [460, 101, 480, 119]
 		  ZOrder		  -5
 		  IconDisplay		  "Port number"
 		}
-		Block {
-		  BlockType		  Outport
-		  Name			  "ZMP_buffer"
-		  SID			  "6993::38"
-		  Position		  [460, 136, 480, 154]
-		  ZOrder		  23
-		  Port			  "2"
-		  IconDisplay		  "Port number"
-		}
 		Line {
-		  ZOrder		  214
+		  ZOrder		  193
 		  SrcBlock		  "f_lFoot"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  1
 		}
 		Line {
-		  ZOrder		  215
+		  ZOrder		  194
 		  SrcBlock		  "f_rFoot"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  2
 		}
 		Line {
-		  ZOrder		  216
+		  ZOrder		  195
 		  SrcBlock		  "pose_lFoot"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  3
 		}
 		Line {
-		  ZOrder		  217
+		  ZOrder		  196
 		  SrcBlock		  "orient_lFoot"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  4
 		}
 		Line {
-		  ZOrder		  218
+		  ZOrder		  197
 		  SrcBlock		  "pose_rFoot"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  5
 		}
 		Line {
-		  ZOrder		  219
+		  ZOrder		  198
 		  SrcBlock		  "orient_rFoot"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  6
 		}
 		Line {
-		  ZOrder		  220
+		  ZOrder		  199
 		  SrcBlock		  "feetInContact"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  7
 		}
 		Line {
-		  ZOrder		  221
-		  SrcBlock		  "ZMP_previous"
-		  SrcPort		  1
-		  DstBlock		  " SFunction "
-		  DstPort		  8
-		}
-		Line {
-		  Name			  "ZMP_mean"
-		  ZOrder		  222
+		  Name			  "ZMP"
+		  ZOrder		  200
 		  Labels		  [0, 0]
 		  SrcBlock		  " SFunction "
 		  SrcPort		  2
-		  DstBlock		  "ZMP_mean"
+		  DstBlock		  "ZMP"
 		  DstPort		  1
 		}
 		Line {
-		  Name			  "ZMP_buffer"
-		  ZOrder		  223
-		  Labels		  [0, 0]
-		  SrcBlock		  " SFunction "
-		  SrcPort		  3
-		  DstBlock		  "ZMP_buffer"
-		  DstPort		  1
-		}
-		Line {
-		  ZOrder		  224
+		  ZOrder		  201
 		  SrcBlock		  " Demux "
 		  SrcPort		  1
 		  DstBlock		  " Terminator "
 		  DstPort		  1
 		}
 		Line {
-		  ZOrder		  225
+		  ZOrder		  202
 		  SrcBlock		  " SFunction "
 		  SrcPort		  1
 		  DstBlock		  " Demux "
@@ -26923,7 +27066,7 @@ Model {
 	      BlockType		      Outport
 	      Name		      "zmp"
 	      SID		      "6998"
-	      Position		      [970, 213, 1000, 227]
+	      Position		      [985, 213, 1015, 227]
 	      ZOrder		      488
 	      IconDisplay	      "Port number"
 	    }
@@ -26976,14 +27119,14 @@ Model {
 	      SrcPort		      1
 	      Points		      [57, 0]
 	      Branch {
-		ZOrder			119
-		DstBlock		"Goto5"
+		ZOrder			84
+		DstBlock		"zmp"
 		DstPort			1
 	      }
 	      Branch {
-		ZOrder			117
-		Points			[0, 50]
-		DstBlock		"zmp"
+		ZOrder			63
+		Points			[0, -55]
+		DstBlock		"Goto5"
 		DstPort			1
 	      }
 	    }
@@ -27055,21 +27198,6 @@ Model {
 	      SrcPort		      1
 	      DstBlock		      "supportPolygon"
 	      DstPort		      4
-	    }
-	    Line {
-	      ZOrder		      98
-	      SrcBlock		      "Memory"
-	      SrcPort		      1
-	      Points		      [21, 0; 0, 90; -321, 0]
-	      DstBlock		      "compute ZMP"
-	      DstPort		      8
-	    }
-	    Line {
-	      ZOrder		      99
-	      SrcBlock		      "compute ZMP"
-	      SrcPort		      2
-	      DstBlock		      "Memory"
-	      DstPort		      1
 	    }
 	  }
 	}
@@ -27174,7 +27302,7 @@ Model {
 	  Name			  "select_pose"
 	  SID			  "6999"
 	  Ports			  [1, 1]
-	  Position		  [970, 293, 995, 307]
+	  Position		  [970, 303, 995, 317]
 	  ZOrder		  1047
 	  ShowName		  off
 	  NumberOfDimensions	  "2"
@@ -27188,7 +27316,7 @@ Model {
 	  Name			  "select_pose1"
 	  SID			  "7000"
 	  Ports			  [1, 1]
-	  Position		  [970, 353, 995, 367]
+	  Position		  [970, 373, 995, 387]
 	  ZOrder		  1048
 	  ShowName		  off
 	  NumberOfDimensions	  "2"
@@ -27275,7 +27403,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "84"
+	    ZoomFactor		    "83"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "pos_vel_CoM"
@@ -27892,8 +28020,8 @@ Model {
 	      Variant		      off
 	      System {
 		Name			"Rotation Error Rotational Task"
-		Location		[53, 27, 1366, 768]
-		Open			on
+		Location		[65, 24, 1920, 1080]
+		Open			off
 		PortBlocksUseCompactNotation off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -27905,7 +28033,7 @@ Model {
 		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 		TiledPageScale		1
 		ShowPageBoundaries	off
-		ZoomFactor		"155"
+		ZoomFactor		"223"
 		Block {
 		  BlockType		  Inport
 		  Name			  "w_R_rot_task"
@@ -28680,10 +28808,10 @@ Model {
 	  Points		  [27, 0]
 	  Branch {
 	    ZOrder		    669
-	    Points		    [0, 230]
+	    Points		    [0, 240]
 	    Branch {
-	      ZOrder		      709
-	      Points		      [0, 30]
+	      ZOrder		      672
+	      Points		      [0, 35]
 	      DstBlock		      "Selector14"
 	      DstPort		      1
 	    }
@@ -28828,10 +28956,10 @@ Model {
 	  Points		  [2, 0]
 	  Branch {
 	    ZOrder		    674
-	    Points		    [0, 245]
+	    Points		    [0, 265]
 	    Branch {
-	      ZOrder		      713
-	      Points		      [0, 30]
+	      ZOrder		      676
+	      Points		      [0, 35]
 	      DstBlock		      "Selector1"
 	      DstPort		      1
 	    }
@@ -28858,6 +28986,7 @@ Model {
 	  ZOrder		  664
 	  SrcBlock		  "From9"
 	  SrcPort		  1
+	  Points		  [110, 0]
 	  DstBlock		  "ZMP, support polygon"
 	  DstPort		  2
 	}
@@ -28899,7 +29028,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		33
+	$ObjectID		26
 	$ClassName		"Simulink.Mask"
 	Display			"disp('VISUALIZE AND DUMP DATA \\n EARLY TERMINATION')"
       }
@@ -28918,7 +29047,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"100"
+	ZoomFactor		"80"
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "Cartesian Tasks"
@@ -28932,7 +29061,7 @@ Model {
 	  System {
 	    Name		    "Cartesian Tasks"
 	    Location		    [53, 27, 1366, 768]
-	    Open		    on
+	    Open		    off
 	    PortBlocksUseCompactNotation off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -29045,8 +29174,8 @@ Model {
 	      "]),extmgr.Configuration('Core','Source UI',true),extmgr.Configuration('Sources','WiredSimulink',true,'DataLoggi"
 	      "ng',true,'DataLoggingVariableName','forKin_CoM_DATA','DataLoggingSaveFormat','StructureWithTime','DataLoggingDe"
 	      "cimation','1','DataLoggingDecimateData',true),extmgr.Configuration('Visuals','Time Domain',true,'SerializedDisp"
-	      "lays',{struct('MinYLimReal','-0.22272','MaxYLimReal','0.60642','YLabelReal','','MinYLimMag','0.00000','MaxYLimM"
-	      "ag','0.60642','LegendVisibility','On','XGrid',true,'YGrid',true,'PlotMagPhase',false,'AxesColor',[0 0 0],'AxesT"
+	      "lays',{struct('MinYLimReal','-0.22134','MaxYLimReal','0.60585','YLabelReal','','MinYLimMag','0.00000','MaxYLimM"
+	      "ag','0.60585','LegendVisibility','On','XGrid',true,'YGrid',true,'PlotMagPhase',false,'AxesColor',[0 0 0],'AxesT"
 	      "ickColor',[0.686274509803922 0.686274509803922 0.686274509803922],'ColorOrder',[1 1 0.0666666666666667;0.074509"
 	      "8039215686 0.623529411764706 1;1 0.411764705882353 0.16078431372549;0.392156862745098 0.831372549019608 0.07450"
 	      "98039215686;0.717647058823529 0.274509803921569 1;0.0588235294117647 1 1;1 0.0745098039215686 0.650980392156863"
@@ -29056,7 +29185,7 @@ Model {
 	      "eStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 1 0],'LineStyle','-','LineWidth',"
 	      "0.5,'Marker','none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Vis"
 	      "ible','on')}},'UserDefinedChannelNames',{{}},'NumLines',3,'LineNames',{{'Selector:1','Selector:2','Selector:3'}"
-	      "},'ShowContent',true,'Placement',1),struct('MinYLimReal','-0.21605','MaxYLimReal','0.59404','YLabelReal','','Mi"
+	      "},'ShowContent',true,'Placement',1),struct('MinYLimReal','-0.21729','MaxYLimReal','0.59423','YLabelReal','','Mi"
 	      "nYLimMag','0','MaxYLimMag','10','LegendVisibility','On','XGrid',true,'YGrid',true,'PlotMagPhase',false,'AxesCol"
 	      "or',[0 0 0],'AxesTickColor',[0.686274509803922 0.686274509803922 0.686274509803922],'ColorOrder',[1 1 0.0666666"
 	      "666666667;0.0745098039215686 0.623529411764706 1;1 0.411764705882353 0.16078431372549;0.392156862745098 0.83137"
@@ -29067,7 +29196,7 @@ Model {
 	      "lor',[1 0 0],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 1 0],'LineStyle'"
 	      ",'-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Ma"
 	      "rker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',3,'LineNames',{{'Selector1:1','Selecto"
-	      "r1:2','Selector1:3'}},'ShowContent',true,'Placement',2),struct('MinYLimReal','-0.00908','MaxYLimReal','0.00713'"
+	      "r1:2','Selector1:3'}},'ShowContent',true,'Placement',2),struct('MinYLimReal','-0.00986','MaxYLimReal','0.01226'"
 	      ",'YLabelReal','','MinYLimMag','0','MaxYLimMag','10','LegendVisibility','On','XGrid',true,'YGrid',true,'PlotMagP"
 	      "hase',false,'AxesColor',[0 0 0],'AxesTickColor',[0.686274509803922 0.686274509803922 0.686274509803922],'ColorO"
 	      "rder',[1 1 0.0666666666666667;0.0745098039215686 0.623529411764706 1;1 0.411764705882353 0.16078431372549;0.392"
@@ -29100,8 +29229,8 @@ Model {
 	      "none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},"
 	      "'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLayout"
 	      "Dimensions',[4 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','"
-	      "XY','PreviousZoomMode','ZoomY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version',"
-	      "'2017a','Location',[54 111 1367 767])"
+	      "XY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017a','Location',[54 111 "
+	      "1367 767])"
 	      NumInputPorts	      "4"
 	    }
 	    Block {
@@ -29335,8 +29464,8 @@ Model {
 	      "]),extmgr.Configuration('Core','Source UI',true),extmgr.Configuration('Sources','WiredSimulink',true,'DataLoggi"
 	      "ng',true,'DataLoggingVariableName','forKin_RFoot_DATA','DataLoggingSaveFormat','StructureWithTime','DataLogging"
 	      "Decimation','1','DataLoggingDecimateData',true),extmgr.Configuration('Visuals','Time Domain',true,'SerializedDi"
-	      "splays',{struct('MinYLimReal','-0.15981','MaxYLimReal','0.03971','YLabelReal','','MinYLimMag','0.00000','MaxYLi"
-	      "mMag','0.15981','LegendVisibility','On','XGrid',true,'YGrid',true,'PlotMagPhase',false,'AxesColor',[0 0 0],'Axe"
+	      "splays',{struct('MinYLimReal','-0.16101','MaxYLimReal','0.03981','YLabelReal','','MinYLimMag','0.00000','MaxYLi"
+	      "mMag','0.16101','LegendVisibility','On','XGrid',true,'YGrid',true,'PlotMagPhase',false,'AxesColor',[0 0 0],'Axe"
 	      "sTickColor',[0.686274509803922 0.686274509803922 0.686274509803922],'ColorOrder',[1 1 0.0666666666666667;0.0745"
 	      "098039215686 0.623529411764706 1;1 0.411764705882353 0.16078431372549;0.392156862745098 0.831372549019608 0.074"
 	      "5098039215686;0.717647058823529 0.274509803921569 1;0.0588235294117647 1 1;1 0.0745098039215686 0.6509803921568"
@@ -29346,52 +29475,52 @@ Model {
 	      "ineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 1 0],'LineStyle','-','LineWidth"
 	      "',0.5,'Marker','none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','V"
 	      "isible','on')}},'UserDefinedChannelNames',{{}},'NumLines',3,'LineNames',{{'Selector4:1','Selector4:2','Selector"
-	      "4:3'}},'ShowContent',true,'Placement',1),struct('MinYLimReal','-0.15605','MaxYLimReal','0.04287','YLabelReal','"
-	      "','MinYLimMag','0','MaxYLimMag','10','LegendVisibility','On','XGrid',true,'YGrid',true,'PlotMagPhase',false,'Ax"
+	      "4:3'}},'ShowContent',true,'Placement',1),struct('MinYLimReal','-0.15882','MaxYLimReal','0.0433','YLabelReal',''"
+	      ",'MinYLimMag','0','MaxYLimMag','10','LegendVisibility','On','XGrid',true,'YGrid',true,'PlotMagPhase',false,'Axe"
+	      "sColor',[0 0 0],'AxesTickColor',[0.686274509803922 0.686274509803922 0.686274509803922],'ColorOrder',[1 1 0.066"
+	      "6666666666667;0.0745098039215686 0.623529411764706 1;1 0.411764705882353 0.16078431372549;0.392156862745098 0.8"
+	      "31372549019608 0.0745098039215686;0.717647058823529 0.274509803921569 1;0.0588235294117647 1 1;1 0.074509803921"
+	      "5686 0.650980392156863],'Title','Desired','LinePropertiesCache',{{struct('Color',[1 1 0],'LineStyle','-','LineW"
+	      "idth',0.5,'Marker','none','Visible','on'),struct('Color',[1 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none"
+	      "','Visible','on'),struct('Color',[0 1 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct"
+	      "('Color',[1 0 0],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 1 0],'LineSt"
+	      "yle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5"
+	      ",'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',3,'LineNames',{{'Selector5:1','Sel"
+	      "ector5:2','Selector5:3'}},'ShowContent',true,'Placement',2),struct('MinYLimReal','-0.00115','MaxYLimReal','0.00"
+	      "043','YLabelReal','','MinYLimMag','0.00000','MaxYLimMag','0.00889','LegendVisibility','On','XGrid',true,'YGrid'"
+	      ",true,'PlotMagPhase',false,'AxesColor',[0 0 0],'AxesTickColor',[0.686274509803922 0.686274509803922 0.686274509"
+	      "803922],'ColorOrder',[1 1 0.0666666666666667;0.0745098039215686 0.623529411764706 1;1 0.411764705882353 0.16078"
+	      "431372549;0.392156862745098 0.831372549019608 0.0745098039215686;0.717647058823529 0.274509803921569 1;0.058823"
+	      "5294117647 1 1;1 0.0745098039215686 0.650980392156863],'Title','Error','LinePropertiesCache',{{struct('Color',["
+	      "1 1 0],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[1 0 1],'LineStyle','-','"
+	      "LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 1 1],'LineStyle','-','LineWidth',0.5,'Marker',"
+	      "'none','Visible','on'),struct('Color',[1 0 0],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),s"
+	      "truct('Color',[0 1 0],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 0 1],'L"
+	      "ineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',3,'Li"
+	      "neNames',{{'Sum2:1','Sum2:2','Sum2:3'}},'ShowContent',true,'Placement',3),struct('MinYLimReal','0.5','MaxYLimRe"
+	      "al','5.5','YLabelReal','','MinYLimMag','0','MaxYLimMag','10','LegendVisibility','On','XGrid',true,'YGrid',true,"
+	      "'PlotMagPhase',false,'AxesColor',[0 0 0],'AxesTickColor',[0.686274509803922 0.686274509803922 0.686274509803922"
+	      "],'ColorOrder',[1 1 0.0666666666666667;0.0745098039215686 0.623529411764706 1;1 0.411764705882353 0.16078431372"
+	      "549;0.392156862745098 0.831372549019608 0.0745098039215686;0.717647058823529 0.274509803921569 1;0.058823529411"
+	      "7647 1 1;1 0.0745098039215686 0.650980392156863],'Title','%<SignalLabel>','LinePropertiesCache',{{struct('Color"
+	      "',[1 1 0],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[1 0 1],'LineStyle','-"
+	      "','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 1 1],'LineStyle','-','LineWidth',0.5,'Marke"
+	      "r','none','Visible','on'),struct('Color',[1 0 0],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'"
+	      "),struct('Color',[0 1 0],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 0 1]"
+	      ",'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',1,"
+	      "'LineNames',{{'state'}},'ShowContent',true,'Placement',4)},'DisplayPropertyDefaults',struct('YLabelReal','','Ax"
 	      "esColor',[0 0 0],'AxesTickColor',[0.686274509803922 0.686274509803922 0.686274509803922],'ColorOrder',[1 1 0.06"
 	      "66666666666667;0.0745098039215686 0.623529411764706 1;1 0.411764705882353 0.16078431372549;0.392156862745098 0."
 	      "831372549019608 0.0745098039215686;0.717647058823529 0.274509803921569 1;0.0588235294117647 1 1;1 0.07450980392"
-	      "15686 0.650980392156863],'Title','Desired','LinePropertiesCache',{{struct('Color',[1 1 0],'LineStyle','-','Line"
-	      "Width',0.5,'Marker','none','Visible','on'),struct('Color',[1 0 1],'LineStyle','-','LineWidth',0.5,'Marker','non"
-	      "e','Visible','on'),struct('Color',[0 1 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struc"
-	      "t('Color',[1 0 0],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 1 0],'LineS"
-	      "tyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0."
-	      "5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',3,'LineNames',{{'Selector5:1','Se"
-	      "lector5:2','Selector5:3'}},'ShowContent',true,'Placement',2),struct('MinYLimReal','-0.00872','MaxYLimReal','0.0"
-	      "1421','YLabelReal','','MinYLimMag','0.00000','MaxYLimMag','0.00889','LegendVisibility','On','XGrid',true,'YGrid"
-	      "',true,'PlotMagPhase',false,'AxesColor',[0 0 0],'AxesTickColor',[0.686274509803922 0.686274509803922 0.68627450"
-	      "9803922],'ColorOrder',[1 1 0.0666666666666667;0.0745098039215686 0.623529411764706 1;1 0.411764705882353 0.1607"
-	      "8431372549;0.392156862745098 0.831372549019608 0.0745098039215686;0.717647058823529 0.274509803921569 1;0.05882"
-	      "35294117647 1 1;1 0.0745098039215686 0.650980392156863],'Title','Error','LinePropertiesCache',{{struct('Color',"
-	      "[1 1 0],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[1 0 1],'LineStyle','-',"
-	      "'LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 1 1],'LineStyle','-','LineWidth',0.5,'Marker'"
-	      ",'none','Visible','on'),struct('Color',[1 0 0],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),"
-	      "struct('Color',[0 1 0],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 0 1],'"
-	      "LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',3,'L"
-	      "ineNames',{{'Sum2:1','Sum2:2','Sum2:3'}},'ShowContent',true,'Placement',3),struct('MinYLimReal','0.5','MaxYLimR"
-	      "eal','5.5','YLabelReal','','MinYLimMag','0','MaxYLimMag','10','LegendVisibility','On','XGrid',true,'YGrid',true"
-	      ",'PlotMagPhase',false,'AxesColor',[0 0 0],'AxesTickColor',[0.686274509803922 0.686274509803922 0.68627450980392"
-	      "2],'ColorOrder',[1 1 0.0666666666666667;0.0745098039215686 0.623529411764706 1;1 0.411764705882353 0.1607843137"
-	      "2549;0.392156862745098 0.831372549019608 0.0745098039215686;0.717647058823529 0.274509803921569 1;0.05882352941"
-	      "17647 1 1;1 0.0745098039215686 0.650980392156863],'Title','%<SignalLabel>','LinePropertiesCache',{{struct('Colo"
-	      "r',[1 1 0],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[1 0 1],'LineStyle','"
-	      "-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 1 1],'LineStyle','-','LineWidth',0.5,'Mark"
-	      "er','none','Visible','on'),struct('Color',[1 0 0],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on"
-	      "'),struct('Color',[0 1 0],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 0 1"
-	      "],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',1"
-	      ",'LineNames',{{'state'}},'ShowContent',true,'Placement',4)},'DisplayPropertyDefaults',struct('YLabelReal','','A"
-	      "xesColor',[0 0 0],'AxesTickColor',[0.686274509803922 0.686274509803922 0.686274509803922],'ColorOrder',[1 1 0.0"
-	      "666666666666667;0.0745098039215686 0.623529411764706 1;1 0.411764705882353 0.16078431372549;0.392156862745098 0"
-	      ".831372549019608 0.0745098039215686;0.717647058823529 0.274509803921569 1;0.0588235294117647 1 1;1 0.0745098039"
-	      "215686 0.650980392156863],'LinePropertiesCache',{{struct('Color',[1 1 0],'LineStyle','-','LineWidth',0.5,'Marke"
-	      "r','none','Visible','on'),struct('Color',[1 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'"
-	      "),struct('Color',[0 1 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[1 0 0]"
-	      ",'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 1 0],'LineStyle','-','LineWi"
-	      "dth',0.5,'Marker','none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none'"
-	      ",'Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement"
-	      "',1),'DisplayLayoutDimensions',[4 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'P"
-	      "reviousAutoscale','XY','PreviousZoomMode','ZoomY'),extmgr.Configuration('Tools','Measurements',true,'Version','"
-	      "2017a')),'Version','2017a','Location',[193 190 1367 767])"
+	      "15686 0.650980392156863],'LinePropertiesCache',{{struct('Color',[1 1 0],'LineStyle','-','LineWidth',0.5,'Marker"
+	      "','none','Visible','on'),struct('Color',[1 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')"
+	      ",struct('Color',[0 1 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[1 0 0],"
+	      "'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 1 0],'LineStyle','-','LineWid"
+	      "th',0.5,'Marker','none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none',"
+	      "'Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement'"
+	      ",1),'DisplayLayoutDimensions',[4 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'Pr"
+	      "eviousAutoscale','XY','PreviousZoomMode','ZoomY'),extmgr.Configuration('Tools','Measurements',true,'Version','2"
+	      "017a')),'Version','2017a','Location',[193 190 1367 767])"
 	      NumInputPorts	      "4"
 	    }
 	    Block {
@@ -31024,7 +31153,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "150"
+	    ZoomFactor		    "200"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "exitFlagQP"
@@ -31182,7 +31311,7 @@ Model {
 	  System {
 	    Name		    "Emergency Stop2"
 	    Location		    [53, 27, 1366, 768]
-	    Open		    on
+	    Open		    off
 	    PortBlocksUseCompactNotation off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -31194,7 +31323,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "125"
+	    ZoomFactor		    "150"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "ZMP"
@@ -31487,7 +31616,7 @@ Model {
 	  System {
 	    Name		    "Forces and Torques"
 	    Location		    [53, 27, 1366, 768]
-	    Open		    on
+	    Open		    off
 	    PortBlocksUseCompactNotation off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -31668,13 +31797,17 @@ Model {
 	      Name		      "DoFs converter"
 	      SID		      "4141"
 	      Ports		      [1, 5]
-	      Position		      [715, 288, 810, 382]
+	      Position		      [710, 288, 805, 382]
 	      ZOrder		      706
-	      LibraryVersion	      "1.497"
+	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
 	      SourceProductName	      "Whole Body Toolbox"
-	      yarp2WBIOption	      "From YARP to WBI"
+	      yarp2WBIOption	      "From WBI to YARP"
+	      robotName		      "WBT_robotName"
+	      localName		      "WBT_modelName"
+	      wbiFile		      "WBT_wbiFilename"
+	      wbiList		      "WBT_wbiList"
 	      Port {
 		PortNumber		1
 		Name			"torso"
@@ -31701,13 +31834,17 @@ Model {
 	      Name		      "DoFs converter1"
 	      SID		      "4142"
 	      Ports		      [1, 5]
-	      Position		      [715, 433, 810, 527]
+	      Position		      [710, 433, 805, 527]
 	      ZOrder		      708
-	      LibraryVersion	      "1.497"
+	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
 	      SourceProductName	      "Whole Body Toolbox"
-	      yarp2WBIOption	      "From YARP to WBI"
+	      yarp2WBIOption	      "From WBI to YARP"
+	      robotName		      "WBT_robotName"
+	      localName		      "WBT_modelName"
+	      wbiFile		      "WBT_wbiFilename"
+	      wbiList		      "WBT_wbiList"
 	      Port {
 		PortNumber		1
 		Name			"torso"
@@ -31734,13 +31871,17 @@ Model {
 	      Name		      "DoFs converter2"
 	      SID		      "4143"
 	      Ports		      [1, 5]
-	      Position		      [715, 578, 810, 672]
+	      Position		      [710, 578, 805, 672]
 	      ZOrder		      712
-	      LibraryVersion	      "1.497"
+	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
 	      SourceProductName	      "Whole Body Toolbox"
-	      yarp2WBIOption	      "From YARP to WBI"
+	      yarp2WBIOption	      "From WBI to YARP"
+	      robotName		      "WBT_robotName"
+	      localName		      "WBT_modelName"
+	      wbiFile		      "WBT_wbiFilename"
+	      wbiList		      "WBT_wbiList"
 	      Port {
 		PortNumber		1
 		Name			"torso"
@@ -32558,7 +32699,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "left_arm"
-	      ZOrder		      109
+	      ZOrder		      17
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter1"
 	      SrcPort		      2
@@ -32596,7 +32737,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "left_leg"
-	      ZOrder		      105
+	      ZOrder		      22
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter1"
 	      SrcPort		      4
@@ -32633,7 +32774,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "right_arm"
-	      ZOrder		      103
+	      ZOrder		      27
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter2"
 	      SrcPort		      3
@@ -32703,7 +32844,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "left_arm"
-	      ZOrder		      110
+	      ZOrder		      37
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter2"
 	      SrcPort		      2
@@ -32721,7 +32862,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "right_leg"
-	      ZOrder		      102
+	      ZOrder		      39
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter"
 	      SrcPort		      5
@@ -32730,7 +32871,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "right_leg"
-	      ZOrder		      101
+	      ZOrder		      40
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter2"
 	      SrcPort		      5
@@ -32755,7 +32896,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "right_arm"
-	      ZOrder		      106
+	      ZOrder		      43
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter1"
 	      SrcPort		      3
@@ -32816,7 +32957,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "right_leg"
-	      ZOrder		      107
+	      ZOrder		      52
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter1"
 	      SrcPort		      5
@@ -32825,7 +32966,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "left_arm"
-	      ZOrder		      100
+	      ZOrder		      53
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter"
 	      SrcPort		      2
@@ -32834,7 +32975,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "right_arm"
-	      ZOrder		      108
+	      ZOrder		      54
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter"
 	      SrcPort		      3
@@ -32888,7 +33029,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "left_leg"
-	      ZOrder		      111
+	      ZOrder		      62
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter"
 	      SrcPort		      4
@@ -32924,7 +33065,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "left_leg"
-	      ZOrder		      104
+	      ZOrder		      67
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter2"
 	      SrcPort		      4
@@ -33357,7 +33498,7 @@ Model {
 	  Variant		  off
 	  System {
 	    Name		    "Gain Scheduling"
-	    Location		    [53, 27, 1366, 768]
+	    Location		    [65, 24, 1920, 1080]
 	    Open		    off
 	    PortBlocksUseCompactNotation off
 	    ModelBrowserVisibility  off
@@ -33370,7 +33511,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "100"
+	    ZoomFactor		    "167"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "Kp_CoM"
@@ -33482,13 +33623,17 @@ Model {
 	      Name		      "DoFs converter1"
 	      SID		      "5876"
 	      Ports		      [1, 5]
-	      Position		      [1025, 483, 1120, 577]
+	      Position		      [1020, 483, 1115, 577]
 	      ZOrder		      779
-	      LibraryVersion	      "1.497"
+	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
 	      SourceProductName	      "Whole Body Toolbox"
-	      yarp2WBIOption	      "From YARP to WBI"
+	      yarp2WBIOption	      "From WBI to YARP"
+	      robotName		      "WBT_robotName"
+	      localName		      "WBT_modelName"
+	      wbiFile		      "WBT_wbiFilename"
+	      wbiList		      "WBT_wbiList"
 	      Port {
 		PortNumber		1
 		Name			"torso"
@@ -33515,13 +33660,17 @@ Model {
 	      Name		      "DoFs converter4"
 	      SID		      "5874"
 	      Ports		      [1, 5]
-	      Position		      [1025, 303, 1120, 397]
+	      Position		      [1020, 303, 1115, 397]
 	      ZOrder		      777
-	      LibraryVersion	      "1.497"
+	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
 	      SourceProductName	      "Whole Body Toolbox"
-	      yarp2WBIOption	      "From YARP to WBI"
+	      yarp2WBIOption	      "From WBI to YARP"
+	      robotName		      "WBT_robotName"
+	      localName		      "WBT_modelName"
+	      wbiFile		      "WBT_wbiFilename"
+	      wbiList		      "WBT_wbiList"
 	      Port {
 		PortNumber		1
 		Name			"torso"
@@ -34198,7 +34347,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "left_arm"
-	      ZOrder		      181
+	      ZOrder		      134
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter4"
 	      SrcPort		      2
@@ -34216,7 +34365,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "left_leg"
-	      ZOrder		      179
+	      ZOrder		      136
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter4"
 	      SrcPort		      4
@@ -34225,7 +34374,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "right_arm"
-	      ZOrder		      182
+	      ZOrder		      137
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter4"
 	      SrcPort		      3
@@ -34234,7 +34383,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "right_leg"
-	      ZOrder		      185
+	      ZOrder		      138
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter4"
 	      SrcPort		      5
@@ -34243,7 +34392,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "left_arm"
-	      ZOrder		      184
+	      ZOrder		      143
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter1"
 	      SrcPort		      2
@@ -34261,7 +34410,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "left_leg"
-	      ZOrder		      178
+	      ZOrder		      145
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter1"
 	      SrcPort		      4
@@ -34270,7 +34419,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "right_arm"
-	      ZOrder		      183
+	      ZOrder		      146
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter1"
 	      SrcPort		      3
@@ -34279,7 +34428,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "right_leg"
-	      ZOrder		      180
+	      ZOrder		      147
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter1"
 	      SrcPort		      5
@@ -34315,7 +34464,7 @@ Model {
 	  System {
 	    Name		    "Joints and Floating Base State"
 	    Location		    [53, 27, 1366, 768]
-	    Open		    on
+	    Open		    off
 	    PortBlocksUseCompactNotation off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -34327,7 +34476,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "80"
+	    ZoomFactor		    "97"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "s"
@@ -34394,13 +34543,17 @@ Model {
 	      Name		      "DoFs converter"
 	      SID		      "4778"
 	      Ports		      [1, 5]
-	      Position		      [755, 228, 850, 322]
+	      Position		      [750, 228, 845, 322]
 	      ZOrder		      736
-	      LibraryVersion	      "1.497"
+	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
 	      SourceProductName	      "Whole Body Toolbox"
-	      yarp2WBIOption	      "From YARP to WBI"
+	      yarp2WBIOption	      "From WBI to YARP"
+	      robotName		      "WBT_robotName"
+	      localName		      "WBT_modelName"
+	      wbiFile		      "WBT_wbiFilename"
+	      wbiList		      "WBT_wbiList"
 	      Port {
 		PortNumber		1
 		Name			"torso"
@@ -34427,13 +34580,17 @@ Model {
 	      Name		      "DoFs converter1"
 	      SID		      "4779"
 	      Ports		      [1, 5]
-	      Position		      [755, 373, 850, 467]
+	      Position		      [750, 373, 845, 467]
 	      ZOrder		      738
-	      LibraryVersion	      "1.497"
+	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
 	      SourceProductName	      "Whole Body Toolbox"
-	      yarp2WBIOption	      "From YARP to WBI"
+	      yarp2WBIOption	      "From WBI to YARP"
+	      robotName		      "WBT_robotName"
+	      localName		      "WBT_modelName"
+	      wbiFile		      "WBT_wbiFilename"
+	      wbiList		      "WBT_wbiList"
 	      Port {
 		PortNumber		1
 		Name			"torso"
@@ -34460,13 +34617,17 @@ Model {
 	      Name		      "DoFs converter2"
 	      SID		      "4780"
 	      Ports		      [1, 5]
-	      Position		      [755, 518, 850, 612]
+	      Position		      [750, 518, 845, 612]
 	      ZOrder		      742
-	      LibraryVersion	      "1.497"
+	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
 	      SourceProductName	      "Whole Body Toolbox"
-	      yarp2WBIOption	      "From YARP to WBI"
+	      yarp2WBIOption	      "From WBI to YARP"
+	      robotName		      "WBT_robotName"
+	      localName		      "WBT_modelName"
+	      wbiFile		      "WBT_wbiFilename"
+	      wbiList		      "WBT_wbiList"
 	      Port {
 		PortNumber		1
 		Name			"torso"
@@ -34493,13 +34654,17 @@ Model {
 	      Name		      "DoFs converter3"
 	      SID		      "4781"
 	      Ports		      [1, 5]
-	      Position		      [1335, 143, 1430, 237]
+	      Position		      [1330, 143, 1425, 237]
 	      ZOrder		      748
-	      LibraryVersion	      "1.497"
+	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/DoFs converter"
 	      SourceType	      "DoFs converter"
 	      SourceProductName	      "Whole Body Toolbox"
-	      yarp2WBIOption	      "From YARP to WBI"
+	      yarp2WBIOption	      "From WBI to YARP"
+	      robotName		      "WBT_robotName"
+	      localName		      "WBT_modelName"
+	      wbiFile		      "WBT_wbiFilename"
+	      wbiList		      "WBT_wbiList"
 	      Port {
 		PortNumber		1
 		Name			"torso"
@@ -35133,7 +35298,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "left_arm"
-	      ZOrder		      68
+	      ZOrder		      1
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter1"
 	      SrcPort		      2
@@ -35142,7 +35307,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "right_leg"
-	      ZOrder		      71
+	      ZOrder		      2
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter"
 	      SrcPort		      5
@@ -35160,7 +35325,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "left_leg"
-	      ZOrder		      70
+	      ZOrder		      4
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter"
 	      SrcPort		      4
@@ -35169,7 +35334,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "left_arm"
-	      ZOrder		      65
+	      ZOrder		      5
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter"
 	      SrcPort		      2
@@ -35194,7 +35359,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "left_leg"
-	      ZOrder		      58
+	      ZOrder		      8
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter1"
 	      SrcPort		      4
@@ -35203,7 +35368,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "right_arm"
-	      ZOrder		      72
+	      ZOrder		      9
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter1"
 	      SrcPort		      3
@@ -35212,7 +35377,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "right_arm"
-	      ZOrder		      69
+	      ZOrder		      10
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter"
 	      SrcPort		      3
@@ -35221,7 +35386,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "right_leg"
-	      ZOrder		      64
+	      ZOrder		      11
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter2"
 	      SrcPort		      5
@@ -35230,7 +35395,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "left_arm"
-	      ZOrder		      59
+	      ZOrder		      12
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter2"
 	      SrcPort		      2
@@ -35255,7 +35420,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "right_leg"
-	      ZOrder		      62
+	      ZOrder		      15
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter1"
 	      SrcPort		      5
@@ -35264,7 +35429,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "left_leg"
-	      ZOrder		      66
+	      ZOrder		      16
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter2"
 	      SrcPort		      4
@@ -35273,7 +35438,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "right_arm"
-	      ZOrder		      61
+	      ZOrder		      18
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter2"
 	      SrcPort		      3
@@ -35282,7 +35447,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "right_leg"
-	      ZOrder		      63
+	      ZOrder		      19
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter3"
 	      SrcPort		      5
@@ -35300,7 +35465,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "left_leg"
-	      ZOrder		      67
+	      ZOrder		      21
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter3"
 	      SrcPort		      4
@@ -35309,7 +35474,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "right_arm"
-	      ZOrder		      60
+	      ZOrder		      22
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter3"
 	      SrcPort		      3
@@ -35318,7 +35483,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "left_arm"
-	      ZOrder		      73
+	      ZOrder		      23
 	      Labels		      [1, 1]
 	      SrcBlock		      "DoFs converter3"
 	      SrcPort		      2
@@ -37131,25 +37296,25 @@ Model {
 	  ScopeSpecificationString "Simulink.scopes.TimeScopeBlockCfg('CurrentConfiguration', extmgr.ConfigurationSet(extmgr."
 	  "Configuration('Core','General UI',true),extmgr.Configuration('Core','Source UI',true),extmgr.Configuration('Sources"
 	  "','WiredSimulink',true,'DataLoggingVariableName','ScopeData1'),extmgr.Configuration('Visuals','Time Domain',true,'S"
-	  "erializedDisplays',{struct('MinYLimReal','-0.08725','MaxYLimReal','0.23161','YLabelReal','','MinYLimMag','0.00000',"
-	  "'MaxYLimMag','0.23161','LegendVisibility','Off','XGrid',true,'YGrid',true,'PlotMagPhase',false,'AxesColor',[0 0 0],"
+	  "erializedDisplays',{struct('MinYLimReal','-0.07444','MaxYLimReal','0.11943','YLabelReal','','MinYLimMag','0.00000',"
+	  "'MaxYLimMag','0.11943','LegendVisibility','Off','XGrid',true,'YGrid',true,'PlotMagPhase',false,'AxesColor',[0 0 0],"
 	  "'AxesTickColor',[0.686274509803922 0.686274509803922 0.686274509803922],'ColorOrder',[1 1 0.0666666666666667;0.0745"
 	  "098039215686 0.623529411764706 1;1 0.411764705882353 0.16078431372549;0.392156862745098 0.831372549019608 0.0745098"
 	  "039215686;0.717647058823529 0.274509803921569 1;0.0588235294117647 1 1;1 0.0745098039215686 0.650980392156863],'Tit"
 	  "le','%<SignalLabel>','LinePropertiesCache',{{}},'UserDefinedChannelNames',{{}},'NumLines',3,'LineNames',{{'zmp_x','"
-	  "support_polygon_x:1','support_polygon_x:2'}},'ShowContent',true,'Placement',1),struct('MinYLimReal','-0.18491','Max"
-	  "YLimReal','0.04899','YLabelReal','','MinYLimMag','0','MaxYLimMag','10','LegendVisibility','off','XGrid',true,'YGrid"
-	  "',true,'PlotMagPhase',false,'AxesColor',[0 0 0],'AxesTickColor',[0.686274509803922 0.686274509803922 0.686274509803"
-	  "922],'ColorOrder',[1 1 0.0666666666666667;0.0745098039215686 0.623529411764706 1;1 0.411764705882353 0.160784313725"
-	  "49;0.392156862745098 0.831372549019608 0.0745098039215686;0.717647058823529 0.274509803921569 1;0.0588235294117647 "
-	  "1 1;1 0.0745098039215686 0.650980392156863],'Title','%<SignalLabel>','LinePropertiesCache',{{}},'UserDefinedChannel"
-	  "Names',{{}},'NumLines',3,'LineNames',{{'zmp_y','support_polygon_y:1','support_polygon_y:2'}},'ShowContent',true,'Pl"
-	  "acement',2)},'DisplayPropertyDefaults',struct('YLabelReal','','AxesColor',[0 0 0],'AxesTickColor',[0.68627450980392"
-	  "2 0.686274509803922 0.686274509803922],'ColorOrder',[0.0745098039215686 0.623529411764706 1;1 0.411764705882353 0.1"
-	  "6078431372549;1 1 0.0666666666666667;0.717647058823529 0.274509803921569 1;0.392156862745098 0.831372549019608 0.07"
-	  "45098039215686;0.0588235294117647 1 1;1 0.0745098039215686 0.650980392156863]),'DisplayLayoutDimensions',[2 1],'Dis"
-	  "playContentCache',[]),extmgr.Configuration('Tools','Plot Navigation',true,'PreviousAutoscale','XY'),extmgr.Configur"
-	  "ation('Tools','Measurements',true,'Version','2017a')),'Version','2017a','Position',[59 1 1303 656])"
+	  "support_polygon_x:1','support_polygon_x:2'}},'ShowContent',true,'Placement',1),struct('MinYLimReal','-0.1845','MaxY"
+	  "LimReal','0.04889','YLabelReal','','MinYLimMag','0','MaxYLimMag','10','LegendVisibility','off','XGrid',true,'YGrid'"
+	  ",true,'PlotMagPhase',false,'AxesColor',[0 0 0],'AxesTickColor',[0.686274509803922 0.686274509803922 0.6862745098039"
+	  "22],'ColorOrder',[1 1 0.0666666666666667;0.0745098039215686 0.623529411764706 1;1 0.411764705882353 0.1607843137254"
+	  "9;0.392156862745098 0.831372549019608 0.0745098039215686;0.717647058823529 0.274509803921569 1;0.0588235294117647 1"
+	  " 1;1 0.0745098039215686 0.650980392156863],'Title','%<SignalLabel>','LinePropertiesCache',{{}},'UserDefinedChannelN"
+	  "ames',{{}},'NumLines',3,'LineNames',{{'zmp_y','support_polygon_y:1','support_polygon_y:2'}},'ShowContent',true,'Pla"
+	  "cement',2)},'DisplayPropertyDefaults',struct('YLabelReal','','AxesColor',[0 0 0],'AxesTickColor',[0.686274509803922"
+	  " 0.686274509803922 0.686274509803922],'ColorOrder',[0.0745098039215686 0.623529411764706 1;1 0.411764705882353 0.16"
+	  "078431372549;1 1 0.0666666666666667;0.717647058823529 0.274509803921569 1;0.392156862745098 0.831372549019608 0.074"
+	  "5098039215686;0.0588235294117647 1 1;1 0.0745098039215686 0.650980392156863]),'DisplayLayoutDimensions',[2 1],'Disp"
+	  "layContentCache',[]),extmgr.Configuration('Tools','Plot Navigation',true,'PreviousAutoscale','XY'),extmgr.Configura"
+	  "tion('Tools','Measurements',true,'Version','2017a')),'Version','2017a','Position',[59 1 1303 656])"
 	  NumInputPorts		  "2"
 	}
 	Block {
@@ -37161,13 +37326,12 @@ Model {
 	  ZOrder		  929
 	  ForegroundColor	  "[0.490196, 0.000000, 0.000000]"
 	  ShowName		  off
-	  LibraryVersion	  "1.497"
+	  LibraryVersion	  "1.383"
 	  SourceBlock		  "WBToolboxLibrary/Utilities/Yarp Read"
 	  SourceType		  "YARP Read"
 	  SourceProductName	  "Whole Body Toolbox"
 	  portName		  "Ports.LEFT_FOOT_EXT_WRENCH"
 	  signalSize		  "6"
-	  timeout		  "0.5"
 	  blocking		  off
 	  timestamp		  off
 	  autoconnect		  on
@@ -37182,13 +37346,12 @@ Model {
 	  ZOrder		  930
 	  ForegroundColor	  "[0.490196, 0.000000, 0.000000]"
 	  ShowName		  off
-	  LibraryVersion	  "1.497"
+	  LibraryVersion	  "1.383"
 	  SourceBlock		  "WBToolboxLibrary/Utilities/Yarp Read"
 	  SourceType		  "YARP Read"
 	  SourceProductName	  "Whole Body Toolbox"
 	  portName		  "Ports.RIGHT_FOOT_EXT_WRENCH"
 	  signalSize		  "6"
-	  timeout		  "0.5"
 	  blocking		  off
 	  timestamp		  off
 	  autoconnect		  on
@@ -37875,7 +38038,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		34
+	$ObjectID		27
 	$ClassName		"Simulink.Mask"
 	Display			"disp('SYNCHRONIZER')"
       }
@@ -37937,7 +38100,7 @@ Model {
 	      ZOrder		      539
 	      ForegroundColor	      "[0.490196, 0.000000, 0.000000]"
 	      ShowName		      off
-	      LibraryVersion	      "1.497"
+	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/Simulator Synchronizer"
 	      SourceType	      "Simulator Synchronizer"
 	      SourceProductName	      "Whole Body Toolbox"
@@ -38015,7 +38178,7 @@ Model {
 	      ForegroundColor	      "[0.916667, 0.916667, 0.916667]"
 	      BackgroundColor	      "gray"
 	      ShowName		      off
-	      LibraryVersion	      "1.497"
+	      LibraryVersion	      "1.383"
 	      SourceBlock	      "WBToolboxLibrary/Utilities/Real Time Synchronizer"
 	      SourceType	      "Real Time Synchronizer"
 	      SourceProductName	      "Whole Body Toolbox"
@@ -38298,7 +38461,7 @@ Stateflow {
     created		    "29-Nov-2017 15:01:26"
     isLibrary		    0
     sfVersion		    80000011
-    firstTarget		    367
+    firstTarget		    365
   }
   chart {
     id			    2
@@ -45802,7 +45965,7 @@ Stateflow {
     screen		    [1 1 1280 1024 1.041050272174191]
     treeNode		    [0 334 0 0]
     viewObj		    333
-    ssIdHighWaterMark	    20
+    ssIdHighWaterMark	    18
     decomposition	    CLUSTER_CHART
     type		    EML_CHART
     chartFileNumber	    19
@@ -45811,8 +45974,8 @@ Stateflow {
       name		      "ZMP"
     }
     firstData		    335
-    firstTransition	    346
-    firstJunction	    345
+    firstTransition	    344
+    firstJunction	    343
   }
   state {
     id			    334
@@ -45828,17 +45991,16 @@ Stateflow {
     decomposition	    CLUSTER_STATE
     eml {
       isEML		      1
-      script		      "function [ZMP_mean, ZMP_buffer] = ZMP(f_lFoot, f_rFoot, pose_lFoot, orient_lFoot, pose_rFoot, ori"
-      "ent_rFoot, feetInContact, ZMP_previous)\n\nfz_lFoot   = f_lFoot(3);\ntaux_lFoot = f_lFoot(4);\ntauy_lFoot = f_lF"
-      "oot(5);\nfz_rFoot   = f_rFoot(3);\ntaux_rFoot = f_rFoot(4);\ntauy_rFoot = f_rFoot(5);\n\nif feetInContact(1) > 0"
-      ".1 && feetInContact(2) > 0.1 %Both feet on ground\n    cop_lFoot  = orient_lFoot(1:2,1:2) * [-tauy_lFoot; taux_l"
-      "Foot] / fz_lFoot + pose_lFoot(1:2);\n    cop_rFoot  = orient_rFoot(1:2,1:2) * [-tauy_rFoot; taux_rFoot] / fz_rFo"
-      "ot + pose_rFoot(1:2);\n    ZMP       = (fz_lFoot * cop_lFoot + fz_rFoot * cop_rFoot) / (fz_lFoot + fz_rFoot);\n "
-      "   \nelseif feetInContact(1) > 0.1 %Left foot on ground\n    cop_lFoot  = orient_lFoot(1:2,1:2) * [-tauy_lFoot; "
-      "taux_lFoot] / fz_lFoot + pose_lFoot(1:2);\n    ZMP       = (fz_lFoot * cop_lFoot) / (fz_lFoot);\n    \nelseif fe"
-      "etInContact(2) > 0.1 %Right foot on ground\n    cop_rFoot  = orient_rFoot(1:2,1:2) * [-tauy_rFoot; taux_rFoot] /"
-      " fz_rFoot + pose_rFoot(1:2);\n    ZMP       = (fz_rFoot * cop_rFoot) / (fz_rFoot);\n    \nelse\n    ZMP = zeros("
-      "2,1);\nend\n\nZMP_buffer = [ZMP_previous(:,2:end) ZMP];\n\nZMP_mean = mean(ZMP_buffer,2);\n    \n\n\n\n\n"
+      script		      "function ZMP = ZMP(f_lFoot, f_rFoot, pose_lFoot, orient_lFoot, pose_rFoot, orient_rFoot, feetInCo"
+      "ntact)\n\nfz_lFoot   = f_lFoot(3);\ntaux_lFoot = f_lFoot(4);\ntauy_lFoot = f_lFoot(5);\nfz_rFoot   = f_rFoot(3);"
+      "\ntaux_rFoot = f_rFoot(4);\ntauy_rFoot = f_rFoot(5);\n\nif feetInContact(1) > 0.1 && feetInContact(2) > 0.1 %Bot"
+      "h feet on ground\n    cop_lFoot  = orient_lFoot(1:2,1:2) * [-tauy_lFoot; taux_lFoot] / fz_lFoot + pose_lFoot(1:2"
+      ");\n    cop_rFoot  = orient_rFoot(1:2,1:2) * [-tauy_rFoot; taux_rFoot] / fz_rFoot + pose_rFoot(1:2);\n    ZMP   "
+      "    = (fz_lFoot * cop_lFoot + fz_rFoot * cop_rFoot) / (fz_lFoot + fz_rFoot);\n    \nelseif feetInContact(1) > 0."
+      "1 %Left foot on ground\n    cop_lFoot  = orient_lFoot(1:2,1:2) * [-tauy_lFoot; taux_lFoot] / fz_lFoot + pose_lFo"
+      "ot(1:2);\n    ZMP       = (fz_lFoot * cop_lFoot) / (fz_lFoot);\n    \nelseif feetInContact(2) > 0.1 %Right foot "
+      "on ground\n    cop_rFoot  = orient_rFoot(1:2,1:2) * [-tauy_rFoot; taux_rFoot] / fz_rFoot + pose_rFoot(1:2);\n   "
+      " ZMP       = (fz_rFoot * cop_rFoot) / (fz_rFoot);\n    \nelse\n    ZMP = zeros(2,1);\nend\n    \n\n\n\n\n"
       editorLayout	      "100 M4x1[10 5 700 500]"
     }
   }
@@ -45895,7 +46057,7 @@ Stateflow {
   data {
     id			    337
     ssIdNumber		    5
-    name		    "ZMP_mean"
+    name		    "ZMP"
     scope		    OUTPUT_DATA
     machine		    1
     props {
@@ -46038,60 +46200,10 @@ Stateflow {
       }
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [333 341 343]
-  }
-  data {
-    id			    343
-    ssIdNumber		    19
-    name		    "ZMP_previous"
-    scope		    INPUT_DATA
-    machine		    1
-    props {
-      array {
-	size			"-1"
-      }
-      type {
-	method			SF_INHERITED_TYPE
-	primitive		SF_DOUBLE_TYPE
-	isSigned		1
-	wordLength		"16"
-      }
-      complexity	      SF_COMPLEX_INHERITED
-      frame		      SF_FRAME_INHERITED
-      unit {
-	name			"inherit"
-      }
-    }
-    dataType		    "Inherit: Same as Simulink"
-    linkNode		    [333 342 344]
-  }
-  data {
-    id			    344
-    ssIdNumber		    20
-    name		    "ZMP_buffer"
-    scope		    OUTPUT_DATA
-    machine		    1
-    props {
-      array {
-	size			"-1"
-      }
-      type {
-	method			SF_INHERITED_TYPE
-	primitive		SF_DOUBLE_TYPE
-	isSigned		1
-	wordLength		"16"
-      }
-      complexity	      SF_COMPLEX_INHERITED
-      frame		      SF_FRAME_NO
-      unit {
-	name			"inherit"
-      }
-    }
-    dataType		    "Inherit: Same as Simulink"
-    linkNode		    [333 343 0]
+    linkNode		    [333 341 0]
   }
   junction {
-    id			    345
+    id			    343
     position		    [23.5747 49.5747 7]
     chart		    333
     subviewer		    333
@@ -46100,7 +46212,7 @@ Stateflow {
     linkNode		    [333 0 0]
   }
   transition {
-    id			    346
+    id			    344
     labelString		    "{eML_blk_kernel();}"
     labelPosition	    [28.125 13.875 102.544 14.964]
     fontSize		    12
@@ -46108,7 +46220,7 @@ Stateflow {
       intersection	      [0 0 1 0 23.5747 14.625 0 0]
     }
     dst {
-      id		      345
+      id		      343
       intersection	      [1 0 -1 0 23.5747 42.5747 0 0]
     }
     midPoint		    [23.5747 24.9468]
@@ -46124,21 +46236,21 @@ Stateflow {
     linkNode		    [333 0 0]
   }
   instance {
-    id			    347
+    id			    345
     machine		    1
     name		    "Subsystem/ZMP, support polygon/compute ZMP"
     chart		    333
   }
   chart {
-    id			    348
+    id			    346
     machine		    1
     name		    "Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Mass Matrix and Bias Forces/Add motors"
     " reflected inertias/Add motor reflected inertias"
     windowPosition	    [422 539.941 189 413]
     viewLimits		    [0 156.75 0 153.75]
     screen		    [1 1 3600 1200 1.180555555555556]
-    treeNode		    [0 349 0 0]
-    viewObj		    348
+    treeNode		    [0 347 0 0]
+    viewObj		    346
     ssIdHighWaterMark	    6
     decomposition	    CLUSTER_CHART
     type		    EML_CHART
@@ -46147,19 +46259,19 @@ Stateflow {
     eml {
       name		      "addMotorsInertiaFCN"
     }
-    firstData		    350
-    firstTransition	    354
-    firstJunction	    353
+    firstData		    348
+    firstTransition	    352
+    firstJunction	    351
   }
   state {
-    id			    349
+    id			    347
     labelString		    "eML_blk_kernel()"
     position		    [18 64.5 118 66]
     fontSize		    12
-    chart		    348
-    treeNode		    [348 0 0 0]
+    chart		    346
+    treeNode		    [346 0 0 0]
     superState		    SUBCHART
-    subviewer		    348
+    subviewer		    346
     ssIdNumber		    1
     type		    FUNC_STATE
     decomposition	    CLUSTER_STATE
@@ -46171,7 +46283,7 @@ Stateflow {
     }
   }
   data {
-    id			    350
+    id			    348
     ssIdNumber		    4
     name		    "M"
     scope		    INPUT_DATA
@@ -46190,10 +46302,10 @@ Stateflow {
       }
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [348 0 351]
+    linkNode		    [346 0 349]
   }
   data {
-    id			    351
+    id			    349
     ssIdNumber		    5
     name		    "M_with_inertia"
     scope		    OUTPUT_DATA
@@ -46213,10 +46325,10 @@ Stateflow {
       }
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [348 350 352]
+    linkNode		    [346 348 350]
   }
   data {
-    id			    352
+    id			    350
     ssIdNumber		    6
     name		    "Config"
     scope		    PARAMETER_DATA
@@ -46238,19 +46350,19 @@ Stateflow {
       }
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [348 351 0]
+    linkNode		    [346 349 0]
   }
   junction {
-    id			    353
+    id			    351
     position		    [23.5747 49.5747 7]
-    chart		    348
-    subviewer		    348
+    chart		    346
+    subviewer		    346
     ssIdNumber		    3
     type		    CONNECTIVE_JUNCTION
-    linkNode		    [348 0 0]
+    linkNode		    [346 0 0]
   }
   transition {
-    id			    354
+    id			    352
     labelString		    "{eML_blk_kernel();}"
     labelPosition	    [28.125 13.875 102.544 14.964]
     fontSize		    12
@@ -46258,37 +46370,37 @@ Stateflow {
       intersection	      [0 0 1 0 23.5747 14.625 0 0]
     }
     dst {
-      id		      353
+      id		      351
       intersection	      [1 0 -1 0 23.5747 42.5747 0 0]
     }
     midPoint		    [23.5747 24.9468]
-    chart		    348
+    chart		    346
     dataLimits		    [21.175 25.975 14.625 42.575]
-    subviewer		    348
+    subviewer		    346
     drawStyle		    SMART
     slide {
       sticky		      BOTH_STICK
     }
     executionOrder	    1
     ssIdNumber		    2
-    linkNode		    [348 0 0]
+    linkNode		    [346 0 0]
   }
   instance {
-    id			    355
+    id			    353
     machine		    1
     name		    "Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Mass Matrix and Bias Forces/Add motors"
     " reflected inertias/Add motor reflected inertias"
-    chart		    348
+    chart		    346
   }
   chart {
-    id			    356
+    id			    354
     machine		    1
     name		    "Subsystem/ZMP, support polygon/supportPolygon"
     windowPosition	    [422 539.941 189 413]
     viewLimits		    [0 156.75 0 153.75]
     screen		    [1 1 3600 1200 1.180555555555556]
-    treeNode		    [0 357 0 0]
-    viewObj		    356
+    treeNode		    [0 355 0 0]
+    viewObj		    354
     ssIdHighWaterMark	    12
     decomposition	    CLUSTER_CHART
     type		    EML_CHART
@@ -46297,19 +46409,19 @@ Stateflow {
     eml {
       name		      "supportPolygon"
     }
-    firstData		    358
-    firstTransition	    365
-    firstJunction	    364
+    firstData		    356
+    firstTransition	    363
+    firstJunction	    362
   }
   state {
-    id			    357
+    id			    355
     labelString		    "eML_blk_kernel()"
     position		    [18 64.5 118 66]
     fontSize		    12
-    chart		    356
-    treeNode		    [356 0 0 0]
+    chart		    354
+    treeNode		    [354 0 0 0]
     superState		    SUBCHART
-    subviewer		    356
+    subviewer		    354
     ssIdNumber		    1
     type		    FUNC_STATE
     decomposition	    CLUSTER_STATE
@@ -46340,7 +46452,7 @@ Stateflow {
     }
   }
   data {
-    id			    358
+    id			    356
     ssIdNumber		    6
     name		    "pose_lFoot"
     scope		    INPUT_DATA
@@ -46362,10 +46474,10 @@ Stateflow {
       }
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [356 0 359]
+    linkNode		    [354 0 357]
   }
   data {
-    id			    359
+    id			    357
     ssIdNumber		    7
     name		    "pose_rFoot"
     scope		    INPUT_DATA
@@ -46387,10 +46499,10 @@ Stateflow {
       }
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [356 358 360]
+    linkNode		    [354 356 358]
   }
   data {
-    id			    360
+    id			    358
     ssIdNumber		    4
     name		    "feet_in_contact"
     scope		    INPUT_DATA
@@ -46409,10 +46521,10 @@ Stateflow {
       }
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [356 359 361]
+    linkNode		    [354 357 359]
   }
   data {
-    id			    361
+    id			    359
     ssIdNumber		    12
     name		    "state"
     scope		    INPUT_DATA
@@ -46434,10 +46546,10 @@ Stateflow {
       }
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [356 360 362]
+    linkNode		    [354 358 360]
   }
   data {
-    id			    362
+    id			    360
     ssIdNumber		    5
     name		    "supportPolygon"
     scope		    OUTPUT_DATA
@@ -46457,10 +46569,10 @@ Stateflow {
       }
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [356 361 363]
+    linkNode		    [354 359 361]
   }
   data {
-    id			    363
+    id			    361
     ssIdNumber		    8
     name		    "Config"
     scope		    PARAMETER_DATA
@@ -46482,19 +46594,19 @@ Stateflow {
       }
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [356 362 0]
+    linkNode		    [354 360 0]
   }
   junction {
-    id			    364
+    id			    362
     position		    [23.5747 49.5747 7]
-    chart		    356
-    subviewer		    356
+    chart		    354
+    subviewer		    354
     ssIdNumber		    3
     type		    CONNECTIVE_JUNCTION
-    linkNode		    [356 0 0]
+    linkNode		    [354 0 0]
   }
   transition {
-    id			    365
+    id			    363
     labelString		    "{eML_blk_kernel();}"
     labelPosition	    [28.125 13.875 102.544 14.964]
     fontSize		    12
@@ -46502,29 +46614,29 @@ Stateflow {
       intersection	      [0 0 1 0 23.5747 14.625 0 0]
     }
     dst {
-      id		      364
+      id		      362
       intersection	      [1 0 -1 0 23.5747 42.5747 0 0]
     }
     midPoint		    [23.5747 24.9468]
-    chart		    356
+    chart		    354
     dataLimits		    [21.175 25.975 14.625 42.575]
-    subviewer		    356
+    subviewer		    354
     drawStyle		    SMART
     slide {
       sticky		      BOTH_STICK
     }
     executionOrder	    1
     ssIdNumber		    2
-    linkNode		    [356 0 0]
+    linkNode		    [354 0 0]
   }
   instance {
-    id			    366
+    id			    364
     machine		    1
     name		    "Subsystem/ZMP, support polygon/supportPolygon"
-    chart		    356
+    chart		    354
   }
   target {
-    id			    367
+    id			    365
     machine		    1
     name		    "sfun"
     description		    "Default Simulink S-Function Target."

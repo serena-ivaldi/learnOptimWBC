@@ -9,27 +9,26 @@ CONFIG.SMOOTH_DES_COM      = 0;    % If equal to one, the desired streamed value
 CONFIG.SMOOTH_DES_Q        = 1;    % If equal to one, the desired streamed values 
                                    % of the postural tasks are smoothed internally 
 
+%Robot configuration for WBT2.0
+WBT_wbiList   = 'ROBOT_TORQUE_CONTROL_JOINTS_WITHOUT_PRONOSUP';
+WBT_robotName = 'icubSim';
 
-% Robot configuration for WBT3.0
-WBTConfigRobot           = WBToolbox.Configuration;
-WBTConfigRobot.RobotName = 'icubSim';
-WBTConfigRobot.UrdfFile  = 'model.urdf';
-WBTConfigRobot.LocalName = 'WBT';
-WBTConfigRobot.ControlBoardsNames = {'torso','left_arm','right_arm','left_leg','right_leg'};
-WBTConfigRobot.ControlledJoints   = {'torso_pitch','torso_roll','torso_yaw', ...
-                                     'l_shoulder_pitch','l_shoulder_roll','l_shoulder_yaw','l_elbow', ...
-                                     'r_shoulder_pitch','r_shoulder_roll','r_shoulder_yaw','r_elbow', ...
-                                     'l_hip_pitch','l_hip_roll','l_hip_yaw','l_knee','l_ankle_pitch','l_ankle_roll', ...
-                                     'r_hip_pitch','r_hip_roll','r_hip_yaw','r_knee','r_ankle_pitch','r_ankle_roll'};
+if(strcmp(params.codyco,'old'))
+    PORTS.WBDT_LEFTLEG_EE  = '/wholeBodyDynamicsTree/left_leg/cartesianEndEffectorWrench:o';
+    PORTS.WBDT_RIGHTLEG_EE = '/wholeBodyDynamicsTree/right_leg/cartesianEndEffectorWrench:o';
+    PORTS.RIGHT_ARM        = '/wholeBodyDynamicsTree/left_arm/endEffectorWrench:o';
+    PORTS.LEFT_ARM         = '/wholeBodyDynamicsTree/right_arm/endEffectorWrench:o';
+else
+    PORTS.WBDT_LEFTLEG_EE  = '/wholeBodyDynamics/left_leg/cartesianEndEffectorWrench:o';
+    PORTS.WBDT_RIGHTLEG_EE = '/wholeBodyDynamics/right_leg/cartesianEndEffectorWrench:o';
+    PORTS.RIGHT_ARM        = '/wholeBodyDynamics/left_arm/endEffectorWrench:o';
+    PORTS.LEFT_ARM         = '/wholeBodyDynamics/right_arm/endEffectorWrench:o';
+end
 
-PORTS.WBDT_LEFTLEG_EE  = '/wholeBodyDynamics/left_leg/cartesianEndEffectorWrench:o';
-PORTS.WBDT_RIGHTLEG_EE = '/wholeBodyDynamics/right_leg/cartesianEndEffectorWrench:o';
-PORTS.RIGHT_ARM        = '/wholeBodyDynamics/left_arm/endEffectorWrench:o';
-PORTS.LEFT_ARM         = '/wholeBodyDynamics/right_arm/endEffectorWrench:o';
-PORTS.IMU              = ['/' WBTConfigRobot.RobotName, '/inertial'];                                   
-PORTS.HEAD             = ['/' WBTConfigRobot.RobotName, '/head/state:o'];
-dump.left_wrench_port  = ['/' WBTConfigRobot.RobotName, '/left_foot/analog:o'];
-dump.right_wrench_port = ['/' WBTConfigRobot.RobotName, '/right_foot/analog:o'];
+PORTS.IMU              = ['/' WBT_robotName, '/inertial'];                                   
+PORTS.HEAD             = ['/' WBT_robotName, '/head/state:o'];
+dump.left_wrench_port  = ['/' WBT_robotName, '/left_foot/analog:o'];
+dump.right_wrench_port = ['/' WBT_robotName, '/right_foot/analog:o'];
 
 references.smoothingTimeMinJerkComDesQDes = 2.5;    %3;
 sat.torque = 34;

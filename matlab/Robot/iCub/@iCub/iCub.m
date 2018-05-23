@@ -240,9 +240,14 @@ classdef iCub < handle
             elseif(strcmp( obj.model_name ,'modelSimulink'))
                 % launch the measure scheme to read the starting joint
                 % positions of the robot
-                options = simset('SrcWorkspace','current');
-                sim('./scheme_measure/scheme_Measure',[],options);
-                
+                if(strcmp(params.codyco,'old'))
+                    options = simset('SrcWorkspace','current');
+                    sim('./scheme_measure/scheme_Measure_WBT2',[],options);
+                else
+                    sim('./scheme_measure/scheme_Measure');
+                    CloseMeasure;
+                end
+                                
                 length_vector=[3,4,4,6,6];
                 limb_list = {'torso','leftArm','rigthArm','leftLeg','rightLeg'};
                 qjInit = [];
