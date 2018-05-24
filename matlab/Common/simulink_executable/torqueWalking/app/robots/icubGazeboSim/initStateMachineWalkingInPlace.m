@@ -38,6 +38,8 @@ Config.QP_USE_STRICT_TASK_PRIORITIES = false; %true;
 % If true, the output of QP solver will be forced to be continuous
 Config.QP_USE_CONTINUITY_CONSTRAINTS = false;
 Config.QP_IKIN_USE_CONTINUITY_CONSTRAINTS = false;
+% using saturation on torque derivative (for QP solver)
+Sat.tauDot_max = 10000;
 
 % If true, the IMU orientation is used in order to estimate the
 % base-to-world transformation matrix
@@ -63,7 +65,7 @@ Config.ONLY_BALANCING = false;
 % for the time Config.t_balancing
 Config.t_balancing = 2;
 % and the movements will need the following precision
-Config.precision_threshold = 0.02;
+Config.precision_threshold = 0.025;
 
 % If true, simulation is stopped when qpOASES outputs a "-2" error (QP is unfeasible)
 Config.CHECK_QP_ERROR = true;
@@ -71,13 +73,17 @@ Config.CHECK_QP_ERROR = true;
 % If true, simulation is stopped when the CoM of the robot goes below half of its initial height
 Config.CHECK_ROBOT_FALLING = true;
 
+% If true, the controller QP will take into account the joint torque limits
+% specified in the URDF model of the robot
+Config.USE_JOINT_LIMITS = true;
+Sat.jointTorqueLimits = params.robot_torqueLimit;
+Sat.ub_jointLimits    = params.robot_UBjointLimit;
+Sat.lb_jointLimits    = params.robot_LBjointLimit;
+
 %% Robot setup 
 
 % Joint torque saturation
 Sat.tau_max = 60; % [Nm]
-
-% Saturation on torque derivative (for QP solver)
-Sat.tauDot_max = 10000;
 
 % Saturation on state jerk (for QP based inverse kinematics)
 Sat.nuDDot_max = 10000;
@@ -191,54 +197,54 @@ Config.deltaPos_LFoot = [ 0.000 0.00  0.000; ...   % state = 1 two feet balancin
 %% Gains matrices
 
 % CoM position and velocity gains
-Gains.Kp_CoM = [50, 50, 50; ...  % state = 1 two feet balancing
-                50, 50, 50; ...  % state = 2 move CoM on left foot
-                50, 50, 50; ...  % state = 3 left foot balancing
-                50, 50, 50; ...  % state = 4 prepare for switching
-                50, 50, 50];     % state = 5 two feet balancing
+Gains.Kp_CoM = 1* [5, 5, 5; ...  % state = 1 two feet balancing
+                5, 5, 5; ...  % state = 2 move CoM on left foot
+                5, 5, 5; ...  % state = 3 left foot balancing
+                5, 5, 5; ...  % state = 4 prepare for switching
+                5, 5, 5];     % state = 5 two feet balancing
                 
 Gains.Kd_CoM = 2*sqrt(Gains.Kp_CoM);
 
 % Feet position and velocity gains
-Gains.Kp_LFoot = [50, 50, 50, 30, 30, 30; ... % state = 1 two feet balancing
-                  50, 50, 50, 30, 30, 30; ... % state = 2 move CoM on left foot
-                  50, 50, 50, 30, 30, 30; ... % state = 3 left foot balancing
-                  50, 50, 50, 30, 30, 30; ... % state = 4 prepare for switching
-                  50, 50, 50, 30, 30, 30];    % state = 5 two feet balancing
+Gains.Kp_LFoot = 2*[5, 5, 5, 3, 3, 3; ... % state = 1 two feet balancing
+                  5, 5, 5, 3, 3, 3; ... % state = 2 move CoM on left foot
+                  5, 5, 5, 3, 3, 3; ... % state = 3 left foot balancing
+                  5, 5  5, 3, 3, 3; ... % state = 4 prepare for switching
+                  5, 5, 5, 3, 3, 3];    % state = 5 two feet balancing
               
 Gains.Kd_LFoot = 2*sqrt(Gains.Kp_LFoot);
 
-Gains.Kp_RFoot = [50, 50, 50, 30, 30, 30; ... % state = 1 two feet balancing
-                  50, 50, 50, 30, 30, 30; ... % state = 2 move CoM on left foot
-                  50, 50, 50, 30, 30, 30; ... % state = 3 left foot balancing
-                  50, 50, 50, 30, 30, 30; ... % state = 4 prepare for switching
-                  50, 50, 50, 30, 30, 30];    % state = 5 two feet balancing
+Gains.Kp_RFoot = 2*[5, 5, 5, 3, 3, 3; ... % state = 1 two feet balancing
+                  5, 5, 5, 3, 3, 3; ... % state = 2 move CoM on left foot
+                  5, 5, 5, 3, 3, 3; ... % state = 3 left foot balancing
+                  5, 5, 5, 3, 3, 3; ... % state = 4 prepare for switching
+                  5, 5, 5, 3, 3, 3];    % state = 5 two feet balancing
 
 Gains.Kd_RFoot = 2*sqrt(Gains.Kp_RFoot); 
 
 % Root link orientation and angular velocity gains
-Gains.Kp_rot_task = [20, 20, 20; ...  % state = 1 two feet balancing
-                     20, 20, 20; ...  % state = 2 move CoM on left foot
-                     20, 20, 20; ...  % state = 3 left foot balancing
-                     20, 20, 20; ...  % state = 4 prepare for switching
-                     20, 20, 20];     % state = 5 two feet balancing
+Gains.Kp_rot_task = 0.5*[3, 3, 3; ...  % state = 1 two feet balancing
+                     3, 3, 3; ...  % state = 2 move CoM on left foot
+                     3, 3, 3; ...  % state = 3 left foot balancing
+                     3, 3, 3; ...  % state = 4 prepare for switching
+                     3, 3, 3];     % state = 5 two feet balancing
                  
 Gains.Kd_rot_task =  2*sqrt(Gains.Kp_rot_task); 
 
 % Hand position and velocity gains
-Gains.Kp_LHand = 0.001*[50, 50, 50, 30, 30, 30; ... % state = 1 two feet balancing
-                  50, 50, 50, 30, 30, 30; ... % state = 2 move CoM on left foot
-                  50, 50, 50, 30, 30, 30; ... % state = 3 left foot balancing
-                  50, 50, 50, 30, 30, 30; ... % state = 4 prepare for switching
-                  50, 50, 50, 30, 30, 30];    % state = 5 two feet balancing
+Gains.Kp_LHand = 0.001*[5, 5, 5, 3, 3, 3; ... % state = 1 two feet balancing
+                  5, 5, 5, 3, 3, 3; ... % state = 2 move CoM on left foot
+                  5, 5, 5, 3, 3, 3; ... % state = 3 left foot balancing
+                  5, 5, 5, 3, 3, 3; ... % state = 4 prepare for switching
+                  5, 5, 5, 3, 3, 3];    % state = 5 two feet balancing
               
 Gains.Kd_LHand = 2*sqrt(Gains.Kp_LHand);
 
-Gains.Kp_RHand = 0.001*[50, 50, 50, 30, 30, 30; ... % state = 1 two feet balancing
-                  50, 50, 50, 30, 30, 30; ... % state = 2 move CoM on left foot
-                  50, 50, 50, 30, 30, 30; ... % state = 3 left foot balancing
-                  50, 50, 50, 30, 30, 30; ... % state = 4 prepare for switching
-                  50, 50, 50, 30, 30, 30];    % state = 5 two feet balancing
+Gains.Kp_RHand = 0.001*[5, 5, 5, 3, 3, 3; ... % state = 1 two feet balancing
+                  5, 5, 5, 3, 3, 3; ... % state = 2 move CoM on left foot
+                  5, 5, 5, 3, 3, 3; ... % state = 3 left foot balancing
+                  5, 5, 5, 3, 3, 3; ... % state = 4 prepare for switching
+                  5, 5, 5, 3, 3, 3];    % state = 5 two feet balancing
 
 Gains.Kd_RHand = 2*sqrt(Gains.Kp_RHand); 
 
@@ -250,11 +256,11 @@ Gains.impedances = [20  20  20,  10  10  10  8,  10  10  20  8,  30  30  30  60 
                     20  20  20,  10  10  10  8,  10  10  20  8,  30  30  30  60  10  10,  30  30  30  60  10  10;  ... % state = 4 prepare for switching
                     20  20  20,  10  10  10  8,  10  10  20  8,  30  30  30  60  10  10,  30  30  30  60  10  10]; ... % state = 5 two feet balancing
                 
-Gains.dampings   = 0 * sqrt(Gains.impedances); %zeros(size(Gains.impedances));
+Gains.dampings   = 2 * sqrt(Gains.impedances); %zeros(size(Gains.impedances));
 
 % Joints position and velocity gains for inverse kinematics
 Gains.ikin_impedances = Gains.impedances(1,:);
-Gains.ikin_dampings   = 2*sqrt(Gains.ikin_impedances); 
+Gains.ikin_dampings   = Gains.dampings(1,:); % 2*sqrt(Gains.ikin_impedances); 
     
 %% Constraints for QP for balancing - friction cone - z-moment - in terms of f
 
