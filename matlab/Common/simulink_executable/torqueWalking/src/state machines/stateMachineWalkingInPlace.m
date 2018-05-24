@@ -43,7 +43,7 @@
 function [w_H_b, feetInContact, state, references_LFoot, references_RFoot, references_CoM, ...
           references_rot_task, references_LHand, references_RHand, references_s] = stateMachineWalkingInPlace ...
              (s_0, w_H_LFoot, w_H_LFoot_0, w_H_RFoot, w_H_RFoot_0, w_H_CoM, w_H_CoM_0, w_H_rot_task_0, ...
-              w_H_LHand_0, w_H_RHand_0, LFoot_H_b, RFoot_H_b, LFoot_wrench, RFoot_wrench, t, Config)
+              w_H_LHand_0, w_H_RHand_0, LFoot_H_b, RFoot_H_b, LFoot_wrench, RFoot_wrench, t, Config, Sat)
           
      persistent currentState t_switch w_H_fixed_link stance_foot
      
@@ -196,7 +196,7 @@ function [w_H_b, feetInContact, state, references_LFoot, references_RFoot, refer
          w_H_b = w_H_fixed_link*stanceFoot_H_b;
          
          % Feet in contact
-         if ~swingFoot_wrench(3)
+         if swingFoot_wrench(3) < Sat.toll_feetInContact
              % allow the swing foot to keep moving,
              % while it is being placed on the ground
              % if stance_foot == 0, feetInContact = [1,0];
