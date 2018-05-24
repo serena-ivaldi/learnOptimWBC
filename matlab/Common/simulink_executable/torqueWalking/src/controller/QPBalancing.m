@@ -287,6 +287,15 @@ function QPBalancing(block)
                    -Sat.tauDot_max*Config.t_step+tau_previousStep];
         end
         
+        if Config.USE_JOINT_LIMITS
+            %add torque limits in QP constraints
+            ub = [inf*ones(length(g)-ROBOT_DOF,1); Sat.jointTorqueLimits];
+            lb = -ub;
+        else
+            lb = [];
+            ub = [];
+        end
+        
         % Enforce symmetry of the Hessian matrix. Given the Hessian matrix
         % is symmetrix, and anyway the term x'*H*x is 0 if H is a
         % skew-symmetric matrix, we enforce the symmetry of H
@@ -296,7 +305,8 @@ function QPBalancing(block)
         %% ----------------------------------------------------------------
         %% QP optimization procedure using qpOASES
         %% ----------------------------------------------------------------
-        [u,~,exitFlagQP,~,~,~] = qpOASES(H,g,A,[],[],lbA,ubA);     
+        [u,~,exitFlagQP,~,~,~] = qpOASES(H,g,A,lb,ub,lbA,ubA); %qpOASES(H,g,A,[],[],lbA,ubA);
+        
     
         % separate joint torques (actual control input) from contact forces 
         % for all diffrent cases
