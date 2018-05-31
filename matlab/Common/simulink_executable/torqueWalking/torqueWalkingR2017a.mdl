@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.861"
+    ComputedModelVersion    "1.868"
     NumModelReferences	    0
     NumTestPointedSignals   0
     NumProvidedFunctions    0
@@ -64,7 +64,7 @@ Model {
       }
       Array {
 	Type			"Simulink.EditorInfo"
-	Dimension		7
+	Dimension		8
 	Object {
 	  $ObjectID		  5
 	  IsActive		  [0]
@@ -86,11 +86,11 @@ Model {
 	Object {
 	  $ObjectID		  7
 	  IsActive		  [0]
-	  ViewObjType		  "SimulinkTopLevel"
-	  LoadSaveID		  "0"
+	  ViewObjType		  "SimulinkSubsys"
+	  LoadSaveID		  "4091"
 	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [0.71524966261808365]
-	  Offset		  [-486.73106041845432, -70.805561225348839]
+	  ZoomFactor		  [0.67774936061381075]
+	  Offset		  [-343.11320754716985, -20.656603773584891]
 	}
 	Object {
 	  $ObjectID		  8
@@ -117,22 +117,31 @@ Model {
 	  LoadSaveID		  "5513"
 	  Extents		  [1275.0, 558.0]
 	  ZoomFactor		  [1.0]
-	  Offset		  [391.66979835629712, 216.110483299802]
+	  Offset		  [391.66979835629718, 216.110483299802]
 	}
 	Object {
 	  $ObjectID		  11
 	  IsActive		  [1]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "6883"
+	  ViewObjType		  "SimulinkTopLevel"
+	  LoadSaveID		  "0"
 	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [0.64792176039119809]
-	  Offset		  [-315.48568137940043, 243.93537470377689]
+	  ZoomFactor		  [0.71524966261808365]
+	  Offset		  [-528.79716981132083, -119.57358490566037]
+	}
+	Object {
+	  $ObjectID		  12
+	  IsActive		  [0]
+	  ViewObjType		  "SimulinkSubsys"
+	  LoadSaveID		  "4114"
+	  Extents		  [1275.0, 558.0]
+	  ZoomFactor		  [1.620795107033639]
+	  Offset		  [-216.41140919811323, 10.362264150943389]
 	}
 	PropName		"EditorsInfo"
       }
       Object {
 	$PropName		"DockComponentsInfo"
-	$ObjectID		12
+	$ObjectID		13
 	$ClassName		"Simulink.DockComponentInfo"
 	Type			"GLUE2:PropertyInspector"
 	ID			"Property Inspector"
@@ -162,9 +171,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "mcharbonneau"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu May 24 14:16:22 2018"
-  RTWModifiedTimeStamp	  449072181
-  ModelVersionFormat	  "1.%<AutoIncrement:861>"
+  LastModifiedDate	  "Thu May 31 10:40:41 2018"
+  RTWModifiedTimeStamp	  449664035
+  ModelVersionFormat	  "1.%<AutoIncrement:868>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -214,7 +223,7 @@ Model {
   TryForcingSFcnDF	  off
   Object {
     $PropName		    "DataLoggingOverride"
-    $ObjectID		    13
+    $ObjectID		    14
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
     model_		    "torqueWalkingR2017a"
     overrideMode_	    [0.0]
@@ -259,7 +268,7 @@ Model {
     Type		    "Handle"
     Dimension		    1
     Simulink.ConfigSet {
-      $ObjectID		      14
+      $ObjectID		      15
       Version		      "1.17.0"
       DisabledProps	      []
       Description	      ""
@@ -267,7 +276,7 @@ Model {
 	Type			"Handle"
 	Dimension		9
 	Simulink.SolverCC {
-	  $ObjectID		  15
+	  $ObjectID		  16
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  ""
@@ -307,7 +316,7 @@ Model {
 	  SampleTimeProperty	  []
 	}
 	Simulink.DataIOCC {
-	  $ObjectID		  16
+	  $ObjectID		  17
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  ""
@@ -348,7 +357,7 @@ Model {
 	  LoggingIntervals	  "[-inf, inf]"
 	}
 	Simulink.OptimizationCC {
-	  $ObjectID		  17
+	  $ObjectID		  18
 	  Version		  "1.17.0"
 	  Array {
 	    Type		    "Cell"
@@ -409,7 +418,7 @@ Model {
 	  BusAssignmentInplaceUpdate on
 	}
 	Simulink.DebuggingCC {
-	  $ObjectID		  18
+	  $ObjectID		  19
 	  Version		  "1.17.0"
 	  Array {
 	    Type		    "Cell"
@@ -519,7 +528,7 @@ Model {
 	  UnitDatabase		  ""
 	}
 	Simulink.HardwareCC {
-	  $ObjectID		  19
+	  $ObjectID		  20
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  ""
@@ -567,7 +576,7 @@ Model {
 	  UseSimulinkCoderFeatures on
 	}
 	Simulink.ModelReferenceCC {
-	  $ObjectID		  20
+	  $ObjectID		  21
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  ""
@@ -586,7 +595,7 @@ Model {
 	  SupportModelReferenceSimTargetCustomCode off
 	}
 	Simulink.SFSimCC {
-	  $ObjectID		  21
+	  $ObjectID		  22
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  ""
@@ -616,7 +625,7 @@ Model {
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
-	  $ObjectID		  22
+	  $ObjectID		  23
 	  Version		  "1.17.0"
 	  Array {
 	    Type		    "Cell"
@@ -699,7 +708,7 @@ Model {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
-	      $ObjectID		      23
+	      $ObjectID		      24
 	      Version		      "1.17.0"
 	      Array {
 		Type			"Cell"
@@ -786,7 +795,7 @@ Model {
 	    }
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
-	      $ObjectID		      24
+	      $ObjectID		      25
 	      Version		      "1.17.0"
 	      Array {
 		Type			"Cell"
@@ -882,7 +891,7 @@ Model {
 	  }
 	}
 	SlCovCC.ConfigComp {
-	  $ObjectID		  25
+	  $ObjectID		  26
 	  Version		  "1.17.0"
 	  DisabledProps		  []
 	  Description		  "Simulink Coverage Configuration Component"
@@ -932,11 +941,11 @@ Model {
   }
   Simulink.ConfigSet {
     $PropName		    "ActiveConfigurationSet"
-    $ObjectID		    14
+    $ObjectID		    15
   }
   Object {
     $PropName		    "DataTransfer"
-    $ObjectID		    26
+    $ObjectID		    27
     $ClassName		    "Simulink.GlobalDataTransfer"
     DefaultTransitionBetweenSyncTasks "Ensure deterministic transfer (maximum delay)"
     DefaultTransitionBetweenAsyncTasks "Ensure data integrity only"
@@ -1316,7 +1325,7 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "72"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "7143"
+    SIDHighWatermark	    "7146"
     Block {
       BlockType		      SubSystem
       Name		      "Balancing Controller (Reactive QP control)"
@@ -1330,7 +1339,7 @@ Model {
       System {
 	Name			"Balancing Controller (Reactive QP control)"
 	Location		[53, 27, 1366, 768]
-	Open			off
+	Open			on
 	PortBlocksUseCompactNotation off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1342,7 +1351,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"100"
+	ZoomFactor		"68"
 	Block {
 	  BlockType		  Inport
 	  Name			  "s"
@@ -2177,6 +2186,7 @@ Model {
 	  SID			  "5647"
 	  Position		  [1185, 180, 1225, 210]
 	  ZOrder		  699
+	  ShowName		  off
 	  GotoTag		  "tau_des"
 	  TagVisibility		  "global"
 	}
@@ -2186,6 +2196,7 @@ Model {
 	  SID			  "5648"
 	  Position		  [1010, 295, 1080, 325]
 	  ZOrder		  700
+	  ShowName		  off
 	  GotoTag		  "f_LFoot_des"
 	  TagVisibility		  "global"
 	}
@@ -2195,6 +2206,7 @@ Model {
 	  SID			  "5649"
 	  Position		  [1005, 475, 1085, 505]
 	  ZOrder		  701
+	  ShowName		  off
 	  GotoTag		  "f_RFoot_des"
 	  TagVisibility		  "global"
 	}
@@ -2204,6 +2216,7 @@ Model {
 	  SID			  "5650"
 	  Position		  [1015, 655, 1070, 685]
 	  ZOrder		  702
+	  ShowName		  off
 	  GotoTag		  "exitFlagQP"
 	  TagVisibility		  "global"
 	}
@@ -2213,25 +2226,8 @@ Model {
 	  SID			  "5664"
 	  Position		  [445, 0, 485, 30]
 	  ZOrder		  915
+	  ShowName		  off
 	  GotoTag		  "tau"
-	  TagVisibility		  "global"
-	}
-	Block {
-	  BlockType		  Goto
-	  Name			  "Goto5"
-	  SID			  "7131"
-	  Position		  [500, 114, 570, 136]
-	  ZOrder		  919
-	  GotoTag		  "QP_Hessian"
-	  TagVisibility		  "global"
-	}
-	Block {
-	  BlockType		  Goto
-	  Name			  "Goto6"
-	  SID			  "7132"
-	  Position		  [500, 140, 570, 160]
-	  ZOrder		  920
-	  GotoTag		  "QP_gradient"
 	  TagVisibility		  "global"
 	}
 	Block {
@@ -2247,7 +2243,7 @@ Model {
 	  System {
 	    Name		    "QPSolver (Reactive QP control)"
 	    Location		    [53, 27, 1366, 768]
-	    Open		    off
+	    Open		    on
 	    PortBlocksUseCompactNotation off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -2259,7 +2255,7 @@ Model {
 	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
-	    ZoomFactor		    "163"
+	    ZoomFactor		    "162"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "tau_0"
@@ -2332,10 +2328,20 @@ Model {
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
+	      BlockType		      Goto
+	      Name		      "Goto3"
+	      SID		      "7144"
+	      Position		      [280, 282, 390, 308]
+	      ZOrder		      703
+	      ShowName		      off
+	      GotoTag		      "QP_optObjfun_value"
+	      TagVisibility	      "global"
+	    }
+	    Block {
 	      BlockType		      M-S-Function
 	      Name		      "QPSolver"
 	      SID		      "4123"
-	      Ports		      [8, 4]
+	      Ports		      [8, 5]
 	      Position		      [110, 21, 260, 329]
 	      ZOrder		      390
 	      FunctionName	      "QPBalancing"
@@ -2345,7 +2351,7 @@ Model {
 	      BlockType		      Outport
 	      Name		      "tau"
 	      SID		      "4124"
-	      Position		      [280, 58, 310, 72]
+	      Position		      [280, 48, 310, 62]
 	      ZOrder		      399
 	      IconDisplay	      "Port number"
 	    }
@@ -2353,7 +2359,7 @@ Model {
 	      BlockType		      Outport
 	      Name		      "f_LFoot"
 	      SID		      "4125"
-	      Position		      [280, 133, 310, 147]
+	      Position		      [280, 108, 310, 122]
 	      ZOrder		      400
 	      Port		      "2"
 	      IconDisplay	      "Port number"
@@ -2362,7 +2368,7 @@ Model {
 	      BlockType		      Outport
 	      Name		      "f_RFoot"
 	      SID		      "4126"
-	      Position		      [280, 208, 310, 222]
+	      Position		      [280, 168, 310, 182]
 	      ZOrder		      401
 	      Port		      "3"
 	      IconDisplay	      "Port number"
@@ -2371,7 +2377,7 @@ Model {
 	      BlockType		      Outport
 	      Name		      "exitFlagQP"
 	      SID		      "4127"
-	      Position		      [280, 283, 310, 297]
+	      Position		      [280, 228, 310, 242]
 	      ZOrder		      402
 	      Port		      "4"
 	      IconDisplay	      "Port number"
@@ -2460,6 +2466,13 @@ Model {
 	      DstBlock		      "exitFlagQP"
 	      DstPort		      1
 	    }
+	    Line {
+	      ZOrder		      13
+	      SrcBlock		      "QPSolver"
+	      SrcPort		      5
+	      DstBlock		      "Goto3"
+	      DstPort		      1
+	    }
 	  }
 	}
 	Block {
@@ -2520,18 +2533,8 @@ Model {
 	  ZOrder		  5
 	  SrcBlock		  "Balancing Controller Function"
 	  SrcPort		  2
-	  Points		  [11, 0]
-	  Branch {
-	    ZOrder		    129
-	    Points		    [0, -205]
-	    DstBlock		    "Goto6"
-	    DstPort		    1
-	  }
-	  Branch {
-	    ZOrder		    128
-	    DstBlock		    "QPSolver (Reactive QP control)"
-	    DstPort		    4
-	  }
+	  DstBlock		  "QPSolver (Reactive QP control)"
+	  DstPort		  4
 	}
 	Line {
 	  ZOrder		  6
@@ -2669,18 +2672,8 @@ Model {
 	  ZOrder		  39
 	  SrcBlock		  "Balancing Controller Function"
 	  SrcPort		  1
-	  Points		  [2, 0]
-	  Branch {
-	    ZOrder		    127
-	    Points		    [0, -140]
-	    DstBlock		    "Goto5"
-	    DstPort		    1
-	  }
-	  Branch {
-	    ZOrder		    126
-	    DstBlock		    "QPSolver (Reactive QP control)"
-	    DstPort		    3
-	  }
+	  DstBlock		  "QPSolver (Reactive QP control)"
+	  DstPort		  3
 	}
 	Line {
 	  ZOrder		  22
@@ -2797,7 +2790,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"100"
+	ZoomFactor		"47"
 	Block {
 	  BlockType		  Inport
 	  Name			  "s"
@@ -26183,7 +26176,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		27
+	$ObjectID		28
 	$ClassName		"Simulink.Mask"
 	Display			"disp('DATA FOR LEARNOPTIM_WBC')"
 	RunInitForIconRedraw	"off"
@@ -26191,7 +26184,7 @@ Model {
       System {
 	Name			"Subsystem"
 	Location		[53, 27, 1366, 768]
-	Open			on
+	Open			off
 	PortBlocksUseCompactNotation off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -26203,7 +26196,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"65"
+	ZoomFactor		"73"
 	Block {
 	  BlockType		  From
 	  Name			  "From1"
@@ -26236,6 +26229,16 @@ Model {
 	}
 	Block {
 	  BlockType		  From
+	  Name			  "From12"
+	  SID			  "7145"
+	  Position		  [135, 588, 245, 612]
+	  ZOrder		  1079
+	  ShowName		  off
+	  GotoTag		  "QP_optObjfun_value"
+	  TagVisibility		  "global"
+	}
+	Block {
+	  BlockType		  From
 	  Name			  "From13"
 	  SID			  "6838"
 	  Position		  [155, 296, 215, 314]
@@ -26258,7 +26261,7 @@ Model {
 	  BlockType		  From
 	  Name			  "From15"
 	  SID			  "6840"
-	  Position		  [155, 511, 220, 539]
+	  Position		  [155, 656, 220, 684]
 	  ZOrder		  989
 	  ShowName		  off
 	  GotoTag		  "exitFlagQP"
@@ -26308,7 +26311,7 @@ Model {
 	  BlockType		  From
 	  Name			  "From46"
 	  SID			  "6843"
-	  Position		  [155, 571, 195, 599]
+	  Position		  [155, 521, 195, 549]
 	  ZOrder		  992
 	  ShowName		  off
 	  GotoTag		  "tau"
@@ -26421,6 +26424,18 @@ Model {
 	  Position		  [965, 510, 1015, 550]
 	  ZOrder		  998
 	  ShowName		  off
+	}
+	Block {
+	  BlockType		  ToWorkspace
+	  Name			  "QP optObjfun_value"
+	  SID			  "7146"
+	  Ports			  [1]
+	  Position		  [475, 585, 570, 615]
+	  ZOrder		  1080
+	  VariableName		  "QP_optObjfun_value"
+	  MaxDataPoints		  "inf"
+	  SaveFormat		  "Timeseries"
+	  SampleTime		  "-1"
 	}
 	Block {
 	  BlockType		  Selector
@@ -26696,9 +26711,9 @@ Model {
 	  Name			  "exitFlagQP"
 	  SID			  "6688"
 	  Ports			  [1]
-	  Position		  [495, 510, 555, 540]
+	  Position		  [495, 655, 555, 685]
 	  ZOrder		  995
-	  VariableName		  "exitFlagQP"
+	  VariableName		  "QP_exitFlag"
 	  MaxDataPoints		  "inf"
 	  SaveFormat		  "Timeseries"
 	  SampleTime		  "-1"
@@ -26732,7 +26747,7 @@ Model {
 	  Name			  "measured torques"
 	  SID			  "6808"
 	  Ports			  [1]
-	  Position		  [495, 570, 555, 600]
+	  Position		  [495, 520, 555, 550]
 	  ZOrder		  985
 	  VariableName		  "torques"
 	  MaxDataPoints		  "inf"
@@ -28502,6 +28517,13 @@ Model {
 	  DstBlock		  "task_errors"
 	  DstPort		  1
 	}
+	Line {
+	  ZOrder		  785
+	  SrcBlock		  "From12"
+	  SrcPort		  1
+	  DstBlock		  "QP optObjfun_value"
+	  DstPort		  1
+	}
       }
     }
     Block {
@@ -28519,7 +28541,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		28
+	$ObjectID		29
 	$ClassName		"Simulink.Mask"
 	Display			"disp('VISUALIZE AND DUMP DATA \\n EARLY TERMINATION')"
       }
@@ -37479,7 +37501,7 @@ Model {
       Variant		      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		29
+	$ObjectID		30
 	$ClassName		"Simulink.Mask"
 	Display			"disp('SYNCHRONIZER')"
       }
@@ -42737,9 +42759,6 @@ Stateflow {
     screen		    [1 1 3600 1200 1.180555555555556]
     treeNode		    [0 211 0 0]
     viewObj		    210
-    visible		    1
-    subviewS {
-    }
     ssIdHighWaterMark	    54
     decomposition	    CLUSTER_CHART
     type		    EML_CHART
@@ -45587,9 +45606,6 @@ Stateflow {
     screen		    [1 1 1280 1024 1.041050272174191]
     treeNode		    [0 343 0 0]
     viewObj		    342
-    visible		    1
-    subviewS {
-    }
     ssIdHighWaterMark	    25
     decomposition	    CLUSTER_CHART
     type		    EML_CHART

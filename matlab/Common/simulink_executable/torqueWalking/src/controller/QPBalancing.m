@@ -23,6 +23,7 @@
 %         - tau = [n * 1] joint torques
 %         - exitFlag = it returns 0 if the QP solver did not fail, a different 
 %                      number otherwise
+%         - optObjFun_value = value of the optimal objective function
 %
 % Authors: Daniele Pucci, Marie Charbonneau, Gabriele Nava
 %          
@@ -40,7 +41,7 @@ function QPBalancing(block)
     function setup(block)
         
         block.NumInputPorts  = 8; 
-        block.NumOutputPorts = 4;
+        block.NumOutputPorts = 5;
         
         % Setup port properties to be dynamic
         block.SetPreCompInpPortInfoToDynamic;
@@ -52,6 +53,7 @@ function QPBalancing(block)
         block.OutputPort(2).Dimensions = 6;                       % f Left foot
         block.OutputPort(3).Dimensions = 6;                       % f Right foot     
         block.OutputPort(4).Dimensions = 1;                       % Exit flag QP  
+        block.OutputPort(5).Dimensions = 1;                       % Optimal objective function value 
         
         % Input format
         for i=1:block.NumInputPorts
@@ -305,8 +307,7 @@ function QPBalancing(block)
         %% ----------------------------------------------------------------
         %% QP optimization procedure using qpOASES
         %% ----------------------------------------------------------------
-        [u,~,exitFlagQP,~,~,~] = qpOASES(H,g,A,lb,ub,lbA,ubA); %qpOASES(H,g,A,[],[],lbA,ubA);
-        
+        [u,optObjfun_value,exitFlagQP,~,~,~] = qpOASES(H,g,A,lb,ub,lbA,ubA); %qpOASES(H,g,A,[],[],lbA,ubA); 
     
         % separate joint torques (actual control input) from contact forces 
         % for all diffrent cases
@@ -344,6 +345,7 @@ function QPBalancing(block)
         block.OutputPort(2).Data = f_LFoot;
         block.OutputPort(3).Data = f_RFoot; 
         block.OutputPort(4).Data = exitFlagQP;
+        block.OutputPort(5).Data = optObjfun_value;
     
     end
 

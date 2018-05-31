@@ -22,8 +22,9 @@ classdef torqueWalkingMessage < Messaging.AbstractMessage
 %           controller.simulation_iterator                = 1;
           controller.simulation_results.task_errors     = task_errors.Data;
           controller.simulation_results.joint_error     = joint_error.Data(:,:)';
-          controller.simulation_results.torques         = torques.Data; %this is a timeseries of the vector of joint torques
-          controller.simulation_results.exitFlagQP      = exitFlagQP.Data;
+          controller.simulation_results.torques         = torques.Data; %this is a timeseries of the vector of measured joint torques
+          controller.simulation_results.QP_optObjFunVal = QP_optObjFunVal.Data;
+          controller.simulation_results.QP_exitFlag     = QP_exitFlag.Data;
           controller.simulation_results.zmp             = ZMP.Data;
           controller.simulation_results.pose_CoM        = pose_CoM.Data(:,:)';
           controller.simulation_results.support_polygon = support_polygon.Data; %this is a matrix of the size (2,2,nsamples)
@@ -31,6 +32,7 @@ classdef torqueWalkingMessage < Messaging.AbstractMessage
           controller.simulation_results.pose_lFoot      = pose_lFoot.Data(:,:)';
           controller.simulation_results.pose_rFoot      = pose_rFoot.Data(:,:)';
           controller.simulation_results.time            = time;
+          
           s  = s_sim.Data;
           sd = sd_sim.Data;
           t  = params.tStart:params.sim_step:params.tEnd; 
@@ -42,7 +44,8 @@ classdef torqueWalkingMessage < Messaging.AbstractMessage
         task_errors          = results.get('task_errors');
         joint_error          = results.get('joint_error');
         torques              = results.get('torques');
-        exitFlagQP           = results.get('exitFlagQP');
+        QP_optObjFunVal      = results.get('QP_optObjfun_value');
+        QP_exitFlag          = results.get('QP_exitFlag');
         ZMP                  = results.get('ZMP');
         feet_in_contact      = results.get('feet_in_contact');
         support_polygon      = results.get('support_polygon');
@@ -54,8 +57,10 @@ classdef torqueWalkingMessage < Messaging.AbstractMessage
         time                 = results.get('tout');
         
         %% simulationResults.mat has to be saved in common/simulink_executable
-        save(obj.outputfromsimulink, 'task_errors', 'joint_error', 'torques', 'exitFlagQP', ...
-            'ZMP', 'feet_in_contact', 'support_polygon', 'pose_CoM', 'pose_lFoot', 'pose_rFoot', 's_sim', 'sd_sim', 'time');
+        save(obj.outputfromsimulink, 'task_errors', 'joint_error', 'torques', ...
+            'QP_optObjFunVal', 'QP_exitFlag', ...
+            'feet_in_contact', 'ZMP', 'support_polygon', ...
+            'pose_CoM', 'pose_lFoot', 'pose_rFoot', 's_sim', 'sd_sim', 'time');
       end
    end
     

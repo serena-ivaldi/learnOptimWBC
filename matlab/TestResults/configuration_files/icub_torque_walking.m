@@ -22,11 +22,11 @@ params.scenario_name         = scenario_name;
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti   = 0;    %initial time
-time_struct.tf   = 60;   %final time
+time_struct.tf   = 40;   %final time
 time_struct.step = 0.01; %time step (fixed step integrator)
 
 % parameters used in DynSim_iCubSim for detecting whether the process got stuck
-params.max_timer = time_struct.tf * 2 + 100; %maximum time expected for a successful run of threadSimulink
+params.max_timer = time_struct.tf * 2 + 150; %maximum time expected for a successful run of threadSimulink
 params.max_consecutive_fails_counter = 5; %number of failed runs of threadSimulink, after which all programs are killed and restarted
 
 %% TASK PARAMETERS
@@ -89,8 +89,8 @@ params.foot.xmax    = params.footSize(1,2);
 params.foot.ymin    = params.footSize(2,1);
 params.foot.ymax    = params.footSize(2,2);
 
-params.footSizeForOptimization = params.footSize;  %[-0.07  0.12 ;    % xMin, xMax
-                                                   %-0.045 0.05];      % yMin, yMax   
+params.footSizeForOptimization = params.footSize;  %[-0.07  0.12;    % xMin, xMax
+                                                   % -0.045 0.05];    % yMin, yMax   
 
 %% PARAMETERS FOR CONTROLLER AND FITNESS FUNCTION (fitnessHumanoidsiCubTorqueWalking)
 
@@ -118,6 +118,9 @@ time_law_sec = {'linear'};
 geom_parameters_sec{1,1} = [pi/2 0 -pi/2]; % regulation
 dim_of_task_sec{1,1}={[1;1;1]};
 
+params.robot_LBjointLimit = bot1.LBjointLimit';
+params.robot_UBjointLimit = bot1.UBjointLimit';
+params.robot_torqueLimit  = bot1.effortLimit';
 
 %% Parameters Dependant on the type of controller
 
@@ -154,14 +157,14 @@ switch CONTROLLERTYPE
             constraints_functions{k+1} = 'LinInequality2'; %lower bound joint/torque limit
         end
         
-        %%Constraint: QP exit flag must be 0
-        constraints_functions{end+1} = 'LinEquality'; 
-        constraints_values = [constraints_values, 0];
-        
-        %Constraint: check balance, ZMP must remain within support polygon
-        % with the empty constraints it means that i compute the constraints directly inside the fitness function and i provide the result through the input of the empty constraints
-        constraints_functions{end+1} = 'EmptyConstraints';
-        constraints_values = [constraints_values,nan];   % vector that contains some constants that are used by the function in constraints_functions to compute the constraints_violation
+%         %%Constraint: QP exit flag must be 0
+%         constraints_functions{end+1} = 'LinEquality'; 
+%         constraints_values = [constraints_values, 0];
+%         
+%         %Constraint: check balance, ZMP must remain within support polygon
+%         % with the empty constraints it means that i compute the constraints directly inside the fitness function and i provide the result through the input of the empty constraints
+%         constraints_functions{end+1} = 'EmptyConstraints';
+%         constraints_values = [constraints_values,nan];   % vector that contains some constants that are used by the function in constraints_functions to compute the constraints_violation
        
         %% we do this small addition to limit the joint below a fixed treshold
         torqueThreshold = 60;
@@ -180,9 +183,9 @@ switch CONTROLLERTYPE
         activate_constraints_handling = true;
         
         %% INSTANCE PARAMETER
-        preprocessing = @EmptyPreprocessing;
-        run_function = @RobotExperiment;
-        fitness = @fitnessHumanoidsiCubTorqueWalkingGlobal; %Conservative; %@fitnessHumanoidsiCubTorqueWalkingGlobal, @fitnessHumanoidsiCubTorqueWalkingHybrid
+        preprocessing  = @EmptyPreprocessing;
+        run_function   = @RobotExperiment;
+        fitness        = @fitnessTorqueWalking_QPcosts; %@fitnessHumanoidsiCubTorqueWalkingGlobal; %Conservative; %@fitnessHumanoidsiCubTorqueWalkingGlobal, @fitnessHumanoidsiCubTorqueWalkingHybrid
         clean_function = @RobotExperimentCleanData;
         
         input{1} = simulator_type{1};  % rbt / v-rep
@@ -195,12 +198,12 @@ switch CONTROLLERTYPE
         %--- Starting value of parameters
         generation_of_starting_point = 'test'; % 'test':user defined by user_defined_start_action 'given':is redundant with test  'random': random starting point
         %init_parameters = 6;
-      
-        user_defined_start_action = [1, 1, 0.01, 0.01, 0.001, 0.0001]; 
+        %'weightStanceFoot' 'weightSwingFoot' 'weightHand' 'weightRotTask' 'weightPostural' 'weightTau' 
+        user_defined_start_action = [1, 1, 0, 0.01, 0.001, 0.0001]; 
         explorationRate = 0.1; %0.5; %Value in the range [0, 1]
-        niter = 50; %500;  %number of generations
-        cmaes_value_range{1} = [1e-4, 1e-4, 0.0, 0.0, 1e-6, 1e-10]; % lower bound that defines the search space
-        cmaes_value_range{2} = [ 2.0,  2.0, 2.0, 2.0,  1.0, 1e-01]; % upper bound that defines the search space
+        niter = 500;  %number of generations
+        cmaes_value_range{1} = [1e-4, 1e-4, 0.0, 1e-4, 1e-6, 1e-10]; % lower bound that defines the search space
+        cmaes_value_range{2} = [ 2.0,  2.0, 1.0,  2.0,  1.0, 1e-01]; % upper bound that defines the search space
         learn_approach = '(1+1)CMAES'; %CMAES (1+1)CMAES
         %--- Parameter for constraints method
         method_to_use = 'nopenalty';  % adaptive , vanilla , empty 'nopenalty'
