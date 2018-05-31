@@ -61,9 +61,11 @@ Config.ONLY_BALANCING = false;
 % If Config.ONLY_BALANCING = false, (WALKING_IN_PLACE DEMO ONLY)
 % the robot will balance before it starts moving 
 % for the time Config.t_balancing
-Config.t_balancing = 5;
+Config.t_balancing_min = 2;
 % and the movements will need the following precision
-Config.precision_threshold = 0.02;
+Config.precision_threshold = 0.025;
+% each state lasting no more than Config.t_balancing_max
+Config.t_balancing_max = 3 * Config.t_balancing_min;
 
 % If true, simulation is stopped when qpOASES outputs a "-2" error (QP is unfeasible)
 Config.CHECK_QP_ERROR = true;

@@ -108,7 +108,7 @@ function [w_H_b, feetInContact, state, references_LFoot, references_RFoot, refer
      w_H_b = w_H_fixed_link*stanceFoot_H_b;
      
      % Change state
-     if ~Config.ONLY_BALANCING && t > Config.t_balancing && currentState == 1
+     if ~Config.ONLY_BALANCING && t > Config.t_balancing_min && currentState == 1
          currentState = 2;
          t_switch = t;
      end
@@ -124,7 +124,7 @@ function [w_H_b, feetInContact, state, references_LFoot, references_RFoot, refer
          references_CoM = [[w_H_stanceFoot_0(1:2,4);w_H_CoM_0(3,4)], zeros(3,2)];
          
          % Switch to the next state
-         if norm(w_H_CoM(1:3,4) - references_CoM(:, 1)) < Config.precision_threshold && t > (t_switch + Config.t_balancing)
+         if (norm(w_H_CoM(1:3,4) - references_CoM(:, 1)) < Config.precision_threshold && t > (t_switch + Config.t_balancing_min)) || (t > (t_switch + Config.t_balancing_max))
              
              currentState = 3; % stance foot balancing
              t_switch = t;
@@ -158,7 +158,7 @@ function [w_H_b, feetInContact, state, references_LFoot, references_RFoot, refer
          end
      
          % Switch to the next state
-         if t > (t_switch + Config.t_balancing) 
+         if t > (t_switch + Config.t_balancing_min) 
             currentState = 4; % prepare for switching
             t_switch = t;
          end 
@@ -181,7 +181,7 @@ function [w_H_b, feetInContact, state, references_LFoot, references_RFoot, refer
          feetInContact = [1-stance_foot, 1-~stance_foot];
      
          % Switch to the next state
-         if ((norm(w_H_RFoot(1:3,4) - w_H_RFoot_0(1:3, 4)) + norm(w_H_LFoot(1:3,4) - w_H_LFoot_0(1:3, 4))) < Config.precision_threshold) && (t > (t_switch + 1.2 * Config.t_balancing)) 
+         if ((norm(w_H_RFoot(1:3,4) - w_H_RFoot_0(1:3, 4)) + norm(w_H_LFoot(1:3,4) - w_H_LFoot_0(1:3, 4))) < Config.precision_threshold) && (t > (t_switch + Config.t_balancing_min)) || (t > (t_switch + Config.t_balancing_max)) 
             currentState = 5; % back to two feet balancing
             t_switch = t;
          end 
@@ -205,7 +205,7 @@ function [w_H_b, feetInContact, state, references_LFoot, references_RFoot, refer
          end
          
          % Switch to the next state
-         if norm(w_H_CoM(1:3,4) - references_CoM(:, 1)) < Config.precision_threshold && t > (t_switch + Config.t_balancing)        
+         if (norm(w_H_CoM(1:3,4) - references_CoM(:, 1)) < Config.precision_threshold && t > (t_switch + Config.t_balancing_min)) || (t > (t_switch + Config.t_balancing_max))       
              currentState = 2; % back to the beginning
              t_switch = t;
              %Switch swing foot
