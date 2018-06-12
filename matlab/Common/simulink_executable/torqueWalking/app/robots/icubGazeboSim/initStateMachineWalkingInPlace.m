@@ -22,7 +22,7 @@ Frames.COM = 'com';
 Frames.BASE_LINK = 'root_link';
 Frames.LEFT_FOOT = 'l_sole';
 Frames.RIGHT_FOOT = 'r_sole';
-Frames.ROT_TASK_LINK = 'neck_2';
+Frames.ROT_TASK_LINK = 'neck_2'; %'torso_1';
 Frames.LEFT_HAND = 'l_wrist_1';
 Frames.RIGHT_HAND = 'r_wrist_1';
 
@@ -184,15 +184,28 @@ Config.smoothingTimeGains    = 2*[1;1;1;1;1];
 % dimension: [m]
 % format: [x;y;z]
 %
+
+if ~CONFIG.FOOT_LIFT_FRONT %move the foot towards the back and up
+    delta_balancing = [-0.025 0.00 0.025];
+elseif CONFIG.FOOT_LIFT_FRONT %move the foot towards the front and up
+    delta_balancing = [0.025 0.00 0.025];
+end
+
+if CONFIG.COM_DELTA
+    Config.delta_com = [0.02; 0];
+else
+    Config.delta_com = [0; 0];
+end
+
 Config.deltaPos_RFoot = [ 0.000 0.00  0.000; ...   % state = 1 two feet balancing
                           0.000 0.00  0.000; ...   % state = 2 move CoM on left foot
-                         -0.025 0.00  0.025; ...   % state = 3 left foot balancing
+                          delta_balancing;   ...   % state = 3 left foot balancing
                           0.000 0.00  0.000; ...   % state = 4 prepare for switching
                           0.000 0.00  0.000];      % state = 5 two feet balancing
                       
 Config.deltaPos_LFoot = [ 0.000 0.00  0.000; ...   % state = 1 two feet balancing
                           0.000 0.00  0.000; ...   % state = 2 move CoM on right foot
-                         -0.025 0.00  0.025; ...   % state = 3 right foot balancing
+                          delta_balancing;   ...   % state = 3 right foot balancing
                           0.000 0.00  0.000; ...   % state = 4 prepare for switching
                           0.000 0.00  0.000];      % state = 5 two feet balancing                      
    

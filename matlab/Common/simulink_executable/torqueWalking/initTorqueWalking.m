@@ -15,8 +15,12 @@
 %% --- Initialization ---
 
 %% for stand alone execution remove comment on the following lines
-% clc; clear all; close all;
+% clc; close all; clear all;
 % load('inputData.mat')
+CONFIG.APPLY_EXTERNAL_WRENCH = 0;
+CONFIG.ADD_NOISE_FT_SENSORS = 0;
+CONFIG.FOOT_LIFT_FRONT = 0; %0 is lifting the foot towards the back; 1 is lifting the foot towards the front
+CONFIG.COM_DELTA = 0; %move the CoM to the front (except for two feet balancing)
 %
 
 % NOTE: if you are simulating the robot with Gazebo, remember that you have
