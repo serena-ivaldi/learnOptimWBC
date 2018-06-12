@@ -3,8 +3,12 @@ if exist('exitFlagQP_unsuccessful', 'var')
         disp("Early termination due to unsuccessful QP");
     elseif no_force_on_feet.Data(end)
         disp("Early termination due to no forces on feet");
-    elseif ZMP_out_of_bounds.Data(end)
-        disp("Early termination due to ZMP out of support polygon");
+    elseif exist('ZMP_out_of_bounds', 'var') 
+        if ZMP_out_of_bounds.Data(end)
+            disp("Early termination due to ZMP out of support polygon");
+        else
+            disp("Normal termination at end of simulation time");
+        end
     else
         disp("Normal termination at end of simulation time");
     end
@@ -15,8 +19,10 @@ if exist('results', 'var')
         disp("Early termination due to unsuccessful QP");
     elseif results.no_force_on_feet.Data(end)
         disp("Early termination due to no forces on feet");
-    elseif results.ZMP_out_of_bounds.Data(end)
-        disp("Early termination due to ZMP out of support polygon");
+    elseif exist('results.ZMP_out_of_bounds', 'var')
+        if results.ZMP_out_of_bounds.Data(end)
+            disp("Early termination due to ZMP out of support polygon");
+        end
     else
         disp("Normal termination at end of simulation time");
     end

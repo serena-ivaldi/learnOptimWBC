@@ -121,7 +121,7 @@ function [w_H_b, feetInContact, state, references_LFoot, references_RFoot, refer
          w_H_b = w_H_fixed_link*stanceFoot_H_b;
          
          % Keep CoM on stance foot
-         references_CoM = [[w_H_stanceFoot_0(1:2,4);w_H_CoM_0(3,4)], zeros(3,2)];
+         references_CoM = [[w_H_stanceFoot_0(1:2,4) + Config.delta_com; w_H_CoM_0(3,4)], zeros(3,2)];
          
          % Switch to the next state
          if (norm(w_H_CoM(1:3,4) - references_CoM(:, 1)) < Config.precision_threshold && t > (t_switch + Config.t_balancing_min)) || (t > (t_switch + Config.t_balancing_max))
@@ -140,7 +140,7 @@ function [w_H_b, feetInContact, state, references_LFoot, references_RFoot, refer
          w_H_b = w_H_fixed_link*stanceFoot_H_b;
          
          % Keep CoM on stance foot
-         references_CoM = [[w_H_stanceFoot_0(1:2,4);w_H_CoM_0(3,4)], zeros(3,2)];
+         references_CoM = [[w_H_stanceFoot_0(1:2,4) + Config.delta_com; w_H_CoM_0(3,4)], zeros(3,2)];
          
          % Feet in contact 
          % if stance_foot == 0, feetInContact = [1,0]; 
@@ -158,7 +158,7 @@ function [w_H_b, feetInContact, state, references_LFoot, references_RFoot, refer
          end
      
          % Switch to the next state
-         if t > (t_switch + Config.t_balancing_min) 
+         if t > (t_switch + Config.t_balancing_min) || ((norm(w_H_RFoot(1:3,4) - w_H_RFoot_0(1:3, 4)) + norm(w_H_LFoot(1:3,4) - w_H_LFoot_0(1:3, 4))) < Config.precision_threshold) %|| (t > (t_switch + Config.t_balancing_max))
             currentState = 4; % prepare for switching
             t_switch = t;
          end 
@@ -173,15 +173,15 @@ function [w_H_b, feetInContact, state, references_LFoot, references_RFoot, refer
          w_H_b = w_H_fixed_link*stanceFoot_H_b;
          
          % Keep CoM on stance foot
-         references_CoM = [[w_H_stanceFoot_0(1:2,4); w_H_CoM_0(3,4)], zeros(3,2)];
+         references_CoM = [[w_H_stanceFoot_0(1:2,4) + Config.delta_com; w_H_CoM_0(3,4)], zeros(3,2)];
         
          % Feet in contact 
          % if stance_foot == 0, feetInContact = [1,0]; 
          % if stance_foot == 1, feetInContact = [0,1];
          feetInContact = [1-stance_foot, 1-~stance_foot];
      
-         % Switch to the next state
-         if ((norm(w_H_RFoot(1:3,4) - w_H_RFoot_0(1:3, 4)) + norm(w_H_LFoot(1:3,4) - w_H_LFoot_0(1:3, 4))) < Config.precision_threshold) && (t > (t_switch + Config.t_balancing_min)) || (t > (t_switch + Config.t_balancing_max)) 
+         % Switch to the next state %(norm(w_H_CoM(1:3,4) - references_CoM(:, 1)) < Config.precision_threshold) &&
+         if (( (norm(w_H_RFoot(1:3,4) - w_H_RFoot_0(1:3, 4)) + norm(w_H_LFoot(1:3,4) - w_H_LFoot_0(1:3, 4))) < Config.precision_threshold) && (t > (t_switch + Config.t_balancing_min))) || (t > (t_switch + Config.t_balancing_max)) 
             currentState = 5; % back to two feet balancing
             t_switch = t;
          end 
