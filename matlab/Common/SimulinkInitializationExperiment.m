@@ -4,7 +4,7 @@ function [simulink_schemes_global,local_path,matlab_LD_LIBRARY_PATH,new_matlab_L
     C = strsplit(matlab_LD_LIBRARY_PATH,':');
     new_matlab_LD_LIBRARY_PATH = "";
     for i=3:numel(C)
-        new_matlab_LD_LIBRARY_PATH = new_matlab_LD_LIBRARY_PATH + convertCharsToStrings(C{i}) + ":";
+        new_matlab_LD_LIBRARY_PATH = new_matlab_LD_LIBRARY_PATH + string(C{i}) + ":";
     end
     new_matlab_LD_LIBRARY_PATH = char(new_matlab_LD_LIBRARY_PATH);
     s = ' ';
