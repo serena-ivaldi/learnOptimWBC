@@ -6,7 +6,7 @@ function [simulink_schemes_global,local_path,matlab_LD_LIBRARY_PATH,new_matlab_L
     for i=3:numel(C)
         new_matlab_LD_LIBRARY_PATH = new_matlab_LD_LIBRARY_PATH + convertCharsToStrings(C{i}) + ":";
     end
-    new_matlab_LD_LIBRARY_PATH = convertStringsToChars(new_matlab_LD_LIBRARY_PATH);
+    new_matlab_LD_LIBRARY_PATH = char(new_matlab_LD_LIBRARY_PATH);
     s = ' ';
     %% change folder (move to the folder with the simulink scheme)
     fullPath = which('find_simulatorIcubSim.m');
@@ -82,7 +82,7 @@ function [simulink_schemes_global,local_path,matlab_LD_LIBRARY_PATH,new_matlab_L
     % reset the robot in the starting position
     setenv('LD_LIBRARY_PATH', new_matlab_LD_LIBRARY_PATH);
     system('gz world -r');
-     setenv('LD_LIBRARY_PATH', matlab_LD_LIBRARY_PATH);
+    setenv('LD_LIBRARY_PATH', matlab_LD_LIBRARY_PATH);
     %% remove the results file from the the TBstandup folder to manage the case where i did not cancel this file properly
     % remove the file with all the data inside
     
