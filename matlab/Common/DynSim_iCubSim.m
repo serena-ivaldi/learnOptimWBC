@@ -38,7 +38,9 @@ function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
             fclose(fileID);
             commandkill = strcat('kill -9',{' '},C{1});
             system(commandkill{1});
+            setenv('LD_LIBRARY_PATH', params.new_matlab_LD_LIBRARY_PATH);
             system('gz world -r');
+            setenv('LD_LIBRARY_PATH', params.matlab_LD_LIBRARY_PATH);
             pause(3);
             % create a new process with the same value
             run_command = ['gnome-terminal -- sh -c " cd' s params.simulink_schemes_global s '&& ./save_pid.sh && ./matlab_link -nodesktop -r threadSimulink; bash"'];
@@ -63,20 +65,28 @@ function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
                         pause(3)
                         clear simulator
                         pause(3)
+                        setenv('LD_LIBRARY_PATH', params.new_matlab_LD_LIBRARY_PATH);
                         system('gnome-terminal -- sh -c "yarpserver; bash"');
+                        setenv('LD_LIBRARY_PATH', params.matlab_LD_LIBRARY_PATH);
                         pause(3)
                         scenario_path = which('FindData.m');
                         scenario_path = fileparts(scenario_path);
                         scenario_path = strcat(scenario_path,'/scenarios');
                         command_gazebo = ['gnome-terminal -- sh -c "cd' s scenario_path s '&& gazebo -slibgazebo_yarp_clock.so'];
                         command_gazebo = [command_gazebo,s,params.scenario_name '; bash"'];
+                        setenv('LD_LIBRARY_PATH', params.new_matlab_LD_LIBRARY_PATH);
                         system(command_gazebo)
+                        setenv('LD_LIBRARY_PATH', params.matlab_LD_LIBRARY_PATH);
                         pause(3)
                         % this is a temporary switch for the old codyco branch; it will be deleted in the future
                         if(strcmp(params.codyco,'old'))
+                            setenv('LD_LIBRARY_PATH', params.new_matlab_LD_LIBRARY_PATH);
                             system('gnome-terminal -- sh -c "wholeBodyDynamicsTree --autoconnect --robot icubSim; bash"');
+                            setenv('LD_LIBRARY_PATH', params.matlab_LD_LIBRARY_PATH);
                         else
-                            system('gnome-terminal -- sh -c "yarprobotinterface --config launch-wholebodydynamics.xml; bash"')
+                            setenv('LD_LIBRARY_PATH', params.new_matlab_LD_LIBRARY_PATH);
+                            system('gnome-terminal -- sh -c "yarprobotinterface --config launch-wholebodydynamics.xml; bash"');
+                            setenv('LD_LIBRARY_PATH', params.matlab_LD_LIBRARY_PATH);
                         end
                         pause(3)
                         disp('too many consecutive fails; I restart all the programs')
@@ -117,19 +127,27 @@ function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
         pause(3)
         system('pkill -f gazebo');
         pause(3)
+        setenv('LD_LIBRARY_PATH', params.new_matlab_LD_LIBRARY_PATH);
         [xx,yy] = system('yarp clean  --timeout 1.0');
+        setenv('LD_LIBRARY_PATH', params.matlab_LD_LIBRARY_PATH);
         scenario_path = which('FindData.m');
         scenario_path = fileparts(scenario_path);
         scenario_path = strcat(scenario_path,'/scenarios');
         command_gazebo = ['gnome-terminal -- sh -c "cd' s scenario_path s '&& gazebo -slibgazebo_yarp_clock.so'];
-        command_gazebo = [command_gazebo,s,params.scenario_name '; bash"'];
+        command_gazebo = [command_gazebo,s,params.scenario_name '; bash"'];        
+        setenv('LD_LIBRARY_PATH', params.new_matlab_LD_LIBRARY_PATH);
         system(command_gazebo);
+        setenv('LD_LIBRARY_PATH', params.matlab_LD_LIBRARY_PATH);
         pause(3)
         % this is a temporary switch for the old codyco branch; it will be deleted in the future
         if(strcmp(params.codyco,'old'))
+            setenv('LD_LIBRARY_PATH', params.new_matlab_LD_LIBRARY_PATH);
             system('gnome-terminal -- sh -c "wholeBodyDynamicsTree --autoconnect --robot icubSim; bash"');
+            setenv('LD_LIBRARY_PATH', params.matlab_LD_LIBRARY_PATH);
         else
+            setenv('LD_LIBRARY_PATH', params.new_matlab_LD_LIBRARY_PATH);
             system('gnome-terminal -- sh -c "yarprobotinterface --config launch-wholebodydynamics.xml; bash"');
+            setenv('LD_LIBRARY_PATH', params.matlab_LD_LIBRARY_PATH);
         end
         pause(3)
     end
@@ -155,8 +173,9 @@ function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
     % kill windows hosting the matlab thread
     system(commandkill{1});
     % clean yarp
+    setenv('LD_LIBRARY_PATH', params.new_matlab_LD_LIBRARY_PATH);
     [xx,yy]=system('yarp clean  --timeout 1.0');
-    
+    setenv('LD_LIBRARY_PATH', params.matlab_LD_LIBRARY_PATH);
 end
 
 

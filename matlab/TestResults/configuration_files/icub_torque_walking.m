@@ -18,7 +18,7 @@ params.name_simulink_schemes = name_simulink_schemes;
 params.codyco                = codyco;
 params.messenger             = messenger;
 params.scenario_name         = scenario_name;
-[params.simulink_schemes_global,params.path_to_local_simscheme] = SimulinkInitializationExperiment(name_simulink_folder,scenario_name,codyco);
+[params.simulink_schemes_global,params.path_to_local_simscheme,params.matlab_LD_LIBRARY_PATH,params.new_matlab_LD_LIBRARY_PATH] = SimulinkInitializationExperiment(name_simulink_folder,scenario_name,codyco);
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti   = 0;    %initial time

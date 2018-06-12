@@ -26,7 +26,9 @@ elseif(strcmp(obj.input_4_run{1},'icub_matlab'))
     obj.input_4_run{1, 2}.numContacts       = obj.input_4_run{1, 2}.contact_sym.UpdateContact();
     controller = obj.input_4_run{4};
 elseif(strcmp(obj.input_4_run{1},'icub_matlab_sim'))
+    setenv('LD_LIBRARY_PATH', obj.input_4_run{2}.new_matlab_LD_LIBRARY_PATH);
     system('gz world -r')
+    setenv('LD_LIBRARY_PATH', obj.input_4_run{2}.matlab_LD_LIBRARY_PATH);
     controller = obj.input_4_run{4};
 end
 controller.CleanTau();
