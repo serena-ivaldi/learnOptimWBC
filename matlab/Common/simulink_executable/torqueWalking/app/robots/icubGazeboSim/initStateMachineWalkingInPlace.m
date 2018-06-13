@@ -14,6 +14,30 @@
 
 %% --- Initialization ---
 
+%%% LEARNOPTIMWBC INITIALIZATION
+CONFIG.ADD_NOISE_FT_SENSORS  = params.config.ADD_NOISE_FT_SENSORS; %generate gaussian noise on input F/T sensor signals
+CONFIG.FOOT_LIFT_FRONT       = params.config.FOOT_LIFT_FRONT; %0 is lifting the foot towards the back; 1 is lifting the foot towards the front
+CONFIG.COM_DELTA             = params.config.COM_DELTA; %when config.COM_DELTA = 0.02, move the CoM 0.02 m to the front (except during two feet balancing)
+CONFIG.APPLY_EXTERNAL_WRENCH = params.config.APPLY_EXTERNAL_WRENCH; %External wrenches applied in Gazebo
+external_force               = params.external_force;
+
+% Weight matrix for the cartesian tasks
+%weightRotTask; weightStanceFoot; weightSwingFoot; weightPostural; weight_tau; were obtained from inputData.mat 
+Sat.weightCoM        = 1; %weightCoM is not included since it is set to be a constant value of 1
+Sat.weightRotTask    = weightRotTask;
+Sat.weightStanceFoot = weightStanceFoot;
+Sat.weightSwingFoot  = weightSwingFoot;
+Sat.weightLeftHand   = weightHand; %set to 0 if you don't want to let hands move freely
+Sat.weightRightHand  = weightHand; %set to 0 if you don't want to let hands move freely
+
+% Weight for the postural minimization task
+Sat.weightPostural = weightPostural;
+
+% Weight for the joint minimization task
+Sat.weight_tau = weight_tau;
+%%%
+
+
 % SIMULATION SETUP
 %
 % Frames name list
@@ -82,6 +106,7 @@ Sat.jointTorqueLimits = params.robot_torqueLimit;
 Sat.ub_jointLimits    = params.robot_UBjointLimit;
 Sat.lb_jointLimits    = params.robot_LBjointLimit;
 
+
 %% Robot setup 
 
 % Joint torque saturation
@@ -89,23 +114,6 @@ Sat.tau_max = 60; % [Nm]
 
 % Saturation on state jerk (for QP based inverse kinematics)
 Sat.nuDDot_max = 10000;
-
-
-% Weight matrix for the cartesian tasks
-%% For learnOptimWBC
-%weightRotTask; weightStanceFoot; weightSwingFoot; weightPostural; weight_tau; were obtained from inputData.mat 
-Sat.weightCoM        = 1; %weightCoM is not included since it is set to be a constant value of 1
-Sat.weightRotTask    = weightRotTask;
-Sat.weightStanceFoot = weightStanceFoot;
-Sat.weightSwingFoot  = weightSwingFoot;
-Sat.weightLeftHand   = weightHand; %set to 0 if you don't want to let hands move freely
-Sat.weightRightHand  = weightHand; %set to 0 if you don't want to let hands move freely
-
-% Weight for the postural minimization task
-Sat.weightPostural = weightPostural; %0.001;
-
-% Weight for the joint minimization task
-Sat.weight_tau = weight_tau; %0.1*Sat.weightPostural;
 
 % Numerical tolerance for assuming a foot on contact
 Sat.toll_feetInContact = 0.1;
@@ -192,7 +200,7 @@ elseif CONFIG.FOOT_LIFT_FRONT %move the foot towards the front and up
 end
 
 if CONFIG.COM_DELTA
-    Config.delta_com = [0.02; 0];
+    Config.delta_com = [CONFIG.COM_DELTA; 0];
 else
     Config.delta_com = [0; 0];
 end
