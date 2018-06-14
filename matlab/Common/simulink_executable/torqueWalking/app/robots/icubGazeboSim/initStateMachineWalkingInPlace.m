@@ -79,7 +79,8 @@ Config.FILTER_IMU_PITCH = false;
 
 % True if left foot is initially in contact with the ground (if false,
 % right foot is assumed to be in contact) (WALKING_IN_PLACE DEMO ONLY)
-Config.LFoot_in_contact_at0 = true; %false;
+%% we are randominzing the starting foot in order to get cover both legs of the robot during the optimization phase
+Config.LFoot_in_contact_at0 = randi(2)-1; %true; %false;
 
 % If true, the robot will just balance on two feet (WALKING_IN_PLACE DEMO ONLY)
 Config.ONLY_BALANCING = false;

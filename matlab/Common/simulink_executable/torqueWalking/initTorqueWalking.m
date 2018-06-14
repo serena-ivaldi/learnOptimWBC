@@ -15,8 +15,8 @@
 %% --- Initialization ---
 
 %% for stand alone execution remove comment on the following lines
-% clc; close all; clear all;
-% load('inputData.mat')
+ clc; close all; clear all;
+ load('inputData.mat')
 % %
 
 % NOTE: if you are simulating the robot with Gazebo, remember that you have

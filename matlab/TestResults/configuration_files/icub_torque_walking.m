@@ -22,7 +22,7 @@ params.scenario_name         = scenario_name;
 %% GENERAL PARAMETERS
 % for other strucutures
 time_struct.ti   = 0;    %initial time
-time_struct.tf   = 40;   %final time
+time_struct.tf   = 10;   %final time
 time_struct.step = 0.01; %time step (fixed step integrator)
 
 % parameters used in DynSim_iCubSim for detecting whether the process got stuck

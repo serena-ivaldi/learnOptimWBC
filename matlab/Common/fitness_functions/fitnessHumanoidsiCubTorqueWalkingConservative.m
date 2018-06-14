@@ -1,4 +1,4 @@
-function [fit,failure]  = fitnessHumanoidsiCubTorqueWalking(obj,output)
+function [fit,failure]  = fitnessHumanoidsiCubTorqueWalkingConservative(obj,output)
 % fitness function of the icub controlled with the torqueWalking controller
 % we try to optimize:
 % (minimize) error of desired task values (and posture error if desired)

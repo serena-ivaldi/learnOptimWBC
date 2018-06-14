@@ -1,12 +1,12 @@
 Model {
   Name			  "torqueWalkingR2017a"
-  Version		  8.9
+  Version		  9.0
   SavedCharacterEncoding  "UTF-8"
   GraphicalInterface {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.951"
+    ComputedModelVersion    "1.958"
     NumModelReferences	    0
     NumTestPointedSignals   0
     NumProvidedFunctions    0
@@ -16,6 +16,789 @@ Model {
     HasTerminateEvent	    0
     IsExportFunctionModel   0
     NumParameterArguments   0
+    NumExternalFileReferences 117
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyStates/Get Measurement"
+      Path		      "torqueWalkingR2017a/Balancing Controller (Reactive QP control)/Compute joint torques (motor reflect"
+      "ed inertia)/Get Measurement"
+      SID		      "7116"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyStates/Get Measurement"
+      Path		      "torqueWalkingR2017a/Balancing Controller (Reactive QP control)/Get Measurement"
+      SID		      "7100"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Balancing Controller (Reactive QP control)/holder "
+      SID		      "4159"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Configuration"
+      Path		      "torqueWalkingR2017a/Configuration"
+      SID		      "7103"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/DotJ Nu CoM"
+      SID		      "4189"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/DotJ Nu LFoot"
+      SID		      "4192"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/DotJ Nu LHand"
+      SID		      "6393"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/DotJ Nu RFoot"
+      SID		      "4190"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/DotJ Nu RHand"
+      SID		      "6394"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/DotJ Nu rotational task"
+      SID		      "4191"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/Jacobian CoM"
+      SID		      "4193"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/Jacobian LFoot"
+      SID		      "4194"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/Jacobian LHand"
+      SID		      "6389"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/Jacobian RFoot"
+      SID		      "4195"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/Jacobian RHand"
+      SID		      "6390"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/Jacobian rotational task"
+      SID		      "4196"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Dynamics/Get Bias Forces"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Mass Matrix an"
+      "d Bias Forces/Get Bias Forces"
+      SID		      "4210"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Dynamics/Mass Matrix"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Mass Matrix an"
+      "d Bias Forces/Mass Matrix"
+      SID		      "4211"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Initial Conditions/   1"
+      SID		      "5547"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Initial Conditions/   2"
+      SID		      "4231"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Initial Conditions/Compute world to base transform/left"
+      " foot"
+      SID		      "4254"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Initial Conditions/Compute world to base transform/left"
+      " foot1"
+      SID		      "5613"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Initial Conditions/Compute world to base transform/root"
+      "_link"
+      SID		      "4255"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Initial Conditions/compute state velocity/Feet Jacobian"
+      "s/Jacobian LFoot"
+      SID		      "5630"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Initial Conditions/compute state velocity/Feet Jacobian"
+      "s/Jacobian RFoot"
+      SID		      "5631"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/CoM"
+      SID		      "4296"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/LFoot"
+      SID		      "4297"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/LFoot1"
+      SID		      "6628"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/RFoot"
+      SID		      "4298"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/RFoot1"
+      SID		      "6629"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/rotational task"
+      SID		      "4299"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/DotJ Nu CoM"
+      SID		      "4313"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/DotJ Nu LFoot"
+      SID		      "4316"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/DotJ Nu LHand"
+      SID		      "6638"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/DotJ Nu RHand"
+      SID		      "6639"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/DotJ Nu Rfoot"
+      SID		      "4314"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/DotJ Nu rotati"
+      "onal task"
+      SID		      "4315"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/Jacobian CoM"
+      SID		      "4317"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/Jacobian LFoot"
+      SID		      "4318"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/Jacobian LFoot1"
+      SID		      "6634"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/Jacobian RFoot"
+      SID		      "4319"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/Jacobian RFoot1"
+      SID		      "6635"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/Jacobian rotat"
+      "ional task"
+      SID		      "4320"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/QP-Based Inverse Kinematics/DoFs con"
+      "verter1"
+      SID		      "7074"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Visualize Inverse Kinematics/DoFs co"
+      "nverter"
+      SID		      "4388"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Visualize Inverse Kinematics/DoFs co"
+      "nverter1"
+      SID		      "4389"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Visualize Inverse Kinematics/DoFs co"
+      "nverter2"
+      SID		      "4390"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Visualize Inverse Kinematics/DoFs co"
+      "nverter3"
+      SID		      "4391"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Visualize Inverse Kinematics/DoFs co"
+      "nverter4"
+      SID		      "4392"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Visualize Inverse Kinematics/DoFs co"
+      "nverter5"
+      SID		      "4393"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Visualize Inverse Kinematics/DoFs co"
+      "nverter6"
+      SID		      "4394"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Task Accelerations/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/CoM"
+      SID		      "4455"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Task Accelerations/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/LFoot"
+      SID		      "4456"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Task Accelerations/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/LHand"
+      SID		      "6618"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Task Accelerations/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/RFoot"
+      SID		      "4457"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Task Accelerations/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/RHand"
+      SID		      "6619"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Task Accelerations/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/rotational task"
+      SID		      "4458"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
+      Path		      "torqueWalkingR2017a/Robot State and References/Gain Scheduling/Minimum Jerk Trajectory Generator5"
+      SID		      "4544"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Orientations/Com"
+      "pute Smoothed Ref Orientations/holder "
+      SID		      "4618"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Orientations/Com"
+      "pute Smoothed Ref Orientations/holder 1"
+      SID		      "4619"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Orientations/Com"
+      "pute Smoothed Ref Orientations/holder 2"
+      SID		      "4620"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Orientations/Com"
+      "pute Smoothed Ref Orientations/holder 3"
+      SID		      "6356"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Orientations/Com"
+      "pute Smoothed Ref Orientations/holder 4"
+      SID		      "6357"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Positions/Minimu"
+      "m Jerk Trajectory Generator"
+      SID		      "4633"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Positions/Minimu"
+      "m Jerk Trajectory Generator1"
+      SID		      "4634"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Positions/Minimu"
+      "m Jerk Trajectory Generator2"
+      SID		      "4635"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Positions/Minimu"
+      "m Jerk Trajectory Generator3"
+      SID		      "4636"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Positions/Minimu"
+      "m Jerk Trajectory Generator5"
+      SID		      "6303"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Positions/Minimu"
+      "m Jerk Trajectory Generator6"
+      SID		      "6304"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "commchan3/AWGN\nChannel"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Add Gaussian noise/AWGN Channel1"
+      SID		      "7297"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "commchan3/AWGN\nChannel"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Add Gaussian noise/AWGN Channel2"
+      SID		      "7291"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "LFoot to base link transform /Fixed base to imu transform"
+      SID		      "4719"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "LFoot to base link transform /Fixed base to root link transform"
+      SID		      "4728"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Yarp Read"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "LFoot to base link transform /Neck Position"
+      SID		      "4711"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "LFoot to base link transform /holder 1"
+      SID		      "4717"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "LFoot to base link transform /holder 2"
+      SID		      "4718"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "LFoot to world transform (fixed base)"
+      SID		      "4704"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "RFoot to base link transform/Fixed base to imu transform"
+      SID		      "5424"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "RFoot to base link transform/Fixed base to root link transform"
+      SID		      "5425"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Yarp Read"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "RFoot to base link transform/Neck Position"
+      SID		      "5428"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "RFoot to base link transform/holder 1"
+      SID		      "5432"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "RFoot to base link transform/holder 2"
+      SID		      "5433"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "RFoot to world transform (fixed base)"
+      SID		      "5443"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute State Velocity/Feet Jacobians"
+      "/Jacobian LFoot"
+      SID		      "4764"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute State Velocity/Feet Jacobians"
+      "/Jacobian RFoot"
+      SID		      "4765"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyStates/Get Measurement"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Get Measurement"
+      SID		      "7098"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyStates/Get Measurement"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Get Measurement1"
+      SID		      "7099"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Yarp Read"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/IMU measurements"
+      SID		      "4557"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/holder 1"
+      SID		      "4673"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/holder 2"
+      SID		      "4674"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/holder 3"
+      SID		      "4675"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/holder 4"
+      SID		      "4676"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/holder 5"
+      SID		      "4677"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/holder 6"
+      SID		      "6280"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/holder 7"
+      SID		      "6281"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/task position and orientation/CoM"
+      SID		      "4681"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/task position and orientation/LArm"
+      SID		      "6276"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/task position and orientation/LFoot"
+      SID		      "4682"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/task position and orientation/RArm"
+      SID		      "6277"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/task position and orientation/RFoot"
+      SID		      "4683"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/task position and orientation/rotational task"
+      SID		      "4684"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Yarp Read"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/left_foot_wrench"
+      SID		      "7122"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Yarp Read"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/right_foot_wrench"
+      SID		      "7123"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyActuators/Set References"
+      Path		      "torqueWalkingR2017a/Set References"
+      SID		      "4828"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
+      Path		      "torqueWalkingR2017a/Visualization/Emergency Stop/Compare To Constant"
+      SID		      "6792"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
+      Path		      "torqueWalkingR2017a/Visualization/Emergency Stop/Compare To Constant1"
+      SID		      "6794"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Visualization/Forces and Torques/DoFs converter"
+      SID		      "4141"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Visualization/Forces and Torques/DoFs converter1"
+      SID		      "4142"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Visualization/Forces and Torques/DoFs converter2"
+      SID		      "4143"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Visualization/Gain Scheduling/DoFs converter1"
+      SID		      "5876"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Visualization/Gain Scheduling/DoFs converter4"
+      SID		      "5874"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Visualization/Joints and Floating Base State/DoFs converter"
+      SID		      "4778"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Visualization/Joints and Floating Base State/DoFs converter1"
+      SID		      "4779"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Visualization/Joints and Floating Base State/DoFs converter2"
+      SID		      "4780"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Visualization/Joints and Floating Base State/DoFs converter3"
+      SID		      "4781"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Simulator Synchronizer"
+      Path		      "torqueWalkingR2017a/synchronizer/GAZEBO_SYNCHRONIZER/Simulator Synchronizer"
+      SID		      "4832"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Real Time Synchronizer"
+      Path		      "torqueWalkingR2017a/synchronizer/REAL_TIME_SYNC/Real Time Synchronizer"
+      SID		      "4837"
+      Type		      "LIBRARY_BLOCK"
+    }
     OrderedModelArguments   1
   }
   LogicAnalyzerGraphicalSettings ""
@@ -23,6 +806,7 @@ Model {
   LogicAnalyzerSignalOrdering ""
   DiagnosticSuppressor	  "on"
   SuppressorTable	  "22 serialization::archive 11 0 6 0 0 0 11 0"
+  CustomCodeFunctionData  ""
   SLCCPlugin		  "on"
   ScopeRefreshTime	  0.035000
   OverrideScopeRefreshTime on
@@ -45,7 +829,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [709.0, 27.0, 657.0, 741.0]
+      Location		      [-1301.0, -744.0, 1301.0, 744.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -67,19 +851,19 @@ Model {
 	Dimension		6
 	Object {
 	  $ObjectID		  5
-	  IsActive		  [0]
+	  IsActive		  [1]
 	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4452"
-	  Extents		  [1275.0, 558.0]
-	  ZoomFactor		  [0.9106529209621993]
-	  Offset		  [157.69111143867929, 219.35070656740442]
+	  LoadSaveID		  "6883"
+	  Extents		  [1263.0, 589.0]
+	  ZoomFactor		  [0.73]
+	  Offset		  [0.0, 0.0]
 	}
 	Object {
 	  $ObjectID		  6
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "4524"
-	  Extents		  [1275.0, 558.0]
+	  Extents		  [1263.0, 589.0]
 	  ZoomFactor		  [0.909090909090909]
 	  Offset		  [446.01171874999989, 264.59999999999997]
 	}
@@ -88,7 +872,7 @@ Model {
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "7149"
-	  Extents		  [1275.0, 558.0]
+	  Extents		  [1263.0, 589.0]
 	  ZoomFactor		  [1.25]
 	  Offset		  [0.0, 0.0]
 	}
@@ -97,16 +881,16 @@ Model {
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "5513"
-	  Extents		  [1275.0, 558.0]
+	  Extents		  [1263.0, 589.0]
 	  ZoomFactor		  [1.5]
 	  Offset		  [358.86383647798789, 329.19685534591213]
 	}
 	Object {
 	  $ObjectID		  9
-	  IsActive		  [1]
+	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "7262"
-	  Extents		  [619.0, 558.0]
+	  Extents		  [1263.0, 589.0]
 	  ZoomFactor		  [4.568965517241379]
 	  Offset		  [-59.528301886792462, -38.064150943396228]
 	}
@@ -139,11 +923,11 @@ Model {
       "AAAAAAA+wAAABYARABvAGMAawBXAGkAZABnAGUAdAA0AAAAAAD/////AAAAAAAAAAD7AAAAUgBHAEwAVQBFADIAIAB0AHIAZQBlACAAYwBvAG0Ac"
       "ABvAG4AZQBuAHQALwBHAEwAVQBFADIAIAB0AHIAZQBlACAAYwBvAG0AcABvAG4AZQBuAHQAAAAAAP////8AAABiAP///wAAAAEAAAAAAAAAAPwCA"
       "AAAAfsAAABUAEcATABVAEUAMgA6AFAAcgBvAHAAZQByAHQAeQBJAG4AcwBwAGUAYwB0AG8AcgAvAFAAcgBvAHAAZQByAHQAeQAgAEkAbgBzAHAAZ"
-      "QBjAHQAbwByAAAAAAD/////AAAALAD///8AAAKRAAACcgAAAAEAAAACAAAAAQAAAAL8AAAAAQAAAAIAAAAP/////wAAAAAA/////wAAAAAAAAAA/"
+      "QBjAHQAbwByAAAAAAD/////AAAALAD///8AAAUVAAACkQAAAAEAAAACAAAAAQAAAAL8AAAAAQAAAAIAAAAP/////wAAAAAA/////wAAAAAAAAAA/"
       "////wEAAAAA/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/"
       "////wEAAACA/////wAAAAAAAAAA/////wEAAADo/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wEAAAFo/////wAAAAAAAAAA/"
-      "////wAAAAAA/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wEAAAIt/////wAAAAAAAAAA/"
-      "////wEAAAJf/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA"
+      "////wAAAAAA/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wEAAAOH/////wAAAAAAAAAA/"
+      "////wEAAAO5/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA"
     }
   }
   HideAutomaticNames	  on
@@ -151,12 +935,11 @@ Model {
   Creator		  "gnava"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "mcharbonneau"
+  LastModifiedBy	  "vale"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Jun 13 17:36:35 2018"
-  RTWModifiedTimeStamp	  450812187
-  ModelVersionFormat	  "1.%<AutoIncrement:951>"
-  ConfigurationManager	  "none"
+  LastModifiedDate	  "Thu Jun 14 18:06:17 2018"
+  RTWModifiedTimeStamp	  450900372
+  ModelVersionFormat	  "1.%<AutoIncrement:958>"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
   LibraryLinkDisplay	  "disabled"
@@ -184,6 +967,7 @@ Model {
   BlockNameDataTip	  off
   BlockParametersDataTip  off
   BlockDescriptionStringDataTip	off
+  BlockVariantConditionDataTip off
   ToolBar		  on
   StatusBar		  on
   BrowserShowLibraryLinks off
@@ -251,7 +1035,7 @@ Model {
     Dimension		    1
     Simulink.ConfigSet {
       $ObjectID		      13
-      Version		      "1.17.0"
+      Version		      "1.17.1"
       DisabledProps	      []
       Description	      ""
       Array {
@@ -259,7 +1043,7 @@ Model {
 	Dimension		9
 	Simulink.SolverCC {
 	  $ObjectID		  14
-	  Version		  "1.17.0"
+	  Version		  "1.17.1"
 	  DisabledProps		  []
 	  Description		  ""
 	  StartTime		  "0.0"
@@ -267,7 +1051,6 @@ Model {
 	  AbsTol		  "auto"
 	  FixedStep		  "Config.t_step"
 	  InitialStep		  "auto"
-	  MaxNumMinSteps	  "-1"
 	  MaxOrder		  5
 	  ZcThreshold		  "auto"
 	  ConsecutiveZCsStepRelTol "10*128*eps"
@@ -279,7 +1062,6 @@ Model {
 	  MaxConsecutiveMinStep	  "1"
 	  RelTol		  "1e-3"
 	  EnableMultiTasking	  on
-	  EnableConcurrentExecution off
 	  ConcurrentTasks	  off
 	  Solver		  "FixedStepDiscrete"
 	  SolverName		  "FixedStepDiscrete"
@@ -296,10 +1078,11 @@ Model {
 	  SampleTimeConstraint	  "Unconstrained"
 	  InsertRTBMode		  "Whenever possible"
 	  SampleTimeProperty	  []
+	  DecoupledContinuousIntegration off
 	}
 	Simulink.DataIOCC {
 	  $ObjectID		  15
-	  Version		  "1.17.0"
+	  Version		  "1.17.1"
 	  DisabledProps		  []
 	  Description		  ""
 	  Decimation		  "1"
@@ -340,7 +1123,7 @@ Model {
 	}
 	Simulink.OptimizationCC {
 	  $ObjectID		  16
-	  Version		  "1.17.0"
+	  Version		  "1.17.1"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    8
@@ -398,10 +1181,11 @@ Model {
 	  OptimizeBlockOrder	  "off"
 	  OptimizeDataStoreBuffers on
 	  BusAssignmentInplaceUpdate on
+	  DifferentSizesBufferReuse off
 	}
 	Simulink.DebuggingCC {
 	  $ObjectID		  17
-	  Version		  "1.17.0"
+	  Version		  "1.17.1"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    1
@@ -440,6 +1224,7 @@ Model {
 	  MultiTaskRateTransMsg	  "error"
 	  SingleTaskRateTransMsg  "none"
 	  TasksWithSamePriorityMsg "warning"
+	  ExportedTasksRateTransMsg "none"
 	  SigSpecEnsureSampleTimeMsg "warning"
 	  CheckMatrixSingularityMsg "none"
 	  IntegerOverflowMsg	  "warning"
@@ -481,6 +1266,7 @@ Model {
 	  StateNameClashWarn	  "none"
 	  SimStateInterfaceChecksumMismatchMsg "warning"
 	  SimStateOlderReleaseMsg "error"
+	  ChecksumConsistencyForSSReuse	"none"
 	  InitInArrayFormatMsg	  "warning"
 	  StrictBusMsg		  "ErrorLevel1"
 	  BusNameAdapt		  "WarnAndRepair"
@@ -507,11 +1293,14 @@ Model {
 	  AllowedUnitSystems	  "all"
 	  UnitsInconsistencyMsg	  "warning"
 	  AllowAutomaticUnitConversions	on
+	  RCSCRenamedMsg	  "warning"
+	  RCSCObservableMsg	  "warning"
+	  ForceCombineOutputUpdateInSim	off
 	  UnitDatabase		  ""
 	}
 	Simulink.HardwareCC {
 	  $ObjectID		  18
-	  Version		  "1.17.0"
+	  Version		  "1.17.1"
 	  DisabledProps		  []
 	  Description		  ""
 	  ProdBitPerChar	  8
@@ -559,7 +1348,7 @@ Model {
 	}
 	Simulink.ModelReferenceCC {
 	  $ObjectID		  19
-	  Version		  "1.17.0"
+	  Version		  "1.17.1"
 	  DisabledProps		  []
 	  Description		  ""
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
@@ -578,7 +1367,7 @@ Model {
 	}
 	Simulink.SFSimCC {
 	  $ObjectID		  20
-	  Version		  "1.17.0"
+	  Version		  "1.17.1"
 	  DisabledProps		  []
 	  Description		  ""
 	  SimCustomSourceCode	  ""
@@ -608,7 +1397,7 @@ Model {
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
 	  $ObjectID		  21
-	  Version		  "1.17.0"
+	  Version		  "1.17.1"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    13
@@ -656,6 +1445,7 @@ Model {
 	  CustomLibrary		  ""
 	  CustomDefine		  ""
 	  CustomLAPACKCallback	  ""
+	  CustomFFTCallback	  ""
 	  CustomInitializer	  ""
 	  CustomTerminator	  ""
 	  Toolchain		  "Automatically locate an installed toolchain"
@@ -691,7 +1481,7 @@ Model {
 	    Dimension		    2
 	    Simulink.CodeAppCC {
 	      $ObjectID		      22
-	      Version		      "1.17.0"
+	      Version		      "1.17.1"
 	      Array {
 		Type			"Cell"
 		Dimension		27
@@ -731,18 +1521,16 @@ Model {
 	      CommentStyle	      "Auto"
 	      IgnoreCustomStorageClasses on
 	      IgnoreTestpoints	      off
-	      IncHierarchyInIds	      off
 	      MaxIdLength	      31
 	      PreserveName	      off
 	      PreserveNameWithParent  off
 	      ShowEliminatedStatement off
 	      OperatorAnnotations     off
-	      IncAutoGenComments      off
 	      SimulinkDataObjDesc     off
 	      SFDataObjDesc	      off
 	      MATLABFcnDesc	      off
-	      IncDataTypeInIds	      off
 	      MangleLength	      1
+	      SharedChecksumLength    8
 	      CustomSymbolStrGlobalVar "$R$N$M"
 	      CustomSymbolStrType     "$N$R$M_T"
 	      CustomSymbolStrField    "$N$M"
@@ -766,6 +1554,7 @@ Model {
 	      InsertBlockDesc	      off
 	      InsertPolySpaceComments off
 	      SimulinkBlockComments   on
+	      StateflowObjectComments on
 	      MATLABSourceComments    off
 	      EnableCustomComments    off
 	      InternalIdentifierFile  ""
@@ -778,7 +1567,7 @@ Model {
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
 	      $ObjectID		      23
-	      Version		      "1.17.0"
+	      Version		      "1.17.1"
 	      Array {
 		Type			"Cell"
 		Dimension		15
@@ -823,7 +1612,6 @@ Model {
 	      CombineOutputUpdateFcns on
 	      CombineSignalStateStructs	off
 	      SuppressErrorStatus     off
-	      ERTFirstTimeCompliant   off
 	      IncludeFileDelimiter    "Auto"
 	      ERTCustomFileBanners    off
 	      SupportAbsoluteTime     on
@@ -853,6 +1641,9 @@ Model {
 	      CoderGroups	      []
 	      AccessMethods	      []
 	      LookupTableObjectStructAxisOrder "1,2,3,4,..."
+	      LUTObjectStructOrderExplicitValues "Size,Breakpoints,Table"
+	      LUTObjectStructOrderEvenSpacing "Size,Breakpoints,Table"
+	      ArrayLayout	      "Column-major"
 	      UseMalloc		      off
 	      ExtMode		      off
 	      ExtModeStaticAlloc      off
@@ -874,7 +1665,7 @@ Model {
 	}
 	SlCovCC.ConfigComp {
 	  $ObjectID		  24
-	  Version		  "1.17.0"
+	  Version		  "1.17.1"
 	  DisabledProps		  []
 	  Description		  "Simulink Coverage Configuration Component"
 	  Name			  "Simulink Coverage"
@@ -960,7 +1751,12 @@ Model {
     FontSize		    10
     FontWeight		    "normal"
     FontAngle		    "normal"
+    MarkupType		    "model"
     UseDisplayTextAsClickCallback off
+    AnnotationType	    "note_annotation"
+    FixedHeight		    off
+    FixedWidth		    off
+    Interpreter		    "off"
   }
   LineDefaults {
     FontName		    "Helvetica"
@@ -1117,7 +1913,7 @@ Model {
     }
     Block {
       BlockType		      Memory
-      X0		      "0"
+      InitialCondition	      "0"
       InheritSampleTime	      off
       LinearizeMemory	      off
       LinearizeAsDelay	      off
@@ -1151,6 +1947,9 @@ Model {
       OutputWhenDisabled      "held"
       InitialOutput	      "[]"
       MustResolveToSignalObject	off
+      OutputWhenUnConnected   off
+      OutputWhenUnconnectedValue "0"
+      VectorParamsAs1DForOutWhenUnconnected off
     }
     Block {
       BlockType		      PermuteDimensions
@@ -1248,10 +2047,12 @@ Model {
       MaskHideContents	      off
       SFBlockType	      "NONE"
       GeneratePreprocessorConditionals off
+      AllowZeroVariantControls off
       PropagateVariantConditions off
       TreatAsGroupedWhenPropagatingVariantConditions on
       ContentPreviewEnabled   off
       IsWebBlock	      off
+      IsObserver	      off
     }
     Block {
       BlockType		      Sum
@@ -1301,7 +2102,7 @@ Model {
   }
   System {
     Name		    "torqueWalkingR2017a"
-    Location		    [53, 27, 1366, 768]
+    Location		    [65, 24, 1366, 768]
     Open		    off
     PortBlocksUseCompactNotation off
     ModelBrowserVisibility  off
@@ -1329,7 +2130,7 @@ Model {
       Variant		      off
       System {
 	Name			"Balancing Controller (Reactive QP control)"
-	Location		[53, 27, 1366, 768]
+	Location		[709, 27, 1366, 768]
 	Open			on
 	PortBlocksUseCompactNotation off
 	ModelBrowserVisibility	off
@@ -1516,7 +2317,7 @@ Model {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
-	    SIDHighWatermark	    "98"
+	    SIDHighWatermark	    "101"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "feetInContact"
@@ -1654,20 +2455,20 @@ Model {
 	    Block {
 	      BlockType		      Demux
 	      Name		      " Demux "
-	      SID		      "4109::91"
+	      SID		      "4109::100"
 	      Ports		      [1, 1]
 	      Position		      [270, 350, 320, 390]
-	      ZOrder		      81
+	      ZOrder		      84
 	      Outputs		      "1"
 	    }
 	    Block {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
-	      SID		      "4109::90"
+	      SID		      "4109::99"
 	      Tag		      "Stateflow S-Function torqueWalkingR2017a 2"
 	      Ports		      [15, 7]
 	      Position		      [180, 85, 230, 405]
-	      ZOrder		      80
+	      ZOrder		      83
 	      FunctionName	      "sf_sfun"
 	      Parameters	      "Config,ROBOT_DOF,Sat"
 	      PortCounts	      "[15 7]"
@@ -1702,9 +2503,9 @@ Model {
 	    Block {
 	      BlockType		      Terminator
 	      Name		      " Terminator "
-	      SID		      "4109::92"
+	      SID		      "4109::101"
 	      Position		      [460, 361, 480, 379]
-	      ZOrder		      82
+	      ZOrder		      85
 	    }
 	    Block {
 	      BlockType		      Outport
@@ -1760,105 +2561,105 @@ Model {
 	      IconDisplay	      "Port number"
 	    }
 	    Line {
-	      ZOrder		      490
+	      ZOrder		      513
 	      SrcBlock		      "feetInContact"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      491
+	      ZOrder		      514
 	      SrcBlock		      "M"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      2
 	    }
 	    Line {
-	      ZOrder		      492
+	      ZOrder		      515
 	      SrcBlock		      "h"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      3
 	    }
 	    Line {
-	      ZOrder		      493
+	      ZOrder		      516
 	      SrcBlock		      "J"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      4
 	    }
 	    Line {
-	      ZOrder		      494
+	      ZOrder		      517
 	      SrcBlock		      "impedances"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      5
 	    }
 	    Line {
-	      ZOrder		      495
+	      ZOrder		      518
 	      SrcBlock		      "dampings"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      6
 	    }
 	    Line {
-	      ZOrder		      496
+	      ZOrder		      519
 	      SrcBlock		      "s"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      7
 	    }
 	    Line {
-	      ZOrder		      497
+	      ZOrder		      520
 	      SrcBlock		      "sDot"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      8
 	    }
 	    Line {
-	      ZOrder		      498
+	      ZOrder		      521
 	      SrcBlock		      "s_sDot_sDDot_des"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      9
 	    }
 	    Line {
-	      ZOrder		      499
+	      ZOrder		      522
 	      SrcBlock		      "acc_task_star"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      10
 	    }
 	    Line {
-	      ZOrder		      500
+	      ZOrder		      523
 	      SrcBlock		      "JDot_nu"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      11
 	    }
 	    Line {
-	      ZOrder		      501
+	      ZOrder		      524
 	      SrcBlock		      "ConstraintsMatrix_feet"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      12
 	    }
 	    Line {
-	      ZOrder		      502
+	      ZOrder		      525
 	      SrcBlock		      "biasVectorConstraint_feet"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      13
 	    }
 	    Line {
-	      ZOrder		      503
+	      ZOrder		      526
 	      SrcBlock		      "w_H_l_sole"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      14
 	    }
 	    Line {
-	      ZOrder		      504
+	      ZOrder		      527
 	      SrcBlock		      "w_H_r_sole"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
@@ -1866,7 +2667,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "Hessian"
-	      ZOrder		      505
+	      ZOrder		      528
 	      Labels		      [0, 0]
 	      SrcBlock		      " SFunction "
 	      SrcPort		      2
@@ -1875,7 +2676,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "gradient"
-	      ZOrder		      506
+	      ZOrder		      529
 	      Labels		      [0, 0]
 	      SrcBlock		      " SFunction "
 	      SrcPort		      3
@@ -1884,7 +2685,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "ConstraintMatrix_equality"
-	      ZOrder		      507
+	      ZOrder		      530
 	      Labels		      [0, 0]
 	      SrcBlock		      " SFunction "
 	      SrcPort		      4
@@ -1893,7 +2694,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "biasVectorConstraint_equality"
-	      ZOrder		      508
+	      ZOrder		      531
 	      Labels		      [0, 0]
 	      SrcBlock		      " SFunction "
 	      SrcPort		      5
@@ -1902,7 +2703,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "ConstraintMatrix_inequality"
-	      ZOrder		      509
+	      ZOrder		      532
 	      Labels		      [0, 0]
 	      SrcBlock		      " SFunction "
 	      SrcPort		      6
@@ -1911,7 +2712,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "biasVectorConstraint_inequality"
-	      ZOrder		      510
+	      ZOrder		      533
 	      Labels		      [0, 0]
 	      SrcBlock		      " SFunction "
 	      SrcPort		      7
@@ -1919,14 +2720,14 @@ Model {
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      511
+	      ZOrder		      534
 	      SrcBlock		      " Demux "
 	      SrcPort		      1
 	      DstBlock		      " Terminator "
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      512
+	      ZOrder		      535
 	      SrcBlock		      " SFunction "
 	      SrcPort		      1
 	      DstBlock		      " Demux "
@@ -2776,7 +3577,7 @@ Model {
       }
       System {
 	Name			"Disturbances for learnoptim_wbc"
-	Location		[53, 27, 1366, 768]
+	Location		[65, 24, 1366, 768]
 	Open			on
 	PortBlocksUseCompactNotation off
 	ModelBrowserVisibility	off
@@ -2801,7 +3602,7 @@ Model {
 	  Variant		  off
 	  System {
 	    Name		    "Apply external wrench"
-	    Location		    [709, 27, 1366, 768]
+	    Location		    [65, 24, 1366, 768]
 	    Open		    on
 	    PortBlocksUseCompactNotation off
 	    ModelBrowserVisibility  off
@@ -2852,7 +3653,7 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"28"
+		SIDHighWatermark	"31"
 		Block {
 		  BlockType		  Inport
 		  Name			  "time"
@@ -2864,20 +3665,20 @@ Model {
 		Block {
 		  BlockType		  Demux
 		  Name			  " Demux "
-		  SID			  "7147::20"
+		  SID			  "7147::30"
 		  Ports			  [1, 1]
 		  Position		  [270, 100, 320, 140]
-		  ZOrder		  11
+		  ZOrder		  21
 		  Outputs		  "1"
 		}
 		Block {
 		  BlockType		  S-Function
 		  Name			  " SFunction "
-		  SID			  "7147::19"
+		  SID			  "7147::29"
 		  Tag			  "Stateflow S-Function torqueWalkingR2017a 19"
 		  Ports			  [1, 1]
 		  Position		  [180, 100, 230, 140]
-		  ZOrder		  10
+		  ZOrder		  20
 		  FunctionName		  "sf_sfun"
 		  Parameters		  "external_force"
 		  PortCounts		  "[1 1]"
@@ -2888,26 +3689,26 @@ Model {
 		Block {
 		  BlockType		  Terminator
 		  Name			  " Terminator "
-		  SID			  "7147::21"
+		  SID			  "7147::31"
 		  Position		  [460, 111, 480, 129]
-		  ZOrder		  12
+		  ZOrder		  22
 		}
 		Line {
-		  ZOrder		  26
+		  ZOrder		  29
 		  SrcBlock		  "time"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  1
 		}
 		Line {
-		  ZOrder		  27
+		  ZOrder		  30
 		  SrcBlock		  " Demux "
 		  SrcPort		  1
 		  DstBlock		  " Terminator "
 		  DstPort		  1
 		}
 		Line {
-		  ZOrder		  28
+		  ZOrder		  31
 		  SrcBlock		  " SFunction "
 		  SrcPort		  1
 		  DstBlock		  " Demux "
@@ -4083,7 +4884,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "25"
+		    SIDHighWatermark	    "28"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "M"
@@ -4095,20 +4896,20 @@ Model {
 		    Block {
 		    BlockType		    Demux
 		    Name		    " Demux "
-		    SID			    "6165::24"
+		    SID			    "6165::27"
 		    Ports		    [1, 1]
 		    Position		    [270, 230, 320, 270]
-		    ZOrder		    14
+		    ZOrder		    17
 		    Outputs		    "1"
 		    }
 		    Block {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
-		    SID			    "6165::23"
+		    SID			    "6165::26"
 		    Tag			    "Stateflow S-Function torqueWalkingR2017a 20"
 		    Ports		    [1, 2]
 		    Position		    [180, 100, 230, 160]
-		    ZOrder		    13
+		    ZOrder		    16
 		    FunctionName	    "sf_sfun"
 		    Parameters		    "Config"
 		    PortCounts		    "[1 2]"
@@ -4123,9 +4924,9 @@ Model {
 		    Block {
 		    BlockType		    Terminator
 		    Name		    " Terminator "
-		    SID			    "6165::25"
+		    SID			    "6165::28"
 		    Position		    [460, 241, 480, 259]
-		    ZOrder		    15
+		    ZOrder		    18
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -4136,7 +4937,7 @@ Model {
 		    IconDisplay		    "Port number"
 		    }
 		    Line {
-		    ZOrder		    5
+		    ZOrder		    9
 		    SrcBlock		    "M"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
@@ -4144,7 +4945,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "M_with_inertia"
-		    ZOrder		    6
+		    ZOrder		    10
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    2
@@ -4152,14 +4953,14 @@ Model {
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    7
+		    ZOrder		    11
 		    SrcBlock		    " Demux "
 		    SrcPort		    1
 		    DstBlock		    " Terminator "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    8
+		    ZOrder		    12
 		    SrcBlock		    " SFunction "
 		    SrcPort		    1
 		    DstBlock		    " Demux "
@@ -5170,7 +5971,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "3749"
+		    SIDHighWatermark	    "3752"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "J_LeftFoot"
@@ -5209,20 +6010,20 @@ Model {
 		    Block {
 		    BlockType		    Demux
 		    Name		    " Demux "
-		    SID			    "5626::3748"
+		    SID			    "5626::3751"
 		    Ports		    [1, 1]
 		    Position		    [270, 230, 320, 270]
-		    ZOrder		    117
+		    ZOrder		    120
 		    Outputs		    "1"
 		    }
 		    Block {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
-		    SID			    "5626::3747"
+		    SID			    "5626::3750"
 		    Tag			    "Stateflow S-Function torqueWalkingR2017a 1"
 		    Ports		    [4, 2]
 		    Position		    [180, 102, 230, 203]
-		    ZOrder		    116
+		    ZOrder		    119
 		    FunctionName	    "sf_sfun"
 		    Parameters		    "Sat"
 		    PortCounts		    "[4 2]"
@@ -5237,9 +6038,9 @@ Model {
 		    Block {
 		    BlockType		    Terminator
 		    Name		    " Terminator "
-		    SID			    "5626::3749"
+		    SID			    "5626::3752"
 		    Position		    [460, 241, 480, 259]
-		    ZOrder		    118
+		    ZOrder		    121
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -5250,28 +6051,28 @@ Model {
 		    IconDisplay		    "Port number"
 		    }
 		    Line {
-		    ZOrder		    50
+		    ZOrder		    57
 		    SrcBlock		    "J_LeftFoot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    51
+		    ZOrder		    58
 		    SrcBlock		    "J_RightFoot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    2
 		    }
 		    Line {
-		    ZOrder		    52
+		    ZOrder		    59
 		    SrcBlock		    "feetInContact"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    3
 		    }
 		    Line {
-		    ZOrder		    53
+		    ZOrder		    60
 		    SrcBlock		    "sDot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
@@ -5279,7 +6080,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "nu_b"
-		    ZOrder		    54
+		    ZOrder		    61
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    2
@@ -5287,14 +6088,14 @@ Model {
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    55
+		    ZOrder		    62
 		    SrcBlock		    " Demux "
 		    SrcPort		    1
 		    DstBlock		    " Terminator "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    56
+		    ZOrder		    63
 		    SrcBlock		    " SFunction "
 		    SrcPort		    1
 		    DstBlock		    " Demux "
@@ -5929,7 +6730,7 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"89"
+		SIDHighWatermark	"92"
 		Block {
 		  BlockType		  Inport
 		  Name			  "pose_vel_acc_LFoot_des"
@@ -6103,20 +6904,20 @@ Model {
 		Block {
 		  BlockType		  Demux
 		  Name			  " Demux "
-		  SID			  "4279::81"
+		  SID			  "4279::91"
 		  Ports			  [1, 1]
 		  Position		  [270, 230, 320, 270]
-		  ZOrder		  71
+		  ZOrder		  80
 		  Outputs		  "1"
 		}
 		Block {
 		  BlockType		  S-Function
 		  Name			  " SFunction "
-		  SID			  "4279::80"
+		  SID			  "4279::90"
 		  Tag			  "Stateflow S-Function torqueWalkingR2017a 3"
 		  Ports			  [19, 2]
-		  Position		  [180, 90, 230, 490]
-		  ZOrder		  70
+		  Position		  [180, 75, 230, 475]
+		  ZOrder		  79
 		  FunctionName		  "sf_sfun"
 		  Parameters		  "Sat"
 		  PortCounts		  "[19 2]"
@@ -6131,9 +6932,9 @@ Model {
 		Block {
 		  BlockType		  Terminator
 		  Name			  " Terminator "
-		  SID			  "4279::82"
+		  SID			  "4279::92"
 		  Position		  [460, 241, 480, 259]
-		  ZOrder		  72
+		  ZOrder		  81
 		}
 		Block {
 		  BlockType		  Outport
@@ -6144,133 +6945,133 @@ Model {
 		  IconDisplay		  "Port number"
 		}
 		Line {
-		  ZOrder		  561
+		  ZOrder		  583
 		  SrcBlock		  "pose_vel_acc_LFoot_des"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  1
 		}
 		Line {
-		  ZOrder		  562
+		  ZOrder		  584
 		  SrcBlock		  "pose_vel_acc_RFoot_des"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  2
 		}
 		Line {
-		  ZOrder		  563
+		  ZOrder		  585
 		  SrcBlock		  "pos_vel_acc_CoM_des"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  3
 		}
 		Line {
-		  ZOrder		  564
+		  ZOrder		  586
 		  SrcBlock		  "orient_vel_acc_rot_task_des"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  4
 		}
 		Line {
-		  ZOrder		  565
+		  ZOrder		  587
 		  SrcBlock		  "pose_vel_acc_LHand_des"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  5
 		}
 		Line {
-		  ZOrder		  566
+		  ZOrder		  588
 		  SrcBlock		  "pose_vel_acc_RHand_des"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  6
 		}
 		Line {
-		  ZOrder		  567
+		  ZOrder		  589
 		  SrcBlock		  "pose_vel_LFoot"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  7
 		}
 		Line {
-		  ZOrder		  568
+		  ZOrder		  590
 		  SrcBlock		  "pose_vel_RFoot"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  8
 		}
 		Line {
-		  ZOrder		  569
+		  ZOrder		  591
 		  SrcBlock		  "pos_vel_CoM"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  9
 		}
 		Line {
-		  ZOrder		  570
+		  ZOrder		  592
 		  SrcBlock		  "orient_vel_rot_task"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  10
 		}
 		Line {
-		  ZOrder		  571
+		  ZOrder		  593
 		  SrcBlock		  "pose_vel_LHand"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  11
 		}
 		Line {
-		  ZOrder		  572
+		  ZOrder		  594
 		  SrcBlock		  "pose_vel_RHand"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  12
 		}
 		Line {
-		  ZOrder		  573
+		  ZOrder		  595
 		  SrcBlock		  "Kp_Kd_LFoot"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  13
 		}
 		Line {
-		  ZOrder		  574
+		  ZOrder		  596
 		  SrcBlock		  "Kp_Kd_RFoot"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  14
 		}
 		Line {
-		  ZOrder		  575
+		  ZOrder		  597
 		  SrcBlock		  "Kp_Kd_CoM"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  15
 		}
 		Line {
-		  ZOrder		  576
+		  ZOrder		  598
 		  SrcBlock		  "Kp_Kd_rot_task"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  16
 		}
 		Line {
-		  ZOrder		  577
+		  ZOrder		  599
 		  SrcBlock		  "Kp_Kd_LHand"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  17
 		}
 		Line {
-		  ZOrder		  578
+		  ZOrder		  600
 		  SrcBlock		  "Kp_Kd_RHand"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  18
 		}
 		Line {
-		  ZOrder		  579
+		  ZOrder		  601
 		  SrcBlock		  "feetInContact"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
@@ -6278,7 +7079,7 @@ Model {
 		}
 		Line {
 		  Name			  "acc_task_star"
-		  ZOrder		  580
+		  ZOrder		  602
 		  Labels		  [0, 0]
 		  SrcBlock		  " SFunction "
 		  SrcPort		  2
@@ -6286,14 +7087,14 @@ Model {
 		  DstPort		  1
 		}
 		Line {
-		  ZOrder		  581
+		  ZOrder		  603
 		  SrcBlock		  " Demux "
 		  SrcPort		  1
 		  DstBlock		  " Terminator "
 		  DstPort		  1
 		}
 		Line {
-		  ZOrder		  582
+		  ZOrder		  604
 		  SrcBlock		  " SFunction "
 		  SrcPort		  1
 		  DstBlock		  " Demux "
@@ -6435,7 +7236,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "103"
+		    SIDHighWatermark	    "106"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "vel_LFoot"
@@ -6546,20 +7347,20 @@ Model {
 		    Block {
 		    BlockType		    Demux
 		    Name		    " Demux "
-		    SID			    "4288::96"
+		    SID			    "4288::105"
 		    Ports		    [1, 1]
 		    Position		    [270, 350, 320, 390]
-		    ZOrder		    87
+		    ZOrder		    96
 		    Outputs		    "1"
 		    }
 		    Block {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
-		    SID			    "4288::95"
+		    SID			    "4288::104"
 		    Tag			    "Stateflow S-Function torqueWalkingR2017a 4"
 		    Ports		    [12, 7]
-		    Position		    [180, 100, 230, 360]
-		    ZOrder		    86
+		    Position		    [180, 95, 230, 355]
+		    ZOrder		    95
 		    FunctionName	    "sf_sfun"
 		    PortCounts		    "[12 7]"
 		    SFunctionDeploymentMode off
@@ -6593,9 +7394,9 @@ Model {
 		    Block {
 		    BlockType		    Terminator
 		    Name		    " Terminator "
-		    SID			    "4288::97"
+		    SID			    "4288::106"
 		    Position		    [460, 361, 480, 379]
-		    ZOrder		    88
+		    ZOrder		    97
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -6651,84 +7452,84 @@ Model {
 		    IconDisplay		    "Port number"
 		    }
 		    Line {
-		    ZOrder		    358
+		    ZOrder		    378
 		    SrcBlock		    "vel_LFoot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    359
+		    ZOrder		    379
 		    SrcBlock		    "vel_RFoot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    2
 		    }
 		    Line {
-		    ZOrder		    360
+		    ZOrder		    380
 		    SrcBlock		    "vel_CoM"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    3
 		    }
 		    Line {
-		    ZOrder		    361
+		    ZOrder		    381
 		    SrcBlock		    "vel_rot_task"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    4
 		    }
 		    Line {
-		    ZOrder		    362
+		    ZOrder		    382
 		    SrcBlock		    "vel_LHand"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    5
 		    }
 		    Line {
-		    ZOrder		    363
+		    ZOrder		    383
 		    SrcBlock		    "vel_RHand"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    6
 		    }
 		    Line {
-		    ZOrder		    364
+		    ZOrder		    384
 		    SrcBlock		    "w_H_l_sole"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    7
 		    }
 		    Line {
-		    ZOrder		    365
+		    ZOrder		    385
 		    SrcBlock		    "w_H_r_sole"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    8
 		    }
 		    Line {
-		    ZOrder		    366
+		    ZOrder		    386
 		    SrcBlock		    "w_H_CoM"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    9
 		    }
 		    Line {
-		    ZOrder		    367
+		    ZOrder		    387
 		    SrcBlock		    "w_H_rot_task"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    10
 		    }
 		    Line {
-		    ZOrder		    368
+		    ZOrder		    388
 		    SrcBlock		    "w_H_l_hand"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    11
 		    }
 		    Line {
-		    ZOrder		    369
+		    ZOrder		    389
 		    SrcBlock		    "w_H_r_hand"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
@@ -6736,7 +7537,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "pose_vel_LFoot"
-		    ZOrder		    370
+		    ZOrder		    390
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    2
@@ -6745,7 +7546,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "pose_vel_RFoot"
-		    ZOrder		    371
+		    ZOrder		    391
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    3
@@ -6754,7 +7555,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "pos_vel_CoM"
-		    ZOrder		    372
+		    ZOrder		    392
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    4
@@ -6763,7 +7564,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "orient_vel_rot_task"
-		    ZOrder		    373
+		    ZOrder		    393
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    5
@@ -6772,7 +7573,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "pose_vel_LHand"
-		    ZOrder		    374
+		    ZOrder		    394
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    6
@@ -6781,7 +7582,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "pose_vel_RHand"
-		    ZOrder		    375
+		    ZOrder		    395
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    7
@@ -6789,16 +7590,17 @@ Model {
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    376
+		    ZOrder		    396
 		    SrcBlock		    " Demux "
 		    SrcPort		    1
 		    DstBlock		    " Terminator "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    377
+		    ZOrder		    397
 		    SrcBlock		    " SFunction "
 		    SrcPort		    1
+		    Points		    [20, 0]
 		    DstBlock		    " Demux "
 		    DstPort		    1
 		    }
@@ -8416,7 +9218,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "77"
+		    SIDHighWatermark	    "80"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "s"
@@ -8500,20 +9302,20 @@ Model {
 		    Block {
 		    BlockType		    Demux
 		    Name		    " Demux "
-		    SID			    "4342::66"
+		    SID			    "4342::79"
 		    Ports		    [1, 1]
 		    Position		    [270, 280, 320, 320]
-		    ZOrder		    57
+		    ZOrder		    61
 		    Outputs		    "1"
 		    }
 		    Block {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
-		    SID			    "4342::65"
+		    SID			    "4342::78"
 		    Tag			    "Stateflow S-Function torqueWalkingR2017a 5"
 		    Ports		    [9, 5]
 		    Position		    [180, 100, 230, 300]
-		    ZOrder		    56
+		    ZOrder		    60
 		    FunctionName	    "sf_sfun"
 		    Parameters		    "Config,Sat"
 		    PortCounts		    "[9 5]"
@@ -8540,9 +9342,9 @@ Model {
 		    Block {
 		    BlockType		    Terminator
 		    Name		    " Terminator "
-		    SID			    "4342::67"
+		    SID			    "4342::80"
 		    Position		    [460, 291, 480, 309]
-		    ZOrder		    58
+		    ZOrder		    62
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -8580,64 +9382,63 @@ Model {
 		    IconDisplay		    "Port number"
 		    }
 		    Line {
-		    ZOrder		    478
+		    ZOrder		    493
 		    SrcBlock		    "s"
 		    SrcPort		    1
-		    Points		    [120, 0]
 		    DstBlock		    " SFunction "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    479
+		    ZOrder		    494
 		    SrcBlock		    "nu"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    2
 		    }
 		    Line {
-		    ZOrder		    480
+		    ZOrder		    495
 		    SrcBlock		    "s_sDot_sDDot_ref"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    3
 		    }
 		    Line {
-		    ZOrder		    481
+		    ZOrder		    496
 		    SrcBlock		    "impedances"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    4
 		    }
 		    Line {
-		    ZOrder		    482
+		    ZOrder		    497
 		    SrcBlock		    "dampings"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    5
 		    }
 		    Line {
-		    ZOrder		    483
+		    ZOrder		    498
 		    SrcBlock		    "J"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    6
 		    }
 		    Line {
-		    ZOrder		    484
+		    ZOrder		    499
 		    SrcBlock		    "JDot_nu"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    7
 		    }
 		    Line {
-		    ZOrder		    485
+		    ZOrder		    500
 		    SrcBlock		    "acc_task_star"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    8
 		    }
 		    Line {
-		    ZOrder		    486
+		    ZOrder		    501
 		    SrcBlock		    "feetInContact"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
@@ -8645,16 +9446,17 @@ Model {
 		    }
 		    Line {
 		    Name		    "Hessian"
-		    ZOrder		    487
+		    ZOrder		    502
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    2
+		    Points		    [0, -50]
 		    DstBlock		    "Hessian"
 		    DstPort		    1
 		    }
 		    Line {
 		    Name		    "gradient"
-		    ZOrder		    488
+		    ZOrder		    503
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    3
@@ -8663,7 +9465,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "ConstraintMatrix"
-		    ZOrder		    489
+		    ZOrder		    504
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    4
@@ -8672,7 +9474,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "biasVectorConstraint"
-		    ZOrder		    490
+		    ZOrder		    505
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    5
@@ -8680,16 +9482,17 @@ Model {
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    491
+		    ZOrder		    506
 		    SrcBlock		    " Demux "
 		    SrcPort		    1
 		    DstBlock		    " Terminator "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    492
+		    ZOrder		    507
 		    SrcBlock		    " SFunction "
 		    SrcPort		    1
+		    Points		    [20, 0]
 		    DstBlock		    " Demux "
 		    DstPort		    1
 		    }
@@ -9039,7 +9842,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "68"
+		    SIDHighWatermark	    "71"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "pose_b"
@@ -9060,20 +9863,20 @@ Model {
 		    Block {
 		    BlockType		    Demux
 		    Name		    " Demux "
-		    SID			    "4356::67"
+		    SID			    "4356::70"
 		    Ports		    [1, 1]
 		    Position		    [270, 230, 320, 270]
-		    ZOrder		    53
+		    ZOrder		    56
 		    Outputs		    "1"
 		    }
 		    Block {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
-		    SID			    "4356::66"
+		    SID			    "4356::69"
 		    Tag			    "Stateflow S-Function torqueWalkingR2017a 16"
 		    Ports		    [2, 2]
 		    Position		    [180, 100, 230, 160]
-		    ZOrder		    52
+		    ZOrder		    55
 		    FunctionName	    "sf_sfun"
 		    PortCounts		    "[2 2]"
 		    SFunctionDeploymentMode off
@@ -9087,9 +9890,9 @@ Model {
 		    Block {
 		    BlockType		    Terminator
 		    Name		    " Terminator "
-		    SID			    "4356::68"
+		    SID			    "4356::71"
 		    Position		    [460, 241, 480, 259]
-		    ZOrder		    54
+		    ZOrder		    57
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -9100,7 +9903,7 @@ Model {
 		    IconDisplay		    "Port number"
 		    }
 		    Line {
-		    ZOrder		    41
+		    ZOrder		    46
 		    SrcBlock		    "pose_b"
 		    SrcPort		    1
 		    Points		    [120, 0]
@@ -9108,7 +9911,7 @@ Model {
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    42
+		    ZOrder		    47
 		    SrcBlock		    "nu_b"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
@@ -9116,7 +9919,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "pose_bDot"
-		    ZOrder		    43
+		    ZOrder		    48
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    2
@@ -9124,14 +9927,14 @@ Model {
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    44
+		    ZOrder		    49
 		    SrcBlock		    " Demux "
 		    SrcPort		    1
 		    DstBlock		    " Terminator "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    45
+		    ZOrder		    50
 		    SrcBlock		    " SFunction "
 		    SrcPort		    1
 		    DstBlock		    " Demux "
@@ -9288,7 +10091,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "67"
+		    SIDHighWatermark	    "70"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "w_H_b_0"
@@ -9300,20 +10103,20 @@ Model {
 		    Block {
 		    BlockType		    Demux
 		    Name		    " Demux "
-		    SID			    "4363::66"
+		    SID			    "4363::69"
 		    Ports		    [1, 1]
 		    Position		    [270, 230, 320, 270]
-		    ZOrder		    52
+		    ZOrder		    55
 		    Outputs		    "1"
 		    }
 		    Block {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
-		    SID			    "4363::65"
+		    SID			    "4363::68"
 		    Tag			    "Stateflow S-Function torqueWalkingR2017a 18"
 		    Ports		    [1, 2]
 		    Position		    [180, 100, 230, 160]
-		    ZOrder		    51
+		    ZOrder		    54
 		    FunctionName	    "sf_sfun"
 		    PortCounts		    "[1 2]"
 		    SFunctionDeploymentMode off
@@ -9327,9 +10130,9 @@ Model {
 		    Block {
 		    BlockType		    Terminator
 		    Name		    " Terminator "
-		    SID			    "4363::67"
+		    SID			    "4363::70"
 		    Position		    [460, 241, 480, 259]
-		    ZOrder		    53
+		    ZOrder		    56
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -9340,7 +10143,7 @@ Model {
 		    IconDisplay		    "Port number"
 		    }
 		    Line {
-		    ZOrder		    29
+		    ZOrder		    33
 		    SrcBlock		    "w_H_b_0"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
@@ -9348,7 +10151,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "pose_b_0"
-		    ZOrder		    30
+		    ZOrder		    34
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    2
@@ -9356,14 +10159,14 @@ Model {
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    31
+		    ZOrder		    35
 		    SrcBlock		    " Demux "
 		    SrcPort		    1
 		    DstBlock		    " Terminator "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    32
+		    ZOrder		    36
 		    SrcBlock		    " SFunction "
 		    SrcPort		    1
 		    DstBlock		    " Demux "
@@ -9401,7 +10204,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "67"
+		    SIDHighWatermark	    "70"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "pose_b"
@@ -9413,20 +10216,20 @@ Model {
 		    Block {
 		    BlockType		    Demux
 		    Name		    " Demux "
-		    SID			    "4364::66"
+		    SID			    "4364::69"
 		    Ports		    [1, 1]
 		    Position		    [270, 230, 320, 270]
-		    ZOrder		    52
+		    ZOrder		    55
 		    Outputs		    "1"
 		    }
 		    Block {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
-		    SID			    "4364::65"
+		    SID			    "4364::68"
 		    Tag			    "Stateflow S-Function torqueWalkingR2017a 15"
 		    Ports		    [1, 2]
 		    Position		    [180, 100, 230, 160]
-		    ZOrder		    51
+		    ZOrder		    54
 		    FunctionName	    "sf_sfun"
 		    PortCounts		    "[1 2]"
 		    SFunctionDeploymentMode off
@@ -9440,9 +10243,9 @@ Model {
 		    Block {
 		    BlockType		    Terminator
 		    Name		    " Terminator "
-		    SID			    "4364::67"
+		    SID			    "4364::70"
 		    Position		    [460, 241, 480, 259]
-		    ZOrder		    53
+		    ZOrder		    56
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -9453,7 +10256,7 @@ Model {
 		    IconDisplay		    "Port number"
 		    }
 		    Line {
-		    ZOrder		    29
+		    ZOrder		    33
 		    SrcBlock		    "pose_b"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
@@ -9461,7 +10264,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "w_H_b"
-		    ZOrder		    30
+		    ZOrder		    34
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    2
@@ -9469,14 +10272,14 @@ Model {
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    31
+		    ZOrder		    35
 		    SrcBlock		    " Demux "
 		    SrcPort		    1
 		    DstBlock		    " Terminator "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    32
+		    ZOrder		    36
 		    SrcBlock		    " SFunction "
 		    SrcPort		    1
 		    DstBlock		    " Demux "
@@ -12586,7 +13389,7 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"90"
+		SIDHighWatermark	"93"
 		Block {
 		  BlockType		  Inport
 		  Name			  "pos_vel_acc_CoM_des"
@@ -12760,20 +13563,20 @@ Model {
 		Block {
 		  BlockType		  Demux
 		  Name			  " Demux "
-		  SID			  "4438::81"
+		  SID			  "4438::92"
 		  Ports			  [1, 1]
 		  Position		  [270, 230, 320, 270]
-		  ZOrder		  71
+		  ZOrder		  80
 		  Outputs		  "1"
 		}
 		Block {
 		  BlockType		  S-Function
 		  Name			  " SFunction "
-		  SID			  "4438::80"
+		  SID			  "4438::91"
 		  Tag			  "Stateflow S-Function torqueWalkingR2017a 6"
 		  Ports			  [19, 2]
-		  Position		  [180, 90, 230, 490]
-		  ZOrder		  70
+		  Position		  [180, 75, 230, 475]
+		  ZOrder		  79
 		  FunctionName		  "sf_sfun"
 		  Parameters		  "Sat"
 		  PortCounts		  "[19 2]"
@@ -12788,9 +13591,9 @@ Model {
 		Block {
 		  BlockType		  Terminator
 		  Name			  " Terminator "
-		  SID			  "4438::82"
+		  SID			  "4438::93"
 		  Position		  [460, 241, 480, 259]
-		  ZOrder		  72
+		  ZOrder		  81
 		}
 		Block {
 		  BlockType		  Outport
@@ -12801,133 +13604,133 @@ Model {
 		  IconDisplay		  "Port number"
 		}
 		Line {
-		  ZOrder		  462
+		  ZOrder		  484
 		  SrcBlock		  "pos_vel_acc_CoM_des"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  1
 		}
 		Line {
-		  ZOrder		  463
+		  ZOrder		  485
 		  SrcBlock		  "pose_vel_acc_LFoot_des"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  2
 		}
 		Line {
-		  ZOrder		  464
+		  ZOrder		  486
 		  SrcBlock		  "pose_vel_acc_RFoot_des"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  3
 		}
 		Line {
-		  ZOrder		  465
+		  ZOrder		  487
 		  SrcBlock		  "orient_vel_acc_rot_task_des"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  4
 		}
 		Line {
-		  ZOrder		  466
+		  ZOrder		  488
 		  SrcBlock		  "pose_vel_acc_LHand_des"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  5
 		}
 		Line {
-		  ZOrder		  467
+		  ZOrder		  489
 		  SrcBlock		  "pose_vel_acc_RHand_des"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  6
 		}
 		Line {
-		  ZOrder		  468
+		  ZOrder		  490
 		  SrcBlock		  "pos_vel_CoM"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  7
 		}
 		Line {
-		  ZOrder		  469
+		  ZOrder		  491
 		  SrcBlock		  "pose_vel_LFoot"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  8
 		}
 		Line {
-		  ZOrder		  470
+		  ZOrder		  492
 		  SrcBlock		  "pose_vel_RFoot"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  9
 		}
 		Line {
-		  ZOrder		  471
+		  ZOrder		  493
 		  SrcBlock		  "orient_vel_rot_task"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  10
 		}
 		Line {
-		  ZOrder		  472
+		  ZOrder		  494
 		  SrcBlock		  "pose_vel_LHand"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  11
 		}
 		Line {
-		  ZOrder		  473
+		  ZOrder		  495
 		  SrcBlock		  "pose_vel_RHand"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  12
 		}
 		Line {
-		  ZOrder		  474
+		  ZOrder		  496
 		  SrcBlock		  "Kp_Kd_CoM"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  13
 		}
 		Line {
-		  ZOrder		  475
+		  ZOrder		  497
 		  SrcBlock		  "Kp_Kd_LFoot"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  14
 		}
 		Line {
-		  ZOrder		  476
+		  ZOrder		  498
 		  SrcBlock		  "Kp_Kd_RFoot"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  15
 		}
 		Line {
-		  ZOrder		  477
+		  ZOrder		  499
 		  SrcBlock		  "Kp_Kd_rot_task"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  16
 		}
 		Line {
-		  ZOrder		  478
+		  ZOrder		  500
 		  SrcBlock		  "Kp_Kd_LHand"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  17
 		}
 		Line {
-		  ZOrder		  479
+		  ZOrder		  501
 		  SrcBlock		  "Kp_Kd_RHand"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
 		  DstPort		  18
 		}
 		Line {
-		  ZOrder		  480
+		  ZOrder		  502
 		  SrcBlock		  "feetInContact"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
@@ -12935,7 +13738,7 @@ Model {
 		}
 		Line {
 		  Name			  "acc_task_star"
-		  ZOrder		  481
+		  ZOrder		  503
 		  Labels		  [0, 0]
 		  SrcBlock		  " SFunction "
 		  SrcPort		  2
@@ -12943,14 +13746,14 @@ Model {
 		  DstPort		  1
 		}
 		Line {
-		  ZOrder		  482
+		  ZOrder		  504
 		  SrcBlock		  " Demux "
 		  SrcPort		  1
 		  DstBlock		  " Terminator "
 		  DstPort		  1
 		}
 		Line {
-		  ZOrder		  483
+		  ZOrder		  505
 		  SrcBlock		  " SFunction "
 		  SrcPort		  1
 		  DstBlock		  " Demux "
@@ -13092,7 +13895,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "103"
+		    SIDHighWatermark	    "106"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "vel_CoM"
@@ -13203,20 +14006,20 @@ Model {
 		    Block {
 		    BlockType		    Demux
 		    Name		    " Demux "
-		    SID			    "4447::96"
+		    SID			    "4447::105"
 		    Ports		    [1, 1]
 		    Position		    [270, 350, 320, 390]
-		    ZOrder		    87
+		    ZOrder		    96
 		    Outputs		    "1"
 		    }
 		    Block {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
-		    SID			    "4447::95"
+		    SID			    "4447::104"
 		    Tag			    "Stateflow S-Function torqueWalkingR2017a 7"
 		    Ports		    [12, 7]
-		    Position		    [180, 100, 230, 360]
-		    ZOrder		    86
+		    Position		    [180, 95, 230, 355]
+		    ZOrder		    95
 		    FunctionName	    "sf_sfun"
 		    PortCounts		    "[12 7]"
 		    SFunctionDeploymentMode off
@@ -13250,9 +14053,9 @@ Model {
 		    Block {
 		    BlockType		    Terminator
 		    Name		    " Terminator "
-		    SID			    "4447::97"
+		    SID			    "4447::106"
 		    Position		    [460, 361, 480, 379]
-		    ZOrder		    88
+		    ZOrder		    97
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -13308,84 +14111,84 @@ Model {
 		    IconDisplay		    "Port number"
 		    }
 		    Line {
-		    ZOrder		    234
+		    ZOrder		    254
 		    SrcBlock		    "vel_CoM"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    235
+		    ZOrder		    255
 		    SrcBlock		    "vel_LFoot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    2
 		    }
 		    Line {
-		    ZOrder		    236
+		    ZOrder		    256
 		    SrcBlock		    "vel_RFoot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    3
 		    }
 		    Line {
-		    ZOrder		    237
+		    ZOrder		    257
 		    SrcBlock		    "vel_rot_task"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    4
 		    }
 		    Line {
-		    ZOrder		    238
+		    ZOrder		    258
 		    SrcBlock		    "vel_LHand"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    5
 		    }
 		    Line {
-		    ZOrder		    239
+		    ZOrder		    259
 		    SrcBlock		    "vel_RHand"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    6
 		    }
 		    Line {
-		    ZOrder		    240
+		    ZOrder		    260
 		    SrcBlock		    "w_H_CoM"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    7
 		    }
 		    Line {
-		    ZOrder		    241
+		    ZOrder		    261
 		    SrcBlock		    "w_H_l_sole"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    8
 		    }
 		    Line {
-		    ZOrder		    242
+		    ZOrder		    262
 		    SrcBlock		    "w_H_r_sole"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    9
 		    }
 		    Line {
-		    ZOrder		    243
+		    ZOrder		    263
 		    SrcBlock		    "w_H_rot_task"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    10
 		    }
 		    Line {
-		    ZOrder		    244
+		    ZOrder		    264
 		    SrcBlock		    "w_H_l_hand"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    11
 		    }
 		    Line {
-		    ZOrder		    245
+		    ZOrder		    265
 		    SrcBlock		    "w_H_r_hand"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
@@ -13393,7 +14196,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "pos_vel_CoM"
-		    ZOrder		    246
+		    ZOrder		    266
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    2
@@ -13402,7 +14205,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "pose_vel_LFoot"
-		    ZOrder		    247
+		    ZOrder		    267
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    3
@@ -13411,7 +14214,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "pose_vel_RFoot"
-		    ZOrder		    248
+		    ZOrder		    268
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    4
@@ -13420,7 +14223,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "orient_vel_rot_task"
-		    ZOrder		    249
+		    ZOrder		    269
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    5
@@ -13429,7 +14232,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "pose_vel_LHand"
-		    ZOrder		    250
+		    ZOrder		    270
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    6
@@ -13438,7 +14241,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "pose_vel_RHand"
-		    ZOrder		    251
+		    ZOrder		    271
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    7
@@ -13446,16 +14249,17 @@ Model {
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    252
+		    ZOrder		    272
 		    SrcBlock		    " Demux "
 		    SrcPort		    1
 		    DstBlock		    " Terminator "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    253
+		    ZOrder		    273
 		    SrcBlock		    " SFunction "
 		    SrcPort		    1
+		    Points		    [20, 0]
 		    DstBlock		    " Demux "
 		    DstPort		    1
 		    }
@@ -13556,8 +14360,8 @@ Model {
 		  Variant		  off
 		  System {
 		    Name		    "Task position and orientation"
-		    Location		    [53, 27, 1366, 768]
-		    Open		    on
+		    Location		    [65, 24, 1366, 768]
+		    Open		    off
 		    PortBlocksUseCompactNotation off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -15213,7 +16017,7 @@ Model {
       Variant		      off
       System {
 	Name			"Robot State and References"
-	Location		[53, 27, 1366, 768]
+	Location		[65, 24, 1366, 768]
 	Open			on
 	PortBlocksUseCompactNotation off
 	ModelBrowserVisibility	off
@@ -15301,7 +16105,7 @@ Model {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"79"
+		SIDHighWatermark	"82"
 		Block {
 		  BlockType		  Inport
 		  Name			  "state"
@@ -15313,20 +16117,20 @@ Model {
 		Block {
 		  BlockType		  Demux
 		  Name			  " Demux "
-		  SID			  "4534::74"
+		  SID			  "4534::81"
 		  Ports			  [1, 1]
 		  Position		  [270, 675, 320, 715]
-		  ZOrder		  64
+		  ZOrder		  71
 		  Outputs		  "1"
 		}
 		Block {
 		  BlockType		  S-Function
 		  Name			  " SFunction "
-		  SID			  "4534::73"
+		  SID			  "4534::80"
 		  Tag			  "Stateflow S-Function torqueWalkingR2017a 8"
 		  Ports			  [1, 16]
-		  Position		  [180, 95, 230, 435]
-		  ZOrder		  63
+		  Position		  [180, 85, 230, 425]
+		  ZOrder		  70
 		  FunctionName		  "sf_sfun"
 		  Parameters		  "Config,Gains"
 		  PortCounts		  "[1 16]"
@@ -15397,9 +16201,9 @@ Model {
 		Block {
 		  BlockType		  Terminator
 		  Name			  " Terminator "
-		  SID			  "4534::75"
+		  SID			  "4534::82"
 		  Position		  [460, 686, 480, 704]
-		  ZOrder		  65
+		  ZOrder		  72
 		}
 		Block {
 		  BlockType		  Outport
@@ -15536,7 +16340,7 @@ Model {
 		  IconDisplay		  "Port number"
 		}
 		Line {
-		  ZOrder		  269
+		  ZOrder		  287
 		  SrcBlock		  "state"
 		  SrcPort		  1
 		  DstBlock		  " SFunction "
@@ -15544,7 +16348,7 @@ Model {
 		}
 		Line {
 		  Name			  "Kp_CoM"
-		  ZOrder		  270
+		  ZOrder		  288
 		  Labels		  [0, 0]
 		  SrcBlock		  " SFunction "
 		  SrcPort		  2
@@ -15553,7 +16357,7 @@ Model {
 		}
 		Line {
 		  Name			  "Kd_CoM"
-		  ZOrder		  271
+		  ZOrder		  289
 		  Labels		  [0, 0]
 		  SrcBlock		  " SFunction "
 		  SrcPort		  3
@@ -15562,7 +16366,7 @@ Model {
 		}
 		Line {
 		  Name			  "Kp_LFoot"
-		  ZOrder		  272
+		  ZOrder		  290
 		  Labels		  [0, 0]
 		  SrcBlock		  " SFunction "
 		  SrcPort		  4
@@ -15571,7 +16375,7 @@ Model {
 		}
 		Line {
 		  Name			  "Kd_LFoot"
-		  ZOrder		  273
+		  ZOrder		  291
 		  Labels		  [0, 0]
 		  SrcBlock		  " SFunction "
 		  SrcPort		  5
@@ -15580,7 +16384,7 @@ Model {
 		}
 		Line {
 		  Name			  "Kp_RFoot"
-		  ZOrder		  274
+		  ZOrder		  292
 		  Labels		  [0, 0]
 		  SrcBlock		  " SFunction "
 		  SrcPort		  6
@@ -15589,7 +16393,7 @@ Model {
 		}
 		Line {
 		  Name			  "Kd_RFoot"
-		  ZOrder		  275
+		  ZOrder		  293
 		  Labels		  [0, 0]
 		  SrcBlock		  " SFunction "
 		  SrcPort		  7
@@ -15598,7 +16402,7 @@ Model {
 		}
 		Line {
 		  Name			  "Kp_rot_task"
-		  ZOrder		  276
+		  ZOrder		  294
 		  Labels		  [0, 0]
 		  SrcBlock		  " SFunction "
 		  SrcPort		  8
@@ -15607,7 +16411,7 @@ Model {
 		}
 		Line {
 		  Name			  "Kd_rot_task"
-		  ZOrder		  277
+		  ZOrder		  295
 		  Labels		  [0, 0]
 		  SrcBlock		  " SFunction "
 		  SrcPort		  9
@@ -15616,7 +16420,7 @@ Model {
 		}
 		Line {
 		  Name			  "Kp_LHand"
-		  ZOrder		  278
+		  ZOrder		  296
 		  Labels		  [0, 0]
 		  SrcBlock		  " SFunction "
 		  SrcPort		  10
@@ -15625,7 +16429,7 @@ Model {
 		}
 		Line {
 		  Name			  "Kd_LHand"
-		  ZOrder		  279
+		  ZOrder		  297
 		  Labels		  [0, 0]
 		  SrcBlock		  " SFunction "
 		  SrcPort		  11
@@ -15634,7 +16438,7 @@ Model {
 		}
 		Line {
 		  Name			  "Kp_RHand"
-		  ZOrder		  280
+		  ZOrder		  298
 		  Labels		  [0, 0]
 		  SrcBlock		  " SFunction "
 		  SrcPort		  12
@@ -15643,7 +16447,7 @@ Model {
 		}
 		Line {
 		  Name			  "Kd_RHand"
-		  ZOrder		  281
+		  ZOrder		  299
 		  Labels		  [0, 0]
 		  SrcBlock		  " SFunction "
 		  SrcPort		  13
@@ -15652,7 +16456,7 @@ Model {
 		}
 		Line {
 		  Name			  "impedances"
-		  ZOrder		  282
+		  ZOrder		  300
 		  Labels		  [0, 0]
 		  SrcBlock		  " SFunction "
 		  SrcPort		  14
@@ -15661,7 +16465,7 @@ Model {
 		}
 		Line {
 		  Name			  "dampings"
-		  ZOrder		  283
+		  ZOrder		  301
 		  Labels		  [0, 0]
 		  SrcBlock		  " SFunction "
 		  SrcPort		  15
@@ -15670,7 +16474,7 @@ Model {
 		}
 		Line {
 		  Name			  "smoothingTimeGains"
-		  ZOrder		  284
+		  ZOrder		  302
 		  Labels		  [0, 0]
 		  SrcBlock		  " SFunction "
 		  SrcPort		  16
@@ -15678,14 +16482,14 @@ Model {
 		  DstPort		  1
 		}
 		Line {
-		  ZOrder		  285
+		  ZOrder		  303
 		  SrcBlock		  " Demux "
 		  SrcPort		  1
 		  DstBlock		  " Terminator "
 		  DstPort		  1
 		}
 		Line {
-		  ZOrder		  286
+		  ZOrder		  304
 		  SrcBlock		  " SFunction "
 		  SrcPort		  1
 		  DstBlock		  " Demux "
@@ -18175,7 +18979,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "91"
+		    SIDHighWatermark	    "94"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "w_R_LFoot_des"
@@ -18322,20 +19126,20 @@ Model {
 		    Block {
 		    BlockType		    Demux
 		    Name		    " Demux "
-		    SID			    "4570::82"
+		    SID			    "4570::93"
 		    Ports		    [1, 1]
 		    Position		    [270, 315, 320, 355]
-		    ZOrder		    72
+		    ZOrder		    83
 		    Outputs		    "1"
 		    }
 		    Block {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
-		    SID			    "4570::81"
+		    SID			    "4570::92"
 		    Tag			    "Stateflow S-Function torqueWalkingR2017a 9"
 		    Ports		    [16, 6]
-		    Position		    [180, 100, 230, 440]
-		    ZOrder		    71
+		    Position		    [180, 85, 230, 425]
+		    ZOrder		    82
 		    FunctionName	    "sf_sfun"
 		    Parameters		    "Config"
 		    PortCounts		    "[16 6]"
@@ -18366,9 +19170,9 @@ Model {
 		    Block {
 		    BlockType		    Terminator
 		    Name		    " Terminator "
-		    SID			    "4570::83"
+		    SID			    "4570::94"
 		    Position		    [460, 326, 480, 344]
-		    ZOrder		    73
+		    ZOrder		    84
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -18415,112 +19219,112 @@ Model {
 		    IconDisplay		    "Port number"
 		    }
 		    Line {
-		    ZOrder		    371
+		    ZOrder		    394
 		    SrcBlock		    "w_R_LFoot_des"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    372
+		    ZOrder		    395
 		    SrcBlock		    "w_R_RFoot_des"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    2
 		    }
 		    Line {
-		    ZOrder		    373
+		    ZOrder		    396
 		    SrcBlock		    "w_R_rot_task_des"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    3
 		    }
 		    Line {
-		    ZOrder		    374
+		    ZOrder		    397
 		    SrcBlock		    "w_R_LHand_des"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    4
 		    }
 		    Line {
-		    ZOrder		    375
+		    ZOrder		    398
 		    SrcBlock		    "w_R_RHand_des"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    5
 		    }
 		    Line {
-		    ZOrder		    376
+		    ZOrder		    399
 		    SrcBlock		    "w_R_LFoot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    6
 		    }
 		    Line {
-		    ZOrder		    377
+		    ZOrder		    400
 		    SrcBlock		    "w_R_RFoot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    7
 		    }
 		    Line {
-		    ZOrder		    378
+		    ZOrder		    401
 		    SrcBlock		    "w_R_rot_task"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    8
 		    }
 		    Line {
-		    ZOrder		    379
+		    ZOrder		    402
 		    SrcBlock		    "w_R_LHand"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    9
 		    }
 		    Line {
-		    ZOrder		    380
+		    ZOrder		    403
 		    SrcBlock		    "w_R_RHand"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    10
 		    }
 		    Line {
-		    ZOrder		    381
+		    ZOrder		    404
 		    SrcBlock		    "state"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    11
 		    }
 		    Line {
-		    ZOrder		    382
+		    ZOrder		    405
 		    SrcBlock		    "omega_LFoot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    12
 		    }
 		    Line {
-		    ZOrder		    383
+		    ZOrder		    406
 		    SrcBlock		    "omega_RFoot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    13
 		    }
 		    Line {
-		    ZOrder		    384
+		    ZOrder		    407
 		    SrcBlock		    "omega_rot_task"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    14
 		    }
 		    Line {
-		    ZOrder		    385
+		    ZOrder		    408
 		    SrcBlock		    "omega_LHand"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    15
 		    }
 		    Line {
-		    ZOrder		    386
+		    ZOrder		    409
 		    SrcBlock		    "omega_RHand"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
@@ -18528,16 +19332,17 @@ Model {
 		    }
 		    Line {
 		    Name		    "omegaDot_LFoot"
-		    ZOrder		    387
+		    ZOrder		    410
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    2
+		    Points		    [0, -65]
 		    DstBlock		    "omegaDot_LFoot"
 		    DstPort		    1
 		    }
 		    Line {
 		    Name		    "omegaDot_RFoot"
-		    ZOrder		    388
+		    ZOrder		    411
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    3
@@ -18546,7 +19351,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "omegaDot_rot_task"
-		    ZOrder		    389
+		    ZOrder		    412
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    4
@@ -18555,7 +19360,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "omegaDot_LHand"
-		    ZOrder		    390
+		    ZOrder		    413
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    5
@@ -18564,7 +19369,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "omegaDot_RHand"
-		    ZOrder		    391
+		    ZOrder		    414
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    6
@@ -18572,16 +19377,17 @@ Model {
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    392
+		    ZOrder		    415
 		    SrcBlock		    " Demux "
 		    SrcPort		    1
 		    DstBlock		    " Terminator "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    393
+		    ZOrder		    416
 		    SrcBlock		    " SFunction "
 		    SrcPort		    1
+		    Points		    [20, 0]
 		    DstBlock		    " Demux "
 		    DstPort		    1
 		    }
@@ -19349,7 +20155,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "91"
+		    SIDHighWatermark	    "94"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "omega_LFoot"
@@ -19442,20 +20248,20 @@ Model {
 		    Block {
 		    BlockType		    Demux
 		    Name		    " Demux "
-		    SID			    "4571::84"
+		    SID			    "4571::93"
 		    Ports		    [1, 1]
 		    Position		    [270, 315, 320, 355]
-		    ZOrder		    74
+		    ZOrder		    83
 		    Outputs		    "1"
 		    }
 		    Block {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
-		    SID			    "4571::83"
+		    SID			    "4571::92"
 		    Tag			    "Stateflow S-Function torqueWalkingR2017a 12"
 		    Ports		    [10, 6]
-		    Position		    [180, 105, 230, 325]
-		    ZOrder		    73
+		    Position		    [180, 100, 230, 320]
+		    ZOrder		    82
 		    FunctionName	    "sf_sfun"
 		    PortCounts		    "[10 6]"
 		    SFunctionDeploymentMode off
@@ -19485,9 +20291,9 @@ Model {
 		    Block {
 		    BlockType		    Terminator
 		    Name		    " Terminator "
-		    SID			    "4571::85"
+		    SID			    "4571::94"
 		    Position		    [460, 326, 480, 344]
-		    ZOrder		    75
+		    ZOrder		    84
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -19534,70 +20340,70 @@ Model {
 		    IconDisplay		    "Port number"
 		    }
 		    Line {
-		    ZOrder		    193
+		    ZOrder		    210
 		    SrcBlock		    "omega_LFoot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    194
+		    ZOrder		    211
 		    SrcBlock		    "omega_RFoot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    2
 		    }
 		    Line {
-		    ZOrder		    195
+		    ZOrder		    212
 		    SrcBlock		    "omega_rot_task"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    3
 		    }
 		    Line {
-		    ZOrder		    196
+		    ZOrder		    213
 		    SrcBlock		    "omega_LHand"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    4
 		    }
 		    Line {
-		    ZOrder		    197
+		    ZOrder		    214
 		    SrcBlock		    "omega_RHand"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    5
 		    }
 		    Line {
-		    ZOrder		    198
+		    ZOrder		    215
 		    SrcBlock		    "w_R_LFoot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    6
 		    }
 		    Line {
-		    ZOrder		    199
+		    ZOrder		    216
 		    SrcBlock		    "w_R_RFoot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    7
 		    }
 		    Line {
-		    ZOrder		    200
+		    ZOrder		    217
 		    SrcBlock		    "w_R_rot_task"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    8
 		    }
 		    Line {
-		    ZOrder		    201
+		    ZOrder		    218
 		    SrcBlock		    "w_R_LHand"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    9
 		    }
 		    Line {
-		    ZOrder		    202
+		    ZOrder		    219
 		    SrcBlock		    "w_R_RHand"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
@@ -19605,7 +20411,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "RDot_LFoot"
-		    ZOrder		    203
+		    ZOrder		    220
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    2
@@ -19614,7 +20420,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "RDot_RFoot"
-		    ZOrder		    204
+		    ZOrder		    221
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    3
@@ -19623,7 +20429,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "RDot_rot_task"
-		    ZOrder		    205
+		    ZOrder		    222
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    4
@@ -19632,7 +20438,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "RDot_LHand"
-		    ZOrder		    206
+		    ZOrder		    223
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    5
@@ -19641,7 +20447,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "RDot_RHand"
-		    ZOrder		    207
+		    ZOrder		    224
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    6
@@ -19649,14 +20455,14 @@ Model {
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    208
+		    ZOrder		    225
 		    SrcBlock		    " Demux "
 		    SrcPort		    1
 		    DstBlock		    " Terminator "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    209
+		    ZOrder		    226
 		    SrcBlock		    " SFunction "
 		    SrcPort		    1
 		    DstBlock		    " Demux "
@@ -20579,7 +21385,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "53"
+		    SIDHighWatermark	    "56"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "state"
@@ -20591,20 +21397,20 @@ Model {
 		    Block {
 		    BlockType		    Demux
 		    Name		    " Demux "
-		    SID			    "5315::50"
+		    SID			    "5315::55"
 		    Ports		    [1, 1]
 		    Position		    [270, 350, 320, 390]
-		    ZOrder		    41
+		    ZOrder		    46
 		    Outputs		    "1"
 		    }
 		    Block {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
-		    SID			    "5315::49"
+		    SID			    "5315::54"
 		    Tag			    "Stateflow S-Function torqueWalkingR2017a 17"
 		    Ports		    [1, 7]
-		    Position		    [180, 105, 230, 265]
-		    ZOrder		    40
+		    Position		    [180, 100, 230, 260]
+		    ZOrder		    45
 		    FunctionName	    "sf_sfun"
 		    Parameters		    "Config"
 		    PortCounts		    "[1 7]"
@@ -20639,9 +21445,9 @@ Model {
 		    Block {
 		    BlockType		    Terminator
 		    Name		    " Terminator "
-		    SID			    "5315::51"
+		    SID			    "5315::56"
 		    Position		    [460, 361, 480, 379]
-		    ZOrder		    42
+		    ZOrder		    47
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -20697,7 +21503,7 @@ Model {
 		    IconDisplay		    "Port number"
 		    }
 		    Line {
-		    ZOrder		    167
+		    ZOrder		    176
 		    SrcBlock		    "state"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
@@ -20705,16 +21511,17 @@ Model {
 		    }
 		    Line {
 		    Name		    "smoothingTime_CoM"
-		    ZOrder		    168
+		    ZOrder		    177
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    2
+		    Points		    [0, -30]
 		    DstBlock		    "smoothingTime_CoM"
 		    DstPort		    1
 		    }
 		    Line {
 		    Name		    "smoothingTime_LFoot"
-		    ZOrder		    169
+		    ZOrder		    178
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    3
@@ -20723,7 +21530,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "smoothingTime_RFoot"
-		    ZOrder		    170
+		    ZOrder		    179
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    4
@@ -20732,7 +21539,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "smoothingTime_joints"
-		    ZOrder		    171
+		    ZOrder		    180
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    5
@@ -20741,7 +21548,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "smoothingTime_LHand"
-		    ZOrder		    172
+		    ZOrder		    181
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    6
@@ -20750,7 +21557,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "smoothingTime_RHand"
-		    ZOrder		    173
+		    ZOrder		    182
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    7
@@ -20758,16 +21565,17 @@ Model {
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    174
+		    ZOrder		    183
 		    SrcBlock		    " Demux "
 		    SrcPort		    1
 		    DstBlock		    " Terminator "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    175
+		    ZOrder		    184
 		    SrcBlock		    " SFunction "
 		    SrcPort		    1
+		    Points		    [20, 0]
 		    DstBlock		    " Demux "
 		    DstPort		    1
 		    }
@@ -21847,7 +22655,7 @@ Model {
 		  Position		  [145, 96, 235, 114]
 		  ZOrder		  1104
 		  ShowName		  off
-		  LibraryVersion	  "1.473"
+		  LibraryVersion	  "1.481"
 		  UserDataPersistent	  on
 		  UserData		  "DataTag0"
 		  SourceBlock		  "commchan3/AWGN\nChannel"
@@ -21874,7 +22682,7 @@ Model {
 		  Position		  [145, 21, 235, 39]
 		  ZOrder		  933
 		  ShowName		  off
-		  LibraryVersion	  "1.473"
+		  LibraryVersion	  "1.481"
 		  UserDataPersistent	  on
 		  UserData		  "DataTag1"
 		  SourceBlock		  "commchan3/AWGN\nChannel"
@@ -22268,7 +23076,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "3740"
+		    SIDHighWatermark	    "3743"
 		    SIDPrevWatermark	    "9"
 		    Block {
 		    BlockType		    Inport
@@ -22326,20 +23134,20 @@ Model {
 		    Block {
 		    BlockType		    Demux
 		    Name		    " Demux "
-		    SID			    "4716::3739"
+		    SID			    "4716::3742"
 		    Ports		    [1, 1]
 		    Position		    [270, 230, 320, 270]
-		    ZOrder		    139
+		    ZOrder		    142
 		    Outputs		    "1"
 		    }
 		    Block {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
-		    SID			    "4716::3738"
+		    SID			    "4716::3741"
 		    Tag			    "Stateflow S-Function torqueWalkingR2017a 11"
 		    Ports		    [6, 2]
 		    Position		    [180, 102, 230, 243]
-		    ZOrder		    138
+		    ZOrder		    141
 		    FunctionName	    "sf_sfun"
 		    Parameters		    "Config"
 		    PortCounts		    "[6 2]"
@@ -22354,9 +23162,9 @@ Model {
 		    Block {
 		    BlockType		    Terminator
 		    Name		    " Terminator "
-		    SID			    "4716::3740"
+		    SID			    "4716::3743"
 		    Position		    [460, 241, 480, 259]
-		    ZOrder		    140
+		    ZOrder		    143
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -22367,42 +23175,42 @@ Model {
 		    IconDisplay		    "Port number"
 		    }
 		    Line {
-		    ZOrder		    1
+		    ZOrder		    10
 		    SrcBlock		    "imu_H_link"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    2
+		    ZOrder		    11
 		    SrcBlock		    "imu_H_link_0"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    2
 		    }
 		    Line {
-		    ZOrder		    3
+		    ZOrder		    12
 		    SrcBlock		    "link_H_base"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    3
 		    }
 		    Line {
-		    ZOrder		    4
+		    ZOrder		    13
 		    SrcBlock		    "inertial_0"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    4
 		    }
 		    Line {
-		    ZOrder		    5
+		    ZOrder		    14
 		    SrcBlock		    "inertial"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    5
 		    }
 		    Line {
-		    ZOrder		    6
+		    ZOrder		    15
 		    SrcBlock		    "neck_pos"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
@@ -22410,7 +23218,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "w_H_b"
-		    ZOrder		    7
+		    ZOrder		    16
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    2
@@ -22418,14 +23226,14 @@ Model {
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    8
+		    ZOrder		    17
 		    SrcBlock		    " Demux "
 		    SrcPort		    1
 		    DstBlock		    " Terminator "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    9
+		    ZOrder		    18
 		    SrcBlock		    " SFunction "
 		    SrcPort		    1
 		    DstBlock		    " Demux "
@@ -23000,7 +23808,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "3740"
+		    SIDHighWatermark	    "3743"
 		    SIDPrevWatermark	    "9"
 		    Block {
 		    BlockType		    Inport
@@ -23058,20 +23866,20 @@ Model {
 		    Block {
 		    BlockType		    Demux
 		    Name		    " Demux "
-		    SID			    "5431::3739"
+		    SID			    "5431::3742"
 		    Ports		    [1, 1]
 		    Position		    [270, 230, 320, 270]
-		    ZOrder		    139
+		    ZOrder		    142
 		    Outputs		    "1"
 		    }
 		    Block {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
-		    SID			    "5431::3738"
+		    SID			    "5431::3741"
 		    Tag			    "Stateflow S-Function torqueWalkingR2017a 13"
 		    Ports		    [6, 2]
 		    Position		    [180, 102, 230, 243]
-		    ZOrder		    138
+		    ZOrder		    141
 		    FunctionName	    "sf_sfun"
 		    Parameters		    "Config"
 		    PortCounts		    "[6 2]"
@@ -23086,9 +23894,9 @@ Model {
 		    Block {
 		    BlockType		    Terminator
 		    Name		    " Terminator "
-		    SID			    "5431::3740"
+		    SID			    "5431::3743"
 		    Position		    [460, 241, 480, 259]
-		    ZOrder		    140
+		    ZOrder		    143
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -23099,42 +23907,42 @@ Model {
 		    IconDisplay		    "Port number"
 		    }
 		    Line {
-		    ZOrder		    1
+		    ZOrder		    10
 		    SrcBlock		    "imu_H_link"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    2
+		    ZOrder		    11
 		    SrcBlock		    "imu_H_link_0"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    2
 		    }
 		    Line {
-		    ZOrder		    3
+		    ZOrder		    12
 		    SrcBlock		    "link_H_base"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    3
 		    }
 		    Line {
-		    ZOrder		    4
+		    ZOrder		    13
 		    SrcBlock		    "inertial_0"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    4
 		    }
 		    Line {
-		    ZOrder		    5
+		    ZOrder		    14
 		    SrcBlock		    "inertial"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    5
 		    }
 		    Line {
-		    ZOrder		    6
+		    ZOrder		    15
 		    SrcBlock		    "neck_pos"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
@@ -23142,7 +23950,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "w_H_b"
-		    ZOrder		    7
+		    ZOrder		    16
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    2
@@ -23150,14 +23958,14 @@ Model {
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    8
+		    ZOrder		    17
 		    SrcBlock		    " Demux "
 		    SrcPort		    1
 		    DstBlock		    " Terminator "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    9
+		    ZOrder		    18
 		    SrcBlock		    " SFunction "
 		    SrcPort		    1
 		    DstBlock		    " Demux "
@@ -23814,7 +24622,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "3749"
+		    SIDHighWatermark	    "3752"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "J_LeftFoot"
@@ -23853,20 +24661,20 @@ Model {
 		    Block {
 		    BlockType		    Demux
 		    Name		    " Demux "
-		    SID			    "4760::3748"
+		    SID			    "4760::3751"
 		    Ports		    [1, 1]
 		    Position		    [270, 230, 320, 270]
-		    ZOrder		    117
+		    ZOrder		    120
 		    Outputs		    "1"
 		    }
 		    Block {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
-		    SID			    "4760::3747"
+		    SID			    "4760::3750"
 		    Tag			    "Stateflow S-Function torqueWalkingR2017a 14"
 		    Ports		    [4, 2]
 		    Position		    [180, 102, 230, 203]
-		    ZOrder		    116
+		    ZOrder		    119
 		    FunctionName	    "sf_sfun"
 		    Parameters		    "Sat"
 		    PortCounts		    "[4 2]"
@@ -23881,9 +24689,9 @@ Model {
 		    Block {
 		    BlockType		    Terminator
 		    Name		    " Terminator "
-		    SID			    "4760::3749"
+		    SID			    "4760::3752"
 		    Position		    [460, 241, 480, 259]
-		    ZOrder		    118
+		    ZOrder		    121
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -23894,28 +24702,28 @@ Model {
 		    IconDisplay		    "Port number"
 		    }
 		    Line {
-		    ZOrder		    50
+		    ZOrder		    57
 		    SrcBlock		    "J_LeftFoot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    51
+		    ZOrder		    58
 		    SrcBlock		    "J_RightFoot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    2
 		    }
 		    Line {
-		    ZOrder		    52
+		    ZOrder		    59
 		    SrcBlock		    "feetInContact"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    3
 		    }
 		    Line {
-		    ZOrder		    53
+		    ZOrder		    60
 		    SrcBlock		    "sDot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
@@ -23923,7 +24731,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "nu_b"
-		    ZOrder		    54
+		    ZOrder		    61
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    2
@@ -23931,14 +24739,14 @@ Model {
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    55
+		    ZOrder		    62
 		    SrcBlock		    " Demux "
 		    SrcPort		    1
 		    DstBlock		    " Terminator "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    56
+		    ZOrder		    63
 		    SrcBlock		    " SFunction "
 		    SrcPort		    1
 		    DstBlock		    " Demux "
@@ -24447,7 +25255,7 @@ Model {
 		    TiledPageScale	    1
 		    ShowPageBoundaries	    off
 		    ZoomFactor		    "100"
-		    SIDHighWatermark	    "113"
+		    SIDHighWatermark	    "116"
 		    Block {
 		    BlockType		    Inport
 		    Name		    "s_0"
@@ -24585,20 +25393,20 @@ Model {
 		    Block {
 		    BlockType		    Demux
 		    Name		    " Demux "
-		    SID			    "4671::101"
+		    SID			    "4671::115"
 		    Ports		    [1, 1]
 		    Position		    [270, 495, 320, 535]
-		    ZOrder		    88
+		    ZOrder		    100
 		    Outputs		    "1"
 		    }
 		    Block {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
-		    SID			    "4671::100"
+		    SID			    "4671::114"
 		    Tag			    "Stateflow S-Function torqueWalkingR2017a 10"
 		    Ports		    [15, 11]
 		    Position		    [180, 85, 230, 405]
-		    ZOrder		    87
+		    ZOrder		    99
 		    FunctionName	    "sf_sfun"
 		    Parameters		    "Config,Sat"
 		    PortCounts		    "[15 11]"
@@ -24649,9 +25457,9 @@ Model {
 		    Block {
 		    BlockType		    Terminator
 		    Name		    " Terminator "
-		    SID			    "4671::102"
+		    SID			    "4671::116"
 		    Position		    [460, 506, 480, 524]
-		    ZOrder		    89
+		    ZOrder		    101
 		    }
 		    Block {
 		    BlockType		    Outport
@@ -24743,105 +25551,105 @@ Model {
 		    IconDisplay		    "Port number"
 		    }
 		    Line {
-		    ZOrder		    2099
+		    ZOrder		    2126
 		    SrcBlock		    "s_0"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    2100
+		    ZOrder		    2127
 		    SrcBlock		    "w_H_LFoot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    2
 		    }
 		    Line {
-		    ZOrder		    2101
+		    ZOrder		    2128
 		    SrcBlock		    "w_H_LFoot_0"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    3
 		    }
 		    Line {
-		    ZOrder		    2102
+		    ZOrder		    2129
 		    SrcBlock		    "w_H_RFoot"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    4
 		    }
 		    Line {
-		    ZOrder		    2103
+		    ZOrder		    2130
 		    SrcBlock		    "w_H_RFoot_0"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    5
 		    }
 		    Line {
-		    ZOrder		    2104
+		    ZOrder		    2131
 		    SrcBlock		    "w_H_CoM"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    6
 		    }
 		    Line {
-		    ZOrder		    2105
+		    ZOrder		    2132
 		    SrcBlock		    "w_H_CoM_0"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    7
 		    }
 		    Line {
-		    ZOrder		    2106
+		    ZOrder		    2133
 		    SrcBlock		    "w_H_rot_task_0"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    8
 		    }
 		    Line {
-		    ZOrder		    2107
+		    ZOrder		    2134
 		    SrcBlock		    "w_H_LHand_0"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    9
 		    }
 		    Line {
-		    ZOrder		    2108
+		    ZOrder		    2135
 		    SrcBlock		    "w_H_RHand_0"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    10
 		    }
 		    Line {
-		    ZOrder		    2109
+		    ZOrder		    2136
 		    SrcBlock		    "LFoot_H_b"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    11
 		    }
 		    Line {
-		    ZOrder		    2110
+		    ZOrder		    2137
 		    SrcBlock		    "RFoot_H_b"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    12
 		    }
 		    Line {
-		    ZOrder		    2111
+		    ZOrder		    2138
 		    SrcBlock		    "LFoot_wrench"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    13
 		    }
 		    Line {
-		    ZOrder		    2112
+		    ZOrder		    2139
 		    SrcBlock		    "RFoot_wrench"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
 		    DstPort		    14
 		    }
 		    Line {
-		    ZOrder		    2113
+		    ZOrder		    2140
 		    SrcBlock		    "t"
 		    SrcPort		    1
 		    DstBlock		    " SFunction "
@@ -24849,7 +25657,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "w_H_b"
-		    ZOrder		    2114
+		    ZOrder		    2141
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    2
@@ -24858,7 +25666,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "feetInContact"
-		    ZOrder		    2115
+		    ZOrder		    2142
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    3
@@ -24867,7 +25675,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "state"
-		    ZOrder		    2116
+		    ZOrder		    2143
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    4
@@ -24876,7 +25684,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "references_LFoot"
-		    ZOrder		    2117
+		    ZOrder		    2144
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    5
@@ -24885,17 +25693,16 @@ Model {
 		    }
 		    Line {
 		    Name		    "references_RFoot"
-		    ZOrder		    2118
+		    ZOrder		    2145
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    6
-		    Points		    [0, 10]
 		    DstBlock		    "references_RFoot"
 		    DstPort		    1
 		    }
 		    Line {
 		    Name		    "references_CoM"
-		    ZOrder		    2119
+		    ZOrder		    2146
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    7
@@ -24904,7 +25711,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "references_rot_task"
-		    ZOrder		    2120
+		    ZOrder		    2147
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    8
@@ -24913,7 +25720,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "references_LHand"
-		    ZOrder		    2121
+		    ZOrder		    2148
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    9
@@ -24922,7 +25729,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "references_RHand"
-		    ZOrder		    2122
+		    ZOrder		    2149
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    10
@@ -24931,7 +25738,7 @@ Model {
 		    }
 		    Line {
 		    Name		    "references_s"
-		    ZOrder		    2123
+		    ZOrder		    2150
 		    Labels		    [0, 0]
 		    SrcBlock		    " SFunction "
 		    SrcPort		    11
@@ -24939,14 +25746,14 @@ Model {
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    2124
+		    ZOrder		    2151
 		    SrcBlock		    " Demux "
 		    SrcPort		    1
 		    DstBlock		    " Terminator "
 		    DstPort		    1
 		    }
 		    Line {
-		    ZOrder		    2125
+		    ZOrder		    2152
 		    SrcBlock		    " SFunction "
 		    SrcPort		    1
 		    DstBlock		    " Demux "
@@ -26600,8 +27407,8 @@ Model {
       }
       System {
 	Name			"Subsystem"
-	Location		[53, 27, 1366, 768]
-	Open			off
+	Location		[-1301, -744, 0, 0]
+	Open			on
 	PortBlocksUseCompactNotation off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -26911,7 +27718,7 @@ Model {
 	  BlockType		  SubSystem
 	  Name			  "compute ZMP"
 	  SID			  "7143"
-	  Ports			  [6, 2]
+	  Ports			  [6, 3]
 	  Position		  [1035, 221, 1175, 459]
 	  ZOrder		  1076
 	  LibraryVersion	  "1.32"
@@ -26937,7 +27744,7 @@ Model {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
-	    SIDHighWatermark	    "43"
+	    SIDHighWatermark	    "47"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "f_lFoot"
@@ -26994,23 +27801,23 @@ Model {
 	    Block {
 	      BlockType		      Demux
 	      Name		      " Demux "
-	      SID		      "7143::27"
+	      SID		      "7143::45"
 	      Ports		      [1, 1]
-	      Position		      [270, 230, 320, 270]
-	      ZOrder		      13
+	      Position		      [270, 245, 320, 285]
+	      ZOrder		      30
 	      Outputs		      "1"
 	    }
 	    Block {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
-	      SID		      "7143::26"
+	      SID		      "7143::44"
 	      Tag		      "Stateflow S-Function torqueWalkingR2017a 21"
-	      Ports		      [6, 3]
-	      Position		      [180, 112, 230, 253]
-	      ZOrder		      12
+	      Ports		      [6, 4]
+	      Position		      [180, 102, 230, 243]
+	      ZOrder		      29
 	      FunctionName	      "sf_sfun"
 	      Parameters	      "Config,Sat"
-	      PortCounts	      "[6 3]"
+	      PortCounts	      "[6 4]"
 	      SFunctionDeploymentMode off
 	      EnableBusSupport	      on
 	      SFcnIsStateOwnerBlock   off
@@ -27022,13 +27829,17 @@ Model {
 		PortNumber		3
 		Name			"supportPolygon"
 	      }
+	      Port {
+		PortNumber		4
+		Name			"zmpErr"
+	      }
 	    }
 	    Block {
 	      BlockType		      Terminator
 	      Name		      " Terminator "
-	      SID		      "7143::28"
-	      Position		      [460, 241, 480, 259]
-	      ZOrder		      14
+	      SID		      "7143::46"
+	      Position		      [460, 256, 480, 274]
+	      ZOrder		      31
 	    }
 	    Block {
 	      BlockType		      Outport
@@ -27047,43 +27858,52 @@ Model {
 	      Port		      "2"
 	      IconDisplay	      "Port number"
 	    }
+	    Block {
+	      BlockType		      Outport
+	      Name		      "zmpErr"
+	      SID		      "7143::47"
+	      Position		      [460, 171, 480, 189]
+	      ZOrder		      32
+	      Port		      "3"
+	      IconDisplay	      "Port number"
+	    }
 	    Line {
-	      ZOrder		      1
+	      ZOrder		      21
 	      SrcBlock		      "f_lFoot"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      2
+	      ZOrder		      22
 	      SrcBlock		      "f_rFoot"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      2
 	    }
 	    Line {
-	      ZOrder		      3
+	      ZOrder		      23
 	      SrcBlock		      "pose_lFoot"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      3
 	    }
 	    Line {
-	      ZOrder		      4
+	      ZOrder		      24
 	      SrcBlock		      "orient_lFoot"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      4
 	    }
 	    Line {
-	      ZOrder		      5
+	      ZOrder		      25
 	      SrcBlock		      "pose_rFoot"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
 	      DstPort		      5
 	    }
 	    Line {
-	      ZOrder		      6
+	      ZOrder		      26
 	      SrcBlock		      "orient_rFoot"
 	      SrcPort		      1
 	      DstBlock		      " SFunction "
@@ -27091,7 +27911,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "ZMP"
-	      ZOrder		      7
+	      ZOrder		      27
 	      Labels		      [0, 0]
 	      SrcBlock		      " SFunction "
 	      SrcPort		      2
@@ -27100,7 +27920,7 @@ Model {
 	    }
 	    Line {
 	      Name		      "supportPolygon"
-	      ZOrder		      8
+	      ZOrder		      28
 	      Labels		      [0, 0]
 	      SrcBlock		      " SFunction "
 	      SrcPort		      3
@@ -27108,14 +27928,23 @@ Model {
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      9
+	      Name		      "zmpErr"
+	      ZOrder		      29
+	      Labels		      [0, 0]
+	      SrcBlock		      " SFunction "
+	      SrcPort		      4
+	      DstBlock		      "zmpErr"
+	      DstPort		      1
+	    }
+	    Line {
+	      ZOrder		      30
 	      SrcBlock		      " Demux "
 	      SrcPort		      1
 	      DstBlock		      " Terminator "
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      10
+	      ZOrder		      31
 	      SrcBlock		      " SFunction "
 	      SrcPort		      1
 	      DstBlock		      " Demux "
@@ -28851,7 +29680,7 @@ Model {
 	  ZOrder		  762
 	  SrcBlock		  "compute ZMP"
 	  SrcPort		  1
-	  Points		  [19, 0]
+	  Points		  [0, 20; 19, 0]
 	  Branch {
 	    ZOrder		    765
 	    Points		    [0, -40]
@@ -28915,7 +29744,7 @@ Model {
 	  ZOrder		  763
 	  SrcBlock		  "compute ZMP"
 	  SrcPort		  2
-	  Points		  [15, 0]
+	  Points		  [0, 60; 15, 0]
 	  Branch {
 	    ZOrder		    767
 	    DstBlock		    "Goto1"
@@ -28964,7 +29793,7 @@ Model {
       }
       System {
 	Name			"Visualization"
-	Location		[53, 27, 1366, 768]
+	Location		[65, 24, 1366, 768]
 	Open			on
 	PortBlocksUseCompactNotation off
 	ModelBrowserVisibility	off
@@ -30845,7 +31674,7 @@ Model {
 	      Position		      [-55, -20, -25, 10]
 	      ZOrder		      918
 	      ShowName		      off
-	      LibraryVersion	      "1.391"
+	      LibraryVersion	      "1.401"
 	      SourceBlock	      "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	      SourceType	      "Compare To Constant"
 	      SourceProductName	      "Simulink"
@@ -30864,7 +31693,7 @@ Model {
 	      Position		      [-55, 30, -25, 60]
 	      ZOrder		      920
 	      ShowName		      off
-	      LibraryVersion	      "1.391"
+	      LibraryVersion	      "1.401"
 	      SourceBlock	      "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	      SourceType	      "Compare To Constant"
 	      SourceProductName	      "Simulink"
@@ -31049,10 +31878,8 @@ Model {
 	    Annotation {
 	      SID		      "6758"
 	      Name		      "Stop the simulation when the force on each feet is below a threshold (i.e. robot falls)"
-	      Position		      [-115, -57, 257, -42]
+	      Position		      [-115, -57, 256, -40]
 	      InternalMargins	      [0, 0, 0, 0]
-	      FixedHeight	      off
-	      FixedWidth	      off
 	      HorizontalAlignment     "left"
 	      VerticalAlignment	      "top"
 	      ZOrder		      -1
@@ -31887,10 +32714,8 @@ Model {
 	    Annotation {
 	      SID		      "7035"
 	      Name		      "Stop the simulation when the ZMP goes out of the support polygon"
-	      Position		      [-115, -57, 181, -42]
+	      Position		      [-115, -57, 181, -40]
 	      InternalMargins	      [0, 0, 0, 0]
-	      FixedHeight	      off
-	      FixedWidth	      off
 	      HorizontalAlignment     "left"
 	      VerticalAlignment	      "top"
 	      ZOrder		      -1
@@ -38788,7 +39613,7 @@ MatData {
 }
 #Finite State Machines
 #
-#   Stateflow 80000011
+#   Stateflow 80000012
 #
 #
 Stateflow {
@@ -38797,8 +39622,8 @@ Stateflow {
     name		    "torqueWalkingR2017a"
     created		    "29-Nov-2017 15:01:26"
     isLibrary		    0
-    sfVersion		    80000011
-    firstTarget		    364
+    sfVersion		    80000012
+    firstTarget		    365
   }
   chart {
     id			    2
@@ -46329,9 +47154,6 @@ Stateflow {
     screen		    [1 1 3600 1200 1.180555555555556]
     treeNode		    [0 335 0 0]
     viewObj		    334
-    visible		    1
-    subviewS {
-    }
     ssIdHighWaterMark	    9
     decomposition	    CLUSTER_CHART
     type		    EML_CHART
@@ -46622,7 +47444,10 @@ Stateflow {
     screen		    [1 1 1280 1024 1.041050272174191]
     treeNode		    [0 350 0 0]
     viewObj		    349
-    ssIdHighWaterMark	    25
+    visible		    1
+    subviewS {
+    }
+    ssIdHighWaterMark	    26
     decomposition	    CLUSTER_CHART
     type		    EML_CHART
     chartFileNumber	    21
@@ -46631,8 +47456,8 @@ Stateflow {
       name		      "ZMP"
     }
     firstData		    351
-    firstTransition	    362
-    firstJunction	    361
+    firstTransition	    363
+    firstJunction	    362
   }
   state {
     id			    350
@@ -46648,35 +47473,38 @@ Stateflow {
     decomposition	    CLUSTER_STATE
     eml {
       isEML		      1
-      script		      "function [ZMP, supportPolygon] = ZMP(f_lFoot, f_rFoot, pose_lFoot, orient_lFoot, pose_rFoot, orie"
-      "nt_rFoot, Sat, Config)\n\n% % Compute the coordinates of the ZMP\n% % Compute the coordinates of the support pol"
-      "ygon\n% %\n% %           right_foot      left_foot\n% %         C  _______  B   C' _______ B'          \n% %    "
-      "       |       |       |       |   Y_w\n% %           |       |       |   ---------->\n% %           |       |  "
-      "     |   |   |\n% %         D |_______| A   D'|___|__ | A'\n% %                               |\n% %            "
-      "               X_w |\n% %                               v\n% % \n% % input Config.footSize = [xMin, xMax]\n% %  "
-      "                       [yMin, yMax] \n% %                            \n% % output supportPolygon = [xMin, xMax]\n"
-      "% %                         [yMin, yMax]\n\n%Re-organize foot size into min/max coordinates\nfoot_xMin    = Conf"
-      "ig.footSize(1,1);\nfoot_xMax    = Config.footSize(1,2);\nfoot_yMin    = Config.footSize(2,1);\nfoot_yMax    = Co"
-      "nfig.footSize(2,2);\n\n%Re-organize forces on feet\nfz_lFoot   = f_lFoot(3);\ntaux_lFoot = f_lFoot(4);\ntauy_lFo"
-      "ot = f_lFoot(5);\nfz_rFoot   = f_rFoot(3);\ntaux_rFoot = f_rFoot(4);\ntauy_rFoot = f_rFoot(5);\n\nif f_lFoot(3) "
-      "> Sat.toll_feetInContact && f_rFoot(3) > Sat.toll_feetInContact \n    %double support\n    \n    cop_lFoot  = or"
-      "ient_lFoot(1:2,1:2) * [-tauy_lFoot; taux_lFoot] / fz_lFoot + pose_lFoot(1:2);\n    cop_rFoot  = orient_rFoot(1:2"
-      ",1:2) * [-tauy_rFoot; taux_rFoot] / fz_rFoot + pose_rFoot(1:2);\n    ZMP       = (fz_lFoot * cop_lFoot + fz_rFoo"
-      "t * cop_rFoot) / (fz_lFoot + fz_rFoot);\n    \n    supportPolygon_xMin = min( pose_lFoot(1), pose_rFoot(1) ) + f"
-      "oot_xMin;\n    supportPolygon_xMax = max( pose_lFoot(1), pose_rFoot(1) ) + foot_xMax;\n    supportPolygon_yMin ="
-      " min( pose_lFoot(2), pose_rFoot(2) ) + foot_yMin;\n    supportPolygon_yMax = max( pose_lFoot(2), pose_rFoot(2) )"
-      " + foot_yMax;\n    \nelseif f_lFoot(3) > Sat.toll_feetInContact\n    %single support left foot\n    \n    cop_lF"
-      "oot  = orient_lFoot(1:2,1:2) * [-tauy_lFoot; taux_lFoot] / fz_lFoot + pose_lFoot(1:2);\n    ZMP       = (fz_lFoo"
-      "t * cop_lFoot) / (fz_lFoot);\n    \n    supportPolygon_xMin = pose_lFoot(1) + foot_xMin;\n    supportPolygon_xMa"
-      "x = pose_lFoot(1) + foot_xMax;\n    supportPolygon_yMin = pose_lFoot(2) + foot_yMin;\n    supportPolygon_yMax = "
-      "pose_lFoot(2) + foot_yMax;\n    \nelseif f_rFoot(3) > Sat.toll_feetInContact     \n    %single support right foo"
-      "t\n    \n    cop_rFoot  = orient_rFoot(1:2,1:2) * [-tauy_rFoot; taux_rFoot] / fz_rFoot + pose_rFoot(1:2);\n    Z"
-      "MP       = (fz_rFoot * cop_rFoot) / (fz_rFoot);\n    \n    supportPolygon_xMin = pose_rFoot(1) + foot_xMin;\n   "
-      " supportPolygon_xMax = pose_rFoot(1) + foot_xMax;\n    supportPolygon_yMin = pose_rFoot(2) + foot_yMin;\n    sup"
-      "portPolygon_yMax = pose_rFoot(2) + foot_yMax;\n    \nelse\n    %no support\n    ZMP = zeros(2,1);\n    supportPo"
-      "lygon_xMin = 0;\n    supportPolygon_xMax = 0;\n    supportPolygon_yMin = 0;\n    supportPolygon_yMax = 0;\nend\n"
-      "\n%re-organize supportPolygon\n%and add tolerance of 0.002 m on supportPolygon\nsupportPolygon = [supportPolygon"
-      "_xMin,      supportPolygon_xMax;\n                  supportPolygon_yMin-0.010, supportPolygon_yMax+0.010];"
+      script		      "function [ZMP, supportPolygon,zmpErr] = ZMP(f_lFoot, f_rFoot, pose_lFoot, orient_lFoot, pose_rFoo"
+      "t, orient_rFoot, Sat, Config)\n\n% % Compute the coordinates of the ZMP\n% % Compute the coordinates of the supp"
+      "ort polygon\n% %\n% %           right_foot      left_foot\n% %         C  _______  B   C' _______ B'          \n"
+      "% %           |       |       |       |   Y_w\n% %           |       |       |   ---------->\n% %           |   "
+      "    |       |   |   |\n% %         D |_______| A   D'|___|__ | A'\n% %                               |\n% %     "
+      "                      X_w |\n% %                               v\n% % \n% % input Config.footSize = [xMin, xMax]"
+      "\n% %                         [yMin, yMax] \n% %                            \n% % output supportPolygon = [xMin,"
+      " xMax]\n% %                         [yMin, yMax]\n\n%Re-organize foot size into min/max coordinates\nfoot_xMin  "
+      "  = Config.footSize(1,1);\nfoot_xMax    = Config.footSize(1,2);\nfoot_yMin    = Config.footSize(2,1);\nfoot_yMax"
+      "    = Config.footSize(2,2);\n\n%Re-organize forces on feet\nfz_lFoot   = f_lFoot(3);\ntaux_lFoot = f_lFoot(4);\n"
+      "tauy_lFoot = f_lFoot(5);\nfz_rFoot   = f_rFoot(3);\ntaux_rFoot = f_rFoot(4);\ntauy_rFoot = f_rFoot(5);\n\nif f_l"
+      "Foot(3) > Sat.toll_feetInContact && f_rFoot(3) > Sat.toll_feetInContact \n    %double support\n    \n    cop_lFo"
+      "ot  = orient_lFoot(1:2,1:2) * [-tauy_lFoot; taux_lFoot] / fz_lFoot + pose_lFoot(1:2);\n    cop_rFoot  = orient_r"
+      "Foot(1:2,1:2) * [-tauy_rFoot; taux_rFoot] / fz_rFoot + pose_rFoot(1:2);\n    ZMP       = (fz_lFoot * cop_lFoot +"
+      " fz_rFoot * cop_rFoot) / (fz_lFoot + fz_rFoot);\n    \n    supportPolygon_xMin = min( pose_lFoot(1), pose_rFoot("
+      "1) ) + foot_xMin;\n    supportPolygon_xMax = max( pose_lFoot(1), pose_rFoot(1) ) + foot_xMax;\n    supportPolygo"
+      "n_yMin = min( pose_lFoot(2), pose_rFoot(2) ) + foot_yMin;\n    supportPolygon_yMax = max( pose_lFoot(2), pose_rF"
+      "oot(2) ) + foot_yMax;\n    \nelseif f_lFoot(3) > Sat.toll_feetInContact\n    %single support left foot\n    \n  "
+      "  cop_lFoot  = orient_lFoot(1:2,1:2) * [-tauy_lFoot; taux_lFoot] / fz_lFoot + pose_lFoot(1:2);\n    ZMP       = "
+      "(fz_lFoot * cop_lFoot) / (fz_lFoot);\n    \n    supportPolygon_xMin = pose_lFoot(1) + foot_xMin;\n    supportPol"
+      "ygon_xMax = pose_lFoot(1) + foot_xMax;\n    supportPolygon_yMin = pose_lFoot(2) + foot_yMin;\n    supportPolygon"
+      "_yMax = pose_lFoot(2) + foot_yMax;\n    \nelseif f_rFoot(3) > Sat.toll_feetInContact     \n    %single support r"
+      "ight foot\n    \n    cop_rFoot  = orient_rFoot(1:2,1:2) * [-tauy_rFoot; taux_rFoot] / fz_rFoot + pose_rFoot(1:2)"
+      ";\n    ZMP       = (fz_rFoot * cop_rFoot) / (fz_rFoot);\n    \n    supportPolygon_xMin = pose_rFoot(1) + foot_xM"
+      "in;\n    supportPolygon_xMax = pose_rFoot(1) + foot_xMax;\n    supportPolygon_yMin = pose_rFoot(2) + foot_yMin;\n"
+      "    supportPolygon_yMax = pose_rFoot(2) + foot_yMax;\n    \nelse\n    %no support\n    ZMP = zeros(2,1);\n    su"
+      "pportPolygon_xMin = 0;\n    supportPolygon_xMax = 0;\n    supportPolygon_yMin = 0;\n    supportPolygon_yMax = 0;"
+      "\nend\n\n%re-organize supportPolygon\n%and add tolerance of 0.002 m on supportPolygon\nsupportPolygon = [support"
+      "Polygon_xMin,      supportPolygon_xMax;\n                  supportPolygon_yMin-0.010, supportPolygon_yMax+0.010]"
+      ";\n\nsupportPolygoncenter = zeros(2,1); \nsupportPolygoncenter(1) = (supportPolygon_xMax + supportPolygon_xMin)/"
+      "2;\nsupportPolygoncenter(2) = ((supportPolygon_yMax+0.010) + (supportPolygon_yMin-0.010))/2;\n\nzmpErr = sqrt((s"
+      "upportPolygoncenter(1)-ZMP(1))^2 + (supportPolygoncenter(2)-ZMP(2))^2);\n\n              \n              "
       editorLayout	      "100 M4x1[10 5 700 500]"
     }
   }
@@ -46929,10 +47757,35 @@ Stateflow {
       }
     }
     dataType		    "Inherit: Same as Simulink"
-    linkNode		    [349 359 0]
+    linkNode		    [349 359 361]
+  }
+  data {
+    id			    361
+    ssIdNumber		    26
+    name		    "zmpErr"
+    scope		    OUTPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+	isSigned		1
+	wordLength		"16"
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_NO
+      unit {
+	name			"inherit"
+      }
+    }
+    dataType		    "Inherit: Same as Simulink"
+    linkNode		    [349 360 0]
   }
   junction {
-    id			    361
+    id			    362
     position		    [23.5747 49.5747 7]
     chart		    349
     subviewer		    349
@@ -46941,7 +47794,7 @@ Stateflow {
     linkNode		    [349 0 0]
   }
   transition {
-    id			    362
+    id			    363
     labelString		    "{eML_blk_kernel();}"
     labelPosition	    [28.125 13.875 102.544 14.964]
     fontSize		    12
@@ -46949,7 +47802,7 @@ Stateflow {
       intersection	      [0 0 1 0 23.5747 14.625 0 0]
     }
     dst {
-      id		      361
+      id		      362
       intersection	      [1 0 -1 0 23.5747 42.5747 0 0]
     }
     midPoint		    [23.5747 24.9468]
@@ -46965,13 +47818,13 @@ Stateflow {
     linkNode		    [349 0 0]
   }
   instance {
-    id			    363
+    id			    364
     machine		    1
     name		    "Subsystem/compute ZMP"
     chart		    349
   }
   target {
-    id			    364
+    id			    365
     machine		    1
     name		    "sfun"
     description		    "Default Simulink S-Function Target."

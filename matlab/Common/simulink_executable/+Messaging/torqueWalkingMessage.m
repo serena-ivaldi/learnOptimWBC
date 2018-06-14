@@ -32,7 +32,9 @@ classdef torqueWalkingMessage < Messaging.AbstractMessage
           controller.simulation_results.pose_lFoot      = pose_lFoot.Data(:,:)';
           controller.simulation_results.pose_rFoot      = pose_rFoot.Data(:,:)';
           controller.simulation_results.time            = time;
+          controller.simulation_results.zmpErr          = zmpErr;
           controller.log.external_wrench                = external_force.wrench;
+          
           
           s  = s_sim.Data;
           sd = sd_sim.Data;
@@ -56,13 +58,14 @@ classdef torqueWalkingMessage < Messaging.AbstractMessage
         s_sim                = results.get('s');
         sd_sim               = results.get('sd');
         time                 = results.get('tout');
+        zmpErr               = results.get('zmpErr');
         
         
         %% simulationResults.mat has to be saved in common/simulink_executable
         save(obj.outputfromsimulink, 'task_errors', 'joint_error', 'torques', ...
             'QP_optObjFunVal', 'QP_exitFlag', ...
             'feet_in_contact', 'ZMP', 'support_polygon', ...
-            'pose_CoM', 'pose_lFoot', 'pose_rFoot', 's_sim', 'sd_sim', 'time');
+            'pose_CoM', 'pose_lFoot', 'pose_rFoot', 's_sim', 'sd_sim', 'time','zmpErr');
       end
    end
     
