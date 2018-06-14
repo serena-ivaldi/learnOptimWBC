@@ -26,7 +26,7 @@ time_struct.tf   = 40;   %final time
 time_struct.step = 0.01; %time step (fixed step integrator)
 
 % parameters used in DynSim_iCubSim for detecting whether the process got stuck
-params.max_timer = time_struct.tf * 2 + 180; %maximum time expected for a successful run of threadSimulink
+params.max_timer = time_struct.tf * 2 + 360; %maximum time expected for a successful run of threadSimulink
 params.max_consecutive_fails_counter = 5; %number of failed runs of threadSimulink, after which all programs are killed and restarted
 
 %% TASK PARAMETERS
@@ -124,33 +124,16 @@ params.robot_torqueLimit  = bot1.effortLimit';
 
 %% NOISE GENERATION
 
-params.config.ADD_NOISE_FT_SENSORS = round(rand(1)); %generate gaussian noise on input F/T sensor signals
-params.config.FOOT_LIFT_FRONT = round(rand(1)); %0 is lifting the foot towards the back; 1 is lifting the foot towards the front
-params.config.COM_DELTA = (randi(3)-1)/100; %when config.COM_DELTA = 0.02, move the CoM 0.02 m to the front (except during two feet balancing)
 params.config.APPLY_EXTERNAL_WRENCH = 1; %External wrenches applied in Gazebo
-
 %External wrenches will be applied
 %on the specified link
 params.external_force.link = 'chest';
 %for a random number of applications
-params.external_force.n_wrench_applications = randi(10);
-%at random times in the simulation
-params.external_force.time_of_application = sort(round(params.tEnd * rand(params.external_force.n_wrench_applications, 1), 2));
+params.external_force.maximum_number_of_wrenches = 10;
 %for random durations
-params.external_force.duration = round(2 * rand(params.external_force.n_wrench_applications, 1), 2);
-%with a random magnitude, towards a random direction
-params.external_force.max_force = 15; %N
-params.external_force.max_torque = 3; %N
-params.external_force.magnitude = params.external_force.max_force * rand(params.external_force.n_wrench_applications, 1);
-params.external_force.wrench = zeros(params.external_force.n_wrench_applications, 6);
-for i = 1 : params.external_force.n_wrench_applications
-   params.external_force.wrench(i,1) = params.external_force.magnitude(i) * rand(1);
-   params.external_force.wrench(i,2) = sqrt(params.external_force.magnitude(i)^2 - params.external_force.wrench(i,1)^2);
-   params.external_force.wrench(i,4:6) = params.external_force.max_torque * rand(1,3);
-end
-params.external_force.wrench = round(params.external_force.wrench,2);
-
-
+params.external_force.max_duration_of_wrenches = 2;
+params.external_force.max_force  = 15; %N
+params.external_force.max_torque = 3;  %N*m
 %% Parameters Dependant on the type of controller
 
 switch CONTROLLERTYPE
@@ -217,10 +200,11 @@ switch CONTROLLERTYPE
         fitness        = @fitnessTorqueWalking_QPcosts; %@fitnessHumanoidsiCubTorqueWalkingGlobal; %Conservative; %@fitnessHumanoidsiCubTorqueWalkingGlobal, @fitnessHumanoidsiCubTorqueWalkingHybrid
         clean_function = @RobotExperimentCleanData;
         
-        input{1} = simulator_type{1};  % rbt / v-rep
-        input{2} = params;
-        input{3} = time_sym_struct;
-        input{4} = [];                 % here i have to insert the controller i will do that in init()
+        input{1}  = simulator_type{1};  % rbt / v-rep
+        input{2}  = params;
+        input{3}  = time_sym_struct;
+        input{4}  = [];                 % here i have to insert the controller i will do that in init()
+        
         
         
         %% CMAES PARAMETER

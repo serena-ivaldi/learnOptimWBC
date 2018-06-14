@@ -19,7 +19,7 @@ classdef torqueWalkingMessage < Messaging.AbstractMessage
           %% this line has to be present in every unpack function  
           load(obj.outputfromsimulink)
           %% save data 
-%           controller.simulation_iterator                = 1;
+%         controller.simulation_iterator                = 1;
           controller.simulation_results.task_errors     = task_errors.Data;
           controller.simulation_results.joint_error     = joint_error.Data(:,:)';
           controller.simulation_results.torques         = torques.Data; %this is a timeseries of the vector of measured joint torques
@@ -32,6 +32,7 @@ classdef torqueWalkingMessage < Messaging.AbstractMessage
           controller.simulation_results.pose_lFoot      = pose_lFoot.Data(:,:)';
           controller.simulation_results.pose_rFoot      = pose_rFoot.Data(:,:)';
           controller.simulation_results.time            = time;
+          controller.log.external_wrench                = external_force.wrench;
           
           s  = s_sim.Data;
           sd = sd_sim.Data;
@@ -55,6 +56,7 @@ classdef torqueWalkingMessage < Messaging.AbstractMessage
         s_sim                = results.get('s');
         sd_sim               = results.get('sd');
         time                 = results.get('tout');
+        
         
         %% simulationResults.mat has to be saved in common/simulink_executable
         save(obj.outputfromsimulink, 'task_errors', 'joint_error', 'torques', ...

@@ -79,6 +79,10 @@ Config.t_step = params.sim_step; %0.01; % [s]
 % parameters, but in common for all demos is run. Then, the configuration
 % file corresponding to the specified demo is run.
 %
+
+disturbancesInit = 'disturbances.m';
+run(disturbancesInit);
+
 configRobotFCN = fullfile('app/robots', getenv('YARP_ROBOT_NAME'),'configRobot.m');
 run(configRobotFCN);
 

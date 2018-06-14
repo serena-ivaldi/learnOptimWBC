@@ -66,6 +66,11 @@ function [performance, succeeded, data2save] = EvaluateCMAES(obj,action,cur_cand
                   performance = performance - obj.penalty_handling.fitness_penalties(1);
                end
             end
+            %% i added this line in order to save some log value during the optimization procedure
+            if(log_index > 0)
+                data2save.log = obj.input_4_run{1,obj.log_index}.log;
+            end
+            
         else
             succeeded = 0;
         end

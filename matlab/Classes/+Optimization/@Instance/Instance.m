@@ -3,7 +3,7 @@
 
 
 
-classdef  Instance
+classdef  Instance < handle
     
    properties
       penalty_handling % object to handle penalties inside the optimization routine
@@ -16,6 +16,8 @@ classdef  Instance
       input_4_run      % this variable is a cell array that contains the data that are needed to execute the run function
       fitness_result   % in this vector i save the value of the fitness function 
       data2save        % in this structure im going to save all the data that i need for visualization / debugging purpose
+      log_index        % index that tell us where it is possible to find the log data inside input_4_run 
+                       % (it is based on the fact that the controller object is never copyed but passed as a pointer throughout the the computation)
    end
        
    methods
@@ -31,13 +33,15 @@ classdef  Instance
            if(~isempty(varargin))
                obj.constraints = varargin{1};
            end
-           obj.learn_procedure = learn_procedure;
+           obj.learn_procedure  = learn_procedure;
            obj.penalty_handling = penalty_handling;
-           obj.preprocessing = preprocessing;
-           obj.run_function = run_function;  
-           obj.fitness = fitness;
-           obj.input_4_run = input_4_run;
-           obj.clean_function = clean_function;
+           obj.preprocessing    = preprocessing;
+           obj.run_function     = run_function;  
+           obj.fitness          = fitness;
+           obj.input_4_run      = input_4_run;
+           obj.clean_function   = clean_function;
+           obj.log_index        = 0;   % i use this default value in order to avoid any logging (if it is different from zero i will log data)
+           obj.data2save        = {};
        end
        
        % this function has to give back something that let me compute the
@@ -45,6 +49,11 @@ classdef  Instance
        function [output]=run(obj,parameters)
             %disp('im in run')   
             [output]=feval(obj.run_function,obj,parameters);
+       end
+       
+       % wi
+       function setLogIndex(obj,log_index)
+           obj.log_index = log_index;
        end
        
        function [mean_performances, bestAction, BestActionPerEachGen, policies, costs, succeeded, G_data2save]=CMAES(obj,num_of_param,start_action,niter,explorationRate,cmaes_value_range)

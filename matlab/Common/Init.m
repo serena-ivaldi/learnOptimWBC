@@ -120,16 +120,25 @@ end
 
 %% Instance
 if strcmp(simulator_type{1},'rbt')
-    input{5} = controller;
+    input{5}  = controller;
+    log_index = 5;
 elseif strcmp(simulator_type{1},'icub_matlab')
-    input{4} = controller;
+    input{4}  = controller;
+    log_index = 4;
 elseif strcmp(simulator_type{1},'icub_matlab_sim')
-    input{4} = controller;
+    input{4}  = controller;
+    log_index = 4;
 end
 
 % i added it for the using it in the preprocessing methods for benchmarks
 if(strcmp(learn_approach,'fmincon'))
-    inst = ObjProblem(controller.GetTotalParamNum(),cmaes_value_range,constr,learn_approach,run_function,fitness,clean_function,input);       
+    inst = ObjProblem(controller.GetTotalParamNum(),cmaes_value_range,constr,learn_approach,run_function,fitness,clean_function,input);
+    % i need to explicitly set the log index in order to log the file inside
+    % the controller that are stored in the message class from the
+    % simulation otheriwise there will be no storage at all. 
+    % The log data areexpected to be inside a struct or an object in input
+    % for run
+    inst.setLogIndex(log_index);
 else
     inst = Optimization.Instance(constr,learn_approach,preprocessing,run_function,fitness,clean_function,input,activate_constraints_handling);
 end
