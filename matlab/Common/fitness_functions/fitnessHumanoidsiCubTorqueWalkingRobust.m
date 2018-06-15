@@ -17,14 +17,15 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalkingRobust(obj,output)
     
     torques         = controller.simulation_results.torques;         %[nsamples x nDOF]
     time            = controller.simulation_results.time;            %[nsamples x 1]
-    zmpErr          = controller.simulation_results.zmpErr;            %[nsamples x 1]
+    zmpErr          = controller.simulation_results.zmpErr;          %[nsamples x 1]
+    QP_exitFlag     = controller.simulation_results.QP_exitFlag;     %[nsamples x 1]    
 
     t_all           = output{1};
     q_all           = output{2};
     qd_all          = output{3};
     
-    nsamples        = size(controller.simulation_results.task_errors,1);
-    max_zmpErr      = 0.07 * nsamples;
+    nsamples        = size(controller.simulation_results.zmpErr,1);
+    max_zmpErr      = 0.0049 * nsamples;
     
     
     downsample      = 1;

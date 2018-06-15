@@ -20,7 +20,7 @@ classdef torqueWalkingMessage < Messaging.AbstractMessage
           load(obj.outputfromsimulink)
           %% save data 
 %         controller.simulation_iterator                = 1;
-          controller.simulation_results.task_errors     = task_errors.Data;
+          controller.simulation_results.task_errors     = task_errors.Data(:,:)';
           controller.simulation_results.joint_error     = joint_error.Data(:,:)';
           controller.simulation_results.torques         = torques.Data; %this is a timeseries of the vector of measured joint torques
           controller.simulation_results.QP_optObjFunVal = QP_optObjFunVal.Data;
@@ -32,8 +32,8 @@ classdef torqueWalkingMessage < Messaging.AbstractMessage
           controller.simulation_results.pose_lFoot      = pose_lFoot.Data(:,:)';
           controller.simulation_results.pose_rFoot      = pose_rFoot.Data(:,:)';
           controller.simulation_results.time            = time;
-          controller.simulation_results.zmpErr          = zmpErr;
-          controller.log.external_wrench                = external_force.wrench;
+          controller.simulation_results.zmpErr          = zmpErr.Data;
+          controller.log.external_wrench                = external_wrench;
           
           
           s  = s_sim.Data;
@@ -42,7 +42,7 @@ classdef torqueWalkingMessage < Messaging.AbstractMessage
           
       end
       
-      function StoreFromSimulink(obj,results)
+      function StoreFromSimulink(obj,results,params)
  
         task_errors          = results.get('task_errors');
         joint_error          = results.get('joint_error');
@@ -59,13 +59,14 @@ classdef torqueWalkingMessage < Messaging.AbstractMessage
         sd_sim               = results.get('sd');
         time                 = results.get('tout');
         zmpErr               = results.get('zmpErr');
+        external_wrench      = params.external_force;
         
         
         %% simulationResults.mat has to be saved in common/simulink_executable
         save(obj.outputfromsimulink, 'task_errors', 'joint_error', 'torques', ...
             'QP_optObjFunVal', 'QP_exitFlag', ...
             'feet_in_contact', 'ZMP', 'support_polygon', ...
-            'pose_CoM', 'pose_lFoot', 'pose_rFoot', 's_sim', 'sd_sim', 'time','zmpErr');
+            'pose_CoM', 'pose_lFoot', 'pose_rFoot', 's_sim', 'sd_sim', 'time','zmpErr','external_wrench');
       end
    end
     

@@ -19,7 +19,7 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalkingPerformanceRobust(obj
     task_errors     = controller.simulation_results.task_errors;     %[nsamples x 12] matrix, [CoMx, CoMy, CoMz, OriRot, lFootx,lFooty,lFootz,lFootRot,rFootx, rFooty, rFootz, rFootRot]
 %     joint_error     = controller.simulation_results.joint_error;     %[nsamples x nDOF]
     torques         = controller.simulation_results.torques;         %[nsamples x nDOF]
-%    exitFlagQP      = controller.simulation_results.exitFlagQP;      %[nsamples x 1]
+    QP_exitFlag      = controller.simulation_results.QP_exitFlag;      %[nsamples x 1]
 %     zmp             = controller.simulation_results.zmp;             %[nsamples x 3]
 %     support_polygon = controller.simulation_results.support_polygon; %[2 x 2 x nsamples]
 %     feet_in_contact = controller.simulation_results.feet_in_contact; %[nsamples x 2]
@@ -34,14 +34,14 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalkingPerformanceRobust(obj
     qd_all          = output{3};
     
     nsamples        = size(controller.simulation_results.task_errors,1);
-    max_torques     = 230  * nsamples ; %! these parameters need to be scaled with the length of the simulation
-    max_task_error  = 0.1  * nsamples;
-    max_zmpErr      = 0.07 * nsamples;
+    max_torques     = 230    * nsamples ; %! these parameters need to be scaled with the length of the simulation
+    max_task_error  = 0.1    * nsamples;
+    max_zmpErr      = 0.0049 * nsamples;
     
     weight_task_err = -1;     %minimize
     weight_torques  = -1;     %minimize
     weight_zmp_dist = -1;     %maximize (minimize a negative measure of distance)
-    sum_weights     = abs(weight_torques) + abs(weight_task_err) + weight_zmp_dist;
+    sum_weights     = abs(weight_torques) + abs(weight_task_err) + abs(weight_zmp_dist);
     
     downsample      = 1;
     evaluate_constraints_index = 1;

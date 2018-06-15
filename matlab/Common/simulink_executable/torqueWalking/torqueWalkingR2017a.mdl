@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.958"
+    ComputedModelVersion    "1.963"
     NumModelReferences	    0
     NumTestPointedSignals   0
     NumProvidedFunctions    0
@@ -829,7 +829,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [-1301.0, -744.0, 1301.0, 744.0]
+      Location		      [73.0, 32.0, 1301.0, 744.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -855,17 +855,17 @@ Model {
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "6883"
 	  Extents		  [1263.0, 589.0]
-	  ZoomFactor		  [0.73]
-	  Offset		  [0.0, 0.0]
+	  ZoomFactor		  [1.0]
+	  Offset		  [148.0, 226.0]
 	}
 	Object {
 	  $ObjectID		  6
 	  IsActive		  [0]
-	  ViewObjType		  "SimulinkSubsys"
-	  LoadSaveID		  "4524"
+	  ViewObjType		  "SimulinkTopLevel"
+	  LoadSaveID		  "0"
 	  Extents		  [1263.0, 589.0]
-	  ZoomFactor		  [0.909090909090909]
-	  Offset		  [446.01171874999989, 264.59999999999997]
+	  ZoomFactor		  [0.67]
+	  Offset		  [0.0, 1.1368683772161603e-13]
 	}
 	Object {
 	  $ObjectID		  7
@@ -882,8 +882,8 @@ Model {
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "5513"
 	  Extents		  [1263.0, 589.0]
-	  ZoomFactor		  [1.5]
-	  Offset		  [358.86383647798789, 329.19685534591213]
+	  ZoomFactor		  [1.0]
+	  Offset		  [15.397169811321191, 294.13018867924529]
 	}
 	Object {
 	  $ObjectID		  9
@@ -891,7 +891,7 @@ Model {
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "7262"
 	  Extents		  [1263.0, 589.0]
-	  ZoomFactor		  [4.568965517241379]
+	  ZoomFactor		  [4.5689655172413781]
 	  Offset		  [-59.528301886792462, -38.064150943396228]
 	}
 	Object {
@@ -899,7 +899,7 @@ Model {
 	  IsActive		  [0]
 	  ViewObjType		  "SimulinkSubsys"
 	  LoadSaveID		  "4091"
-	  Extents		  [1275.0, 558.0]
+	  Extents		  [1263.0, 589.0]
 	  ZoomFactor		  [0.67774936061381075]
 	  Offset		  [-343.11320754716985, -20.656603773584891]
 	}
@@ -937,9 +937,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "vale"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Jun 14 18:06:17 2018"
-  RTWModifiedTimeStamp	  450900372
-  ModelVersionFormat	  "1.%<AutoIncrement:958>"
+  LastModifiedDate	  "Fri Jun 15 14:57:43 2018"
+  RTWModifiedTimeStamp	  450975041
+  ModelVersionFormat	  "1.%<AutoIncrement:963>"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
   LibraryLinkDisplay	  "disabled"
@@ -2102,8 +2102,8 @@ Model {
   }
   System {
     Name		    "torqueWalkingR2017a"
-    Location		    [65, 24, 1366, 768]
-    Open		    off
+    Location		    [73, 32, 1374, 776]
+    Open		    on
     PortBlocksUseCompactNotation off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -2117,7 +2117,7 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "67"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "7338"
+    SIDHighWatermark	    "7344"
     Block {
       BlockType		      SubSystem
       Name		      "Balancing Controller (Reactive QP control)"
@@ -2130,7 +2130,7 @@ Model {
       Variant		      off
       System {
 	Name			"Balancing Controller (Reactive QP control)"
-	Location		[709, 27, 1366, 768]
+	Location		[73, 32, 1374, 776]
 	Open			on
 	PortBlocksUseCompactNotation off
 	ModelBrowserVisibility	off
@@ -3577,7 +3577,7 @@ Model {
       }
       System {
 	Name			"Disturbances for learnoptim_wbc"
-	Location		[65, 24, 1366, 768]
+	Location		[73, 32, 1374, 776]
 	Open			on
 	PortBlocksUseCompactNotation off
 	ModelBrowserVisibility	off
@@ -3602,7 +3602,7 @@ Model {
 	  Variant		  off
 	  System {
 	    Name		    "Apply external wrench"
-	    Location		    [65, 24, 1366, 768]
+	    Location		    [73, 32, 1374, 776]
 	    Open		    on
 	    PortBlocksUseCompactNotation off
 	    ModelBrowserVisibility  off
@@ -16017,8 +16017,8 @@ Model {
       Variant		      off
       System {
 	Name			"Robot State and References"
-	Location		[65, 24, 1366, 768]
-	Open			on
+	Location		[73, 32, 1374, 776]
+	Open			off
 	PortBlocksUseCompactNotation off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -27407,7 +27407,7 @@ Model {
       }
       System {
 	Name			"Subsystem"
-	Location		[-1301, -744, 0, 0]
+	Location		[73, 32, 1374, 776]
 	Open			on
 	PortBlocksUseCompactNotation off
 	ModelBrowserVisibility	off
@@ -27420,7 +27420,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"73"
+	ZoomFactor		"100"
 	Block {
 	  BlockType		  From
 	  Name			  "From1"
@@ -27629,6 +27629,16 @@ Model {
 	  ZOrder		  1078
 	  ShowName		  off
 	  GotoTag		  "support_polygon"
+	  TagVisibility		  "global"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto2"
+	  SID			  "7340"
+	  Position		  [1295, 425, 1420, 445]
+	  ZOrder		  1082
+	  ShowName		  off
+	  GotoTag		  "zmpErr"
 	  TagVisibility		  "global"
 	}
 	Block {
@@ -29489,6 +29499,18 @@ Model {
 	  SaveFormat		  "Timeseries"
 	  SampleTime		  "-1"
 	}
+	Block {
+	  BlockType		  ToWorkspace
+	  Name			  "zmpErr"
+	  SID			  "7339"
+	  Ports			  [1]
+	  Position		  [1290, 455, 1370, 485]
+	  ZOrder		  1081
+	  VariableName		  "zmpErr"
+	  MaxDataPoints		  "inf"
+	  SaveFormat		  "Timeseries"
+	  SampleTime		  "-1"
+	}
 	Line {
 	  ZOrder		  581
 	  SrcBlock		  "select_pose4"
@@ -29770,6 +29792,24 @@ Model {
 	  DstBlock		  "QP optObjfun_value"
 	  DstPort		  1
 	}
+	Line {
+	  ZOrder		  786
+	  SrcBlock		  "compute ZMP"
+	  SrcPort		  3
+	  Points		  [16, 0; 0, 40; 9, 0]
+	  Branch {
+	    ZOrder		    788
+	    Points		    [0, -25]
+	    DstBlock		    "Goto2"
+	    DstPort		    1
+	  }
+	  Branch {
+	    ZOrder		    787
+	    Points		    [0, 10]
+	    DstBlock		    "zmpErr"
+	    DstPort		    1
+	  }
+	}
       }
     }
     Block {
@@ -29793,7 +29833,7 @@ Model {
       }
       System {
 	Name			"Visualization"
-	Location		[65, 24, 1366, 768]
+	Location		[73, 32, 1374, 776]
 	Open			on
 	PortBlocksUseCompactNotation off
 	ModelBrowserVisibility	off
@@ -29806,7 +29846,7 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"150"
+	ZoomFactor		"100"
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "Cartesian Tasks"
@@ -34621,6 +34661,16 @@ Model {
 	}
 	Block {
 	  BlockType		  From
+	  Name			  "From45"
+	  SID			  "7341"
+	  Position		  [1025, 441, 1110, 459]
+	  ZOrder		  1101
+	  ShowName		  off
+	  GotoTag		  "zmpErr"
+	  TagVisibility		  "global"
+	}
+	Block {
+	  BlockType		  From
 	  Name			  "From5"
 	  SID			  "5534"
 	  Position		  [315, -174, 400, -156]
@@ -38493,6 +38543,20 @@ Model {
 	  NumInputPorts		  "2"
 	}
 	Block {
+	  BlockType		  Scope
+	  Name			  "Scope"
+	  SID			  "7342"
+	  Ports			  [1]
+	  Position		  [1145, 434, 1175, 466]
+	  ZOrder		  1102
+	  ScopeSpecificationString "Simulink.scopes.TimeScopeBlockCfg('CurrentConfiguration', extmgr.ConfigurationSet(extmgr."
+	  "Configuration('Core','General UI',true),extmgr.Configuration('Core','Source UI',true),extmgr.Configuration('Sources"
+	  "','WiredSimulink',true,'DataLoggingVariableName','ScopeData1'),extmgr.Configuration('Visuals','Time Domain',true),e"
+	  "xtmgr.Configuration('Tools','Plot Navigation',true),extmgr.Configuration('Tools','Measurements',true)),'Version','2"
+	  "017b')"
+	  NumInputPorts		  "1"
+	}
+	Block {
 	  BlockType		  ToWorkspace
 	  Name			  "s"
 	  SID			  "6774"
@@ -39169,6 +39233,13 @@ Model {
 	  Points		  [70, 0]
 	  DstBlock		  "Emergency Stop2"
 	  DstPort		  enable
+	}
+	Line {
+	  ZOrder		  1782
+	  SrcBlock		  "From45"
+	  SrcPort		  1
+	  DstBlock		  "Scope"
+	  DstPort		  1
 	}
       }
     }
@@ -47154,6 +47225,9 @@ Stateflow {
     screen		    [1 1 3600 1200 1.180555555555556]
     treeNode		    [0 335 0 0]
     viewObj		    334
+    visible		    1
+    subviewS {
+    }
     ssIdHighWaterMark	    9
     decomposition	    CLUSTER_CHART
     type		    EML_CHART
@@ -47444,9 +47518,6 @@ Stateflow {
     screen		    [1 1 1280 1024 1.041050272174191]
     treeNode		    [0 350 0 0]
     viewObj		    349
-    visible		    1
-    subviewS {
-    }
     ssIdHighWaterMark	    26
     decomposition	    CLUSTER_CHART
     type		    EML_CHART

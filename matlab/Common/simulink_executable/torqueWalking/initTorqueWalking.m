@@ -15,8 +15,8 @@
 %% --- Initialization ---
 
 %% for stand alone execution remove comment on the following lines
- clc; close all; clear all;
- load('inputData.mat')
+% clc; close all; clear all;
+% load('inputData.mat')
 % %
 
 % NOTE: if you are simulating the robot with Gazebo, remember that you have
@@ -80,6 +80,7 @@ Config.t_step = params.sim_step; %0.01; % [s]
 % file corresponding to the specified demo is run.
 %
 
+%% with disturbances i update the params struct wiht the external_force struct cause in this way i can save the disturbances action through StoreFromSimulink from the message class
 disturbancesInit = 'disturbances.m';
 run(disturbancesInit);
 

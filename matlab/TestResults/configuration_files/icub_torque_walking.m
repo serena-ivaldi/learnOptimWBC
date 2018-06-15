@@ -129,11 +129,11 @@ params.config.APPLY_EXTERNAL_WRENCH = 1; %External wrenches applied in Gazebo
 %on the specified link
 params.external_force.link = 'chest';
 %for a random number of applications
-params.external_force.maximum_number_of_wrenches = 10;
+params.external_force.maximum_number_of_wrenches = 7;
 %for random durations
-params.external_force.max_duration_of_wrenches = 2;
-params.external_force.max_force  = 15; %N
-params.external_force.max_torque = 3;  %N*m
+params.external_force.max_duration_of_wrenches = 1;
+params.external_force.max_force  = 10; %N
+params.external_force.max_torque = 1.5;  %N*m
 %% Parameters Dependant on the type of controller
 
 switch CONTROLLERTYPE
@@ -197,7 +197,7 @@ switch CONTROLLERTYPE
         %% INSTANCE PARAMETER
         preprocessing  = @EmptyPreprocessing;
         run_function   = @RobotExperiment;
-        fitness        = @fitnessTorqueWalking_QPcosts; %@fitnessHumanoidsiCubTorqueWalkingGlobal; %Conservative; %@fitnessHumanoidsiCubTorqueWalkingGlobal, @fitnessHumanoidsiCubTorqueWalkingHybrid
+        fitness        = @fitnessHumanoidsiCubTorqueWalkingPerformanceRobust; %@fitnessHumanoidsiCubTorqueWalkingGlobal; %Conservative; %@fitnessHumanoidsiCubTorqueWalkingGlobal, @fitnessHumanoidsiCubTorqueWalkingHybrid
         clean_function = @RobotExperimentCleanData;
         
         input{1}  = simulator_type{1};  % rbt / v-rep

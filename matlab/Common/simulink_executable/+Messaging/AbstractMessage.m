@@ -6,7 +6,7 @@ classdef (Abstract) AbstractMessage < handle
    methods(Abstract = true)
       Pack(obj,controller,params);
       Unpack(obj,controller,params); % for Unpack is mandatory to return [ q, qd ,t]
-      StoreFromSimulink(obj,results);
+      StoreFromSimulink(obj,results,params);
    end
     
 end

@@ -15,6 +15,7 @@ classdef  GHC < Controllers.AbstractController
       torques          %  resulting torque (cell array of matrix)
       torques_time     % all the time istant when i aply a torque.
       display_opt      % display settings display_opt.step display_opt.trajtrack
+      log
    end
 
 

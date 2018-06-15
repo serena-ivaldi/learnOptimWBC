@@ -4,6 +4,7 @@ classdef (Abstract) AbstractController < handle
       subchains;
       references;
       torques;
+      log;
    end
        
     
