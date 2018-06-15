@@ -20,7 +20,7 @@ function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
     s=' ';
     %% execution of the process and check of success 
     run_command = ['gnome-terminal -- sh -c " cd' s params.simulink_schemes_global s '&& ./save_pid.sh && ./matlab_link -nodesktop -r threadSimulink; bash"'];
-    system(run_command); %% TODEBUG
+    system(run_command); 
     
     % waiting for the thread completion
     simulation_result_path = [params.simulink_schemes_global '/simulationResults.mat'];
@@ -44,7 +44,7 @@ function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
             pause(3);
             % create a new process with the same value
             run_command = ['gnome-terminal -- sh -c " cd' s params.simulink_schemes_global s '&& ./save_pid.sh && ./matlab_link -nodesktop -r threadSimulink; bash"'];
-            system(run_command); %% TODEBUG
+            system(run_command); 
             timer = 0;
             consecutive_fails_counter = consecutive_fails_counter + 1;
             disp('thread got stuck, i had to restart it')
@@ -97,7 +97,7 @@ function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
         
     end
     %% copy the results from the thread 
-    try %% TODEBUG
+    try 
         %% with this function I collect the results from the simulink experiment
         %% and store them in controller.simulation_results and [q,qd,t]
         [q,qd,t]=params.messenger.Unpack(controller,params);        

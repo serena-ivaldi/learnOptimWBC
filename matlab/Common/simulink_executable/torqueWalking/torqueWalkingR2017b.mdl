@@ -1,12 +1,12 @@
 Model {
-  Name			  "torqueWalkingR2017a_true"
-  Version		  8.9
+  Name			  "torqueWalkingR2017a"
+  Version		  9.0
   SavedCharacterEncoding  "UTF-8"
   GraphicalInterface {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.964"
+    ComputedModelVersion    "1.963"
     NumModelReferences	    0
     NumTestPointedSignals   0
     NumProvidedFunctions    0
@@ -16,6 +16,789 @@ Model {
     HasTerminateEvent	    0
     IsExportFunctionModel   0
     NumParameterArguments   0
+    NumExternalFileReferences 117
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyStates/Get Measurement"
+      Path		      "torqueWalkingR2017a/Balancing Controller (Reactive QP control)/Compute joint torques (motor reflect"
+      "ed inertia)/Get Measurement"
+      SID		      "7116"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyStates/Get Measurement"
+      Path		      "torqueWalkingR2017a/Balancing Controller (Reactive QP control)/Get Measurement"
+      SID		      "7100"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Balancing Controller (Reactive QP control)/holder "
+      SID		      "4159"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Configuration"
+      Path		      "torqueWalkingR2017a/Configuration"
+      SID		      "7103"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/DotJ Nu CoM"
+      SID		      "4189"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/DotJ Nu LFoot"
+      SID		      "4192"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/DotJ Nu LHand"
+      SID		      "6393"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/DotJ Nu RFoot"
+      SID		      "4190"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/DotJ Nu RHand"
+      SID		      "6394"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/DotJ Nu rotational task"
+      SID		      "4191"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/Jacobian CoM"
+      SID		      "4193"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/Jacobian LFoot"
+      SID		      "4194"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/Jacobian LHand"
+      SID		      "6389"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/Jacobian RFoot"
+      SID		      "4195"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/Jacobian RHand"
+      SID		      "6390"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Jacobians and "
+      "JDot_nu/Jacobian rotational task"
+      SID		      "4196"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Dynamics/Get Bias Forces"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Mass Matrix an"
+      "d Bias Forces/Get Bias Forces"
+      SID		      "4210"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Dynamics/Mass Matrix"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Compute Dynamic and Kinematic Quantities/Mass Matrix an"
+      "d Bias Forces/Mass Matrix"
+      SID		      "4211"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Initial Conditions/   1"
+      SID		      "5547"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Initial Conditions/   2"
+      SID		      "4231"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Initial Conditions/Compute world to base transform/left"
+      " foot"
+      SID		      "4254"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Initial Conditions/Compute world to base transform/left"
+      " foot1"
+      SID		      "5613"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Initial Conditions/Compute world to base transform/root"
+      "_link"
+      SID		      "4255"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Initial Conditions/compute state velocity/Feet Jacobian"
+      "s/Jacobian LFoot"
+      SID		      "5630"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Initial Conditions/compute state velocity/Feet Jacobian"
+      "s/Jacobian RFoot"
+      SID		      "5631"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/CoM"
+      SID		      "4296"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/LFoot"
+      SID		      "4297"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/LFoot1"
+      SID		      "6628"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/RFoot"
+      SID		      "4298"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/RFoot1"
+      SID		      "6629"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/rotational task"
+      SID		      "4299"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/DotJ Nu CoM"
+      SID		      "4313"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/DotJ Nu LFoot"
+      SID		      "4316"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/DotJ Nu LHand"
+      SID		      "6638"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/DotJ Nu RHand"
+      SID		      "6639"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/DotJ Nu Rfoot"
+      SID		      "4314"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/DotJ Nu"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/DotJ Nu rotati"
+      "onal task"
+      SID		      "4315"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/Jacobian CoM"
+      SID		      "4317"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/Jacobian LFoot"
+      SID		      "4318"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/Jacobian LFoot1"
+      SID		      "6634"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/Jacobian RFoot"
+      SID		      "4319"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/Jacobian RFoot1"
+      SID		      "6635"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Jacobians and JDot_nu/Jacobian rotat"
+      "ional task"
+      SID		      "4320"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/QP-Based Inverse Kinematics/DoFs con"
+      "verter1"
+      SID		      "7074"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Visualize Inverse Kinematics/DoFs co"
+      "nverter"
+      SID		      "4388"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Visualize Inverse Kinematics/DoFs co"
+      "nverter1"
+      SID		      "4389"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Visualize Inverse Kinematics/DoFs co"
+      "nverter2"
+      SID		      "4390"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Visualize Inverse Kinematics/DoFs co"
+      "nverter3"
+      SID		      "4391"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Visualize Inverse Kinematics/DoFs co"
+      "nverter4"
+      SID		      "4392"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Visualize Inverse Kinematics/DoFs co"
+      "nverter5"
+      SID		      "4393"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Inverse Kinematics/Visualize Inverse Kinematics/DoFs co"
+      "nverter6"
+      SID		      "4394"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Task Accelerations/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/CoM"
+      SID		      "4455"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Task Accelerations/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/LFoot"
+      SID		      "4456"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Task Accelerations/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/LHand"
+      SID		      "6618"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Task Accelerations/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/RFoot"
+      SID		      "4457"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Task Accelerations/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/RHand"
+      SID		      "6619"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Dynamics and Kinematics/Task Accelerations/ComputeTasksPoseAndVelocity/Task pos"
+      "ition and orientation/rotational task"
+      SID		      "4458"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
+      Path		      "torqueWalkingR2017a/Robot State and References/Gain Scheduling/Minimum Jerk Trajectory Generator5"
+      SID		      "4544"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Orientations/Com"
+      "pute Smoothed Ref Orientations/holder "
+      SID		      "4618"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Orientations/Com"
+      "pute Smoothed Ref Orientations/holder 1"
+      SID		      "4619"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Orientations/Com"
+      "pute Smoothed Ref Orientations/holder 2"
+      SID		      "4620"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Orientations/Com"
+      "pute Smoothed Ref Orientations/holder 3"
+      SID		      "6356"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Orientations/Com"
+      "pute Smoothed Ref Orientations/holder 4"
+      SID		      "6357"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Positions/Minimu"
+      "m Jerk Trajectory Generator"
+      SID		      "4633"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Positions/Minimu"
+      "m Jerk Trajectory Generator1"
+      SID		      "4634"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Positions/Minimu"
+      "m Jerk Trajectory Generator2"
+      SID		      "4635"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Positions/Minimu"
+      "m Jerk Trajectory Generator3"
+      SID		      "4636"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Positions/Minimu"
+      "m Jerk Trajectory Generator5"
+      SID		      "6303"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Minimum Jerk Trajectory Generator"
+      Path		      "torqueWalkingR2017a/Robot State and References/Smooth References /Smooth Reference Positions/Minimu"
+      "m Jerk Trajectory Generator6"
+      SID		      "6304"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "commchan3/AWGN\nChannel"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Add Gaussian noise/AWGN Channel1"
+      SID		      "7297"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "commchan3/AWGN\nChannel"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Add Gaussian noise/AWGN Channel2"
+      SID		      "7291"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "LFoot to base link transform /Fixed base to imu transform"
+      SID		      "4719"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "LFoot to base link transform /Fixed base to root link transform"
+      SID		      "4728"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Yarp Read"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "LFoot to base link transform /Neck Position"
+      SID		      "4711"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "LFoot to base link transform /holder 1"
+      SID		      "4717"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "LFoot to base link transform /holder 2"
+      SID		      "4718"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "LFoot to world transform (fixed base)"
+      SID		      "4704"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "RFoot to base link transform/Fixed base to imu transform"
+      SID		      "5424"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "RFoot to base link transform/Fixed base to root link transform"
+      SID		      "5425"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Yarp Read"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "RFoot to base link transform/Neck Position"
+      SID		      "5428"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "RFoot to base link transform/holder 1"
+      SID		      "5432"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "RFoot to base link transform/holder 2"
+      SID		      "5433"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute Feet to Base Link Transforms/"
+      "RFoot to world transform (fixed base)"
+      SID		      "5443"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute State Velocity/Feet Jacobians"
+      "/Jacobian LFoot"
+      SID		      "4764"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Jacobians/Jacobian"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Compute State Velocity/Feet Jacobians"
+      "/Jacobian RFoot"
+      SID		      "4765"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyStates/Get Measurement"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Get Measurement"
+      SID		      "7098"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyStates/Get Measurement"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Get Measurement1"
+      SID		      "7099"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Yarp Read"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/IMU measurements"
+      SID		      "4557"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/holder 1"
+      SID		      "4673"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/holder 2"
+      SID		      "4674"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/holder 3"
+      SID		      "4675"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/holder 4"
+      SID		      "4676"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/holder 5"
+      SID		      "4677"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/holder 6"
+      SID		      "6280"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/holder\n"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/holder 7"
+      SID		      "6281"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/task position and orientation/CoM"
+      SID		      "4681"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/task position and orientation/LArm"
+      SID		      "6276"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/task position and orientation/LFoot"
+      SID		      "4682"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/task position and orientation/RArm"
+      SID		      "6277"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/task position and orientation/RFoot"
+      SID		      "4683"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyModel/Kinematics/Forward Kinematics"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/Select the Current State and Referenc"
+      "es/task position and orientation/rotational task"
+      SID		      "4684"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Yarp Read"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/left_foot_wrench"
+      SID		      "7122"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Yarp Read"
+      Path		      "torqueWalkingR2017a/Robot State and References/State Machines/right_foot_wrench"
+      SID		      "7123"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/wholeBodyActuators/Set References"
+      Path		      "torqueWalkingR2017a/Set References"
+      SID		      "4828"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
+      Path		      "torqueWalkingR2017a/Visualization/Emergency Stop/Compare To Constant"
+      SID		      "6792"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
+      Path		      "torqueWalkingR2017a/Visualization/Emergency Stop/Compare To Constant1"
+      SID		      "6794"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Visualization/Forces and Torques/DoFs converter"
+      SID		      "4141"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Visualization/Forces and Torques/DoFs converter1"
+      SID		      "4142"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Visualization/Forces and Torques/DoFs converter2"
+      SID		      "4143"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Visualization/Gain Scheduling/DoFs converter1"
+      SID		      "5876"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Visualization/Gain Scheduling/DoFs converter4"
+      SID		      "5874"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Visualization/Joints and Floating Base State/DoFs converter"
+      SID		      "4778"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Visualization/Joints and Floating Base State/DoFs converter1"
+      SID		      "4779"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Visualization/Joints and Floating Base State/DoFs converter2"
+      SID		      "4780"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/DoFs converter"
+      Path		      "torqueWalkingR2017a/Visualization/Joints and Floating Base State/DoFs converter3"
+      SID		      "4781"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Simulator Synchronizer"
+      Path		      "torqueWalkingR2017a/synchronizer/GAZEBO_SYNCHRONIZER/Simulator Synchronizer"
+      SID		      "4832"
+      Type		      "LIBRARY_BLOCK"
+    }
+    ExternalFileReference {
+      Reference		      "WBToolboxLibrary/Utilities/Real Time Synchronizer"
+      Path		      "torqueWalkingR2017a/synchronizer/REAL_TIME_SYNC/Real Time Synchronizer"
+      SID		      "4837"
+      Type		      "LIBRARY_BLOCK"
+    }
     OrderedModelArguments   1
   }
   LogicAnalyzerGraphicalSettings ""
@@ -23,6 +806,7 @@ Model {
   LogicAnalyzerSignalOrdering ""
   DiagnosticSuppressor	  "on"
   SuppressorTable	  "22 serialization::archive 11 0 6 0 0 0 11 0"
+  CustomCodeFunctionData  ""
   SLCCPlugin		  "on"
   ScopeRefreshTime	  0.035000
   OverrideScopeRefreshTime on
@@ -153,9 +937,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "vale"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Jun 15 17:48:09 2018"
-  RTWModifiedTimeStamp	  450985683
-  ModelVersionFormat	  "1.%<AutoIncrement:964>"
+  LastModifiedDate	  "Fri Jun 15 14:57:43 2018"
+  RTWModifiedTimeStamp	  450975041
+  ModelVersionFormat	  "1.%<AutoIncrement:963>"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
   LibraryLinkDisplay	  "disabled"
@@ -183,6 +967,7 @@ Model {
   BlockNameDataTip	  off
   BlockParametersDataTip  off
   BlockDescriptionStringDataTip	off
+  BlockVariantConditionDataTip off
   ToolBar		  on
   StatusBar		  on
   BrowserShowLibraryLinks off
@@ -206,12 +991,12 @@ Model {
     $PropName		    "DataLoggingOverride"
     $ObjectID		    12
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
-    model_		    "torqueWalkingR2017a_true"
+    model_		    "torqueWalkingR2017a"
     overrideMode_	    [0.0]
     Array {
       Type		      "Cell"
       Dimension		      1
-      Cell		      "torqueWalkingR2017a_true"
+      Cell		      "torqueWalkingR2017a"
       PropName		      "logAsSpecifiedByModels_"
     }
     Array {
@@ -250,7 +1035,7 @@ Model {
     Dimension		    1
     Simulink.ConfigSet {
       $ObjectID		      13
-      Version		      "1.17.0"
+      Version		      "1.17.1"
       DisabledProps	      []
       Description	      ""
       Array {
@@ -258,7 +1043,7 @@ Model {
 	Dimension		9
 	Simulink.SolverCC {
 	  $ObjectID		  14
-	  Version		  "1.17.0"
+	  Version		  "1.17.1"
 	  DisabledProps		  []
 	  Description		  ""
 	  StartTime		  "0.0"
@@ -277,7 +1062,6 @@ Model {
 	  MaxConsecutiveMinStep	  "1"
 	  RelTol		  "1e-3"
 	  EnableMultiTasking	  on
-	  EnableConcurrentExecution off
 	  ConcurrentTasks	  off
 	  Solver		  "FixedStepDiscrete"
 	  SolverName		  "FixedStepDiscrete"
@@ -294,10 +1078,11 @@ Model {
 	  SampleTimeConstraint	  "Unconstrained"
 	  InsertRTBMode		  "Whenever possible"
 	  SampleTimeProperty	  []
+	  DecoupledContinuousIntegration off
 	}
 	Simulink.DataIOCC {
 	  $ObjectID		  15
-	  Version		  "1.17.0"
+	  Version		  "1.17.1"
 	  DisabledProps		  []
 	  Description		  ""
 	  Decimation		  "1"
@@ -338,7 +1123,7 @@ Model {
 	}
 	Simulink.OptimizationCC {
 	  $ObjectID		  16
-	  Version		  "1.17.0"
+	  Version		  "1.17.1"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    8
@@ -396,10 +1181,11 @@ Model {
 	  OptimizeBlockOrder	  "off"
 	  OptimizeDataStoreBuffers on
 	  BusAssignmentInplaceUpdate on
+	  DifferentSizesBufferReuse off
 	}
 	Simulink.DebuggingCC {
 	  $ObjectID		  17
-	  Version		  "1.17.0"
+	  Version		  "1.17.1"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    1
@@ -438,6 +1224,7 @@ Model {
 	  MultiTaskRateTransMsg	  "error"
 	  SingleTaskRateTransMsg  "none"
 	  TasksWithSamePriorityMsg "warning"
+	  ExportedTasksRateTransMsg "none"
 	  SigSpecEnsureSampleTimeMsg "warning"
 	  CheckMatrixSingularityMsg "none"
 	  IntegerOverflowMsg	  "warning"
@@ -479,6 +1266,7 @@ Model {
 	  StateNameClashWarn	  "none"
 	  SimStateInterfaceChecksumMismatchMsg "warning"
 	  SimStateOlderReleaseMsg "error"
+	  ChecksumConsistencyForSSReuse	"none"
 	  InitInArrayFormatMsg	  "warning"
 	  StrictBusMsg		  "ErrorLevel1"
 	  BusNameAdapt		  "WarnAndRepair"
@@ -505,11 +1293,14 @@ Model {
 	  AllowedUnitSystems	  "all"
 	  UnitsInconsistencyMsg	  "warning"
 	  AllowAutomaticUnitConversions	on
+	  RCSCRenamedMsg	  "warning"
+	  RCSCObservableMsg	  "warning"
+	  ForceCombineOutputUpdateInSim	off
 	  UnitDatabase		  ""
 	}
 	Simulink.HardwareCC {
 	  $ObjectID		  18
-	  Version		  "1.17.0"
+	  Version		  "1.17.1"
 	  DisabledProps		  []
 	  Description		  ""
 	  ProdBitPerChar	  8
@@ -557,7 +1348,7 @@ Model {
 	}
 	Simulink.ModelReferenceCC {
 	  $ObjectID		  19
-	  Version		  "1.17.0"
+	  Version		  "1.17.1"
 	  DisabledProps		  []
 	  Description		  ""
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
@@ -576,7 +1367,7 @@ Model {
 	}
 	Simulink.SFSimCC {
 	  $ObjectID		  20
-	  Version		  "1.17.0"
+	  Version		  "1.17.1"
 	  DisabledProps		  []
 	  Description		  ""
 	  SimCustomSourceCode	  ""
@@ -606,7 +1397,7 @@ Model {
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
 	  $ObjectID		  21
-	  Version		  "1.17.0"
+	  Version		  "1.17.1"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    13
@@ -654,6 +1445,7 @@ Model {
 	  CustomLibrary		  ""
 	  CustomDefine		  ""
 	  CustomLAPACKCallback	  ""
+	  CustomFFTCallback	  ""
 	  CustomInitializer	  ""
 	  CustomTerminator	  ""
 	  Toolchain		  "Automatically locate an installed toolchain"
@@ -689,7 +1481,7 @@ Model {
 	    Dimension		    2
 	    Simulink.CodeAppCC {
 	      $ObjectID		      22
-	      Version		      "1.17.0"
+	      Version		      "1.17.1"
 	      Array {
 		Type			"Cell"
 		Dimension		27
@@ -738,6 +1530,7 @@ Model {
 	      SFDataObjDesc	      off
 	      MATLABFcnDesc	      off
 	      MangleLength	      1
+	      SharedChecksumLength    8
 	      CustomSymbolStrGlobalVar "$R$N$M"
 	      CustomSymbolStrType     "$N$R$M_T"
 	      CustomSymbolStrField    "$N$M"
@@ -761,6 +1554,7 @@ Model {
 	      InsertBlockDesc	      off
 	      InsertPolySpaceComments off
 	      SimulinkBlockComments   on
+	      StateflowObjectComments on
 	      MATLABSourceComments    off
 	      EnableCustomComments    off
 	      InternalIdentifierFile  ""
@@ -773,7 +1567,7 @@ Model {
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
 	      $ObjectID		      23
-	      Version		      "1.17.0"
+	      Version		      "1.17.1"
 	      Array {
 		Type			"Cell"
 		Dimension		15
@@ -847,6 +1641,9 @@ Model {
 	      CoderGroups	      []
 	      AccessMethods	      []
 	      LookupTableObjectStructAxisOrder "1,2,3,4,..."
+	      LUTObjectStructOrderExplicitValues "Size,Breakpoints,Table"
+	      LUTObjectStructOrderEvenSpacing "Size,Breakpoints,Table"
+	      ArrayLayout	      "Column-major"
 	      UseMalloc		      off
 	      ExtMode		      off
 	      ExtModeStaticAlloc      off
@@ -868,7 +1665,7 @@ Model {
 	}
 	SlCovCC.ConfigComp {
 	  $ObjectID		  24
-	  Version		  "1.17.0"
+	  Version		  "1.17.1"
 	  DisabledProps		  []
 	  Description		  "Simulink Coverage Configuration Component"
 	  Name			  "Simulink Coverage"
@@ -954,7 +1751,12 @@ Model {
     FontSize		    10
     FontWeight		    "normal"
     FontAngle		    "normal"
+    MarkupType		    "model"
     UseDisplayTextAsClickCallback off
+    AnnotationType	    "note_annotation"
+    FixedHeight		    off
+    FixedWidth		    off
+    Interpreter		    "off"
   }
   LineDefaults {
     FontName		    "Helvetica"
@@ -1111,7 +1913,7 @@ Model {
     }
     Block {
       BlockType		      Memory
-      X0		      "0"
+      InitialCondition	      "0"
       InheritSampleTime	      off
       LinearizeMemory	      off
       LinearizeAsDelay	      off
@@ -1146,6 +1948,8 @@ Model {
       InitialOutput	      "[]"
       MustResolveToSignalObject	off
       OutputWhenUnConnected   off
+      OutputWhenUnconnectedValue "0"
+      VectorParamsAs1DForOutWhenUnconnected off
     }
     Block {
       BlockType		      PermuteDimensions
@@ -1243,10 +2047,12 @@ Model {
       MaskHideContents	      off
       SFBlockType	      "NONE"
       GeneratePreprocessorConditionals off
+      AllowZeroVariantControls off
       PropagateVariantConditions off
       TreatAsGroupedWhenPropagatingVariantConditions on
       ContentPreviewEnabled   off
       IsWebBlock	      off
+      IsObserver	      off
     }
     Block {
       BlockType		      Sum
@@ -1295,9 +2101,9 @@ Model {
     }
   }
   System {
-    Name		    "torqueWalkingR2017a_true"
+    Name		    "torqueWalkingR2017a"
     Location		    [73, 32, 1374, 776]
-    Open		    off
+    Open		    on
     PortBlocksUseCompactNotation off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -1325,7 +2131,7 @@ Model {
       System {
 	Name			"Balancing Controller (Reactive QP control)"
 	Location		[73, 32, 1374, 776]
-	Open			off
+	Open			on
 	PortBlocksUseCompactNotation off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1659,7 +2465,7 @@ Model {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
 	      SID		      "4109::99"
-	      Tag		      "Stateflow S-Function torqueWalkingR2017a_true 2"
+	      Tag		      "Stateflow S-Function torqueWalkingR2017a 2"
 	      Ports		      [15, 7]
 	      Position		      [180, 85, 230, 405]
 	      ZOrder		      83
@@ -2750,12 +3556,6 @@ Model {
       ContentPreviewEnabled   off
       ConfigSource	      "Workspace"
       ConfigObject	      "'WBTConfigRobot'"
-      RobotName		      "'icub'"
-      UrdfFile		      "'model.urdf'"
-      ControlledJoints	      "{'l_elbow','l_shoulder_pitch','torso_roll'}"
-      ControlBoardsNames      "{'left_arm','right_arm','torso'}"
-      LocalName		      "'WBT'"
-      GravityVector	      "[0,0,-9.81]"
     }
     Block {
       BlockType		      SubSystem
@@ -2778,7 +3578,7 @@ Model {
       System {
 	Name			"Disturbances for learnoptim_wbc"
 	Location		[73, 32, 1374, 776]
-	Open			off
+	Open			on
 	PortBlocksUseCompactNotation off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -2803,7 +3603,7 @@ Model {
 	  System {
 	    Name		    "Apply external wrench"
 	    Location		    [73, 32, 1374, 776]
-	    Open		    off
+	    Open		    on
 	    PortBlocksUseCompactNotation off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -2875,7 +3675,7 @@ Model {
 		  BlockType		  S-Function
 		  Name			  " SFunction "
 		  SID			  "7147::29"
-		  Tag			  "Stateflow S-Function torqueWalkingR2017a_true 19"
+		  Tag			  "Stateflow S-Function torqueWalkingR2017a 19"
 		  Ports			  [1, 1]
 		  Position		  [180, 100, 230, 140]
 		  ZOrder		  20
@@ -4106,7 +4906,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "6165::26"
-		    Tag			    "Stateflow S-Function torqueWalkingR2017a_true 20"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 20"
 		    Ports		    [1, 2]
 		    Position		    [180, 100, 230, 160]
 		    ZOrder		    16
@@ -5220,7 +6020,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "5626::3750"
-		    Tag			    "Stateflow S-Function torqueWalkingR2017a_true 1"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 1"
 		    Ports		    [4, 2]
 		    Position		    [180, 102, 230, 203]
 		    ZOrder		    119
@@ -6114,7 +6914,7 @@ Model {
 		  BlockType		  S-Function
 		  Name			  " SFunction "
 		  SID			  "4279::90"
-		  Tag			  "Stateflow S-Function torqueWalkingR2017a_true 3"
+		  Tag			  "Stateflow S-Function torqueWalkingR2017a 3"
 		  Ports			  [19, 2]
 		  Position		  [180, 75, 230, 475]
 		  ZOrder		  79
@@ -6557,7 +7357,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4288::104"
-		    Tag			    "Stateflow S-Function torqueWalkingR2017a_true 4"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 4"
 		    Ports		    [12, 7]
 		    Position		    [180, 95, 230, 355]
 		    ZOrder		    95
@@ -8512,7 +9312,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4342::78"
-		    Tag			    "Stateflow S-Function torqueWalkingR2017a_true 5"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 5"
 		    Ports		    [9, 5]
 		    Position		    [180, 100, 230, 300]
 		    ZOrder		    60
@@ -8933,7 +9733,7 @@ Model {
 		  "','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Plac"
 		  "ement',1),'TimeRangeSamples','14','TimeRangeFrames','14','DisplayLayoutDimensions',[6 1]),extmgr.Configuration('To"
 		  "ols','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('Tools','Measurement"
-		  "s',true,'Version','2017a')),'Version','2017b','Location',[61 111 1362 767])"
+		  "s',true,'Version','2017a')),'Version','2017a','Location',[61 111 1362 767])"
 		  NumInputPorts		  "6"
 		}
 		Block {
@@ -9073,7 +9873,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4356::69"
-		    Tag			    "Stateflow S-Function torqueWalkingR2017a_true 16"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 16"
 		    Ports		    [2, 2]
 		    Position		    [180, 100, 230, 160]
 		    ZOrder		    55
@@ -9313,7 +10113,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4363::68"
-		    Tag			    "Stateflow S-Function torqueWalkingR2017a_true 18"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 18"
 		    Ports		    [1, 2]
 		    Position		    [180, 100, 230, 160]
 		    ZOrder		    54
@@ -9426,7 +10226,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4364::68"
-		    Tag			    "Stateflow S-Function torqueWalkingR2017a_true 15"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 15"
 		    Ports		    [1, 2]
 		    Position		    [180, 100, 230, 160]
 		    ZOrder		    54
@@ -10472,7 +11272,7 @@ Model {
 		  "215686 0.623529411764706 1;1 0.411764705882353 0.16078431372549;0.392156862745098 0.831372549019608 0.074509803921"
 		  "5686;0.717647058823529 0.274509803921569 1;0.0588235294117647 1 1;1 0.0745098039215686 0.650980392156863])),extmgr"
 		  ".Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('T"
-		  "ools','Measurements',true,'Version','2017a')),'Version','2017b','Location',[155 158 1344 695])"
+		  "ools','Measurements',true,'Version','2017a')),'Version','2017a','Location',[155 158 1344 695])"
 		  NumInputPorts		  "1"
 		}
 		Block {
@@ -10624,7 +11424,7 @@ Model {
 		  "tyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames"
 		  "',{{[]}},'ShowContent',true,'Placement',1),'DisplayLayoutDimensions',[2 1]),extmgr.Configuration('Tools','Plot Nav"
 		  "igation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('Tools','Measurements',true,'Versi"
-		  "on','2016b')),'Version','2017b','Location',[66 109 1377 828])"
+		  "on','2016b')),'Version','2017a','Location',[66 109 1377 828])"
 		  NumInputPorts		  "1"
 		}
 		Block {
@@ -10716,7 +11516,7 @@ Model {
 		  "t('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}}"
 		  ",'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLayoutDimensions',[6 1]),extmgr.Configu"
 		  "ration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('Tools','M"
-		  "easurements',true,'Version','2017a')),'Version','2017b','Location',[56 111 1367 767])"
+		  "easurements',true,'Version','2017a')),'Version','2017a','Location',[56 111 1367 767])"
 		  NumInputPorts		  "5"
 		}
 		Block {
@@ -10808,7 +11608,7 @@ Model {
 		  "n'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNa"
 		  "mes',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLayoutDimensions',[6 1]),extmg"
 		  "r.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('"
-		  "Tools','Measurements',true,'Version','2016b')),'Version','2017b','Location',[66 106 1377 825])"
+		  "Tools','Measurements',true,'Version','2016b')),'Version','2017a','Location',[66 106 1377 825])"
 		  NumInputPorts		  "5"
 		}
 		Block {
@@ -10898,7 +11698,7 @@ Model {
 		  "le','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedCha"
 		  "nnelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLayoutDimensions',[6 1])"
 		  ",extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false),extmgr.Configuration('Tools','Measurement"
-		  "s',true,'Version','2017b')),'Version','2017b','Location',[66 78 1367 767])"
+		  "s',true,'Version','2017b')),'Version','2017a','Location',[66 78 1367 767])"
 		  NumInputPorts		  "5"
 		}
 		Block {
@@ -10988,7 +11788,7 @@ Model {
 		  "','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDe"
 		  "finedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLayoutDimensions"
 		  "',[6 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false),extmgr.Configuration('Tools','Mea"
-		  "surements',true,'Version','2017b')),'Version','2017b','Location',[66 106 1367 795])"
+		  "surements',true,'Version','2017b')),'Version','2017a','Location',[66 106 1367 795])"
 		  NumInputPorts		  "5"
 		}
 		Block {
@@ -11080,7 +11880,7 @@ Model {
 		  "e','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChan"
 		  "nelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLayoutDimensions',[6 1]),"
 		  "extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configurat"
-		  "ion('Tools','Measurements',true,'Version','2016b')),'Version','2017b','Location',[351 265 1632 866])"
+		  "ion('Tools','Measurements',true,'Version','2016b')),'Version','2017a','Location',[351 265 1632 866])"
 		  NumInputPorts		  "5"
 		}
 		Block {
@@ -11172,7 +11972,7 @@ Model {
 		  ",struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames"
 		  "',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLayoutDimensions',[6 1]),extmgr.C"
 		  "onfiguration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('Too"
-		  "ls','Measurements',true,'Version','2017a')),'Version','2017b','Location',[76 111 1367 767])"
+		  "ls','Measurements',true,'Version','2017a')),'Version','2017a','Location',[76 111 1367 767])"
 		  NumInputPorts		  "5"
 		}
 		Block {
@@ -11262,7 +12062,7 @@ Model {
 		  "'Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefi"
 		  "nedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLayoutDimensions',"
 		  "[6 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false),extmgr.Configuration('Tools','Measu"
-		  "rements',true,'Version','2017b')),'Version','2017b','Location',[66 78 1367 767])"
+		  "rements',true,'Version','2017b')),'Version','2017a','Location',[66 78 1367 767])"
 		  NumInputPorts		  "5"
 		}
 		Line {
@@ -12773,7 +13573,7 @@ Model {
 		  BlockType		  S-Function
 		  Name			  " SFunction "
 		  SID			  "4438::91"
-		  Tag			  "Stateflow S-Function torqueWalkingR2017a_true 6"
+		  Tag			  "Stateflow S-Function torqueWalkingR2017a 6"
 		  Ports			  [19, 2]
 		  Position		  [180, 75, 230, 475]
 		  ZOrder		  79
@@ -13216,7 +14016,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4447::104"
-		    Tag			    "Stateflow S-Function torqueWalkingR2017a_true 7"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 7"
 		    Ports		    [12, 7]
 		    Position		    [180, 95, 230, 355]
 		    ZOrder		    95
@@ -15327,7 +16127,7 @@ Model {
 		  BlockType		  S-Function
 		  Name			  " SFunction "
 		  SID			  "4534::80"
-		  Tag			  "Stateflow S-Function torqueWalkingR2017a_true 8"
+		  Tag			  "Stateflow S-Function torqueWalkingR2017a 8"
 		  Ports			  [1, 16]
 		  Position		  [180, 85, 230, 425]
 		  ZOrder		  70
@@ -18336,7 +19136,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4570::92"
-		    Tag			    "Stateflow S-Function torqueWalkingR2017a_true 9"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 9"
 		    Ports		    [16, 6]
 		    Position		    [180, 85, 230, 425]
 		    ZOrder		    82
@@ -19458,7 +20258,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4571::92"
-		    Tag			    "Stateflow S-Function torqueWalkingR2017a_true 12"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 12"
 		    Ports		    [10, 6]
 		    Position		    [180, 100, 230, 320]
 		    ZOrder		    82
@@ -20607,7 +21407,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "5315::54"
-		    Tag			    "Stateflow S-Function torqueWalkingR2017a_true 17"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 17"
 		    Ports		    [1, 7]
 		    Position		    [180, 100, 230, 260]
 		    ZOrder		    45
@@ -22344,7 +23144,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4716::3741"
-		    Tag			    "Stateflow S-Function torqueWalkingR2017a_true 11"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 11"
 		    Ports		    [6, 2]
 		    Position		    [180, 102, 230, 243]
 		    ZOrder		    141
@@ -23076,7 +23876,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "5431::3741"
-		    Tag			    "Stateflow S-Function torqueWalkingR2017a_true 13"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 13"
 		    Ports		    [6, 2]
 		    Position		    [180, 102, 230, 243]
 		    ZOrder		    141
@@ -23871,7 +24671,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4760::3750"
-		    Tag			    "Stateflow S-Function torqueWalkingR2017a_true 14"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 14"
 		    Ports		    [4, 2]
 		    Position		    [180, 102, 230, 203]
 		    ZOrder		    119
@@ -24603,7 +25403,7 @@ Model {
 		    BlockType		    S-Function
 		    Name		    " SFunction "
 		    SID			    "4671::114"
-		    Tag			    "Stateflow S-Function torqueWalkingR2017a_true 10"
+		    Tag			    "Stateflow S-Function torqueWalkingR2017a 10"
 		    Ports		    [15, 11]
 		    Position		    [180, 85, 230, 405]
 		    ZOrder		    99
@@ -26608,7 +27408,7 @@ Model {
       System {
 	Name			"Subsystem"
 	Location		[73, 32, 1374, 776]
-	Open			off
+	Open			on
 	PortBlocksUseCompactNotation off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -27021,7 +27821,7 @@ Model {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
 	      SID		      "7143::44"
-	      Tag		      "Stateflow S-Function torqueWalkingR2017a_true 21"
+	      Tag		      "Stateflow S-Function torqueWalkingR2017a 21"
 	      Ports		      [6, 4]
 	      Position		      [180, 102, 230, 243]
 	      ZOrder		      29
@@ -29034,7 +29834,7 @@ Model {
       System {
 	Name			"Visualization"
 	Location		[73, 32, 1374, 776]
-	Open			off
+	Open			on
 	PortBlocksUseCompactNotation off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -29229,7 +30029,7 @@ Model {
 	      "'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLayout"
 	      "Dimensions',[4 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','"
 	      "XY','PreviousZoomMode','ZoomY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version',"
-	      "'2017b','Location',[54 111 1367 767])"
+	      "'2017a','Location',[54 111 1367 767])"
 	      NumInputPorts	      "4"
 	    }
 	    Block {
@@ -29302,7 +30102,7 @@ Model {
 	      ")}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLa"
 	      "youtDimensions',[4 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscal"
 	      "e','XY','PreviousZoomMode','ZoomY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Versi"
-	      "on','2017b','Location',[54 111 1367 767])"
+	      "on','2017a','Location',[54 111 1367 767])"
 	      NumInputPorts	      "4"
 	    }
 	    Block {
@@ -29351,7 +30151,7 @@ Model {
 	      "0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLin"
 	      "es',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLayoutDimensions',[2 1]),extmgr.Configuratio"
 	      "n('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('Tools','Mea"
-	      "surements',true,'Version','2016b')),'Version','2017b','Location',[76 218 1387 937])"
+	      "surements',true,'Version','2016b')),'Version','2017a','Location',[76 218 1387 937])"
 	      NumInputPorts	      "2"
 	    }
 	    Block {
@@ -29400,7 +30200,7 @@ Model {
 	      ",'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',0,"
 	      "'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLayoutDimensions',[2 1]),extmgr.Configuration('Too"
 	      "ls','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('Tools','Measureme"
-	      "nts',true,'Version','2017a')),'Version','2017b','Location',[54 111 1367 767])"
+	      "nts',true,'Version','2017a')),'Version','2017a','Location',[54 111 1367 767])"
 	      NumInputPorts	      "2"
 	    }
 	    Block {
@@ -29449,7 +30249,7 @@ Model {
 	      "[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLi"
 	      "nes',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLayoutDimensions',[2 1]),extmgr.Configurati"
 	      "on('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('Tools','Me"
-	      "asurements',true,'Version','2017a')),'Version','2017b','Location',[66 171 1379 827])"
+	      "asurements',true,'Version','2017a')),'Version','2017a','Location',[66 171 1379 827])"
 	      NumInputPorts	      "2"
 	    }
 	    Block {
@@ -29520,7 +30320,7 @@ Model {
 	      "Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',"
 	      "1),'DisplayLayoutDimensions',[4 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'Pre"
 	      "viousAutoscale','XY','PreviousZoomMode','ZoomY'),extmgr.Configuration('Tools','Measurements',true,'Version','20"
-	      "17a')),'Version','2017b','Location',[173 190 1367 767])"
+	      "17a')),'Version','2017a','Location',[173 190 1367 767])"
 	      NumInputPorts	      "4"
 	    }
 	    Block {
@@ -32349,7 +33149,7 @@ Model {
 	      "'none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}}"
 	      ",'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLayou"
 	      "tDimensions',[2 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale',"
-	      "'XY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017b','Location',[54 168"
+	      "'XY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017a','Location',[54 168"
 	      " 1367 767])"
 	      NumInputPorts	      "2"
 	    }
@@ -32530,7 +33330,7 @@ Model {
 	      "-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{"
 	      "[]}},'ShowContent',true,'Placement',1),'TimeRangeSamples','14','TimeRangeFrames','14','DisplayLayoutDimensions'"
 	      ",[6 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY','Previo"
-	      "usZoomMode','ZoomY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017b','Lo"
+	      "usZoomMode','ZoomY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017a','Lo"
 	      "cation',[56 111 1367 767])"
 	      NumInputPorts	      "6"
 	    }
@@ -32603,7 +33403,7 @@ Model {
 	      "t('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{"
 	      "{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'TimeRangeSamples','40','TimeRangeFrames'"
 	      ",'40','DisplayLayoutDimensions',[4 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'"
-	      "PreviousAutoscale','XY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017b'"
+	      "PreviousAutoscale','XY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017a'"
 	      ",'Location',[54 111 1367 767])"
 	      NumInputPorts	      "4"
 	    }
@@ -32677,7 +33477,7 @@ Model {
 	      "elNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'TimeRangeSamples','40','TimeRa"
 	      "ngeFrames','40','DisplayLayoutDimensions',[4 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtSto"
 	      "p',false,'PreviousAutoscale','XY','PreviousZoomMode','ZoomY'),extmgr.Configuration('Tools','Measurements',true,"
-	      "'Version','2017a')),'Version','2017b','Location',[54 111 1367 767])"
+	      "'Version','2017a')),'Version','2017a','Location',[54 111 1367 767])"
 	      NumInputPorts	      "4"
 	    }
 	    Block {
@@ -32771,7 +33571,7 @@ Model {
 	      "'LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}"
 	      "},'ShowContent',true,'Placement',1),'TimeRangeSamples','14','TimeRangeFrames','14','DisplayLayoutDimensions',[6"
 	      " 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY','PreviousZ"
-	      "oomMode','ZoomY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017b','Locat"
+	      "oomMode','ZoomY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017a','Locat"
 	      "ion',[59 111 1350 767])"
 	      NumInputPorts	      "6"
 	    }
@@ -32845,7 +33645,7 @@ Model {
 	      "},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'TimeRangeSa"
 	      "mples','40','TimeRangeFrames','40','DisplayLayoutDimensions',[4 1]),extmgr.Configuration('Tools','Plot Navigati"
 	      "on',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('Tools','Measurements',true,'Version"
-	      "','2017a')),'Version','2017b','Location',[61 111 1362 767])"
+	      "','2017a')),'Version','2017a','Location',[61 111 1362 767])"
 	      NumInputPorts	      "4"
 	    }
 	    Block {
@@ -32918,7 +33718,7 @@ Model {
 	      "ible','on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),"
 	      "'TimeRangeSamples','40','TimeRangeFrames','40','DisplayLayoutDimensions',[4 1]),extmgr.Configuration('Tools','P"
 	      "lot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('Tools','Measurements',t"
-	      "rue,'Version','2017a')),'Version','2017b','Location',[66 111 1367 767])"
+	      "rue,'Version','2017a')),'Version','2017a','Location',[66 111 1367 767])"
 	      NumInputPorts	      "4"
 	    }
 	    Block {
@@ -33012,7 +33812,7 @@ Model {
 	      "tyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNa"
 	      "mes',{{[]}},'ShowContent',true,'Placement',1),'TimeRangeSamples','14','TimeRangeFrames','14','DisplayLayoutDime"
 	      "nsions',[6 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY')"
-	      ",extmgr.Configuration('Tools','Measurements',true,'Version','2016b')),'Version','2017b','Location',[355 406 164"
+	      ",extmgr.Configuration('Tools','Measurements',true,'Version','2016b')),'Version','2017a','Location',[355 406 164"
 	      "6 1065])"
 	      NumInputPorts	      "6"
 	    }
@@ -34171,7 +34971,7 @@ Model {
 	      "35294117647 1 1;1 0.0745098039215686 0.650980392156863]),'DisplayLayoutDimensions',[3 2],'DisplayContentCache',"
 	      "{struct('Title','%<SignalLabel>','LinePropertiesCache',{{}},'UserDefinedChannelNames',{{}},'PlotMagPhase',false"
 	      ")}),extmgr.Configuration('Tools','Plot Navigation',true),extmgr.Configuration('Tools','Measurements',true,'Vers"
-	      "ion','2017b')),'Version','2017b','Position',[403 146 560 420])"
+	      "ion','2017b')),'Version','2017a','Position',[403 146 560 420])"
 	      NumInputPorts	      "6"
 	    }
 	    Block {
@@ -34230,7 +35030,7 @@ Model {
 	      ";1 0.411764705882353 0.16078431372549;1 1 0.0666666666666667;0.717647058823529 0.274509803921569 1;0.3921568627"
 	      "45098 0.831372549019608 0.0745098039215686;0.0588235294117647 1 1;1 0.0745098039215686 0.650980392156863]),'Dis"
 	      "playLayoutDimensions',[3 2],'DisplayContentCache',[]),extmgr.Configuration('Tools','Plot Navigation',true),extm"
-	      "gr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017b','Position',[403 146 560 420]"
+	      "gr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017a','Position',[403 146 560 420]"
 	      ")"
 	      NumInputPorts	      "6"
 	    }
@@ -34279,7 +35079,7 @@ Model {
 	      " 0],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','Lin"
 	      "eWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'S"
 	      "howContent',true,'Placement',1),'DisplayLayoutDimensions',[2 1]),extmgr.Configuration('Tools','Plot Navigation'"
-	      ",true,'OnceAtStop',false),extmgr.Configuration('Tools','Measurements',true,'Version','2017b')),'Version','2017b"
+	      ",true,'OnceAtStop',false),extmgr.Configuration('Tools','Measurements',true,'Version','2017b')),'Version','2017a"
 	      "','Location',[66 78 1367 767])"
 	      NumInputPorts	      "2"
 	    }
@@ -34328,7 +35128,7 @@ Model {
 	      ",'none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}"
 	      "},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLayo"
 	      "utDimensions',[2 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale'"
-	      ",'XY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017b','Location',[56 11"
+	      ",'XY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017a','Location',[56 11"
 	      "1 1367 767])"
 	      NumInputPorts	      "2"
 	    }
@@ -34378,7 +35178,7 @@ Model {
 	      ",0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowCont"
 	      "ent',true,'Placement',1),'DisplayLayoutDimensions',[2 1]),extmgr.Configuration('Tools','Plot Navigation',true,'"
 	      "OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('Tools','Measurements',true,'Version','2016b')"
-	      "),'Version','2017b','Location',[1345 525 2656 1244])"
+	      "),'Version','2017a','Location',[1345 525 2656 1244])"
 	      NumInputPorts	      "2"
 	    }
 	    Block {
@@ -34426,7 +35226,7 @@ Model {
 	      ",'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWi"
 	      "dth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'Show"
 	      "Content',true,'Placement',1),'DisplayLayoutDimensions',[2 1]),extmgr.Configuration('Tools','Plot Navigation',tr"
-	      "ue,'OnceAtStop',false),extmgr.Configuration('Tools','Measurements',true,'Version','2017b')),'Version','2017b','"
+	      "ue,'OnceAtStop',false),extmgr.Configuration('Tools','Measurements',true,'Version','2017b')),'Version','2017a','"
 	      "Location',[66 78 1367 767])"
 	      NumInputPorts	      "2"
 	    }
@@ -34475,7 +35275,7 @@ Model {
 	      "arker','none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible',"
 	      "'on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'Displ"
 	      "ayLayoutDimensions',[2 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAuto"
-	      "scale','XY'),extmgr.Configuration('Tools','Measurements',true,'Version','2016b')),'Version','2017b','Location',"
+	      "scale','XY'),extmgr.Configuration('Tools','Measurements',true,'Version','2016b')),'Version','2017a','Location',"
 	      "[66 106 1377 825])"
 	      NumInputPorts	      "2"
 	    }
@@ -34525,7 +35325,7 @@ Model {
 	      "-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{"
 	      "[]}},'ShowContent',true,'Placement',1),'DisplayLayoutDimensions',[2 1]),extmgr.Configuration('Tools','Plot Navi"
 	      "gation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('Tools','Measurements',true,'Ver"
-	      "sion','2016b')),'Version','2017b','Location',[66 134 1377 853])"
+	      "sion','2016b')),'Version','2017a','Location',[66 134 1377 853])"
 	      NumInputPorts	      "2"
 	    }
 	    Block {
@@ -34573,7 +35373,7 @@ Model {
 	      ",'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWi"
 	      "dth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'Show"
 	      "Content',true,'Placement',1),'DisplayLayoutDimensions',[2 1]),extmgr.Configuration('Tools','Plot Navigation',tr"
-	      "ue,'OnceAtStop',false),extmgr.Configuration('Tools','Measurements',true,'Version','2017b')),'Version','2017b','"
+	      "ue,'OnceAtStop',false),extmgr.Configuration('Tools','Measurements',true,'Version','2017b')),'Version','2017a','"
 	      "Location',[66 78 1367 767])"
 	      NumInputPorts	      "2"
 	    }
@@ -34622,7 +35422,7 @@ Model {
 	      " 0],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','Lin"
 	      "eWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'S"
 	      "howContent',true,'Placement',1),'DisplayLayoutDimensions',[2 1]),extmgr.Configuration('Tools','Plot Navigation'"
-	      ",true,'OnceAtStop',false),extmgr.Configuration('Tools','Measurements',true,'Version','2017b')),'Version','2017b"
+	      ",true,'OnceAtStop',false),extmgr.Configuration('Tools','Measurements',true,'Version','2017b')),'Version','2017a"
 	      "','Location',[66 78 1367 767])"
 	      NumInputPorts	      "2"
 	    }
@@ -35226,7 +36026,7 @@ Model {
 	      "Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}}"
 	      ",'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLayoutDimensions',[2 1]),extmgr.Conf"
 	      "iguration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('Too"
-	      "ls','Measurements',true,'Version','2017a')),'Version','2017b','Location',[54 111 1367 767])"
+	      "ls','Measurements',true,'Version','2017a')),'Version','2017a','Location',[54 111 1367 767])"
 	      NumInputPorts	      "2"
 	    }
 	    Block {
@@ -35275,7 +36075,7 @@ Model {
 	      "th',0.5,'Marker','none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none',"
 	      "'Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement'"
 	      ",1),'DisplayLayoutDimensions',[2 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'Pr"
-	      "eviousAutoscale','XY'),extmgr.Configuration('Tools','Measurements',true,'Version','2016b')),'Version','2017b','"
+	      "eviousAutoscale','XY'),extmgr.Configuration('Tools','Measurements',true,'Version','2016b')),'Version','2017a','"
 	      "Location',[632 559 1943 1278])"
 	      NumInputPorts	      "2"
 	    }
@@ -35371,7 +36171,7 @@ Model {
 	      " 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines'"
 	      ",0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLayoutDimensions',[6 1]),extmgr.Configuration('"
 	      "Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('Tools','Measur"
-	      "ements',true,'Version','2017a')),'Version','2017b','Location',[56 111 1367 767])"
+	      "ements',true,'Version','2017a')),'Version','2017a','Location',[56 111 1367 767])"
 	      NumInputPorts	      "6"
 	    }
 	    Block {
@@ -35419,7 +36219,7 @@ Model {
 	      "rker','none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','"
 	      "on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'Displa"
 	      "yLayoutDimensions',[2 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutos"
-	      "cale','XY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017b','Location',["
+	      "cale','XY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017a','Location',["
 	      "54 111 1367 767])"
 	      NumInputPorts	      "2"
 	    }
@@ -35515,7 +36315,7 @@ Model {
 	      "',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'Num"
 	      "Lines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLayoutDimensions',[6 1]),extmgr.Configura"
 	      "tion('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('Tools','"
-	      "Measurements',true,'Version','2016b')),'Version','2017b','Location',[66 78 1921 1079])"
+	      "Measurements',true,'Version','2016b')),'Version','2017a','Location',[66 78 1921 1079])"
 	      NumInputPorts	      "6"
 	    }
 	    Block {
@@ -35610,7 +36410,7 @@ Model {
 	      "lor',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefinedChannelNames',{{}},'"
 	      "NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLayoutDimensions',[6 1]),extmgr.Config"
 	      "uration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('Tools"
-	      "','Measurements',true,'Version','2016b')),'Version','2017b','Location',[431 355 1732 1044])"
+	      "','Measurements',true,'Version','2016b')),'Version','2017a','Location',[431 355 1732 1044])"
 	      NumInputPorts	      "6"
 	    }
 	    Block {
@@ -35704,7 +36504,7 @@ Model {
 	      "','none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')"
 	      "}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLay"
 	      "outDimensions',[6 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale"
-	      "','XY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017b','Location',[66 1"
+	      "','XY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017a','Location',[66 1"
 	      "11 1367 767])"
 	      NumInputPorts	      "6"
 	    }
@@ -36448,7 +37248,7 @@ Model {
 	      "'none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}}"
 	      ",'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1)),extmgr.Confi"
 	      "guration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('Tool"
-	      "s','Measurements',true,'Version','2017a')),'Version','2017b','Location',[54 111 1367 767])"
+	      "s','Measurements',true,'Version','2017a')),'Version','2017a','Location',[54 111 1367 767])"
 	      NumInputPorts	      "1"
 	    }
 	    Block {
@@ -36488,7 +37288,7 @@ Model {
 	      "'Marker','none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible"
 	      "','on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1)),ext"
 	      "mgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configurat"
-	      "ion('Tools','Measurements',true,'Version','2017a')),'Version','2017b','Location',[635 204 1225 684])"
+	      "ion('Tools','Measurements',true,'Version','2017a')),'Version','2017a','Location',[635 204 1225 684])"
 	      NumInputPorts	      "1"
 	    }
 	    Block {
@@ -36538,7 +37338,7 @@ Model {
 	      "Width',0.5,'Marker','none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','non"
 	      "e','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placeme"
 	      "nt',1),'DisplayLayoutDimensions',[2 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,"
-	      "'PreviousAutoscale','XY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017b"
+	      "'PreviousAutoscale','XY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017a"
 	      "','Location',[54 111 1367 767])"
 	      NumInputPorts	      "1"
 	    }
@@ -36589,7 +37389,7 @@ Model {
 	      "rker','none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','"
 	      "on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'Displa"
 	      "yLayoutDimensions',[2 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutos"
-	      "cale','XY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017b','Location',["
+	      "cale','XY'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017a','Location',["
 	      "56 111 1367 767])"
 	      NumInputPorts	      "1"
 	    }
@@ -36640,7 +37440,7 @@ Model {
 	      "ne','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'U"
 	      "serDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'DisplayLayoutDi"
 	      "mensions',[2 1]),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY"
-	      "'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017b','Location',[54 111 13"
+	      "'),extmgr.Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017a','Location',[54 111 13"
 	      "67 767])"
 	      NumInputPorts	      "1"
 	    }
@@ -36681,7 +37481,7 @@ Model {
 	      "none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},"
 	      "'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1)),extmgr.Config"
 	      "uration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('Tools"
-	      "','Measurements',true,'Version','2017a')),'Version','2017b','Location',[398 299 948 659])"
+	      "','Measurements',true,'Version','2017a')),'Version','2017a','Location',[398 299 948 659])"
 	      NumInputPorts	      "1"
 	    }
 	    Block {
@@ -36720,7 +37520,7 @@ Model {
 	      ",'Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'User"
 	      "DefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1)),extmgr.Configurati"
 	      "on('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('Tools','Me"
-	      "asurements',true,'Version','2016b')),'Version','2017b','Location',[655 257 1235 737])"
+	      "asurements',true,'Version','2016b')),'Version','2017a','Location',[655 257 1235 737])"
 	      NumInputPorts	      "1"
 	    }
 	    Block {
@@ -37560,7 +38360,7 @@ Model {
 	      "sible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','none','Visible','on')}},'UserDefi"
 	      "nedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1)),extmgr.Configuration('"
 	      "Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('Tools','Measur"
-	      "ements',true,'Version','2017a')),'Version','2017b','Location',[54 111 1367 767])"
+	      "ements',true,'Version','2017a')),'Version','2017a','Location',[54 111 1367 767])"
 	      NumInputPorts	      "1"
 	    }
 	    Block {
@@ -37601,7 +38401,7 @@ Model {
 	      "Width',0.5,'Marker','none','Visible','on'),struct('Color',[0 0 1],'LineStyle','-','LineWidth',0.5,'Marker','non"
 	      "e','Visible','on')}},'UserDefinedChannelNames',{{}},'NumLines',0,'LineNames',{{[]}},'ShowContent',true,'Placeme"
 	      "nt',1)),extmgr.Configuration('Tools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr"
-	      ".Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017b','Location',[655 227 1265 767])"
+	      ".Configuration('Tools','Measurements',true,'Version','2017a')),'Version','2017a','Location',[655 227 1265 767])"
 	      NumInputPorts	      "1"
 	    }
 	    Line {
@@ -37739,7 +38539,7 @@ Model {
 	  "23529 0.274509803921569 1;0.392156862745098 0.831372549019608 0.0745098039215686;0.0588235294117647 1 1;1 0.0745098"
 	  "039215686 0.650980392156863]),'DisplayLayoutDimensions',[2 1],'DisplayContentCache',[]),extmgr.Configuration('Tools"
 	  "','Plot Navigation',true,'PreviousAutoscale','XY','OnceAtStop',false),extmgr.Configuration('Tools','Measurements',t"
-	  "rue,'Version','2017a')),'Version','2017b','Position',[54 1 1313 656])"
+	  "rue,'Version','2017a')),'Version','2017a','Position',[54 1 1313 656])"
 	  NumInputPorts		  "2"
 	}
 	Block {
@@ -38890,10 +39690,10 @@ MatData {
 Stateflow {
   machine {
     id			    1
-    name		    "torqueWalkingR2017a_true"
+    name		    "torqueWalkingR2017a"
     created		    "29-Nov-2017 15:01:26"
     isLibrary		    0
-    sfVersion		    80000011
+    sfVersion		    80000012
     firstTarget		    365
   }
   chart {
@@ -46425,6 +47225,9 @@ Stateflow {
     screen		    [1 1 3600 1200 1.180555555555556]
     treeNode		    [0 335 0 0]
     viewObj		    334
+    visible		    1
+    subviewS {
+    }
     ssIdHighWaterMark	    9
     decomposition	    CLUSTER_CHART
     type		    EML_CHART
