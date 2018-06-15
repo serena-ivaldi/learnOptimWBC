@@ -67,7 +67,7 @@ function [performance, succeeded, data2save] = EvaluateCMAES(obj,action,cur_cand
                end
             end
             %% i added this line in order to save some log value during the optimization procedure
-            if(log_index > 0)
+            if(obj.log_index > 0)
                 data2save.log = obj.input_4_run{1,obj.log_index}.log;
             end
             
