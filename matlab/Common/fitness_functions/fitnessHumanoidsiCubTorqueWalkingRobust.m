@@ -13,7 +13,7 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalkingRobust(obj,output)
 
     controller      = obj.input_4_run{4};
 
-    fall_penalty    = -1;  %in this case, I set a very negative penalty because in the unconstrained case i have no lower bound
+    fall_penalty    = -1.5;  %in this case, I set a very negative penalty because in the unconstrained case i have no lower bound
     
     torques         = controller.simulation_results.torques;         %[nsamples x nDOF]
     time            = controller.simulation_results.time;            %[nsamples x 1]
@@ -22,10 +22,10 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalkingRobust(obj,output)
 
     t_all           = output{1};
     q_all           = output{2};
-    qd_all          = output{3};
+    %qd_all          = output{3};
     
     nsamples        = size(controller.simulation_results.zmpErr,1);
-    max_zmpErr      = 0.0049 * nsamples;
+    max_zmpErr      = 0.005 * nsamples;
     
     
     downsample      = 1;
@@ -72,7 +72,7 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalkingRobust(obj,output)
     sum_zmpErr         = sum_zmpErr/max_zmpErr;
 
     %Note: the optimization procedure searches to maximize the fitness
-    fit =  sum_zmpErr;
+    fit = -sum_zmpErr;
 
     failure = false;
 

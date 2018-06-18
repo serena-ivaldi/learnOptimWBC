@@ -13,24 +13,24 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalkingPerformance(obj,outpu
 
     controller      = obj.input_4_run{4};
 
-    fall_penalty    = -1;  %in this case, I set a very negative penalty because in the unconstrained case i have no lower bound
+    fall_penalty    = -1.5;  %in this case, I set a very negative penalty because in the unconstrained case i have no lower bound
     
     
     task_errors     = controller.simulation_results.task_errors;     %[nsamples x 12] matrix, [CoMx, CoMy, CoMz, OriRot, lFootx,lFooty,lFootz,lFootRot,rFootx, rFooty, rFootz, rFootRot]
     torques         = controller.simulation_results.torques;         %[nsamples x nDOF]
     time            = controller.simulation_results.time;            %[nsamples x 1]
-    QP_exitFlag     = controller.simulation_results.QP_exitFlag;      %[nsamples x 1]
+    QP_exitFlag     = controller.simulation_results.QP_exitFlag;     %[nsamples x 1]
 
     t_all           = output{1};
     q_all           = output{2};
-    qd_all          = output{3};
+    %qd_all          = output{3};
     
-    nsamples        = size(controller.simulation_results.task_errors,1);
-    max_torques     = 230  * nsamples ; %! these parameters need to be scaled with the length of the simulation
-    max_task_error  = 0.1  * nsamples ;
+    nsamples        = size(controller.simulation_results.time,1);
+    max_torques     = 230   * nsamples;
+    max_task_error  = 0.005 * nsamples;
     
     weight_task_err = -1;     %minimize
-    weight_torques  = -1;     %minimize
+    weight_torques  = -0.1;   %minimize
     sum_weights     = abs(weight_torques) + abs(weight_task_err);
     
     downsample      = 1;
@@ -67,7 +67,7 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalkingPerformance(obj,outpu
     %fitness function computation
 
     %sum of task errors
-    sum_task_error = sum((task_errors(:).*task_errors(:)),1); %sqrt(mean(task_errors.^2, 1));
+    sum_task_error = sum((task_errors(:).*task_errors(:)),1);
 
     %sum of joint torques
     sum_torques = sum((torques(:).*torques(:)),1);

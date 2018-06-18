@@ -13,7 +13,7 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalkingPerformanceRobust(obj
 
     controller      = obj.input_4_run{4};
 
-    fall_penalty    = -1;  %in this case, I set a very negative penalty because in the unconstrained case i have no lower bound
+    fall_penalty    = -1.5;  %in this case, I set a very negative penalty because in the unconstrained case i have no lower bound
     
     
     task_errors     = controller.simulation_results.task_errors;     %[nsamples x 12] matrix, [CoMx, CoMy, CoMz, OriRot, lFootx,lFooty,lFootz,lFootRot,rFootx, rFooty, rFootz, rFootRot]
@@ -31,23 +31,24 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalkingPerformanceRobust(obj
 
     t_all           = output{1};
     q_all           = output{2};
-    qd_all          = output{3};
+    %qd_all          = output{3};
     
     nsamples        = size(controller.simulation_results.task_errors,1);
-    max_torques     = 230    * nsamples ; %! these parameters need to be scaled with the length of the simulation
-    max_task_error  = 0.1    * nsamples;
-    max_zmpErr      = 0.0049 * nsamples;
+    %max_torques     = 230    * nsamples ; %! these parameters need to be scaled with the length of the simulation
+    %max_task_error  = 0.1    * nsamples;
+    %max_zmpErr      = 0.0049 * nsamples;
+    
+    max_torques     = 230   * nsamples;
+    max_task_error  = 0.005 * nsamples;
+    max_zmpErr      = 0.005 * nsamples;
     
     weight_task_err = -1;     %minimize
-    weight_torques  = -1;     %minimize
+    weight_torques  = -0.1;   %minimize
     weight_zmp_dist = -1;     %maximize (minimize a negative measure of distance)
     sum_weights     = abs(weight_torques) + abs(weight_task_err) + abs(weight_zmp_dist);
     
     downsample      = 1;
-    evaluate_constraints_index = 1;
-   
-
-    
+    evaluate_constraints_index = 1;   
    
     for i=1:downsample:length(time)
 
@@ -78,12 +79,12 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalkingPerformanceRobust(obj
     %fitness function computation
 
     %sum of task errors
-    sum_task_error = sum((task_errors(:).*task_errors(:)),1); %sqrt(mean(task_errors.^2, 1));
-
+    sum_task_error = sum((task_errors(:).*task_errors(:)),1);
+    
     %sum of joint torques
     sum_torques = sum((torques(:).*torques(:)),1);
 
-    %sum of zmperror
+    %sum of zmp error
     sum_zmpErr  = sum((zmpErr(:).*zmpErr(:)),1);
 
     % saturations
