@@ -106,13 +106,20 @@ function [t, q, qd,failed_flag] = DynSim_iCubSim(controller,params)
         failed_flag = true;
     end
     
-    if size(q,1) <= 1
-        % if there was no error, but the simulation did not run 
+    % if there was no error, but the simulation did not run 
         % due to early termination that occurred right at initial time,
         % gazebo was unable to replace the robot in its original position,
         % therefore gazebo and yarprobotinterface need to be restarted
         % and the simulation repeated
+    if exist('q', 'var')
+        if size(q,1) <= 1
+            failed_flag = true;
+        end
+    else
         failed_flag = true;
+    end
+    
+    if failed_flag == true
         %% DEBUG
         disp('Something went wrong; restarting gazebo and repeating the simulation with the same parameters');
         if(strcmp(params.codyco,'old'))
