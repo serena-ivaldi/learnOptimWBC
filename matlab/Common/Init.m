@@ -132,7 +132,7 @@ end
 
 % i added it for the using it in the preprocessing methods for benchmarks
 if(strcmp(learn_approach,'fmincon'))
-    inst = ObjProblem(controller.GetTotalParamNum(),cmaes_value_range,constr,learn_approach,run_function,fitness,clean_function,input); 
+    inst = ObjProblem(controller.GetTotalParamNum(),cmaes_value_range,constr,learn_approach,run_function,fitness,clean_function,input);
 else
     inst = Optimization.Instance(constr,learn_approach,preprocessing,run_function,fitness,clean_function,input,activate_constraints_handling);
     % i need to explicitly set the log index in order to log the file inside
