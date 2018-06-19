@@ -32,11 +32,6 @@ function [performance, succeeded, data2save] = EvaluateCMAES(obj,action,cur_cand
 
             succeeded = 1;
 
-            %tic
-            % insert fitness function 
-            
-            
-            %toc
             %% i check the eventual fail
             if(nargout(obj.fitness) > 1)
                 % here i checked 

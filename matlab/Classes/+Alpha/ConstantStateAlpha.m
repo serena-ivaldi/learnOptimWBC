@@ -1,3 +1,6 @@
+% in this class i define a column of value for each task. each element of
+% the column represent a 
+
 classdef ConstantStateAlpha < Alpha.AbstractAlpha
    
    properties
@@ -10,21 +13,22 @@ classdef ConstantStateAlpha < Alpha.AbstractAlpha
    
    
    methods
-      
+      % here value represents the set of coefficients that the task assumes
+      % while is in different state during the experiment
       function obj = ConstantStateAlpha(value,value_range,time_struct)
          
           obj.sample = value;
           obj.time_struct = time_struct;
-          % only to be compiant with the whole structure
+          % only to be compliant with the whole structure
           obj.range = value_range;
           
       end
       
-      %function that give the value of the alpha function given the current time 
+      % function that give the value of the alpha function given the current time 
       function val = GetValue(obj,state)
          val = obj.sample(state);
       end   
-      %function that compute update the value to test
+      % function that update the value to test
       function ComputeNumValue(obj,theta)
           obj.sample = theta;
       end
@@ -36,7 +40,7 @@ classdef ConstantStateAlpha < Alpha.AbstractAlpha
    end
    
    methods (Static)
-      % here the cosntructor accept a matrix of array as values ( row = task column = states)
+      % here the constructor accept a matrix of array as values ( row = task column = states)
       % here we remove subchain because this class is built around the
       % simulink simulator with the icub humanoids
       function alphas = BuildCellArray(n_task,values,value_range,time_struct)
