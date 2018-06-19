@@ -66,7 +66,7 @@ switch CONTROLLERTYPE
             case 'constant'
                 alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,value_range_for_optimization_routine,time_struct);
             case 'constantState'
-                alphas = Alpha.ConstantStateAlpha.BuildCellArray(chains.GetNumTasks(1),values,[],time_struct);
+                alphas = Alpha.ConstantStateAlpha.BuildCellArray(chains.GetNumTasks(1),values,[],time_struct,mapping);
             case 'empty'
                 alphas = Alpha.EmptyAlpha.BuildCellArray(chains.GetNumTasks(1),values,[],time_struct);
             case 'handTuned'

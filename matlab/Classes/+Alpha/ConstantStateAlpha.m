@@ -4,10 +4,10 @@
 classdef ConstantStateAlpha < Alpha.AbstractAlpha
    
    properties
-      time_struct                % time struct is not used but i could be used in the future 
-      sample                     % array of values (one for each state) associated to one task ( row = task column = states)
-      range                      % necessary because i call it inside instance cmaes (it seems to be not used anymore)
-      param    
+      time_struct           % time struct is not used but i could be used in the future 
+      sample                % array of values (one for each state) associated to one task ( row = task column = states)
+      range                 % necessary because i call it inside instance cmaes (it seems to be not used anymore)
+      mapping               % array of index that specify which weight we apply for each state (so it is possible to have less weights than states)                     
    end
    
    
@@ -15,13 +15,12 @@ classdef ConstantStateAlpha < Alpha.AbstractAlpha
    methods
       % here value represents the set of coefficients that the task assumes
       % while is in different state during the experiment
-      function obj = ConstantStateAlpha(value,value_range,time_struct)
-         
-          obj.sample = value;
+      function obj = ConstantStateAlpha(value,value_range,time_struct,map)
+          obj.sample      = value;
           obj.time_struct = time_struct;
           % only to be compliant with the whole structure
-          obj.range = value_range;
-          
+          obj.range       = value_range;
+          obj.mapping     = map; 
       end
       
       % function that give the value of the alpha function given the current time 

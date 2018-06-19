@@ -5,7 +5,7 @@ clc
 %% initialize all the data
 optim = false;
 
-configuration_file_name = 'icub_stand_opt_no_backward_simulink';
+configuration_file_name = 'icub_torque_walking';
 
 [bot1,name_scenario,time_struct,time_sym_struct,simulator_type,reference,alphas,controller,constr,learn_approach,inst,~,~,~,~,~,input,rawTextFromStorage,name_dat]=Init(configuration_file_name,optim);
 %% Simulation

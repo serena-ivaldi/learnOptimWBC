@@ -5,13 +5,13 @@
 % params is shipped inside the simulink-thread through the 'input' cell
 % vector. input variables has renamed as 'input_for_run' inside the instance object
 name_simulink_folder  = 'torqueWalking';
-name_simulink_schemes = 'torqueWalkingR2017a';
+name_simulink_schemes = 'torqueWalkingMultipleStateCoefficientR2017b';
 scenario_name         = 'standing_icub_to_optimize.world';
 % just temporary until codyco is updated on every machine
 codyco                = 'new'; % old or new depending on your codyco installation (2017 codyco version = old 2018 codyco version = new)
 % here i build the class that is responsible of the communication among
 % matlab processes
-messenger             = Messaging.torqueWalkingMessage();
+messenger             = Messaging.torqueWalkingMultipleStatesMessage();
 
 %% not change this part!
 params.name_simulink_schemes = name_simulink_schemes;
@@ -147,13 +147,14 @@ switch CONTROLLERTYPE
         %% ALPHA PARAMETER
         %constant alpha
         choose_alpha = 'constantState';  % RBF , constant, handTuned, empty, constantState
-        number_of_state = 1;
+        number_of_state = 3;
         number_of_tasks = chains.GetNumTasks(1);
         %values = ones(chains.GetNumTasks(1),number_of_state);
-        values          = [0.794857081519787,0.796890628453649,0,0.000100000000000000,0.262751761986009,1.00000000000000e-10]';
-        % for this kind of experiment i do not need any mapping because i
-        % keep the parameters costant for every state
-        mapping         = [];
+        values          = [0.794857081519787,0.796890628453649,0,0.000100000000000000,0.262751761986009,1.00000000000000e-10;
+                           0.794857081519787,0.796890628453649,0,0.000100000000000000,0.262751761986009,1.00000000000000e-10;
+                           0.794857081519787,0.796890628453649,0,0.000100000000000000,0.262751761986009,1.00000000000000e-10]';
+        mapping         = [1 1 1 2 3];
+        
         
         % this is a trick that was used for providing bound to the optimization procedure for parametric reference.
         % it is to be not used anymore for the trajectory case

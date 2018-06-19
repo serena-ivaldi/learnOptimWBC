@@ -1,15 +1,31 @@
-classdef torqueWalkingMessage < Messaging.AbstractMessage
+classdef torqueWalkingRbfMessage < Messaging.AbstractMessage
     
    methods
        %% important!! params must always be saved to make the code work
        function Pack(obj,controller,params)
-           weightStanceFoot = controller.alpha{1,1}.sample;
-           weightSwingFoot  = controller.alpha{1,2}.sample;
-           weightHand       = controller.alpha{1,3}.sample;
-           weightRotTask    = controller.alpha{1,4}.sample;
-           weightPostural   = controller.alpha{1,5}.sample;
-           weight_tau       = controller.alpha{1,6}.sample;
-   
+           
+           time = params.tStart:params.sim_step:params.tEnd;
+           
+           
+           weightStanceFoot = zeros(length(time),1);
+           weightSwingFoot  = zeros(length(time),1);
+           weightHand       = zeros(length(time),1);
+           weightRotTask    = zeros(length(time),1);
+           weightPostural   = zeros(length(time),1);
+           weight_tau       = zeros(length(time),1);
+           
+           index = 1;
+           for ti=time
+               weightStanceFoot(index) = controller.alpha{1,1}.GetValue(ti);
+               weightSwingFoot(index)  = controller.alpha{1,2}.GetValue(ti);
+               weightHand(index)       = controller.alpha{1,3}.GetValue(ti);
+               weightRotTask(index)    = controller.alpha{1,4}.GetValue(ti);
+               weightPostural(index)   = controller.alpha{1,5}.GetValue(ti);
+               weight_tau(index)       = controller.alpha{1,6}.GetValue(ti);
+               index = index + 1;
+           end
+           
+          
           % save all the relevant data for the thread
           %% inputData.mat has to be saved in common/simulink_executable      
             save(obj.input2simulink,'weightStanceFoot','weightSwingFoot', 'weightHand', 'weightRotTask', 'weightPostural', 'weight_tau', 'params');
