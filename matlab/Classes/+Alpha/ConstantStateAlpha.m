@@ -42,12 +42,12 @@ classdef ConstantStateAlpha < Alpha.AbstractAlpha
       % here the constructor accept a matrix of array as values ( row = task column = states)
       % here we remove subchain because this class is built around the
       % simulink simulator with the icub humanoids
-      function alphas = BuildCellArray(n_task,values,value_range,time_struct)
+      function alphas = BuildCellArray(n_task,values,value_range,time_struct,map)
          
          %for i=1:n_subchain
              ii = 1;
              for j =1:n_task
-               alphas{ii,j} = Alpha.ConstantStateAlpha(values(j,:),value_range,time_struct);
+               alphas{ii,j} = Alpha.ConstantStateAlpha(values(j,:),value_range,time_struct,map);
              end
          %end
          

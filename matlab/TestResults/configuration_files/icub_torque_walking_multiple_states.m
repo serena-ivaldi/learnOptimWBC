@@ -150,10 +150,10 @@ switch CONTROLLERTYPE
         number_of_state = 3;
         number_of_tasks = chains.GetNumTasks(1);
         %values = ones(chains.GetNumTasks(1),number_of_state);
-        values          = [0.794857081519787,0.796890628453649,0,0.000100000000000000,0.262751761986009,1.00000000000000e-10;
-                           0.794857081519787,0.796890628453649,0,0.000100000000000000,0.262751761986009,1.00000000000000e-10;
-                           0.794857081519787,0.796890628453649,0,0.000100000000000000,0.262751761986009,1.00000000000000e-10]';
-        mapping         = [1 1 1 2 3];
+        values          = [1   , 1  , 0, 0.1, 0.3, 0.00001;
+                           1.1 , 1.1, 0, 0.2, 0.4, 0.00002;
+                           1.2 , 1.2, 0, 0.3, 0.5, 0.00003]';
+        mapping         = [1 1 2 3 3];
         
         
         % this is a trick that was used for providing bound to the optimization procedure for parametric reference.
