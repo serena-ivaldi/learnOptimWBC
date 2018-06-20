@@ -11,7 +11,7 @@ scenario_name         = 'standing_icub_to_optimize.world';
 codyco                = 'new'; % old or new depending on your codyco installation (2017 codyco version = old 2018 codyco version = new)
 % here i build the class that is responsible of the communication among
 % matlab processes
-messenger             = Messaging.torqueWalkingRBF();
+messenger             = Messaging.torqueWalkingRbfMessage();
 
 %% not change this part!
 params.name_simulink_schemes = name_simulink_schemes;
@@ -155,7 +155,7 @@ switch CONTROLLERTYPE
         precomp_sample = false;
         % value of theta that we have to change when we want to execute the result
         % from the optimization step 
-        numeric_theta =zeros(1,number_of_basis*chains.GetNumTasks(1));
+        numeric_theta =[1, 1.1, 1.2, 1, 1.1, 1.2, 0, 0, 0, 0.1, 0.2, 0.3, 0.3, 0.4, 0.5, 0.00001, 0.00002, 0.00003];
         
         
         % this is a trick that was used for providing bound to the optimization procedure for parametric reference.
