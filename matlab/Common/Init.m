@@ -66,7 +66,7 @@ switch CONTROLLERTYPE
             case 'constant'
                 alphas = Alpha.ConstantAlpha.BuildCellArray(chains.GetNumChains(),chains.GetNumTasks(1),values,value_range_for_optimization_routine,time_struct);
             case 'constantState'
-                alphas = Alpha.ConstantStateAlpha.BuildCellArray(chains.GetNumTasks(1),values,[],time_struct);
+                alphas = Alpha.ConstantStateAlpha.BuildCellArray(chains.GetNumTasks(1),values,[],time_struct,mapping);
             case 'empty'
                 alphas = Alpha.EmptyAlpha.BuildCellArray(chains.GetNumTasks(1),values,[],time_struct);
             case 'handTuned'
@@ -120,16 +120,25 @@ end
 
 %% Instance
 if strcmp(simulator_type{1},'rbt')
-    input{5} = controller;
+    input{5}  = controller;
+    log_index = 5;
 elseif strcmp(simulator_type{1},'icub_matlab')
-    input{4} = controller;
+    input{4}  = controller;
+    log_index = 4;
 elseif strcmp(simulator_type{1},'icub_matlab_sim')
-    input{4} = controller;
+    input{4}  = controller;
+    log_index = 4;
 end
 
 % i added it for the using it in the preprocessing methods for benchmarks
 if(strcmp(learn_approach,'fmincon'))
-    inst = ObjProblem(controller.GetTotalParamNum(),cmaes_value_range,constr,learn_approach,run_function,fitness,clean_function,input);       
+    inst = ObjProblem(controller.GetTotalParamNum(),cmaes_value_range,constr,learn_approach,run_function,fitness,clean_function,input);
 else
     inst = Optimization.Instance(constr,learn_approach,preprocessing,run_function,fitness,clean_function,input,activate_constraints_handling);
+    % i need to explicitly set the log index in order to log the file inside
+    % the controller that are stored in the message class from the
+    % simulation otheriwise there will be no storage at all. 
+    % The log data areexpected to be inside a struct or an object in input
+    % for run
+    inst.setLogIndex(log_index);
 end

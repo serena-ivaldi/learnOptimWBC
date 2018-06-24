@@ -19,6 +19,7 @@ classdef  UF < Controllers.AbstractController
       torques_time     % all the time istant when i aply a torque.
       display_opt      % display settings display_opt.step display_opt.trajtrack
       visual_param     % temporary
+      log
    end
 
 

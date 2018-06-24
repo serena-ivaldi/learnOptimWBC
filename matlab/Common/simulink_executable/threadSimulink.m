@@ -40,7 +40,10 @@ results = sim(simulink_scheme_path,'SimulationMode','normal');
 %% with this function i save only the data that i need for computing 
 %% the fitness function from the simulink experiment
 cd(simulink_schemes_global)
-params.messenger.StoreFromSimulink(results);
+% from results we save time series data 
+% in params we store data that are in the threads workspace and can be used
+% for logging reasons
+params.messenger.StoreFromSimulink(results,params);
 
 exit
 

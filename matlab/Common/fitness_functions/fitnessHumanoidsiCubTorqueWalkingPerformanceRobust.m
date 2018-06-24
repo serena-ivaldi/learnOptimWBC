@@ -44,6 +44,7 @@ function [fit,failure]  = fitnessHumanoidsiCubTorqueWalkingPerformanceRobust(obj
 
     weight_task_err = -1;      %minimize
     weight_torques  = -0.0001; %minimize
+
     weight_zmp_dist = -1;     %maximize (minimize a negative measure of distance)
     sum_weights     = abs(weight_torques) + abs(weight_task_err) + abs(weight_zmp_dist);
     

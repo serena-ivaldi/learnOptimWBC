@@ -77,7 +77,7 @@ Problem.f = 'FeasibleSolutionObj';
 [performances(1), succeeded(1), data2save] = fnForwardModel(obj,mean(1, :),1,1);
 %% parameter to collect 1
 costs(1) = - performances(1);
-
+obj.data2save{1} = data2save;
 
 %% Optimization loop 
 
@@ -109,7 +109,7 @@ for k = 1:(nIterations - 1)
     %%    
     %evaluate offsprings
     disp('evaluate offsprings')
-    [performances_new succeeded(k)] = fnForwardModel(obj,offsprings,1, 1); % compute fitness    
+    [performances_new succeeded(k) data2save] = fnForwardModel(obj,offsprings,1, 1); % compute fitness    
     %% added part to manage constraints
     if(obj.constraints)      
         %% TODO check if it is working 
@@ -178,6 +178,8 @@ for k = 1:(nIterations - 1)
     end
     bestAction.hist(k).performance = performances(k + 1);
     bestAction.hist(k).parameters = mean(k + 1, :);
+    % logging data 
+    obj.data2save{k} = data2save;
     
     fprintf('performance %d: %e %d\n', k + 1, performances(k + 1), succeeded(k));
     

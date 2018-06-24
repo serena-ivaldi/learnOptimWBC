@@ -74,7 +74,7 @@ classdef TB_StandUpMessage < Messaging.AbstractMessage
           
       end
       
-      function StoreFromSimulink(obj,results)
+      function StoreFromSimulink(obj,results,params)
         torque_sim           = results.get('torque_sim');
         zmp_sim              = results.get('zmp_sim');
         com_pos_sim          = results.get('com_pos_sim');

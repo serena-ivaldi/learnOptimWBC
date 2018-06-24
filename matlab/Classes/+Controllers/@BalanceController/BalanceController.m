@@ -19,6 +19,7 @@ classdef  BalanceController < Controllers.AbstractController
       gains
       simulation_results   % in this variable i save the result of the integration for fixed step  
       simulation_iterator  % i use this to save the data during the execution of the simulation
+      log 
    end
 
 

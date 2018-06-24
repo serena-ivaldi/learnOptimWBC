@@ -15,8 +15,8 @@
 %% --- Initialization ---
 
 %% for stand alone execution remove comment on the following lines
-% clc; close all; clear all;
-% load('inputData.mat')
+clc; close all; clear variables;
+load('inputData.mat')
 % %
 
 % NOTE: if you are simulating the robot with Gazebo, remember that you have
@@ -90,7 +90,7 @@ run(configRobotFCN);
 if strcmp(DEMO_TYPE, 'WALKING_IN_PLACE')
     
     % Run configuration script for internal coordinator
-    stateMachineWalkingInPlaceFCN = fullfile('app/robots', getenv('YARP_ROBOT_NAME'),'initStateMachineWalkingInPlace.m');
+    stateMachineWalkingInPlaceFCN = fullfile('app/robots', getenv('YARP_ROBOT_NAME'),'initStateMachineWalkingInParamInScheme.m');
     run(stateMachineWalkingInPlaceFCN);
 end
 
