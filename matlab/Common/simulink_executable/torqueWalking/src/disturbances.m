@@ -19,6 +19,8 @@ phi_torque   = 2*pi*rand(params.external_force.n_wrench_applications,1);
 for i = 1 : params.external_force.n_wrench_applications
    params.external_force.wrench(i,1) = params.external_force.magnitude(i)*cos(gamma_force(i));
    params.external_force.wrench(i,2) = params.external_force.magnitude(i)*sin(gamma_force(i));
+   %There is a major error here, "params.external_force.wrench(i)" should
+   %not be there, but "params.external_torque.magnitude(i)" instead!
    params.external_force.wrench(i,4) = params.external_force.wrench(i)*sin(theta_torque(i))*cos(phi_torque(i));
    params.external_force.wrench(i,5) = params.external_force.wrench(i)*sin(theta_torque(i))*sin(phi_torque(i));
    params.external_force.wrench(i,6) = params.external_force.wrench(i)*cos(theta_torque(i));
