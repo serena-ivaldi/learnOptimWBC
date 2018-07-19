@@ -1,0 +1,33 @@
+
+
+performanceRobust 6   done (total 20)
+performance       7   done (total 16)
+robust            8
+
+
+1_iCub_standing_sim_1.0  robust
+2_iCub_standing_sim_1.0  performance
+3_iCub_standing_sim_1.0  performance
+4_iCub_standing_sim_1.0  robust
+5_iCub_standing_sim_1.0  performance
+7_iCub_standing_sim_1.0  performanceRobust
+8_iCub_standing_sim_1.0  robust
+9_iCub_standing_sim_1.0  performance
+10_iCub_standing_sim_1.0 performanceRobust
+11_iCub_standing_sim_1.0 robust
+12_iCub_standing_sim_1.0 perfomance
+13_iCub_standing_sim_1.0 performanceRobust
+14_iCub_standing_sim_1.0 robust
+15_iCub_standing_sim_1.0 performance
+16_iCub_standing_sim_1.0 performanceRobust
+17_iCub_standing_sim_1.0 robust
+18_iCub_standing_sim_1.0 performance
+19_iCub_standing_sim_1.0 performanceRobust
+20_iCub_standing_sim_1.0 performanceRobust
+21_iCub_standing_sim_1.0 Robust 
+22_iCub_standing_sim_1.0 Robust 
+23_iCub_standing_sim_1.0 Robust doing                
+
+
+
+
