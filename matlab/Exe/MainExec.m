@@ -5,7 +5,7 @@ clc
 %% initialize all the data
 optim = false;
 
-configuration_file_name = 'icub_torque_walking_RBF';
+configuration_file_name = 'icub_torque_walking';
 
 [bot1,name_scenario,time_struct,time_sym_struct,simulator_type,reference,alphas,controller,constr,learn_approach,inst,~,~,~,~,~,input,rawTextFromStorage,name_dat]=Init(configuration_file_name,optim);
 %% Simulation
@@ -156,3 +156,6 @@ if(strcmp(simulator_type{1},'icub_matlab') || strcmp(simulator_type{1},'rbt'))
 elseif(strcmp(simulator_type{1},'icub_matlab_sim'))
     disp('for now do nothing')
 end
+
+
+get_from_mainExec;
