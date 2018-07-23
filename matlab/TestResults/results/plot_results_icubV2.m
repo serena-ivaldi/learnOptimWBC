@@ -105,11 +105,10 @@ fprintf('Success rate of experiments without DR: %d %% \n', nsuccess/10*100)
 %% Plot formats
 time = 0:0.01:40;
 
-
 width = 3;     % Width in inches
 height = 3;    % Height in inches
 alw = 0.75;    % AxesLineWidth
-fsz = 20; %15      % Fontsize
+fsz = 15; %20 for abstract      % Fontsize
 lw = 1.5;      % LineWidth
 msz = 8;       % MarkerSize
 
@@ -147,15 +146,15 @@ title('Reference');
 set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
 set(gca,'box','off')
 
-figure(); %- it's just falling
-plot(pose_CoM_baseline(:,1)*1000, pose_CoM_baseline(:,2)*1000)
-% title('Phase plot of CoM position, obtained with initial weights');
-xlabel('CoM_x (mm)');
-ylabel('CoM_y (mm)');
-axis(CoM_axis);
-% set(gca,'yticklabel',[])
-set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
-set(gca,'box','off')
+% figure(); %- it's just falling
+% plot(pose_CoM_baseline(:,1)*1000, pose_CoM_baseline(:,2)*1000)
+% % title('Phase plot of CoM position, obtained with initial weights');
+% xlabel('CoM_x (mm)');
+% ylabel('CoM_y (mm)');
+% axis(CoM_axis);
+% % set(gca,'yticklabel',[])
+% set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+% set(gca,'box','off')
 
 figure();
 for k = 1:j_robust-1 %k = 1, 2, 4 are falling
@@ -173,21 +172,21 @@ axis(CoM_axis);
 set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
 set(gca,'box','off')
 
-figure()
-for k = 1:j_performance-1
-    hold on;
-    if size(pose_CoM_performance{k},1) == length(time)
-        plot(pose_CoM_performance{k}(:,1)*1000, pose_CoM_performance{k}(:,2)*1000)
-    end
-end
-% title('Phase plot of CoM, obtained with weights optimized using \phi_p');
-% legend('Training 1', 'Training 2');
-% ylabel('CoM_y (mm)');
-xlabel('CoM_x (mm)');
-axis(CoM_axis);
-set(gca,'yticklabel',[])
-set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
-set(gca,'box','off')
+% figure()
+% for k = 1:j_performance-1
+%     hold on;
+%     if size(pose_CoM_performance{k},1) == length(time)
+%         plot(pose_CoM_performance{k}(:,1)*1000, pose_CoM_performance{k}(:,2)*1000)
+%     end
+% end
+% % title('Phase plot of CoM, obtained with weights optimized using \phi_p');
+% % legend('Training 1', 'Training 2');
+% % ylabel('CoM_y (mm)');
+% xlabel('CoM_x (mm)');
+% axis(CoM_axis);
+% set(gca,'yticklabel',[])
+% set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+% set(gca,'box','off')
 
 figure()
 for k = 1:j_performanceRobust-1
@@ -200,7 +199,7 @@ end
 %title('Robot');
 title('w{\phi_{pr}}');
 % legend('Training 1', 'Training 2', 'Training 3');
-%ylabel('CoM_y (mm)');
+ylabel('CoM_y (mm)');
 xlabel('CoM_x (mm)');
 axis(CoM_axis);
 % set(gca,'yticklabel',[])
@@ -227,17 +226,17 @@ set(gca,'box','off')
 
 
 %FOR LEGEND -- use the one from CoM_legend =)
-    fig = figure(); %this one is just for the axis!
-    for k = 1:j_performanceRobust-1
-        hold on;
-        plot(pose_CoM_performanceRobust{k}(:,1)*1000, pose_CoM_performanceRobust{k}(:,2)*1000)
-    end
-    xlabel('CoM_x (mm)');
-    ylabel('y (mm)');
-    set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
-    legendHandle = legend('T1', 'T2', 'T3', 'T4');
-    legend('Orientation','horizontal');
-    legend('Location','bestoutside')
+%     fig = figure(); %this one is just for the axis!
+%     for k = 1:j_performanceRobust-1
+%         hold on;
+%         plot(pose_CoM_performanceRobust{k}(:,1)*1000, pose_CoM_performanceRobust{k}(:,2)*1000)
+%     end
+%     xlabel('CoM_x (mm)');
+%     ylabel('y (mm)');
+%     set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+%     legendHandle = legend('T1', 'T2', 'T3', 'T4');
+%     legend('Orientation','horizontal');
+%     legend('Location','bestoutside')
 %    saveLegendToImage(fig, legendHandle, 'CoM_legend', 'jpg');
 
 %% Foot trajectories
@@ -265,54 +264,54 @@ set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
 % title('Feet trajectories, obtained with initial weights');
 % legend('Left foot', 'Right foot');
 
-figure() %lFoot z position
-for k = 1:j_robust-1
-    hold on;
-    if size(pose_lFoot_robust{k},1) == length(time) %2 failed %1,2,4 one failed
-    plot(time,pose_lFoot_robust{k}(:,3)*10000);
-    plot(time,pose_rFoot_robust{k}(:,3)*10000);
-    end
-end
-% legend('left foot, training 1', 'right foot, training 1', 'left foot, training 2', 'right foot, training 2');
-title('w{\phi_r}');
-xlabel('time (s)');
-ylabel('foot_z (mm)');
-axis(foot_axis);
-set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+% figure() %lFoot z position
+% for k = 1:j_robust-1
+%     hold on;
+%     if size(pose_lFoot_robust{k},1) == length(time) %2 failed %1,2,4 one failed
+%     plot(time,pose_lFoot_robust{k}(:,3)*10000);
+%     plot(time,pose_rFoot_robust{k}(:,3)*10000);
+%     end
+% end
+% % legend('left foot, training 1', 'right foot, training 1', 'left foot, training 2', 'right foot, training 2');
+% title('w{\phi_r}');
+% xlabel('time (s)');
+% ylabel('foot_z (mm)');
+% axis(foot_axis);
+% set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
 
-figure() %lFoot z position %they all failed
-for k = 1:j_performance-1
-    hold on;
-    if size(pose_lFoot_performance{k},1) == length(time)
-        plot(time,pose_lFoot_performance{k}(:,3)*10000);
-        plot(time,pose_rFoot_performance{k}(:,3)*10000);
-    end
-end
-xlabel('time (s)');
-% ylabel('z (mm)');
-% legend('left foot, training 1', 'right foot, training 1', 'left foot, training 2', 'right foot, training 2');
-% title('Feet trajectories, obtained with weights optimized using \phi_p');
-axis(foot_axis);
-set(gca,'yticklabel',[])
-set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+% figure() %lFoot z position %they all failed
+% for k = 1:j_performance-1
+%     hold on;
+%     if size(pose_lFoot_performance{k},1) == length(time)
+%         plot(time,pose_lFoot_performance{k}(:,3)*10000);
+%         plot(time,pose_rFoot_performance{k}(:,3)*10000);
+%     end
+% end
+% xlabel('time (s)');
+% % ylabel('z (mm)');
+% % legend('left foot, training 1', 'right foot, training 1', 'left foot, training 2', 'right foot, training 2');
+% % title('Feet trajectories, obtained with weights optimized using \phi_p');
+% axis(foot_axis);
+% set(gca,'yticklabel',[])
+% set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
 
-figure() %lFoot z position
-for k = 1:j_performanceRobust-1
-    hold on;
-    if size(pose_lFoot_performanceRobust{k},1) == length(time) %2 failed
-        plot(time,pose_lFoot_performanceRobust{k}(:,3)*10000);
-        plot(time,pose_rFoot_performanceRobust{k}(:,3)*10000);
-    end
-end
-% ylabel('z (mm)');
-% legend('left foot, training 1', 'right foot, training 1', 'left foot, training 2', 'right foot, training 2');
-title('w{\phi_{pr}}');
-xlabel('time (s)');
-axis(foot_axis);
-set(gca,'yticklabel',[])
-set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+% figure() %lFoot z position
+% for k = 1:j_performanceRobust-1
+%     hold on;
+%     if size(pose_lFoot_performanceRobust{k},1) == length(time) %2 failed
+%         plot(time,pose_lFoot_performanceRobust{k}(:,3)*10000);
+%         plot(time,pose_rFoot_performanceRobust{k}(:,3)*10000);
+%     end
+% end
+% % ylabel('z (mm)');
+% % legend('left foot, training 1', 'right foot, training 1', 'left foot, training 2', 'right foot, training 2');
+% title('w{\phi_{pr}}');
+% xlabel('time (s)');
+% axis(foot_axis);
+% set(gca,'yticklabel',[])
+% set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
 
-%ONE TRAINING ONE COLOUR
+%ONE TRAINING, ONE COLOUR
 figure() %lFoot z position
 cc=lines(j_performanceRobust-1);
 for k = 1:j_performanceRobust-1

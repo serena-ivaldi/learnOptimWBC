@@ -115,11 +115,11 @@ bottom = (defsize(2)- height)/2;
 defsize = [left, bottom, width, height];
 set(0, 'defaultFigurePaperPosition', defsize);
 
-a = 2;
-%1: show CoM plots
-%2: show feet plots
-%3: show ZMPx plots
-%4: show ZMPy plots
+a = 3;
+%a = 1: show CoM plots
+%a = 2: show feet plots
+%a = 3: show ZMPx plots
+%a = 4: show ZMPy plots
 
 if a == 1
     %% CoM phase plots x v.s. y
@@ -162,11 +162,15 @@ if a == 1
     % legend('Location','northoutside')
     
     figure()
+    i = 0;
     for k = 1:j_performance-1
         hold on;
         if size(pose_CoM_performance{k},1) < length(time) %this one fails
         else
+            if i < 3
+            i = i + 1;
             plot(pose_CoM_performance{k}(:,1)*1000, pose_CoM_performance{k}(:,2)*1000)
+            end
         end
     end
     xlabel('CoM_x (mm)');
@@ -195,18 +199,18 @@ if a == 1
     title('w{\phi_{pr}}');
     
     
-    fig = figure(); %this one is just for the legend!
-    for k = 1:3 %j_performanceRobust-1
-        hold on;
-        plot(pose_CoM_performanceRobust{k}(:,1)*1000, pose_CoM_performanceRobust{k}(:,2)*1000)
-    end
-    xlabel('CoM_x (mm)');
-    ylabel('y (mm)');
-    set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
-    legendHandle = legend('T1', 'T2', 'T3');
-    legend('Orientation','horizontal');
-    legend('Location','bestoutside')
-    saveLegendToImage(fig, legendHandle, 'CoM_legend', 'jpg');
+%     fig = figure(); %this one is just for the legend!
+%     for k = 1:3 %j_performanceRobust-1
+%         hold on;
+%         plot(pose_CoM_performanceRobust{k}(:,1)*1000, pose_CoM_performanceRobust{k}(:,2)*1000)
+%     end
+%     xlabel('CoM_x (mm)');
+%     ylabel('y (mm)');
+%     set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+%     legendHandle = legend('T1', 'T2', 'T3');
+%     legend('Orientation','horizontal');
+%     legend('Location','bestoutside')
+%     saveLegendToImage(fig, legendHandle, 'CoM_legend', 'jpg');
     
 elseif a == 2
     %% Foot trajectories
@@ -268,7 +272,7 @@ elseif a == 2
     for k = 1:j_performance-1
         hold on;
         if size(pose_CoM_performance{k},1) < length(time) %this one fails
-        else
+        elseif i < 3
             i = i + 1;
             plot(time,pose_lFoot_performance{k}(:,3)*10000, 'Color', cc(i,:));
             plot(time,pose_rFoot_performance{k}(:,3)*10000, 'Color', cc(i,:));
@@ -304,21 +308,21 @@ elseif a == 2
     % legend('left, T1', 'right, T1', 'left, T2', 'right, T2', 'left, T3', 'right, T3');
     title('w{\phi_{pr}}');
     
-    fig = figure(); %lFoot z position
-    % title('Feet trajectories, obtained with weights optimized using \phi_{pr}');
-    for k = 1:j_performanceRobust-1
-        hold on;
-        plot(time,pose_lFoot_performanceRobust{k}(:,3)*10000);
-        plot(time,pose_rFoot_performanceRobust{k}(:,3)*10000);
-    end
-    xlabel('time (s)');
-%     ylabel('z (mm)');
-    axis(foot_axis);
-    set(gca,'yticklabel',[])
-    set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
-    legend('Orientation','horizontal');
-    legendHandle = legend('T1 left', 'T1 right', 'T2 left', 'T2 right', 'T3 left', 'T3 right');
-    legend('Location','bestoutside')
+%     fig = figure(); %lFoot z position
+%     % title('Feet trajectories, obtained with weights optimized using \phi_{pr}');
+%     for k = 1:j_performanceRobust-1
+%         hold on;
+%         plot(time,pose_lFoot_performanceRobust{k}(:,3)*10000);
+%         plot(time,pose_rFoot_performanceRobust{k}(:,3)*10000);
+%     end
+%     xlabel('time (s)');
+% %     ylabel('z (mm)');
+%     axis(foot_axis);
+%     set(gca,'yticklabel',[])
+%     set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+%     legend('Orientation','horizontal');
+%     legendHandle = legend('T1 left', 'T1 right', 'T2 left', 'T2 right', 'T3 left', 'T3 right');
+%     legend('Location','bestoutside')
 %    saveLegendToImage(fig, legendHandle, 'feet_legend', 'jpg');
     
 elseif a == 3
@@ -352,6 +356,7 @@ elseif a == 3
     plot(time, pos_SP_baseline(:,1,2)*1000, 'Color', [157, 88, 176]/255);
     xlabel('time (s)');
     ylabel('ZMP_x (mm)');
+    title('w_0');
     axis(zmpx_axis);
     set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
     set(gca,'box','off')
@@ -359,10 +364,12 @@ elseif a == 3
     % legend('x_{ZMP}', 'SP bounds');
     
     figure();
+    i = 0;
     for k = 1:j_robust-1
         hold on;
-        if k == 2 %this one fails
-        else
+        if size(pose_CoM_robust{k},1) < length(time) %this one fails
+        elseif i < 3
+            i = i + 1;
             plot(time, pos_ZMP_robust{k}(:,1)*1000);
         end
     end
@@ -370,6 +377,7 @@ elseif a == 3
     plot(time, pos_SP_robust{1}(:,1,2)*1000, 'Color', [157, 88, 176]/255);
     xlabel('time (s)');
     % ylabel('x_{ZMP} (mm)');
+    title('w{\phi_r}');
     % title('ZMP trajectory, obtained with with weights optimized using \phi_r');
     % legend('x_{ZMP}, training 1', 'x_{ZMP}, training 2', 'SP bounds');
     axis(zmpx_axis);
@@ -378,10 +386,12 @@ elseif a == 3
     
     
     figure();
+    i = 0;
     for k = 1:j_performance-1
         hold on;
         if size(pose_CoM_performance{k},1) < length(time) %this one fails
-        else
+        elseif i < 2
+            i = i + 1;
             plot(time, pos_ZMP_performance{k}(:,1)*1000);
         end
     end
@@ -389,45 +399,47 @@ elseif a == 3
     plot(time, pos_SP_performance{1}(:,1,2)*1000, 'Color', [157, 88, 176]/255);
     xlabel('time (s)');
     % ylabel('x_{ZMP} (mm)');
-    % title('ZMP trajectory, obtained with with weights optimized using \phi_p');
-    % legend('x_{ZMP}, training 1', 'x_{ZMP}, training 2', 'SP bounds');
+    title('w{\phi_p}');
     axis(zmpx_axis);
     set(gca,'yticklabel',[])
     set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
     
     figure();
+    i = 0;
     for k = 1:j_performanceRobust-1
         hold on;
-        plot(time, pos_ZMP_performanceRobust{k}(:,1)*1000);
+        if i < 2
+            i = i + 1;
+            plot(time, pos_ZMP_performanceRobust{k}(:,1)*1000);
+        end
     end
     plot(time, pos_SP_performanceRobust{1}(:,1,1)*1000, 'Color', [157, 88, 176]/255);
     plot(time, pos_SP_performanceRobust{1}(:,1,2)*1000, 'Color', [157, 88, 176]/255);
     xlabel('time (s)');
     % ylabel('x_{ZMP} (mm)');
-    % title('ZMP trajectory, obtained with with weights optimized using \phi_{pr}');
-    % legend('x_{ZMP}, training 1', 'x_{ZMP}, training 2', 'SP bounds');
+    title('w{\phi_{pr}}');
     axis(zmpx_axis);
     set(gca,'yticklabel',[])
     set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
     
-    %FOR LEGEND
-    fig = figure();
-    for k = 1:j_performanceRobust-1
-        hold on;
-        plot(time, pos_ZMP_performanceRobust{k}(:,1)*1000);
-    end
-    plot(time, pos_SP_performanceRobust{1}(:,1,1)*1000, 'Color', [157, 88, 176]/255);
-    plot(time, pos_SP_performanceRobust{1}(:,1,2)*1000, 'Color', [157, 88, 176]/255);
-    xlabel('time (s)');
-    % ylabel('x_{ZMP} (mm)');
-    % title('ZMP trajectory, obtained with with weights optimized using \phi_{pr}');
-    axis(zmpx_axis);
-    set(gca,'yticklabel',[])
-    set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
-    legendHandle = legend('T1', 'T2', 'T3', 'support polygon upper bound', 'support polygon lower bound');
-    legend('Orientation','horizontal');
-    legend('Location','bestoutside')
-%     saveLegendToImage(fig, legendHandle, 'zmpx_legend', 'jpg');
+%     %FOR LEGEND
+%     fig = figure();
+%     for k = 1:j_performanceRobust-1
+%         hold on;
+%         plot(time, pos_ZMP_performanceRobust{k}(:,1)*1000);
+%     end
+%     plot(time, pos_SP_performanceRobust{1}(:,1,1)*1000, 'Color', [157, 88, 176]/255);
+%     plot(time, pos_SP_performanceRobust{1}(:,1,2)*1000, 'Color', [157, 88, 176]/255);
+%     xlabel('time (s)');
+%     % ylabel('x_{ZMP} (mm)');
+%     % title('ZMP trajectory, obtained with with weights optimized using \phi_{pr}');
+%     axis(zmpx_axis);
+%     set(gca,'yticklabel',[])
+%     set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+%     legendHandle = legend('T1', 'T2', 'T3', 'support polygon upper bound', 'support polygon lower bound');
+%     legend('Orientation','horizontal');
+%     legend('Location','bestoutside')
+% %     saveLegendToImage(fig, legendHandle, 'zmpx_legend', 'jpg');
 
     
 elseif a == 4
@@ -460,10 +472,12 @@ set(gca,'box','off')
 
 
 figure();
+i = 0;
 for k = 1:j_robust-1
     hold on;
-    if k == 2 %this one fails
-    else
+    if size(pose_CoM_robust{k},1) < length(time) %this one fails
+    elseif i < 3
+    	i = i + 1;
     plot(time, pos_ZMP_robust{k}(:,2)*1000);
     end
 end
@@ -471,17 +485,17 @@ plot(time, pos_SP_robust{1}(:,2,1)*1000, 'Color', [157, 88, 176]/255);
 plot(time, pos_SP_robust{1}(:,2,2)*1000, 'Color', [157, 88, 176]/255);
 xlabel('time (s)');
 % ylabel('y_{ZMP} (mm)');
-% title('ZMP trajectory, obtained with with weights optimized using \phi_r');
-% legend('y_{ZMP}, training 1', 'y_{ZMP}, training 2', 'SP bounds');
 axis(zmpy_axis);
 set(gca,'yticklabel',[])
 set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
 
 figure();
+i = 0;
 for k = 1:j_performance-1
     hold on;
-    if k == 3 %this one fails
-    else
+    if size(pose_CoM_performance{k},1) < length(time) %this one fails
+    elseif i < 2
+    	i = i + 1;
     plot(time, pos_ZMP_performance{k}(:,2)*1000);
     end
 end
@@ -489,69 +503,46 @@ plot(time, pos_SP_performance{1}(:,2,1)*1000, 'Color', [157, 88, 176]/255);
 plot(time, pos_SP_performance{1}(:,2,2)*1000, 'Color', [157, 88, 176]/255);
 xlabel('time (s)');
 % ylabel('y_{ZMP} (mm)');
-% title('ZMP trajectory, obtained with with weights optimized using \phi_p');
-% legend('y_{ZMP}, training 1', 'y_{ZMP}, training 2', 'SP bounds');
 axis(zmpy_axis);
 set(gca,'yticklabel',[])
 set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
 
 figure();
+i = 0;
 for k = 1:j_performanceRobust-1
     hold on;
+    if i < 2
+        i = i + 1;
     plot(time, pos_ZMP_performanceRobust{k}(:,2)*1000);
+    end
 end
 plot(time, pos_SP_performanceRobust{2}(:,2,1)*1000, 'Color', [157, 88, 176]/255);
 plot(time, pos_SP_performanceRobust{2}(:,2,2)*1000, 'Color', [157, 88, 176]/255);
 xlabel('time (s)');
 % ylabel('y_{ZMP} (mm)');
-% title('ZMP trajectory, obtained with with weights optimized using \phi_{pr}');
-% legend('y_{ZMP}, training 1', 'y_{ZMP}, training 2', 'y_{ZMP}, training 3', 'SP bounds');
 axis(zmpy_axis);
 set(gca,'yticklabel',[])
 set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
 
-
-fig = figure(); %FOR LEGEND
-for k = 1:j_performanceRobust-1
-    hold on;
-    plot(time, pos_ZMP_performanceRobust{k}(:,2)*1000);
-end
-plot(time, pos_SP_performanceRobust{2}(:,2,1)*1000, 'Color', [157, 88, 176]/255);
-plot(time, pos_SP_performanceRobust{2}(:,2,2)*1000, 'Color', [157, 88, 176]/255);
-xlabel('time (s)');
-% ylabel('y_{ZMP} (mm)');
-% title('ZMP trajectory, obtained with with weights optimized using \phi_{pr}');
-% legend('y_{ZMP}, training 1', 'y_{ZMP}, training 2', 'y_{ZMP}, training 3', 'SP bounds');
-    axis(zmpy_axis);
-    set(gca,'yticklabel',[])
-    set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
-    legendHandle = legend('T1', 'T2', 'T3', 'SP upper bound', 'SP lower bound');
-    legend('Orientation','horizontal');
-    legend('Location','bestoutside')
-    saveLegendToImage(fig, legendHandle, 'zmpy_legend', 'jpg');
-
-end
-
-
-
-% figure(8) %torques
-% hold on;
-%I would show this for the icubGazeboSimV2_5 only
-
-
-% %Plot CoM position %y-direction CoM
-% plot(time, pose_CoM_desired(:,2));
-% hold on;
-% plot(time, pose_CoM_baseline(:,2));
-% for k = 1:j_robust-1
-%     if length(pose_CoM_robust{k}) < length(time) %robot fell
-%         plot(time, [pose_CoM_robust{k}(:,2); zeros(length(time)-length(pose_CoM_robust{k}),1)]);
-%     else
-%         plot(time,pose_CoM_robust{k}(:,2));
-%     end
+% 
+% fig = figure(); %FOR LEGEND
+% for k = 1:j_performanceRobust-1
+%     hold on;
+%     plot(time, pos_ZMP_performanceRobust{k}(:,2)*1000);
 % end
-% for k = 1:j_performance-1
-%     plot(time,pose_CoM_performance{k}(:,2));
-% end
-% xlabel('time');
-% ylabel('CoM_y');
+% plot(time, pos_SP_performanceRobust{2}(:,2,1)*1000, 'Color', [157, 88, 176]/255);
+% plot(time, pos_SP_performanceRobust{2}(:,2,2)*1000, 'Color', [157, 88, 176]/255);
+% xlabel('time (s)');
+% % ylabel('y_{ZMP} (mm)');
+% % title('ZMP trajectory, obtained with with weights optimized using \phi_{pr}');
+% % legend('y_{ZMP}, training 1', 'y_{ZMP}, training 2', 'y_{ZMP}, training 3', 'SP bounds');
+%     axis(zmpy_axis);
+%     set(gca,'yticklabel',[])
+%     set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+%     legendHandle = legend('T1', 'T2', 'T3', 'SP upper bound', 'SP lower bound');
+%     legend('Orientation','horizontal');
+%     legend('Location','bestoutside')
+%     saveLegendToImage(fig, legendHandle, 'zmpy_legend', 'jpg');
+
+end
+
