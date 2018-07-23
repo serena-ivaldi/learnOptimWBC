@@ -26,7 +26,7 @@ time_struct.tf   = 10;   %final time
 time_struct.step = 0.01; %time step (fixed step integrator)
 
 % parameters used in DynSim_iCubSim for detecting whether the process got stuck
-params.max_timer = time_struct.tf * 2 + 360; %maximum time expected for a successful run of threadSimulink
+params.max_timer = time_struct.tf * 2 + 2000; %360; %maximum time expected for a successful run of threadSimulink
 params.max_consecutive_fails_counter = 5; %number of failed runs of threadSimulink, after which all programs are killed and restarted
 
 %% TASK PARAMETERS
@@ -149,8 +149,9 @@ switch CONTROLLERTYPE
         choose_alpha = 'constantState';  % RBF , constant, handTuned, empty, constantState
         number_of_state = 1;
         number_of_tasks = chains.GetNumTasks(1);
-        %values = ones(chains.GetNumTasks(1),number_of_state);
-        values          = [0.794857081519787,0.796890628453649,0,0.000100000000000000,0.262751761986009,1.00000000000000e-10]';
+        %values = ones(chains.GetNumTasks(1),number_of_state);       
+        values = [1 1 0 0.01 0.001 0.0001]'; %Initial values
+ 
         % for this kind of experiment i do not need any mapping because i
         % keep the parameters costant for every state
         mapping         = [];
@@ -200,7 +201,7 @@ switch CONTROLLERTYPE
         %% INSTANCE PARAMETER
         preprocessing  = @EmptyPreprocessing;
         run_function   = @RobotExperiment;
-        fitness        = @fitnessHumanoidsiCubTorqueWalkingPerformanceRobust; %@fitnessHumanoidsiCubTorqueWalkingGlobal; %Conservative; %@fitnessHumanoidsiCubTorqueWalkingGlobal, @fitnessHumanoidsiCubTorqueWalkingHybrid
+        fitness        = @fitnessHumanoidsiCubTorqueWalkingPerformance; %Robust; %PerformanceRobust;
         clean_function = @RobotExperimentCleanData;
         
         input{1}  = simulator_type{1};  % rbt / v-rep
