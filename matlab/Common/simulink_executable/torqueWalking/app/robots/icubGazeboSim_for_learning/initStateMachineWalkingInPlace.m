@@ -15,12 +15,12 @@
 %% --- Initialization ---
 
 %%% LEARNOPTIMWBC INITIALIZATION
-CONFIG.ADD_NOISE_FT_SENSORS       = 0;% params.config.ADD_NOISE_FT_SENSORS; %generate gaussian noise on input F/T sensor signals
-CONFIG.ADD_NOISE_JOINT_VELOCITIES = 0; %generate gaussian noise on input joint velocity signals
-CONFIG.FOOT_LIFT_FRONT            = 0; %params.config.FOOT_LIFT_FRONT; %0 is lifting the foot towards the back; 1 is lifting the foot towards the front
-CONFIG.COM_DELTA                  = 0; %params.config.COM_DELTA; %when config.COM_DELTA = 0.02, move the CoM 0.02 m to the front (except during two feet balancing)
-CONFIG.APPLY_EXTERNAL_WRENCH      = 0; %params.config.APPLY_EXTERNAL_WRENCH; %External wrenches applied in Gazebo
-external_force                    = params.external_force;
+CONFIG.ADD_NOISE_FT_SENSORS  = params.config.ADD_NOISE_FT_SENSORS; %generate gaussian noise on input F/T sensor signals
+CONFIG.ADD_NOISE_JOINT_VELOCITIES = 0; %NOT USED FOR LEARNING generate gaussian noise on input velocity signals
+CONFIG.FOOT_LIFT_FRONT       = params.config.FOOT_LIFT_FRONT; %0 is lifting the foot towards the back; 1 is lifting the foot towards the front
+CONFIG.COM_DELTA             = params.config.COM_DELTA; %when config.COM_DELTA = 0.02, move the CoM 0.02 m to the front (except during two feet balancing)
+CONFIG.APPLY_EXTERNAL_WRENCH = params.config.APPLY_EXTERNAL_WRENCH; %External wrenches applied in Gazebo
+external_force               = params.external_force;
 
 % Weight matrix for the cartesian tasks
 %weightRotTask; weightStanceFoot; weightSwingFoot; weightPostural; weight_tau; were obtained from inputData.mat 
@@ -28,8 +28,8 @@ Sat.weightCoM        = 1; %weightCoM is not included since it is set to be a con
 Sat.weightRotTask    = weightRotTask;
 Sat.weightStanceFoot = weightStanceFoot;
 Sat.weightSwingFoot  = weightSwingFoot;
-Sat.weightLeftHand   = 0; %set to 0 if you don't want to let hands move freely
-Sat.weightRightHand  = 0; %set to 0 if you don't want to let hands move freely
+Sat.weightLeftHand   = weightHand; %set to 0 if you don't want to let hands move freely
+Sat.weightRightHand  = weightHand; %set to 0 if you don't want to let hands move freely
 
 % Weight for the postural minimization task
 Sat.weightPostural = weightPostural;
@@ -37,7 +37,6 @@ Sat.weightPostural = weightPostural;
 % Weight for the joint minimization task
 Sat.weight_tau = weight_tau;
 %%%
-
 
 
 % SIMULATION SETUP
@@ -48,7 +47,7 @@ Frames.COM = 'com';
 Frames.BASE_LINK = 'root_link';
 Frames.LEFT_FOOT = 'l_sole';
 Frames.RIGHT_FOOT = 'r_sole';
-Frames.ROT_TASK_LINK = 'neck_2';
+Frames.ROT_TASK_LINK = 'neck_2'; %'torso_1';
 Frames.LEFT_HAND = 'l_wrist_1';
 Frames.RIGHT_HAND = 'r_wrist_1';
 
@@ -64,6 +63,8 @@ Config.QP_USE_STRICT_TASK_PRIORITIES = false; %true;
 % If true, the output of QP solver will be forced to be continuous
 Config.QP_USE_CONTINUITY_CONSTRAINTS = false;
 Config.QP_IKIN_USE_CONTINUITY_CONSTRAINTS = false;
+% using saturation on torque derivative (for QP solver)
+Sat.tauDot_max = 10000;
 
 % If true, the IMU orientation is used in order to estimate the
 % base-to-world transformation matrix
@@ -79,7 +80,8 @@ Config.FILTER_IMU_PITCH = false;
 
 % True if left foot is initially in contact with the ground (if false,
 % right foot is assumed to be in contact) (WALKING_IN_PLACE DEMO ONLY)
-Config.LFoot_in_contact_at0 = true; %false;
+%% we are randominzing the starting foot in order to get cover both legs of the robot during the optimization phase
+Config.LFoot_in_contact_at0 = randi(2)-1; %true; %false;
 
 % If true, the robot will just balance on two feet (WALKING_IN_PLACE DEMO ONLY)
 Config.ONLY_BALANCING = false;
@@ -106,6 +108,7 @@ Sat.jointTorqueLimits = params.robot_torqueLimit;
 Sat.ub_jointLimits    = params.robot_UBjointLimit;
 Sat.lb_jointLimits    = params.robot_LBjointLimit;
 
+
 %% Robot setup 
 
 % Joint torque saturation
@@ -123,7 +126,6 @@ Sat.pinvDamp_nu_b = 1e-6;
 % If true, the feet accelerations are zero when the foot is in contact. If false, 
 % feet accelerations are equal to a feedforward + feedback terms
 Sat.zeroAccWhenFeetInContact = false;
-
 
 %% Parameters for motors reflected inertia
 
@@ -199,7 +201,6 @@ elseif CONFIG.FOOT_LIFT_FRONT %move the foot towards the front and up
     delta_balancing = [0.025 0.00 0.025];
 end
 
-CONFIG.COM_DELTA = 0.01;
 if CONFIG.COM_DELTA
     Config.delta_com = [CONFIG.COM_DELTA; 0];
 else
@@ -216,63 +217,61 @@ Config.deltaPos_LFoot = [ 0.000 0.00  0.000; ...   % state = 1 two feet balancin
                           0.000 0.00  0.000; ...   % state = 2 move CoM on right foot
                           delta_balancing;   ...   % state = 3 right foot balancing
                           0.000 0.00  0.000; ...   % state = 4 prepare for switching
-                          0.000 0.00  0.000];      % state = 5 two feet balancing                    
+                          0.000 0.00  0.000];      % state = 5 two feet balancing                      
    
 %% Gains matrices
-multTorqueCoM = 2.2;
-multTorquesFeet = 2.2;
-multTorqueNeck = 2.2;
+
 % CoM position and velocity gains
-Gains.Kp_CoM =multTorqueCoM*  1* [5, 5, 5; ...  % state = 1 two feet balancing
+Gains.Kp_CoM = 1* [5, 5, 5; ...  % state = 1 two feet balancing
                 5, 5, 5; ...  % state = 2 move CoM on left foot
                 5, 5, 5; ...  % state = 3 left foot balancing
                 5, 5, 5; ...  % state = 4 prepare for switching
                 5, 5, 5];     % state = 5 two feet balancing
                 
-Gains.Kd_CoM = 0* 2*sqrt(Gains.Kp_CoM);
+Gains.Kd_CoM = 2*sqrt(Gains.Kp_CoM);
 
 % Feet position and velocity gains
-Gains.Kp_LFoot =multTorquesFeet*  2*[5, 5, 5, 3, 3, 3; ... % state = 1 two feet balancing
+Gains.Kp_LFoot = 2*[5, 5, 5, 3, 3, 3; ... % state = 1 two feet balancing
                   5, 5, 5, 3, 3, 3; ... % state = 2 move CoM on left foot
                   5, 5, 5, 3, 3, 3; ... % state = 3 left foot balancing
                   5, 5  5, 3, 3, 3; ... % state = 4 prepare for switching
                   5, 5, 5, 3, 3, 3];    % state = 5 two feet balancing
               
-Gains.Kd_LFoot = 0 * 2*sqrt(Gains.Kp_LFoot);
+Gains.Kd_LFoot = 2*sqrt(Gains.Kp_LFoot);
 
-Gains.Kp_RFoot =multTorquesFeet*  2*[5, 5, 5, 3, 3, 3; ... % state = 1 two feet balancing
+Gains.Kp_RFoot = 2*[5, 5, 5, 3, 3, 3; ... % state = 1 two feet balancing
                   5, 5, 5, 3, 3, 3; ... % state = 2 move CoM on left foot
                   5, 5, 5, 3, 3, 3; ... % state = 3 left foot balancing
                   5, 5, 5, 3, 3, 3; ... % state = 4 prepare for switching
                   5, 5, 5, 3, 3, 3];    % state = 5 two feet balancing
 
-Gains.Kd_RFoot = 0 * 2*sqrt(Gains.Kp_RFoot); 
+Gains.Kd_RFoot = 2*sqrt(Gains.Kp_RFoot); 
 
 % Root link orientation and angular velocity gains
-Gains.Kp_rot_task = multTorqueNeck  *0.5*[3, 3, 3; ...  % state = 1 two feet balancing
+Gains.Kp_rot_task = 0.5*[3, 3, 3; ...  % state = 1 two feet balancing
                      3, 3, 3; ...  % state = 2 move CoM on left foot
                      3, 3, 3; ...  % state = 3 left foot balancing
                      3, 3, 3; ...  % state = 4 prepare for switching
                      3, 3, 3];     % state = 5 two feet balancing
                  
-Gains.Kd_rot_task =  0 * 2*sqrt(Gains.Kp_rot_task); 
+Gains.Kd_rot_task =  2*sqrt(Gains.Kp_rot_task); 
 
 % Hand position and velocity gains
-Gains.Kp_LHand = 0.0001*[5, 5, 5, 3, 3, 3; ... % state = 1 two feet balancing
+Gains.Kp_LHand = 0.001*[5, 5, 5, 3, 3, 3; ... % state = 1 two feet balancing
                   5, 5, 5, 3, 3, 3; ... % state = 2 move CoM on left foot
                   5, 5, 5, 3, 3, 3; ... % state = 3 left foot balancing
                   5, 5, 5, 3, 3, 3; ... % state = 4 prepare for switching
                   5, 5, 5, 3, 3, 3];    % state = 5 two feet balancing
               
-Gains.Kd_LHand = 0 * 2*sqrt(Gains.Kp_LHand);
+Gains.Kd_LHand = 2*sqrt(Gains.Kp_LHand);
 
-Gains.Kp_RHand = 0.0001*[5, 5, 5, 3, 3, 3; ... % state = 1 two feet balancing
+Gains.Kp_RHand = 0.001*[5, 5, 5, 3, 3, 3; ... % state = 1 two feet balancing
                   5, 5, 5, 3, 3, 3; ... % state = 2 move CoM on left foot
                   5, 5, 5, 3, 3, 3; ... % state = 3 left foot balancing
                   5, 5, 5, 3, 3, 3; ... % state = 4 prepare for switching
                   5, 5, 5, 3, 3, 3];    % state = 5 two feet balancing
 
-Gains.Kd_RHand = 0 * 2*sqrt(Gains.Kp_RHand); 
+Gains.Kd_RHand = 2*sqrt(Gains.Kp_RHand); 
 
 % Joint position and velocity gains    
                     % torso      % left arm       % right arm      % left leg               % right leg                                   
@@ -282,7 +281,7 @@ Gains.impedances = [20  20  20,  10  10  10  8,  10  10  20  8,  30  30  30  60 
                     20  20  20,  10  10  10  8,  10  10  20  8,  30  30  30  60  10  10,  30  30  30  60  10  10;  ... % state = 4 prepare for switching
                     20  20  20,  10  10  10  8,  10  10  20  8,  30  30  30  60  10  10,  30  30  30  60  10  10]; ... % state = 5 two feet balancing
                 
-Gains.dampings   = 0 * 2 * sqrt(Gains.impedances); %zeros(size(Gains.impedances));
+Gains.dampings   = 2 * sqrt(Gains.impedances); %zeros(size(Gains.impedances));
 
 % Joints position and velocity gains for inverse kinematics
 Gains.ikin_impedances = Gains.impedances(1,:);

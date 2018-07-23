@@ -15,11 +15,14 @@
 %% --- Initialization ---
 
 %%% LEARNOPTIMWBC INITIALIZATION
-CONFIG.ADD_NOISE_FT_SENSORS  = params.config.ADD_NOISE_FT_SENSORS; %generate gaussian noise on input F/T sensor signals
-CONFIG.FOOT_LIFT_FRONT       = params.config.FOOT_LIFT_FRONT; %0 is lifting the foot towards the back; 1 is lifting the foot towards the front
-CONFIG.COM_DELTA             = params.config.COM_DELTA; %when config.COM_DELTA = 0.02, move the CoM 0.02 m to the front (except during two feet balancing)
-CONFIG.APPLY_EXTERNAL_WRENCH = params.config.APPLY_EXTERNAL_WRENCH; %External wrenches applied in Gazebo
-external_force               = params.external_force;
+CONFIG.ADD_NOISE_FT_SENSORS       = 0; %params.config.ADD_NOISE_FT_SENSORS; %generate gaussian noise on input F/T sensor signals
+CONFIG.ADD_NOISE_JOINT_VELOCITIES = 0; %generate gaussian noise on input velocity signals
+CONFIG.FOOT_LIFT_FRONT            = 0; %params.config.FOOT_LIFT_FRONT; %0 is lifting the foot towards the back; 1 is lifting the foot towards the front
+CONFIG.COM_DELTA                  = 0; %params.config.COM_DELTA; %when config.COM_DELTA = 0.02, move the CoM 0.02 m to the front (except during two feet balancing)
+CONFIG.APPLY_EXTERNAL_WRENCH      = 0; %params.config.APPLY_EXTERNAL_WRENCH; %External wrenches applied in Gazebo
+external_force                    = params.external_force;
+%Config.LFoot_in_contact_at0 = false;
+
 
 % Weight matrix for the cartesian tasks
 %weightRotTask; weightStanceFoot; weightSwingFoot; weightPostural; weight_tau; were obtained from inputData.mat 
@@ -80,7 +83,7 @@ Config.FILTER_IMU_PITCH = false;
 % True if left foot is initially in contact with the ground (if false,
 % right foot is assumed to be in contact) (WALKING_IN_PLACE DEMO ONLY)
 %% we are randominzing the starting foot in order to get cover both legs of the robot during the optimization phase
-Config.LFoot_in_contact_at0 = randi(2)-1; %true; %false;
+Config.LFoot_in_contact_at0 = false;
 
 % If true, the robot will just balance on two feet (WALKING_IN_PLACE DEMO ONLY)
 Config.ONLY_BALANCING = false;

@@ -17,7 +17,29 @@
 %% for stand alone execution remove comment on the following lines
 % clc; close all; clear all;
 % load('inputData.mat')
-% %
+
+%% For testing an optimized solution on the robot, remove comment on desired lines
+%5 PerformanceRobust
+% weights = [0.521001991358939 3.77297320861414 0 1.0e-10 1.0e-06 1.0e-10];
+%10 DO NOT USE WITH ROBOT!! PerformanceRobust
+% weights = [3.693623124143939,2.143065336547741,0,1.000000000000000e-10,1.000000000000000e-06,1.000000000000000e-10];
+%13 PerformanceRobust
+%weights = [1.000000000000000e-04,1.737313922301323,0,3.482983184717527,1.000000000000000e-06,1.000000000000000e-10];
+%16 PerformanceRobust
+%weights = [0.095174601016771,0.595822496784248,0,1.000000000000000e-10,1.000000000000000e-06,1.000000000000000e-10];
+%19 Performance Robust
+%weights = [0.185889537508686,4.334093373729575,0,1.000000000000000e-10,1.000000000000000e-06,1.000000000000000e-10];
+%20 PerformanceRobust
+%weights = [0.133824305791255,3.235006604923308,0,1.000000000000000e-10,1.000000000000000e-06,1.000000000000000e-10];
+ 
+% weightStanceFoot = weights(1);
+% weightSwingFoot  = weights(2);
+% weightHand       = weights(3);
+% weightRotTask    = weights(4);
+% weightPostural   = weights(5);
+% weightTau        = weights(6);
+% params.tEnd = 40;
+
 
 % NOTE: if you are simulating the robot with Gazebo, remember that you have
 % to launch Gazebo as follow:
@@ -25,7 +47,9 @@
 %     gazebo -slibgazebo_yarp_clock.so
 %
 % Set the YARP_ROBOT_NAME environmental variable
-setenv('YARP_ROBOT_NAME','icubGazeboSim');
+setenv('YARP_ROBOT_NAME','icubGazeboSim');              %D.R. off
+% setenv('YARP_ROBOT_NAME','icubGazeboSim_for_learning'); %D.R. on
+% setenv('YARP_ROBOT_NAME','iCubGazeboV2_5');             %noise on
 % setenv('YARP_ROBOT_NAME','iCubNancy01');
 
 
@@ -81,12 +105,13 @@ Config.t_step = params.sim_step; %0.01; % [s]
 %
 
 %% with disturbances i update the params struct wiht the external_force struct cause in this way i can save the disturbances action through StoreFromSimulink from the message class
+
 disturbancesInit = 'disturbances.m';
 run(disturbancesInit);
 
 configRobotFCN = fullfile('app/robots', getenv('YARP_ROBOT_NAME'),'configRobot.m');
 run(configRobotFCN);
-
+    
 if strcmp(DEMO_TYPE, 'WALKING_IN_PLACE')
     
     % Run configuration script for internal coordinator
@@ -98,6 +123,7 @@ end
 % constraints at contact locations
 [ConstraintMatrix_feet, biasVectorConstraint_feet] = constraints ...
     (forceFrictionCoefficient, numberOfPoints, torsionalFrictionCoefficient, Config.footSize, fZmin);
+ 
 
 disp('Initialize torqueWalking')
 disp(['Selected robot: ',getenv('YARP_ROBOT_NAME')])
