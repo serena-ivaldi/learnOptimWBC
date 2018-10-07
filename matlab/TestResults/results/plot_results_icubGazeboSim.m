@@ -35,6 +35,8 @@ for k = 4:35
         pos_SP_baseline     = permute(support_polygon.Data, [3,1,2]);
         err_ZMP_baseline    = zmpErr.Data;
         torques_baseline    = torques.Data;
+        baseVel_baseline    = baseVel_DATA.signals(1).values;
+        r_ground_baseline   = [RFoot_forces_DATA.signals(1).values, RFoot_moments_DATA.signals(1).values]; 
     end
     
     if find( k == robust_experiments)
@@ -45,6 +47,8 @@ for k = 4:35
         pos_SP_robust{j_robust}     = permute(support_polygon.Data, [3,1,2]);
         err_ZMP_robust{j_robust}    = zmpErr.Data;
         torques_robust{j_robust}    = torques.Data;
+        baseVel_robust{j_robust}    = baseVel_DATA.signals(1).values;
+        r_ground_robust{j_robust}   = [RFoot_forces_DATA.signals(1).values, RFoot_moments_DATA.signals(1).values];
         j_robust = j_robust + 1;
         if size(pose_CoM.Data,3) > 4000
             nsuccess_robust = nsuccess_robust + 1;
@@ -58,6 +62,8 @@ for k = 4:35
         pos_SP_performance{j_performance}     = permute(support_polygon.Data, [3,1,2]);
         err_ZMP_performance{j_performance}    = zmpErr.Data;
         torques_performance{j_performance}    = torques.Data;
+        baseVel_performance{j_performance}    = baseVel_DATA.signals(1).values;
+        r_ground_performance{j_performance}   = [RFoot_forces_DATA.signals(1).values, RFoot_moments_DATA.signals(1).values];
         j_performance = j_performance + 1;
         if size(pose_CoM.Data,3) > 4000
             nsuccess_performance = nsuccess_performance + 1;
@@ -71,6 +77,8 @@ for k = 4:35
         pos_SP_performanceRobust{j_performanceRobust}     = permute(support_polygon.Data, [3,1,2]);
         err_ZMP_performanceRobust{j_performanceRobust}    = zmpErr.Data;
         torques_performanceRobust{j_performanceRobust}    = torques.Data;
+        baseVel_performanceRobust{j_performanceRobust}    = baseVel_DATA.signals(1).values;
+        r_ground_performanceRobust{j_performanceRobust}   = [RFoot_forces_DATA.signals(1).values, RFoot_moments_DATA.signals(1).values];
         j_performanceRobust = j_performanceRobust + 1;
         if size(pose_CoM.Data,3) > 4000
             nsuccess_performanceRobust = nsuccess_performanceRobust + 1;
@@ -80,10 +88,21 @@ for k = 4:35
 end
 
 %% Success rates
+
+nsuccess_noDR = 0;
+for k = 1:10
+    results_file = strcat('102_iCub_standing_sim_1.0/', num2str(k), '_of_102_iCub_standing_sim_1.0/icubGazeboSim_40s.mat');
+    load( [filepath results_file])
+    if size(pose_CoM,1) > 4000
+        nsuccess_noDR = nsuccess_noDR + 1;
+    end
+end
 fprintf('Success rate of performance experiments: %.1f %% \n', nsuccess_performance/(j_performance-1)*100);
 fprintf('Success rate of robust experiments: %.1f %% \n', nsuccess_robust/(j_robust-1)*100);
 %assume 10 experiments, and 103_9 was successful -- NOT
 fprintf('Success rate of performanceRobust experiments: %.1f %% \n', (nsuccess_performanceRobust)/(j_performanceRobust-1)*100); 
+fprintf('Success rate of experiments without DR: %d %% \n', nsuccess_noDR/10*100)
+
 
 close all;
 %% Plot formats
@@ -115,11 +134,13 @@ bottom = (defsize(2)- height)/2;
 defsize = [left, bottom, width, height];
 set(0, 'defaultFigurePaperPosition', defsize);
 
-a = 3;
+a = 6;
 %a = 1: show CoM plots
 %a = 2: show feet plots
 %a = 3: show ZMPx plots
 %a = 4: show ZMPy plots
+%a = 5: show torque plots
+%a = 6: show ground reaction forces
 
 if a == 1
     %% CoM phase plots x v.s. y
@@ -543,6 +564,588 @@ set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
 %     legend('Orientation','horizontal');
 %     legend('Location','bestoutside')
 %     saveLegendToImage(fig, legendHandle, 'zmpy_legend', 'jpg');
+
+
+elseif a == 5
+%% right ankle torque plots
+%torques right foot: ankle torques are indices 21,22,23
+index1 = 21 -6;
+index2 = 22 -6;
+index3 = 23 -6;
+
+torques_axis = [0 40 -15 15];
+
+figure(); 
+plot(time,torques_baseline(:,index1));
+hold on;
+plot(time, torques_baseline(:,index2));
+plot(time, torques_baseline(:,index3));
+xlabel('time (s)');
+ylabel('torques (Nm)');
+title('initial weights');
+%legend('1', '2', '3');
+axis(torques_axis);
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+set(gca,'box','off')
+
+
+figure();
+i = 0;
+for k = 1:j_robust-1
+    hold on;
+    if size(torques_robust{k},1) < length(time) %this one fails
+    elseif i < 3
+    	i = i + 1;
+        plot(time, torques_robust{k}(:,index1));
+        hold on;
+        plot(time, torques_robust{k}(:,index2));
+        plot(time, torques_robust{k}(:,index3));
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('robust');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
+figure();
+i = 0;
+for k = 1:j_performance-1
+    hold on;
+    if size(torques_performance{k},1) < length(time) %this one fails
+    elseif i < 2
+    	i = i + 1;
+    	plot(time, torques_performance{k}(:,index1));
+        hold on;
+        plot(time, torques_performance{k}(:,index2));
+        plot(time, torques_performance{k}(:,index3));
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('performance');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
+figure();
+i = 0;
+for k = 1:j_performanceRobust-1
+    hold on;
+    if i < 2
+        i = i + 1;
+        plot(time, torques_performanceRobust{k}(:,index1));
+        hold on;
+        plot(time, torques_performanceRobust{k}(:,index2));
+        plot(time, torques_performanceRobust{k}(:,index3));
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('performance robust');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
+
+elseif a == 6
+%% right ankle torque plots
+%ground forces at right foot
+
+torques_axis = [0 40 -100 300];
+
+figure(); 
+plot(time,r_ground_baseline(:,1));
+hold on;
+plot(time, r_ground_baseline(:,2));
+plot(time, r_ground_baseline(:,3));
+xlabel('time (s)');
+ylabel('torques (Nm)');
+title('initial weights');
+%legend('1', '2', '3');
+axis(torques_axis);
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+set(gca,'box','off')
+
+
+figure();
+i = 0;
+for k = 1:j_robust-1
+    hold on;
+    if size(torques_robust{k},1) < length(time) %this one fails
+    elseif i < 3
+    	i = i + 1;
+        plot(time, r_ground_robust{k}(:,1));
+        hold on;
+        plot(time, r_ground_robust{k}(:,2));
+        plot(time, r_ground_robust{k}(:,3));
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('robust');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
+figure();
+i = 0;
+for k = 1:j_performance-1
+    hold on;
+    if size(r_ground_performance{k},1) < length(time) %this one fails
+    elseif i < 2
+    	i = i + 1;
+    	plot(time, r_ground_performance{k}(:,1));
+        hold on;
+        plot(time, r_ground_performance{k}(:,2));
+        plot(time, r_ground_performance{k}(:,3));
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('performance');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
+figure();
+i = 0;
+for k = 1:j_performanceRobust-1
+    hold on;
+    if i < 2
+        i = i + 1;
+        plot(time, r_ground_performanceRobust{k}(:,1));
+        hold on;
+        plot(time, r_ground_performanceRobust{k}(:,2));
+        plot(time, r_ground_performanceRobust{k}(:,3));
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('performance robust');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
+
+%~~~~~~~~ torques
+torques_axis = [0 40 -15 15];
+
+figure(); 
+plot(time,r_ground_baseline(:,4));
+hold on;
+plot(time, r_ground_baseline(:,5));
+plot(time, r_ground_baseline(:,6));
+xlabel('time (s)');
+ylabel('torques (Nm)');
+title('initial weights');
+%legend('1', '2', '3');
+axis(torques_axis);
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+set(gca,'box','off')
+
+
+figure();
+i = 0;
+for k = 1:j_robust-1
+    hold on;
+    if size(torques_robust{k},1) < length(time) %this one fails
+    elseif i < 3
+    	i = i + 1;
+        plot(time, r_ground_robust{k}(:,4));
+        hold on;
+        plot(time, r_ground_robust{k}(:,5));
+        plot(time, r_ground_robust{k}(:,6));
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('robust');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
+figure();
+i = 0;
+for k = 1:j_performance-1
+    hold on;
+    if size(r_ground_performance{k},1) < length(time) %this one fails
+    elseif i < 2
+    	i = i + 1;
+    	plot(time, r_ground_performance{k}(:,4));
+        hold on;
+        plot(time, r_ground_performance{k}(:,5));
+        plot(time, r_ground_performance{k}(:,6));
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('performance');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
+figure();
+i = 0;
+for k = 1:j_performanceRobust-1
+    hold on;
+    if i < 2
+        i = i + 1;
+        plot(time, r_ground_performanceRobust{k}(:,4));
+        hold on;
+        plot(time, r_ground_performanceRobust{k}(:,5));
+        plot(time, r_ground_performanceRobust{k}(:,6));
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('performance robust');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
+
+%~~~~~~~~ base velocity
+torques_axis = [0 40 -5 5];
+
+figure(); 
+plot(time,baseVel_baseline(:,4));
+hold on;
+plot(time, baseVel_baseline(:,5));
+plot(time, baseVel_baseline(:,6));
+plot(time, baseVel_baseline(:,1));
+plot(time, baseVel_baseline(:,2));
+plot(time, baseVel_baseline(:,3));
+xlabel('time (s)');
+ylabel('torques (Nm)');
+title('initial weights');
+%legend('1', '2', '3');
+axis(torques_axis);
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+set(gca,'box','off')
+
+
+figure();
+i = 0;
+for k = 1:j_robust-1
+    hold on;
+    if size(torques_robust{k},1) < length(time) %this one fails
+    elseif i < 3
+    	i = i + 1;
+        plot(time, baseVel_robust{k}(:,4));
+        hold on;
+        plot(time, baseVel_robust{k}(:,5));
+        plot(time, baseVel_robust{k}(:,6));
+        plot(time, baseVel_robust{k}(:,1));
+        plot(time, baseVel_robust{k}(:,2));
+        plot(time, baseVel_robust{k}(:,3)); 
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('robust');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
+figure();
+i = 0;
+for k = 1:j_performance-1
+    hold on;
+    if size(r_ground_performance{k},1) < length(time) %this one fails
+    elseif i < 2
+    	i = i + 1;
+    	plot(time, baseVel_performance{k}(:,4));
+        hold on;
+        plot(time, baseVel_performance{k}(:,5));
+        plot(time, baseVel_performance{k}(:,6));
+        plot(time, baseVel_performance{k}(:,1));
+        plot(time, baseVel_performance{k}(:,2));
+        plot(time, baseVel_performance{k}(:,3)); 
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('performance');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
+figure();
+i = 0;
+for k = 1:j_performanceRobust-1
+    hold on;
+    if i < 2
+        i = i + 1;
+        plot(time, baseVel_performanceRobust{k}(:,4));
+        hold on;
+        plot(time, baseVel_performanceRobust{k}(:,5));
+        plot(time, baseVel_performanceRobust{k}(:,6));
+        plot(time, baseVel_performanceRobust{k}(:,1));
+        plot(time, baseVel_performanceRobust{k}(:,2));
+        plot(time, baseVel_performanceRobust{k}(:,3)); 
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('performance robust');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
+
+
+%~~~~~~~~~ arm torque plots
+index1 = 4+4;
+index2 = 5+4;
+index3 = 6+4;
+index4 = 7+4;
+
+torques_axis = [0 40 -5 5];
+
+figure(); 
+plot(time,torques_baseline(:,index1));
+hold on;
+plot(time, torques_baseline(:,index2));
+plot(time, torques_baseline(:,index3));
+plot(time, torques_baseline(:,index4));
+xlabel('time (s)');
+ylabel('torques (Nm)');
+title('initial weights');
+%legend('1', '2', '3');
+axis(torques_axis);
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+set(gca,'box','off')
+
+
+figure();
+i = 0;
+for k = 1:j_robust-1
+    hold on;
+    if size(torques_robust{k},1) < length(time) %this one fails
+    elseif i < 3
+    	i = i + 1;
+        plot(time, torques_robust{k}(:,index1));
+        hold on;
+        plot(time, torques_robust{k}(:,index2));
+        plot(time, torques_robust{k}(:,index3));
+        plot(time, torques_robust{k}(:,index4));
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('robust');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
+figure();
+i = 0;
+for k = 1:j_performance-1
+    hold on;
+    if size(torques_performance{k},1) < length(time) %this one fails
+    elseif i < 2
+    	i = i + 1;
+    	plot(time, torques_performance{k}(:,index1));
+        hold on;
+        plot(time, torques_performance{k}(:,index2));
+        plot(time, torques_performance{k}(:,index3));
+        plot(time, torques_performance{k}(:,index4));
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('performance');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
+figure();
+i = 0;
+for k = 1:j_performanceRobust-1
+    hold on;
+    if i < 2
+        i = i + 1;
+        plot(time, torques_performanceRobust{k}(:,index1));
+        hold on;
+        plot(time, torques_performanceRobust{k}(:,index2));
+        plot(time, torques_performanceRobust{k}(:,index3));
+        plot(time, torques_performanceRobust{k}(:,index4));
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('performance robust');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
+
+
+%% torso torque plots
+%torques torso:
+index1 = 1 ;
+index2 = 2 ;
+index3 = 3 ;
+index4 = 4;
+
+torques_axis = [0 40 -15 15];
+
+figure(); 
+plot(time,torques_baseline(:,index1));
+hold on;
+plot(time, torques_baseline(:,index2));
+plot(time, torques_baseline(:,index3));
+xlabel('time (s)');
+ylabel('torques (Nm)');
+title('initial weights');
+%legend('1', '2', '3');
+axis(torques_axis);
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+set(gca,'box','off')
+
+
+figure();
+i = 0;
+for k = 1:j_robust-1
+    hold on;
+    if size(torques_robust{k},1) < length(time) %this one fails
+    elseif i < 3
+    	i = i + 1;
+        plot(time, torques_robust{k}(:,index1));
+        hold on;
+        plot(time, torques_robust{k}(:,index2));
+        plot(time, torques_robust{k}(:,index3));
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('robust');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
+figure();
+i = 0;
+for k = 1:j_performance-1
+    hold on;
+    if size(torques_performance{k},1) < length(time) %this one fails
+    elseif i < 2
+    	i = i + 1;
+    	plot(time, torques_performance{k}(:,index1));
+        hold on;
+        plot(time, torques_performance{k}(:,index2));
+        plot(time, torques_performance{k}(:,index3));
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('performance');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
+figure();
+i = 0;
+for k = 1:j_performanceRobust-1
+    hold on;
+    if i < 2
+        i = i + 1;
+        plot(time, torques_performanceRobust{k}(:,index1));
+        hold on;
+        plot(time, torques_performanceRobust{k}(:,index2));
+        plot(time, torques_performanceRobust{k}(:,index3));
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('performance robust');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
+
+%~~~~~~~~~ hips + knee torque plots
+index1 = 12+6;
+index2 = 13+6;
+index3 = 14+6;
+
+torques_axis = [0 40 -15 30];
+
+figure(); 
+plot(time,torques_baseline(:,index1));
+hold on;
+plot(time, torques_baseline(:,index2));
+plot(time, torques_baseline(:,index3));
+xlabel('time (s)');
+ylabel('torques (Nm)');
+title('initial weights');
+%legend('1', '2', '3');
+axis(torques_axis);
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+set(gca,'box','off')
+
+
+figure();
+i = 0;
+for k = 1:j_robust-1
+    hold on;
+    if size(torques_robust{k},1) < length(time) %this one fails
+    elseif i < 3
+    	i = i + 1;
+        plot(time, torques_robust{k}(:,index1));
+        hold on;
+        plot(time, torques_robust{k}(:,index2));
+        plot(time, torques_robust{k}(:,index3));
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('robust');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
+figure();
+i = 0;
+for k = 1:j_performance-1
+    hold on;
+    if size(torques_performance{k},1) < length(time) %this one fails
+    elseif i < 2
+    	i = i + 1;
+    	plot(time, torques_performance{k}(:,index1));
+        hold on;
+        plot(time, torques_performance{k}(:,index2));
+        plot(time, torques_performance{k}(:,index3));
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('performance');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
+figure();
+i = 0;
+for k = 1:j_performanceRobust-1
+    hold on;
+    if i < 2
+        i = i + 1;
+        plot(time, torques_performanceRobust{k}(:,index1));
+        hold on;
+        plot(time, torques_performanceRobust{k}(:,index2));
+        plot(time, torques_performanceRobust{k}(:,index3));
+    end
+end
+xlabel('time (s)');
+% ylabel('y_{ZMP} (mm)');
+title('performance robust');
+axis(torques_axis);
+set(gca,'yticklabel',[])
+set(gca,'LineWidth',1,'TickLength',[0.05 0.05]);
+
 
 end
 
